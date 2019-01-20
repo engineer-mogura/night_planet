@@ -33,7 +33,6 @@ class DevelopersController extends AppController
         if(isset($this->request->query["targetTable"])){
             $targetTable = $this->request->getQuery("targetTable");
             if ($targetTable == 'Developers') {
-                $this->log($this->Developers,"debug");
                 $developers = $this->paginate($this->Developers);
                 if (!$developers) {
                     $this->Flash->success(__('データがありません。'));
@@ -43,7 +42,6 @@ class DevelopersController extends AppController
                 $this->set(compact('developers','itemName1','itemName2'));
 
             } else if ($targetTable == 'Users') {
-                $this->log($targetTable,"debug");
                 $users = $this->paginate($this->Users);
                 if (!$users) {
 
@@ -54,7 +52,6 @@ class DevelopersController extends AppController
                 $this->set(compact('users','itemName1','itemName2'));
 
             } else if ($targetTable == 'Owners') {
-                $this->log($targetTable,"debug");
                 $owners = $this->paginate($this->Owners);
                 if (!$owners) {
 
@@ -165,13 +162,11 @@ class DevelopersController extends AppController
                     $itemName1 = 'developer';
                     $developer = $this->Developers->newEntity();
                     $this->set(compact('developer','itemName1'));
-                    $this->log($this);
                 } else if($targetTable == 'Users') {
 
                     $itemName1 = 'user';
                     $user = $this->Users->newEntity();
                     $this->set(compact('user','itemName1'));
-                    $this->log($this);
                 } else if($targetTable == 'Owners') {
 
                     $itemName1 = 'owner';

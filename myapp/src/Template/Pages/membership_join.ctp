@@ -15,13 +15,12 @@
     </div>
   </p>
   <p>店舗掲載をご希望の方は、下のURLからユーザー登録をお願いします。</p>
-  <div class="org-link">
-    <a href="/registe/owner">新規登録する</a>
+  <div class="org-link"><?= $this->Html->link(__('新規登録する'), ['controller' => 'owner/Owners', 'action' => 'signup']) ?>
   </div>
 </p>
 <p>既に会員の方は下のURLからログインしてください。</p>
-<div class="org-link">
-  <a href="https://okiyoru.com/membership-login/">ログインページへ</a>
+  <div class="org-link"><?= $this->Html->link(__('ログインページへ'), ['controller' => 'owner/Owners', 'action' => 'login']) ?>
+
 </div>
 </div>
 </div>

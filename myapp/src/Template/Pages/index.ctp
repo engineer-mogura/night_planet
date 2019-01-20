@@ -3,21 +3,21 @@
 <div class="slider">
   <ul class="slides">
     <li>
-      <img src="http://192.168.33.10/img/common/top/top1.jpg"> <!-- random image -->
+      <img src="/img/common/top/top1.jpg"> <!-- random image -->
       <div class="caption center-align">
         <h3>沖縄の夜遊び探しは【おきよる】!</h3>
         <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
       </div>
     </li>
     <li>
-      <img src="http://192.168.33.10/img/common/top/top2.jpg"> <!-- random image -->
+      <img src="/img/common/top/top2.jpg"> <!-- random image -->
       <div class="caption left-align">
         <h3>沖縄の夜遊び探しは【おきよる】!</h3>
         <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
       </div>
     </li>
     <li>
-      <img src="http://192.168.33.10/img/common/top/top3.jpg"> <!-- random image -->
+      <img src="/img/common/top/top3.jpg"> <!-- random image -->
       <div class="caption right-align">
         <h3>沖縄の夜遊び探しは【おきよる】!</h3>
         <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
@@ -80,7 +80,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>那覇</p>
@@ -93,7 +93,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>宮古島</p>
@@ -106,7 +106,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>石垣島</p>
@@ -119,7 +119,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>豊見城</p>
@@ -132,7 +132,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>南城</p>
@@ -145,7 +145,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>糸満</p>
@@ -158,7 +158,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>浦添</p>
@@ -171,7 +171,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>宜野湾</p>
@@ -184,7 +184,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>沖縄市</p>
@@ -197,7 +197,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>うるま</p>
@@ -210,7 +210,7 @@
     <div class="col s12 m4 l3">
       <div class="card small">
         <div class="card-image">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
         <div class="card-content">
           <p>名護</p>
@@ -226,7 +226,7 @@
       <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">新着情報</h6></div>
       <ul class="collection">
         <li class="collection-item avatar">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg" alt="" class="circle">
+          <img src="/img/common/top/top1.jpg" alt="" class="circle">
           <span class="title">Title</span>
           <p>First Line <br>
             Second Line
@@ -263,7 +263,7 @@
       <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">店舗からのお知らせ</h6></div>
       <ul class="collection">
         <li class="collection-item avatar">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg" alt="" class="circle">
+          <img src="/img/common/top/top1.jpg" alt="" class="circle">
           <span class="title">Title</span>
           <p>First Line <br>
             Second Line
@@ -300,7 +300,7 @@
       <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">キャスト日記</h6></div>
       <ul class="collection">
         <li class="collection-item avatar">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg" alt="" class="circle">
+          <img src="/img/common/top/top1.jpg" alt="" class="circle">
           <span class="title">Title</span>
           <p>First Line <br>
             Second Line

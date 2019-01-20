@@ -7,5 +7,4 @@
 
 <div class="container">
     <h3><?= __('Owners') ?></h3>
-
 </div>

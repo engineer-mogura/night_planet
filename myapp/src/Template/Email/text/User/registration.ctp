@@ -2,8 +2,8 @@
 use Cake\Error\Debugger;
 use Cake\Routing\Router;
 
-$url = Router::url(['controller' => 'Owners', 'action' => 'verify', $owner->tokenGenerate()], true);
+$url = Router::url(['controller' => 'Users', 'action' => 'verify', $user->tokenGenerate()], true);
 ?>
-こんにちは、<?= $owner->name ?>さん。
+こんにちは、<?= $user->name ?>さん。
 メールアドレスを認証をするために以下のURLにアクセスしてください。
 <?= $url ?>

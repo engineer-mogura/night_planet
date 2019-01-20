@@ -7,9 +7,7 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Users ldap_mod_del(link_identifier, dn, entry)
- *
- * @property \App\Model\Table\ArticlesTable|\Cake\ORM\Association\HasMany $Articles
+ * Users Model
  *
  * @method \App\Model\Entity\User get($primaryKey, $options = [])
  * @method \App\Model\Entity\User newEntity($data = null, array $options = [])
@@ -40,10 +38,6 @@ class UsersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
-
-        $this->hasMany('Articles', [
-            'foreignKey' => 'user_id'
-        ]);
     }
 
     /**
@@ -56,18 +50,22 @@ class UsersTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->email('email')
             ->requirePresence('email', 'create')
-            ->notEmpty('email');
+            ->allowEmptyString('email', false);
 
         $validator
             ->scalar('password')
             ->maxLength('password', 255)
             ->requirePresence('password', 'create')
-            ->notEmpty('password');
+            ->allowEmptyString('password', false);
+
+        $validator
+            ->integer('status')
+            ->allowEmptyString('status');
 
         return $validator;
     }

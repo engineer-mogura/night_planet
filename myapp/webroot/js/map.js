@@ -1,7 +1,7 @@
 var my_google_map;
 var my_google_geo;
 
-function googlemap_init( id_name, addr_name ) 
+function googlemap_init( id_name, addr_name ) {
   var latlng = new google.maps.LatLng(41, 133);
   var opts = {
         zoom: 18, /*拡大比率*/

@@ -21,6 +21,8 @@
       return false;
     });
 
+    $('.tooltipped').tooltip({delay: 50});
+
     // show return top button
     var topBtn = $('#return_top');
     $(window).scroll(function () {
@@ -34,7 +36,20 @@
 
     $('.modal').modal();
 
+       /* 店舗ページの設定 クーポンクリックイベント */
+    $('.coupon').click(function() {
+        $(this).find('.arrow').toggleClass("active");
+        $(this).find('.arrow').toggleClass('nonActive');
+        if (!$(this).find('.arrow').hasClass('active')) {
+            $(this).find('.label').text('クーポンを表示する');
+        } else {
+            $(this).find('.label').text('クーポンをとじる');
+        }
+    });
+
+
   });
+
 
 /*  document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');
@@ -49,7 +64,7 @@
     }*/
 
     // 現在地取得処理
-    function getPosition() {
+/*    function getPosition() {
       var accessStatus = Geolocator.RequestAccessAsync();
       alert(accessStatus);
       // 現在地を取得
@@ -76,4 +91,4 @@
           }
         }
       );
-    }
+    }*/

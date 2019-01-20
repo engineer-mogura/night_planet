@@ -137,7 +137,7 @@ Router::prefix('developer', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
 });
 
-/*// 認証2
+// 認証2
 Router::prefix('owner', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
 });
@@ -145,4 +145,4 @@ Router::prefix('owner', function (RouteBuilder $routes) {
 // 認証3
 Router::prefix('user', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
-});*/
+});

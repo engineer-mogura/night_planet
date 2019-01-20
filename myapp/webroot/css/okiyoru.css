@@ -46,8 +46,8 @@ span.notice {
 #return_top {
     display: none;
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 95px;
+    right: 25px;
     z-index: 990;
 }
 #return_top a {
@@ -173,10 +173,92 @@ div.message.hidden {
 
 /* フラッシュメッセージ系 END */
 
+/* 新規・ログイン画面 START */
+.or-form-wrap {
+    margin: 0 auto;
+    width: 90%;
+}
+.card.or-card {
+    width: 400px;
+    margin: 0 auto;
+    margin-top: 50px;
+}
+.or-button {
+    text-align: center;
+    margin-bottom: 50px;
+}
+/* 新規・ログイン画面 END */
+
+/* 店舗ページ START */
+  p.description {
+    display: -webkit-box;
+    margin: 2em 0 2.5em;
+    padding: 1em 1.5em;
+    line-height: 2.0;
+    border: 1px dashed #cdcdcd;
+    background: #fcfcfc;
+    box-shadow: 0 1px 3px 0 rgba(195,195,195,0.3);
+}
+  span.or-header {
+    color: aliceblue;
+  }
+  .or-header-wrap {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+  .coupon {
+    text-align: center;
+    width: 100%;
+  }
+  .material-icons.or-material-icons {
+    width: inherit;
+  }
+  table.shop-table {
+    border: 1px solid #bbb;
+  }
+
+  table.shop-table th:not(.table-header) {
+        border: 1px solid #bbb;
+        font-weight: initial;
+        background-color: #e1f5fe;
+  }
+  th.table-header {
+    border: 1px solid #bbb;
+    font-weight: initial;
+    background-color: #e9f6ff;
+  }
+  table.shop-table > td {
+  }
+
+  table.event-table {
+    margin-top: 10px;
+  }
+  table.event-table td {
+    border: 1px solid #bbb;
+  }
+  table.other-table {
+    margin-top: 10px;
+  }
+  .shop-image {
+    margin-top:5px;
+  }
+
+/*   .active {
+  transform: rotate(180deg);
+  transition: 0.5s;
+}
+
+.nonActive {
+  transform: rotate(0deg);
+  transition: 0.5s;
+} */
+/* 店舗ページ END */
+
 @media only screen and (max-width: 992px) {
   .brand-logo.oki-brand-logo{
     margin-left: initial;
   }
+
   /* Text inputs */
   input:not([type]),
   input[type=text]:not(.browser-default),
@@ -197,15 +279,25 @@ div.message.hidden {
 }
 
 @media only screen and (max-width: 600px) {
+  table.tel-table {
+    margin-top: 10px;
+  }
 
 }
 
 @media only screen and (max-width: 992px) {
-
+  .header-area {
+    display: none;
+  }
 }
 
 @media only screen and (min-width: 601px) {
-
+  table.other-table {
+    margin-top: 0px;
+  }
+  table.tel-table {
+    margin-top: 0px;
+  }
 }
 
 @media only screen and (min-width: 600px) and (max-width: 992px) {
@@ -213,6 +305,12 @@ div.message.hidden {
 }
 
 @media only screen and (min-width: 993px) {
+  .fixed-action-btn {
+    display: none;
+  }
+  table.tel-table {
+    margin-top: 10px;
+   }
 
 }
 

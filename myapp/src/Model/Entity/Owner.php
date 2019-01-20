@@ -2,7 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
-use App\Model\Entity\TokenTrait;
+use Token\Model\Entity\TokenTrait;
 use Cake\Auth\DefaultPasswordHasher;
 
 /**

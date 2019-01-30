@@ -8,9 +8,10 @@
 <div>
   <?= $this->Flash->render() ?>
     <div class="card or-card">
-        <div class="card-image waves-effect waves-block waves-light">
+        <div class="card-image waves-block">
             <div class="or-form-wrap">
             <h3><?= __('おきよるGo') ?></h3>
+
 
             <form method="post" accept-charset="utf-8" action="/owner/owners/login">
                 <div style="display:none;">
@@ -28,6 +29,10 @@
                         <label for="password" class="">Password</label>
                     </div>
                 </div>
+                <p>
+                  <input type="checkbox" name="auto_login" id="auto_login" value="1" />
+                  <label for="auto_login">ログイン状態を保存する</label>
+                </p>
                 <div class="or-button">
                 <button type="submit" class="waves-effect waves-light btn-large">ログイン
                 </button>

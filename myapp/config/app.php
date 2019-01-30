@@ -383,5 +383,12 @@ return [
      */
     'Session' => [
         'defaults' => 'php',
+        'timeout' => '120',
+        'cookie' => 'okiyorugo_cookie', // 任意の文字列
+        'cookieTimeout' => '259200', // 180days
+        'ini' => [
+            'session.cookie_secure' => false, // SSLと非SSLのドメイン両方でセッションにアクセスする必要がある場合、これを無効
+            'session.cookie_lifetime' => 15552000,
+        ],
     ],
 ];

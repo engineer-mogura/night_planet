@@ -25,33 +25,37 @@ $cakeDescription = '管理画面';
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
+  <?php $id = $this->request->getSession()->read('Auth.Owner.id') ?>
 <body>
   <ul id="slide-out" class="side-nav">
     <li>
       <div class="user-view">
         <div class="background">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
-        <a href="#!user"><img class="circle" src="http://192.168.33.10/img/common/top/top1.jpg"></a>
+        <a href="#!user"><img class="circle" src="/img/common/top/top1.jpg"></a>
         <a href="#!name"><span class="white-text name">John Doe</span></a>
-        <a href="#!email"><span class="white-text email">jdandturk@gmail.com</span></a>
+        <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>
     </li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">info_outline</i>新着情報を編集する</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">event_available</i>トップ画像ーを編集する</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">event_available</i>キャッチコピーを編集する</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">event_available</i>店舗写真を編集する</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">cloud</i>キャストを編集する</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">trending_up</i>店舗情報を編集する</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">trending_up</i>クーポンを編集する</a></li>
-    <li><a class="waves-effect" href="http://okiyoru.local"><i class="material-icons">vertical_align_top</i>位置情報を編集する</a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">cloud</i>求人情報を編集する</a></li>
+    <li>
+      <a href="/owner/shops/index/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger">
+        <i class="material-icons" href="">info_outline</i>トップ画像を編集する
+      </a>
+    </li>
+    <li><a href="/owner/shops/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">event_available</i>キャッチコピーを編集する</a></li>
+    <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">event_available</i>クーポンを編集する</a></li>
+    <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">event_available</i>キャストを編集する</a></li>
+    <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">trending_up</i>店舗情報を編集する</a></li>
+    <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">trending_up</i>店内を編集する</a></li>
+    <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">vertical_align_top</i>マップを編集する</a></li>
+    <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">cloud</i>求人情報を編集する</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i>よくある質問</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i>お問い合わせ</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">note</i>プライバシーポリシー</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">note</i>ご利用規約</a></li>
     <li><div class="divider"></div></li>
-    <li><a class="subheader">Subheader</a></li>
+    <li><a href="/owner/owners/logout" class="waves-effect modal-trigger"><i class="material-icons" href="">info_outline</i>ログアウト</a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
   <nav>
@@ -100,15 +104,14 @@ $cakeDescription = '管理画面';
       <div class="col s12 l6">
         <h5 class="white-text">Links</h5>
         <ul class="collection">
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">info_outline</i>新着情報を編集する</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">event_available</i>トップ画像を編集する</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">event_available</i>キャッチコピーを編集する</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">event_available</i>店舗写真を編集する</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/"><i class="material-icons">vertical_align_top</i>キャストを編集する</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">trending_up</i>店舗情報を編集する</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">trending_up</i>クーポンを編集する</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/"><i class="material-icons">vertical_align_top</i>位置情報を編集する</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/"><i class="material-icons">vertical_align_top</i>求人情報を編集する</a></li>
+          <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="grey-text link-box text-lighten-3 collection-item modal-trigger"><i class="material-icons">info_outline</i>トップ画像を編集する</a></li>
+          <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="grey-text link-box text-lighten-3 collection-item modal-trigger"><i class="material-icons">event_available</i>キャッチコピーを編集する</a></li>
+          <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="grey-text link-box text-lighten-3 collection-item modal-trigger"><i class="material-icons">event_available</i>クーポンを編集する</a></li>
+          <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="grey-text link-box text-lighten-3 collection-item modal-trigger"><i class="material-icons">event_available</i>キャストを編集する</a></li>
+          <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="grey-text link-box text-lighten-3 collection-item modal-trigger"><i class="material-icons">vertical_align_top</i>店舗情報を編集する</a></li>
+          <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="grey-text link-box text-lighten-3 collection-item modal-trigger"><i class="material-icons">trending_up</i>店内を編集する</a></li>
+          <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="grey-text link-box text-lighten-3 collection-item modal-trigger"><i class="material-icons">trending_up</i>マップを編集する</a></li>
+          <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="grey-text link-box text-lighten-3 collection-item modal-trigger"><i class="material-icons">vertical_align_top</i>求人情報を編集する</a></li>
         </ul>
       </div>
       <div class="col s12 l6">
@@ -138,11 +141,11 @@ $cakeDescription = '管理画面';
     </div><!-- END #return_top -->
   </footer>
   <?= $this->Html->scriptstart() ?>
-  $(document).ready(function(){
+$(document).ready(function(){
   googlemap_init('google_map', '沖縄県浦添市屋富祖３丁目１５');
 });
 <?= $this->Html->scriptend() ?>
 
- <script src="http://192.168.33.10/js/okiyoru.js"></script>
+ <script src="/js/okiyoru.js"></script>
 </body>
 </html>

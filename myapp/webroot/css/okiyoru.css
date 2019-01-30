@@ -185,12 +185,13 @@ div.message.hidden {
 }
 .or-button {
     text-align: center;
+    margin-top: 30px;
     margin-bottom: 50px;
 }
 /* 新規・ログイン画面 END */
 
 /* 店舗ページ START */
-  p.description {
+  div.description {
     display: -webkit-box;
     margin: 2em 0 2.5em;
     padding: 1em 1.5em;
@@ -230,10 +231,10 @@ div.message.hidden {
   table.shop-table > td {
   }
 
-  table.event-table {
+  table.new-info-table {
     margin-top: 10px;
   }
-  table.event-table td {
+  table.new-info-table td {
     border: 1px solid #bbb;
   }
   table.other-table {
@@ -253,6 +254,27 @@ div.message.hidden {
   transition: 0.5s;
 } */
 /* 店舗ページ END */
+
+/* 店舗編集ページ START */
+.edit-menu {
+  margin-top: 10px;
+}
+body,
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+footer {
+  margin-top: auto;
+}
+
+#show-top-image img {
+    background-color:gray;
+    object-fit:contain;
+}
+/* 店舗編集ページ END */
 
 @media only screen and (max-width: 992px) {
   .brand-logo.oki-brand-logo{

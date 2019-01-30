@@ -14,8 +14,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
   <?= $this->Html->meta('icon') ?>
   <?= $this->Html->script('jquery-3.1.0.min.js') ?>
   <?= $this->Html->script('materialize.min.js') ?>
-  <?= $this->Html->script('map.js') ?>
-  <?= $this->Html->script("https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4") ?>
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <?= $this->Html->css('materialize.css') ?>
@@ -24,19 +22,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
-  <?= $this->Html->scriptstart() ?>
-  $(document).ready(function(){
-  googlemap_init('google_map', '沖縄県浦添市屋富祖３丁目１５');
-});
-<?= $this->Html->scriptend() ?>
 <body>
   <ul id="slide-out" class="side-nav">
     <li>
       <div class="user-view">
         <div class="background">
-          <img src="http://192.168.33.10/img/common/top/top1.jpg">
+          <img src="/img/common/top/top1.jpg">
         </div>
-        <a href="#!user"><img class="circle" src="http://192.168.33.10/img/common/top/top1.jpg"></a>
+        <a href="#!user"><img class="circle" src="/img/common/top/top1.jpg"></a>
         <a href="#!name"><span class="white-text name">John Doe</span></a>
         <a href="#!email"><span class="white-text email">jdandturk@gmail.com</span></a>
       </div>
@@ -178,7 +171,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="/pages/privacy_policy"><i class="material-icons">note</i>プライバシーポリシー</a></li>
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="/pages/contract"><i class="material-icons">note</i>ご利用規約</a></li>
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="/pages/membership_join"><i class="material-icons">star_half</i>店舗の掲載をご希望の方</a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/owner"><i class="material-icons">vpn_key</i>店舗ログイン</a></li>
+          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/owner/owners/login"><i class="material-icons">vpn_key</i>店舗ログイン</a></li>
         </ul>
       </div>
       <div class="col s12">
@@ -198,6 +191,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     </div><!-- END #return_top -->
   </footer>
 
- <script src="http://192.168.33.10/js/okiyoru.js"></script>
+ <script src="/js/okiyoru.js"></script>
 </body>
 </html>

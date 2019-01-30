@@ -9,9 +9,9 @@ use Cake\Core\Configure;
     <nav>
         <div class="nav-wrapper">
             <ul>
-                <li><?= $this->Html->link(__(Configure::read('developerList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Developers']]) ?></li>
-                <li><?= $this->Html->link(__(Configure::read('userList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Users']]) ?></li>
-                <li><?= $this->Html->link(__(Configure::read('ownerList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Owners']]) ?></li>
+                <li><?= $this->Html->link(__(Configure::read('devlop.developerList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Developers']]) ?></li>
+                <li><?= $this->Html->link(__(Configure::read('devlop.userList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Users']]) ?></li>
+                <li><?= $this->Html->link(__(Configure::read('devlop.ownerList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Owners']]) ?></li>
                 <li><?= $this->Html->link(__('logout'), ['controller' => 'Developers', 'action' => 'logout']) ?></li>
                 <li><?=$this->request->session()->read('Auth.Developer.email')?>でログイン中</li>
             </ul>

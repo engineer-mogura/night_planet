@@ -16,23 +16,40 @@
           <i class="material-icons">share</i>
         </a>
         <ul>
-          <li><a class="btn-floating blue"><i class="icon-facebook-rect">icon-facebook-rect</i></a></li>
-          <li><a class="btn-floating blue darken-1"><i class="icon-twitter">icon-twitter</i></a></li>
-          <li><a class="btn-floating chocolate"><i class="icon-instagram">icon-instagram</i></a></li>
-          <li><a class="btn-floating green"><i class="icon-comment-alt">icon-comment-alt</i></a></li>
+          <li>
+            <a class="btn-floating blue"><i class="icon-facebook-rect">icon-facebook-rect</i></a>
+          </li>
+          <li>
+            <a class="btn-floating blue darken-1"><i class="icon-twitter">icon-twitter</i></a>
+          </li>
+          <li>
+            <a class="btn-floating chocolate"><i class="icon-instagram">icon-instagram</i></a>
+          </li>
+          <li>
+            <a class="btn-floating green"><i class="icon-comment-alt">icon-comment-alt</i></a>
+          </li>
         </ul>
       </div>
+      <?= $this->element('shop-edit-form') ?>
       <div class="header-area">
         <h5 class="left-align">ラウンジ 三月 -みつき-</h5>
         <div class="share right-align">
-          <a class="btn-floating blue btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="facebookでシェア"><i class="icon-facebook-rect">icon-facebook-rect</i></a>
-          <a class="btn-floating blue darken-1 btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="twitterでシェア"><i class="icon-twitter">icon-twitter</i></a>
-          <a class="btn-floating chocolate btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="instagramでシェア"><i class="icon-instagram">icon-instagram</i></a>
-          <a class="btn-floating green btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="lineでシェア"><i class="icon-comment-alt">icon-comment-alt</i></a>
+          <a class="btn-floating blue btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="facebookでシェア">
+            <i class="icon-facebook-rect">icon-facebook-rect</i>
+          </a>
+          <a class="btn-floating blue darken-1 btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="twitterでシェア">
+            <i class="icon-twitter">icon-twitter</i>
+          </a>
+          <a class="btn-floating chocolate btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="instagramでシェア">
+            <i class="icon-instagram">icon-instagram</i>
+          </a>
+          <a class="btn-floating green btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="lineでシェア">
+            <i class="icon-comment-alt">icon-comment-alt</i>
+          </a>
         </div>
       </div>
-      <p class="description">宮古島のキャバクラをお探しならラウンジ美月へ。<br />
-      宮古島最大級のキャストと楽しむヒトトキ。時間制・飲み放題で安心のキャバクラです。</p>
+      <div class="description">宮古島のキャバクラをお探しならラウンジ美月へ。<br />
+      宮古島最大級のキャストと楽しむヒトトキ。時間制・飲み放題で安心のキャバクラです。</div>
       <ul class="collapsible popout" data-collapsible="accordion">
         <li>
           <div class="collapsible-header orange lighten-4">
@@ -183,9 +200,25 @@
       </div>
     </div>
     <div class="row">
-        <div class="or-header-wrap card-panel red lighten-3">
-          <span class="or-header">店内</span>
+      <div class="col s12">
+        <div class="post_col post_col-2">
+          <table class="new-info-table bordered shop-table z-depth-2" border="1">
+            <tbody>
+              <tr>
+                <th class="table-header" colspan="2" align="center">新着情報</th>
+              </tr>
+              <tr>
+                <td>新着情報はありません。</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="or-header-wrap card-panel red lighten-3">
+        <span class="or-header">店内</span>
+      </div>
       <div class="shop-image col s12 m4 l3">
         <img class="materialboxed" data-caption="店内の様子" width="100%" src="/img/common/top/top1.jpg">
       </div>

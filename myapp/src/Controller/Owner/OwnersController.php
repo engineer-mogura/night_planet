@@ -49,6 +49,10 @@ class OwnersController extends AppController
     public function login()
     {
         if ($this->request->is('post')) {
+
+            // TODO オートログイン機能は、後回し
+            $this->log($this->request->getData("auto_login"),"debug");
+
             $owner = $this->Auth->identify();
             if ($owner) {
               $this->Auth->setUser($owner);
@@ -89,8 +93,28 @@ class OwnersController extends AppController
 
     public function index()
     {
+        $this->log($this->Owners,"debug");
         $owner = $this->paginate($this->Owners);
         $this->set(compact('owner'));
     }
+
+        public function view($id = null)
+    {
+
+        if(isset($this->request->query["targetEdit"])){
+            $targetEdit = $this->request->getQuery("targetEdit");
+            $shop = $this->Owners->find('all')->contain(['Shops']);
+
+            if ($targetEdit == 'topImage') {
+                $this->paginate = [
+                    'contain' => ['Shops']
+                ];
+                $this->log("shop","debug");
+                $this->log($shop,"debug");
+                $this->set(compact('shop'));
+            }
+        }
+    }
+
 
 }

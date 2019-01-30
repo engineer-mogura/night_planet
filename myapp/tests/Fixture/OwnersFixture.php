@@ -46,8 +46,8 @@ class OwnersFixture extends TestFixture
                 'email' => 'Lorem ipsum dolor sit amet',
                 'password' => 'Lorem ipsum dolor sit amet',
                 'status' => 1,
-                'created' => '2019-01-13 17:29:23',
-                'modified' => '2019-01-13 17:29:23'
+                'created' => '2019-01-22 22:54:14',
+                'modified' => '2019-01-22 22:54:14'
             ],
         ];
         parent::init();

@@ -14,6 +14,8 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property int|null $status
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
+ *
+ * @property \App\Model\Entity\Shop $shop
  */
 class Owner extends Entity
 {
@@ -32,7 +34,8 @@ class Owner extends Entity
         'password' => true,
         'status' => true,
         'created' => true,
-        'modified' => true
+        'modified' => true,
+        'shop' => true
     ];
 
     /**

@@ -9,6 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Owners Model
  *
+ * @property \App\Model\Table\ShopsTable|\Cake\ORM\Association\HasMany $Shops
+ *
  * @method \App\Model\Entity\Owner get($primaryKey, $options = [])
  * @method \App\Model\Entity\Owner newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Owner[] newEntities(array $data, array $options = [])
@@ -38,6 +40,8 @@ class OwnersTable extends Table
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+        $this->hasOne('Shops');
     }
 
     /**

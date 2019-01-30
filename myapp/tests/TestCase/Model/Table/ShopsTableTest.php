@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\OwnersTable;
+use App\Model\Table\ShopsTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\OwnersTable Test Case
+ * App\Model\Table\ShopsTable Test Case
  */
-class OwnersTableTest extends TestCase
+class ShopsTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\OwnersTable
+     * @var \App\Model\Table\ShopsTable
      */
-    public $Owners;
+    public $Shops;
 
     /**
      * Fixtures
@@ -24,7 +24,6 @@ class OwnersTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Owners',
         'app.Shops'
     ];
 
@@ -36,8 +35,8 @@ class OwnersTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Owners') ? [] : ['className' => OwnersTable::class];
-        $this->Owners = TableRegistry::getTableLocator()->get('Owners', $config);
+        $config = TableRegistry::getTableLocator()->exists('Shops') ? [] : ['className' => ShopsTable::class];
+        $this->Shops = TableRegistry::getTableLocator()->get('Shops', $config);
     }
 
     /**
@@ -47,7 +46,7 @@ class OwnersTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Owners);
+        unset($this->Shops);
 
         parent::tearDown();
     }

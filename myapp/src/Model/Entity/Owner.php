@@ -44,7 +44,8 @@ class Owner extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password'
+        'password',
+        'remember_token',  // 自動ログイン用トークン
     ];
 
   protected function _setPassword($value){

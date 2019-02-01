@@ -12,13 +12,16 @@ class AppController extends \App\Controller\AppController
         parent::initialize();
         $this->Owners = TableRegistry::get('Owners');
         $this->Shops = TableRegistry::get('Shops');
-        $this->loadComponent('Cookie');
         $this->loadComponent('Auth', [
             'authenticate' => [
                 'Form' => [
                     'userModel' => 'Owners',
                     'fields' => ['username' => 'email','password' => 'password']
-                ]
+                ],
+               'NodeLink/RememberMe.Cookie' => [
+                   'userModel' => 'Owners',  // 'Form'認証と同じモデルを指定します
+                   'fields' => ['token' => 'remember_token'],  // Remember-Me認証用のトークンを保存するカラムを指定します
+               ],
             ],
             'storage' => ['className' => 'Session', 'key' => 'Auth.Owner'],
 

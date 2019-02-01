@@ -54,6 +54,9 @@ class Application extends BaseApplication
         if (Configure::read('debug')) {
             $this->addPlugin(\DebugKit\Plugin::class);
         }
+        // 自動ログイン機能 プラグイン 2019130 追加
+        $this->addPlugin('NodeLink/RememberMe');
+
     }
 
     /**

@@ -50,6 +50,7 @@ $cakeDescription = '管理画面';
     <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">trending_up</i>店内を編集する</a></li>
     <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">vertical_align_top</i>マップを編集する</a></li>
     <li><a href="/owner/shops/view/<?=$id?>?targetEdit=topImage" class="waves-effect modal-trigger"><i class="material-icons">cloud</i>求人情報を編集する</a></li>
+    <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">help_outline</i>トップに戻る</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i>よくある質問</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i>お問い合わせ</a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">note</i>プライバシーポリシー</a></li>
@@ -76,13 +77,13 @@ $cakeDescription = '管理画面';
         <div class="row">
           <li class="search col s12 l12">
             <div class="input-field oki-input-field">
-              <input id="email" type="email" class="validate">
+              <input id="" type="email" class="validate">
               <label for="email">Email</label>
             </div>
           </li>
           <li class="search col s12 l12">
             <div class="input-field oki-input-field">
-              <input id="password" type="password" class="validate">
+              <input type="password" class="validate">
               <label for="password">Password</label>
             </div>
           </li>
@@ -117,6 +118,7 @@ $cakeDescription = '管理画面';
       <div class="col s12 l6">
         <h5 class="white-text">Links</h5>
         <ul class="collection">
+          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/owner/owners"><i class="material-icons">cloud</i>トップに戻る</a></li>
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">cloud</i>facebook</a></li>
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">help_outline</i>よくある質問</a></li>
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="/pages/contract"><i class="material-icons">contact_mail</i>お問い合わせ</a></li>

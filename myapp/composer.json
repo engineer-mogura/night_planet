@@ -11,7 +11,8 @@
         "cakephp/plugin-installer": "^1.0",
         "lcobucci/jwt": "^3.2",
         "mobiledetect/mobiledetectlib": "2.*",
-        "mosaxiv/cakephp-token-verify": "^1.0"
+        "mosaxiv/cakephp-token-verify": "^1.0",
+        "node-link/cakephp-remember-me": "^0.1.2"
     },
     "require-dev": {
         "cakephp/bake": "~1.0",

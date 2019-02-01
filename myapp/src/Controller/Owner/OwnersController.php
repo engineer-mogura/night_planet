@@ -51,8 +51,8 @@ class OwnersController extends AppController
         if ($this->request->is('post')) {
 
             // TODO オートログイン機能は、後回し
-            $this->log($this->request->getData("auto_login"),"debug");
-
+            //$this->log($this->request->getData("auto_login"),"debug");
+            $this->log($this->request->getData("remember_me"),"debug");
             $owner = $this->Auth->identify();
             if ($owner) {
               $this->Auth->setUser($owner);

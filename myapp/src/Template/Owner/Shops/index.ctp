@@ -59,17 +59,19 @@
       <?= $this->Flash->render() ?>
       <h5>キャッチコピー</h5>
       <?php foreach ($shop as $shopRow): ?>
-        <div id="show-catch" style="text-align:center">
+        <div id="show-catch">
           <?php if(!$shopRow->catch == "") { ?>
             <?php $test = $this->Text->autoParagraph($shopRow->catch)?>
           <div class="description"><?php echo($test) ?></div>
-          <a href="#" class="waves-effect waves-light btn-large" onClick="catchChangeBtn(document.getElementById('catch'));return false;">変更</a>
         <form id="delete-catch" name="delete_catch" method="post" style="display:none;" action="/owner/shops/edit_catch/<?= $shopRow->owner_id ?>">
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="catch_before" value="<?=$shopRow->catch ?>">
             <input type="hidden" name="catch_delete" value="delete">
         </form>
+        <p style="text-align:center;">
+          <a href="#" class="waves-effect waves-light btn-large" onClick="catchChangeBtn(document.getElementById('catch'));return false;">変更</a>
           <button type="button" class="waves-effect waves-light btn-large" onclick="if (confirm('キャッチコピーを削除してもよろしいですか？')) { document.delete_catch.submit(); } event.returnValue = false; return false;">削除</button>
+        </p>
         <?php } else { ?>
           <p>まだ登録されていません。</p>
           <a href="#" class="waves-effect waves-light btn-large" onClick="catchChangeBtn(document.getElementById('catch'));return false;">登録</a>

@@ -30,8 +30,8 @@
                     </div>
                 </div>
                 <p>
-                  <input type="checkbox" name="auto_login" id="auto_login" value="1" />
-                  <label for="auto_login">ログイン状態を保存する</label>
+                  <input type="checkbox" name="remember_me" id="remember_me" />
+                  <label for="remember_me">ログイン状態を保存する</label>
                 </p>
                 <div class="or-button">
                 <button type="submit" class="waves-effect waves-light btn-large">ログイン
@@ -47,6 +47,7 @@
         </div>
     </div>
 </div>
+
 <script>
   $(document).ready(function(){
     $("nav").hide();

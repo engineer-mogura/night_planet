@@ -67,6 +67,12 @@ return [
      *   The salt value is also used as the encryption key.
      *   You should treat it as extremely sensitive data.
      */
+
+/*    'Security' => [
+        'salt' => env('SECURITY_SALT', 'acf7cd3579e3765df27308099e929bbe8e25f653d00eef67ce22d2a4aeaefa99'),
+    ],
+*/
+    // 2019130 Remember-Me認証用のトークン 生成はここではなく、"src/node-link\cakephp-remember-me\config\app.php"で生成される。
     'Security' => [
         'salt' => env('SECURITY_SALT', 'acf7cd3579e3765df27308099e929bbe8e25f653d00eef67ce22d2a4aeaefa99'),
     ],
@@ -381,7 +387,9 @@ return [
      *
      * To use database sessions, load the SQL file located at config/schema/sessions.sql
      */
-    'Session' => [
+
+
+/*    'Session' => [
         'defaults' => 'php',
         'timeout' => '120',
         'cookie' => 'okiyorugo_cookie', // 任意の文字列
@@ -390,5 +398,21 @@ return [
             'session.cookie_secure' => false, // SSLと非SSLのドメイン両方でセッションにアクセスする必要がある場合、これを無効
             'session.cookie_lifetime' => 15552000,
         ],
+    ],*/
+
+    'Session' => [
+        'defaults' => 'php',
+        'cookie' => 'remember_me', // 任意の文字列
+        'timeout' => 259200, // 180days
+        'cookieTimeout' => 259200, // 180days
+        'autoRegenerate' => false, // 自動でセッションを再生成するのをやめる
+        'checkAgent' => false, // trueにすると毎回セッションが切れることがある
+        'ini' => array(
+            'session.cookie_lifetime' => 15552000, //180days
+            'session.gc_divisor' => 15552000,
+            'session.gc_maxlifetime' => 15552000, //180days
+        ),
+        'use_cookies' => 1, // SessionをCookieにも保存する
+        'cookie_lifetime' => 15552000, //180days
     ],
 ];

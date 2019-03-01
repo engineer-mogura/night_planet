@@ -12,6 +12,8 @@ class AppController extends \App\Controller\AppController
         parent::initialize();
         $this->Owners = TableRegistry::get('Owners');
         $this->Shops = TableRegistry::get('Shops');
+        $this->Coupons = TableRegistry::get('Coupons');
+        $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
             'authenticate' => [
                 'Form' => [
@@ -47,7 +49,7 @@ class AppController extends \App\Controller\AppController
     {
         $action = $this->request->getParam('action');
         // ログイン時に許可するアクション
-        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit', 'editTopImage', 'editCatch'])) {
+        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit', 'editTopImage', 'editCatch', 'editCoupon'])) {
             return true;
         }
         return false;
@@ -83,7 +85,7 @@ class AppController extends \App\Controller\AppController
         }
         $infoArray = $infoArray + array('dir'=> $ownerDir);
         $path = "img/".$infoArray['area_path']."/".$infoArray['genre_path']."/".$infoArray['dir']."/";
-        $infoArray = $infoArray + array("imgPath"=> $path);
+        $infoArray = $infoArray + array("dir_path"=> $path);
         $this->set('infoArray',$infoArray);
 
     }

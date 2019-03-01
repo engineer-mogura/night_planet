@@ -7,37 +7,18 @@
 
 <div>
   <?= $this->Flash->render() ?>
-    <div class="card or-card">
-        <div class="card-image waves-block">
-            <div class="or-form-wrap">
+  <div class="card or-card">
+    <div class="card-image waves-block">
+        <div class="or-form-wrap">
             <h3><?= __('おきよるGo') ?></h3>
-
-
-            <form method="post" accept-charset="utf-8" action="/owner/owners/login">
-                <div style="display:none;">
-                    <input type="hidden" name="_method" value="POST">
-                </div>
-                <div class="input email required">
-                    <div class="input-field col ">
-                        <input type="email" name="email" required="required" maxlength="255" id="email">
-                        <label for="email">Email</label>
-                    </div>
-                </div>
-                <div class="input password required">
-                    <div class="input-field col ">
-                        <input type="password" name="password" required="required" id="password">
-                        <label for="password" class="">Password</label>
-                    </div>
-                </div>
-                <p>
-                  <input type="checkbox" name="remember_me" id="remember_me" />
-                  <label for="remember_me">ログイン状態を保存する</label>
-                </p>
-                <div class="or-button">
-                <button type="submit" class="waves-effect waves-light btn-large">ログイン
-                </button>
-                </div>
-            </form>
+            <?= $this->Form->create() ?>
+            <?= $this->Form->control('email', array('required' => false)) ?>
+            <?= $this->Form->control('password', array('required' => false)) ?>
+            <?= $this->Form->control('remember_me',['type'=>'checkbox','label'=>['text'=>'ログイン状態を保存する']]) ?>
+            <div class="or-button">
+                <?= $this->Form->button('ログイン',array('class'=>'waves-effect waves-light btn-large'));?>
+            </div>
+            <?= $this->Form->end() ?>
         </div>
         <div class="card-content"style="text-align:center">
             <p><class="">SNSからでもログインできます。</p>

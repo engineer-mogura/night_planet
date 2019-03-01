@@ -10,7 +10,9 @@
   <h5><?= __('店舗トップページ') ?></h5>
   <div class="row">
     <div class="col s12 m12 l8">
-      <img class="responsive-img" width="100%" src="/img/common/top/top1.jpg"/>
+      <img class="responsive-img" width="100%" src=<?php if($shop->shop->top_image != '') {
+        echo('/'.$infoArray['dir_path'].$shop->shop->top_image);} else {
+        echo("/img/common/top/top1.jpg");} ?> />
       <div class="fixed-action-btn horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
           <i class="material-icons">share</i>
@@ -31,8 +33,11 @@
         </ul>
       </div>
       <?= $this->element('shop-edit-form') ?>
+      <h5 class="left-align"><?php if($shop->shop->name != '') {
+        echo($shop->shop->name);} else {
+        echo("店舗名を決めてください。");} ?>
+      </h5>
       <div class="header-area">
-        <h5 class="left-align">ラウンジ 三月 -みつき-</h5>
         <div class="share right-align">
           <a class="btn-floating blue btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="facebookでシェア">
             <i class="icon-facebook-rect">icon-facebook-rect</i>
@@ -47,9 +52,14 @@
             <i class="icon-comment-alt">icon-comment-alt</i>
           </a>
         </div>
+
       </div>
-      <div class="description">宮古島のキャバクラをお探しならラウンジ美月へ。<br />
-      宮古島最大級のキャストと楽しむヒトトキ。時間制・飲み放題で安心のキャバクラです。</div>
+      <div class="description">
+        <?php if($shop->shop->catch != ''){
+          echo ($this->Text->autoParagraph($shop->shop->catch)); } else {
+          echo ('キャッチコピーを決めてください。以下はサンプルです。<br />宮古島のキャバクラをお探しならラウンジ美月へ。<br />
+      宮古島最大級のキャストと楽しむヒトトキ。時間制・飲み放題で安心のキャバクラです。');} ?>
+      </div>
       <ul class="collapsible popout" data-collapsible="accordion">
         <li>
           <div class="collapsible-header orange lighten-4">
@@ -59,13 +69,26 @@
               <p class="arrow nonActive">
                 <a class="btn-floating btn-large red">
                   <i class="large material-icons or-material-icons">expand_more</i>
+
                 </a>
               </p>
             </div>
           </div>
-          <div class="collapsible-body orange lighten-4"><span>☆ご新規のお客様に限り☆<br />
-            ★☆★初回１セット4000円★☆★<br />
-          こちらの画面をお店側に見せてください。</span></div>
+            <?php if(count($shop->shop->coupons) > 0) { ?>
+            <?php foreach($shop->shop->coupons as $coupon): ?>
+              <div class="collapsible-body orange lighten-4">
+                <span><?= $this->Time->format($coupon->from_day, 'Y/M/d') ?>～<?= $this->Time->format($coupon->to_day, 'Y/M/d') ?></span><br />
+                  <span>★☆★<?=$coupon->title ?>★☆★<br />
+                <?=$coupon->content ?><br />
+              <?php if($coupon === end($shop->shop->coupons)){echo ('こちらの画面をお店側に見せ、使用するクーポンをお知らせください。');}?></span>
+              </div>
+            <?php endforeach; ?>
+            <?php } else { ?>
+              <div class="collapsible-body orange lighten-4">
+                <p>クーポンの登録はありません。</p>
+              </div>
+            <?php } ?>
+
         </li>
       </ul>
       <div class="row">

@@ -59,6 +59,15 @@ span.notice {
     border-radius: 50%;
     opacity: 0.6;
 }
+.preloader-wrapper {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: absolute;
+    margin: auto;
+}
+
 table, th, td{
   word-break: break-word;
 }
@@ -177,6 +186,7 @@ div.message.hidden {
 .or-form-wrap {
     margin: 0 auto;
     width: 90%;
+    display: grid;
 }
 .card.or-card {
     width: 400px;
@@ -244,6 +254,13 @@ div.message.hidden {
     margin-top:5px;
   }
 
+/* 更新ぐるぐる START */
+
+.preloader-wrapper {
+ z-index: 999;
+}
+/* 更新ぐるぐる END */
+
 /*   .active {
   transform: rotate(180deg);
   transition: 0.5s;
@@ -274,6 +291,22 @@ footer {
     background-color:gray;
     object-fit:contain;
 }
+
+.check-coupon {
+/*     position: absolute;
+left: 30px;
+top: 70px; */
+}
+
+.chip-box > .chip {
+  pointer-events: auto;
+}
+.chip-box > .chip:hover {
+  background-color: #26a69a;
+  color: white;
+  cursor : pointer;
+}
+
 /* 店舗編集ページ END */
 
 @media only screen and (max-width: 992px) {
@@ -301,8 +334,12 @@ footer {
 }
 
 @media only screen and (max-width: 600px) {
+
   table.tel-table {
     margin-top: 10px;
+  }
+  .card.or-card {
+    width: 100%;
   }
 
 }

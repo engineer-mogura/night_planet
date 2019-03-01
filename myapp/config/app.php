@@ -42,7 +42,8 @@ return [
     'App' => [
         'namespace' => 'App',
         'encoding' => env('APP_ENCODING', 'UTF-8'),
-        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
+        //'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
+        'defaultLocale' => env('APP_DEFAULT_LOCALE', 'ja_JP'),
         'defaultTimezone' => env('APP_DEFAULT_TIMEZONE', 'UTC'),
         'base' => false,
         'dir' => 'src',
@@ -211,7 +212,7 @@ return [
                 'port' => 465,
             'timeout' => 30,
             'username' => 'okiyoru1@gmail.com',
-            'password' => 'okiyoru@001',
+            'password' => 'okiyoruPass001',
             'transport' => 'Smtp',
             'client' => null,
             'tls' => null,

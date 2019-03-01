@@ -9,11 +9,11 @@ use Cake\Core\Configure;
     <nav>
         <div class="nav-wrapper">
             <ul>
-                <li><?= $this->Html->link(__(Configure::read('devlop.developerList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Developers']]) ?></li>
-                <li><?= $this->Html->link(__(Configure::read('devlop.userList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Users']]) ?></li>
-                <li><?= $this->Html->link(__(Configure::read('devlop.ownerList')), ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Owners']]) ?></li>
-                <li><?= $this->Html->link(__('logout'), ['controller' => 'Developers', 'action' => 'logout']) ?></li>
-                <li><?=$this->request->session()->read('Auth.Developer.email')?>でログイン中</li>
+                <li><?= $this->Html->link(DEVELOPER_LM['001'], ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Developers']]) ?></li>
+                <li><?= $this->Html->link(DEVELOPER_LM['002'], ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Users']]) ?></li>
+                <li><?= $this->Html->link(DEVELOPER_LM['003'], ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Owners']]) ?></li>
+                <li><?= $this->Html->link(COMMON_LM['006'], ['controller' => 'Developers', 'action' => 'logout']) ?></li>
+                <li><?=$this->request->session()->read('Auth.Developer.email').COMMON_LB['050']?></li>
             </ul>
         </div>
     </nav>
@@ -22,7 +22,7 @@ use Cake\Core\Configure;
     <?php if(isset($this->request->query["targetTable"])):?>
     <h3><?= h($itemName1); ?></h3>
     <?php if($itemName2 == "Developers"): ?>
-    <span><?= $this->Html->link(__('追加'), ['action' => 'add','?' => ['targetTable'=>'Developers']]) ?></span>
+    <span><?= $this->Html->link(DEVELOPER_LM['003'], ['action' => 'add','?' => ['targetTable'=>'Developers']]) ?></span>
     <table class="bordered highlight">
         <thead>
             <tr>
@@ -43,16 +43,16 @@ use Cake\Core\Configure;
                     <td><?= h($developer->created) ?></td>
                     <td><?= h($developer->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('表示'), ['action' => 'view', $developer->id,'?' => ['targetTable'=>'Developers']]) ?>
-                        <?= $this->Html->link(__('編集'), ['action' => 'edit', $developer->id,'?' => ['targetTable'=>'Developers']]) ?>
-                        <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $developer->id,'?' => ['targetTable'=>'Developers']],['confirm' => __(' #{0}を消去してもよろしいですか？', $developer->id)]) ?>
+                        <?= $this->Html->link(COMMON_LB['001'], ['action' => 'view', $developer->id,'?' => ['targetTable'=>'Developers']]) ?>
+                        <?= $this->Html->link(COMMON_LB['002'], ['action' => 'edit', $developer->id,'?' => ['targetTable'=>'Developers']]) ?>
+                        <?= $this->Form->postLink(COMMON_LB['004'], ['action' => 'delete', $developer->id,'?' => ['targetTable'=>'Developers']],['confirm' => __(' #{0}を消去してもよろしいですか？', $developer->id)]) ?>
                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
     <?php elseif($itemName2 == "Users"): ?>
-    <span><?= $this->Html->link(__('追加'), ['action' => 'add','?' => ['targetTable'=>'Users']]) ?></span>
+    <span><?= $this->Html->link(COMMON_LB['003'], ['action' => 'add','?' => ['targetTable'=>'Users']]) ?></span>
     <table class="bordered highlight">
         <thead>
             <tr>
@@ -73,16 +73,16 @@ use Cake\Core\Configure;
                     <td><?= h($user->created) ?></td>
                     <td><?= h($user->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('表示'), ['action' => 'view', $user->id,'?' => ['targetTable'=>'Users']]) ?>
-                        <?= $this->Html->link(__('編集'), ['action' => 'edit', $user->id,'?' => ['targetTable'=>'Users']]) ?>
-                        <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $user->id,'?' => ['targetTable'=>'Users']],['confirm' => __(' #{0}を消去してもよろしいですか？', $user->id)]) ?>
+                        <?= $this->Html->link(COMMON_LB['001'], ['action' => 'view', $user->id,'?' => ['targetTable'=>'Users']]) ?>
+                        <?= $this->Html->link(COMMON_LB['002'], ['action' => 'edit', $user->id,'?' => ['targetTable'=>'Users']]) ?>
+                        <?= $this->Form->postLink(COMMON_LB['004'], ['action' => 'delete', $user->id,'?' => ['targetTable'=>'Users']],['confirm' => __(' #{0}を消去してもよろしいですか？', $user->id)]) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
     <?php elseif($itemName2 == "Owners"): ?>
-    <span><?= $this->Html->link(__('追加'), ['action' => 'add','?' => ['targetTable'=>'Owners']]) ?></span>
+    <span><?= $this->Html->link(DEVELOPER_LM['003'], ['action' => 'add','?' => ['targetTable'=>'Owners']]) ?></span>
     <table class="bordered highlight">
         <thead>
             <tr>
@@ -103,9 +103,9 @@ use Cake\Core\Configure;
                     <td><?= h($owner->created) ?></td>
                     <td><?= h($owner->modified) ?></td>
                     <td class="actions">
-                        <?= $this->Html->link(__('表示'), ['action' => 'view', $owner->id,'?' => ['targetTable'=>'Owners']]) ?>
-                        <?= $this->Html->link(__('編集'), ['action' => 'edit', $owner->id,'?' => ['targetTable'=>'Owners']]) ?>
-                        <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $owner->id,'?' => ['targetTable'=>'Owners']],['confirm' => __(' #{0}を消去してもよろしいですか？', $owner->id)]) ?>
+                        <?= $this->Html->link(COMMON_LB['001'], ['action' => 'view', $owner->id,'?' => ['targetTable'=>'Owners']]) ?>
+                        <?= $this->Html->link(COMMON_LB['002'], ['action' => 'edit', $owner->id,'?' => ['targetTable'=>'Owners']]) ?>
+                        <?= $this->Form->postLink(COMMON_LB['004'], ['action' => 'delete', $owner->id,'?' => ['targetTable'=>'Owners']],['confirm' => __(' #{0}を消去してもよろしいですか？', $owner->id)]) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

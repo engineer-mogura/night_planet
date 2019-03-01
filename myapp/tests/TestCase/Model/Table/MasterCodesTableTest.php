@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\ShopsTable;
+use App\Model\Table\MasterCodesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\ShopsTable Test Case
+ * App\Model\Table\MasterCodesTable Test Case
  */
-class ShopsTableTest extends TestCase
+class MasterCodesTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\ShopsTable
+     * @var \App\Model\Table\MasterCodesTable
      */
-    public $Shops;
+    public $MasterCodes;
 
     /**
      * Fixtures
@@ -24,9 +24,7 @@ class ShopsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Shops',
-        'app.Owners',
-        'app.Coupons'
+        'app.MasterCodes'
     ];
 
     /**
@@ -37,8 +35,8 @@ class ShopsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Shops') ? [] : ['className' => ShopsTable::class];
-        $this->Shops = TableRegistry::getTableLocator()->get('Shops', $config);
+        $config = TableRegistry::getTableLocator()->exists('MasterCodes') ? [] : ['className' => MasterCodesTable::class];
+        $this->MasterCodes = TableRegistry::getTableLocator()->get('MasterCodes', $config);
     }
 
     /**
@@ -48,7 +46,7 @@ class ShopsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Shops);
+        unset($this->MasterCodes);
 
         parent::tearDown();
     }
@@ -69,16 +67,6 @@ class ShopsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test buildRules method
-     *
-     * @return void
-     */
-    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

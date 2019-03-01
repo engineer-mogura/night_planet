@@ -32,6 +32,10 @@ class Owner extends Entity
     protected $_accessible = [
         'email' => true,
         'password' => true,
+        'area' => true,
+        'genre' => true,
+        'dir' => true,
+        'tel' => true,
         'status' => true,
         'created' => true,
         'modified' => true,

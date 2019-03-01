@@ -9,7 +9,8 @@ use Cake\Validation\Validator;
 /**
  * Shops Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $Owners
+ * @property \App\Model\Table\OwnersTable|\Cake\ORM\Association\BelongsTo $Owners
+ * @property \App\Model\Table\CouponsTable|\Cake\ORM\Association\HasMany $Coupons
  *
  * @method \App\Model\Entity\Shop get($primaryKey, $options = [])
  * @method \App\Model\Entity\Shop newEntity($data = null, array $options = [])
@@ -41,6 +42,13 @@ class ShopsTable extends Table
 
         $this->addBehavior('Timestamp');
 
+        $this->belongsTo('Owners', [
+            'foreignKey' => 'owner_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->hasMany('Coupons', [
+            'foreignKey' => 'shop_id'
+        ]);
     }
 
     /**
@@ -51,42 +59,67 @@ class ShopsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+
+        $validator->setProvider('custom', 'App\Model\Validation\CustomValidation');
+
         $validator
             ->integer('id')
             ->allowEmptyString('id', 'create');
 
         $validator
+            ->scalar('name')
+            ->maxLength('name', 30)
+            ->allowEmptyString('name');
+
+        $validator
             ->scalar('top_image')
-            ->maxLength('top_image', 255)
+            ->maxLength('top_image', 100)
             ->allowEmptyFile('top_image');
 
         $validator
             ->scalar('catch')
+            ->maxLength('catch', 100,"キャッチコピーは120文字以内にしてください。")
             ->allowEmptyString('catch');
 
         $validator
-            ->integer('coupon')
-            ->allowEmptyString('coupon');
+            ->scalar('tel')
+            ->maxLength('tel', 15,"電話番号が長いです。")
+            ////電話番号形式のチェック ////
+            ->add('tel', 'tel_check',[
+                'rule' =>'tel_check',
+                'provider' => 'custom',
+                'message' => '無効な電話番号です。'
+            ]);
+
+        $validator
+            ->scalar('staff')
+            ->maxLength('staff', 255)
+            ->allowEmptyString('staff');
+
+        $validator
+            ->scalar('bus_hours')
+            ->maxLength('bus_hours', 255)
+            ->allowEmptyString('bus_hours');
+
+        $validator
+            ->scalar('system')
+            ->maxLength('system', 255)
+            ->allowEmptyString('system');
+
+        $validator
+            ->scalar('credit')
+            ->maxLength('credit', 255)
+            ->allowEmptyString('credit');
 
         $validator
             ->scalar('cast')
+            ->maxLength('cast', 255)
             ->allowEmptyString('cast');
 
         $validator
-            ->scalar('tenpo')
-            ->allowEmptyString('tenpo');
-
-        $validator
-            ->integer('tennai')
-            ->allowEmptyString('tennai');
-
-        $validator
-            ->scalar('map')
-            ->allowEmptyString('map');
-
-        $validator
-            ->scalar('job')
-            ->allowEmptyString('job');
+            ->scalar('address')
+            ->maxLength('address', 255)
+            ->allowEmptyString('address');
 
         return $validator;
     }
@@ -98,5 +131,10 @@ class ShopsTable extends Table
      * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
      * @return \Cake\ORM\RulesChecker
      */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['owner_id'], 'Owners'));
 
+        return $rules;
+    }
 }

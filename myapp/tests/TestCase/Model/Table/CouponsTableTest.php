@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\ShopsTable;
+use App\Model\Table\CouponsTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\ShopsTable Test Case
+ * App\Model\Table\CouponsTable Test Case
  */
-class ShopsTableTest extends TestCase
+class CouponsTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\ShopsTable
+     * @var \App\Model\Table\CouponsTable
      */
-    public $Shops;
+    public $Coupons;
 
     /**
      * Fixtures
@@ -24,9 +24,8 @@ class ShopsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Shops',
-        'app.Owners',
-        'app.Coupons'
+        'app.Coupons',
+        'app.Shops'
     ];
 
     /**
@@ -37,8 +36,8 @@ class ShopsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Shops') ? [] : ['className' => ShopsTable::class];
-        $this->Shops = TableRegistry::getTableLocator()->get('Shops', $config);
+        $config = TableRegistry::getTableLocator()->exists('Coupons') ? [] : ['className' => CouponsTable::class];
+        $this->Coupons = TableRegistry::getTableLocator()->get('Coupons', $config);
     }
 
     /**
@@ -48,7 +47,7 @@ class ShopsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Shops);
+        unset($this->Coupons);
 
         parent::tearDown();
     }

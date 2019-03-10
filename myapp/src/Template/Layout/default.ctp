@@ -182,7 +182,7 @@
     </div>
     <div id="return_top">
       <a href="#body" class="red"><i class="medium material-icons return_top">keyboard_arrow_up</i></a>
-    </div><!-- END #return_top -->
+    </div> END #return_top
   </footer>
 
  <script src="/js/okiyoru.js"></script>

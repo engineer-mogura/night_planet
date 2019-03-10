@@ -15,6 +15,7 @@
   <?= $this->Html->script('okiyoru.js') ?>
   <?= $this->Html->script('ja_JP.js') ?>
   <?= $this->Html->script('jquery.notifyBar.js') ?>
+  <?= $this->Html->script('ajaxzip3.js') ?>
   <?= $this->Html->script("https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4") ?>
 
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />

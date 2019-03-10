@@ -69,18 +69,32 @@ class CouponsTable extends Table
             ->notEmpty('from_day','有効開始日を入力してください。')
             ->requirePresence('from_day', 'create')
             ->allowEmptyDateTime('from_day', false);
+            //開始日、終了日が片方入力のチェック ////
+            // ->add('from_day', 'from_to_day_check',[
+            //     'rule' =>'from_to_day_check',
+            //     'provider' => 'custom',
+            //     'message' => '終了日も入力してください。'
+            // ]);
 
         $validator
             ->date('to_day')
             ->notEmpty('to_day','有効終了日を入力してください。')
             ->requirePresence('to_day', 'create')
-            ->allowEmptyDateTime('to_day', false);
+            ->allowEmptyDateTime('to_day', false)
+            ->greaterThanField('to_day', 'from_day','対象期間の終了日は開始日より後にしてください。');
+            ////開始日、終了日が片方入力のチェック ////
+            // ->add('to_day', 'fromToDayCheck',[
+            //     'rule' =>'fromToDayCheck',
+            //     'provider' => 'custom',
+            //     'message' => '開始日も入力してください。'
+            // ]);
+
 
         $validator
             ->scalar('title')
             ->notEmpty('title','タイトルを入力してください。')
             ->maxLength('title', 255,'タイトルが長すぎます。')
-            ->minLength('title', 2,'タイトルが短すぎます。')
+            ->minLength('title', 5,'タイトルが短すぎます。')
             ->requirePresence('title', 'create')
             ->allowEmptyString('title', false);
 
@@ -88,7 +102,7 @@ class CouponsTable extends Table
             ->scalar('content')
             ->notEmpty('content','内容を入力してください。')
             ->maxLength('content', 255,'内容が長すぎます。')
-            ->minLength('content', 2,'内容が短すぎます。')
+            ->minLength('content', 5,'内容が短すぎます。')
             ->requirePresence('content', 'create')
             ->allowEmptyString('content', false);
 

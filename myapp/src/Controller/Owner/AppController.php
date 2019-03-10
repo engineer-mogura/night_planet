@@ -7,6 +7,8 @@ use Cake\Core\Configure;
 
 class AppController extends \App\Controller\AppController
 {
+    public $components = array('Util');
+
     public function initialize()
     {
         parent::initialize();
@@ -37,19 +39,14 @@ class AppController extends \App\Controller\AppController
             'unauthorizedRedirectedRedirect' => $this->referer()
         ]);
 
-        // ログインしている場合は、オーナー情報を取得
-        if(!is_null($this->Auth->user()))
-        {
-            $this->getItem();
-        }
-
     }
 
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
         // ログイン時に許可するアクション
-        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit', 'editTopImage', 'editCatch', 'editCoupon'])) {
+        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit',
+                                'editTopImage', 'editCatch', 'editCoupon', 'editTenpo'])) {
             return true;
         }
         return false;
@@ -62,33 +59,5 @@ class AppController extends \App\Controller\AppController
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
         $this->viewBuilder()->layout('ownerDefault');
     }
-    public function getItem() {
-        $ownerArea = $this->request->getSession()->read('Auth.Owner.area');
-        $ownerGenre = $this->request->getSession()->read('Auth.Owner.genre');
-        $ownerDir = $this->request->getSession()->read('Auth.Owner.dir');
-        $areas = array ('miyako','ishigaki','naha','nanjo','tomigusuku',
-                        'urasoe','ginowan','okinawashi','uruma','nago');
-        $genres = array ('caba','snack','girlsbar','bar');
-
-        $infoArray = array();
-        foreach ( $areas as $area ) {
-            if ($area == $ownerArea) {
-                $infoArray = $infoArray + Configure::read('area.'.$area);
-                break;
-            }
-        }
-        foreach ( $genres as $genre ) {
-            if ($genre == $ownerGenre) {
-                $infoArray = $infoArray + Configure::read('genre.'.$genre);
-                break;
-            }
-        }
-        $infoArray = $infoArray + array('dir'=> $ownerDir);
-        $path = "img/".$infoArray['area_path']."/".$infoArray['genre_path']."/".$infoArray['dir']."/";
-        $infoArray = $infoArray + array("dir_path"=> $path);
-        $this->set('infoArray',$infoArray);
-
-    }
-
 
 }

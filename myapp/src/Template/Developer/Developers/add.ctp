@@ -17,41 +17,33 @@
         </div>
     </nav>
     <div>
-        <?php if(isset($this->request->query["targetTable"])):?>
-            <?php if($itemName1 == "developer"): ?>
-              <?= $this->Form->create($developer) ?>
-              <fieldset>
-                <legend><?= __('開発者を追加') ?></legend>
-                <?php
-                echo $this->Form->control('email');
-                echo $this->Form->control('password');
-                ?>
-            </fieldset>
-            <?= $this->Form->button(__('Submit')) ?>
-            <?= $this->Form->end() ?>
-            <?php elseif($itemName1 == "user"): ?>
-                <?= $this->Form->create($user) ?>
-                <fieldset>
-                  <legend><?= __('ユーザーを追加') ?></legend>
-                  <?php
-                  echo $this->Form->control('email');
-                  echo $this->Form->control('password');
-                  ?>
-              </fieldset>
-              <?= $this->Form->button(__('Submit')) ?>
-              <?= $this->Form->end() ?>
-              <?php elseif($itemName1 == "owner"): ?>
-                <?= $this->Form->create($owner) ?>
-                <fieldset>
-                    <legend><?= __('オーナーを追加') ?></legend>
-                  <?php
-                  echo $this->Form->control('email');
-                  echo $this->Form->control('password');
-                  ?>
-              </fieldset>
-              <?= $this->Form->button(__('Submit')) ?>
-              <?= $this->Form->end() ?>
-          <?php endif;?>
-      <?php endif;?>
+    <?php if (isset($this->request->query["targetTable"])):?>
+        <?php if ($itemName1 == "developer"): ?>
+        <?= $this->Form->create($developer) ?>
+            <p>開発者追加</p>
+            <div class="row">
+                <?= $this->Form->control('email', array('required' => false)) ?>
+                <?= $this->Form->control('password', array('required' => false)) ?>
+            </div>
+        <?php elseif ($itemName1 == "user"): ?>
+        <?= $this->Form->create($user) ?>
+            <p>ユーザ追加</p>
+            <div class="row">
+                <?= $this->Form->control('email', array('required' => false)) ?>
+                <?= $this->Form->control('password', array('required' => false)) ?>
+            </div>
+        <?php elseif ($itemName1 == "owner"): ?>
+        <?= $this->Form->create($owner) ?>
+            <p>オーナ追加</p>
+            <div class="row">
+                <?= $this->Form->control('email', array('required' => false)) ?>
+                <?= $this->Form->control('password', array('required' => false)) ?>
+            </div>
+        <?php endif;?>
+        <div class="card-content" style="text-align:center;">
+            <button type="submit" class="waves-effect waves-light btn-large saveBtn">登録</button>
+        </div>
+        <?= $this->Form->end() ?>
+    <?php endif;?>
   </div>
 </div>

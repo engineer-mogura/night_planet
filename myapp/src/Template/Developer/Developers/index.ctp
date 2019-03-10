@@ -12,7 +12,7 @@ use Cake\Core\Configure;
                 <li><?= $this->Html->link(DEVELOPER_LM['001'], ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Developers']]) ?></li>
                 <li><?= $this->Html->link(DEVELOPER_LM['002'], ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Users']]) ?></li>
                 <li><?= $this->Html->link(DEVELOPER_LM['003'], ['controller' => 'Developers', 'action' => 'index','?' => ['targetTable'=>'Owners']]) ?></li>
-                <li><?= $this->Html->link(COMMON_LM['006'], ['controller' => 'Developers', 'action' => 'logout']) ?></li>
+                <li><?= $this->Html->link(COMMON_LM['007'], ['controller' => 'Developers', 'action' => 'logout']) ?></li>
                 <li><?=$this->request->session()->read('Auth.Developer.email').COMMON_LB['050']?></li>
             </ul>
         </div>
@@ -22,7 +22,7 @@ use Cake\Core\Configure;
     <?php if(isset($this->request->query["targetTable"])):?>
     <h3><?= h($itemName1); ?></h3>
     <?php if($itemName2 == "Developers"): ?>
-    <span><?= $this->Html->link(DEVELOPER_LM['003'], ['action' => 'add','?' => ['targetTable'=>'Developers']]) ?></span>
+    <span><?= $this->Html->link(COMMON_LB['003'], ['action' => 'add','?' => ['targetTable'=>'Developers']]) ?></span>
     <table class="bordered highlight">
         <thead>
             <tr>
@@ -82,7 +82,7 @@ use Cake\Core\Configure;
         </tbody>
     </table>
     <?php elseif($itemName2 == "Owners"): ?>
-    <span><?= $this->Html->link(DEVELOPER_LM['003'], ['action' => 'add','?' => ['targetTable'=>'Owners']]) ?></span>
+    <span><?= $this->Html->link(COMMON_LB['003'], ['action' => 'add','?' => ['targetTable'=>'Owners']]) ?></span>
     <table class="bordered highlight">
         <thead>
             <tr>

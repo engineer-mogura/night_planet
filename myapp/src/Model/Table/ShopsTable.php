@@ -68,7 +68,7 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 30)
+            ->maxLength('name', 120,"店舗名は120文字以内にしてください。")
             ->allowEmptyString('name');
 
         $validator
@@ -78,12 +78,14 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('catch')
-            ->maxLength('catch', 100,"キャッチコピーは120文字以内にしてください。")
+            ->minLength('catch', 5,"キャッチコピーが短すぎます。")
+            ->maxLength('catch', 120,"キャッチコピーは120文字以内にしてください。")
             ->allowEmptyString('catch');
 
         $validator
             ->scalar('tel')
             ->maxLength('tel', 15,"電話番号が長いです。")
+            ->allowEmptyString('tel')
             ////電話番号形式のチェック ////
             ->add('tel', 'tel_check',[
                 'rule' =>'tel_check',
@@ -93,17 +95,25 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('staff')
-            ->maxLength('staff', 255)
+            ->maxLength('staff', 120,"スタッフは120文字以内にしてください。")
             ->allowEmptyString('staff');
 
         $validator
-            ->scalar('bus_hours')
-            ->maxLength('bus_hours', 255)
-            ->allowEmptyString('bus_hours');
+            ->time('bus_from_time')
+            ->allowEmptyDateTime('bus_from_time');
+
+        $validator
+            ->time('bus_to_time')
+            ->allowEmptyDateTime('bus_to_time');
+
+        $validator
+            ->scalar('bus_hosoku')
+            ->maxLength('bus_hosoku', 120,"スタッフは120文字以内にしてください。")
+            ->allowEmptyString('bus_hosoku');
 
         $validator
             ->scalar('system')
-            ->maxLength('system', 255)
+            ->maxLength('system', 255,"スタッフは255文字以内にしてください。")
             ->allowEmptyString('system');
 
         $validator
@@ -117,9 +127,17 @@ class ShopsTable extends Table
             ->allowEmptyString('cast');
 
         $validator
-            ->scalar('address')
-            ->maxLength('address', 255)
-            ->allowEmptyString('address');
+            ->scalar('pref21')
+            ->maxLength('pref21', 3,"都道府県が不正です。")
+            ->allowEmptyString('pref21');
+        $validator
+            ->scalar('addr21')
+            ->maxLength('addr21', 10,"市町村が不正です。")
+            ->allowEmptyString('addr21');
+        $validator
+            ->scalar('strt21')
+            ->maxLength('strt21', 20,"以降の住所が不正です。")
+            ->allowEmptyString('strt21');
 
         return $validator;
     }

@@ -98,6 +98,7 @@ class OwnersController extends AppController
                 if ($owner) {
 
                   $this->Auth->setUser($owner);
+
                   return $this->redirect($this->Auth->redirectUrl());
                 }
 
@@ -195,6 +196,7 @@ class OwnersController extends AppController
     public function index()
     {
         $shop = $this->Owners->find('all')->where(['Owners.id' => $this->request->getSession()->read('Auth.Owner.id')])->contain(['Shops.Coupons'])->first();
+        $this->set('infoArray', $this->Util->getItem());
 
         $this->set(compact('shop'));
         $this->render();

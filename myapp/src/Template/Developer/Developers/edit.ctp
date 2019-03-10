@@ -17,40 +17,32 @@
         </div>
     </nav>
     <div>
-    <h3><?= h($itemName1); ?></h3>
     <?php if($itemName2 == "developer"): ?>
-        <?= $this->Form->create($developer) ?>
-        <fieldset>
-            <legend><?= __('Edit Developer') ?></legend>
-            <?php
-            echo $this->Form->control('email');
-            echo $this->Form->control('password');
-            ?>
-        </fieldset>
-        <?= $this->Form->button(__('Submit')) ?>
-        <?= $this->Form->end() ?>
+    <?= $this->Form->create($developer) ?>
+        <p>開発者編集</p>
+        <div class="row">
+            <?= $this->Form->control('email', array('required' => false)) ?>
+            <?= $this->Form->control('password', array('required' => false)) ?>
+        </div>
     <?php elseif($itemName2 == "user"): ?>
-        <?= $this->Form->create($user) ?>
-        <fieldset>
-            <legend><?= __('Edit User') ?></legend>
-            <?php
-            echo $this->Form->control('email');
-            echo $this->Form->control('password');
-            ?>
-        </fieldset>
-        <?= $this->Form->button(__('Submit')) ?>
-        <?= $this->Form->end() ?>
-    <?php elseif($itemName2 == "owner"): ?>
+    <?= $this->Form->create($user) ?>
+        <p>ユーザ編集</p>
+        <div class="row">
+            <?= $this->Form->control('email', array('required' => false)) ?>
+            <?= $this->Form->control('password', array('required' => false)) ?>
+        </div>
+    <?php else: ?>
         <?= $this->Form->create($owner) ?>
-        <fieldset>
-            <legend><?= __('Edit Owner') ?></legend>
-            <?php
-            echo $this->Form->control('email');
-            echo $this->Form->control('password');
-            ?>
-        </fieldset>
-        <?= $this->Form->button(__('Submit')) ?>
-        <?= $this->Form->end() ?>
+        <p>オーナ編集</p>
+        <div class="row">
+            <?= $this->Form->control('email', array('required' => false)) ?>
+            <?= $this->Form->control('password', array('required' => false)) ?>
+        </div>
     <?php endif;?>
+        <div class="card-content" style="text-align:center;">
+            <button type="submit" class="waves-effect waves-light btn-large saveBtn">登録</button>
+        </div>
+    <?= $this->Form->end() ?>
+
     </div>
 </div>

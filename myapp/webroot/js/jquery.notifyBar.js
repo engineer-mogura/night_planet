@@ -49,7 +49,7 @@
 
         settings = $.extend({
             html            : 'Your message here', // Notify bar's text or HTML
-            delay           : 3000,                // How many microseconds notifybar will be shown    
+            delay           : 10000,                // How many microseconds notifybar will be shown    
             animationSpeed  : 200,                 // Animation time
             cssClass        : '',                  // CSS class
             jqObject        : '',                  // Custom jQuery object

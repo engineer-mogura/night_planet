@@ -36,7 +36,7 @@
               <button type="button" class="waves-effect waves-light btn-large" onclick="topImageChangeBtn($('#top-image'));return false;">登録</button>
             <?php } ?>
           </div>
-          <form id="edit-top-image" name="edit_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/edit_top_image/<?= $shopRow->owner_id ?>" style="display:none;">
+          <!-- <form id="edit-top-image" name="edit_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/edit_top_image/<?= $shopRow->owner_id ?>" style="display:none;">
             <div style="display:none;">
               <input type="hidden" name="_method" value="POST">
               <input type="hidden" name="file_before" value="<?=$shopRow->top_image ?>">
@@ -55,7 +55,30 @@
               <button type="button" class="waves-effect waves-light btn-large" onclick="topImageChangeBtn($('#top-image'));return false;">やめる</button>
               <button type="button" class="waves-effect waves-light btn-large saveBtn" onclick="topImageSaveBtn(); return false;">確定</button>
             </div>
+          </form> -->
+          <form id="edit-top-image" name="edit_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/edit_top_image/<?= $shopRow->owner_id ?>" style="display:none;">
+            <div style="display:none;">
+              <input type="hidden" name="_method" value="POST">
+              <input type="hidden" name="file_before" value="<?=$shopRow->top_image ?>">
+            </div>
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>File</span>
+                <input type="file" id="top-image-file" name="top_image_file" onChange="imgDisp();">
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" name="top_image" type="text">
+              </div>
+            </div>
+            <img src="" id="top-image-show" />
+            <img src="" id="top-image-preview" style="display:none;" />
+            <canvas id="top-image-canvas" style="display:none;"></canvas>
+            <div class="card-content" style="text-align:center;">
+              <button type="button" class="waves-effect waves-light btn-large" onclick="topImageChangeBtn($('#top-image'));return false;">やめる</button>
+              <button type="button" class="waves-effect waves-light btn-large saveBtn" onclick="topImageSaveBtn(); return false;">確定</button>
+            </div>
           </form>
+
         <?php endforeach; ?>
       </div>
       <!-- キャッチコピータブ -->
@@ -66,16 +89,19 @@
         <?php foreach ($shop as $shopRow): ?>
           <div id="show-catch">
             <?php if(!$shopRow->catch == "") { ?>
-              <?php $test = $this->Text->autoParagraph($shopRow->catch); ?>
-              <div class="description"><?php echo($test) ?></div>
+              <?php $catch = $this->Text->autoParagraph($shopRow->catch); ?>
+              <div class="description"><?php echo($catch) ?></div>
               <form id="delete-catch" name="delete_catch" method="post" style="display:none;" action="/owner/shops/edit_catch/<?= $shopRow->owner_id ?>">
                 <input type="hidden" name="_method" value="POST">
                 <input type="hidden" name="catch_before" value="<?=$shopRow->catch ?>">
                 <input type="hidden" name="catch_delete" value="delete">
               </form>
+              <div style="display:none;">
+                <input type="hidden" name="catch_copy" value='<?=$shopRow->catch ?>'>
+              </div>
               <p style="text-align:center;">
                 <button type="button" class="waves-effect waves-light btn-large" onclick="catchChangeBtn($('#catch'));return false;">変更</button>
-                <button type="button" class="waves-effect waves-light btn-large" onclick="if (confirm('キャッチコピーを削除してもよろしいですか？')) { document.delete_catch.submit(); } event.returnValue = false; return false;">削除</button>
+                <button type="button" class="waves-effect waves-light btn-large" onclick="catchDeleteBtn(); return false;">削除</button>
               </p>
             <?php } else { ?>
               <p>まだ登録されていません。</p>
@@ -88,13 +114,13 @@
               <input type="hidden" name="catch_before" value="<?=$shopRow->catch ?>">
             </div>
             <div class="input-field">
-              <textarea id="text-catch" class="materialize-textarea" name="catch" data-length="120"><?=$shopRow->catch?></textarea>
-              <label for="text-catch">Textarea</label>
+              <textarea id="catch-copy" class="validate materialize-textarea" name="catch" data-length="120"><?=$shopRow->catch?></textarea>
+              <label for="catch-copy">キャッチコピー</label>
             </div>
             <div class="card-content" style="text-align:center;">
               <button type="button" class="waves-effect waves-light btn-large" onclick="catchChangeBtn($('#catch'));return false;">やめる</button>
 
-              <button type="button" class="waves-effect waves-light btn-large" onclick="if (confirm('こちらのキャッチコピーに変更でよろしいですか？')) { document.edit_catch.submit(); } event.returnValue = false; return false; ">確定</button>
+              <button type="button" class="waves-effect waves-light btn-large" onclick="catchSaveBtn(); return false;">確定</button>
             </div>
           </form>
         <?php endforeach; ?>
@@ -159,7 +185,7 @@
               <p style="text-align:center;">
                 <button type="button" href="#" class="waves-effect waves-light btn-large addBtn" onclick="couponAddBtn($('#coupon'));return false;">追加</button>
                 <button type="button" class="waves-effect waves-light btn-large disabled changeBtn" onclick="couponChangeBtn($('#coupon'));return false;">変更</button>
-                <button type="button" class="waves-effect waves-light btn-large disabled deleteBtn" onclick="couponDeleteBtn(); event.returnValue = false; return false;">削除</button>
+                <button type="button" class="waves-effect waves-light btn-large disabled deleteBtn" onclick="couponDeleteBtn();return false;">削除</button>
               </p>
             <?php } else { ?>
               <p>まだ登録されていません。</p>
@@ -181,6 +207,7 @@
               ON
             </label>
           </div>
+          <p>対象期間</p>
           <div class="row">
             <div class="col s5 m4 l3"><input id="from-day" class="datepicker" name="from_day"></div>
             <div class="col s2 m1 l1 center-align">～</div>
@@ -188,30 +215,30 @@
           </div>
           <div class="row">
             <div class="input-field col s12 m6 l6">
-              <input type="text" id="text-coupon-title" class="validate" name="title" data-length="50">
-              <label for="text-coupon-title">タイトル</label>
+              <input type="text" id="coupon-title" class="validate" name="title" data-length="50">
+              <label for="coupon-title">タイトル</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12 m10 l6">
-              <textarea id="text-coupon-content" class="validate materialize-textarea" name="content"></textarea>
-              <label for="text-coupon-content">内容</label>
+              <textarea id="coupon-content" class="validate materialize-textarea" name="content"></textarea>
+              <label for="coupon-content">内容</label>
             </div>
           </div>
           <div class="card-content" style="text-align:center;">
             <button type="button" href="#" class="waves-effect waves-light btn-large" onclick="couponChangeBtn($('#coupon'));return false;">やめる</button>
-            <button type="button" class="waves-effect waves-light btn-large saveBtn" onclick="if (confirm('こちらのクーポン内容に変更でよろしいですか？')) {couponSaveBtn(); } event.returnValue = false; return false;">確定</button>
+            <button type="button" class="waves-effect waves-light btn-large saveBtn" onclick="couponSaveBtn(); return false;">確定</button>
           </div>
         </form>
       </div>
 
       <div id="cast" class="col s12">
-        <h5>トップ画像</h5>
+        <!-- <h5>トップ画像</h5>
         <?= $this->Form->create() ?>
         <?= $this->Form->control('email3') ?>
         <?= $this->Form->control('password3') ?>
         <?= $this->Form->button('ログイン') ?>
-        <?= $this->Form->end() ?>
+        <?= $this->Form->end() ?> -->
       </div>
       <div id="tenpo" class="col s12">
         <h5>店舗情報</h5>
@@ -221,6 +248,7 @@
               <?php foreach ($shop as $shopRow): ?>
                 <div style="display:none;">
                   <input type="hidden" name="tenpo_copy" value='<?=$shopRow ?>'>
+                  <input type="hidden" name="chip_hidden" value='<?=$creditsHidden?>'>
                 </div>
                 <table class="bordered shop-table z-depth-2" border="1">
                 <tr>
@@ -232,8 +260,8 @@
                 </tr>
                 <tr>
                   <th align="center">所在地</th>
-                  <td><?php if(!$shopRow->address == '') {
-                    echo ($shopRow->address);
+                  <td><?php if(!$shopRow->pref21 == '') {
+                    echo ($shopRow->pref21.$shopRow->addr21.$shopRow->strt21);
                   } else {echo ('登録されていません。');} ?>
                   </td>
                 </tr>
@@ -246,30 +274,41 @@
                 </tr>
                 <tr>
                   <th align="center">営業時間</th>
-                  <td><?php if(!$shopRow->bus_hours == '') {
-                    echo ($shopRow->bus_hours);
-                  } else {echo ('登録されていません。');} ?>
+                  <td><?php if((!$shopRow->bus_from_time == '')
+                            && (!$shopRow->bus_to_time == '')
+                            && (!$shopRow->bus_hosoku == '')) {
+                              $busTime = $this->Time->format($shopRow->bus_from_time, 'HH:mm')
+                              ."～".$this->Time->format($shopRow->bus_to_time, 'HH:mm')
+                              ."</br>".$shopRow->bus_hosoku;
+                              echo ($busTime);
+                            } else { echo ('登録されていません。'); } ?>
                   </td>
                 </tr>
                 <tr>
                   <th align="center">スタッフ</th>
                   <td><?php if(!$shopRow->staff == '') {
-                    echo ($shopRow->staff);
+                    echo ($this->Text->autoParagraph($shopRow->staff));
                   } else {echo ('登録されていません。');} ?>
                   </td>
                 </tr>
                 <tr>
                   <th align="center" valign="top">システム</th>
                   <td><?php if(!$shopRow->system == '') {
-                    echo ($shopRow->system);
+                    echo ($this->Text->autoParagraph($shopRow->system));
                   } else {echo ('登録されていません。');} ?>
                   </td>
                 </tr>
                 <tr>
                   <th align="center">ご利用できるクレジットカード</th>
-                  <td><?php if(!$shopRow->credit == '') {
-                    echo ($shopRow->credit);
-                  } else {echo ('登録されていません。');} ?>
+                  <td><?php if(!$shopRow->credit == '') { ?>
+                      <?php $array =explode(',', $shopRow->credit); ?>
+                      <?php for ($i = 0; $i < count($array); $i++) { ?>
+                      <div class="chip" name="" value="">
+                        <img src="/img/common/credit/<?=$array[$i]?>.png" id="<?=$array[$i]?>" alt="<?=$array[$i]?>">
+                        <?=$array[$i]?>
+                      </div>
+                      <?php } ?>
+                      <?php } else {echo ('登録されていません。');} ?>
                   </td>
                 </tr>
               </table>
@@ -285,47 +324,75 @@
             <input type="hidden" name="_method" value="POST">
             <input type="hidden" name="tenpo_edit" value="">
             <input type="hidden" name="tenpo_edit_id" value="">
+            <input type="hidden" name="credit" value="">
           </div>
           <div class="row">
             <div class="input-field col s12 m6 l6">
-              <input type="text" id="text-tenpo-name" class="validate" name="name" data-length="50">
-              <label for="text-tenpo-name">店舗名</label>
+              <input type="text" id="name" class="validate" name="name" data-length="50">
+              <label for="name">店舗名</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m12 l12">
+              <span>郵便番号からも検索できます。</span>
+            </div>
+            <div class="input-field col s5 m2 l2">
+              <input type="text" id="zip21" name="zip21" size="4" maxlength="3">
+              <label for="zip21">郵便番号(3桁)</label>
+            </div>
+            <div class="col s1 m1 l1 center-align">ー</div>
+            <div class="input-field col s6 m2 l2">
+              <input type="text" id="zip22" name="zip22" size="5" maxlength="4" onKeyUp="AjaxZip3.zip2addr('zip21','zip22','pref21','addr21','strt21');">
+              <label for="zip22">郵便番号(4桁)</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12 m6 l6">
-              <input type="text" id="text-tenpo-address" class="validate" name="address" data-length="50">
-              <label for="text-tenpo-address">所在地</label>
+              <input type="text" id="pref21" name="pref21" class="validate" size="3">
+              <label for="pref21">都道府県</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12 m6 l6">
-              <input type="text" id="text-tenpo-tel" class="validate" name="tel" data-length="50">
-              <label for="text-tenpo-tel">連絡先</label>
+              <input type="text" id="addr21" name="addr21" class="validate" size="10">
+              <label for="addr21">市区町村</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input type="text" id="strt21" name="strt21" class="validate" size="20">
+              <label for="strt21">以降の住所</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input type="tel" id="tel" class="validate" name="tel">
+              <label for="tel">連絡先</label>
             </div>
           </div>
           <div class="row">
             <div class="col s12 m12 l12"><label style="font-size: 1rem;">営業時間</label></div>
-            <div class="col s5 m1 l1"><input id="from-time" class="timepicker" name="from_time"></div>
+            <div class="col s5 m1 l1"><input id="bus-from-time" class="timepicker" name="bus_from_time"></div>
             <div class="col s2 m1 l1 center-align">～</div>
-            <div class="col s5 m1 l1"><input id="to-time" class="timepicker" name="to_time"></div>
+            <div class="col s5 m1 l1"><input id="bus-to-time" class="timepicker" name="bus_to_time"></div>
           </div>
           <div class="row">
             <div class="input-field col s12 m6 l6">
-              <input type="text" id="text-tenpo-hosoku" class="validate" name="hosoku" data-length="50">
-              <label for="text-tenpo-hosoku">営業時間についての補足</label>
+              <input type="text" id="bus-hosoku" class="validate" name="bus_hosoku" data-length="50">
+              <label for="bus-hosoku">営業時間についての補足</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12 m6 l6">
-              <input type="text" id="text-tenpo-staff" class="validate" name="staff" data-length="50">
-              <label for="text-tenpo-staff">スタッフ</label>
+              <textarea id="staff" class="validate materialize-textarea" name="staff" data-length="50"></textarea>
+              <label for="staff">スタッフ</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12 m6 l6">
-              <input type="text" id="text-tenpo-system" class="validate" name="system" data-length="250">
-              <label for="text-tenpo-system">システム</label>
+              <textarea id="system" class="validate materialize-textarea" name="system" data-length="250"></textarea>
+              <label for="system">システム</label>
             </div>
           </div>
           <div class="row">
@@ -336,8 +403,8 @@
                 <div class="card-panel">
                 <div class="chip-box">
                 <?php foreach ($credits as $key => $value): ?>
-                  <div class="chip" id="" name="" value="">
-                    <img src="/img/common/credit/<?=$value->code?>.png" alt="<?=$value->code?>">
+                  <div class="chip" name="" value="">
+                    <img src="/img/common/credit/<?=$value->code?>.png" id="<?=$value->id?>" alt="<?=$value->code?>">
                     <?=$value->code?>
                   </div>
                 <?php endforeach ?>
@@ -346,34 +413,34 @@
             </div>
           </div>
           <div class="card-content" style="text-align:center;">
-            <button type="button" href="#" class="waves-effect waves-light btn-large" onclick="tenpoChangeBtn($('#tenpo'));return false;">やめる</button>
-            <button type="button" class="waves-effect waves-light btn-large" onclick="if (confirm('こちらの店舗内容に変更でよろしいですか？')) {tenpoSaveBtn(); } event.returnValue = false; return false;">確定</button>
+            <button type="button" href="#" class="waves-effect waves-light btn-large changeBtn" onclick="tenpoChangeBtn($('#tenpo'));return false;">やめる</button>
+            <button type="button" class="waves-effect waves-light btn-large saveBtn" onclick="tenpoSaveBtn();return false;">確定</button>
           </div>
         </form>
       </div>
       <div id="tennai" class="col s12">
-        <h5>トップ画像</h5>
+        <!-- <h5>トップ画像</h5>
         <?= $this->Form->create() ?>
         <?= $this->Form->control('email5') ?>
         <?= $this->Form->control('password5') ?>
         <?= $this->Form->button('ログイン') ?>
-        <?= $this->Form->end() ?>
+        <?= $this->Form->end() ?> -->
       </div>
       <div id="map" class="col s12">
-        <h5>トップ画像</h5>
+        <!-- <h5>トップ画像</h5>
         <?= $this->Form->create() ?>
         <?= $this->Form->control('email6') ?>
         <?= $this->Form->control('password6') ?>
         <?= $this->Form->button('ログイン') ?>
-        <?= $this->Form->end() ?>
+        <?= $this->Form->end() ?> -->
       </div>
       <div id="job" class="col s12">
-        <h5>トップ画像</h5>
+        <!-- <h5>トップ画像</h5>
         <?= $this->Form->create() ?>
         <?= $this->Form->control('email7') ?>
         <?= $this->Form->control('password7') ?>
         <?= $this->Form->button('ログイン') ?>
-        <?= $this->Form->end() ?>
+        <?= $this->Form->end() ?> -->
       </div>
     </div>
   </div>

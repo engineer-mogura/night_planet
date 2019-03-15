@@ -24,8 +24,6 @@ class ShopsController extends AppController
         }
     }
 
-
-
     /**
      * 編集画面の処理
      *
@@ -43,6 +41,9 @@ class ShopsController extends AppController
         // セッションにアクティブタブがセットされていればセットする
         if ($this->request->session()->check('activeTab')) {
             $activeTab = $this->request->session()->consume('activeTab');
+        }
+        if(!is_null($user = $this->Auth->user())){
+            $this->set('infoArray', $this->Util->getItem());
         }
 
         if ($this->request->session()->check('ajax')) {

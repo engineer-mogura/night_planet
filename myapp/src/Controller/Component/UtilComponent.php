@@ -31,6 +31,7 @@ class UtilComponent extends Component {
      */
     public function getItem()
     {
+        // TODO: Authセッションからオーナー情報を取得せず、Ownersテーブルから取る？
         $ownerArea = $this->request->getSession()->read('Auth.Owner.area');
         $ownerGenre = $this->request->getSession()->read('Auth.Owner.genre');
         $ownerDir = $this->request->getSession()->read('Auth.Owner.dir');

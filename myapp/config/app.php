@@ -270,7 +270,7 @@ return [
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
              */
             //'encoding' => 'utf8mb4',
-            'timezone' => '+09:00',
+            'timezone' => 'Asia/Tokyo',
             'flags' => [],
             'cacheMetadata' => true,
             'log' => true,
@@ -390,20 +390,20 @@ return [
      */
 
 
-/*    'Session' => [
-        'defaults' => 'php',
-        'timeout' => '120',
-        'cookie' => 'okiyorugo_cookie', // 任意の文字列
-        'cookieTimeout' => '259200', // 180days
-        'ini' => [
-            'session.cookie_secure' => false, // SSLと非SSLのドメイン両方でセッションにアクセスする必要がある場合、これを無効
-            'session.cookie_lifetime' => 15552000,
-        ],
-    ],*/
+    // 'Session' => [
+    //     'defaults' => 'php',
+    //     'timeout' => '120',
+    //     'cookie' => 'okiyorugo_cookie', // 任意の文字列
+    //     'cookieTimeout' => '259200', // 180days
+    //     'ini' => [
+    //         'session.cookie_secure' => false, // SSLと非SSLのドメイン両方でセッションにアクセスする必要がある場合、これを無効
+    //         'session.cookie_lifetime' => 15552000,
+    //     ],
+    // ],
 
     'Session' => [
         'defaults' => 'php',
-        'cookie' => 'remember_me', // 任意の文字列
+        'cookie' => 'okiyorugo_cookie', // 任意の文字列
         'timeout' => 259200, // 180days
         'cookieTimeout' => 259200, // 180days
         'autoRegenerate' => false, // 自動でセッションを再生成するのをやめる

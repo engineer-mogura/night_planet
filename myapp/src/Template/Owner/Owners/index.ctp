@@ -4,14 +4,14 @@
 * @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
 */
 ?>
-
 <div class="container">
   <?= $this->Flash->render() ?>
   <h5><?= __('店舗トップページ') ?></h5>
+  <?php foreach ($owner as $ownerRow): ?>
   <div class="row">
     <div class="col s12 m12 l8">
-      <img class="responsive-img" width="100%" src=<?php if($shop->shop->top_image != '') {
-        echo('/'.$infoArray['dir_path'].$shop->shop->top_image);} else {
+      <img class="responsive-img" width="100%" src=<?php if($ownerRow->shop->top_image != '') {
+        echo('/'.$infoArray['dir_path'].$ownerRow->shop->top_image);} else {
         echo("/img/common/top/top1.jpg");} ?> />
       <div class="fixed-action-btn horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
@@ -33,8 +33,8 @@
         </ul>
       </div>
       <?= $this->element('shop-edit-form') ?>
-      <h5 class="left-align"><?php if($shop->shop->name != '') {
-        echo($shop->shop->name);} else {
+      <h5 class="left-align"><?php if($ownerRow->shop->name != '') {
+        echo($ownerRow->shop->name);} else {
         echo("店舗名を決めてください。");} ?>
       </h5>
       <div class="header-area">
@@ -55,8 +55,8 @@
 
       </div>
       <div class="description">
-        <?php if($shop->shop->catch != ''){
-          echo ($this->Text->autoParagraph($shop->shop->catch)); } else {
+        <?php if($ownerRow->shop->catch != ''){
+          echo ($this->Text->autoParagraph($ownerRow->shop->catch)); } else {
           echo ('キャッチコピーを決めてください。以下はサンプルです。<br />宮古島のキャバクラをお探しならラウンジ美月へ。<br />
       宮古島最大級のキャストと楽しむヒトトキ。時間制・飲み放題で安心のキャバクラです。');} ?>
       </div>
@@ -74,13 +74,13 @@
               </p>
             </div>
           </div>
-            <?php if(count($shop->shop->coupons) > 0) { ?>
-            <?php foreach($shop->shop->coupons as $coupon): ?>
+            <?php if(count($ownerRow->shop->coupons) > 0) { ?>
+            <?php foreach($ownerRow->shop->coupons as $coupon): ?>
               <div class="collapsible-body orange lighten-4">
                 <span><?= $this->Time->format($coupon->from_day, 'Y/M/d') ?>～<?= $this->Time->format($coupon->to_day, 'Y/M/d') ?></span><br />
                   <span>★☆★<?=$coupon->title ?>★☆★<br />
                 <?=$coupon->content ?><br />
-              <?php if($coupon === end($shop->shop->coupons)){echo ('こちらの画面をお店側に見せ、使用するクーポンをお知らせください。');}?></span>
+              <?php if($coupon === end($ownerRow->shop->coupons)){echo ('こちらの画面をお店側に見せ、使用するクーポンをお知らせください。');}?></span>
               </div>
             <?php endforeach; ?>
             <?php } else { ?>
@@ -176,30 +176,27 @@
          <table class="bordered shop-table z-depth-2" border="1">
           <tbody>
             <tr>
-              <th class="table-header" colspan="2" align="center">ラウンジ美月 宮古島店</th>
+              <th class="table-header" colspan="2" align="center"><?= h($ownerRow->shop->name);?></th>
             </tr>
             <tr>
               <th align="center">所在地</th>
-              <td>〒906-0012 沖縄県宮古島市平良字西里171</td>
+              <td><?= h($ownerRow->shop->pref21.$ownerRow->shop->addr21.$ownerRow->shop->strt21);?></td>
             </tr>
             <tr>
               <th align="center">連絡先</th>
-              <td>TEL. 0980-79-0257</td>
+              <td><?=h($ownerRow->shop->tel);?></td>
             </tr>
             <tr>
               <th align="center">営業時間</th>
-              <td>20：00 ～ LAST ※日曜日も営業しております。</td>
+              <td><?=h($ownerRow->shop->bus_from_time);?> ～ <?=h($ownerRow->shop->bus_to_time);?> <?=h($ownerRow->shop->bus_hosoku);?></td>
             </tr>
             <tr>
               <th align="center">スタッフ</th>
-              <td>全国各地から集まった20歳～30歳の明るい女のコ多数</td>
+              <td><?=h($ownerRow->shop->staff);?></td>
             </tr>
             <tr>
               <th align="center" valign="top">システム</th>
-              <td>時間制 1時間飲み放題<br>
-                お一人様（税・サービス料込）<br>
-                ￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）<br>
-              ★ＶＩＰルーム、カラオケ完備</td>
+              <td><?=h($ownerRow->shop->system);?></td>
             </tr>
           </tbody>
         </table>
@@ -213,9 +210,15 @@
               </tr>
               <tr>
                 <th align="center">ご利用できるクレジットカード</th>
-                <td>MasterCard<br>
-                  VISA<br>
-                JCB</td>
+                <td><?php if(!$ownerRow->shop->credit == '') { ?>
+                      <?php $array =explode(',', $ownerRow->shop->credit); ?>
+                      <?php for ($i = 0; $i < count($array); $i++) { ?>
+                      <div class="chip" name="" value="">
+                        <img src="/img/common/credit/<?=$array[$i]?>.png" id="<?=$array[$i]?>" alt="<?=$array[$i]?>">
+                        <?=$array[$i]?>
+                      </div>
+                      <?php } ?>
+                      <?php } else {echo ('登録されていません。');} ?></td>
               </tr>
             </tbody>
           </table>
@@ -324,4 +327,5 @@
     </div>
   </div>
 </div>
+<?php endforeach; ?>
 </div>

@@ -36,6 +36,7 @@ class Owner extends Entity
         'genre' => true,
         'dir' => true,
         'tel' => true,
+        'remember_token' => true,
         'status' => true,
         'created' => true,
         'modified' => true,
@@ -49,7 +50,7 @@ class Owner extends Entity
      */
     protected $_hidden = [
         'password',
-        'remember_token',  // 自動ログイン用トークン
+        //'remember_token',  // 自動ログイン用トークン TODO: リリース前にコメントインする
     ];
 
   protected function _setPassword($value){

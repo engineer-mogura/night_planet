@@ -87,7 +87,9 @@ class OwnersController extends AppController
     public function login()
     {
         $OwnersTable = TableRegistry::get('Owners');
+
         if ($this->request->is('post')) {
+
             // バリデーションはログイン用を使う。
             $owner = $this->Owners->newEntity( $this->request->getData(),['validate' => 'ownerLogin']);
 
@@ -96,9 +98,24 @@ class OwnersController extends AppController
                 $this->log($this->request->getData("remember_me"),"debug");
                 $owner = $this->Auth->identify();
                 if ($owner) {
+                    // TODO: この自動ログインのコメントは削除予定。\node-link\cakephp-remember-meプラグインで対応できてる
+                    // // 自動ログインチェック時にcookie設定
+                    // if ($this->request->getData('remember_me') === '1') {
+                    //     // ユーザー確認用の乱数生成
+                    //     $set_key = hash('sha256', (uniqid() . mt_rand(1, 999999999) . '_auto_logins'));
+                    //     $entity = $this->Owners->get($owner['id']);
+                    //     $entity->remember_token = $set_key;
+                    //     $this->Owners->save($entity);
+                    //     // Cookieセット
+                    //     $this->response = $this->response->withCookie('AUTO_LOGIN', [
+                    //         'value' => $set_key,
+                    //         'path' => '/',
+                    //         'httpOnly' => true,
+                    //         'secure' => false,
+                    //         'expire' => strtotime('+1 year')]);
+                    // }
 
                   $this->Auth->setUser($owner);
-
                   return $this->redirect($this->Auth->redirectUrl());
                 }
 
@@ -120,6 +137,16 @@ class OwnersController extends AppController
 
     public function logout()
     {
+        // TODO: この自動ログインのコメントは削除予定。\node-link\cakephp-remember-meプラグインで対応できてる
+        // // ※ $userにユーザー情報取得済み前提
+        // // ユーザー自動ログイン管理テーブルからレコード削除
+        // $entity = $this->Owners->get(['id' => $this->Auth->user('id')]);
+        // $entity->remember_token = "";
+        // if ($this->Owners->save($entity)) {
+        //     // Cookie削除
+        //     $this->response = $this->response->withExpiredCookie('AUTO_LOGIN');
+        // }
+
         $this->Flash->success(Configure::read('cm.002'));
         return $this->redirect($this->Auth->logout());
     }
@@ -195,14 +222,18 @@ class OwnersController extends AppController
 
     public function index()
     {
-        $shop = $this->Owners->find('all')->where(['Owners.id' => $this->request->getSession()->read('Auth.Owner.id')])->contain(['Shops.Coupons'])->first();
-        $this->set('infoArray', $this->Util->getItem());
-
-        $this->set(compact('shop'));
+        $owner = $this->Owners->find('all')->where(['Owners.id' => $this->request->getSession()->read('Auth.Owner.id')])->contain(['Shops.Coupons']);
+        // オーナーに関する情報をセット
+        if(!is_null($user = $this->Auth->user())){
+            $this->set('infoArray', $this->Util->getItem());
+        }
+        $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
+        $creditsHidden = json_encode($this->Util->getCredit($owner,$credits));
+        $this->set(compact('owner', 'credits','creditsHidden'));
         $this->render();
     }
 
-        public function view($id = null)
+    public function view($id = null)
     {
 
         if(isset($this->request->query["targetEdit"])){

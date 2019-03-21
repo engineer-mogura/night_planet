@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 3 月 03 日 10:57
+-- Generation Time: 2019 年 3 月 21 日 20:38
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.1.26
 
@@ -93,6 +93,48 @@ INSERT INTO `articles_tags` (`article_id`, `tag_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `casts`
+--
+
+DROP TABLE IF EXISTS `casts`;
+CREATE TABLE `casts` (
+  `id` int(11) NOT NULL,
+  `shop_id` int(11) NOT NULL,
+  `name` varchar(30) NOT NULL,
+  `nickname` varchar(30) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `birthday` time DEFAULT NULL,
+  `three_size` varchar(10) DEFAULT NULL,
+  `blood_type` varchar(5) DEFAULT NULL,
+  `constellation` varchar(10) DEFAULT NULL,
+  `age` varchar(5) DEFAULT NULL,
+  `message` varchar(50) DEFAULT NULL,
+  `status` int(1) NOT NULL,
+  `delete_flag` char(1) DEFAULT NULL,
+  `holiday` varchar(50) DEFAULT NULL,
+  `image1` varchar(255) DEFAULT NULL,
+  `image2` varchar(255) DEFAULT NULL,
+  `image3` varchar(255) DEFAULT NULL,
+  `image4` varchar(255) DEFAULT NULL,
+  `image5` varchar(255) DEFAULT NULL,
+  `image6` varchar(255) DEFAULT NULL,
+  `image7` varchar(255) DEFAULT NULL,
+  `image8` varchar(255) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `casts`
+--
+
+INSERT INTO `casts` (`id`, `shop_id`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `status`, `delete_flag`, `holiday`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `created`, `modified`) VALUES
+(0, 38, '山田　花子', 'ＨＡＮＡ', 'okiyoru2@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-21 19:10:06', '2019-03-21 19:59:30');
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `coupons`
 --
 
@@ -101,8 +143,8 @@ CREATE TABLE `coupons` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
   `status` int(1) NOT NULL,
-  `from_day` date NOT NULL,
-  `to_day` date NOT NULL,
+  `from_day` datetime NOT NULL,
+  `to_day` datetime NOT NULL,
   `title` text NOT NULL,
   `content` text NOT NULL,
   `created` datetime NOT NULL,
@@ -114,12 +156,12 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`id`, `shop_id`, `status`, `from_day`, `to_day`, `title`, `content`, `created`, `modified`) VALUES
-(11, 2, 0, '2019-02-05', '2019-02-13', 'タイトル１', 'タイトル１タイトル１', '2019-02-12 23:04:16', '2019-02-12 23:04:16'),
-(12, 57, 0, '2019-02-11', '2019-02-13', 'existsInexistsIn', 'existsInexistsInexistsIn', '2019-02-12 23:45:12', '2019-02-12 23:45:12'),
-(13, 57, 0, '2019-02-12', '2019-02-19', 'ｆｆｆｆ', 'ｆｄｆｄｆｄｄ', '2019-02-13 00:36:09', '2019-02-13 00:36:09'),
-(14, 57, 0, '2019-02-04', '2019-02-28', 'ｆｆｄｄｆ', 'ｆｄｆ', '2019-02-13 18:09:26', '2019-02-13 18:09:26'),
-(42, 38, 1, '2019-02-05', '2019-02-19', 'タイトル１タイトル１タイトル１', 'タイトル１タイトル１タイトル１タイトル１タイトル１', '2019-02-23 00:16:08', '2019-03-03 01:12:22'),
-(44, 38, 0, '2019-03-02', '2019-03-26', 'うちあたゆれ', 'いつたぬいち', '2019-03-03 01:12:48', '2019-03-03 01:15:19');
+(11, 2, 0, '2019-02-05 00:00:00', '2019-02-13 00:00:00', 'タイトル１', 'タイトル１タイトル１', '2019-02-12 23:04:16', '2019-02-12 23:04:16'),
+(12, 57, 0, '2019-02-11 00:00:00', '2019-02-13 00:00:00', 'existsInexistsIn', 'existsInexistsInexistsIn', '2019-02-12 23:45:12', '2019-02-12 23:45:12'),
+(13, 57, 0, '2019-02-12 00:00:00', '2019-02-19 00:00:00', 'ｆｆｆｆ', 'ｆｄｆｄｆｄｄ', '2019-02-13 00:36:09', '2019-02-13 00:36:09'),
+(14, 57, 0, '2019-02-04 00:00:00', '2019-02-28 00:00:00', 'ｆｆｄｄｆ', 'ｆｄｆ', '2019-02-13 18:09:26', '2019-02-13 18:09:26'),
+(42, 38, 1, '2019-02-01 00:00:00', '2019-02-02 00:00:00', 'クーポンタイトル１クーポンタイトル２クーポンタイトル２クーポンタイトル２', 'クーポン内容１クーポン内容１\r\nクーポン内容１クーポン内容１\r\nクーポン内容１クーポン内容１クーポン内容１クーポン内容１\r\nクーポン内容１クーポン内容１', '2019-02-23 00:16:08', '2019-03-21 17:50:21'),
+(44, 38, 1, '2019-02-22 00:00:00', '2019-03-18 00:00:00', 'クーポンタイトル２クーポンタイトル２クーポンタイトル２', '	\r\nクーポン内容２クーポン内容２\r\nクーポン内容２クーポン内容２\r\nクーポン内容２クーポン内容２', '2019-03-03 01:12:48', '2019-03-17 15:14:23');
 
 -- --------------------------------------------------------
 
@@ -143,6 +185,45 @@ CREATE TABLE `developers` (
 INSERT INTO `developers` (`id`, `email`, `password`, `created`, `modified`) VALUES
 (2, 'dev3@gmail.com', '$2y$10$nL/kI91hjg11GHNPafsH0OVn9rq5TwMHYmmSEMSaIoGDu.Ua0sCp2', '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (3, 'dev4@gmail.com', '$2y$10$XcLOtHKPdLvHofbqqbpX1u7/Wiosc5NaTjmHfRTIwEcMQ8Vunw896', '2019-01-11 21:19:43', '2019-01-13 18:47:16');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+CREATE TABLE `jobs` (
+  `id` int(11) NOT NULL,
+  `shop_id` int(11) NOT NULL,
+  `industry` varchar(30) DEFAULT NULL,
+  `job_type` varchar(30) DEFAULT NULL,
+  `work_from_time` time DEFAULT NULL,
+  `work_to_time` time DEFAULT NULL,
+  `work_time_hosoku` varchar(50) DEFAULT NULL,
+  `from_age` varchar(2) DEFAULT NULL,
+  `to_age` varchar(2) DEFAULT NULL,
+  `qualification_hosoku` varchar(50) DEFAULT NULL,
+  `holiday` varchar(50) DEFAULT NULL,
+  `holiday_hosoku` varchar(50) DEFAULT NULL,
+  `treatment` varchar(255) DEFAULT NULL,
+  `pr` varchar(100) DEFAULT NULL,
+  `tel1` varchar(15) DEFAULT NULL,
+  `tel2` varchar(15) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `lineid` varchar(20) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `jobs`
+--
+
+INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `work_to_time`, `work_time_hosoku`, `from_age`, `to_age`, `qualification_hosoku`, `holiday`, `holiday_hosoku`, `treatment`, `pr`, `tel1`, `tel2`, `email`, `lineid`, `created`, `modified`) VALUES
+(0, 37, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '2019-03-20 00:06:19', '2019-03-20 00:06:19'),
+(1, 38, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '12:00:00', '12:00:00', 'work_time_hosoku', '21', '24', 'qualification_hosoku', '水,土,日', 'holiday_hosoku', '経験者優遇,ドレス・制服貸与あり,友達紹介料あり,モノレール駅からすぐ,送迎あり,個人ロッカーあり', 'PR文PR文PR文PR文PR文PR文PR文\r\nPR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文\r\nPR文PR文PR文PR文PR文PR文PR文', '09037968838', '08037968838', 't.takuma830@gmail.com', 'testLINEID', '2019-03-20 00:06:19', '2019-03-21 16:05:54'),
+(2, 39, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -188,8 +269,50 @@ INSERT INTO `master_codes` (`id`, `code`, `code_name`, `code_group`, `sort`, `de
 (19, 'MasterCard', 'マスターカード', 'credit', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (20, 'VISA', 'ビサ', 'credit', 2, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (21, 'JCB', 'ジェイシービー', 'credit', 3, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
-(22, 'AMERICAN EXPRESS', 'アメリカン・エクスプレス', 'credit', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
-(23, 'Diners', 'ダイナース', 'credit', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10');
+(22, 'AmericanExpress', 'アメリカン・エクスプレス', 'credit', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(23, 'Diners', 'ダイナース', 'credit', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(24, 'time_caba', '時間制(キャバクラ)', 'industry', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(25, 'time_snack', '時間制(スナック))', 'industry', 2, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(26, 'time_lounge', '時間制(ラウンジ)', 'industry', 3, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(27, 'time_club', '時間制(クラブ)', 'industry', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(28, 'bottle_caba', 'ボトル制(キャバクラ)', 'industry', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(29, 'bottle_snack', 'ボトル制(スナック))', 'industry', 6, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(30, 'bottle_lounge', 'ボトル制(ラウンジ)', 'industry', 7, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(31, 'bottle_club', 'ボトル制(クラブ)', 'industry', 8, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(32, 'girsbar', 'ガールズバー', 'industry', 9, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(33, 'bar', 'バー', 'industry', 10, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(34, 'job_type1', 'レディスタッフ・キャスト', 'job_type', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(35, 'job_type2', 'カウンターレディ', 'job_type', 2, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(36, 'job_type3', 'ママ・チーママ', 'job_type', 3, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(37, 'job_type4', 'バーテンダー', 'job_type', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(38, 'job_type5', '幹部候補・店長候補', 'job_type', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(39, 'job_type6', 'キッチンスタッフ', 'job_type', 6, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(40, 'job_type7', '送迎スタッフ', 'job_type', 7, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(41, 'treatment1', '体験入店あり', 'treatment', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(42, 'treatment2', 'お友達と一緒に面接可', 'treatment', 2, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(43, 'treatment3', '週末のみ可', 'treatment', 3, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(44, 'treatment4', '週１から可', 'treatment', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(45, 'treatment5', '大型連休あり', 'treatment', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(46, 'treatment6', '日払い可', 'treatment', 6, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(47, 'treatment7', '給与支給2回', 'treatment', 7, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(48, 'treatment8', '各種バックあり', 'treatment', 8, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(49, 'treatment9', '友達紹介料あり', 'treatment', 9, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(50, 'treatment10', '未経験者歓迎', 'treatment', 10, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(51, 'treatment11', 'ノルマなし', 'treatment', 11, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(52, 'treatment12', 'レンタル衣装あり', 'treatment', 12, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(53, 'treatment13', 'モノレール駅からすぐ', 'treatment', 13, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(54, 'treatment14', '送迎あり', 'treatment', 14, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(55, 'treatment15', 'ヘアメイクあり', 'treatment', 15, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(56, 'treatment16', '経験者優遇', 'treatment', 16, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(57, 'treatment17', 'ドレス・制服貸与あり', 'treatment', 17, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(58, 'treatment18', '個人ロッカーあり', 'treatment', 18, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(59, 'monday', '月', 'day', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(60, 'tuesday', '火', 'day', 2, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(61, 'wednesday', '水', 'day', 3, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(62, 'thursday', '木', 'day', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(63, 'friday', '金', 'day', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(64, 'saturday', '土', 'day', 6, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(65, 'sunday', '日', 'day', 7, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10');
 
 -- --------------------------------------------------------
 
@@ -230,7 +353,7 @@ CREATE TABLE `owners` (
 
 INSERT INTO `owners` (`id`, `email`, `password`, `area`, `genre`, `dir`, `remember_token`, `status`, `created`, `modified`) VALUES
 (2, 't.takuma830@gmail.com', '$2y$10$ziRcJzp.VFaPPswXOGBKjeiM04qB7ZTMeC.jBQ91KtnPAiWDxGBVa', 'miyako', 'caba', '00002', NULL, 1, '2019-01-18 16:53:21', '2019-01-18 16:53:57'),
-(57, 'okiyoru1@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 'naha', 'snack', '00005', '77a9b872731faa7d3c2e55469918daeb777ec8a4701009e6317f26fe0565834f', 1, '2019-02-12 21:42:22', '2019-02-12 21:42:56');
+(57, 'okiyoru1@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 'naha', 'snack', '00005', 'ef570faf9061eead44513f65d31d2a5dbe92058e5df4ab8a65a71dcb7debf421', 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38');
 
 -- --------------------------------------------------------
 
@@ -265,8 +388,24 @@ CREATE TABLE `shops` (
 --
 
 INSERT INTO `shops` (`id`, `owner_id`, `name`, `top_image`, `catch`, `tel`, `staff`, `bus_from_time`, `bus_to_time`, `bus_hosoku`, `system`, `credit`, `cast`, `pref21`, `addr21`, `strt21`, `created`, `modified`) VALUES
-(2, 2, NULL, NULL, 'fdffdf', NULL, NULL,  NULL,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-02-12 21:42:56', '2019-02-16 13:49:27'),
-(38, 57, '', '2c12dfae9753435e1e1d5a6b2d4ad015bfcc0662.jpg', '那覇のキャバクラをお探しなら〇〇\r\n時間制・飲み放題で安心のキャバクラです。', NULL, NULL,  NULL,  NULL, '20：00 ～ LAST ※日曜日も営業しております。', NULL, NULL, NULL, NULL, NULL, NULL, '2019-02-12 21:42:56', '2019-03-03 00:59:32');
+(2, 2, NULL, NULL, 'fdffdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-02-12 21:42:56', '2019-02-16 13:49:27'),
+(38, 57, 'OKIYORUGO', '1bd801217d84a5f82ba87f69b71c7203f2a0b853.jpg', '那覇のキャバクラをお探しなら〇〇\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-03-21 17:07:48');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `shop_infos`
+--
+
+DROP TABLE IF EXISTS `shop_infos`;
+CREATE TABLE `shop_infos` (
+  `id` int(11) NOT NULL,
+  `shop_id` int(11) NOT NULL,
+  `content` varchar(255) NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -346,6 +485,13 @@ ALTER TABLE `articles_tags`
   ADD KEY `tag_key` (`tag_id`);
 
 --
+-- Indexes for table `casts`
+--
+ALTER TABLE `casts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `shop_key` (`shop_id`);
+
+--
 -- Indexes for table `coupons`
 --
 ALTER TABLE `coupons`
@@ -357,6 +503,13 @@ ALTER TABLE `coupons`
 --
 ALTER TABLE `developers`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `owner_key` (`shop_id`);
 
 --
 -- Indexes for table `master_codes`
@@ -382,6 +535,13 @@ ALTER TABLE `owners`
 ALTER TABLE `shops`
   ADD PRIMARY KEY (`id`),
   ADD KEY `owner_key` (`owner_id`);
+
+--
+-- Indexes for table `shop_infos`
+--
+ALTER TABLE `shop_infos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `shop_key` (`shop_id`);
 
 --
 -- Indexes for table `tags`
@@ -413,40 +573,10 @@ ALTER TABLE `articles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
--- AUTO_INCREMENT for table `coupons`
---
-ALTER TABLE `coupons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
-
---
--- AUTO_INCREMENT for table `developers`
---
-ALTER TABLE `developers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- AUTO_INCREMENT for table `master_codes`
 --
 ALTER TABLE `master_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT for table `master_role`
---
-ALTER TABLE `master_role`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'プライマリーキー';
-
---
--- AUTO_INCREMENT for table `owners`
---
-ALTER TABLE `owners`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
-
---
--- AUTO_INCREMENT for table `tags`
---
-ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -463,13 +593,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `articles`
   ADD CONSTRAINT `articles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- テーブルの制約 `articles_tags`
---
-ALTER TABLE `articles_tags`
-  ADD CONSTRAINT `articles_tags_ibfk_1` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`),
-  ADD CONSTRAINT `articles_tags_ibfk_2` FOREIGN KEY (`article_id`) REFERENCES `articles` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

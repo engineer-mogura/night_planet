@@ -2,10 +2,10 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
-use Cake\Validation\Validator;
+use Cake\ORM\RulesChecker;
 use Cake\ORM\TableRegistry;
+use Cake\Validation\Validator;
 
 /**
  * Owners Model
@@ -45,6 +45,7 @@ class OwnersTable extends Table
         $this->hasOne('Shops', [
             'foreignKey' => 'owner_id',
         ]);
+
     }
 
     /**
@@ -63,7 +64,7 @@ class OwnersTable extends Table
             ->allowEmptyString('id', 'create');
 
         $validator
-            ->email('email')
+            ->email('email',false, "メールアドレスの形式が不正です。")
             ->requirePresence('email', 'create')
             ->notEmpty('email','メールアドレスを入力してください。')
             ->allowEmptyString('email', false)

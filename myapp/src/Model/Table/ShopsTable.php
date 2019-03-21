@@ -1,9 +1,11 @@
 <?php
 namespace App\Model\Table;
 
+use ArrayObject;
 use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Event\Event;
+use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
 
 /**
@@ -46,7 +48,13 @@ class ShopsTable extends Table
             'foreignKey' => 'owner_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasOne('Jobs', [
+            'foreignKey' => 'shop_id',
+        ]);
         $this->hasMany('Coupons', [
+            'foreignKey' => 'shop_id'
+        ]);
+        $this->hasMany('Casts', [
             'foreignKey' => 'shop_id'
         ]);
     }
@@ -154,5 +162,22 @@ class ShopsTable extends Table
         $rules->add($rules->existsIn(['owner_id'], 'Owners'));
 
         return $rules;
+    }
+
+        /**
+     * リクエストデータがエンティティーに変換される前に呼ばれる処理。 
+     * 主にリクエストデータに変換を掛けたり、バリデーションを条件次第で事前に解除したりできる。
+     * @param Event $event
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void
+     */
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    {
+        // telは、ハイフン削除
+        if (isset($data['tel'])) {
+            $data['tel'] = str_replace(array('-', 'ー', '−', '―', '‐'), '', $data['tel']);
+        }
+
     }
 }

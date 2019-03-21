@@ -1,0 +1,185 @@
+<?php
+namespace App\Model\Table;
+
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Casts Model
+ *
+ * @property \App\Model\Table\ShopsTable|\Cake\ORM\Association\BelongsTo $Shops
+ *
+ * @method \App\Model\Entity\Cast get($primaryKey, $options = [])
+ * @method \App\Model\Entity\Cast newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\Cast[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\Cast|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Cast|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Cast patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\Cast[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\Cast findOrCreate($search, callable $callback = null, $options = [])
+ *
+ * @mixin \Cake\ORM\Behavior\TimestampBehavior
+ */
+class CastsTable extends Table
+{
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->setTable('casts');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Shops', [
+            'foreignKey' => 'shop_id',
+            'joinType' => 'INNER'
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', 'create');
+
+        $validator
+            ->scalar('name')
+            ->maxLength('name', 30)
+            ->requirePresence('name', 'create')
+            ->allowEmptyString('name', false);
+
+        $validator
+            ->scalar('nickname')
+            ->maxLength('nickname', 30)
+            ->requirePresence('nickname', 'create')
+            ->allowEmptyString('nickname', false);
+
+        $validator
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->allowEmptyString('email', false);
+
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 255)
+            ->allowEmptyString('password');
+
+        $validator
+            ->time('birthday')
+            ->allowEmptyTime('birthday');
+
+        $validator
+            ->scalar('three_size')
+            ->maxLength('three_size', 10)
+            ->allowEmptyString('three_size');
+
+        $validator
+            ->scalar('blood_type')
+            ->maxLength('blood_type', 5)
+            ->allowEmptyString('blood_type');
+
+        $validator
+            ->scalar('constellation')
+            ->maxLength('constellation', 10)
+            ->allowEmptyString('constellation');
+
+        $validator
+            ->scalar('age')
+            ->maxLength('age', 5)
+            ->allowEmptyString('age');
+
+        $validator
+            ->scalar('message')
+            ->maxLength('message', 50)
+            ->allowEmptyString('message');
+
+        $validator
+            ->integer('status')
+            ->requirePresence('status', 'create')
+            ->allowEmptyString('status', false);
+
+        $validator
+            ->scalar('delete_flag')
+            ->maxLength('delete_flag', 1)
+            ->allowEmptyString('delete_flag');
+
+        $validator
+            ->scalar('holiday')
+            ->maxLength('holiday', 50)
+            ->allowEmptyString('holiday');
+
+        $validator
+            ->scalar('image1')
+            ->maxLength('image1', 255)
+            ->allowEmptyFile('image1');
+
+        $validator
+            ->scalar('image2')
+            ->maxLength('image2', 255)
+            ->allowEmptyFile('image2');
+
+        $validator
+            ->scalar('image3')
+            ->maxLength('image3', 255)
+            ->allowEmptyFile('image3');
+
+        $validator
+            ->scalar('image4')
+            ->maxLength('image4', 255)
+            ->allowEmptyFile('image4');
+
+        $validator
+            ->scalar('image5')
+            ->maxLength('image5', 255)
+            ->allowEmptyFile('image5');
+
+        $validator
+            ->scalar('image6')
+            ->maxLength('image6', 255)
+            ->allowEmptyFile('image6');
+
+        $validator
+            ->scalar('image7')
+            ->maxLength('image7', 255)
+            ->allowEmptyFile('image7');
+
+        $validator
+            ->scalar('image8')
+            ->maxLength('image8', 255)
+            ->allowEmptyFile('image8');
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['email']));
+        $rules->add($rules->existsIn(['shop_id'], 'Shops'));
+
+        return $rules;
+    }
+}

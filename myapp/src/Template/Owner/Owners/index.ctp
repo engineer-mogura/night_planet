@@ -188,7 +188,14 @@
             </tr>
             <tr>
               <th align="center">営業時間</th>
-              <td><?=h($ownerRow->shop->bus_from_time);?> ～ <?=h($ownerRow->shop->bus_to_time);?> <?=h($ownerRow->shop->bus_hosoku);?></td>
+              <td><?php if((!$ownerRow->shop->bus_from_time == '')
+                            && (!$ownerRow->shop->bus_to_time == '')
+                            && (!$ownerRow->shop->bus_hosoku == '')) {
+                              $busTime = $this->Time->format($ownerRow->shop->bus_from_time, 'HH:mm')
+                              ."～".$this->Time->format($ownerRow->shop->bus_to_time, 'HH:mm')
+                              ."</br>".$ownerRow->shop->bus_hosoku;
+                              echo ($busTime);
+                            } else { echo ('-'); } ?></td>
             </tr>
             <tr>
               <th align="center">スタッフ</th>
@@ -218,7 +225,7 @@
                         <?=$array[$i]?>
                       </div>
                       <?php } ?>
-                      <?php } else {echo ('登録されていません。');} ?></td>
+                      <?php } else {echo ('-');} ?></td>
               </tr>
             </tbody>
           </table>
@@ -278,24 +285,77 @@
       <table class="bordered shop-table z-depth-2" border="1">
         <tbody>
           <tr>
-            <th  class="table-header" colspan="2" align="center">ラウンジ美月 宮古島店</th>
+          <tr>
+            <th  class="table-header" colspan="2" align="center"><?php if(!$ownerRow->shop->name == '') {
+              echo ($ownerRow->shop->name);
+            } else {echo ('-');}?></th>
+          </tr>
+          <tr>
+            <th align="center">業種</th>
+            <td>
+              <?php if(!$ownerRow->shop->job->industry == '') {
+                      echo ($this->Text->autoParagraph($ownerRow->shop->job->industry));
+                    } else {echo ('-');} ?>
+            </td>
           </tr>
           <tr>
             <th align="center">職種</th>
-            <td>スナック・パブ・ラウンジ 【アルバイト・パート】フロアレディ・カウンターレディ(ナイトワーク系)</td>
+            <td>
+              <?php if(!$ownerRow->shop->job->job_type == '') {
+                      echo ($this->Text->autoParagraph($ownerRow->shop->job->job_type));
+                    } else {echo ('-');} ?>
+            </td>
+          </tr>
+          <th align="center">時間</th>
+            <td><?php if((!$ownerRow->shop->job->work_from_time == '')
+                      && (!$ownerRow->shop->job->work_to_time == '')) {
+                        $workTime = $this->Time->format($ownerRow->shop->job->work_from_time, 'HH:mm')
+                        ."～".$this->Time->format($ownerRow->shop->job->work_to_time, 'HH:mm');
+                        if (!$ownerRow->shop->job->work_time_hosoku == '') {
+                          $workTime = $workTime.="</br>".$ownerRow->shop->job->work_time_hosoku;
+                        }
+                        echo ($workTime);
+                      } else { echo ('-'); } ?>
+            </td>
+          </tr>
+          <th align="center">資格</th>
+          <td><?php if((!$ownerRow->shop->job->from_age == '')
+                      && (!$ownerRow->shop->job->to_age == '')) {
+                        $qualification = $ownerRow->shop->job->from_age."歳～".$ownerRow->shop->job->to_age."歳くらいまで";
+                        if (!$ownerRow->shop->job->qualification_hosoku == '') {
+                          $qualification = $qualification.="</br>".$ownerRow->shop->job->qualification_hosoku;
+                        }
+                        echo ($qualification);
+                      } else { echo ('-'); } ?>
+            </td>
+          </tr>
+          <th align="center">休日</th>
+            <td><?php if(!$ownerRow->shop->job->holiday == '') {
+                        $holiday = $ownerRow->shop->job->holiday;
+                        if (!$ownerRow->shop->job->holiday_hosoku == '') {
+                          $holiday = $holiday.="</br>".$ownerRow->shop->job->holiday_hosoku;
+                        }
+                        echo ($holiday);
+                      } else { echo ('-'); } ?>
+            </td>
+          </tr>
+            <th align="center">待遇</th>
+            <td>
+              <?php if(!$ownerRow->shop->job->treatment == '') { ?>
+                <?php $array =explode(',', $ownerRow->shop->job->treatment); ?>
+                <?php for ($i = 0; $i < count($array); $i++) { ?>
+                <div class="chip" name=""id="<?=$array[$i]?>" value="<?=$array[$i]?>"><?=$array[$i]?></div>
+                </div>
+                <?php } ?>
+              <?php } else {echo ('-');} ?>
+            </td>
           </tr>
           <tr>
-            <th align="center">給与</th>
-            <td>日払い週払い高収入給与手渡し昇給あり 【アルバイト・パート】時給3,000円～<br>
-              ★経験者優遇します！<br>
-              ★日払いOK！<br>
-            ★昇給あり</td>
-          </tr>
-          <tr>
-            <th align="center">勤務時間</th>
-            <td>シフト相談 週/シフト～4h/日9時～OK10時～OK残業なし週1縲廾K週2・3縲廾K週4縲廾K夏(冬)休み限【アルバイト・パート】19:30～00:00<br>
-              週１日・１日3h～OK！<br>
-            時間・曜日はお気軽にご相談ください♪</td>
+            <th align="center">PR</th>
+            <td><?php if(!$ownerRow->shop->job->pr == '') {
+              echo ($ownerRow->shop->job->pr);
+            } else {echo ('-');}?>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -307,20 +367,32 @@
             <th  class="table-header" colspan="2" align="center">応募連絡先</th>
           </tr>
           <tr>
-            <th align="center">TEL1</th>
-            <td>0980-72-XXXX</td>
+            <th align="center">連絡先1</th>
+            <td><?php if(!$ownerRow->shop->job->tel1 == '') {
+              echo ($ownerRow->shop->job->tel1);
+            } else {echo ('-');} ?>
+            </td>
           </tr>
           <tr>
-            <th align="center">TEL2</th>
-            <td>090-XXXX-XXXX</td>
+            <th align="center">連絡先2</th>
+            <td><?php if(!$ownerRow->shop->job->tel2 == '') {
+              echo ($ownerRow->shop->job->tel2);
+            } else {echo ('-');} ?>
+            </td>
           </tr>
           <tr>
-            <th align="center">MAIL</th>
-            <td>XXXXX@gmail.com</td>
+            <th align="center">メール</th>
+            <td><?php if(!$ownerRow->shop->job->email == '') {
+              echo ($ownerRow->shop->job->email);
+            } else {echo ('-');} ?>
+            </td>
           </tr>
           <tr>
-            <th align="center">LINE</th>
-            <td>LINEIDXXXXXXXX</td>
+            <th align="center">LINE ID</th>
+            <td><?php if(!$ownerRow->shop->job->lineid == '') {
+              echo ($ownerRow->shop->job->lineid);
+            } else {echo ('-');} ?>
+            </td>
           </tr>
         </tbody>
       </table>

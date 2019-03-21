@@ -15,6 +15,8 @@ class AppController extends \App\Controller\AppController
         $this->Owners = TableRegistry::get('Owners');
         $this->Shops = TableRegistry::get('Shops');
         $this->Coupons = TableRegistry::get('Coupons');
+        $this->Casts = TableRegistry::get('Casts');
+        $this->Jobs = TableRegistry::get('Jobs');
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
             'authenticate' => [
@@ -60,7 +62,7 @@ class AppController extends \App\Controller\AppController
         $action = $this->request->getParam('action');
         // ログイン時に許可するアクション
         if (in_array($action, ['index', 'view', 'add', 'delete', 'edit',
-                                'editTopImage', 'editCatch', 'editCoupon', 'editTenpo'])) {
+                                'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob'])) {
             return true;
         }
         return false;

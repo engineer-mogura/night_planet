@@ -71,9 +71,6 @@ span.notice {
     margin: auto;
 }
 
-table, th, td{
-  word-break: break-word;
-}
 
 /* フラッシュメッセージ系 START */
 
@@ -227,32 +224,6 @@ div.message.hidden {
   .material-icons.or-material-icons {
     width: inherit;
   }
-  table.shop-table {
-    border: 1px solid #bbb;
-  }
-
-  table.shop-table th:not(.table-header) {
-        border: 1px solid #bbb;
-        font-weight: initial;
-        background-color: #e1f5fe;
-  }
-  th.table-header {
-    border: 1px solid #bbb;
-    font-weight: initial;
-    background-color: #e9f6ff;
-  }
-  table.shop-table > td {
-  }
-
-  table.new-info-table {
-    margin-top: 10px;
-  }
-  table.new-info-table td {
-    border: 1px solid #bbb;
-  }
-  table.other-table {
-    margin-top: 10px;
-  }
   .shop-image {
     margin-top:5px;
   }
@@ -264,15 +235,54 @@ div.message.hidden {
 }
 /* 更新ぐるぐる END */
 
-/*   .active {
-  transform: rotate(180deg);
-  transition: 0.5s;
+/* テーブル系共通 START */
+table{
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.nonActive {
-  transform: rotate(0deg);
-  transition: 0.5s;
+table tr{
+  border-bottom: solid 2px white;
+}
+
+table tr:last-child{
+  border-bottom: none;
+}
+
+table th{
+  position: relative;
+  text-align: left;
+  width: 30%;
+  background-color: #52c2d0;
+  color: white;
+  text-align: center;
+  padding: 10px 0 ;
+  font-weight: initial;
+}
+
+/* table th:after{
+  display: block;
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  top:calc(50% - 10px);
+  right:-10px;
+  border-left: 10px solid #52c2d0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
 } */
+
+table td{
+  text-align: left;
+  width: 70%;
+  text-align: center;
+  /*background-color: #eee;*/
+  padding: 10px 5px;
+}
+/* テーブル系共通 END */
+
+
 /* 店舗ページ END */
 
 /* 店舗編集ページ START */
@@ -295,10 +305,12 @@ footer {
     object-fit:contain;
 }
 
-.check-coupon {
-/*     position: absolute;
-left: 30px;
-top: 70px; */
+tbody.tbody-coupon-group:before ,tbody.tbody-cast-group:before{
+	content: "";
+	height: 1px;
+	width: 100%;
+	padding: 2px 0;
+	display: block;
 }
 
 .chip-box > .chip {
@@ -309,7 +321,14 @@ top: 70px; */
   color: white;
   cursor : pointer;
 }
-
+.back-color {
+  background-color: #26a69a;
+  color: white;
+}
+li.daylist {
+  float: left;
+  margin-left: 60px;
+}
 
 /* 店舗編集ページ END */
 

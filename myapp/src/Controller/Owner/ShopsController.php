@@ -2,7 +2,6 @@
 namespace App\Controller\Owner;
 
 use Cake\Event\Event;
-use Cake\I18n\Date;
 use RuntimeException;
 use Cake\Core\Configure;
 use Cake\Error\Debugger;
@@ -63,8 +62,15 @@ class ShopsController extends AppController
             if (count($valideteErrors) > 0) {
                 foreach ($valideteErrors as $key1 => $value1) {
                     foreach ($value1 as $key2 => $value2) {
-                        $errors .= $value2."<br/>";
-                        //$this->Flash->error($value2);
+                        if (is_array($value2)) {
+                            foreach ($value2 as $key3 => $value3) {
+                                $errors .= $value3."<br/>";
+                            }
+
+                        } else {
+                            $errors .= $value2."<br/>";
+                            //$this->Flash->error($value2);
+                        }
                     }
                 }
             }
@@ -79,10 +85,17 @@ class ShopsController extends AppController
                 $id = $this->request->getSession()->read('Auth.Owner.id');
             }
 
-            $shop = $this->Shops->find()->where(['owner_id' => $id])->contain(['Coupons']);
+            $shop = $this->Shops->find()->where(['owner_id' => $id])->contain(['Coupons','Jobs','Casts']);
+            $masterCodesFind = array('industry','job_type','treatment','day');
             $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-            $creditsHidden = json_encode($this->Util->getCredit($shop,$credits));
-            $this->set(compact('shop', 'credits','creditsHidden', 'activeTab', 'ajax'));
+            $creditsHidden = $this->Util->getCredit($shop,$credits);
+            $treatments = $this->MasterCodes->find()->where(['code_group' => 'treatment']);
+            $treatmentHidden = $this->Util->getTreatment($shop,$treatments);
+            $masterCodeHidden = array('credit'=>json_encode($creditsHidden));
+            $masterCodeHidden = array_merge($masterCodeHidden, array('treatment'=>json_encode($treatmentHidden)));
+            $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
+    
+            $this->set(compact('shop','credits','masterCodeHidden','selectList', 'activeTab', 'ajax'));
             $html = (String)$this->render('/Owner/Shops/index');
 
             $response = array(
@@ -99,10 +112,17 @@ class ShopsController extends AppController
         if (!isset($id)) {
             $id = $this->request->getSession()->read('Auth.Owner.id');
         }
-        $shop = $this->Shops->find()->where(['owner_id' => $id])->contain(['Coupons']);
+        $shop = $this->Shops->find()->where(['owner_id' => $id])->contain(['Coupons','Jobs','Casts']);
+        $masterCodesFind = array('industry','job_type','treatment','day');
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-        $creditsHidden = json_encode($this->Util->getCredit($shop,$credits));
-        $this->set(compact('shop', 'credits','creditsHidden', 'activeTab', 'ajax'));
+        $creditsHidden = $this->Util->getCredit($shop,$credits);
+        $treatments = $this->MasterCodes->find()->where(['code_group' => 'treatment']);
+        $treatmentHidden = $this->Util->getTreatment($shop,$treatments);
+        $masterCodeHidden = array('credit'=>json_encode($creditsHidden));
+        $masterCodeHidden = array_merge($masterCodeHidden, array('treatment'=>json_encode($treatmentHidden)));
+        $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
+
+        $this->set(compact('shop','credits','masterCodeHidden','selectList', 'activeTab', 'ajax'));
         $this->render();
     }
 
@@ -150,7 +170,7 @@ class ShopsController extends AppController
                 if ($this->request->getData('top_image_file.name')) {
                     $limitFileSize = 1024 * 1024;
                     try {
-                        $shop->top_image = $this->file_upload($this->request->getData('top_image_file'), $dir, $limitFileSize);
+                        $shop->top_image = $this->Util->file_upload($this->request->getData('top_image_file'), $dir, $limitFileSize);
                         // ファイル更新の場合は古いファイルは削除
                         if (isset($this->request->data["file_before"])) {
                             // ファイル名が同じ場合は削除を実行しない
@@ -369,6 +389,104 @@ class ShopsController extends AppController
     }
 
     /**
+     * キャストタブの処理
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function editCast($id = null)
+    {
+        $addFlg = false; // 追加実行フラグ
+        $castsTable = TableRegistry::get('Casts');
+        $entity = $castsTable->newEntity();
+        $this->request->session()->write('activeTab', 'cast');
+
+        // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
+        if (isset($this->request->data["cast_edit"]) || isset($this->request->data["cast_add"])) {
+            $entity = $castsTable->newEntity($this->request->getData());
+        }
+        if ($this->request->is('ajax')) {
+            $resultMessage = '';
+            $resultflg = true;
+            $isException = false;
+            $isSave = false;
+            if (!$entity->errors()) {
+
+                // キャスト削除の場合
+                if (isset($this->request->data["cast_delete"])) {
+                    $cast = $castsTable->get($id);
+                    if ($castsTable->delete($cast)) {
+                        $resultMessage = Configure::read('irm.003');
+                    } else {
+                        $resultMessage = Configure::read('irm.052');
+                        $resultflg = false;
+                    }
+                } elseif (isset($this->request->data["cast_edit"])) {
+                    // キャスト編集の場合
+                    $cast = $castsTable->find()->where(['id'
+                        => $this->request->getData('cast_edit_id')])->first();
+
+                    // キャスト内容をセット
+                    $cast->name = $this->request->getData('name');
+                    $cast->nickname = $this->request->getData('nickname');
+                    $cast->email = $this->request->getData('email');
+                    $cast->status = $this->request->getData('status');
+                } elseif (isset($this->request->data["cast_add"])) {
+                    // キャスト追加の場合
+                    $shop = $this->Shops->find()->where(['owner_id'
+                     => $this->request->getSession()->read('Auth.Owner.id')])->first();
+
+                    // キャスト内容をセット
+                    $cast = $castsTable->newEntity();
+
+                    $cast->shop_id = $shop->id;
+                    $cast->name = $this->request->getData('name');
+                    $cast->nickname = $this->request->getData('nickname');
+                    $cast->email = $this->request->getData('email');
+                    $cast->status = $this->request->getData('status');
+                    $addFlg = true;
+                } elseif (isset($this->request->data["cast_switch"])) {
+                    // キャストステータスの場合
+                    $cast = $castsTable->find()->where(['id' => $id])->first();
+
+                    // キャストステータスをセット
+                    $cast->status = $this->request->getData('cast_switch');
+                }
+                // saveするか判定する
+                if (array_key_exists('cast_add', $this->request->getData()) ||
+                   array_key_exists('cast_edit', $this->request->getData()) ||
+                   array_key_exists('cast_switch', $this->request->getData())) {
+                    $isSave = true;
+                }
+                if ($isSave) {
+                    if ($castsTable->save($cast)) {
+                        if ($addFlg == true) {
+                            $resultMessage = Configure::read('irm.001');
+                        } else {
+                            $resultMessage = Configure::read('irm.002');
+                        }
+                    } else {
+                        if ($addFlg == true) {
+                            $resultMessage = Configure::read('irm.050');
+                        } else {
+                            $resultMessage = Configure::read('irm.051');
+                        }
+                        $resultflg = false;
+                    }
+                }
+            } else {
+                $resultflg = false;
+            }
+            $this->request->session()->write('exception', $isException);
+            $this->request->session()->write('resultMessage', $resultMessage);
+            $this->request->session()->write('resultflg', $resultflg);
+            $this->request->session()->write('errors', $entity->errors());
+            $this->request->session()->write('ajax', true);
+        }
+        return $this->redirect($this->referer());
+    }
+
+    /**
      * 店舗情報タブの処理
      *
      * @param [type] $id
@@ -408,7 +526,7 @@ class ShopsController extends AppController
 
                     // 店舗情報内容をセット
                     $shop->name = $this->request->getData('name');
-                    $shop->tel = $this->request->getData('tel');
+                    $shop->tel = $entity['tel'];
                     $shop->staff = $this->request->getData('staff');
                     $shop->bus_from_time = $this->request->getData('bus_from_time');
                     $shop->bus_to_time = $this->request->getData('bus_to_time');
@@ -451,6 +569,119 @@ class ShopsController extends AppController
         return $this->redirect($this->referer());
     }
 
+        /**
+     * 求人情報タブの処理
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function editJob($id = null)
+    {
+        $addFlg = false; // 追加実行フラグ
+        $jobsTable = TableRegistry::get('Jobs');
+        $entity = $jobsTable->newEntity();
+        $this->request->session()->write('activeTab', 'job');
+
+        // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
+        if (isset($this->request->data["job_edit"])) {
+            $entity = $jobsTable->newEntity($this->request->getData());
+        }
+        if ($this->request->is('ajax')) {
+            $resultMessage = '';
+            $resultflg = true;
+            $isException = false;
+            $isSave = false;
+            if (!$entity->errors()) {
+
+                // 求人情報削除の場合
+                if (isset($this->request->data["job_delete"])) {
+                    $job = $jobsTable->get($id);
+                    if ($jobsTable->delete($job)) {
+                        $resultMessage = Configure::read('irm.003');
+                    } else {
+                        $resultMessage = Configure::read('irm.052');
+                        $resultflg = false;
+                    }
+                } elseif (isset($this->request->data["job_edit"])) {
+                    // 求人情報編集の場合
+                    $job = $jobsTable->get($id);
+
+                    // // 求人情報内容をセット
+                    $job->industry = $entity['industry'];
+                    $job->job_type = $entity['job_type'];
+                    $job->work_from_time = $entity['work_from_time'];
+                    $job->work_to_time = $entity['work_to_time'];
+                    $job->work_time_hosoku = $entity['work_time_hosoku'];
+                    $job->from_age = $entity['from_age'];
+                    $job->to_age = $entity['to_age'];
+                    $job->qualification_hosoku = $entity['qualification_hosoku'];
+                    $job->holiday = $entity['holiday'];
+                    $job->holiday_hosoku = $entity['holiday_hosoku'];
+                    $job->treatment = $entity['treatment'];
+                    $job->pr = $entity['pr'];
+                    $job->tel1 = $entity['tel1'];
+                    $job->tel2 = $entity['tel2'];
+                    // TODO: isUnique()は、他のカラムが空文字でもuniqueチェックを行うため、
+                    // 重複エラーになるためスルーする。
+                    $job->email = $this->Util->ifnullString($entity['email']);
+                    $job->lineid = $entity['lineid'];
+                    // 求人情報内容をセット
+                    // $job->industry = $this->request->getData('industry');
+                    // $job->job_type = $this->request->getData('job_type');
+                    // $job->work_from_time = $this->request->getData('work_from_time');
+                    // $job->work_to_time = $this->request->getData('work_to_time');
+                    // $job->work_time_hosoku = $this->request->getData('work_time_hosoku');
+                    // $job->from_age = $this->request->getData('from_age');
+                    // $job->to_age = $this->request->getData('to_age');
+                    // $job->qualification_hosoku = $this->request->getData('qualification_hosoku');
+                    // $job->holiday = $entity['holiday'];
+                    // $job->holiday_hosoku = $this->request->getData('holiday_hosoku');
+                    // $job->treatment = $this->request->getData('treatment');
+                    // $job->pr = $this->request->getData('pr');
+                    // $job->tel1 = $this->request->getData('tel1');
+                    // $job->tel2 = $this->request->getData('tel2');
+                    // $job->email = $this->request->getData('email');
+                    // $job->lineid = $this->request->getData('lineid');
+
+                }
+                // saveするか判定する
+                if (array_key_exists('job_edit', $this->request->getData())) {
+                    $isSave = true;
+                }
+                if ($isSave) {
+                    try {
+                        if ($jobsTable->saveOrFail($job)) {
+                            if ($addFlg == true) {
+                                $resultMessage = Configure::read('irm.001');
+                            } else {
+                                $resultMessage = Configure::read('irm.002');
+                            }
+                        } else {
+                            if ($addFlg == true) {
+                                $resultMessage = Configure::read('irm.050');
+                            } else {
+                                $resultMessage = Configure::read('irm.051');
+                            }
+                            $resultflg = false;
+                        }
+                    } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
+                        echo $e;
+                        //  echo $e->getEntity();
+                            return '500(Save Failed)';
+                    }
+                }
+            } else {
+                $resultflg = false;
+            }
+            $this->request->session()->write('exception', $isException);
+            $this->request->session()->write('resultMessage', $resultMessage);
+            $this->request->session()->write('resultflg', $resultflg);
+            $this->request->session()->write('errors', $entity->errors());
+            $this->request->session()->write('ajax', true);
+        }
+        return $this->redirect($this->referer());
+    }
+
     /**
      * Delete method
      *
@@ -471,81 +702,5 @@ class ShopsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * ファイルアップロードの処理
-     *
-     * @param [type] $file
-     * @param [type] $dir
-     * @param [type] $limitFileSize
-     * @return void
-     */
-    public function file_upload($file = null, $dir = null, $limitFileSize = 1024 * 1024)
-    {
-        try {
-            // ファイルを保存するフォルダ $dirの値のチェック
-            if ($dir) {
-                debug("file_upload", "debug");
-                debug($dir, "debug");
-                if (!file_exists($dir)) {
-                    throw new RuntimeException('指定のディレクトリがありません。');
-                }
-            } else {
-                throw new RuntimeException('ディレクトリの指定がありません。');
-            }
 
-            // 未定義、複数ファイル、破損攻撃のいずれかの場合は無効処理
-            if (!isset($file['error']) || is_array($file['error'])) {
-                throw new RuntimeException('Invalid parameters.');
-            }
-
-            // エラーのチェック
-            switch ($file['error']) {
-                case 0:
-                break;
-                case UPLOAD_ERR_OK:
-                break;
-                case UPLOAD_ERR_NO_FILE:
-                throw new RuntimeException('No file sent.');
-                case UPLOAD_ERR_INI_SIZE:
-                case UPLOAD_ERR_FORM_SIZE:
-                throw new RuntimeException('Exceeded filesize limit.');
-                default:
-                throw new RuntimeException('Unknown errors.');
-            }
-
-            // ファイル情報取得
-            $fileInfo = new File($file["tmp_name"]);
-
-            // ファイルサイズのチェック
-            if ($fileInfo->size() > $limitFileSize) {
-                throw new RuntimeException('Exceeded filesize limit.');
-            }
-
-            // ファイルタイプのチェックし、拡張子を取得
-            if (false === $ext = array_search(
-                $fileInfo->mime(),
-                ['jpg' => 'image/jpeg',
-              'png' => 'image/png',
-              'gif' => 'image/gif',],
-                true
-            )) {
-                throw new RuntimeException('Invalid file format.');
-            }
-
-            // ファイル名の生成
-//            $uploadFile = $file["name"] . "." . $ext;
-            $uploadFile = sha1_file($file["tmp_name"]) . "." . $ext;
-
-            // ファイルの移動
-            if (!@move_uploaded_file($file["tmp_name"], $dir . "/" . $uploadFile)) {
-                throw new RuntimeException('Failed to move uploaded file.');
-            }
-
-            // 処理を抜けたら正常終了
-//            echo 'File is uploaded successfully.';
-        } catch (RuntimeException $e) {
-            throw $e;
-        }
-        return $uploadFile;
-    }
 }

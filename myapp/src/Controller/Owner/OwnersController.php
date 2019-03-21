@@ -198,6 +198,9 @@ class OwnersController extends AppController
                 if($result) {
                     // 成功: commit
                     $connection->commit();
+                    // ショップテーブルが登録されて初めて、求人情報の空テーブル作成
+                    $findShop = $this->Shops->find()->where(['owner_id' => $owner->id])->first();
+                    $this->Jobs->findOrCreate(['shop_id' => $findShop->id]);
                     // commit出来たらディレクトリを掘る
                     $dir = new Folder(WWW_ROOT.$path.$nextDir, true, 0755);
                     // ユーザーステータスを本登録にする。(statusカラムを本登録に更新する)
@@ -222,7 +225,7 @@ class OwnersController extends AppController
 
     public function index()
     {
-        $owner = $this->Owners->find('all')->where(['Owners.id' => $this->request->getSession()->read('Auth.Owner.id')])->contain(['Shops.Coupons']);
+        $owner = $this->Owners->find('all')->where(['Owners.id' => $this->request->getSession()->read('Auth.Owner.id')])->contain(['Shops.Coupons','Shops.Jobs']);
         // オーナーに関する情報をセット
         if(!is_null($user = $this->Auth->user())){
             $this->set('infoArray', $this->Util->getItem());

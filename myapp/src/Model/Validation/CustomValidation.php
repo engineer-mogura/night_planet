@@ -20,7 +20,7 @@ class CustomValidation extends Validation
     public function tel_check($value, $context)
     {
         //boolで返さないとエラー
-        return (bool) preg_match('/^[0-9]{2,5}-?[0-9]{2,5}-?[0-9]{2,5}$/', $value);
+        return (bool) preg_match('/^[0-9]{2,5}?[0-9]{2,5}?[0-9]{2,5}$/', $value);
     }
 
     /**

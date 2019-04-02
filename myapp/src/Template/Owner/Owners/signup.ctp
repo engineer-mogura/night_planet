@@ -5,13 +5,12 @@
 */
 ?>
 
-<div class="container">
     <?= $this->Flash->render() ?>
     <div class="card or-card">
         <div class="card-image waves-block waves-light">
             <div class="or-form-wrap">
                 <h3><?= __('おきよるGo') ?></h3>
-                <?= $this->Form->create() ?>
+                <?= $this->Form->create(null, array('class' => 'signup')) ?>
                 <?= $this->Form->control('email', array('required' => false)) ?>
                 <?= $this->Form->control('password', array('required' => false)) ?>
                 <?= $this->Form->control('password_check', array('type'=>'password','label' => 'password check'
@@ -25,6 +24,9 @@
                                                      'options' => $genre,
                                                      'empty' => 'ジャンルを選択してください。')
                                       ); ?>
+                <?= $this->Form->input('role', array('type' => 'hidden',
+                                                     'value' => 'owner')
+                                      ); ?>
                 <div class="or-button">
                     <?= $this->Form->button('新規登録',array('class'=>'waves-effect waves-light btn-large'));?>
                 </div>
@@ -33,10 +35,9 @@
             </div>
         </div>
     </div>
-</div>
 <script>
     $(document).ready(function(){
-        $("nav").hide();
+        $("nav, .side-nav.fixed").hide();
         $('.page-footer').hide();
         $('select').material_select();
 

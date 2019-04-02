@@ -15,7 +15,7 @@
                 <span>キャストログイン</span>
                 <span class="right"><?= $this->Html->link(('オーナーはこちらからログイン'), ['controller' => 'Owners', 'action' => 'login']) ?></span>
             </div>
-            <?= $this->Form->create() ?>
+            <?= $this->Form->create(null, array('class' => 'login')) ?>
             <?= $this->Form->control('email', array('required' => false)) ?>
             <?= $this->Form->control('password', array('required' => false)) ?>
             <?= $this->Form->control('remember_me',['type'=>'checkbox','label'=>['text'=>'ログイン状態を保存する']]) ?>

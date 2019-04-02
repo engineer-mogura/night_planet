@@ -311,6 +311,7 @@
             </div>
           </div>
           <div style="display:none;">
+          <!-- TODO: 暫定でキャストのパスワード初期値を決めている -->
           <input type="hidden" name="password" value="pass">
           <input type="hidden" name="role" value="cast">
           </div>

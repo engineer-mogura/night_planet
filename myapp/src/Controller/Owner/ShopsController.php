@@ -3,23 +3,29 @@ namespace App\Controller\Owner;
 
 use Cake\Event\Event;
 use RuntimeException;
+use Token\Util\Token;
+use Cake\Mailer\Email;
 use Cake\Core\Configure;
 use Cake\Error\Debugger;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
  * Controls the data flow into shops object and updates the view whenever data changes.
  */
 class ShopsController extends AppController
 {
+    use MailerAwareTrait;
+
     public function beforeFilter(Event $event) {
         // AppController.beforeFilterをコールバック
         parent::beforeFilter($event);
-        //　オーナーに関する情報をセット
+        // オーナーに関する情報をセット
         if(!is_null($user = $this->Auth->user())){
-            $this->set('infoArray', $this->Util->getItem());
+            $shop = $this->Shops->find('all')->where(['owner_id' => $user['id']])->first();
+            $this->set('infoArray', $this->Util->getItem($shop));
         }
     }
 
@@ -42,7 +48,8 @@ class ShopsController extends AppController
             $activeTab = $this->request->session()->consume('activeTab');
         }
         if(!is_null($user = $this->Auth->user())){
-            $this->set('infoArray', $this->Util->getItem());
+            $shop = $this->Shops->find('all')->where(['owner_id' => $user['id']])->first();
+            $this->set('infoArray', $this->Util->getItem($shop));
         }
 
         if ($this->request->session()->check('ajax')) {
@@ -241,7 +248,7 @@ class ShopsController extends AppController
 
         // 新規登録、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
         if (isset($this->request->data["catch_edit"])) {
-            $entity = $couponsTable->newEntity($this->request->getData());
+            $entity = $shopTable->newEntity($this->request->getData());
         }
         if ($this->request->is('ajax')) {
             $resultMessage = '';
@@ -433,17 +440,12 @@ class ShopsController extends AppController
                     $cast->status = $this->request->getData('status');
                 } elseif (isset($this->request->data["cast_add"])) {
                     // キャスト追加の場合
+                    $cast = $this->Casts->patchEntity($entity, $this->request->getData());
+
                     $shop = $this->Shops->find()->where(['owner_id'
                      => $this->request->getSession()->read('Auth.Owner.id')])->first();
 
-                    // キャスト内容をセット
-                    $cast = $castsTable->newEntity();
-
                     $cast->shop_id = $shop->id;
-                    $cast->name = $this->request->getData('name');
-                    $cast->nickname = $this->request->getData('nickname');
-                    $cast->email = $this->request->getData('email');
-                    $cast->status = $this->request->getData('status');
                     $addFlg = true;
                 } elseif (isset($this->request->data["cast_switch"])) {
                     // キャストステータスの場合
@@ -461,7 +463,8 @@ class ShopsController extends AppController
                 if ($isSave) {
                     if ($castsTable->save($cast)) {
                         if ($addFlg == true) {
-                            $resultMessage = Configure::read('irm.001');
+                            $this->getMailer('Cast')->send('castRegistration', [$cast]);
+                            $resultMessage = '入力したアドレスにメールを送りました。URLをクリックし、認証を完了するようキャストへお伝えください。</ br>今から１０分以内に完了しないと、やり直しになりますのでご注意ください。';
                         } else {
                             $resultMessage = Configure::read('irm.002');
                         }

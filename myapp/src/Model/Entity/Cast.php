@@ -2,7 +2,8 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
-
+use Token\Model\Entity\TokenTrait;
+use Cake\Auth\DefaultPasswordHasher;
 /**
  * Cast Entity
  *
@@ -18,8 +19,6 @@ use Cake\ORM\Entity;
  * @property string|null $constellation
  * @property string|null $age
  * @property string|null $message
- * @property int $status
- * @property string|null $delete_flag
  * @property string|null $holiday
  * @property string|null $image1
  * @property string|null $image2
@@ -29,6 +28,9 @@ use Cake\ORM\Entity;
  * @property string|null $image6
  * @property string|null $image7
  * @property string|null $image8
+ * @property string|null $remember_token
+ * @property int $status
+ * @property int|null $delete_flag
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
@@ -36,7 +38,7 @@ use Cake\ORM\Entity;
  */
 class Cast extends Entity
 {
-
+    use TokenTrait;
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -48,6 +50,7 @@ class Cast extends Entity
      */
     protected $_accessible = [
         'shop_id' => true,
+        'role' => true,
         'name' => true,
         'nickname' => true,
         'email' => true,
@@ -58,8 +61,6 @@ class Cast extends Entity
         'constellation' => true,
         'age' => true,
         'message' => true,
-        'status' => true,
-        'delete_flag' => true,
         'holiday' => true,
         'image1' => true,
         'image2' => true,
@@ -69,6 +70,10 @@ class Cast extends Entity
         'image6' => true,
         'image7' => true,
         'image8' => true,
+        'dir' => true,
+        'remember_token' => true,
+        'status' => true,
+        'delete_flag' => true,
         'created' => true,
         'modified' => true,
         'shop' => true
@@ -80,6 +85,15 @@ class Cast extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password'
-    ];
+        'password',
+        //'remember_token',  // 自動ログイン用トークン TODO: リリース前にコメントインする
+        ];
+
+    protected function _setPassword($value){
+        if (strlen($value)) {
+            $hasher = new DefaultPasswordHasher();
+    
+            return $hasher->hash($value);
+        }
+    }
 }

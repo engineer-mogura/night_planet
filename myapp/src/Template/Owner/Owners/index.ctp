@@ -54,7 +54,7 @@
         </div>
 
       </div>
-      <div class="description">
+      <div class="card-panel light-blue accent-1">
         <?php if($ownerRow->shop->catch != ''){
           echo ($this->Text->autoParagraph($ownerRow->shop->catch)); } else {
           echo ('キャッチコピーを決めてください。以下はサンプルです。<br />宮古島のキャバクラをお探しならラウンジ美月へ。<br />

@@ -30,6 +30,7 @@ class Owner extends Entity
      * @var array
      */
     protected $_accessible = [
+        'role' => true,
         'email' => true,
         'password' => true,
         'area' => true,

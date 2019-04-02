@@ -38,6 +38,9 @@ class Shop extends Entity
      */
     protected $_accessible = [
         'owner_id' => true,
+        'area' => true,
+        'genre' => true,
+        'dir' => true,
         'name' => true,
         'top_image' => true,
         'catch' => true,

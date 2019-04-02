@@ -70,7 +70,7 @@
           <div id="show-catch">
             <?php if(!$shopRow->catch == "") { ?>
               <?php $catch = $this->Text->autoParagraph($shopRow->catch); ?>
-              <div class="description"><?php echo($catch) ?></div>
+              <div class="card-panel light-blue accent-1"><?php echo($catch) ?></div>
               <form id="delete-catch" name="delete_catch" method="post" style="display:none;" action="/owner/shops/edit_catch/<?= $shopRow->owner_id ?>">
                 <input type="hidden" name="_method" value="POST">
                 <input type="hidden" name="catch_before" value="<?=$shopRow->catch ?>">
@@ -309,6 +309,10 @@
               <input type="text" id="cast-email" class="validate" name="email" data-length="255">
               <label for="cast-email">メールアドレス</label>
             </div>
+          </div>
+          <div style="display:none;">
+          <input type="hidden" name="password" value="pass">
+          <input type="hidden" name="role" value="cast">
           </div>
           <div class="card-content" style="text-align:center;">
             <button type="button" href="#" class="waves-effect waves-light btn-large" onclick="castChangeBtn($('#cast'));return false;">やめる</button>

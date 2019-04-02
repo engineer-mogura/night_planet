@@ -46,30 +46,30 @@ class UtilComponent extends Component {
      *
      * @return void
      */
-    public function getItem()
+    public function getItem($shop)
     {
-        // TODO: Authセッションからオーナー情報を取得せず、Ownersテーブルから取る？
-        $ownerArea = $this->request->getSession()->read('Auth.Owner.area');
-        $ownerGenre = $this->request->getSession()->read('Auth.Owner.genre');
-        $ownerDir = $this->request->getSession()->read('Auth.Owner.dir');
+        // TODO: Authセッションからオーナー情報を取得せず、shopsテーブルから取る？
+        $shopArea = $shop['area'];
+        $shopGenre = $shop['genre'];
+        $shopDir = $shop['dir'];
         $areas = array('miyako','ishigaki','naha','nanjo','tomigusuku',
                         'urasoe','ginowan','okinawashi','uruma','nago');
         $genres = array('caba','snack','girlsbar','bar');
 
         $infoArray = array();
         foreach ($areas as $area) {
-            if ($area == $ownerArea) {
+            if ($area == $shopArea) {
                 $infoArray = $infoArray + Configure::read('area.'.$area);
                 break;
             }
         }
         foreach ($genres as $genre) {
-            if ($genre == $ownerGenre) {
+            if ($genre == $shopGenre) {
                 $infoArray = $infoArray + Configure::read('genre.'.$genre);
                 break;
             }
         }
-        $infoArray = $infoArray + array('dir'=> $ownerDir);
+        $infoArray = $infoArray + array('dir'=> $shopDir);
         $path = "img/".$infoArray['area_path']."/".$infoArray['genre_path']."/".$infoArray['dir']."/";
         $infoArray = $infoArray + array("dir_path"=> $path);
         return  $infoArray;
@@ -135,7 +135,7 @@ class UtilComponent extends Component {
      * @param [type] $flag
      * @return void
      */
-    public function getSelectList($masterCodesFind, $masterCodeEntity, $flag = null) {
+    public function getSelectList($masterCodesFind = null, $masterCodeEntity = null, $flag = null) {
 
         $result = array();
         for($i = 0; $i < count($masterCodesFind); $i++) {

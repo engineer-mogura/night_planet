@@ -10,10 +10,10 @@
   <div class="card or-card">
     <div class="card-image waves-block">
         <div class="or-form-wrap">
-            <h3><?= __('おきよるGo') ?></h3>
+            <h3><?='おきよるGo'?></h3>
             <div class="left">
-                <span>オーナーログイン</span>
-                <span class="right"><?= $this->Html->link(('キャストはこちらからログイン'), ['controller' => 'Casts', 'action' => 'login']) ?></span>
+                <span>キャストログイン</span>
+                <span class="right"><?= $this->Html->link(('オーナーはこちらからログイン'), ['controller' => 'Owners', 'action' => 'login']) ?></span>
             </div>
             <?= $this->Form->create() ?>
             <?= $this->Form->control('email', array('required' => false)) ?>

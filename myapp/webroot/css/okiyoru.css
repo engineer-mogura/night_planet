@@ -9,8 +9,11 @@ li{
   list-style-type: none;
 }
 a.button-collapse.oki-button-collapse{
-  display: block;
+  /*display: block;*/
 }
+  .nav-wrapper,.container,footer{
+    padding-left: 300px;
+  }
 .brand-logo.oki-brand-logo{
   margin-left: 50px;
 }
@@ -28,7 +31,7 @@ footer i.material-icons{
 }
 a.grey-text.link-box.text-lighten-3.collection-item {
   background-color: initial;
-  border: 1px solid: #e0e0e0;
+  border: 1px solid #e0e0e0;
 }
 .collection a.collection-item:not(.active):hover{
   background-color: #ddd;
@@ -227,6 +230,7 @@ div.message.hidden {
   .shop-image {
     margin-top:5px;
   }
+/* 店舗ページ END */
 
 /* 更新ぐるぐる START */
 
@@ -282,8 +286,15 @@ table td{
 }
 /* テーブル系共通 END */
 
+/* リンク系共通 START */
+.side-nav li > a.btn-disabled {
+  color: #c3c3c3;
+  pointer-events: none; /* aタグのリンクを無効にする */
+  cursor: default;  /* マウスオーバー時のカーソルをdefaultに固定 */
+  text-decoration: none;  /* 下線等を消す。 */
+}
+/* テーブル系共通 END */
 
-/* 店舗ページ END */
 
 /* 店舗編集ページ START */
 .edit-menu {
@@ -325,7 +336,7 @@ tbody.tbody-coupon-group:before ,tbody.tbody-cast-group:before{
   background-color: #26a69a;
   color: white;
 }
-li.daylist {
+li.daylist,li.eventlist {
   float: left;
   margin-left: 60px;
 }
@@ -335,6 +346,12 @@ li.daylist {
 @media only screen and (max-width: 992px) {
   .brand-logo.oki-brand-logo{
     margin-left: initial;
+  }
+  .button-collapse {
+    display: block;
+  }
+  .nav-wrapper,.container,footer {
+    padding-left: initial;
   }
 
   /* Text inputs */

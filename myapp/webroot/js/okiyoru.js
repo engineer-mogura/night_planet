@@ -6,6 +6,7 @@ $(document).ready(function(){
     initialize();
 });
 
+/* オーナーデフォルト start */
 /* トップ画像 関連処理 start */
 
 /**
@@ -991,198 +992,220 @@ function jobSaveBtn(){
     });
 }
 
-    /**
-     * 求人タブのモーダル呼び出し時の処理
-     * @param {*} obj 
-     */
-    function modalJobTriggerBtn(obj) {
+/**
+ * 求人タブのモーダル呼び出し時の処理
+ * @param {*} obj 
+ */
+function modalJobTriggerBtn(obj) {
 
-        // オブジェクトを配列に変換
-        //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
-        var $chips = $('#job').find('.chips');
-        var $chipList = $('#modal-job').find('.chip');
-        $($chips).val($(this).attr('id'));
-         // 待遇フィールドにあるタグを取得して配列にセット
-         var data = $($chips).material_chip('data');
+    // オブジェクトを配列に変換
+    //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
+    var $chips = $('#job').find('.chips');
+    var $chipList = $('#modal-job').find('.chip');
+    $($chips).val($(this).attr('id'));
+        // 待遇フィールドにあるタグを取得して配列にセット
+        var data = $($chips).material_chip('data');
 
-        var addFlg = true;
-        // 配列dataを順に処理
-        // タグの背景色を初期化する
+    var addFlg = true;
+    // 配列dataを順に処理
+    // タグの背景色を初期化する
+    $($chipList).each(function(i,o){
+        $(o).removeClass('back-color');
+    });
+    // インプットフィールドにあるタグは選択済にする
+    $.each(data, function(index, val) {
         $($chipList).each(function(i,o){
-            $(o).removeClass('back-color');
+            if($(o).attr('id') == val.id) {
+                $(o).addClass('back-color');
+                return true;
+            }
         });
-        // インプットフィールドにあるタグは選択済にする
-        $.each(data, function(index, val) {
-            $($chipList).each(function(i,o){
-                if($(o).attr('id') == val.id) {
-                    $(o).addClass('back-color');
-                    return true;
-                }
-            });
-        });
+    });
+}
+/* 求人情報 関連処理 end */
+/* オーナーデフォルト end */
+
+/* キャストデフォルト start */
+// TODO: ショップページとキャストページは分離していることから、jsファイルも分けるか
+// 要素の存在判定で読み込まない処理にするか後で考える。
+function calendarBtn(obj, action) {
+    var $button = $(obj).find('.modal-footer');
+    var $form = $(obj).find('#edit-calendar');
+    var radio = $($form).find('input[name="title"]:checked').attr('id');
+    var timeStart = $($form).find('select[name="time_start"]').val();
+    var timeEnd = $($form).find('select[name="time_end"]').val();
+    if(timeStart != null) {
+        $($form).find("input[name='start']").val($($form).find("input[name='start']").val() + " " + timeStart);
     }
-    /* 求人情報 関連処理 end */
+    // TODO: sart日時は必ず生成されるけど、end日時はstartのHH:MMを超えると生成される。
+    if(timeEnd != null) {
+        $($form).find("input[name='end']").val($($form).find("input[name='end']").val() + " " + timeEnd);
+    }
+    $($form).find("input[type='hidden'] + input[name='all_day']").val(function () {
+        return $($form).find("input[id='all-day']").prop("checked") ? 1 : 0;
+    });
+    // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
+    $($form).find("input[name='crud_type']").val(action);
+    if ((action == 'create') || (action == 'update')) {
+        if (radio == "work") {
+            if (timeStart == null) {
+                alert("仕事の場合、最低でも出勤時間は選択して下さい。");
+                return;
+            }
+        }
+    }
+
+    event.preventDefault();
+
+    $.ajax({
+        url : $form.attr('action'), //Formのアクションを取得して指定する
+        type: $form.attr('method'),//Formのメソッドを取得して指定する
+        data: $form.serialize(), //データにFormがserialzeした結果を入れる
+        dataType: 'json', //データにFormがserialzeした結果を入れる
+        timeout: 100000,
+        beforeSend : function(xhr, settings){
+            //Buttonを無効にする
+            $($button).find('.createBtn').attr('disabled' , true);
+            $($button).find('.updateBtn').attr('disabled' , true);
+            $($button).find('.deleteBtn').attr('disabled' , true);
+            $(obj).modal('close');
+
+            //処理中のを通知するアイコンを表示する
+            $("#dummy").load("/module/Preloader.ctp");
+        },
+        complete: function(xhr, textStatus){
+            //処理中アイコン削除
+            $('.preloader-wrapper').remove();
+            $($button).find('.createBtn').attr('disabled' , false);
+            $($button).find('.updateBtn').attr('disabled' , false);
+            $($button).find('.deleteBtn').attr('disabled' , false);
+            //fullcalendarInitialize($("input[name='calendar_path']").val());
+            $('#calendar').fullCalendar('refetchEvents');
+        },
+        success: function (response, textStatus, xhr) {
+
+            // OKの場合
+            if(response){
+                var $objWrapper = $("#wrapper");
+                    // $.notifyBar({
+                    // cssClass: 'success',
+                    // //html: response.message
+                //});
+                //initialize();
+            }else{
+            // NGの場合
+                $.notifyBar({
+                    cssClass: 'error',
+                    //html: response.error
+                });
+            }
+        },
+        error : function(response, textStatus, xhr){
+            $.notifyBar({
+                cssClass: 'error',
+                html: "エラーが発生しました。ステータス：" + textStatus
+            });
+        }
+    });
+
+}
 
     // all initialize
     function initialize() {
 
-        var activeTab = $('#activeTab').val();
-        var options = {
-            //'swipeable':true, // モバイル時のスワイプでタブ切り替え
-            //'responsiveThreshold':991,
-            'onShow': function() {   // タブ切り替え時のコールバック
-            }
-        }
-        $('ul.tabs').tabs(options);
-        // タブの事前選択
-        $('ul.tabs').tabs('select_tab', activeTab);
-
-        // materializecss sideNav サイドバーの初期化
-        $(".button-collapse").sideNav();
-        $('.button-collapse').sideNav({
-            menuWidth: 300,
-            edge: 'left',
-            closeOnClick: true,
-            draggable: true,
-            onOpen: function(el) {
-               // 開いたときの処理
-            },
-            onClose: function(el) {
-               // 閉じたときの処理
-            }
-        });
-
-        // materializecss selectbox
-        $('select').material_select();
-        // materializecss tooltip
-        $('.tooltipped').tooltip({delay: 50});
-        // materializecss modal
-        $('.modal').modal();
-        // materializecss Chips
-        $('.chips-initial').material_chip();
-        // materializecss Chips 追加イベント
-        $('.chips').on('chip.add', function(e, chip){
-            //alert("chip.add");
-        });
-        // materializecss Chips 削除イベント
-        $('.chips').on('chip.delete', function(e, chip){
-            //alert("chip.delete");
-        });
-        // materializecss Chips 選択イベント
-        $('.chips').on('chip.select', function(e, chip){
-            //alert("chip.select");
-        });
-
-        // 店舗編集のスクリプト 店舗情報 クレジットフォームを入力不可にする
-        $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
-        // 店舗情報 クレジットタグをフォームに追加する
-        $('#tenpo').find('.chip').on('click', function() {
-            var $chips = $('#tenpo').find('.chips');
-            $($chips).val($(this).children().attr('alt'));
-             // クレジットフィールドにあるタグを取得して配列にセット
-             var data = $($chips).material_chip('data');
-             console.log(data);
-
-            // クリックしたタグを取得
-            var newTag = $(this).children().attr('alt');
-            var newId = $(this).children().attr('id');
-            var addFlg = true;
-            // 配列dataを順に処理
-            $.each(data, function(index, val) {
-                if(newId == val.id) {
-                    addFlg = false;
+        /* オーナーページ 関連処理 start */
+        if($('#owner-default').length) {
+            var activeTab = $('#activeTab').val();
+            var options = {
+                //'swipeable':true, // モバイル時のスワイプでタブ切り替え
+                //'responsiveThreshold':991,
+                'onShow': function() {   // タブ切り替え時のコールバック
                 }
-            });
-            // 重複したクレジットが無い、またはデータが１つも無ければクレジット追加
-            if(addFlg || data.length == 0) {
-                data.push({'tag' : newTag, 'image':'/img/common/credit/'+ newTag +'.png', 'id':newId});
             }
-            // クレジットフィールドの初期化
-            $($chips).material_chip({
-                data:data
-            });
-            $($chips).find('input').prop('disabled',true);
+            $('ul.tabs').tabs(options);
+            // タブの事前選択
+            $('ul.tabs').tabs('select_tab', activeTab);
 
-            return false;
-        });
-        // 求人情報 待遇タグをフォームに追加する
-        $('#modal-job').find('.chip').on('click', function() {
-            var $chips = $('#job').find('.chips');
-            $($chips).val($(this).attr('id'));
-             // 待遇フィールドにあるタグを取得して配列にセット
-             var data = $($chips).material_chip('data');
+            // 店舗編集のスクリプト 店舗情報 クレジットフォームを入力不可にする
+            $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
+            // 店舗情報 クレジットタグをフォームに追加する
+            $('#tenpo').find('.chip').on('click', function() {
+                var $chips = $('#tenpo').find('.chips');
+                $($chips).val($(this).children().attr('alt'));
+                // クレジットフィールドにあるタグを取得して配列にセット
+                var data = $($chips).material_chip('data');
+                console.log(data);
 
-            // クリックしたタグを取得
-            var newTag = $(this).attr('value');
-            var newId = $(this).attr('id');
-            var addFlg = true;
-            var removeFlg = false;
-            if ($(this).hasClass('back-color')) {
-                $(this).removeClass('back-color');
-                removeFlg = true;
-            } else {
-                $(this).addClass('back-color');
-            }
-            // 配列dataを順に処理
-            $.each(data, function(index, val) {
-                if(newId == val.id) {
-                    addFlg = false;
-                }
-            });
-            // 重複した待遇が無い、またはデータが１つも無ければ待遇追加
-            if(addFlg || data.length == 0) {
-                data.push({'tag' : newTag, 'id':newId});
-            }
-            //タグの選択解除
-            if (removeFlg) {
+                // クリックしたタグを取得
+                var newTag = $(this).children().attr('alt');
+                var newId = $(this).children().attr('id');
+                var addFlg = true;
+                // 配列dataを順に処理
                 $.each(data, function(index, val) {
                     if(newId == val.id) {
-                        data.splice(index,1);
-                        return false;
+                        addFlg = false;
                     }
                 });
-            }
-            // 待遇フィールドの初期化
-            $($chips).material_chip({
-                data:data
+                // 重複したクレジットが無い、またはデータが１つも無ければクレジット追加
+                if(addFlg || data.length == 0) {
+                    data.push({'tag' : newTag, 'image':'/img/common/credit/'+ newTag +'.png', 'id':newId});
+                }
+                // クレジットフィールドの初期化
+                $($chips).material_chip({
+                    data:data
+                });
+                $($chips).find('input').prop('disabled',true);
+
+                return false;
             });
-            $($chips).find('input').prop('disabled',true);
+            // 求人情報 待遇タグをフォームに追加する
+            $('#modal-job').find('.chip').on('click', function() {
+                var $chips = $('#job').find('.chips');
+                $($chips).val($(this).attr('id'));
+                // 待遇フィールドにあるタグを取得して配列にセット
+                var data = $($chips).material_chip('data');
 
-            return false;
-        });
+                // クリックしたタグを取得
+                var newTag = $(this).attr('value');
+                var newId = $(this).attr('id');
+                var addFlg = true;
+                var removeFlg = false;
+                if ($(this).hasClass('back-color')) {
+                    $(this).removeClass('back-color');
+                    removeFlg = true;
+                } else {
+                    $(this).addClass('back-color');
+                }
+                // 配列dataを順に処理
+                $.each(data, function(index, val) {
+                    if(newId == val.id) {
+                        addFlg = false;
+                    }
+                });
+                // 重複した待遇が無い、またはデータが１つも無ければ待遇追加
+                if(addFlg || data.length == 0) {
+                    data.push({'tag' : newTag, 'id':newId});
+                }
+                //タグの選択解除
+                if (removeFlg) {
+                    $.each(data, function(index, val) {
+                        if(newId == val.id) {
+                            data.splice(index,1);
+                            return false;
+                        }
+                    });
+                }
+                // 待遇フィールドの初期化
+                $($chips).material_chip({
+                    data:data
+                });
+                $($chips).find('input').prop('disabled',true);
 
-        // show return top button
-        var topBtn = $('#return_top');
-        $(window).scroll(function () {
-            var scrTop = $(this).scrollTop();
-            if (scrTop > 100) {
-                topBtn.stop().fadeIn('slow');
-            } else {
-                topBtn.stop().fadeOut();
-            }
-        });
+                return false;
+            });
 
-        // click return top
-        $('#return_top a').click(function() {
-            $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
-            return false;
-        });
-
-        /* ショップページプレビュ クーポン クリックイベント */
-        $('.coupon').click(function() {
-            $(this).find('.arrow').toggleClass("active");
-            $(this).find('.arrow').toggleClass('nonActive');
-            if (!$(this).find('.arrow').hasClass('active')) {
-                $(this).find('.label').text('クーポンを表示する');
-            } else {
-                $(this).find('.label').text('クーポンをとじる');
-            }
-        });
-
-        /* クーポンタブ 関連処理 start */
-
-        /* クーポン チェックボックスオンオフ時 */
-        $(function(){
+            /* クーポンタブ 関連処理 start */
+            /* クーポン チェックボックスオンオフ時 */
             $(document).on('click','.check-coupon-group', function() {
                 var $button = $('#coupon').find('button.changeBtn,button.deleteBtn');
                 var $addButton = $('#coupon').find('button.addBtn');
@@ -1232,12 +1255,9 @@ function jobSaveBtn(){
                     }
                 });
             });
+            /* クーポンタブ 関連処理 end */
 
-        });
-        /* クーポンタブ 関連処理 end */
-
-        /* キャストタブ 関連処理 start */
-        $(function(){
+            /* キャストタブ 関連処理 start */
             $(document).on('click','.check-cast-group', function() {
                 var $button = $('#cast').find('button.changeBtn,button.deleteBtn');
                 var $addButton = $('#cast').find('button.addBtn');
@@ -1287,10 +1307,86 @@ function jobSaveBtn(){
                     }
                 });
             });
+            /* キャストタブ 関連処理 end */
+        }
+        /* オーナーページ 関連処理 end */
 
+        /* キャストページ 関連処理 start */
+        if($('#cast-default').length) {
+            // TODO: ショップページとキャストページは分離していることから、jsファイルも分けるか
+            // 要素の存在判定で読み込まない処理にするか後で考える。
+            // キャスト用の初期化処理
+            fullcalendarSetting();
+        }
+        /* キャストページ 関連処理 end */
+
+        /* 共通処理 start */
+        // materializecss sideNav サイドバーの初期化
+        $(".button-collapse").sideNav();
+        $('.button-collapse').sideNav({
+            menuWidth: 300,
+            edge: 'left',
+            closeOnClick: true,
+            draggable: true,
+            onOpen: function(el) {
+               // 開いたときの処理
+            },
+            onClose: function(el) {
+               // 閉じたときの処理
+            }
         });
-        /* キャストタブ 関連処理 end */
 
+        // materializecss selectbox
+        $('select').material_select();
+        // materializecss tooltip
+        $('.tooltipped').tooltip({delay: 50});
+        // materializecss modal
+        $('.modal').modal();
+        // materializecss Chips
+        $('.chips-initial').material_chip();
+        // materializecss Chips 追加イベント
+        $('.chips').on('chip.add', function(e, chip){
+            //alert("chip.add");
+        });
+        // materializecss Chips 削除イベント
+        $('.chips').on('chip.delete', function(e, chip){
+            //alert("chip.delete");
+        });
+        // materializecss Chips 選択イベント
+        $('.chips').on('chip.select', function(e, chip){
+            //alert("chip.select");
+        });
+
+
+        // show return top button
+        var topBtn = $('#return_top');
+        $(window).scroll(function () {
+            var scrTop = $(this).scrollTop();
+            if (scrTop > 100) {
+                topBtn.stop().fadeIn('slow');
+            } else {
+                topBtn.stop().fadeOut();
+            }
+        });
+
+        // click return top
+        $('#return_top a').click(function() {
+            $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
+            return false;
+        });
+
+        /* ショップページプレビュ クーポン クリックイベント */
+        $('.coupon').click(function() {
+            $(this).find('.arrow').toggleClass("active");
+            $(this).find('.arrow').toggleClass('nonActive');
+            if (!$(this).find('.arrow').hasClass('active')) {
+                $(this).find('.label').text('クーポンを表示する');
+            } else {
+                $(this).find('.label').text('クーポンをとじる');
+            }
+        });
+        // TODO: ピッカー系がgoogle chomeブラウザで不具合が出てるっぽい。2019/03/28時点
+        // 症状は、クリックしても一瞬表示されるだけ。現時点の解決策としては<label>タグを付与することで表示される
         /* 店舗編集のスクリプト クーポン materializecss Date Picker */
         $('.datepicker').pickadate({
             selectMonths: true, // Creates a dropdown to control month
@@ -1315,8 +1411,13 @@ function jobSaveBtn(){
             ampmclickable: true, // make AM PM clickable
             aftershow: function(){} //Function for after opening timepicker
         });
-
+        /* 共通処理 end */
     }
+
+
+
+
+
 /*  document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');
     var instances = M.Modal.init(elems, options);

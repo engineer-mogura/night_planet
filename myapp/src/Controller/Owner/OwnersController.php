@@ -1,15 +1,15 @@
 <?php
 namespace App\Controller\Owner;
 
-use Cake\ORM\TableRegistry;
 use Cake\ORM\Query;
 use Token\Util\Token;
-use Cake\Mailer\MailerAwareTrait;
 use Cake\Mailer\Email;
-use Cake\Error\Debugger;
 use Cake\Core\Configure;
-use Cake\Filesystem\Folder;
+use Cake\Error\Debugger;
 use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
+use Cake\ORM\TableRegistry;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -45,7 +45,7 @@ class OwnersController extends AppController
                         ->subject('About')
                         ->send('My message');
                     $this->log($email,'debug');*/
-                    $this->getMailer('Owner')->send('registration', [$owner]);
+                    $this->getMailer('Owner')->send('ownerRegistration', [$owner]);
                     $this->Flash->success('入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。今から１０分以内に完了しないと、やり直しになりますのでご注意ください。');
                     return $this->redirect(['action' => 'login']);
                 }
@@ -185,7 +185,9 @@ class OwnersController extends AppController
                 $owner->dir = $nextDir;
                 $owner->status = 1;
                 $shop = $this->Shops->newEntity();
-                $shop->owner_id = $owner->id;
+                $shop->area = $owner->area;
+                $shop->genre = $owner->genre;
+                $shop->dir = $owner->dir;
                 $result = true;
                 if(!$this->Owners->save($owner)) {
                     $this->Flash->error('オーナーテーブルの更新に失敗した。');
@@ -226,9 +228,13 @@ class OwnersController extends AppController
     public function index()
     {
         $owner = $this->Owners->find('all')->where(['Owners.id' => $this->request->getSession()->read('Auth.Owner.id')])->contain(['Shops.Coupons','Shops.Jobs']);
+        foreach ($owner as $key => $row) {
+           $id = $row->id;
+        }
         // オーナーに関する情報をセット
+        $shop = $this->Shops->find('all')->where(['Shops.owner_id' => $id])->first();
         if(!is_null($user = $this->Auth->user())){
-            $this->set('infoArray', $this->Util->getItem());
+            $this->set('infoArray', $this->Util->getItem($shop));
         }
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         $creditsHidden = json_encode($this->Util->getCredit($owner,$credits));

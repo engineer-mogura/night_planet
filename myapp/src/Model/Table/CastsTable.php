@@ -111,16 +111,6 @@ class CastsTable extends Table
             ->allowEmptyString('message');
 
         $validator
-            ->integer('status')
-            ->requirePresence('status', 'create')
-            ->allowEmptyString('status', false);
-
-        $validator
-            ->scalar('delete_flag')
-            ->maxLength('delete_flag', 1)
-            ->allowEmptyString('delete_flag');
-
-        $validator
             ->scalar('holiday')
             ->maxLength('holiday', 50)
             ->allowEmptyString('holiday');
@@ -165,8 +155,55 @@ class CastsTable extends Table
             ->maxLength('image8', 255)
             ->allowEmptyFile('image8');
 
+        $validator
+            ->scalar('remember_token')
+            ->maxLength('remember_token', 64)
+            ->allowEmptyString('remember_token');
+
+        $validator
+            ->integer('status')
+            ->requirePresence('status', 'create')
+            ->allowEmptyString('status', false);
+
+        $validator
+            ->integer('delete_flag')
+            ->allowEmptyString('delete_flag');
+
         return $validator;
     }
+
+        /**
+     * バリデーション ログイン.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationCastLogin(Validator $validator)
+{
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', 'create');
+
+        $validator
+            ->email('email')
+            ->requirePresence('email', 'create')
+            ->notEmpty('email','メールアドレスを入力してください。')
+            ->allowEmptyString('email', false);
+
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 255,'パスワードが長すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
+            ->requirePresence('password', 'create')
+            ->allowEmptyString('password', false);
+
+        $validator
+            ->integer('status')
+            ->allowEmptyString('status');
+
+        return $validator;
+    }
+
 
     /**
      * Returns a rules checker object that will be used for validating

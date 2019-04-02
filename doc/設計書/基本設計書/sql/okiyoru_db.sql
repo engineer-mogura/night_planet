@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 3 月 21 日 20:38
+-- Generation Time: 2019 年 4 月 02 日 19:28
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.1.26
 
@@ -100,6 +100,7 @@ DROP TABLE IF EXISTS `casts`;
 CREATE TABLE `casts` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
+  `role` varchar(10) NOT NULL,
   `name` varchar(30) NOT NULL,
   `nickname` varchar(30) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -110,8 +111,6 @@ CREATE TABLE `casts` (
   `constellation` varchar(10) DEFAULT NULL,
   `age` varchar(5) DEFAULT NULL,
   `message` varchar(50) DEFAULT NULL,
-  `status` int(1) NOT NULL,
-  `delete_flag` char(1) DEFAULT NULL,
   `holiday` varchar(50) DEFAULT NULL,
   `image1` varchar(255) DEFAULT NULL,
   `image2` varchar(255) DEFAULT NULL,
@@ -121,6 +120,10 @@ CREATE TABLE `casts` (
   `image6` varchar(255) DEFAULT NULL,
   `image7` varchar(255) DEFAULT NULL,
   `image8` varchar(255) DEFAULT NULL,
+  `dir` varchar(255) DEFAULT NULL,
+  `remember_token` varchar(64) DEFAULT NULL,
+  `status` int(1) NOT NULL,
+  `delete_flag` int(1) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -129,8 +132,8 @@ CREATE TABLE `casts` (
 -- テーブルのデータのダンプ `casts`
 --
 
-INSERT INTO `casts` (`id`, `shop_id`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `status`, `delete_flag`, `holiday`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `created`, `modified`) VALUES
-(0, 38, '山田　花子', 'ＨＡＮＡ', 'okiyoru2@gmail.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-03-21 19:10:06', '2019-03-21 19:59:30');
+INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `holiday`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `remember_token`, `status`, `delete_flag`, `created`, `modified`) VALUES
+(1, 38, 'cast', '山田　花子', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', '640ed4ee20311aef6baed3b4a98ca557ceec39cac906fd45cf20527b13f595b4', 1, NULL, '2019-03-23 16:51:25', '2019-03-23 16:52:03');
 
 -- --------------------------------------------------------
 
@@ -189,6 +192,53 @@ INSERT INTO `developers` (`id`, `email`, `password`, `created`, `modified`) VALU
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `events`
+--
+
+DROP TABLE IF EXISTS `events`;
+CREATE TABLE `events` (
+  `id` int(11) NOT NULL,
+  `event_type_id` int(11) DEFAULT NULL,
+  `cast_id` int(11) NOT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `details` varchar(255) DEFAULT NULL,
+  `start` datetime DEFAULT NULL,
+  `end` datetime DEFAULT NULL,
+  `time_start` varchar(20) DEFAULT NULL,
+  `time_end` varchar(20) DEFAULT NULL,
+  `all_day` varchar(1) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `active` int(1) DEFAULT NULL,
+  `created` datetime DEFAULT NULL,
+  `modified` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `events`
+--
+
+INSERT INTO `events` (`id`, `event_type_id`, `cast_id`, `title`, `details`, `start`, `end`, `time_start`, `time_end`, `all_day`, `status`, `active`, `created`, `modified`) VALUES
+(233, NULL, 1, '仕事', NULL, '2019-04-02 15:00:00', '2019-04-02 12:30:00', '15:00', '12:30', '1', NULL, 1, '2019-04-02 00:09:54', '2019-04-02 19:07:12'),
+(234, NULL, 1, '仕事', NULL, '2019-04-03 12:00:00', '2019-04-03 12:00:00', '0:30', '0:30', '1', NULL, 1, '2019-04-02 17:57:00', '2019-04-02 17:57:00'),
+(235, NULL, 1, '休み', NULL, '2019-04-04 12:00:00', '2019-04-04 00:30:00', '12:00', '0:30', '1', NULL, 1, '2019-04-02 18:01:42', '2019-04-02 18:39:17'),
+(236, NULL, 1, '仕事', NULL, '2019-04-05 16:30:00', '2019-04-05 03:30:00', '16:30', '3:30', '1', NULL, 1, '2019-04-02 19:16:05', '2019-04-02 19:26:19');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `event_types`
+--
+
+DROP TABLE IF EXISTS `event_types`;
+CREATE TABLE `event_types` (
+  `id` int(11) NOT NULL,
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `color` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `jobs`
 --
 
@@ -221,9 +271,9 @@ CREATE TABLE `jobs` (
 --
 
 INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `work_to_time`, `work_time_hosoku`, `from_age`, `to_age`, `qualification_hosoku`, `holiday`, `holiday_hosoku`, `treatment`, `pr`, `tel1`, `tel2`, `email`, `lineid`, `created`, `modified`) VALUES
-(0, 37, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '2019-03-20 00:06:19', '2019-03-20 00:06:19'),
-(1, 38, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '12:00:00', '12:00:00', 'work_time_hosoku', '21', '24', 'qualification_hosoku', '水,土,日', 'holiday_hosoku', '経験者優遇,ドレス・制服貸与あり,友達紹介料あり,モノレール駅からすぐ,送迎あり,個人ロッカーあり', 'PR文PR文PR文PR文PR文PR文PR文\r\nPR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文\r\nPR文PR文PR文PR文PR文PR文PR文', '09037968838', '08037968838', 't.takuma830@gmail.com', 'testLINEID', '2019-03-20 00:06:19', '2019-03-21 16:05:54'),
-(2, 39, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 38, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '12:00:00', '12:00:00', 'work_time_hosoku', '21', '24', 'qualification_hosoku', '水,土,日', 'holiday_hosoku', '経験者優遇,ドレス・制服貸与あり,友達紹介料あり,モノレール駅からすぐ,送迎あり,個人ロッカーあり', 'PR文PR文PR文PR文PR文PR文PR文\r\nPR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文\r\nPR文PR文PR文PR文PR文PR文PR文', '09037968838', '08037968838', 't.takuma830@gmail.com', 'testLINEID', '2019-03-20 00:06:19', '2019-03-26 23:48:18'),
+(2, 39, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(100, 37, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '2019-03-20 00:06:19', '2019-03-20 00:06:19');
 
 -- --------------------------------------------------------
 
@@ -312,7 +362,57 @@ INSERT INTO `master_codes` (`id`, `code`, `code_name`, `code_group`, `sort`, `de
 (62, 'thursday', '木', 'day', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (63, 'friday', '金', 'day', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (64, 'saturday', '土', 'day', 6, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
-(65, 'sunday', '日', 'day', 7, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10');
+(65, 'sunday', '日', 'day', 7, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(66, '00:00', '00:00', 'time', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(67, '00:30', '00:30', 'time', 2, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(68, '01:00', '01:00', 'time', 3, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(69, '01:30', '01:30', 'time', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(70, '02:00', '02:00', 'time', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(71, '02:30', '02:30', 'time', 6, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(72, '03:00', '03:00', 'time', 7, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(73, '03:30', '03:30', 'time', 8, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(74, '04:00', '04:00', 'time', 9, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(75, '04:30', '04:30', 'time', 10, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(76, '05:00', '05:00', 'time', 11, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(77, '05:30', '05:30', 'time', 12, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(78, '06:00', '06:00', 'time', 13, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(79, '06:30', '06:30', 'time', 14, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(80, '07:00', '07:00', 'time', 15, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(81, '07:30', '07:30', 'time', 16, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(82, '08:00', '08:00', 'time', 17, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(83, '08:30', '08:30', 'time', 18, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(84, '09:00', '09:00', 'time', 19, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(85, '09:30', '09:30', 'time', 20, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(86, '10:00', '10:00', 'time', 21, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(87, '10:30', '10:30', 'time', 22, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(88, '11:00', '11:00', 'time', 23, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(89, '11:30', '11:30', 'time', 24, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(90, '12:00', '12:00', 'time', 25, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(91, '12:30', '12:30', 'time', 26, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(92, '13:00', '13:00', 'time', 27, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(93, '13:30', '13:30', 'time', 28, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(94, '14:00', '14:00', 'time', 29, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(95, '14:30', '14:30', 'time', 30, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(96, '15:00', '15:00', 'time', 31, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(97, '15:30', '15:30', 'time', 32, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(98, '16:00', '16:00', 'time', 33, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(99, '16:30', '16:30', 'time', 34, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(100, '17:00', '17:00', 'time', 35, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(101, '17:30', '17:30', 'time', 36, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(102, '18:00', '18:00', 'time', 37, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(103, '18:30', '18:30', 'time', 38, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(104, '19:00', '19:00', 'time', 39, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(105, '19:30', '19:30', 'time', 40, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(106, '20:00', '20:00', 'time', 41, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(107, '20:30', '20:30', 'time', 42, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(108, '21:00', '21:00', 'time', 43, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(109, '21:30', '21:30', 'time', 44, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(110, '22:00', '22:00', 'time', 45, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(111, '22:30', '22:30', 'time', 46, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(112, '23:00', '23:00', 'time', 47, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(113, '23:30', '23:30', 'time', 48, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(114, 'work', '仕事', 'event', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(115, 'holiday', '休み', 'event', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10');
 
 -- --------------------------------------------------------
 
@@ -322,10 +422,22 @@ INSERT INTO `master_codes` (`id`, `code`, `code_name`, `code_group`, `sort`, `de
 
 DROP TABLE IF EXISTS `master_role`;
 CREATE TABLE `master_role` (
-  `id` int(11) UNSIGNED NOT NULL COMMENT 'プライマリーキー',
-  `role` varchar(64) NOT NULL DEFAULT '' COMMENT 'ロール名',
-  `role_name` varchar(64) NOT NULL DEFAULT '' COMMENT 'ロール名'
+  `id` int(11) NOT NULL,
+  `role` varchar(64) NOT NULL COMMENT 'ロール名',
+  `role_name` varchar(64) NOT NULL COMMENT 'ロール名',
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ロール';
+
+--
+-- テーブルのデータのダンプ `master_role`
+--
+
+INSERT INTO `master_role` (`id`, `role`, `role_name`, `created`, `modified`) VALUES
+(1, 'owner', 'オーナー', '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(2, 'shop', 'マネージャー', '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(3, 'cast', 'キャスト', '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(4, 'user', 'ユーザー', '2019-01-06 21:23:05', '2019-01-13 18:46:10');
 
 -- --------------------------------------------------------
 
@@ -336,6 +448,7 @@ CREATE TABLE `master_role` (
 DROP TABLE IF EXISTS `owners`;
 CREATE TABLE `owners` (
   `id` int(11) NOT NULL,
+  `role` varchar(10) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `area` varchar(255) DEFAULT NULL,
@@ -351,9 +464,9 @@ CREATE TABLE `owners` (
 -- テーブルのデータのダンプ `owners`
 --
 
-INSERT INTO `owners` (`id`, `email`, `password`, `area`, `genre`, `dir`, `remember_token`, `status`, `created`, `modified`) VALUES
-(2, 't.takuma830@gmail.com', '$2y$10$ziRcJzp.VFaPPswXOGBKjeiM04qB7ZTMeC.jBQ91KtnPAiWDxGBVa', 'miyako', 'caba', '00002', NULL, 1, '2019-01-18 16:53:21', '2019-01-18 16:53:57'),
-(57, 'okiyoru1@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 'naha', 'snack', '00005', 'ef570faf9061eead44513f65d31d2a5dbe92058e5df4ab8a65a71dcb7debf421', 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38');
+INSERT INTO `owners` (`id`, `role`, `email`, `password`, `area`, `genre`, `dir`, `remember_token`, `status`, `created`, `modified`) VALUES
+(1, 'owner', 't.takuma830@gmail.com', '$2y$10$IvHwLrvdmHfFQgw88nlOD.DD1jnVFy52vG.auT04dLts3W1c2xcxu', 'naha', 'cabacula', NULL, NULL, 0, '2019-03-23 10:38:14', '2019-03-23 10:38:14'),
+(57, 'owner', 'okiyoru1@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 'naha', 'snack', '00005', '123a40ef9ee43fde6f8a4f408b8be5aa72a9498fb3836e3b9692e18f02c950d1', 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38');
 
 -- --------------------------------------------------------
 
@@ -365,6 +478,9 @@ DROP TABLE IF EXISTS `shops`;
 CREATE TABLE `shops` (
   `id` int(11) NOT NULL,
   `owner_id` int(11) NOT NULL,
+  `area` varchar(255) DEFAULT NULL,
+  `genre` varchar(255) DEFAULT NULL,
+  `dir` varchar(255) DEFAULT NULL,
   `name` varchar(30) DEFAULT NULL,
   `top_image` varchar(100) DEFAULT NULL,
   `catch` varchar(100) DEFAULT NULL,
@@ -387,9 +503,9 @@ CREATE TABLE `shops` (
 -- テーブルのデータのダンプ `shops`
 --
 
-INSERT INTO `shops` (`id`, `owner_id`, `name`, `top_image`, `catch`, `tel`, `staff`, `bus_from_time`, `bus_to_time`, `bus_hosoku`, `system`, `credit`, `cast`, `pref21`, `addr21`, `strt21`, `created`, `modified`) VALUES
-(2, 2, NULL, NULL, 'fdffdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-02-12 21:42:56', '2019-02-16 13:49:27'),
-(38, 57, 'OKIYORUGO', '1bd801217d84a5f82ba87f69b71c7203f2a0b853.jpg', '那覇のキャバクラをお探しなら〇〇\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-03-21 17:07:48');
+INSERT INTO `shops` (`id`, `owner_id`, `area`, `genre`, `dir`, `name`, `top_image`, `catch`, `tel`, `staff`, `bus_from_time`, `bus_to_time`, `bus_hosoku`, `system`, `credit`, `cast`, `pref21`, `addr21`, `strt21`, `created`, `modified`) VALUES
+(2, 2, NULL, NULL, NULL, NULL, NULL, 'fdffdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-02-12 21:42:56', '2019-02-16 13:49:27'),
+(38, 57, 'naha', 'snack', '00005', 'OKIYORUGO', '592d09baaeee900a100607147752290dbef71a09.jpg', '那覇のキャバクラをお探しなら〇〇\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-03-26 23:49:22');
 
 -- --------------------------------------------------------
 
@@ -505,6 +621,19 @@ ALTER TABLE `developers`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `events`
+--
+ALTER TABLE `events`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cast_key` (`cast_id`);
+
+--
+-- Indexes for table `event_types`
+--
+ALTER TABLE `event_types`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `jobs`
 --
 ALTER TABLE `jobs`
@@ -534,7 +663,7 @@ ALTER TABLE `owners`
 --
 ALTER TABLE `shops`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `owner_key` (`owner_id`);
+  ADD KEY `owner_id` (`owner_id`);
 
 --
 -- Indexes for table `shop_infos`
@@ -573,10 +702,76 @@ ALTER TABLE `articles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
+-- AUTO_INCREMENT for table `casts`
+--
+ALTER TABLE `casts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `coupons`
+--
+ALTER TABLE `coupons`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+
+--
+-- AUTO_INCREMENT for table `developers`
+--
+ALTER TABLE `developers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `events`
+--
+ALTER TABLE `events`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+
+--
+-- AUTO_INCREMENT for table `event_types`
+--
+ALTER TABLE `event_types`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+
+--
 -- AUTO_INCREMENT for table `master_codes`
 --
 ALTER TABLE `master_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+
+--
+-- AUTO_INCREMENT for table `master_role`
+--
+ALTER TABLE `master_role`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `owners`
+--
+ALTER TABLE `owners`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+
+--
+-- AUTO_INCREMENT for table `shops`
+--
+ALTER TABLE `shops`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT for table `shop_infos`
+--
+ALTER TABLE `shop_infos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `tags`
+--
+ALTER TABLE `tags`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `users`

@@ -161,16 +161,18 @@ class OwnersController extends AppController
         }
         if ($owner->status == 0 ) {
             // 本登録をもってオーナー用のディレクトリを掘る
-            $path = 'img/'.$owner->area.'/'.$owner->genre.'/';
+            $dir = WWW_ROOT.'img/'.$owner->area.'/'.$owner->genre.'/';
             // TODO scandirは、リストがないと、falseだけじゃなく
             // warningも吐く。後で対応を考える。
-            $dirList = scandir(WWW_ROOT. $path);
-
             // 指定フォルダ配下にあればラストの連番に+1していく
-            if ($dirList) {
-                $i = count(scandir(WWW_ROOT. $path));
-                $lastDir = $dirList[$i - 1];
-                $nextDir = sprintf("%05d",$lastDir + 1);
+            if (file_exists($dir)) {
+                $dirArray = scandir($dir);
+                for($i = 0; $i < count($dirArray); $i++) {
+                    if(strpos($dirArray[$i],'.') !== false) {
+                        unset($dirArray[$i]);
+                    }
+                }
+                $nextDir = sprintf("%05d",count($dirArray) + 1);
 
             } else {
             // 指定フォルダが空なら00001連番から振る
@@ -178,7 +180,7 @@ class OwnersController extends AppController
 
             }
             // パスが存在しなければディレクトリを掘ってDB登録
-            if (!realpath(WWW_ROOT.$path.$nextDir)) {
+            if (!realpath($dir.$nextDir)) {
                 $connection = ConnectionManager::get('default');
                 // トランザクション処理開始
                 $connection->begin();
@@ -204,7 +206,7 @@ class OwnersController extends AppController
                     $findShop = $this->Shops->find()->where(['owner_id' => $owner->id])->first();
                     $this->Jobs->findOrCreate(['shop_id' => $findShop->id]);
                     // commit出来たらディレクトリを掘る
-                    $dir = new Folder(WWW_ROOT.$path.$nextDir, true, 0755);
+                    $dir = new Folder($dir.$nextDir, true, 0755);
                     // ユーザーステータスを本登録にする。(statusカラムを本登録に更新する)
                     $this->Flash->success(Configure::read('irm.054'));
                     return $this->redirect(['action' => 'login']);

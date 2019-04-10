@@ -697,7 +697,7 @@
             </div>
             <label class="col s12 m1 l1">歳から</label>
             <div class="input-field col s12 m4 l2">
-            <select name="to_age">
+              <select name="to_age">
                 <option value="" selected>年齢を選択してください</option>
                 <?php foreach ($selectList['age'] as $key => $value) {
                   echo('<option value="' .$key.'">'.$value.'</option>');

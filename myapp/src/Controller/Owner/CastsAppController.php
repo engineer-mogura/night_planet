@@ -45,7 +45,7 @@ class CastsAppController extends \App\Controller\AppController
     {
         $action = $this->request->getParam('action');
         // ログイン時に許可するアクション
-        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit', 'editCast','editCalendar'])) {
+        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit', 'editCast','editCalendar','profile','image'])) {
             return true;
         }
         return false;

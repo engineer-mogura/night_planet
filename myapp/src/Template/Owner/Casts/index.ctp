@@ -8,54 +8,6 @@
   <?= $this->Flash->render() ?>
   <h5><?= __('キャストトップページ') ?></h5>
   <?php foreach ($cast as $castRow): ?>
-  <!-- <div class="row">
-    <div class="col s12 m4 l4">
-      <div class="card horizontal">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-stacked">
-          <div class="card-content">
-            <p>I am a very simple card. I am good at containing small bits of information.</p>
-          </div>
-          <div class="card-action">
-            <a href="#">This is a link</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l4">
-      <div class="card horizontal">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-stacked">
-          <div class="card-content">
-            <p>I am a very simple card. I am good at containing small bits of information.</p>
-          </div>
-          <div class="card-action">
-            <a href="#">This is a link</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l4">
-      <div class="card horizontal">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-stacked">
-          <div class="card-content">
-            <p>I am a very simple card. I am good at containing small bits of information.</p>
-          </div>
-          <div class="card-action">
-            <a href="#">This is a link</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
-
   <div id="cast" class="row">
     <div class="col s12 m4 l4">
       <div class="card">
@@ -200,12 +152,7 @@
     <div class="col s12 m6 l6">
       <div id="calendar"></div>
     </div>
-    <!-- <div class="row">
-            <div class="col s5 m4 l3"><input id="from-time" class="timepicker" name="from_time"></div>
-            <div class="col s2 m1 l1 center-align">～</div>
-            <div class="col s5 m4 l3"><input id="to-time" class="timepicker" name="to_time"></div>
-          </div>
-  </div> -->
+  </div>
 </div>
 <?php endforeach; ?>
 </div>

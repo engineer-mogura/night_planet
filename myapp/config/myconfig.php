@@ -3,6 +3,12 @@ use Cake\Core\Configure;
  
 return [
 
+	// ラベル定数 owner.label menu
+	define('CAST_CONFIG', array(
+		'file_max'=>'8',
+	)),
+	
+
 		// ラベル定数 developer.label menu
 	define('DEVELOPER_LM', array(
 		'001'=>'開発者リスト',

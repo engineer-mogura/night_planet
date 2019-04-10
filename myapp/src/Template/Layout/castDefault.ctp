@@ -47,9 +47,9 @@
       </div>
     </li>
     <li><a href="/owner/casts/index/<?=$id?>?activeTab=dashbord" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= CAST_LM['001'] ?></a></li>
-    <li><a href="/owner/casts/index/<?=$id?>?activeTab=profile" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['002'] ?></a></li>
-    <li><a href="/owner/casts/index/<?=$id?>?activeTab=dialy" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['003'] ?></a></li>
-    <li><a href="/owner/casts/index/<?=$id?>?activeTab=image" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['004'] ?></a></li>
+    <li><a href="/owner/casts/profile/<?=$id?>?activeTab=profile" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['002'] ?></a></li>
+    <li><a href="/owner/casts/dialy/<?=$id?>?activeTab=dialy" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['003'] ?></a></li>
+    <li><a href="/owner/casts/image/<?=$id?>?activeTab=image" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">help_outline</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

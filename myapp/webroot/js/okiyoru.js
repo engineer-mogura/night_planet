@@ -1110,6 +1110,361 @@ function calendarBtn(obj, action) {
 
 }
 
+/**
+ * キャストプロフィール 登録ボタン処理
+ */
+function profileSaveBtn(obj){
+
+    if (!confirm('こちらのプロフィール内容でよろしいですか？')) {
+        return false;
+    }
+    var $form = obj;
+
+    //通常のアクションをキャンセルする
+    event.preventDefault();
+
+    $.ajax({
+        url : $form.attr('action'), //Formのアクションを取得して指定する
+        type: $form.attr('method'),//Formのメソッドを取得して指定する
+        data: $form.serialize(), //データにFormがserialzeした結果を入れる
+        dataType: 'json', //データにFormがserialzeした結果を入れる
+        timeout: 1000000,
+        beforeSend : function(xhr, settings){
+            //Buttonを無効にする
+            $($form).find('.saveBtn').removeClass('disabled');
+            //処理中のを通知するアイコンを表示する
+            $("#dummy").load("/module/Preloader.ctp");
+        },
+        complete: function(xhr, textStatus){
+            //処理中アイコン削除
+            $('.preloader-wrapper').remove();
+            $($form).find('.saveBtn').addClass('disabled');
+        },
+        success: function (response, textStatus, xhr) {
+
+            // OKの場合
+            if(response.success){
+                // $.notifyBar({
+                    // cssClass: 'success',
+                    // //html: response.message
+                //});
+            }else{
+            // NGの場合
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: response.error
+                });
+            }
+        },
+        error : function(response, textStatus, xhr){
+            $($form).find('.saveBtn').attr('disabled' , false);
+            $.notifyBar({
+                cssClass: 'error',
+                html: response.result+"<br/>エラーが発生しました。ステータス：" + textStatus
+            });
+        }
+    });
+}
+
+/**
+ * 誕生日用 datepicker初期化処理
+ */
+function birthdayPickerIni () {
+    $('.birthday-picker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 100, // Creates a dropdown of 15 years to control year,
+        closeOnSelect: false, // Close upon selecting a date,
+        container: undefined, // ex. 'body' will append picker to body
+        monthsFull:  ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+        weekdaysFull: ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"],
+        weekdaysShort:  ["日", "月", "火", "水", "木", "金", "土"],
+        weekdaysLetter: ["日", "月", "火", "水", "木", "金", "土"],
+        labelMonthNext: "翌月",
+        labelMonthPrev: "前月",
+        labelMonthSelect: "月を選択",
+        labelYearSelect: "年を選択",
+        today: "今日",
+        clear: "クリア",
+        close: "閉じる",
+        format: "yyyy-mm-dd",
+        min: new Date(1960,1,1),
+        max: new Date()
+    });
+    $('.birthday-picker').pickadate('setDate', new Date());
+}
+
+/**
+ * 画像を要素に読み込む
+ * @param  {} obj
+ */
+function castImgDisp(obj) {
+    if($("#image-file").prop("files").length == 0) {
+        $(".cancelBtn").addClass("disabled");
+        $(".saveBtn").addClass("disabled");
+    } else {
+        $(".cancelBtn").removeClass("disabled");
+        $(".saveBtn").removeClass("disabled");
+    }
+    $(document).find(".card-img.new").remove();
+    var fileList = $("#image-file").prop("files");
+    var imgCount = $(".card-img").length;
+    var fimeMax = $("input[name='file_max']").val();
+
+    $.each(fileList, function(index, file){
+        //画像ファイルかチェック
+        if (file["type"] != "image/jpeg" && file["type"] != "image/png" && file["type"] != "image/gif") {
+            alert("jpgかpngかgifファイルを選択してください");
+            $("#image-file").val('');
+            return false;
+        }
+    });
+    // ファイル数を制限する
+    if(fileList.length + imgCount > fimeMax) {
+        alert("アップロードできる画像は" + fimeMax + "ファイルまでです。");
+        castCancelBtn();
+        return;
+    }
+    for(var i = 0; i < fileList.length; i++){
+
+        imgCount += 1;
+        fileload(fileList[i], obj, imgCount);
+    }
+    $('.materialboxed').materialbox();
+    $('.tooltipped').tooltip({delay: 50});
+
+}
+
+/**
+ * HTMLを生成する
+ * @param  {} file
+ * @param  {} obj
+ * @param  {} imgCount
+ */
+function fileload(file, obj, imgCount) {
+
+    var fileReader = new FileReader();
+    fileReader.onloadend = function() {
+        var html = '<div class="col s6 m4 l3 card-img new image'+imgCount+'">'
+                + '<span class="new badge red oki-new"></span>'
+                + '<input type="hidden" name="file_name" value="'+file.name+'">'
+                + '<div class="card">'
+                + '<div class="card-image">'
+                + '<img class="materialboxed" data-caption="" src="">'
+                + '</div>'
+                + '</div>'
+                + '</div>';
+
+        var $html = $(html);
+
+        $($html).find('img').attr({width:'100%',height:'120',src:fileReader.result});
+        $(obj).append($html);
+
+    }
+
+    fileReader.readAsDataURL(file);
+}
+
+/**
+ * キャスト画像アップ用リセット リセットボタン処理
+ */
+function castCancelBtn(){
+    $(document).find(".card-img.new").remove();
+    $(document).find('#image-file').replaceWith($('#image-file').val('').clone(true));
+    $("input[name='top_image']").val('');
+}
+
+function castImageSaveBtn(){
+
+    //加工後の横幅を800pxに設定
+    var processingWidth = 800;
+
+    //加工後の容量を100KB以下に設定
+    var processingCapacity = 100000;
+    // form 初期化
+    var $form = null;
+    var formData = null;
+    var blob = [];
+
+    //ファイル選択済みかチェック
+    var fileCheck = $("#image-file").val().length;
+    if (fileCheck === 0) {
+        alert("画像ファイルを選択してください");
+        return false;
+    }
+    if(!confirm('こちらの画像に変更でよろしいですか？')) {
+        return false;
+    }
+    $('.card-img').each(function(index, element){
+
+        console.log(index + ':' + $(element).text());
+        //imgタグに表示した画像をimageオブジェクトとして取得
+        var image = new Image();
+        image.src = $(this).find("img").attr("src");
+
+        var h;
+        var w;
+
+        //原寸横幅が加工後横幅より大きければ、縦横比を維持した縮小サイズを取得
+        if(processingWidth < image.width) {
+            w = processingWidth;
+            h = image.height * (processingWidth / image.width);
+
+        //原寸横幅が加工後横幅以下なら、原寸サイズのまま
+        } else {
+            w = image.width;
+            h = image.height;
+        }
+
+        //取得したサイズでcanvasに描画
+        var canvas = $("#image-canvas");
+        var ctx = canvas[0].getContext("2d");
+        $("#image-canvas").attr("width", w);
+        $("#image-canvas").attr("height", h);
+        ctx.drawImage(image, 0, 0, w, h);
+
+        //canvasに描画したデータを取得
+        var canvasImage = $("#image-canvas").get(0);
+
+        //オリジナル容量(画質落としてない場合の容量)を取得
+        var originalBinary = canvasImage.toDataURL("image/jpeg"); //画質落とさずバイナリ化
+        var originalBlob = base64ToBlob(originalBinary); //画質落としてないblobデータをアップロード用blobに設定
+        console.log(originalBlob["size"]);
+
+        //オリジナル容量blobデータをアップロード用blobに設定
+        var uploadBlob = originalBlob;
+
+        //オリジナル容量が加工後容量以上かチェック
+        if(processingCapacity <= originalBlob["size"]) {
+            //加工後容量以下に落とす
+            var capacityRatio = processingCapacity / originalBlob["size"];
+            var processingBinary = canvasImage.toDataURL("image/jpeg", capacityRatio); //画質落としてバイナリ化
+            uploadBlob = base64ToBlob(processingBinary); //画質落としたblobデータをアップロード用blobに設定
+            console.log(capacityRatio);
+            console.log(uploadBlob["size"]);
+        }
+
+        blob.push(uploadBlob);
+    });
+
+    //アップロード用blobをformDataに設定
+    $form = $('#edit-image');
+    formData = new FormData($form.get()[0]);
+    formData.append("image", blob);
+
+    //通常のアクションをキャンセルする
+    event.preventDefault();
+
+    $.ajax({
+        url : $form.attr('action'), //Formのアクションを取得して指定する
+        type: $form.attr('method'),//Formのメソッドを取得して指定する
+        data: formData, //データにFormがserialzeした結果を入れる
+        dataType: 'html', //データにFormがserialzeした結果を入れる
+        processData: false,
+        contentType: false,
+        timeout: 1000000,
+        beforeSend : function(xhr, settings){
+            //Buttonを無効にする
+            $($form).find('.saveBtn').removeClass('disabled');
+            //処理中のを通知するアイコンを表示する
+            $("#dummy").load("/module/Preloader.ctp");
+        },
+        complete: function(xhr, textStatus){
+            //処理中アイコン削除
+            $('.preloader-wrapper').remove();
+            $($form).find('.saveBtn').addClass('disabled');
+            $('.tooltipped').tooltip({delay: 50});
+        },
+        success: function (response, textStatus, xhr) {
+
+            // OKの場合
+            if(response){
+                var $objWrapper = $("#wrapper");
+                $($objWrapper).replaceWith(response);
+                // $.notifyBar({
+                //     // cssClass: 'success',
+                //     // //html: response.message
+                // });
+            }else{
+            // NGの場合
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: response.error
+                });
+            }
+        },
+        error : function(response, textStatus, xhr){
+            $($form).find('.saveBtn').attr('disabled' , false);
+            $.notifyBar({
+                cssClass: 'error',
+                html: response.result+"<br/>エラーが発生しました。ステータス：" + textStatus
+            });
+        }
+    });
+}
+
+/**
+ * キャスト画像 削除ボタン処理
+ */
+function castImageDeleteBtn(form, obj){
+
+    if (!confirm('削除しますか？')) {
+        return false;
+    }
+    var $form = form;
+
+    //通常のアクションをキャンセルする
+    event.preventDefault();
+
+    $.ajax({
+        url : $form.attr('action'), //Formのアクションを取得して指定する
+        type: $form.attr('method'),//Formのメソッドを取得して指定する
+        data: $form.serialize(), //データにFormがserialzeした結果を入れる
+        dataType: 'html', //データにFormがserialzeした結果を入れる
+        timeout: 100000,
+        beforeSend : function(xhr, settings){
+            //Buttonを無効にする
+            $($form).find('.saveBtn').removeClass('disabled');
+            //処理中のを通知するアイコンを表示する
+            $("#dummy").load("/module/Preloader.ctp");
+        },
+        complete: function(xhr, textStatus){
+            //処理中アイコン削除
+            $('.preloader-wrapper').remove();
+            $($form).find('.saveBtn').addClass('disabled');
+            $('.tooltipped').tooltip({delay: 50});
+        },
+        success: function (response, textStatus, xhr) {
+
+            // OKの場合
+            if(response){
+                var $objWrapper = $("#wrapper");
+                $($objWrapper).replaceWith(response);
+                // $.notifyBar({
+                //     // cssClass: 'success',
+                //     // //html: response.message
+                // });
+            }else{
+            // NGの場合
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: response.error
+                });
+            }
+        },
+        error : function(response, textStatus, xhr){
+            $($form).find('.saveBtn').attr('disabled' , false);
+            $.notifyBar({
+                cssClass: 'error',
+                html: response.result+"<br/>エラーが発生しました。ステータス：" + textStatus
+            });
+        }
+    });
+}
+
+
+/* キャストデフォルト end */
+
     // all initialize
     function initialize() {
 
@@ -1317,6 +1672,61 @@ function calendarBtn(obj, action) {
             // 要素の存在判定で読み込まない処理にするか後で考える。
             // キャスト用の初期化処理
             fullcalendarSetting();
+            birthdayPickerIni();
+
+            if($("#cast-profile").length) {
+                var $profile = $("#cast-profile");
+                var profile = JSON.parse($($profile).find('input[name="profile_copy"]').val());
+                $($profile).find('select[name="age"]').val(profile['age']);
+                $($profile).find('select[name="constellation"]').val(profile['constellation']);
+                $($profile).find('select[name="blood_type"]').val(profile['blood_type']);
+                var birthday = $('#birthday').pickadate('picker'); // Date Picker
+                birthday.set('select', [2000, 1, 1]);
+                birthday.set('select', new Date(2000, 1, 1));
+                birthday.set('select', profile['birthday'], { format: 'yyyy-mm-dd' });
+
+                $($profile).find(":input").on("change", function() {
+
+                    $($profile).find(".saveBtn").removeClass("disabled");
+                });
+
+            }
+            if($("#edit-image").length) {
+                // var $image = $("#edit-image");
+                // var image = JSON.parse($($image).find('input[name="image_copy"]').val());
+
+                // $($image).find(":input").on("change", function() {
+                //     if($($image).find("#image-file").prop("files").length == 0) {
+                //         $($image).find(".cancelBtn").addClass("disabled");
+                //         $($image).find(".saveBtn").addClass("disabled");
+                //         $(document).find(".card-img.new").remove();
+                //     } else {
+                //         $($image).find(".cancelBtn").removeClass("disabled");
+                //         $($image).find(".saveBtn").removeClass("disabled");
+                //     }
+
+                // });
+                // $(document).on('click','.new-btn', function() {
+
+                //     var fileList = $("#image-file").prop("files");
+                //     var dom = $(document).find(this).closest(".card-img");
+                //     var fileName = $(dom).find("input[name='file_name']").val();
+                //     $.each(fileList, function(index, file){
+                //         //画像ファイルかチェック
+                //         if (file["name"] == fileName) {
+                //             $("#image-file").prop("files")[index] = "";
+                //             return false;
+                //         }
+                //         fileList.splice
+                //     });
+                //     $(dom).remove();
+                //     $(".material-tooltip").remove();
+                //     $('.tooltipped').tooltip({delay: 50});
+                // });
+
+            }
+
+
         }
         /* キャストページ 関連処理 end */
 
@@ -1391,11 +1801,21 @@ function calendarBtn(obj, action) {
         $('.datepicker').pickadate({
             selectMonths: true, // Creates a dropdown to control month
             selectYears: 15, // Creates a dropdown of 15 years to control year,
-            today: '今日',
-            clear: 'クリア',
-            close: 'OK',
             closeOnSelect: false, // Close upon selecting a date,
-            container: undefined // ex. 'body' will append picker to body
+            container: undefined, // ex. 'body' will append picker to body
+            monthsFull:  ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+            monthsShort: ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+            weekdaysFull: ["日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日"],
+            weekdaysShort:  ["日", "月", "火", "水", "木", "金", "土"],
+            weekdaysLetter: ["日", "月", "火", "水", "木", "金", "土"],
+            labelMonthNext: "翌月",
+            labelMonthPrev: "前月",
+            labelMonthSelect: "月を選択",
+            labelYearSelect: "年を選択",
+            today: "今日",
+            clear: "クリア",
+            close: "閉じる",
+            format: "yyyy-mm-dd",
         });
         $('.datepicker').pickadate('setDate', new Date());
 

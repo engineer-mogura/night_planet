@@ -165,13 +165,11 @@ class UtilComponent extends Component {
      * @param [type] $limitFileSize
      * @return void
      */
-    public function file_upload($file = null, $dir = null, $limitFileSize = 1024 * 1024)
+    public function file_upload($file = null, $files_befor = null, $dir = null, $limitFileSize = 1024 * 1024)
     {
         try {
             // ファイルを保存するフォルダ $dirの値のチェック
             if ($dir) {
-                debug("file_upload", "debug");
-                debug($dir, "debug");
                 if (!file_exists($dir)) {
                     throw new RuntimeException('指定のディレクトリがありません。');
                 }
@@ -221,6 +219,14 @@ class UtilComponent extends Component {
             // ファイル名の生成
 //            $uploadFile = $file["name"] . "." . $ext;
             $uploadFile = sha1_file($file["tmp_name"]) . "." . $ext;
+
+            // DBにデータがある場合にアップされるファイルを比較する
+            $isFile = array_search($uploadFile, $files_befor);
+            // ファイル名が同じ場合は処理を中断する
+            if ($isFile !== false) {
+
+                return false;
+            }
 
             // ファイルの移動
             if (!@move_uploaded_file($file["tmp_name"], $dir . "/" . $uploadFile)) {

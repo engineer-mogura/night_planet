@@ -61,13 +61,13 @@ class CastsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 30)
+            ->maxLength('name', 30, '名前が長すぎます。')
             ->requirePresence('name', 'create')
             ->allowEmptyString('name', false);
 
         $validator
             ->scalar('nickname')
-            ->maxLength('nickname', 30)
+            ->maxLength('nickname', 30, 'ニックネームが長すぎます。')
             ->requirePresence('nickname', 'create')
             ->allowEmptyString('nickname', false);
 
@@ -82,7 +82,7 @@ class CastsTable extends Table
             ->allowEmptyString('password');
 
         $validator
-            ->time('birthday')
+            ->date('birthday')
             ->allowEmptyTime('birthday');
 
         $validator
@@ -92,12 +92,12 @@ class CastsTable extends Table
 
         $validator
             ->scalar('blood_type')
-            ->maxLength('blood_type', 5)
+            ->maxLength('blood_type', 20)
             ->allowEmptyString('blood_type');
 
         $validator
             ->scalar('constellation')
-            ->maxLength('constellation', 10)
+            ->maxLength('constellation', 20)
             ->allowEmptyString('constellation');
 
         $validator
@@ -162,7 +162,6 @@ class CastsTable extends Table
 
         $validator
             ->integer('status')
-            ->requirePresence('status', 'create')
             ->allowEmptyString('status', false);
 
         $validator

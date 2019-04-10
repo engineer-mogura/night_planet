@@ -14,6 +14,15 @@ a.button-collapse.oki-button-collapse{
   .nav-wrapper,.container,footer{
     padding-left: 300px;
   }
+  li > a.sideNav-active {
+    color: initial;
+    color: #fff;
+    background-color: #26a69a;
+  }
+  .side-nav > li > a:hover {
+    color: #fff;
+    background-color: #26a69a;
+  }
 .brand-logo.oki-brand-logo{
   margin-left: 50px;
 }
@@ -342,6 +351,16 @@ li.daylist,li.eventlist {
 }
 
 /* 店舗編集ページ END */
+
+
+/* キャスト編集ページ START */
+
+.oki-new {
+  margin-left: auto;
+  z-index: 999;
+  position: fixed;
+}
+/* キャスト編集ページ END */
 
 @media only screen and (max-width: 992px) {
   .brand-logo.oki-brand-logo{

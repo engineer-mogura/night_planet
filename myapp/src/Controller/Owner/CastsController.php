@@ -90,7 +90,7 @@ class CastsController extends CastsAppController
             $cast = $this->Casts->find()->where(['id' => $id]);
             $masterCodesFind = array('time');
             $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
-    
+
             $this->set(compact('cast', 'activeTab','selectList', 'ajax'));
                 $html = (String)$this->render('/Owner/Casts/index');
 
@@ -297,11 +297,6 @@ class CastsController extends CastsAppController
                 $file->close();
             }
 
-            // $this->request->session()->write('exception', $isException);
-            // $this->request->session()->write('resultMessage', $resultMessage);
-            // $this->request->session()->write('resultflg', $resultflg);
-            // $this->request->session()->write('errors', $errors);
-            // $this->request->session()->write('ajax', true);
         }
         $this->viewBuilder()->autoLayout(false);
         $this->autoRender = false;
@@ -309,6 +304,261 @@ class CastsController extends CastsAppController
         $this->response->type('json');
         $this->response->body(json_encode($event));
         return;
+    }
+
+    /**
+     * 編集画面の処理
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function profile($id = null)
+    {
+
+            $addFlg = false; // 追加実行フラグ
+            $this->request->session()->write('activeTab', 'cast');
+
+            if ($this->request->is('ajax')) {
+                $resultMessage = '';
+                $resultflg = true;
+                $isException = false;
+                $isSave = false;
+                $errors = '';
+
+                // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
+                if (isset($this->request->data["profile_edit"])) {
+                    $entity = $this->Casts->newEntity($this->request->getData());
+                }
+
+                if (!$entity->errors()) {
+
+                    if (isset($this->request->data["profile_edit"])) {
+                        // キャスト編集の場合
+                        $cast = $this->Casts->get($id);
+                        $cast = $this->Events->patchEntity($cast, $this->request->getData());
+
+                    }
+                    // saveするか判定する
+                    if (array_key_exists('profile_edit', $this->request->getData())){
+                        $isSave = true;
+                    }
+                    if ($isSave) {
+                        if ($this->Casts->save($cast)) {
+                            $resultMessage = Configure::read('irm.001');
+                        } else {
+                            $resultMessage = Configure::read('irm.050');
+                            $resultflg = false;
+                        }
+                    }
+                } else {
+                    $resultflg = false;
+                    foreach ($entity->errors() as $key1 => $value1) {
+                        foreach ($value1 as $key2 => $value2) {
+                            if (is_array($value2)) {
+                                foreach ($value2 as $key3 => $value3) {
+                                    $errors .= $value3."<br/>";
+                                }
+                            } else {
+                                $errors .= $value2."<br/>";
+                                //$this->Flash->error($value2);
+                            }
+                        }
+                    }
+                }
+                // アクティブタブを空で初期化
+                $activeTab = "";
+
+                if (isset($this->request->query["activeTab"])) {
+                    $activeTab = $this->request->getQuery("activeTab");
+                }
+                $this->viewBuilder()->autoLayout(false);
+                $this->autoRender = false;
+                $this->response->charset('UTF-8');
+                $this->response->type('json');
+                $response = array(
+                    'success' => $resultflg,
+                    'error' => $errors,
+                    'message' => $resultMessage,
+                );
+
+                $this->response->body(json_encode($response));
+                return;
+
+            }
+            //return $this->redirect($this->referer());
+
+        // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
+        if (!isset($id)) {
+            $id = $this->request->getSession()->read('Auth.Cast.id');
+        }
+        $cast = $this->Casts->find()->where(['id' => $id]);
+        $masterCodesFind = array('time','constellation','blood_type','age');
+        $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
+
+        $this->set(compact('cast', 'activeTab','selectList', 'ajax'));
+        $this->render();
+    }
+
+    /**
+     * 編集画面の処理
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function image($id = null)
+    {
+
+            $delFlg = false; // 削除実行フラグ
+            $this->request->session()->write('activeTab', 'cast');
+
+            if ($this->request->is('ajax')) {
+                $resultMessage = '';
+                $saveCount = 0;
+                $isException = false;
+                $isSave = false;
+                $errors = '';
+
+                // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
+                $entity = $this->Casts->newEntity($this->request->getData(),['validate' => false]);
+
+                if (!$entity->errors()) {
+
+                    // キャスト取得
+                    $cast = $this->Casts->get($id);
+                    // 本登録をもってキャスト用のディレクトリを掘る
+                    $dir = WWW_ROOT. $this->viewVars['infoArray']['dir_path'].'/cast/'.$cast->dir.'/';
+                    $files_befor = (array)json_decode($this->request->data["image_copy"]);
+                    $fileMax = CAST_CONFIG['file_max'];
+                    $array = $this->Casts->schema()->columns();
+                    $imageCol = array_values(preg_grep("/^image/", $array));
+
+                    $dir = realpath($dir);
+                    if (!$dir) {
+                        $dir = new Folder(WWW_ROOT. $this->viewVars['infoArray']['dir_path'], true, 0755);
+                    }
+                    if (isset($this->request->data["image_edit"])) {
+                        $files = $this->request->data['image'];
+
+                        foreach ($files as $key => $file) {
+                            // ファイルが入力されたとき
+                            if (count($file["name"]) > 0) {
+                                $limitFileSize = 1024 * 1024;
+                                try {
+                                    // ファイル名を取得する
+                                    $convertFile = $this->Util->file_upload($file, $files_befor, $dir, $limitFileSize);
+
+                                    // ファイル名が同じ場合は処理をスキップする
+                                    if ($convertFile === false) {
+                                        $errors = '同じ画像はアップできません。'."\n";
+                                        continue;
+                                    }
+
+                                } catch (RuntimeException $e) {
+                                    // アップロード失敗の時、処理を中断する
+                                    $errors = $e->getMessage()."\n";
+                                    $isException = true;
+                                }
+                            }
+                            // カラムimage1～image8の空いてる場所に入れる
+                            for($i = 0; $i < $fileMax; $i++) {
+                                if(empty($cast->get($imageCol[$i]))) {
+                                    $cast->set($imageCol[$i], $convertFile);
+                                    $saveCount++;
+                                    break;
+                                }
+                            }
+
+                        }
+
+                    } else if (isset($this->request->data["image_delete"])) {
+                        try {
+                            $this->log("file_delete", "debug");
+                            $del_file = new File($dir . "/" .$this->request->getData('filename'));
+                            // ファイル削除処理実行
+                            if ($del_file->delete()) {
+                                $cast->set($this->request->getData('col_name'), "");
+                                $saveCount++;
+                                $delFlg = true;
+                            } else {
+                                throw new RuntimeException('ファイルの削除ができませんでした。');
+                                $errors = 'ファイルの削除ができませんでした。'."\n";
+                            }
+                        } catch (RuntimeException $e) {
+                            $errors = $e->getMessage()."\n";
+                            $isException = true;
+                        }
+                    }
+
+                    // saveするか判定する
+                    if ((array_key_exists('image_edit', $this->request->getData()) ||
+                        array_key_exists('image_delete', $this->request->getData())) &&
+                        $saveCount > 0) {
+                        $isSave = true;
+                    }
+
+                    if ($isSave) {
+                        if ($this->Casts->save($cast)) {
+                            if ($delFlg == true) {
+                                $resultMessage = Configure::read('irm.003');
+                            } else {
+                                $resultMessage = Configure::read('irm.001');
+                            }
+                        } else {
+                            if ($delFlg == true) {
+                                $errors = Configure::read('irm.052');
+                            } else {
+                                $errors = Configure::read('irm.050');
+                            }
+                        }
+                    }
+                } else {
+                    foreach ($entity->errors() as $key1 => $value1) {
+                        foreach ($value1 as $key2 => $value2) {
+                            if (is_array($value2)) {
+                                foreach ($value2 as $key3 => $value3) {
+                                    $errors .= $value3."\n";
+                                }
+                            } else {
+                                $errors .= $value2."\n";
+                                //$this->Flash->error($value2);
+                            }
+                        }
+                    }
+                }
+                // アクティブタブを空で初期化
+                $activeTab = "";
+
+                if (isset($this->request->query["activeTab"])) {
+                    $activeTab = $this->request->getQuery("activeTab");
+                }
+                $this->viewBuilder()->autoLayout(false);
+                $this->autoRender = false;
+                if (strlen($errors) > 0 && strlen($resultMessage) > 0) {
+                    $this->Flash->success($errors .= "\n".$resultMessage);
+                } else if(strlen($errors) > 0) {
+                    $this->Flash->error($errors);
+                } else if(strlen($resultMessage) > 0) {
+                    $this->Flash->success($resultMessage);
+                }
+                $array = array('id','name','image1','image2','image3','image4','image5','image6','image7','image8','dir');
+                $cast = $this->Casts->find('all')->select($array)->where(['id' => $id])->first();
+                $this->set(compact('cast', 'activeTab', 'ajax'));
+
+                $this->render('/Owner/Casts/image');
+                $this->response->body();
+                return;
+
+            }
+
+        // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
+        if (!isset($id)) {
+            $id = $this->request->getSession()->read('Auth.Cast.id');
+        }
+        $array = array('id','name','image1','image2','image3','image4','image5','image6','image7','image8','dir');
+        $cast = $this->Casts->find('all')->select($array)->where(['id' => $id])->first();
+
+        $this->set(compact('cast', 'activeTab', 'ajax'));
+        $this->render();
     }
 
     public function login()
@@ -374,24 +624,26 @@ class CastsController extends CastsAppController
         if ($cast->status == 0 ) {
             $shop = $this->Shops->get($cast->shop_id);
             // 本登録をもってキャスト用のディレクトリを掘る
-            $path = 'img/'.$shop->area.'/'.$shop->genre.'/'.$shop->dir.'/cast/';
+            $dir = WWW_ROOT.'img/'.$shop->area.'/'.$shop->genre.'/'.$shop->dir.'/cast/';
             // TODO: scandirは、リストがないと、falseだけじゃなく
             // warningも吐く。後で対応を考える。
-            $dirList = scandir(WWW_ROOT. $path);
-
             // 指定フォルダ配下にあればラストの連番に+1していく
-            if ($dirList) {
-                $i = count(scandir(WWW_ROOT. $path));
-                $lastDir = $dirList[$i - 1];
-                $nextDir = sprintf("%05d",$lastDir + 1);
+            if (file_exists($dir)) {
+                $dirArray = scandir($dir);
+                for($i = 0; $i < count($dirArray); $i++) {
+                    if(strpos($dirArray[$i],'.') !== false) {
+                        unset($dirArray[$i]);
+                    }
+                }
+                $nextDir = sprintf("%05d",count($dirArray) + 1);
 
             } else {
-            // 指定フォルダが空なら00001連番から振る
+                // 指定フォルダが空なら00001連番から振る
                 $nextDir = sprintf("%05d", 1);
 
             }
             // パスが存在しなければディレクトリを掘ってDB登録
-            if (!realpath(WWW_ROOT.$path.$nextDir)) {
+            if (!realpath($dir.$nextDir)) {
                 $connection = ConnectionManager::get('default');
                 // トランザクション処理開始
                 $connection->begin();
@@ -406,7 +658,7 @@ class CastsController extends CastsAppController
                     // 成功: commit
                     $connection->commit();
                     // commit出来たらディレクトリを掘る
-                    $dir = new Folder(WWW_ROOT.$path.$nextDir, true, 0755);
+                    $dir = new Folder($dir.$nextDir, true, 0755);
                     // ステータスを本登録にする。(statusカラムを本登録に更新する)
                     $this->Flash->success(Configure::read('irm.054'));
                     return $this->redirect(['action' => 'login']);
@@ -414,12 +666,12 @@ class CastsController extends CastsAppController
                     // 失敗: rollback
                     $connection->rollback();
                     $this->Flash->error(Configure::read('irm.053'));
-                    return $this->redirect(['action' => 'signup']);
+                    return $this->redirect(['action' => 'login']);
                 }
             } else {
                 $this->Flash->error('既にディレクトリが存在します。');
                 $this->Flash->error(Configure::read('irm.053'));
-                return $this->redirect(['action' => 'signup']);
+                return $this->redirect(['action' => 'login']);
             }
 
         }

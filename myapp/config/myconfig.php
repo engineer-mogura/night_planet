@@ -3,20 +3,41 @@ use Cake\Core\Configure;
  
 return [
 
-	// ラベル定数 owner.label menu
-	define('CAST_CONFIG', array(
-		'file_max'=>'8',
-	)),
-	
 
-		// ラベル定数 developer.label menu
+	// キャスト用設定 cast.config
+	define('CAST_CONFIG', array(
+		'FILE_MAX'=>'8', // アップロードファイル数
+		'TITLE_EXCERPT'=>'10', // 抜粋文字数
+		'CONTENT_EXCERPT'=>'10', // 抜粋文字数
+		'ELLIPSIS'=>'...', // 省略文字
+	)),
+
+	// パス設定 path.config
+	define('PATH_ROOT', array(
+		'NO_IMAGE01'=> '/img/common/no-img16.png',
+		'NO_IMAGE02'=> '/img/common/no-img150_150/no-img6.png',
+		'NO_IMAGE03'=> '/img/common/no-img150_150/no-img7.png',
+		'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
+		'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
+		'SLASH'=> '/',
+		'OWNER'=> 'owner',
+		'USER'=> 'user',
+		'CAST'=> 'cast',
+		'DIARY'=> 'diary',
+		'TMP'=> 'tmp',
+		'IMAGE'=> 'image',
+		'IMG'=> 'img', // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える
+
+	)),
+
+	// ラベル定数 developer.label menu
 	define('DEVELOPER_LM', array(
 		'001'=>'開発者リスト',
 		'002'=>'ユーザーリスト',
 		'003'=>'オーナーリスト',
 	)),
 
-		// ラベル定数 label title
+	// ラベル定数 label title
 	define('LT', array(
 		'001'=>'OKIYORU Go',
 		'002'=>'Copyright 2018',
@@ -148,36 +169,28 @@ return [
 	],
 
 	// 共通メッセージ common.message
-	'cm' => [
-		'001' => 'ログインしました。',
-		'002' => 'ログアウトしました。',
-	],
+	define('COMMON_M', array(
+		'LOGINED'=>'ログインしました。',
+		'LOGGED_OUT'=>'ログアウトしました。',
+	)),
+
 	// 確認メッセージ info.confirmation.message
 	'icm' => [
 		'001' => '',
 		'002' => '',
 	],
 	// 結果メッセージ info.result.message
-	'irm' => [
-		'001' => '登録に成功しました。',
-		'002' => '編集に成功しました。',
-		'003' => '削除に成功しました。',
-		'050' => '登録に失敗しました。もう一度登録しなおしてください。',
-		'051' => '編集に失敗しました。もう一度編集しなおしてください。',
-		'052' => '削除に失敗しました。もう一度削除しなおしてください。',
-		'053' => '認証に失敗しました。もう一度登録しなおしてください。',
-		'054' => '認証完了しました。ログインしてください。',
-		'055' => 'すでに登録されてます。ログインしてください。',
-	],
-	// チェックエラーメッセージ error.check.message
-	'ecm' => [
-		'001' => 'ユーザー名またはパスワードが不正です。',
-		'002' => '編集に成功しました。',
-		'003' => '削除に成功しました。',
-		'004' => '登録に失敗しました。もう一度登録しなおしてください。',
-		'005' => '編集に失敗しました。もう一度編集しなおしてください。',
-		'006' => '削除に失敗しました。もう一度削除しなおしてください。',
-	],
-
+	define('RESULT_M', array(
+		'SIGNUP_SUCCESS'=>'登録しました。',
+		'UPDATE_SUCCESS'=>'編集しました。',
+		'DELETE_SUCCESS'=>'削除しました。',
+		'AUTH_SUCCESS'=>'認証完了しました。ログインしてください。',
+		'SIGNUP_FAILED'=>'登録に失敗しました。もう一度登録しなおしてください。',
+		'UPDATE_FAILED'=>'編集に失敗しました。もう一度編集しなおしてください。',
+		'DELETE_FAILED'=>'削除に失敗しました。もう一度削除しなおしてください。',
+		'AUTH_FAILED'=>'認証に失敗しました。もう一度登録しなおしてください。',
+		'REGISTERED_FAILED'=>'すでに登録されてます。ログインしてください。',
+		'FRAUD_INPUT_FAILED'=>'ユーザー名またはパスワードが不正です。',
+	)),
 ]
 ?>

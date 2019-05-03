@@ -176,7 +176,8 @@ return [
      *   breathing room to complete logging or error handling.
      */
     'Error' => [
-        'errorLevel' => E_ALL,
+        //'errorLevel' => E_ALL, // 2019/05/02 警告解除
+        'errorLevel' => E_ALL＆〜E_USER_DEPRECATED,
         'exceptionRenderer' => 'Cake\Error\ExceptionRenderer',
         'skipLog' => [],
         'log' => true,

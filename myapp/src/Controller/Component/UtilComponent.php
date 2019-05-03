@@ -5,42 +5,73 @@ namespace App\Controller\Component;
 use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
+use Cake\Filesystem\Folder;
 
-class UtilComponent extends Component {
+class UtilComponent extends Component
+{
 
-     /**
-      * null値の時にデフォルト値を返却する
-      * 
-      * 引数1がnull値なら戻り値は引数2の値を返す。
-      * 引数1がnull値じゃない場合は戻り値は引数1の値を返す。
-      * 
-      * @param mixed
-      * @param mixed
-      * @return mixed
-      */
-      function ifnull($target=null)
-      {
-        if(!is_null($target)) return $target;
-      
+    /**
+     * arrの指定keyで同じ値をグループ化する
+     *
+     * @param [type] $arr
+     * @param [type] $key
+     * @return void
+     */
+    public function groupArray($arr, $key)
+    {
+        $retval = array();
+
+        foreach ($arr as $value) {
+            $group = $value[$key];
+
+            if (!isset($retval[$group])) {
+                $retval[$group] = array();
+            }
+
+            $retval[$group][] = $value;
+        }
+
+        return $retval;
+    }
+
+
+    /**
+     * null値の時にデフォルト値を返却する
+     *
+     * 引数1がnull値なら戻り値は引数2の値を返す。
+     * 引数1がnull値じゃない場合は戻り値は引数1の値を返す。
+     *
+     * @param mixed
+     * @param mixed
+     * @return mixed
+     */
+    public function ifnull($target=null)
+    {
+        if (!is_null($target)) {
+            return $target;
+        }
+
         return '';
-      }
-     /**
-      * null値の時にデフォルト値を返却する
-      * 
-      * 引数1がnull値なら戻り値は引数2の値を返す。
-      * 引数1がnull値じゃない場合は戻り値は引数1の値を返す。
-      * 
-      * @param mixed
-      * @param mixed
-      * @return mixed
-      */
-      function ifnullString($target=null)
-      {
-        if($target !== '') return $target;
-      
+    }
+    /**
+     * null値の時にデフォルト値を返却する
+     *
+     * 引数1がnull値なら戻り値は引数2の値を返す。
+     * 引数1がnull値じゃない場合は戻り値は引数1の値を返す。
+     *
+     * @param mixed
+     * @param mixed
+     * @return mixed
+     */
+    public function ifnullString($target=null)
+    {
+        if ($target !== '') {
+            return $target;
+        }
+
         return null;
-      }
-  
+    }
+
     /**
      * オーナーのディレクトリを取得する。
      *
@@ -78,21 +109,21 @@ class UtilComponent extends Component {
     /**
      * クレジットリストを作成する
      *
-     * @param [type] $shop
-     * @param [type] $credits
+     * @param object $shop
+     * @param array $masterCodeResult
      * @return void
      */
-    public function getCredit($shop, $masterCodeResult) {
-
+    public function getCredit(object $shop, array $masterCodeResult)
+    {
         $array = array();
         $creditsHidden = array();
         foreach ($shop as $key => $value) {
-            $array = explode(',',$value->credit);
+            $array = explode(',', $value->credit);
         }
 
-        for($i = 0; $i < count($array); $i++) {
+        for ($i = 0; $i < count($array); $i++) {
             foreach ($masterCodeResult as $key => $value) {
-                if($array[$i] == $value->code) {
+                if ($array[$i] == $value->code) {
                     $creditsHidden[] = array('tag'=>$value->code,'image'=>"/img/common/credit/".$value->code.".png",'id'=>$value->id);
                     continue;
                 }
@@ -108,17 +139,17 @@ class UtilComponent extends Component {
      * @param [type] $masterCodeResult
      * @return void
      */
-    public function getTreatment($shop, $masterCodeResult) {
-
+    public function getTreatment($shop, $masterCodeResult)
+    {
         $array = array();
         $treatmentsHidden = array();
         foreach ($shop as $key => $value) {
-            $array = explode(',',$value->job->treatment);
+            $array = explode(',', $value->job->treatment);
         }
 
-        for($i = 0; $i < count($array); $i++) {
+        for ($i = 0; $i < count($array); $i++) {
             foreach ($masterCodeResult as $key => $value) {
-                if($array[$i] == $value->code_name) {
+                if ($array[$i] == $value->code_name) {
                     $treatmentsHidden[] = array('tag'=>$value->code_name,'id'=>$value->code);
                     continue;
                 }
@@ -135,23 +166,23 @@ class UtilComponent extends Component {
      * @param [type] $flag
      * @return void
      */
-    public function getSelectList($masterCodesFind = null, $masterCodeEntity = null, $flag = null) {
-
+    public function getSelectList($masterCodesFind = null, $masterCodeEntity = null, $flag = null)
+    {
         $result = array();
-        for($i = 0; $i < count($masterCodesFind); $i++) {
+        for ($i = 0; $i < count($masterCodesFind); $i++) {
             $query = $masterCodeEntity->find('list', [
                 'keyField' => 'code',
                 'valueField' => 'code_name'
             ])->where(['code_group' => $masterCodesFind[$i]]);
-            $result = array_merge($result,array($masterCodesFind[$i] => $query->toArray()));
+            $result = array_merge($result, array($masterCodesFind[$i] => $query->toArray()));
         }
         // 年齢リストを作成するか
         if (!empty($flag)) {
             $ageList = array();
-            for($i = 18; $i <= 99; $i++) {
+            for ($i = 18; $i <= 99; $i++) {
                 $ageList[$i] = $i;
             }
-            $result = array_merge($result,array('age' => $ageList));
+            $result = array_merge($result, array('age' => $ageList));
         }
 
         return $result;
@@ -160,12 +191,14 @@ class UtilComponent extends Component {
     /**
      * ファイルアップロードの処理
      *
-     * @param [type] $file
-     * @param [type] $dir
-     * @param [type] $limitFileSize
+     * @param array $file
+     * @param array $files_befor
+     * @param string $dir
+     * @param integer $limitFileSize
      * @return void
      */
-    public function file_upload($file = null, $files_befor = null, $dir = null, $limitFileSize = 1024 * 1024)
+    public function file_upload(array $file = null, array $files_befor = null,
+        string $dir = null, int $limitFileSize = 1024 * 1024)
     {
         try {
             // ファイルを保存するフォルダ $dirの値のチェック
@@ -221,10 +254,10 @@ class UtilComponent extends Component {
             $uploadFile = sha1_file($file["tmp_name"]) . "." . $ext;
 
             // DBにデータがある場合にアップされるファイルを比較する
-            $isFile = array_search($uploadFile, $files_befor);
+
+            $isFile = array_search($uploadFile, array_column($files_befor, 'name'));
             // ファイル名が同じ場合は処理を中断する
             if ($isFile !== false) {
-
                 return false;
             }
 
@@ -239,6 +272,49 @@ class UtilComponent extends Component {
             throw $e;
         }
         return $uploadFile;
+    }
+
+    /**
+     * 一時ディレクトリにバックアップを作成する
+     *
+     * @param String $tmpPath
+     * @param File $dirClone
+     * @return void
+     */
+    public function createTmpDirectoy(string $tmpPath, folder $dir)
+    {
+
+        // "/$tmpPath/{現在の時間}"というディレクトリをパーミッション777で作ります
+        // オブジェクト作成
+        $result = new Folder;
+        $tmpDir = new Folder($tmpPath . DS . time(), true, 0777);
+        $dir->copy($tmpDir->path);
+        // $fileList = glob($tmpDir->path.'/*'); // ディレクトリ配下のファイルを取得
+        // count($fileList) > 0 ? $result = $tmpDir : $tmpDir->delete();
+        return $tmpDir;
+    }
+
+    /**
+     * エラーメッセージをセットする
+     *
+     * @param Diary $validate
+     * @return $errors
+     */
+    public function setErrMessage($validate)
+    {
+        $errors = ""; // メッセージ格納用
+        foreach ($validate->errors() as $key1 => $value1) {
+            foreach ($value1 as $key2 => $value2) {
+                if (is_array($value2)) {
+                    foreach ($value2 as $key3 => $value3) {
+                        $errors .= $value3."<br/>";
+                    }
+                } else {
+                    $errors .= $value2."<br/>";
+                }
+            }
+        }
+        return $errors;
     }
 
 }

@@ -17,13 +17,11 @@
     $($form).find('input[type="text"]').each(function(){
       if($(this).val() != "") {
         $(this).next().attr('class','active');
-        console.log($(this).val());
       }
     });
     $($form).find('input[type="textarea"]').each(function(){
       if($(this).val() != "") {
         $(this).next().attr('class','active');
-        console.log($(this).val());
       }
     });
   };
@@ -44,6 +42,81 @@
     blob = new Blob([arr], {type: 'image/jpeg'});
     return blob;
   }
+
+  /**
+   * ファイル変換処理
+   * @param  {} canvas
+   * @param  {} form
+   * @param  {} imgList
+   */
+  var fileConvert = function(canvasArea, form, imgList) {
+
+    //加工後の横幅を800pxに設定
+    var processingWidth = 800;
+
+    //加工後の容量を100KB以下に設定
+    var processingCapacity = 100000;
+    // form 初期化
+    var $form = null;
+    var formData = null;
+    var blob = [];
+
+    $(imgList).each(function(index, element){
+
+      //imgタグに表示した画像をimageオブジェクトとして取得
+      var image = new Image();
+      image.src = $(this).find("img").attr("src");
+
+      var h;
+      var w;
+
+      //原寸横幅が加工後横幅より大きければ、縦横比を維持した縮小サイズを取得
+      if(processingWidth < image.width) {
+          w = processingWidth;
+          h = image.height * (processingWidth / image.width);
+
+      //原寸横幅が加工後横幅以下なら、原寸サイズのまま
+      } else {
+          w = image.width;
+          h = image.height;
+      }
+
+      //取得したサイズでcanvasに描画
+      var canvas = $(canvasArea);
+      var ctx = canvas[0].getContext("2d");
+      $(canvasArea).attr("width", w);
+      $(canvasArea).attr("height", h);
+      ctx.drawImage(image, 0, 0, w, h);
+
+      //canvasに描画したデータを取得
+      var canvasImage = $(canvasArea).get(0);
+
+      //オリジナル容量(画質落としてない場合の容量)を取得
+      var originalBinary = canvasImage.toDataURL("image/jpeg"); //画質落とさずバイナリ化
+      var originalBlob = base64ToBlob(originalBinary); //画質落としてないblobデータをアップロード用blobに設定
+
+      //オリジナル容量blobデータをアップロード用blobに設定
+      var uploadBlob = originalBlob;
+
+      //オリジナル容量が加工後容量以上かチェック
+      if(processingCapacity <= originalBlob["size"]) {
+          //加工後容量以下に落とす
+          var capacityRatio = processingCapacity / originalBlob["size"];
+          var processingBinary = canvasImage.toDataURL("image/jpeg", capacityRatio); //画質落としてバイナリ化
+          uploadBlob = base64ToBlob(processingBinary); //画質落としたblobデータをアップロード用blobに設定
+      }
+
+      blob.push(uploadBlob);
+    });
+
+    //アップロード用blobをformDataに設定
+    $form = $(form);
+    formData = new FormData($form.get()[0]);
+    formData.append("image", blob);
+    return formData;
+
+  }
+
 
   /**
    * 
@@ -259,6 +332,166 @@
 
   }
 
+ /**
+ * URLパラメータ値を取得します
+ *
+ * @param  name {string} パラメータのキー文字列
+ * @return  url {url} 対象のURL文字列（任意）
+ */
+function getParam(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+      results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+  /**
+   * ajax共通処理
+   */
+  var ajaxCommon = function($form) {
+
+    //通常のアクションをキャンセルする
+    event.preventDefault();
+
+    $.ajax({
+      url : $form.attr('action'), //Formのアクションを取得して指定する
+      type: $form.attr('method'),//Formのメソッドを取得して指定する
+      data: $form.serialize(), //データにFormがserialzeした結果を入れる
+      //dataType: 'html', //データにFormがserialzeした結果を入れる
+      timeout: 1000000,
+      beforeSend : function(xhr, settings){
+          //Buttonを無効にする
+          $(document).find('.saveBtn').addClass('disabled');
+          $(document).find('.createBtn').addClass('disabled');
+          $(document).find('.updateBtn').addClass('disabled');
+          $(document).find('.cancelBtn').addClass('disabled');
+          //処理中のを通知するアイコンを表示する
+          $("#dummy").load("/module/Preloader.ctp");
+      },
+      complete: function(xhr, textStatus){
+
+        //処理中アイコン削除
+        $('.preloader-wrapper').remove();
+        $(document).find('.saveBtn').addClass('disabled');
+        $(document).find('.createBtn').addClass('disabled');
+        $(document).find('.updateBtn').addClass('disabled');
+        $(document).find('.cancelBtn').addClass('disabled');
+      },
+      success: function (response, textStatus, xhr) {
+
+        // OKの場合
+        if(typeof(response) !== "object"){
+            // TODO: モーダル表示時は、背景画面をFIXIDしているので、
+            // close処理を呼んで、FIXIDを解除する
+            $(".modal").modal('close');
+              var $objWrapper = $("#wrapper");
+              $($objWrapper).replaceWith(response);
+              //初期化
+              initialize();
+
+              // $.notifyBar({
+              //     // cssClass: 'success',
+              //     // //html: response.message
+              // });
+          }else{
+            // var response = $.parseJSON(response);
+          // NGの場合
+              $.notifyBar({
+                  cssClass: 'error',
+                  html: response['errors']
+              });
+
+          }
+      },
+      error : function(response, textStatus, xhr){
+        $(document).find('.saveBtn').removeClass('disabled');
+        $(document).find('.createBtn').removeClass('disabled');
+        $(document).find('.updateBtn').removeClass('disabled');
+        $(document).find('.cancelBtn').removeClass('disabled');
+        $.notifyBar({
+              cssClass: 'error',
+              html: response.result+"<br/>エラーが発生しました。ステータス：" + textStatus
+          });
+      }
+  });
+  return false;
+
+}
+
+/**
+ * 画像アップロードajax共通処理
+ */
+var fileUpAjaxCommon = function($form, formData) {
+
+  //通常のアクションをキャンセルする
+  event.preventDefault();
+
+  $.ajax({
+      url : $form.attr('action'), //Formのアクションを取得して指定する
+      type: $form.attr('method'),//Formのメソッドを取得して指定する
+      data: formData, //データにFormがserialzeした結果を入れる
+      //dataType: 'html', //データにFormがserialzeした結果を入れる
+      processData: false,
+      contentType: false,
+      timeout: 1000000,
+      beforeSend : function(xhr, settings){
+          //Buttonを無効にする
+          $(document).find('.saveBtn').addClass('disabled');
+          $(document).find('.createBtn').addClass('disabled');
+          $(document).find('.updateBtn').addClass('disabled');
+          $(document).find('.cancelBtn').addClass('disabled');
+          //処理中のを通知するアイコンを表示する
+          $("#dummy").load("/module/Preloader.ctp");
+      },
+      complete: function(xhr, textStatus){
+          //処理中アイコン削除
+          $('.preloader-wrapper').remove();
+          $(document).find('.saveBtn').addClass('disabled');
+          $(document).find('.createBtn').addClass('disabled');
+          $(document).find('.updateBtn').addClass('disabled');
+          $(document).find('.cancelBtn').addClass('disabled');
+      },
+      success: function (response, textStatus, xhr) {
+        // OKの場合
+        if(typeof(response) !== "object"){
+          // TODO: モーダル表示時は、背景画面をFIXIDしているので、
+            // close処理を呼んで、FIXIDを解除する
+            $(".modal").modal('close');
+                var $objWrapper = $("#wrapper");
+                $($objWrapper).replaceWith(response);
+                //初期化
+                initialize();
+
+                // $.notifyBar({
+                //     // cssClass: 'success',
+                //     // //html: response.message
+                // });
+        }else{
+            // var response = $.parseJSON(response);
+            // NGの場合
+            $.notifyBar({
+                cssClass: 'error',
+                html: response['errors']
+            });
+
+        }
+      },
+      error : function(response, textStatus, xhr){
+          $(document).find('.saveBtn').removeClass('disabled');
+          $(document).find('.createBtn').removeClass('disabled');
+          $(document).find('.updateBtn').removeClass('disabled');
+          $(document).find('.cancelBtn').removeClass('disabled');
+          $.notifyBar({
+              cssClass: 'error',
+              html: "エラーが発生しました。ステータス：" + textStatus
+          });
+      }
+  });
+}
+
      /**
      * フルカレンダーのモーダル呼び出し時の処理
      * @param {*} obj 
@@ -289,3 +522,37 @@
       //     });
       // });
   }
+
+
+
+  var isJSON = function(arg) {
+    arg = (typeof arg === "function") ? arg() : arg;
+    if (typeof arg  !== "string") {
+        return false;
+    }
+    try {
+    arg = (!JSON) ? eval("(" + arg + ")") : JSON.parse(arg);
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
+$(document).ready(function () {
+
+  var idArr=[];
+  var duplicateIdArr = [];
+  [].forEach.call(document.querySelectorAll('[id]'), function(elm){
+    var id = elm.getAttribute('id');
+    if(idArr.indexOf(id) !== -1) {
+      duplicateIdArr.push(id);
+    } else {
+      idArr.push(id);
+    }
+  });
+  if(duplicateIdArr.length > 0) {
+    console.error('IDの重複があります:', duplicateIdArr);
+  } else {
+    console.success('IDの重複はありません。');
+  }
+});

@@ -10,15 +10,14 @@
         <?= $this->Flash->render() ?>
         <h5><?=('画像アップロード') ?></h5>
             <div id="cast-image" class="row">
-                <input type="hidden" name="file_max" value=<?=CAST_CONFIG['file_max']?>>
-                    <?php for($i = 1; $i <= CAST_CONFIG['file_max']; $i++){
-                            $infoArray;
+                <input type="hidden" name="file_max" value=<?=CAST_CONFIG['FILE_MAX']?>>
+                    <?php for($i = 1; $i <= CAST_CONFIG['FILE_MAX']; $i++){
                             if (!empty($cast['image'.$i])) { ?>
                             <div class="col s6 m4 l3 card-img image<?=$i?>">
                                 <div class="card">
                                     <div class="card-image">
-                                        <img class="materialboxed" data-caption="" height="120" width="100%" src="<?= "/".$infoArray['dir_path']."cast/".$cast->dir."/".$cast['image'.$i] ?>">
-                                        <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped" onclick="castImageDeleteBtn($('#delete-image<?=$i?>'),$('.image<?=$i?>'));return false;" data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
+                                        <img class="materialboxed" data-caption="" height="120" width="100%" src="<?= DS.$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast['image'.$i] ?>">
+                                        <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped deleteBtn" data-delete="delete-image<?=$i?>" data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
                                     </div>
                                 </div>
                             </div>
@@ -45,16 +44,16 @@
                     <div class="file-field input-field col s12 m6 l6">
                         <div class="btn">
                             <span>File</span>
-                            <input type="file" id="image-file" name="image[]" onChange="castImgDisp($('#cast-image'));" multiple>
+                            <input type="file" id="image-file" name="image[]" multiple>
                         </div>
                         <div class="file-path-wrapper">
-                            <input class="file-path validate" name="top_image" type="text">
+                            <input class="file-path validate" name="file_path" type="text">
                         </div>
                         <canvas id="image-canvas" style="display:none;"></canvas>
                     </div>
                     <div class="input-field col s12 m12 l12">
-                        <button type="button" class="waves-effect waves-light btn-large disabled cancelBtn" onclick="castCancelBtn();return false;">やめる</button>
-                        <button type="button" class="waves-effect waves-light btn-large disabled saveBtn" onclick="castImageSaveBtn($('#edit-image'));return false;">確定</button>
+                        <button type="button" class="waves-effect waves-light btn-large disabled cancelBtn">やめる</button>
+                        <button type="button" class="waves-effect waves-light btn-large disabled createBtn">確定</button>
                     </div>
                 </form>
             </div>

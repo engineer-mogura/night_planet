@@ -119,7 +119,7 @@ class OwnersController extends AppController
                   return $this->redirect($this->Auth->redirectUrl());
                 }
 
-                $this->Flash->error(Configure::read('ecm.001'));
+                $this->Flash->error(RESULT_M['FRAUD_INPUT_FAILED']);
             } else {
                 debug("this->request->getData()");
                 debug($this->request->getData());
@@ -147,7 +147,7 @@ class OwnersController extends AppController
         //     $this->response = $this->response->withExpiredCookie('AUTO_LOGIN');
         // }
 
-        $this->Flash->success(Configure::read('cm.002'));
+        $this->Flash->success(COMMON_M['LOGGED_OUT']);
         return $this->redirect($this->Auth->logout());
     }
 
@@ -156,7 +156,7 @@ class OwnersController extends AppController
         $owner = $this->Owners->get(Token::getId($token));
         if (!$owner->tokenVerify($token)) {
 
-            $this->Flash->success(Configure::read('irm.053'));
+            $this->Flash->success(RESULT_M['AUTH_FAILED']);
             return $this->redirect(['action' => 'signup']);
         }
         if ($owner->status == 0 ) {
@@ -208,22 +208,22 @@ class OwnersController extends AppController
                     // commit出来たらディレクトリを掘る
                     $dir = new Folder($dir.$nextDir, true, 0755);
                     // ユーザーステータスを本登録にする。(statusカラムを本登録に更新する)
-                    $this->Flash->success(Configure::read('irm.054'));
+                    $this->Flash->success(RESULT_M['AUTH_SUCCESS']);
                     return $this->redirect(['action' => 'login']);
                 } else {
                     // 失敗: rollback
                     $connection->rollback();
-                $this->Flash->error(Configure::read('irm.053'));
+                $this->Flash->error(RESULT_M['AUTH_FAILED']);
                 return $this->redirect(['action' => 'signup']);
                 }
             } else {
                 $this->Flash->error('既にディレクトリが存在します。');
-                $this->Flash->error(Configure::read('irm.053'));
+                $this->Flash->error(RESULT_M['AUTH_FAILED']);
                 return $this->redirect(['action' => 'signup']);
             }
 
         }
-        $this->Flash->success(Configure::read('irm.055'));
+        $this->Flash->success(RESULT_M['REGISTERED_FAILED']);
         return $this->redirect(['action' => 'login']);
     }
 

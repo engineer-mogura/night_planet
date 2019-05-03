@@ -14,6 +14,7 @@ class CastsAppController extends \App\Controller\AppController
         parent::initialize();
         $this->Shops = TableRegistry::get('Shops');
         $this->Casts = TableRegistry::get('Casts');
+        $this->Diarys = TableRegistry::get('Diarys');
         $this->Events = TableRegistry::get('Events');
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
@@ -45,7 +46,8 @@ class CastsAppController extends \App\Controller\AppController
     {
         $action = $this->request->getParam('action');
         // ログイン時に許可するアクション
-        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit', 'editCast','editCalendar','profile','image'])) {
+        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit','editCast',
+            'editCalendar','profile','image','diary','diaryView','diaryUpdate','diaryDelete'])) {
             return true;
         }
         return false;

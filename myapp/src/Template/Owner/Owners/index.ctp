@@ -13,7 +13,7 @@
       <img class="responsive-img" width="100%" src=<?php if($ownerRow->shop->top_image != '') {
         echo('/'.$infoArray['dir_path'].$ownerRow->shop->top_image);} else {
         echo("/img/common/top/top1.jpg");} ?> />
-      <div class="fixed-action-btn horizontal click-to-toggle">
+      <div class="fixed-action-btn share horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
           <i class="material-icons">share</i>
         </a>

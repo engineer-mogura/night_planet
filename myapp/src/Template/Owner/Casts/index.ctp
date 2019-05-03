@@ -4,6 +4,8 @@
 * @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
 */
 ?>
+  <?= $this->element('modal/calendarModal'); ?>
+
 <div class="container">
   <?= $this->Flash->render() ?>
   <h5><?= __('キャストトップページ') ?></h5>

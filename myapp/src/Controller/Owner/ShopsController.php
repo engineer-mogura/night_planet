@@ -209,15 +209,15 @@ class ShopsController extends AppController
                 if ($shopTable->save($shop)) {
                     $this->log("save成功", "debug");
                     if ($delFlg == true) {
-                        $resultMessage = Configure::read('irm.003');
+                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
                     } else {
-                        $resultMessage = Configure::read('irm.001');
+                        $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
                     }
                 } else {
                     if ($delFlg == true) {
-                        $resultMessage = Configure::read('irm.052');
+                        $resultMessage = RESULT_M['DELETE_FAILED'];
                     } else {
-                        $resultMessage = Configure::read('irm.050');
+                        $resultMessage = RESULT_M['SIGNUP_FAILED'];
                     }
                     $resultflg = false;
                 }
@@ -270,15 +270,15 @@ class ShopsController extends AppController
                 }
                 if ($shopTable->save($shop)) {
                     if ($delFlg == true) {
-                        $resultMessage = Configure::read('irm.003');
+                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
                     } else {
-                        $resultMessage = Configure::read('irm.001');
+                        $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
                     }
                 } else {
                     if ($delFlg == true) {
-                        $resultMessage = Configure::read('irm.052');
+                        $resultMessage = RESULT_M['DELETE_FAILED'];
                     } else {
-                        $resultMessage = Configure::read('irm.050');
+                        $resultMessage = RESULT_M['SIGNUP_FAILED'];
                     }
                     $resultflg = false;
                 }
@@ -323,9 +323,9 @@ class ShopsController extends AppController
                 if (isset($this->request->data["coupon_delete"])) {
                     $coupon = $couponsTable->get($id);
                     if ($couponsTable->delete($coupon)) {
-                        $resultMessage = Configure::read('irm.003');
+                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
                     } else {
-                        $resultMessage = Configure::read('irm.052');
+                        $resultMessage = RESULT_M['DELETE_FAILED'];
                         $resultflg = false;
                     }
                 } elseif (isset($this->request->data["coupon_edit"])) {
@@ -370,15 +370,15 @@ class ShopsController extends AppController
                 if ($isSave) {
                     if ($couponsTable->save($coupon)) {
                         if ($addFlg == true) {
-                            $resultMessage = Configure::read('irm.001');
+                            $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
                         } else {
-                            $resultMessage = Configure::read('irm.002');
+                            $resultMessage = RESULT_M['UPDATE_SUCCESS'];
                         }
                     } else {
                         if ($addFlg == true) {
-                            $resultMessage = Configure::read('irm.050');
+                            $resultMessage = RESULT_M['SIGNUP_FAILED'];
                         } else {
-                            $resultMessage = Configure::read('irm.051');
+                            $resultMessage = RESULT_M['UPDATE_FAILED'];
                         }
                         $resultflg = false;
                     }
@@ -423,9 +423,9 @@ class ShopsController extends AppController
                 if (isset($this->request->data["cast_delete"])) {
                     $cast = $castsTable->get($id);
                     if ($castsTable->delete($cast)) {
-                        $resultMessage = Configure::read('irm.003');
+                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
                     } else {
-                        $resultMessage = Configure::read('irm.052');
+                        $resultMessage = RESULT_M['DELETE_FAILED'];
                         $resultflg = false;
                     }
                 } elseif (isset($this->request->data["cast_edit"])) {
@@ -466,13 +466,13 @@ class ShopsController extends AppController
                             $this->getMailer('Cast')->send('castRegistration', [$cast]);
                             $resultMessage = '入力したアドレスにメールを送りました。URLをクリックし、認証を完了するようキャストへお伝えください。</ br>今から１０分以内に完了しないと、やり直しになりますのでご注意ください。';
                         } else {
-                            $resultMessage = Configure::read('irm.002');
+                            $resultMessage = RESULT_M['UPDATE_SUCCESS'];
                         }
                     } else {
                         if ($addFlg == true) {
-                            $resultMessage = Configure::read('irm.050');
+                            $resultMessage = RESULT_M['SIGNUP_FAILED'];
                         } else {
-                            $resultMessage = Configure::read('irm.051');
+                            $resultMessage = RESULT_M['UPDATE_FAILED'];
                         }
                         $resultflg = false;
                     }
@@ -517,9 +517,9 @@ class ShopsController extends AppController
                 if (isset($this->request->data["tenpo_delete"])) {
                     $shop = $shopsTable->get($id);
                     if ($shopsTable->delete($shop)) {
-                        $resultMessage = Configure::read('irm.003');
+                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
                     } else {
-                        $resultMessage = Configure::read('irm.052');
+                        $resultMessage = RESULT_M['DELETE_FAILED'];
                         $resultflg = false;
                     }
                 } elseif (isset($this->request->data["tenpo_edit"])) {
@@ -547,15 +547,15 @@ class ShopsController extends AppController
                 if ($isSave) {
                     if ($shopsTable->save($shop)) {
                         if ($addFlg == true) {
-                            $resultMessage = Configure::read('irm.001');
+                            $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
                         } else {
-                            $resultMessage = Configure::read('irm.002');
+                            $resultMessage = RESULT_M['UPDATE_SUCCESS'];
                         }
                     } else {
                         if ($addFlg == true) {
-                            $resultMessage = Configure::read('irm.050');
+                            $resultMessage = RESULT_M['SIGNUP_FAILED'];
                         } else {
-                            $resultMessage = Configure::read('irm.051');
+                            $resultMessage = RESULT_M['UPDATE_FAILED'];
                         }
                         $resultflg = false;
                     }
@@ -600,9 +600,9 @@ class ShopsController extends AppController
                 if (isset($this->request->data["job_delete"])) {
                     $job = $jobsTable->get($id);
                     if ($jobsTable->delete($job)) {
-                        $resultMessage = Configure::read('irm.003');
+                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
                     } else {
-                        $resultMessage = Configure::read('irm.052');
+                        $resultMessage = RESULT_M['DELETE_FAILED'];
                         $resultflg = false;
                     }
                 } elseif (isset($this->request->data["job_edit"])) {
@@ -655,15 +655,15 @@ class ShopsController extends AppController
                     try {
                         if ($jobsTable->saveOrFail($job)) {
                             if ($addFlg == true) {
-                                $resultMessage = Configure::read('irm.001');
+                                $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
                             } else {
-                                $resultMessage = Configure::read('irm.002');
+                                $resultMessage = RESULT_M['UPDATE_SUCCESS'];
                             }
                         } else {
                             if ($addFlg == true) {
-                                $resultMessage = Configure::read('irm.050');
+                                $resultMessage = RESULT_M['SIGNUP_FAILED'];
                             } else {
-                                $resultMessage = Configure::read('irm.051');
+                                $resultMessage = RESULT_M['UPDATE_FAILED'];
                             }
                             $resultflg = false;
                         }

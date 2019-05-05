@@ -1912,7 +1912,7 @@ function castInitialize() {
                 },
                 success: function(response,dataType) {
                     $("#view-diary").find("p[name='title']").text(response['title']);
-                    $("#view-diary").find("p[name='content']").text(response['content']);
+                    $("#view-diary").find("p[name='content']").textWithLF(response['content']);
                     $('#modal-diary').modal({
                         dismissible: true, // Modal can be dismissed by clicking outside of the modal
                         opacity: .2, // Opacity of modal background

@@ -315,8 +315,9 @@
     $.ajax({ // json読み込み開始
       type: 'GET',
       url: jsonPath,
-      dataType: 'json'
-    })
+      dataType: 'json',
+      timeout: 10000,
+  })
     .then(
       function(json) { // jsonの読み込みに成功した時
         console.log('成功');
@@ -361,7 +362,7 @@ function getParam(name, url) {
       type: $form.attr('method'),//Formのメソッドを取得して指定する
       data: $form.serialize(), //データにFormがserialzeした結果を入れる
       //dataType: 'html', //データにFormがserialzeした結果を入れる
-      timeout: 1000000,
+      timeout: 10000,
       beforeSend : function(xhr, settings){
           //Buttonを無効にする
           $(document).find('.saveBtn').addClass('disabled');
@@ -412,9 +413,9 @@ function getParam(name, url) {
         $(document).find('.updateBtn').removeClass('disabled');
         $(document).find('.cancelBtn').removeClass('disabled');
         $.notifyBar({
-              cssClass: 'error',
-              html: response.result+"<br/>エラーが発生しました。ステータス：" + textStatus
-          });
+          cssClass: 'error',
+          html: "通信に失敗しました。ステータス：" + textStatus
+        });
       }
   });
   return false;
@@ -464,7 +465,6 @@ var fileUpAjaxCommon = function($form, formData) {
                 $($objWrapper).replaceWith(response);
                 //初期化
                 initialize();
-
                 // $.notifyBar({
                 //     // cssClass: 'success',
                 //     // //html: response.message
@@ -486,7 +486,7 @@ var fileUpAjaxCommon = function($form, formData) {
           $(document).find('.cancelBtn').removeClass('disabled');
           $.notifyBar({
               cssClass: 'error',
-              html: "エラーが発生しました。ステータス：" + textStatus
+              html: "通信に失敗しました。ステータス：" + textStatus
           });
       }
   });

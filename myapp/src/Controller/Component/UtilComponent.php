@@ -278,19 +278,15 @@ class UtilComponent extends Component
      * 一時ディレクトリにバックアップを作成する
      *
      * @param String $tmpPath
-     * @param File $dirClone
+     * @param File $dir
      * @return void
      */
     public function createTmpDirectoy(string $tmpPath, folder $dir)
     {
-
         // "/$tmpPath/{現在の時間}"というディレクトリをパーミッション777で作ります
-        // オブジェクト作成
         $result = new Folder;
         $tmpDir = new Folder($tmpPath . DS . time(), true, 0777);
         $dir->copy($tmpDir->path);
-        // $fileList = glob($tmpDir->path.'/*'); // ディレクトリ配下のファイルを取得
-        // count($fileList) > 0 ? $result = $tmpDir : $tmpDir->delete();
         return $tmpDir;
     }
 

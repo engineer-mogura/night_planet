@@ -11,35 +11,43 @@
         <h5><?=('画像アップロード') ?></h5>
             <div id="cast-image" class="row">
                 <input type="hidden" name="file_max" value=<?=CAST_CONFIG['FILE_MAX']?>>
-                    <?php for($i = 1; $i <= CAST_CONFIG['FILE_MAX']; $i++){
-                            if (!empty($cast['image'.$i])) { ?>
-                            <div class="col s6 m4 l3 card-img image<?=$i?>">
-                                <div class="card">
-                                    <div class="card-image">
-                                        <img class="materialboxed" data-caption="" height="120" width="100%" src="<?= DS.$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast['image'.$i] ?>">
-                                        <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped deleteBtn" data-delete="delete-image<?=$i?>" data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
+                    <?php foreach ($cast as $key => $value) {
+                        if(preg_match('/image[0-9]/',$key)) {
+                            if (!empty($value)) {
+                                $json_array = [
+                                    'col_name' => $key,
+                                    'file_name' => $value,
+                                ];
+                                $json = json_encode( $json_array, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP );
+                                ?>
+                                <div class="col s6 m4 l3 card-img <?=$key?>">
+                                    <div class="card">
+                                        <div class="card-image">
+                                            <img class="materialboxed" data-caption="" height="120" width="100%" src="<?= DS.$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$cast['dir'].DS.PATH_ROOT['IMAGE'].DS.$value ?>">
+                                            <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped deleteBtn" data-delete=<?=$json?> data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <form id="delete-image<?=$i?>" name="delete_image" method="post" action="/owner/casts/image/<?= $cast->id ?>">
+                        <?php
+                            }
+                        }
+                    }
+                    ?>
+            </div>
+            <form id="delete-image" name="delete_image" method="post" action="/owner/casts/image/<?= $cast['id'] ?>">
                                 <div style="display:none;">
-                                    <input type="hidden" name="image_copy" value='<?=$cast ?>'>
                                     <input type="hidden" name="_method" value="POST">
-                                    <input type="hidden" name="image_delete" value="">
-                                    <input type="hidden" name="col_name" value=<?='image'.$i?>>
-                                    <input type="hidden" name="filename" value=<?=$cast['image'.$i]?>>
+                                    <input type="hidden" name="crud_type" value="delete">
+                                    <input type="hidden" name="col_name" value="">
+                                    <input type="hidden" name="file_name" value="">
                                 </div>
                             </form>
-                        <?php } ?>
-                    <?php } ?>
-            </div>
             <div class="row">
                 <form id="edit-image" name="edit_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/casts/image/<?= $cast->id ?>">
                     <div style="display:none;">
-                        <input type="hidden" name="image_copy" value='<?=$cast ?>'>
+                        <input type="hidden" name="image_json" value='<?=json_encode($imageList); ?>'>
                         <input type="hidden" name="_method" value="POST">
-                        <input type="hidden" name="image_edit" value="">
-                        <input type="hidden" name="image_edit_id" value="">
+                        <input type="hidden" name="crud_type" value="update">
                     </div>
                     <div class="file-field input-field col s12 m6 l6">
                         <div class="btn">

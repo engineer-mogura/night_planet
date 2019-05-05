@@ -137,7 +137,7 @@ function topImageSaveBtn(){
         dataType: 'json', //データにFormがserialzeした結果を入れる
         processData: false,
         contentType: false,
-        timeout: 1000000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.saveBtn').attr('disabled' , true);
@@ -172,11 +172,8 @@ function topImageSaveBtn(){
             $($form).find('.saveBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
-            console.log(response);
-            console.log(textStatus);
-            console.log(xhr);
         }
     });
 }
@@ -199,7 +196,7 @@ function topImageDeleteBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.deleteBtn').attr('disabled' , true);
@@ -234,7 +231,7 @@ function topImageDeleteBtn(){
             $($form).find('.deleteBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -283,7 +280,7 @@ function catchSaveBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.saveBtn').attr('disabled' , true);
@@ -318,7 +315,7 @@ function catchSaveBtn(){
             $($form).find('.saveBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -343,7 +340,7 @@ function catchDeleteBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.deleteBtn').attr('disabled' , true);
@@ -378,7 +375,7 @@ function catchDeleteBtn(){
             $($form).find('.deleteBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -477,7 +474,7 @@ function couponSaveBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.saveBtn').attr('disabled' , true);
@@ -512,7 +509,7 @@ function couponSaveBtn(){
             $($form).find('.saveBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -538,7 +535,7 @@ function couponDeleteBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.deleteBtn').attr('disabled' , true);
@@ -573,7 +570,7 @@ function couponDeleteBtn(){
             $($form).find('.deleteBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -661,7 +658,7 @@ function castSaveBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.saveBtn').attr('disabled' , true);
@@ -696,7 +693,7 @@ function castSaveBtn(){
             $($form).find('.saveBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -722,7 +719,7 @@ function castDeleteBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.deleteBtn').attr('disabled' , true);
@@ -757,7 +754,7 @@ function castDeleteBtn(){
             $($form).find('.deleteBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -833,7 +830,7 @@ function tenpoSaveBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.saveBtn').attr('disabled' , true);
@@ -868,7 +865,7 @@ function tenpoSaveBtn(){
             $($form).find('.saveBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -960,7 +957,7 @@ function jobSaveBtn(){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 1000000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.saveBtn').attr('disabled' , true);
@@ -995,7 +992,7 @@ function jobSaveBtn(){
             $($form).find('.saveBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -1071,7 +1068,7 @@ function calendarBtn(obj, action) {
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($button).find('.createBtn').attr('disabled' , true);
@@ -1112,7 +1109,7 @@ function calendarBtn(obj, action) {
         error : function(response, textStatus, xhr){
             $.notifyBar({
                 cssClass: 'error',
-                html: "エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -1219,9 +1216,6 @@ function materialboxedRender(obj, path, fileList) {
     $.get(path, {}, function(html) {
         var dom = $(html); // html部品をdomに変換
         // 前に描画したスライダーを削除する
-        //$(obj).find("#view-diary").find(".slider-box").children().remove();
-        //var carouselTmp = dom.find(".carousel-item").clone(); // カルーセルの部品を複製しておく
-        //dom.find(".carousel-item").remove(); // カルーセルの部品を削除しておく ※複製した部品を都度生成して使う
         $.each(fileList, function(index, file) {
             var carousel = $(carouselTmp).clone();
             var count = index + 1; // カラムがimage1～始まるためのカウント用
@@ -1263,14 +1257,6 @@ function materialboxedRender(obj, path, fileList) {
  */
 function canvasRender(obj, selectFiles, delFlg) {
 
-    // if($(selectFiles).prop("files").length == 0) {
-    //     $(".createBtn").addClass("disabled");
-    //     $(".cancelBtn").addClass("disabled");
-    // } else {
-    //     $(".createBtn").removeClass("disabled");
-    //     $(".cancelBtn").removeClass("disabled");
-    // }
-
     if(delFlg) {
         $(obj).find(".new").remove();
     } else {
@@ -1293,9 +1279,6 @@ function canvasRender(obj, selectFiles, delFlg) {
     // ファイル数を制限する
     if(fileList.length + imgCount > fimeMax) {
         alert("アップロードできる画像は" + fimeMax + "ファイルまでです。");
-        // $(obj).find(".new").remove();
-        // $(obj).find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
-        // $(obj).find("input[name='modal_file_path']").val('');
         resetBtn(obj, true);
         return;
     }
@@ -1320,9 +1303,7 @@ resetBtn(obj, delFlg){
     } else {
         $(obj).find(".card-img").remove();
     }
-    // $(obj).find("input,textarea").val('');
-    // $(obj).find("textarea").trigger('autoresize');
-    // $(obj)[0].reset();
+
     $(obj).find('#image-file').replaceWith($('#image-file').val('').clone(true));
     $(obj).find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
     $(obj).find("input[name='file_path']").val('');
@@ -1365,7 +1346,7 @@ function castImageDeleteBtn(form, obj){
         type: $form.attr('method'),//Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: 'html', //データにFormがserialzeした結果を入れる
-        timeout: 100000,
+        timeout: 10000,
         beforeSend : function(xhr, settings){
             //Buttonを無効にする
             $($form).find('.saveBtn').removeClass('disabled');
@@ -1400,7 +1381,7 @@ function castImageDeleteBtn(form, obj){
             $($form).find('.saveBtn').attr('disabled' , false);
             $.notifyBar({
                 cssClass: 'error',
-                html: response.result+"<br/>エラーが発生しました。ステータス：" + textStatus
+                html: "通信に失敗しました。ステータス：" + textStatus
             });
         }
     });
@@ -1685,14 +1666,15 @@ function ownerInitialize() {
             datatype:'json',
             url: $($form).attr('action'),
             data: data,
+            timeout: 10000,
             success: function(data,dataType) {
-                console.log(data);
+                //console.log(data);
             },
             error : function(response, textStatus, xhr){
                 $($form).find('.saveBtn').attr('disabled' , false);
                 $.notifyBar({
                     cssClass: 'error',
-                    html: "エラーが発生しました。ステータス：" + textStatus
+                    html: "通信に失敗しました。ステータス：" + textStatus
                 });
             }
         });
@@ -1737,6 +1719,7 @@ function ownerInitialize() {
             datatype:'json',
             url: $($form).attr('action'),
             data: data,
+            timeout: 10000,
             success: function(data,dataType) {
                 console.log(data);
             },
@@ -1744,7 +1727,7 @@ function ownerInitialize() {
                 $($form).find('.saveBtn').attr('disabled' , false);
                 $.notifyBar({
                     cssClass: 'error',
-                    html: "エラーが発生しました。ステータス：" + textStatus
+                    html: "通信に失敗しました。ステータス：" + textStatus
                 });
             }
         });
@@ -1773,7 +1756,7 @@ function castInitialize() {
     //         error : function(response, textStatus, xhr){
     //             $.notifyBar({
     //                 cssClass: 'error',
-    //                 html: "エラーが発生しました。ステータス：" + textStatus
+    //                 html: "通信に失敗しました。ステータス：" + textStatus
     //             });
     //         }
     //     });
@@ -1854,7 +1837,6 @@ function castInitialize() {
         // 更新ボタン押した時
         $(document).on("click", ".updateBtn",function() {
             // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
-            //$("#modal-diary").find("input[name='crud_type']").val('update');
             var oldImgList = $('.card-img').not(".new"); // 既に登録した画像リスト
             var newImgList =  $('.card-img.new'); // 追加した画像リスト
             var delList = new Array(); // 削除対象リスト
@@ -1911,6 +1893,7 @@ function castInitialize() {
                 url: "/owner/casts/diary_view/",
                 data: { id: $(this).find("input[name='id']").val()},
                 contentType: 'application/json',
+                timeout: 10000,
                 beforeSend : function(xhr, settings){
                     // 他のアーカイブリンクを無効化する
                     $(".archiveLink").each(function(i, elem) {
@@ -1976,7 +1959,6 @@ function castInitialize() {
                             $("#modal-edit-diary").find(".card-img").remove();
                             $("#modal-edit-diary").find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
                             $("#modal-edit-diary").find("input[name='modal_file_path']").val('');
-                            //resetBtn($('#modal-edit-diary'), false);
                             // モーダルを初期化
                             resetModal();
                             // 描画したスライダーを削除する。
@@ -1995,7 +1977,7 @@ function castInitialize() {
                 error : function(response, textStatus, xhr){
                     $.notifyBar({
                         cssClass: 'error',
-                        html: "エラーが発生しました。ステータス：" + textStatus
+                        html: "通信に失敗しました。ステータス：" + textStatus
                     });
                 }
             });
@@ -2046,7 +2028,6 @@ function castInitialize() {
             $("#modal-edit-diary").find(".card-img").remove();
             $("#modal-edit-diary").find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
             $("#modal-edit-diary").find("input[name='modal_file_path']").val('');
-            //resetBtn("#modal-edit-diary", false);
             // 通常の表示モードに切り替える。
             $("#modal-diary").find(".updateModeBtn").removeClass("hide");
             $("#modal-diary").find(".returnBtn").addClass("hide");
@@ -2085,8 +2066,6 @@ function castInitialize() {
     /* 日記 画面 END */
     /* 画像アップロード 画面 START */
     if($("#cast-image").length) {
-        var $castImage = $("#cast-image");
-        var $editImage = $("#edit-image");
 
         // 画像を選択した時
         $(document).on("change", "#image-file", function() {
@@ -2115,23 +2094,18 @@ function castInitialize() {
             // ファイル数を制限する
             if(fileList.length + imgCount > fimeMax) {
                 alert("アップロードできる画像は" + fimeMax + "ファイルまでです。");
-                // $(document).find(".new").remove();
-                // $(document).find('#image-file').replaceWith($('#image-file').val('').clone(true));
-                // $(document).find("input[name='file_path']").val('');
                 resetBtn($(document), true);
                 return false;
             }
             for(var i = 0; i < fileList.length; i++){
 
                 imgCount += 1;
-                fileload(fileList[i], $castImage, imgCount, modulePath);
+                fileload(fileList[i], $("#cast-image"), imgCount, modulePath);
             }
 
         });
         // 登録ボタン押した時
         $(document).on("click", ".createBtn",function() {
-
-            var $form = $('#edit-image');
 
             //ファイル選択済みかチェック
             var fileCheck = $("#image-file").val().length;
@@ -2143,9 +2117,9 @@ function castInitialize() {
                 return false;
             }
             // ファイル変換
-            var formData = fileConvert("#image-canvas", $form, '.card-img');
+            var formData = fileConvert("#image-canvas", $('#edit-image'), '.card-img');
 
-            fileUpAjaxCommon($form, formData);
+            fileUpAjaxCommon($('#edit-image'), formData);
         });
         // 削除ボタン押した時
         $(document).on("click", ".deleteBtn",function() {
@@ -2153,16 +2127,12 @@ function castInitialize() {
             if (!confirm('削除しますか？')) {
                 return false;
             }
-            var formId = $(this).attr("data-delete");
-            var $form  = $("form[id='"+formId+"']");
+            var json = JSON.parse($(this).attr("data-delete"));
+            $("#delete-image").find("input[name='col_name']").val(json['col_name']);
+            $("#delete-image").find("input[name='file_name']").val(json['file_name']);
+            ajaxCommon($("#delete-image"));
+        });
 
-            ajaxCommon($form);
-        });
-        // キャンセルボタン押した時
-        $($editImage).find(".cancelBtn").on("click", function() {
-            alert("キャンセルボタン押した時");
-            //resetBtn($(document), true);
-        });
     }
     /* 画像アップロード 画面 END */
 }

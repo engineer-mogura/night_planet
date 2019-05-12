@@ -1393,11 +1393,11 @@ function castImageDeleteBtn(form, obj){
 
         /* 共通初期化処理 start */
         // materializecss sideNav サイドバーの初期化
-        $(".button-collapse").sideNav();
+        //$(".button-collapse").sideNav();
         $('.button-collapse').sideNav({
             menuWidth: 300,
             edge: 'left',
-            closeOnClick: true,
+            closeOnClick: false,
             draggable: true,
             onOpen: function(el) {
                // 開いたときの処理
@@ -1431,7 +1431,7 @@ function castImageDeleteBtn(form, obj){
             $('.carousel').carousel('prev');
         });
         // materializecss modal モーダル表示してる時は、背景のスクロール禁止する
-        $('.modal').modal();
+        // $('.modal').modal();
         $('.modal').modal({
             // dismissible: true, // Modal can be dismissed by clicking outside of the modal
             // opacity: 0.5, // Opacity of modal background

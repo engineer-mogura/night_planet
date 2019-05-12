@@ -4,12 +4,10 @@
 * @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
 */
 ?>
-  <?= $this->element('modal/calendarModal'); ?>
-
+<?= $this->element('modal/calendarModal'); ?>
 <div class="container">
   <?= $this->Flash->render() ?>
-  <h5><?= __('キャストトップページ') ?></h5>
-  <?php foreach ($cast as $castRow): ?>
+  <h5><?= $cast->name.'　所属：'.$cast->shop->name ?></h5>
   <div id="cast" class="row">
     <div class="col s12 m4 l4">
       <div class="card">
@@ -19,7 +17,7 @@
           <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
         </div>
         <div class="card-content">
-          <p>日記の投稿数</p>
+          <p>日記の投稿数：<?=count($cast->diarys)?></p>
         </div>
       </div>
     </div>
@@ -42,8 +40,8 @@
           <span class="card-title">いいねの数</span>
           <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">favorite_border</i></a>
         </div>
-        <div class="card-content">  
-          <p>いいねの数</p>
+        <div class="card-content">
+          <p>いいねの数：<?=$likeTotal?></p>
         </div>
       </div>
     </div>
@@ -59,94 +57,12 @@
         <div class="card-content">
           <div id="show-job">
               <div style="display:none;">
-                <input type="hidden" name="job_copy" value='<?=$castRow->job ?>'>
+                <input type="hidden" name="job_copy" value='<?=$cast->job ?>'>
                 <input type="hidden" name="treatment_hidden" value=''>
               </div>
-              <table class="bordered shop-table z-depth-2" border="1">
               <div class="progress">
                   <div class="determinate" style="width: 70%"></div>
               </div>                  <span class="right">プロフィールの入力率：70%</span>
-
-              <tr>
-                <th align="center">店舗名</th>
-                <td class="show-job-name"><?php if(!$castRow->name == '') {
-                  echo ($castRow->name);
-                } else {echo ('登録されていません。');}?>
-                </td>
-              </tr>
-              <tr>
-                <th align="center">業種</th>
-                <td>
-                  <?php if(!$castRow->name == '') {
-                          echo ($this->Text->autoParagraph($castRow->name));
-                        } else {echo ('登録されていません。');} ?>
-                </td>
-              </tr>
-              <tr>
-                <th align="center">職種</th>
-                <td>
-                  <?php if(!$castRow->name == '') {
-                          echo ($this->Text->autoParagraph($castRow->name));
-                        } else {echo ('登録されていません。');} ?>
-                </td>
-              </tr>
-              <th align="center">休日</th>
-                <td><?php if(!$castRow->name == '') {
-                            $holiday = $castRow->name;
-                            if (!$castRow->name == '') {
-                              $holiday = $holiday.="</br>".$castRow->name;
-                            }
-                            echo ($holiday);
-                          } else { echo ('登録されていません。'); } ?>
-                </td>
-              </tr>
-                <th align="center">待遇</th>
-                <td>
-                  <?php if(!$castRow->joname == '') { ?>
-                    <?php $array =explode(',', $castRow->name); ?>
-                    <?php for ($i = 0; $i < count($array); $i++) { ?>
-                    <div class="chip" name=""id="<?=$array[$i]?>" value="<?=$array[$i]?>"><?=$array[$i]?></div>
-                    </div>
-                    <?php } ?>
-                  <?php } else {echo ('登録されていません。');} ?>
-                </td>
-              </tr>
-              <tr>
-                <th align="center">連絡先1</th>
-                <td><?php if(!$castRow->name == '') {
-                  echo ($castRow->name);
-                } else {echo ('登録されていません。');} ?>
-                </td>
-              </tr>
-              <tr>
-                <th align="center">連絡先2</th>
-                <td><?php if(!$castRow->name == '') {
-                  echo ($castRow->name);
-                } else {echo ('登録されていません。');} ?>
-                </td>
-              </tr>
-              <tr>
-                <th align="center">メール</th>
-                <td><?php if(!$castRow->email == '') {
-                  echo ($castRow->email);
-                } else {echo ('登録されていません。');} ?>
-                </td>
-              </tr>
-              <tr>
-                <th align="center">LINEID</th>
-                <td><?php if(!$castRow->name == '') {
-                  echo ($castRow->name);
-                } else {echo ('登録されていません。');} ?>
-                </td>
-              </tr>
-              <tr>
-                <th align="center">PR</th>
-                <td><?php if(!$castRow->name == '') {
-                  echo ($castRow->name);
-                } else {echo ('登録されていません。');}?>
-                </td>
-              </tr>
-            </table>
           </div>
         </div>
       </div>
@@ -155,6 +71,4 @@
       <div id="calendar"></div>
     </div>
   </div>
-</div>
-<?php endforeach; ?>
 </div>

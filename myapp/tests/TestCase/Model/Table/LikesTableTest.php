@@ -25,8 +25,7 @@ class LikesTableTest extends TestCase
      */
     public $fixtures = [
         'app.Likes',
-        'app.Diaries',
-        'app.Users'
+        'app.Diaries'
     ];
 
     /**

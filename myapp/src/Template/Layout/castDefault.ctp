@@ -71,8 +71,6 @@
   </nav>
   <!-- ヘルプモーダル -->
   <?= $this->element('modal/helpModal'); ?>
-  <?= $this->element('modal/calendarModal'); ?>
-  <?= $this->element('modal/diaryModal'); ?>
   <?= $this->fetch('content') ?>
   <footer class="page-footer">
     <div class="footer-copyright oki-footer-copyright">

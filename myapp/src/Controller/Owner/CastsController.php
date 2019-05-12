@@ -11,6 +11,7 @@ use Cake\Error\Debugger;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
+use Cake\Collection\Collection;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Datasource\ConnectionManager;
 
@@ -109,11 +110,24 @@ class CastsController extends CastsAppController
         if (!isset($id)) {
             $id = $this->request->getSession()->read('Auth.Cast.id');
         }
-        $cast = $this->Casts->find()->where(['id' => $id]);
+        $query = $this->Diarys->find();
+        //count = $diarys->find('all')->contain(['diary_id'=>""])->where(['cast_id'=>$id]);
+         // キャストの記事といいね数を取得
+         $diarys = $query->select(['id',
+            'diary_like_num'=> $query->func()->count('Likes.diary_id')])
+        ->contain('Likes')
+        ->leftJoinWith('Likes')
+        ->where(['Diarys.cast_id'=>$id])
+        ->group(['Likes.diary_id'])
+        ->order(['diary_like_num' => 'desc'])->toArray();
+        $likeTotal = array_sum(array_column($diarys, 'diary_like_num'));
+        //$like = $query->select(['total_like' => $query->func()->sum('cast_id')])
+        //$diaryLikes = $this->Diarys->find('all')->where(['cast_id'=>$id])->contain('Likes');
+        $cast = $this->Casts->find('all')->contain(['Shops','Diarys'])->where(['Casts.id'=>$id])->first();
         $masterCodesFind = array('time','event');
         $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
 
-        $this->set(compact('cast', 'activeTab','selectList', 'ajax'));
+        $this->set(compact('cast','likeTotal', 'activeTab','selectList', 'ajax'));
         $this->render();
     }
 
@@ -638,12 +652,19 @@ class CastsController extends CastsAppController
                 }
                 $this->viewBuilder()->autoLayout(false);
                 $this->autoRender = false;
-                $this->getDiary($id);
+                $array = $this->getDiary($id);
+                $cast = $array['cast'];
+                $dir = $array['dir'];
+                $archive = $array['archive'];
+                $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
                 $this->render('/Owner/Casts/diary');
                 $this->response->body();
                 return;
             }
-            $this->getDiary($id);
+            $array = $this->getDiary($id);
+            $cast = $array['cast'];
+            $dir = $array['dir'];
+            $archive = $array['archive'];
             $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
             $this->render();
     }
@@ -863,7 +884,11 @@ class CastsController extends CastsAppController
                 }
                 $this->viewBuilder()->autoLayout(false);
                 $this->autoRender = false;
-                $this->getDiary($id);
+                $array = $this->getDiary($id);
+                $cast = $array['cast'];
+                $dir = $array['dir'];
+                $archive = $array['archive'];
+                $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
                 $this->render('/Owner/Casts/diary');
                 $this->response->body();
                 return;
@@ -930,7 +955,11 @@ class CastsController extends CastsAppController
 
             $this->viewBuilder()->enableAutoLayout(false);
             $this->autoRender = false;
-            $this->getDiary($id);
+            $array = $this->getDiary($id);
+            $cast = $array['cast'];
+            $dir = $array['dir'];
+            $archive = $array['archive'];
+            $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
             $this->render('/Owner/Casts/diary');
             $this->response->getBody();
             return;
@@ -941,7 +970,7 @@ class CastsController extends CastsAppController
      * 日記画面情報取得処理
      *
      * @param [type] $id
-     * @return void
+     * @return array
      */
     public function getDiary($id = null)
     {
@@ -966,8 +995,7 @@ class CastsController extends CastsAppController
         $archive = $this->Util->groupArray($archive, 'ymCreated');
         $archive = array_values($archive);
         $dir = DS.$this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
-
-        $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
+        return array('cast'=>$cast, 'dir'=>$dir, 'archive'=>$archive);
     }
 
     public function login()

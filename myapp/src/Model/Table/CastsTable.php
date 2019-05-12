@@ -45,6 +45,9 @@ class CastsTable extends Table
             'foreignKey' => 'shop_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasMany('Diarys', [
+            'foreignKey' => 'cast_id'
+        ]);
     }
 
     /**

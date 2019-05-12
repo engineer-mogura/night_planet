@@ -4,18 +4,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * DiarysLike Entity
+ * Like Entity
  *
  * @property int $id
  * @property int $diary_id
+ * @property int $cast_id
  * @property int $user_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \App\Model\Entity\Diary $diary
- * @property \App\Model\Entity\User $user
  */
-class DiarysLike extends Entity
+class Like extends Entity
 {
 
     /**
@@ -28,12 +28,11 @@ class DiarysLike extends Entity
      * @var array
      */
     protected $_accessible = [
-        'id' => true,
         'diary_id' => true,
+        'cast_id' => true,
         'user_id' => true,
         'created' => true,
         'modified' => true,
-        'diary' => true,
-        'user' => true
+        'diary' => true
     ];
 }

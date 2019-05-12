@@ -22,6 +22,13 @@ class DiarysLikesFixture extends TestFixture
         'user_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
+        '_indexes' => [
+            'diary_key' => ['type' => 'index', 'columns' => ['diary_id'], 'length' => []],
+            'user_key' => ['type' => 'index', 'columns' => ['user_id'], 'length' => []],
+        ],
+        '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
+        ],
         '_options' => [
             'engine' => 'InnoDB',
             'collation' => 'utf8_general_ci'
@@ -41,8 +48,8 @@ class DiarysLikesFixture extends TestFixture
                 'id' => 1,
                 'diary_id' => 1,
                 'user_id' => 1,
-                'created' => '2019-04-11 18:44:43',
-                'modified' => '2019-04-11 18:44:43'
+                'created' => '2019-05-06 22:18:20',
+                'modified' => '2019-05-06 22:18:20'
             ],
         ];
         parent::init();

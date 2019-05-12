@@ -87,6 +87,7 @@ span.notice {
     right: 0;
     position: fixed;
     margin: auto;
+    z-index: 999;
 }
 
 

@@ -2,7 +2,7 @@
     <div class="modal-content">
       <h4>help</h4>
       <p>A bunch of text</p>
-      <div class="search-box">
+      <div class="modal-box">
         <div class="row">
           <li class="search col s12 l12">
             <div class="input-field oki-input-field">

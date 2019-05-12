@@ -4,6 +4,7 @@
 * @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
 */
 ?>
+<?= $this->element('modal/diaryModal'); ?>
 <div id="wrapper">
     <div class="container">
         <span id="dummy" style="display: hidden;"></span>

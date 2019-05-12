@@ -10,7 +10,7 @@ use Cake\Validation\Validator;
  * Diarys Model
  *
  * @property \App\Model\Table\CastsTable|\Cake\ORM\Association\BelongsTo $Casts
- * @property |\Cake\ORM\Association\HasMany $DiarysLikes
+ * @property \App\Model\Table\LikesTable|\Cake\ORM\Association\HasMany $Likes
  *
  * @method \App\Model\Entity\Diary get($primaryKey, $options = [])
  * @method \App\Model\Entity\Diary newEntity($data = null, array $options = [])
@@ -46,7 +46,7 @@ class DiarysTable extends Table
             'foreignKey' => 'cast_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('DiarysLikes', [
+        $this->hasMany('Likes', [
             'foreignKey' => 'diary_id'
         ]);
     }

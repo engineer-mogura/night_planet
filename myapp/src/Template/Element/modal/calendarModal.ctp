@@ -2,7 +2,7 @@
     <div class="modal-content">
       <h4 class="event-name"></h4>
       <p class="description"></p>
-      <div class="search-box">
+      <div class="modal-box">
         <div class="row">
         <?php foreach ($cast as $castRow): ?>
           <form id="edit-calendar" name="edit_calendar" method="post" action="/owner/casts/edit_calendar/<?= $castRow->id ?>">

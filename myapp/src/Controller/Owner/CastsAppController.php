@@ -15,6 +15,7 @@ class CastsAppController extends \App\Controller\AppController
         $this->Shops = TableRegistry::get('Shops');
         $this->Casts = TableRegistry::get('Casts');
         $this->Diarys = TableRegistry::get('Diarys');
+        $this->Likes = TableRegistry::get('Likes');
         $this->Events = TableRegistry::get('Events');
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [

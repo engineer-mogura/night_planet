@@ -437,7 +437,7 @@ var fileUpAjaxCommon = function($form, formData) {
       //dataType: 'html', //データにFormがserialzeした結果を入れる
       processData: false,
       contentType: false,
-      timeout: 1000000,
+      timeout: 10000,
       beforeSend : function(xhr, settings){
           //Buttonを無効にする
           $(document).find('.saveBtn').addClass('disabled');
@@ -524,7 +524,10 @@ var fileUpAjaxCommon = function($form, formData) {
   }
 
 
-
+  /**
+   * 文字列のjson形式であるかどうか
+   * @param  {} arg 調べたい文字列
+   */
   var isJSON = function(arg) {
     arg = (typeof arg === "function") ? arg() : arg;
     if (typeof arg  !== "string") {

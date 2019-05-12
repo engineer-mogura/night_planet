@@ -17,7 +17,7 @@ class DiarysFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'cast_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'title' => ['type' => 'string', 'length' => 50, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'content' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
@@ -67,8 +67,8 @@ class DiarysFixture extends TestFixture
                 'image7' => 'Lorem ipsum dolor sit amet',
                 'image8' => 'Lorem ipsum dolor sit amet',
                 'dir' => 'Lorem ipsum dolor sit amet',
-                'created' => '2019-04-14 01:42:18',
-                'modified' => '2019-04-14 01:42:18'
+                'created' => '2019-05-06 23:42:07',
+                'modified' => '2019-05-06 23:42:07'
             ],
         ];
         parent::init();

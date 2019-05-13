@@ -14,6 +14,7 @@
  */
 namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -27,6 +28,8 @@ use Cake\Event\Event;
  */
 class AppController extends Controller{
 
+  public $components = array('Util');
+
   /**
    * Initialization hook method.
    *
@@ -38,6 +41,8 @@ class AppController extends Controller{
    */
   public function initialize(){
     parent::initialize();
+    $this->Users = TableRegistry::get('Users');
+    $this->MasterCodes = TableRegistry::get("master_codes");
     $this->loadComponent('RequestHandler', [
       'enableBeforeRedirect' => false,
     ]);

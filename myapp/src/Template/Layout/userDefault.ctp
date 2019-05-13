@@ -10,25 +10,41 @@
   </title>
   <?= $this->Html->meta('icon') ?>
   <?= $this->Html->script('jquery-3.1.0.min.js') ?>
-  <?= $this->Html->script('materialize.min.js') ?>
+  <!-- <?= $this->Html->script('materialize.js') ?> --><!-- 検証用 -->
+ <?= $this->Html->script('materialize.min.js') ?>
+  <?= $this->Html->script('map.js') ?>
+  <?= $this->Html->script('okiyoru.js') ?>
+  <?= $this->Html->script('ja_JP.js') ?>
+  <?= $this->Html->script('jquery.notifyBar.js') ?>
+  <?= $this->Html->script('ajaxzip3.js') ?>
+  <?= $this->Html->script('moment.min.js') ?><!-- fullcalendar-3.9.0 -->
+  <?= $this->Html->script('fullcalendar.js') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
+  <?= $this->Html->script('fullcalendar_locale/ja.js') ?><!-- fullcalendar-3.9.0 -->
+  <?= $this->Html->script("https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4") ?>
 
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
   <?= $this->Html->css('materialize.css') ?>
   <?= $this->Html->css('okiyoru.css') ?>
+  <?= $this->Html->css('jquery.notifyBar.css') ?>
+  <?= $this->Html->css('fullcalendar.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
 
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
-<body>
-  <ul id="slide-out" class="side-nav">
+  <?php $id = $this->request->getSession()->read('Auth.User.id') ?>
+  <?php $role = $this->request->getSession()->read('Auth.User.role') ?>
+
+<body id="user-default">
+  <ul id="slide-out" class="side-nav fixed">
     <li>
       <div class="user-view">
         <div class="background">
           <img src="/img/common/top/top1.jpg">
         </div>
         <a href="#!user"><img class="circle" src="/img/common/top/top1.jpg"></a>
-        <a href="#!name"><span class="white-text name">John Doe</span></a>
-        <a href="#!email"><span class="white-text email">jdandturk@gmail.com</span></a>
+        <a href="#!name"><span class="white-text name"><?=$this->request->getSession()->read('Auth.Cast.name')?></span></a>
+        <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Cast.email')?></span></a>
       </div>
     </li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
@@ -61,13 +77,8 @@
   <!-- ログインモーダル -->
   <?= $this->element('modal/loginModal'); ?>
   <?= $this->fetch('content') ?>
-  <div class="container row">
-    <h1>位置情報取得サンプル</h1>
-    <button onclick="getPosition();">位置情報を取得する</button>
-    <div style="width:100%;height:300px;" id="google_map"></div>
-  </div>
   <footer class="page-footer">
-    <div class="container row">
+    <div class="row">
       <div class="col s12 l6">
         <h5 class="white-text">Links</h5>
         <ul class="collection">
@@ -82,10 +93,10 @@
         <ul class="collection">
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">cloud</i><?= USER_LM['005'] ?></a></li>
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/pages/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/pages/privacy_policy"><i class="material-icons">note</i><?= COMMON_LM['003'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/pages/contract"><i class="material-icons">note</i><?= COMMON_LM['005'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/pages/membership_join"><i class="material-icons">star_half</i><?= USER_LM['006'] ?></a></li>
+          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/Users/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
+          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/Users/privacy_policy"><i class="material-icons">note</i><?= COMMON_LM['003'] ?></a></li>
+          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/Users/contract"><i class="material-icons">note</i><?= COMMON_LM['005'] ?></a></li>
+          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/Users/membership_join"><i class="material-icons">star_half</i><?= USER_LM['006'] ?></a></li>
           <li><a class="grey-text link-box text-lighten-3 collection-item" href="/owner/owners/login"><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?></a></li>
         </ul>
       </div>
@@ -100,9 +111,13 @@
     </div>
     <div id="return_top">
       <a href="#body" class="red"><i class="medium material-icons return_top">keyboard_arrow_up</i></a>
-    </div>
+    </div><!-- END #return_top -->
   </footer>
+  <?= $this->Html->scriptstart() ?>
+$(document).ready(function(){
+  googlemap_init('google_map', '沖縄県浦添市屋富祖３丁目１５');
+});
+<?= $this->Html->scriptend() ?>
 
- <script src="/js/okiyoru.js"></script>
 </body>
 </html>

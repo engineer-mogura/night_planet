@@ -58,14 +58,15 @@ Router::scope(
 );
 
 Router::scope('/', function ($routes) {
-    // デフォルトの home と /pages/* ルートを接続。
+    // デフォルトの home と /users/* ルートを接続。
     $routes->connect('/', [
-        'controller' => 'Pages',
-        'action' => 'display', 'index'
+        'controller' => 'Users',
+        'action' => 'top', 'index',
+        'prefix' => 'user'
     ]);
-    $routes->connect('/pages/*', [
-        'controller' => 'Pages',
-        'action' => 'display'
+    $routes->connect('/users/*', [
+        'controller' => 'Users',
+        'action' => 'top'
     ]);
 
     // 規約に基づいたデフォルトルートを接続。
@@ -92,12 +93,18 @@ Router::scope('/', function (RouteBuilder $routes) {
      * to use (in this case, src/Template/Pages/home.ctp)...
      * cakephpのトップページは、cakeHomeをコメントインする
      */
-    $routes->connect('/', ['controller' => 'Pages', 'action' => 'display', 'index'/*cakeHome*/]);
+    // $routes->connect('/', [
+    //     'controller' => 'Pages',
+    //     'action' => 'display', 'index'/*cakeHome*/
+    // ]);
 
-    /**
-     * ...and connect the rest of 'Pages' controller's URLs.
-     */
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+    // /**
+    //  * ...and connect the rest of 'Pages' controller's URLs.
+    //  */
+    // $routes->connect('/pages/*', [
+    //     'controller' => 'Pages',
+    //     'action' => 'display'
+    // ]);
 
     /**
      * Connect catchall routes for all controllers.

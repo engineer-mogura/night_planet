@@ -5,6 +5,7 @@ use Token\Util\Token;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Error\Debugger;
 use Cake\Mailer\Email;
+use Cake\ORM\TableRegistry;
 
 /**
 * Users Controller
@@ -16,6 +17,13 @@ use Cake\Mailer\Email;
 class UsersController extends AppController
 {
     use MailerAwareTrait;
+
+    public function top()
+    {
+        $masterCodesFind = array('area','genre');
+        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+        $this->set(compact('page', 'subpage', 'selectList'));
+    }
 
     public function signup()
     {
@@ -42,6 +50,57 @@ class UsersController extends AppController
         }
         $this->render('/Registe/User/signup');
 
+    }
+
+    public function login()
+    {
+        $CastsTable = TableRegistry::get('Casts');
+
+        if ($this->request->is('post')) {
+
+            // バリデーションはログイン用を使う。
+            $cast = $this->Casts->newEntity( $this->request->getData(),['validate' => 'castLogin']);
+
+            if(!$cast->errors()) {
+
+                $this->log($this->request->getData("remember_me"),"debug");
+                $cast = $this->Auth->identify();
+                if ($cast) {
+                  $this->Auth->setUser($cast);
+
+                  return $this->redirect($this->Auth->redirectUrl());
+                }
+
+                $this->Flash->error(RESULT_M['FRAUD_INPUT_FAILED']);
+            } else {
+                debug("this->request->getData()");
+                debug($this->request->getData());
+                foreach ($cast->errors() as $key1 => $value1) {
+                    foreach ($value1 as $key2 => $value2) {
+                        $this->Flash->error($value2);
+                    }
+                }
+            }
+        } else {
+            $cast = $CastsTable->newEntity();
+        }
+        $this->set('cast', $cast);
+    }
+
+    public function logout()
+    {
+        // TODO: この自動ログインのコメントは削除予定。\node-link\cakephp-remember-meプラグインで対応できてる
+        // // ※ $userにユーザー情報取得済み前提
+        // // ユーザー自動ログイン管理テーブルからレコード削除
+        // $entity = $this->Casts->get(['id' => $this->Auth->user('id')]);
+        // $entity->remember_token = "";
+        // if ($this->Casts->save($entity)) {
+        //     // Cookie削除
+        //     $this->response = $this->response->withExpiredCookie('AUTO_LOGIN');
+        // }
+
+        $this->Flash->success(COMMON_M['LOGGED_OUT']);
+        return $this->redirect($this->Auth->logout());
     }
 
     public function verify($token)

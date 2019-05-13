@@ -25,13 +25,13 @@
     </li>
   </ul>
 </div>
-<ul class="collection">
-  <li class="collection-item dismissable">
-    <div>2018.08.25ポータルサイト【おきよる】の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
-    </div>
-  </li>
-</ul>
 <div class="container">
+  <ul class="collection">
+    <li class="collection-item dismissable">
+      <div>2018.08.25ポータルサイト【おきよる】の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
+      </div>
+    </li>
+  </ul>
   <div class="search-box">
     <div class="row">
       <li class="search col s12 l3">
@@ -41,33 +41,21 @@
       </li>
       <li class="search col s6 l3">
         <div class="input-field oki-input-field">
-          <select>
-            <option value="" disabled selected>エリア</option>
-            <option value="naha">那覇</option>
-            <option value="miyakojima">宮古島</option>
-            <option value="ishigakijima">石垣島</option>
-            <option value="tomigusuku">豊見城</option>
-            <option value="nanjo">南城</option>
-            <option value="itoman">糸満</option>
-            <option value="urasoe">浦添</option>
-            <option value="ginowan">宜野湾</option>
-            <option value="okinawashi">沖縄市</option>
-            <option value="uruma">うるま</option>
-            <option value="nago">名護</option>
+          <select name="area">
+            <option value="" disabled selected>エリアを選択してください。</option>
+            <?php foreach ($selectList['area'] as $key => $value) {
+              echo('<option value="' .$value.'">'.$value.'</option>');
+              }?>
           </select>
         </div>
       </li>
       <li class="search col s6 l3">
         <div class="input-field oki-input-field">
-          <select>
-            <option value="" disabled selected>ジャンル</option>
-            <option value="cabacula">キャバクラ</option>
-            <option value="girlsbar">ガールズバー</option>
-            <option value="snack">スナック</option>
-            <option value="club">クラブ</option>
-            <option value="lounge">ラウンジ</option>
-            <option value="pub">パブ</option>
-            <option value="bar">バー</option>
+          <select name="genre">
+            <option value="" disabled selected>ジャンルを選択してください。</option>
+            <?php foreach ($selectList['genre'] as $key => $value) {
+              echo('<option value="' .$value.'">'.$value.'</option>');
+              }?>
           </select>
         </div>
       </li>
@@ -77,149 +65,21 @@
     </div>
   </div>
   <div class="row">
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>那覇</p>
-        </div>
-        <div class="card-action">
-          <a href="#">那覇エリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>宮古島</p>
-        </div>
-        <div class="card-action">
-          <a href="#">宮古島エリア</a>
+    <?php foreach ($selectList['area'] as $key => $value): ?>
+      <div class="col s12 m4 l3">
+        <div class="card small">
+          <div class="card-image">
+            <img src="/img/common/top/top1.jpg">
+          </div>
+          <div class="card-content">
+            <p><?=$value?></p>
+          </div>
+          <div class="card-action">
+            <a href="#"><?=$value?>エリア</a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>石垣島</p>
-        </div>
-        <div class="card-action">
-          <a href="#">石垣島エリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>豊見城</p>
-        </div>
-        <div class="card-action">
-          <a href="#">豊見城エリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>南城</p>
-        </div>
-        <div class="card-action">
-          <a href="#">南城エリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>糸満</p>
-        </div>
-        <div class="card-action">
-          <a href="#">糸満エリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>浦添</p>
-        </div>
-        <div class="card-action">
-          <a href="#">浦添エリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>宜野湾</p>
-        </div>
-        <div class="card-action">
-          <a href="#">宜野湾エリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>沖縄市</p>
-        </div>
-        <div class="card-action">
-          <a href="#">沖縄市エリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>うるま</p>
-        </div>
-        <div class="card-action">
-          <a href="#">うるまエリア</a>
-        </div>
-      </div>
-    </div>
-    <div class="col s12 m4 l3">
-      <div class="card small">
-        <div class="card-image">
-          <img src="/img/common/top/top1.jpg">
-        </div>
-        <div class="card-content">
-          <p>名護</p>
-        </div>
-        <div class="card-action">
-          <a href="#">名護エリア</a>
-        </div>
-      </div>
-    </div>
+    <?php endforeach; ?>
   </div>
   <div class="row">
     <div class="col s12 m6 l6">

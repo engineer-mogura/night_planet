@@ -3,10 +3,12 @@ document.write("<script type='text/javascript' src='/js/util.js'></script>");
         /** */
 $(document).ready(function(){
 
+    if($('#user-default').length) {
+        userInitialize();
+    }
     if($('#owner-default').length) {
         ownerInitialize();
     }
-
     if($('#cast-default').length) {
         castInitialize();
     }
@@ -1532,6 +1534,32 @@ function castImageDeleteBtn(form, obj){
         });
         /* 共通処理 end */
     }
+
+    /**
+ * キャスト画面の初期化処理
+ */
+function userInitialize() {
+
+    // ユーザーの初期化処理
+
+    /* トップページ 画面 START */
+    if($("#cast-profile").length) {
+
+        $($profile).find(":input").on("change", function() {
+
+            $($profile).find(".saveBtn").removeClass("disabled");
+        });
+        // 登録ボタン押した時
+        $($profile).find(".saveBtn").on("click", function() {
+            if (!confirm('こちらのプロフィール内容でよろしいですか？')) {
+                return false;
+            }
+            // ajax処理
+            ajaxCommon($("#edit-profile"));
+        });
+    }
+    // /* プロフィール 画面 END */
+}
 
 /**
  * TODO: オーナー？ショップ？画面の初期化処理

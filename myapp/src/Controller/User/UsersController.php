@@ -25,6 +25,33 @@ class UsersController extends AppController
         $this->set(compact('page', 'subpage', 'selectList'));
     }
 
+    public function search()
+    {
+        if ($this->request->is('ajax')) {
+
+            $columns = array('Shops.name', 'Shops.catch'); // like条件用
+            $shops = $this->getShopList($this->request->getQuery(), $columns);
+            // 検索ページからの場合は、結果のみを返却する
+            $this->confReturnJson(); // json返却用の設定
+            $this->response->body(json_encode($shops));
+            return;
+
+        }
+        $shops = array(); // 店舗情報格納用
+        // トップページからの遷移の場合
+        if ($referer = (($this->referer()) == "http://okiyoru.local/") ||
+            /** スマホデバグ用 */(($this->referer()) == "http://192.168.33.10/")) {
+            $columns = array('Shops.name', 'Shops.catch'); // like条件用
+            $shops = $this->getShopList($this->request->getQuery(), $columns);
+            // 検索条件を取得し、画面側でselectedする
+            $conditionSelected = $this->request->getQuery();
+        }
+        $masterCodesFind = array('area','genre');
+        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+        $this->set(compact('shops', 'selectList','conditionSelected'));
+        $this->render();
+    }
+
     public function signup()
     {
         $this->loadModel('Users');
@@ -122,6 +149,49 @@ class UsersController extends AppController
         }
         $this->Flash->success('すでに登録されてます。ログインしてください。');
         return $this->redirect(['action' => 'user']);
+    }
+
+    /**
+     * ショップテーブルから検索条件による店舗情報を取得する
+     *
+     * @param array $validate
+     * @return void
+     */
+    public function getShopList($requestData, $columns)
+    {
+        $query = $this->Shops->find();
+        $findArray = array(); // 検索条件セット用
+        foreach($requestData as $key => $findData) {
+            // リクエストデータが[key_word]かつ値が空じゃない場合
+            if (($key == 'key_word') && ($findData !== "")) {
+                foreach ($columns as $key => $value) {
+                    $query->orWhere(function ($exp, $q) use ($value, $findData) {
+                        $exp->like($value, '%'.$findData.'%');
+                        return $exp;
+                    });
+                }
+            } else {
+                if($findData !== "") {
+                    //$findArray[] = ['Shops.'.$key => $findData];
+                    $query->where(['Shops.'.$key => $findData]);
+                }
+            }
+        }
+        return $query->toArray();
+    }
+
+    /**
+     * json返却用の設定
+     *
+     * @param array $validate
+     * @return void
+     */
+    public function confReturnJson()
+    {
+        $this->viewBuilder()->autoLayout(false);
+        $this->autoRender = false;
+        $this->response->charset('UTF-8');
+        $this->response->type('json');
     }
 
 }

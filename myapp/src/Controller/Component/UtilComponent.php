@@ -83,9 +83,9 @@ class UtilComponent extends Component
         $shopArea = $shop['area'];
         $shopGenre = $shop['genre'];
         $shopDir = $shop['dir'];
-        $areas = array('miyako','ishigaki','naha','nanjo','tomigusuku',
+        $areas = array('miyako','ishigakijima','naha','nanjo','tomigusuku',
                         'urasoe','ginowan','okinawashi','uruma','nago');
-        $genres = array('caba','snack','girlsbar','bar');
+        $genres = array('cabacula','snack','girlsbar','bar');
 
         $infoArray = array();
         foreach ($areas as $area) {
@@ -113,12 +113,12 @@ class UtilComponent extends Component
      * @param array $masterCodeResult
      * @return void
      */
-    public function getCredit(object $shop, array $masterCodeResult)
+    public function getCredit($shop, $masterCodeResult)
     {
         $array = array();
         $creditsHidden = array();
         foreach ($shop as $key => $value) {
-            $array = explode(',', $value->credit);
+            $array = expollode(',', $value->credit);
         }
 
         for ($i = 0; $i < count($array); $i++) {

@@ -332,6 +332,19 @@
     );
 
   }
+/**
+ * パラメータを設定したURLを返す
+ * @param  {} paramsArray
+ * @return  url {url} 対象のURL文字列（任意）
+ */
+function setParameter(paramsArray) {
+  var resurl = location.href.replace(/\?.*$/,"");
+  for ( key in paramsArray ) {
+    resurl += (resurl.indexOf('?') == -1) ? '?':'&';
+    resurl += key + '=' + paramsArray[key];
+  }
+  return resurl;
+}
 
  /**
  * URLパラメータ値を取得します
@@ -406,6 +419,60 @@ function getParam(name, url) {
               });
 
           }
+      },
+      error : function(response, textStatus, xhr){
+        $(document).find('.saveBtn').removeClass('disabled');
+        $(document).find('.createBtn').removeClass('disabled');
+        $(document).find('.updateBtn').removeClass('disabled');
+        $(document).find('.cancelBtn').removeClass('disabled');
+        $.notifyBar({
+          cssClass: 'error',
+          html: "通信に失敗しました。ステータス：" + textStatus
+        });
+      }
+  });
+  return false;
+
+}
+
+  /**
+   * 検索ajax処理
+   */
+  var searchAjax = function(form) {
+
+    //通常のアクションをキャンセルする
+    event.preventDefault();
+
+    $.ajax({
+      url : form.attr('action'), //Formのアクションを取得して指定する
+      type: form.attr('method'),//Formのメソッドを取得して指定する
+      data: form.serialize(), //データにFormがserialzeした結果を入れる
+      //dataType: 'html', //データにFormがserialzeした結果を入れる
+      timeout: 10000000,
+      beforeSend : function(xhr, settings){
+          //Buttonを無効にする
+          $(document).find('.saveBtn').addClass('disabled');
+          $(document).find('.createBtn').addClass('disabled');
+          $(document).find('.updateBtn').addClass('disabled');
+          $(document).find('.cancelBtn').addClass('disabled');
+          //処理中のを通知するアイコンを表示する
+          $("#dummy").load("/module/Preloader.ctp");
+      },
+      complete: function(xhr, textStatus){
+
+        //処理中アイコン削除
+        $('.preloader-wrapper').remove();
+        $(document).find('.saveBtn').addClass('disabled');
+        $(document).find('.createBtn').addClass('disabled');
+        $(document).find('.updateBtn').addClass('disabled');
+        $(document).find('.cancelBtn').addClass('disabled');
+      },
+      success: function (response, textStatus, xhr) {
+
+        // TODO: モーダル表示時は、背景画面をFIXIDしているので、
+        // close処理を呼んで、FIXIDを解除する
+        $(".modal").modal('close');
+        createShopCard(response, "/module/shopCard.ctp");
       },
       error : function(response, textStatus, xhr){
         $(document).find('.saveBtn').removeClass('disabled');

@@ -1176,6 +1176,41 @@ function fileload(file, obj, imgCount, path) {
 }
 
 /**
+ * ショップカードHTMLを生成する
+ * @param  {} file
+ * @param  {} obj
+ * @param  {} imgCount
+ */
+function createShopCard(response, path) {
+
+    var $html;
+
+    $.get(path, {}, function(html) {
+        var dom = $(html); // html部品をdomに変換
+        var resultDom = $(document).find('.resultSearch');
+        var cardTmp = dom.clone(); // ショップカードの部品を複製しておく
+        var area = JSON.parse($(document).find("input[name='area_define']").val());
+        var genre = JSON.parse($(document).find("input[name='genre_define']").val());
+        $(resultDom).find(".card").remove(); // ショップカードの部品を削除しておく ※複製した部品を都度生成して使う
+        $(resultDom).find(".message").addClass('hide'); // メッセージ非表示
+        $(resultDom).find(".header").text('検索結果 ' + response.length + '件');
+        $.each(response, function(index, row) {
+            var shopCard = $(cardTmp).clone();
+            // 属性などを追加する
+            $(shopCard).find('.title').text(row['name'] + '|' + area[row['area']]['label'] + '|' + genre[row['genre']]['label']);
+            $(shopCard).find('.catch').text(row['catch']);
+
+            $(resultDom).append($(shopCard));
+        })
+        // メッセージ表示
+        if(!response.length > 0) {
+            $(resultDom).find(".message").removeClass('hide');
+        }
+
+    });
+}
+
+/**
  * カルーセルスライダーを描画する
  * @param  {} obj
  * @param  {} path
@@ -1535,30 +1570,55 @@ function castImageDeleteBtn(form, obj){
         /* 共通処理 end */
     }
 
-    /**
- * キャスト画面の初期化処理
+/**
+ * ユーザー画面の初期化処理
  */
 function userInitialize() {
 
     // ユーザーの初期化処理
-
-    /* トップページ 画面 START */
-    if($("#cast-profile").length) {
-
-        $($profile).find(":input").on("change", function() {
-
-            $($profile).find(".saveBtn").removeClass("disabled");
-        });
-        // 登録ボタン押した時
-        $($profile).find(".saveBtn").on("click", function() {
-            if (!confirm('こちらのプロフィール内容でよろしいですか？')) {
-                return false;
+    /* トップ画面 START */
+    if($("#top").length) {
+        // 検索ボタン押した時
+        $(document).on('click', '.searchBtn', function() {
+            form = $(this).closest("form[name='search_form']");
+            if(($(form).find("input[name='key_word']").val() == "") &&
+                ($(form).find("[name='area']").val() == "") &&
+                ($(form).find("[name='genre']").val() == "")) {
+                    alert("なにかしら条件を入れてね");
+                    return false;
             }
-            // ajax処理
-            ajaxCommon($("#edit-profile"));
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+
+            var params = [];
+            params['key_word'] = $(form).find("input[name='key_word']").val();
+            params['area'] = $(form).find("[name='area']").val();
+            params['genre'] = $(form).find("[name='area']").val();
+            form.submit();
+            //window.location.href = setParameter(params);
+        });
+
+    }
+    /* トップ画面 END */
+
+    /* 検索画面 START */
+    if($("#search").length) {
+
+        // 検索ボタン押した時
+        $(document).on('click', '.searchBtn', function() {
+            form = $(this).closest("form[name='search_form']");
+            if(($(form).find("input[name='key_word']").val() == "") &&
+                ($(form).find("[name='area']").val() == "") &&
+                ($(form).find("[name='genre']").val() == "")) {
+                    alert("なにかしら条件を入れてね");
+                    return false;
+                }
+
+            searchAjax($(this).closest("form[name='search_form']"));
         });
     }
-    // /* プロフィール 画面 END */
+    /* 検索画面 画面 END */
+
 }
 
 /**

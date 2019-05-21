@@ -105,69 +105,67 @@ return [
 	define('CATCHCOPY','【おきよる】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。(\※ソープ、デリヘル等の風俗情報を除く)。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。更に店舗ごとに多彩なクーポン券などご用意しておりますのでお店に行く前に検索してクーポン券があるのかチェックしてみるのもいいでしょう。'),
 
 	// 所属エリアリスト
-	'area' => [
-		'miyako'=> [
-			'area_label' => "宮古島",
-			'area_path' => "miyako"
+	define('AREA', array(
+		'miyakojima'=> [
+			'label' => "宮古島",
+			'path' => "miyakojima"
 		],
-		'ishigaki'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'ishigaki'
+		'ishigakijima'=> [
+			'label' => "石垣島",
+			'path' => "ishigakijima"
 		],
 		'naha'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'naha'
+			'label' => "那覇",
+			'path' => "naha"
 		],
 		'nanjo'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'nanjo'
+			'label' => "南城",
+			'path' => "nanjo"
 		],
 		'tomigusuku'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'tomigusuku'
+			'label' => "豊見城",
+			'path' => "tomigusuku"
 		],
 		'urasoe'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'urasoe'
+			'label' => "浦添",
+			'path' => "urasoe"
 		],
 		'ginowan'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'ginowan'
+			'label' => "宜野湾",
+			'path' => "ginowan"
 		],
 		'okinawashi'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'okinawashi'
+			'label' => "沖縄市",
+			'path' => "okinawashi"
 		],
 		'uruma'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'uruma'
+			'label' => "うるま",
+			'path' => "uruma"
 		],
 		'nago'=> [
-			'area_label' => '宮古島',
-			'area_path' => 'nago'
+			'label' => "名護",
+			'path' => "nago"
 		],
-
-	],
+	)),
 	// 業種リスト
-	'genre' => [
-		'caba'=> [
-			'genre_label' => "キャバクラ",
-			'genre_path' => "caba"
+	define('GENRE', array(
+		'cabacula'=> [
+			'label' => "キャバクラ",
+			'path' => "cabacula"
 		],
 		'snack'=> [
-			'genre_label' => 'スナック',
-			'genre_path' => 'snack'
+			'label' => "スナック",
+			'path' => "snack"
 		],
 		'girlsbar'=> [
-			'genre_label' => 'ガールズバー',
-			'genre_path' => 'girlsbar'
+			'label' => "ガールズバー",
+			'path' => "girlsbar"
 		],
 		'bar'=> [
-			'genre_label' => 'バー',
-			'genre_path' => 'bar'
+			'label' => "バー",
+			'path' => "bar"
 		],
-	],
-
+	)),
 	// 共通メッセージ common.message
 	define('COMMON_M', array(
 		'LOGINED'=>'ログインしました。',

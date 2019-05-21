@@ -47,7 +47,7 @@ class AppController extends \App\Controller\AppController
     {
         $action = $this->request->getParam('action');
         // ログイン時に許可するアクション
-        if (in_array($action, ['top', 'index', 'view', 'add', 'delete', 'edit'])) {
+        if (in_array($action, ['top', 'search', 'index', 'view', 'add', 'delete', 'edit'])) {
             return true;
         }
         return false;
@@ -56,7 +56,7 @@ class AppController extends \App\Controller\AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['top', 'signup','verify','logout']);
+        $this->Auth->allow(['top', 'search', 'signup','verify','logout']);
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
         $this->viewBuilder()->layout('userDefault');
     }

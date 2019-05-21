@@ -47,7 +47,7 @@ CREATE TABLE `owners` (
 
 INSERT INTO `owners` (`id`, `email`, `password`, `area`, `genre`, `dir`, `remember_token`, `status`, `created`, `modified`) VALUES
 (1, 'owner0@gmail.com', '$2y$10$WL.fRpilzn5dXOjVichk7uXR6xfdjhkdkUFMf6SJlck0GNW4xPAxC', 'miyako', 'snack','0001', '',1, '2018-12-26 19:56:45', '2019-01-12 02:33:27'),
-(2, 't.takuma830@gmail.com', '$2y$10$ziRcJzp.VFaPPswXOGBKjeiM04qB7ZTMeC.jBQ91KtnPAiWDxGBVa', 'miyako', 'caba','0002', '',1, '2019-01-18 16:53:21', '2019-01-18 16:53:57');
+(2, 't.takuma830@gmail.com', '$2y$10$ziRcJzp.VFaPPswXOGBKjeiM04qB7ZTMeC.jBQ91KtnPAiWDxGBVa', 'miyako', '','0002', '',1, '2019-01-18 16:53:21', '2019-01-18 16:53:57');
 
 --
 -- Indexes for dumped tables

@@ -25,45 +25,14 @@
     </li>
   </ul>
 </div>
-<div class="container">
+<div id="top" class="container">
   <ul class="collection">
     <li class="collection-item dismissable">
       <div>2018.08.25ポータルサイト【おきよる】の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
       </div>
     </li>
   </ul>
-  <div class="search-box">
-    <div class="row">
-      <li class="search col s12 l3">
-        <div class="input-field oki-input-field">
-          <input placeholder="キーワード" id="key_word" type="text" class="validate input-search">
-        </div>
-      </li>
-      <li class="search col s6 l3">
-        <div class="input-field oki-input-field">
-          <select name="area">
-            <option value="" disabled selected>エリアを選択してください。</option>
-            <?php foreach ($selectList['area'] as $key => $value) {
-              echo('<option value="' .$value.'">'.$value.'</option>');
-              }?>
-          </select>
-        </div>
-      </li>
-      <li class="search col s6 l3">
-        <div class="input-field oki-input-field">
-          <select name="genre">
-            <option value="" disabled selected>ジャンルを選択してください。</option>
-            <?php foreach ($selectList['genre'] as $key => $value) {
-              echo('<option value="' .$value.'">'.$value.'</option>');
-              }?>
-          </select>
-        </div>
-      </li>
-      <li class="search col s12 l3">
-        <a class="waves-effect waves-light btn-large"><i class="material-icons right">search</i>検索</a>
-      </li>
-    </div>
-  </div>
+    <?= $this->element('elmSearch'); ?>
   <div class="row">
     <?php foreach ($selectList['area'] as $key => $value): ?>
       <div class="col s12 m4 l3">

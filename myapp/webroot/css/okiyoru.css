@@ -51,9 +51,6 @@ a.grey-text.link-box.text-lighten-3.collection-item {
 .collection a.collection-item:not(.active):hover{
   background-color: #ddd;
 }
-.search-box{
-
-}
 
 li.search.col.s12 > a, li.search.col.s3 > a{
   width:100%;
@@ -218,6 +215,16 @@ div.message.hidden {
     margin-bottom: 50px;
 }
 /* 新規・ログイン画面 END */
+
+/* ユーザー START */
+
+.search-result-card:hover {
+  background-color: #fbe9e7;
+  cursor : pointer;
+}
+
+/* ユーザー END */
+
 
 /* 店舗ページ START */
   div.description {

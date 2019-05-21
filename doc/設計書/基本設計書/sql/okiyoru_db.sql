@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 4 月 14 日 01:31
+-- Generation Time: 2019 年 5 月 16 日 20:40
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.1.26
 
@@ -133,8 +133,8 @@ CREATE TABLE `casts` (
 --
 
 INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `holiday`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `remember_token`, `status`, `delete_flag`, `created`, `modified`) VALUES
-(1, 38, 'cast', '山田　花子', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '1966-04-27 00:00:00', NULL, 'blood_type1', 'constellation6', '36', 'ｄｄtrrteraｒffdffdsswsdsdsdsdsdsdds', NULL, '17e335142779847b27818ad120f1240c5eb3d5d2.png', '58d0733b578610160243d78f3e9ab37b9ba1727a.jpg', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', 'a3a562ef091b7ba13f82c4b64bf0ca1c2a730704.jpg', '11d8110b1aad2b537bc79006557f7ae8d044f923.png', '', '892f85410a83889dc01de167a4f05f6ef0dc6346.png', '', '00002', NULL, 1, NULL, '2019-03-23 16:51:25', '2019-04-14 00:02:55'),
-(13, 38, 'cast', '友利拓真', 'wwww', 't.takuma830@gmail.com', '$2y$10$4u6PBUIBjyWsPKhDndEa4eUm30Ym9JEls.OVRyCSeqO/YuuwWOgsC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', 'f52389fbef05bdeff3b3f0f1af80f56be8afc552f99348ca49702b9e3315b427', 1, NULL, '2019-04-03 19:47:43', '2019-04-03 19:53:54');
+(1, 38, 'cast', '山田　敏子', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '1966-04-27 00:00:00', NULL, 'blood_type4', 'constellation3', '36', 'ｄｄtrrtera\r\nｒffdffdsswsdsdsdsdsdsdds\r\n\r\nfdtete', NULL, 'd850c55c7674f7c5b0ca5ee9c4d9bc798010c417.jpg', '09c81edb1ee4c46cb2aeffd4a0c7fca2762f9b53.jpg', '1fa3eb548fdd4a092d84c992964663aae1064f84.jpg', '6ba1b8364eefaa8cdeba8399382926a6e8c10fd4.jpg', '', '', '', '', '00002', 'e4b48d115d35a94b74a007cb091103b45c7cb5e6ffd63496acfbb6c73ab5fc0d', 1, NULL, '2019-03-23 16:51:25', '2019-05-06 14:50:40'),
+(13, 38, 'cast', '友利拓真', 'wwww', 't.takuma830@gmail.com', '$2y$10$4u6PBUIBjyWsPKhDndEa4eUm30Ym9JEls.OVRyCSeqO/YuuwWOgsC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', 'f52389fbef05bdeff3b3f0f1af80f56be8afc552f99348ca49702b9e3315b427', 1, NULL, '2019-04-03 19:47:43', '2019-05-14 19:43:38');
 
 -- --------------------------------------------------------
 
@@ -202,25 +202,42 @@ CREATE TABLE `diarys` (
   `cast_id` int(11) NOT NULL,
   `title` varchar(50) NOT NULL,
   `content` varchar(255) NOT NULL,
-  `image` varchar(100) DEFAULT NULL,
+  `image1` varchar(100) DEFAULT NULL,
+  `image2` varchar(100) DEFAULT NULL,
+  `image3` varchar(100) DEFAULT NULL,
+  `image4` varchar(100) DEFAULT NULL,
+  `image5` varchar(100) DEFAULT NULL,
+  `image6` varchar(100) DEFAULT NULL,
+  `image7` varchar(100) DEFAULT NULL,
+  `image8` varchar(100) DEFAULT NULL,
+  `dir` varchar(255) DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
 --
--- テーブルの構造 `diarys_likes`
+-- テーブルのデータのダンプ `diarys`
 --
 
-DROP TABLE IF EXISTS `diarys_likes`;
-CREATE TABLE `diarys_likes` (
-  `id` int(11) NOT NULL,
-  `diary_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `diarys` (`id`, `cast_id`, `title`, `content`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `created`, `modified`) VALUES
+(105, 1, 'tset', 'testdadyd', '09c81edb1ee4c46cb2aeffd4a0c7fca2762f9b53.jpg', '11d8110b1aad2b537bc79006557f7ae8d044f923.png', '', '', '', '', '', NULL, '2019/201905/20190503/20190503_024338', '2019-05-03 02:43:38', '2019-05-03 13:53:21'),
+(107, 1, 'fd', 'ftb', '9db0f572df6d410790a594802e18acc229ee7208.jpg', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', '2c12dfae9753435e1e1d5a6b2d4ad015bfcc0662.jpg', '', '', '', NULL, NULL, '2019/201905/20190503/20190503_130732', '2019-05-03 13:07:33', '2019-05-03 15:30:24'),
+(108, 1, 'fdffd', 'fdff', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_153612', '2019-05-03 15:36:30', '2019-05-03 15:36:30'),
+(109, 1, 'fdf', 'fdfdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154100', '2019-05-03 15:41:03', '2019-05-03 15:41:03'),
+(110, 1, 'ssd', 'dssdsd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154123', '2019-05-03 15:41:29', '2019-05-03 15:41:29'),
+(111, 1, 'fdfdfd', 'fdffdfdf', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154847', '2019-05-03 15:48:48', '2019-05-03 15:51:01'),
+(112, 1, 'fdf', 'fdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154904', '2019-05-03 15:49:04', '2019-05-03 15:49:04'),
+(113, 1, 'dssd', 'dsdsd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154913', '2019-05-03 15:49:13', '2019-05-03 15:49:13'),
+(114, 1, 'fdfdfdf', 'fdfdfd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155009', '2019-05-03 15:50:09', '2019-05-03 15:50:09'),
+(115, 1, 'fdf', 'fdfd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155019', '2019-05-03 15:50:20', '2019-05-03 15:50:20'),
+(116, 1, 'sduk', 'sddfdffdfdfdfdfj\r\n\r\n\r\ntytytyy\r\n\r\n', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '2c12dfae9753435e1e1d5a6b2d4ad015bfcc0662.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155040', '2019-05-03 15:50:40', '2019-05-03 15:52:50'),
+(117, 1, 'fdfff', 'fdfdfdfdfdfd', '9db0f572df6d410790a594802e18acc229ee7208.jpg', 'd850c55c7674f7c5b0ca5ee9c4d9bc798010c417.jpg', '09c81edb1ee4c46cb2aeffd4a0c7fca2762f9b53.jpg', '1fa3eb548fdd4a092d84c992964663aae1064f84.jpg', '6ba1b8364eefaa8cdeba8399382926a6e8c10fd4.jpg', '112786fba33c77ce659f05ac31f9842546970058.jpg', '58d0733b578610160243d78f3e9ab37b9ba1727a.jpg', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '2019/201905/20190503/20190503_155203', '2019-05-03 15:52:03', '2019-05-03 15:52:03'),
+(118, 1, 'ｆｄｆｄｆｄ', 'ｆｄｄｆyd', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_161956', '2019-05-03 16:19:56', '2019-05-03 16:19:56'),
+(119, 1, 'ｆｄｆｄｆｄ', 'ｆｄｄｆydｈｇｈ', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_162048', '2019-05-03 16:20:49', '2019-05-03 16:20:49'),
+(120, 1, 'ｆｄｆｄｆｄ', 'ｆｄｄｆydｈｇｈchromeｓtetstettet\r\ntettetette', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_162124', '2019-05-03 16:21:24', '2019-05-06 13:39:27'),
+(121, 2, 'test', 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(122, 1, 'tes2', 'dtest', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(124, 1, 'fffffｄｆ', 'fdfｆｆfdfdfDfESft', '11d8110b1aad2b537bc79006557f7ae8d044f923.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190511/20190511_234836', '2019-05-11 23:48:36', '2019-05-11 23:50:56');
 
 -- --------------------------------------------------------
 
@@ -251,8 +268,8 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `event_type_id`, `cast_id`, `title`, `details`, `start`, `end`, `time_start`, `time_end`, `all_day`, `status`, `active`, `created`, `modified`) VALUES
-(265, NULL, 1, '休み', NULL, '2019-04-16 00:00:00', '2019-04-16 00:00:00', NULL, NULL, '1', NULL, 1, '2019-04-11 21:48:54', '2019-04-11 21:48:54'),
-(266, NULL, 1, '仕事', NULL, '2019-04-11 00:00:00', '2019-04-11 00:00:00', '00:00', NULL, '1', NULL, 1, '2019-04-11 21:49:12', '2019-04-11 21:49:12');
+(268, NULL, 1, '仕事', NULL, '2019-04-06 00:30:00', '2019-04-06 03:00:00', '00:30', '03:00', '1', NULL, 1, '2019-04-27 00:32:11', '2019-04-27 00:32:11'),
+(269, NULL, 1, '休み', NULL, '2019-04-10 00:00:00', '2019-04-10 04:00:00', '00:00', '04:00', '1', NULL, 1, '2019-04-27 00:32:41', '2019-04-27 00:33:00');
 
 -- --------------------------------------------------------
 
@@ -309,6 +326,37 @@ INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `
 -- --------------------------------------------------------
 
 --
+-- テーブルの構造 `likes`
+--
+
+DROP TABLE IF EXISTS `likes`;
+CREATE TABLE `likes` (
+  `id` int(11) NOT NULL,
+  `diary_id` int(11) NOT NULL,
+  `cast_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `likes`
+--
+
+INSERT INTO `likes` (`id`, `diary_id`, `cast_id`, `user_id`, `created`, `modified`) VALUES
+(0, 105, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(1, 110, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, 111, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 999, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, 105, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(5, 111, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(6, 111, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(7, 107, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(8, 121, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- テーブルの構造 `master_codes`
 --
 
@@ -352,11 +400,11 @@ INSERT INTO `master_codes` (`id`, `code`, `code_name`, `code_group`, `sort`, `de
 (21, 'JCB', 'ジェイシービー', 'credit', 3, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (22, 'AmericanExpress', 'アメリカン・エクスプレス', 'credit', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (23, 'Diners', 'ダイナース', 'credit', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
-(24, 'time_caba', '時間制(キャバクラ)', 'industry', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(24, 'time_cabacula', '時間制(キャバクラ)', 'industry', 1, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (25, 'time_snack', '時間制(スナック))', 'industry', 2, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (26, 'time_lounge', '時間制(ラウンジ)', 'industry', 3, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (27, 'time_club', '時間制(クラブ)', 'industry', 4, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
-(28, 'bottle_caba', 'ボトル制(キャバクラ)', 'industry', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
+(28, 'bottle_cabacula', 'ボトル制(キャバクラ)', 'industry', 5, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (29, 'bottle_snack', 'ボトル制(スナック))', 'industry', 6, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (30, 'bottle_lounge', 'ボトル制(ラウンジ)', 'industry', 7, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
 (31, 'bottle_club', 'ボトル制(クラブ)', 'industry', 8, NULL, '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
@@ -513,7 +561,7 @@ CREATE TABLE `owners` (
 
 INSERT INTO `owners` (`id`, `role`, `email`, `password`, `area`, `genre`, `dir`, `remember_token`, `status`, `created`, `modified`) VALUES
 (1, 'owner', 't.takuma830@gmail.com', '$2y$10$IvHwLrvdmHfFQgw88nlOD.DD1jnVFy52vG.auT04dLts3W1c2xcxu', 'naha', 'cabacula', NULL, NULL, 0, '2019-03-23 10:38:14', '2019-03-23 10:38:14'),
-(57, 'owner', 'okiyoru1@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 'naha', 'snack', '00005', '123a40ef9ee43fde6f8a4f408b8be5aa72a9498fb3836e3b9692e18f02c950d1', 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38');
+(57, 'owner', 'okiyoru1@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 'naha', 'snack', '00005', NULL, 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38');
 
 -- --------------------------------------------------------
 
@@ -552,7 +600,19 @@ CREATE TABLE `shops` (
 
 INSERT INTO `shops` (`id`, `owner_id`, `area`, `genre`, `dir`, `name`, `top_image`, `catch`, `tel`, `staff`, `bus_from_time`, `bus_to_time`, `bus_hosoku`, `system`, `credit`, `cast`, `pref21`, `addr21`, `strt21`, `created`, `modified`) VALUES
 (2, 2, NULL, NULL, NULL, NULL, NULL, 'fdffdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-02-12 21:42:56', '2019-02-16 13:49:27'),
-(38, 57, 'naha', 'snack', '00005', 'OKIYORUGO', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '那覇のキャバクラをお探しなら〇〇\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-04-07 13:42:41');
+(38, 57, 'naha', 'snack', '00005', 'OKIYORUGO', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '那覇のキャバクラをお探しなら〇〇\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(39, 57, 'naha', 'cabacula', '00005', '那覇店舗名１', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '那覇のキャバクラをお探しなら那覇店舗名１\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(40, 57, 'naha', 'cabacula', '00005', '那覇店舗名２', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '那覇のキャバクラをお探しなら那覇店舗名２\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(41, 57, 'naha', 'cabacula', '00005', '那覇店舗名３', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '那覇のキャバクラをお探しなら那覇店舗名３\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(42, 57, 'naha', 'cabacula', '00005', '那覇店舗名４', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '那覇のキャバクラをお探しなら那覇店舗名４\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(43, 57, 'naha', 'girlsbar', '00005', '那覇店舗名５', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '那覇のガールズバーをお探しなら那覇店舗名５\r\n時間制・飲み放題で安心のガールズバーです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(44, 57, 'miyakojima', 'snack', '00005', '那覇店舗名６', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '那覇のスナックをお探しなら那覇店舗名６\r\n時間制・飲み放題で安心のスナックです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(45, 57, 'miyakojima', 'cabacula', '00005', '宮古島店舗名１', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '宮古島のキャバクラをお探しなら宮古島店舗名１\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(46, 57, 'miyakojima', 'cabacula', '00005', '宮古島店舗名２', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '宮古島のキャバクラをお探しなら宮古島店舗名２\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(47, 57, 'miyakojima', 'cabacula', '00005', '宮古島店舗名３', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '宮古島のキャバクラをお探しなら宮古島店舗名３\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(48, 57, 'miyakojima', 'cabacula', '00005', '宮古島店舗名４', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '宮古島のキャバクラをお探しなら宮古島店舗名４\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(49, 57, 'miyakojima', 'girlsbar', '00005', '宮古島店舗名５', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '宮古島のガールズバーをお探しなら宮古島店舗名５\r\n時間制・飲み放題で安心のガールズバーです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
+(50, 57, 'miyakojima', 'snack', '00005', '宮古島店舗名６', '0f8664b3dc1a6edea7f8348bb5979c388004407d.jpg', '宮古島のスナックをお探しなら宮古島店舗名６\r\n時間制・飲み放題で安心のスナックです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32');
 
 -- --------------------------------------------------------
 
@@ -675,14 +735,6 @@ ALTER TABLE `diarys`
   ADD KEY `cast_key` (`cast_id`);
 
 --
--- Indexes for table `diarys_likes`
---
-ALTER TABLE `diarys_likes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `diary_key` (`diary_id`),
-  ADD KEY `user_key` (`user_id`);
-
---
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
@@ -701,6 +753,13 @@ ALTER TABLE `event_types`
 ALTER TABLE `jobs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `owner_key` (`shop_id`);
+
+--
+-- Indexes for table `likes`
+--
+ALTER TABLE `likes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `diary_key` (`diary_id`);
 
 --
 -- Indexes for table `master_role`
@@ -776,10 +835,16 @@ ALTER TABLE `developers`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `diarys`
+--
+ALTER TABLE `diarys`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
+
+--
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=267;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=270;
 
 --
 -- AUTO_INCREMENT for table `event_types`

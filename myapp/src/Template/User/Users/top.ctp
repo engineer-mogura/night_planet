@@ -1,4 +1,5 @@
 <?= $this->fetch('sidebar') ?>
+<div class="nav-wrapper">
 <div class="slider">
   <ul class="slides">
     <li>
@@ -23,7 +24,8 @@
       </div>
     </li>
   </ul>
-</div>
+  </div>
+  </div>
 <div id="top" class="container">
   <ul class="collection">
     <li class="collection-item dismissable">
@@ -43,7 +45,7 @@
             <p><?=$value?></p>
           </div>
           <div class="card-action">
-            <a href="#"><?=$value?>エリア</a>
+            <a href="miyakojima"><?=$value?>エリア</a>
           </div>
         </div>
       </div>

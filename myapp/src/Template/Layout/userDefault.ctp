@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
   <title>
-    <?= LT['001'] ?>:
     <?= $this->fetch('title') ?>
   </title>
   <?= $this->Html->meta('icon') ?>
@@ -82,22 +81,22 @@
       <div class="col s12 l6">
         <h5 class="white-text">Links</h5>
         <ul class="collection">
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">event_available</i><?= USER_LM['002'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/"><i class="material-icons">vertical_align_top</i><?= USER_LM['004'] ?></a></li>
+          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
+          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">event_available</i><?= USER_LM['002'] ?></a></li>
+          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></a></li>
+          <li><a class="footer-item collection-item" href="/"><i class="material-icons">vertical_align_top</i><?= USER_LM['004'] ?></a></li>
         </ul>
       </div>
       <div class="col s12 l6">
         <h5 class="white-text">Links</h5>
         <ul class="collection">
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">cloud</i><?= USER_LM['005'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/Users/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/Users/privacy_policy"><i class="material-icons">note</i><?= COMMON_LM['003'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/Users/contract"><i class="material-icons">note</i><?= COMMON_LM['005'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/Users/membership_join"><i class="material-icons">star_half</i><?= USER_LM['006'] ?></a></li>
-          <li><a class="grey-text link-box text-lighten-3 collection-item" href="/owner/owners/login"><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?></a></li>
+          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">cloud</i><?= USER_LM['005'] ?></a></li>
+          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
+          <li><a class="footer-item collection-item" href="/Users/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
+          <li><a class="footer-item collection-item" href="/Users/privacy_policy"><i class="material-icons">note</i><?= COMMON_LM['003'] ?></a></li>
+          <li><a class="footer-item collection-item" href="/Users/contract"><i class="material-icons">note</i><?= COMMON_LM['005'] ?></a></li>
+          <li><a class="footer-item collection-item" href="/Users/membership_join"><i class="material-icons">star_half</i><?= USER_LM['006'] ?></a></li>
+          <li><a class="footer-item collection-item" href="/owner/owners/login"><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?></a></li>
         </ul>
       </div>
       <div class="col s12">

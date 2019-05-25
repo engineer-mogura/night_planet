@@ -1,4 +1,4 @@
-<div class="card horizontal waves-effect hoverable search-result-card">
+<div class="col card horizontal waves-effect hoverable search-result-card">
 	<div class="card-image">
 		<img src="/img/common/top/top1.jpg" height="200">
 	</div>

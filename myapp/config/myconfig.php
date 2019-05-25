@@ -161,9 +161,17 @@ return [
 			'label' => "ガールズバー",
 			'path' => "girlsbar"
 		],
-		'bar'=> [
-			'label' => "バー",
-			'path' => "bar"
+		'club'=> [
+			'label' => "クラブ",
+			'path' => "club"
+		],
+		'lounge'=> [
+			'label' => "ラウンジ",
+			'path' => "lounge"
+		],
+		'pub'=> [
+			'label' => "パブ",
+			'path' => "pub"
 		],
 	)),
 	// 共通メッセージ common.message

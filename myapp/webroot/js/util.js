@@ -472,7 +472,7 @@ function getParam(name, url) {
         // TODO: モーダル表示時は、背景画面をFIXIDしているので、
         // close処理を呼んで、FIXIDを解除する
         $(".modal").modal('close');
-        createShopCard(response, "/module/shopCard.ctp");
+        createShopCard(form, response, "/module/shopCard.ctp");
       },
       error : function(response, textStatus, xhr){
         $(document).find('.saveBtn').removeClass('disabled');

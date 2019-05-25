@@ -1,5 +1,4 @@
 <?= $this->fetch('sidebar') ?>
-
 <div class="slider">
   <ul class="slides">
     <li>

@@ -18,7 +18,7 @@ use Cake\View\View;
 /**
  * Application View
  *
- * Your application’s default view class
+ * Your applicationâ€™s default view class
  *
  * @link https://book.cakephp.org/3.0/en/views.html#the-app-view
  */
@@ -37,5 +37,29 @@ class AppView extends View{
       $this->loadHelper('Form', [
         'templates' => 'app_form',
       ]);
+
+      $title = '';
+      if (!empty($this->viewVars['title'])) {
+          // testtitleテスト
+          $title .=  $this->viewVars['title'] . ' | ';
+      }
+      $title .= LT['001'];
+      $this->assign('title', $title);
+
+      // パンくず設定
+      if($this->template == 'top') {
+        $this->Breadcrumbs->add(
+          '<i class="material-icons">home</i>',
+          '/'
+        );
+      }
+      // 検索画面のパンくず設定
+      if($this->template == 'search') {
+        $this->Breadcrumbs->add([
+          ['title' => '<i class="material-icons">home</i>', 'url' => '/'],
+          ['title' => '検索', 'url' => ['controller' => 'users', 'action' => 'search']]
+        ]);
+      }
+
     }
   }

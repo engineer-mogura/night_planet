@@ -40,7 +40,7 @@ class UsersController extends AppController
         $shops = array(); // 店舗情報格納用
         // トップページからの遷移の場合
         if ($referer = (($this->referer()) == "http://okiyoru.local/") ||
-            /** スマホデバグ用 */(($this->referer()) == "http://192.168.33.10/")) {
+            /** ローカル環境スマホ用 */(($this->referer()) == "http://192.168.33.10/")) {
             $columns = array('Shops.name', 'Shops.catch'); // like条件用
             $shops = $this->getShopList($this->request->getQuery(), $columns);
             // 検索条件を取得し、画面側でselectedする

@@ -1181,7 +1181,7 @@ function fileload(file, obj, imgCount, path) {
  * @param  {} obj
  * @param  {} imgCount
  */
-function createShopCard(response, path) {
+function createShopCard(form, response, path) {
 
     var $html;
 
@@ -1193,6 +1193,17 @@ function createShopCard(response, path) {
         var genre = JSON.parse($(document).find("input[name='genre_define']").val());
         $(resultDom).find(".card").remove(); // ショップカードの部品を削除しておく ※複製した部品を都度生成して使う
         $(resultDom).find(".message").addClass('hide'); // メッセージ非表示
+        $title = '';
+        if (($(form).find("[name='area']").val()) !== '' && ($(form).find("[name='genre']").val()) !== '') {
+            // コントローラでセットされたtitleを代入してセパレータを追加
+            $title +=  area[$(form).find("[name='area']").val()]['label'] + 'のおすすめ' +
+                        genre[$(form).find("[name='genre']").val()]['label'] + '一覧';
+        } else if($(form).find("[name='area']").val() !== '') {
+            $title +=  area[$(form).find("[name='area']").val()]['label'] + 'のおすすめ一覧';
+        } else if($(form).find("[name='genre']").val() !== '') {
+            $title +=  genre[$(form).find("[name='genre']").val()]['label'] + 'のおすすめ一覧';
+        }
+        $(resultDom).find(".title").text($title);
         $(resultDom).find(".header").text('検索結果 ' + response.length + '件');
         $.each(response, function(index, row) {
             var shopCard = $(cardTmp).clone();
@@ -1205,6 +1216,7 @@ function createShopCard(response, path) {
         // メッセージ表示
         if(!response.length > 0) {
             $(resultDom).find(".message").removeClass('hide');
+            $(resultDom).find(".message").text("検索結果が０件でした。条件を変更し、もう一度検索してみてください。");
         }
 
     });
@@ -1576,6 +1588,24 @@ function castImageDeleteBtn(form, obj){
 function userInitialize() {
 
     // ユーザーの初期化処理
+    var x = $(window).width();
+    var y = 600;
+    if (x <= y) {
+        $('.search-result-card').removeClass('horizontal');
+    }else{
+        $('.search-result-card').addClass('horizontal');
+    }
+    $(window).resize(function(){
+        //windowの幅をxに代入
+        var x = $(window).width();
+        //windowの分岐幅をyに代入
+        var y = 600;
+        if (x <= y) {
+            $('.search-result-card').removeClass('horizontal');
+        }else{
+            $('.search-result-card').addClass('horizontal');
+        }
+    });
     /* トップ画面 START */
     if($("#top").length) {
         // 検索ボタン押した時

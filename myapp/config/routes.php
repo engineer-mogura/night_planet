@@ -60,14 +60,13 @@ Router::scope(
 Router::scope('/', function ($routes) {
     // デフォルトの home と /users/* ルートを接続。
     $routes->connect('/', [
-        'controller' => 'Users',
-        'action' => 'top', 'index',
-        'prefix' => 'user'
+        'controller' => 'Main',
+        'action' => 'top', 'index'
     ]);
-    $routes->connect('/users/*', [
-        'controller' => 'Users',
-        'action' => 'top'
-    ]);
+    // $routes->connect('/users/*', [
+    //     'controller' => 'Users',
+    //     'action' => 'top'
+    // ]);
 
     // 規約に基づいたデフォルトルートを接続。
     $routes->fallbacks();

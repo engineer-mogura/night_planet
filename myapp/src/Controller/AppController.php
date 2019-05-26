@@ -41,12 +41,24 @@ class AppController extends Controller{
    */
   public function initialize(){
     parent::initialize();
-    $this->Users = TableRegistry::get('Users');
-    $this->MasterCodes = TableRegistry::get("master_codes");
     $this->loadComponent('RequestHandler', [
       'enableBeforeRedirect' => false,
     ]);
     $this->loadComponent('Flash');
+
+    $query = $this->request->getQuery();
+    // 検索結果でタイトルで決める
+    $title = '';
+    if (!empty($query['area']) && !empty($query['genre'])) {
+        // コントローラでセットされたtitleを代入してセパレータを追加
+        $title .=  AREA[$query['area']]['label'] . 'のおすすめ'.
+                    GENRE[$query['genre']]['label'].'一覧';
+    } else if(!empty($query['area'])) {
+        $title .=  AREA[$query['area']]['label'] . 'のおすすめ一覧';
+    } else if(!empty($query['genre'])) {
+        $title .=  GENRE[$query['genre']]['label'] . 'のおすすめ一覧';
+    }
+    $this->set('title', $title);
   }
 
 /*    public function isAuthorized($user){

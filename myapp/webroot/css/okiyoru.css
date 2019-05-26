@@ -17,26 +17,37 @@ li{
 a.button-collapse.oki-button-collapse{
   /*display: block;*/
 }
-  .nav-wrapper,.container,footer{
-    padding-left: 300px;
-  }
-  nav.nav-breadcrumb {
-    margin: 10px 0;
-  }
-  .nav-wrapper.nav-wrapper-oki {
-    padding-left: initial;
-  }
-  li > a.sideNav-active {
-    color: initial;
-    color: #fff;
-    background-color: #26a69a;
-  }
-  .side-nav > li > a:hover {
-    color: #fff;
-    background-color: #26a69a;
-  }
+.nav-wrapper,.container,footer{
+  padding-left: 300px;
+}
+nav.nav-breadcrumb {
+  margin: 10px 0;
+}
+.nav-wrapper.nav-wrapper-oki {
+  padding-left: initial;
+}
+li > a.sideNav-active {
+  color: initial;
+  color: #fff;
+  background-color: #26a69a;
+}
+.side-nav > li > a:hover {
+  color: #fff;
+  background-color: #26a69a;
+}
 .brand-logo.oki-brand-logo{
   margin-left: 50px;
+}
+span.area-logo {
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+span.area-logo-tail {
+  font-size: 1.4rem;
+  font-weight: initial;
+}
+.breadcrumbs-tail {
+  pointer-events: none;
 }
 footer ul.collection li{
   border-style: solid;
@@ -482,6 +493,25 @@ ul.collection.archive-panel > li > span > i.material-icons {
 
   .slider {
     margin-left: initial;
+  }
+
+}
+
+@media only screen and (max-width: 450px) {
+
+  .brand-logo.oki-brand-logo {
+    margin-left: -25px;
+  }
+  .brand-logo.oki-brand-logo {
+    font-size:  1.2rem;
+  }
+  span.area-logo {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+  span.area-logo-tail {
+    font-size: 1.1rem;
+    font-weight: initial;
   }
 
 }

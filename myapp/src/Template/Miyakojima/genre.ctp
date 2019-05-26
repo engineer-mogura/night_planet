@@ -1,41 +1,14 @@
 <?= $this->fetch('sidebar') ?>
-<div class="nav-wrapper">
-<div class="slider">
-  <ul class="slides">
-    <li>
-      <img src="/img/common/top/top1.jpg"> <!-- random image -->
-      <div class="caption center-align">
-        <h3>沖縄の夜遊び探しは【おきよる】!</h3>
-        <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
-      </div>
-    </li>
-    <li>
-      <img src="/img/common/top/top2.jpg"> <!-- random image -->
-      <div class="caption left-align">
-        <h3>沖縄の夜遊び探しは【おきよる】!</h3>
-        <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
-      </div>
-    </li>
-    <li>
-      <img src="/img/common/top/top3.jpg"> <!-- random image -->
-      <div class="caption right-align">
-        <h3>沖縄の夜遊び探しは【おきよる】!</h3>
-        <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
-      </div>
-    </li>
-  </ul>
-  </div>
-  </div>
 <div id="top" class="container">
   <ul class="collection">
     <li class="collection-item dismissable">
-      <div>2018.08.25ポータルサイト【おきよる】の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
+      <div>【おきよる】宮古島の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
       </div>
     </li>
   </ul>
     <?= $this->element('elmSearch'); ?>
   <div class="row">
-    <?php foreach ($selectList['area'] as $key => $value): ?>
+    <?php foreach ($selectList['genre'] as $key => $value): ?>
       <div class="col s12 m4 l3">
         <div class="card small">
           <div class="card-image">
@@ -45,7 +18,7 @@
             <p><?=$value?></p>
           </div>
           <div class="card-action">
-            <a href="miyakojima"><?=$value?>エリア</a>
+            <a href="miyakojima/genre/<?=$key?>"><?=$value?>一覧へ</a>
           </div>
         </div>
       </div>

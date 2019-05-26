@@ -1,5 +1,5 @@
 <div class="row">
-  <form method="GET" class="search-form" name="search_form" action="/user/users/search/">
+  <form method="GET" class="search-form" name="search_form" action="/search/">
     <!-- <input type="hidden" name="_method" value="GET"> -->
     <li class="search col s12 l3">
       <div class="input-field oki-input-field">

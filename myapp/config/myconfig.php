@@ -43,6 +43,7 @@ return [
 		'002'=>'Copyright 2018',
 		'003'=>'OKIYORU Go All Rights Reserved.',
 		'004'=>'管理画面',
+		'005'=>'<span class="area-logo-tail">☽ナイト検索☽</span>',
 	)),
 
 	// ラベル定数 owner.label menu

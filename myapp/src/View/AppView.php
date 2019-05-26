@@ -54,11 +54,17 @@ class AppView extends View{
         );
       }
       // 検索画面のパンくず設定
-      if($this->template == 'search') {
+      if($this->request->url == 'search/') {
         $this->Breadcrumbs->add([
           ['title' => '<i class="material-icons">home</i>', 'url' => '/'],
-          ['title' => '検索', 'url' => ['controller' => 'users', 'action' => 'search']]
+          // ['title' => '検索', 'url' => ['controller' => 'search', 'action' => 'index']]
         ]);
+        // リストの最後に追加
+        $this->Breadcrumbs->add(
+          '検索',
+          ['controller' => 'search', 'action' => 'index'],
+          ['class' => 'breadcrumbs-tail']
+        );
       }
 
     }

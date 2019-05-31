@@ -18,6 +18,10 @@ class AreaController extends AppController
         $this->Jobs = TableRegistry::get('Jobs');
         $this->MasterCodes = TableRegistry::get("master_codes");
 
+        // コントローラ名からエリアタイトルをセット
+        $areaTitle = AREA[mb_strtolower($this->request->getparam("controller"))]['label'];
+        $this->set(compact('areaTitle'));
+
     }
 
     public function beforeFilter(Event $event)

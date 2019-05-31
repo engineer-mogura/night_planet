@@ -1,143 +1,50 @@
-<?= $this->fetch('sidebar') ?>
-<div id="top" class="container">
-  <ul class="collection">
-    <li class="collection-item dismissable">
-      <div>【おきよる】宮古島の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
-      </div>
-    </li>
-  </ul>
-    <?= $this->element('elmSearch'); ?>
-  <div class="row">
-    <?php foreach ($selectList['genre'] as $key => $value): ?>
-      <div class="col s12 m4 l3">
-        <div class="card small">
-          <div class="card-image">
-            <img src="/img/common/top/top1.jpg">
-          </div>
-          <div class="card-content">
-            <p><?=$value?></p>
-          </div>
-          <div class="card-action">
-            <a href="miyakojima/genre/<?=$key?>"><?=$value?>一覧へ</a>
-          </div>
+<div id="wrapper">
+  <div id="search" class="container">
+    <span id="dummy" style="display: hidden;"></span>
+    <?= $this->Flash->render() ?>
+    <nav class="nav-breadcrumb">
+      <div class="nav-wrapper nav-wrapper-oki">
+        <div class="col s12">
+          <?=
+            $this->Breadcrumbs->render(
+              ['class' => 'breadcrumb'],
+              ['separator' => '<i class="material-icons">chevron_right</i>']
+            );
+          ?>
         </div>
       </div>
-    <?php endforeach; ?>
-  </div>
-  <div class="row">
-    <div class="col s12 m6 l6">
-      <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">新着情報</h6></div>
-      <ul class="collection">
-        <li class="collection-item avatar">
-          <img src="/img/common/top/top1.jpg" alt="" class="circle">
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle">folder</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle green">insert_chart</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle red">play_arrow</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-      </ul>
-    </div>
-    <div class="col s12 m6 l6">
-      <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">店舗からのお知らせ</h6></div>
-      <ul class="collection">
-        <li class="collection-item avatar">
-          <img src="/img/common/top/top1.jpg" alt="" class="circle">
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle">folder</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle green">insert_chart</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle red">play_arrow</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-      </ul>
-    </div>
-    <div class="col s12 m6 l6">
-      <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">キャスト日記</h6></div>
-      <ul class="collection">
-        <li class="collection-item avatar">
-          <img src="/img/common/top/top1.jpg" alt="" class="circle">
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle">folder</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle green">insert_chart</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-        <li class="collection-item avatar">
-          <i class="material-icons circle red">play_arrow</i>
-          <span class="title">Title</span>
-          <p>First Line <br>
-            Second Line
-          </p>
-          <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
-        </li>
-      </ul>
+    </nav>
+    <?= $this->element('elmSearch'); ?>
+    <input type="hidden" name="area_define" value=<?=json_encode(AREA)?>>
+    <input type="hidden" name="genre_define" value=<?=json_encode(GENRE)?>>
+    <div class="resultSearch">
+      <div class="col s12">
+        <h5 class="title"><?=h($title)?></h5>
+        <h6 class="header"><?=h(count($shops)."件")?></h6>
+        <p class="message"><?= count($shops) == 0 ? h("検索結果が０件でした。条件を変更し、もう一度検索してみてください。"):""?></p>
+      </div>
+      <?php if(count($shops) > 0) { ?>
+        <?php foreach ($shops as $key => $rows): ?>
+          <div class="col card horizontal waves-effect hoverable search-result-card">
+            <div class="card-image">
+              <img src="/img/common/top/top1.jpg" height="200">
+            </div>
+            <div class="card-stacked">
+              <div class="card-content">
+                <h5 class="blue-text text-darken-2"><?= $rows['name'] .'/'.AREA[$rows['area']]['label'] .'/'. GENRE[$rows['genre']]['label']?></h5>
+                <p class="blue-text text-darken-2"><?= $rows['catch'] ?></p>
+              </div>
+              <div class="card-action">
+                <a href="#">店舗詳細</a>
+              </div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      <?php }  ?>
     </div>
   </div>
 </div>
+
 <?= $this->Html->scriptstart() ?>
 $(document).ready(function(){
 $('.slider').slider();

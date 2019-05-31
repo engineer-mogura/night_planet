@@ -109,7 +109,7 @@ class ShopsTable extends Table
         $validator
             ->time('bus_from_time')
             ->allowEmptyDateTime('bus_from_time');
-
+        // TODO: bus_to_time => 営業時間の終了は「LAST」も含めた方がよいのでは？
         $validator
             ->time('bus_to_time')
             ->allowEmptyDateTime('bus_to_time');

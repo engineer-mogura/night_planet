@@ -237,7 +237,7 @@
                           <table class="highlight">
                             <thead>
                               <td colspan="2">
-                                <img src="/img/common/noimage.jpg" alt="" class="circle left" width="80" height="80">
+                                <img src="<?=isset($cast->image1) ? "/".$infoArray['dir_path']."cast/".$cast->dir."/image/".$cast->image1:"/img/common/noimage.jpg" ?>" alt="" class="circle left" width="80" height="80">
                                 <input type="checkbox" class="check-cast-group" name="check_cast" id="check-cast<?=$i?>" />
                                 <label for="check-cast<?=$i?>">編集する</label>
                                 <div style="display:none;">

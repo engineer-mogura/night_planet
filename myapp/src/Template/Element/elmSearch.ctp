@@ -8,8 +8,13 @@
     </li>
     <li class="search col s12 m6 l3">
       <div class="input-field oki-input-field">
-        <select name="area">
-          <option value="" selected>エリアを選択してください。</option>
+        <select <?=isset($isAreaScreen) ? "disabled":"" ?> name="area">
+          <?php 
+            if(!isset($isAreaScreen)) { ?>
+              <option value="" selected>エリアを選択してください。</option>
+          <?php } else { ?>
+              <option value="<?=$isAreaScreen?>" disabled selected><?=AREA[$isAreaScreen]['label']?></option>
+          <?php } ?>
           <?php foreach ($selectList['area'] as $key => $value) {?>
             <option value="<?=$key?>" <?= $conditionSelected['area'] == $key? "selected":"" ?>><?=$value?></option>
           <?php } ?>

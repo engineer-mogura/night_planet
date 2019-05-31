@@ -83,25 +83,26 @@ class UtilComponent extends Component
         $shopArea = $shop['area'];
         $shopGenre = $shop['genre'];
         $shopDir = $shop['dir'];
-        $areas = array('miyako','ishigakijima','naha','nanjo','tomigusuku',
-                        'urasoe','ginowan','okinawashi','uruma','nago');
-        $genres = array('cabacula','snack','girlsbar','bar');
-
+        // $areas = array('miyako','ishigakijima','naha','nanjo','tomigusuku',
+        //                 'urasoe','ginowan','okinawashi','uruma','nago');
+        // $genres = array('cabacula','snack','girlsbar','bar');
+        $areas = AREA;
+        $genres = GENRE;
         $infoArray = array();
         foreach ($areas as $area) {
-            if ($area == $shopArea) {
-                $infoArray = $infoArray + Configure::read('area.'.$area);
+            if ($area['path'] == $shopArea) {
+                $infoArray = $infoArray + array('area' => $area);
                 break;
             }
         }
         foreach ($genres as $genre) {
-            if ($genre == $shopGenre) {
-                $infoArray = $infoArray + Configure::read('genre.'.$genre);
+            if ($genre['path'] == $shopGenre) {
+                $infoArray = $infoArray + array('genre' => $genre);
                 break;
             }
         }
         $infoArray = $infoArray + array('dir'=> $shopDir);
-        $path = "img/".$infoArray['area_path']."/".$infoArray['genre_path']."/".$infoArray['dir']."/";
+        $path = "img".DS.$infoArray['area']['path'].DS.$infoArray['genre']['path'].DS.$infoArray['dir'].DS;
         $infoArray = $infoArray + array("dir_path"=> $path);
         return  $infoArray;
     }
@@ -118,7 +119,7 @@ class UtilComponent extends Component
         $array = array();
         $creditsHidden = array();
         foreach ($shop as $key => $value) {
-            $array = expollode(',', $value->credit);
+            $array = explode(',', $value->shop->credit);
         }
 
         for ($i = 0; $i < count($array); $i++) {

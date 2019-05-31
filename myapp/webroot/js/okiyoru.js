@@ -1442,8 +1442,7 @@ function castImageDeleteBtn(form, obj){
 
         /* 共通初期化処理 start */
         // materializecss sideNav サイドバーの初期化
-        //$(".button-collapse").sideNav();
-        $('.button-collapse').sideNav({
+        $('nav.nav-header-menu .button-collapse').sideNav({
             menuWidth: 300,
             edge: 'left',
             closeOnClick: false,
@@ -1515,22 +1514,40 @@ function castImageDeleteBtn(form, obj){
             //alert("chip.select");
         });
 
+        /** 下にスクロールでヘッダー非表示・上にスクロールでヘッダー表示 */
+        $(function() {
+            var $win = $(window),
+                $header = $('#nav-header-menu'),
+                headerHeight = $header.outerHeight(),
+                startPos = 0;
 
-        // show return top button
-        var topBtn = $('#return_top');
-        $(window).scroll(function () {
-            var scrTop = $(this).scrollTop();
-            if (scrTop > 100) {
-                topBtn.stop().fadeIn('slow');
-            } else {
-                topBtn.stop().fadeOut();
-            }
+            $win.on('load scroll', function() {
+                var value = $(this).scrollTop();
+                if ( value > startPos && value > headerHeight ) {
+                $header.css('top', '-' + headerHeight + 'px');
+                } else {
+                $header.css('top', '0');
+                }
+                startPos = value;
+            });
         });
 
-        // click return top
-        $('#return_top a').click(function() {
-            $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
-            return false;
+        // show return top button
+        $(function() {
+            var topBtn = $('#return_top');
+            $(window).scroll(function () {
+                var scrTop = $(this).scrollTop();
+                if (scrTop > 100) {
+                    topBtn.stop().fadeIn('slow');
+                } else {
+                    topBtn.stop().fadeOut();
+                }
+            });
+            // click return top
+            $('#return_top a').click(function() {
+                $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
+                return false;
+            });
         });
 
         /* ショップページプレビュ クーポン クリックイベント */

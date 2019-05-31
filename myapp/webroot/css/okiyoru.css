@@ -82,6 +82,23 @@ button.modal-login{
 span.notice {
     vertical-align: super;
 }
+
+/* ヘッダー固定 START */
+nav#nav-header-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  transition: .3s;
+}
+div.nav-header-cron-dummy {
+  height: 64px;
+  width: 100%;
+}
+/* ヘッダー固定 END */
+
+/* トップへスクロールボタン START */
 #return_top {
     display: none;
     position: fixed;
@@ -98,6 +115,9 @@ span.notice {
     border-radius: 50%;
     opacity: 0.6;
 }
+/* トップへスクロールボタン END */
+
+/* ローディング START */
 .preloader-wrapper {
     top: 0;
     bottom: 0;
@@ -107,7 +127,7 @@ span.notice {
     margin: auto;
     z-index: 999;
 }
-
+/* ローディング END */
 
 /* フラッシュメッセージ系 START */
 
@@ -512,6 +532,9 @@ ul.collection.archive-panel > li > span > i.material-icons {
   span.area-logo-tail {
     font-size: 1.1rem;
     font-weight: initial;
+  }
+  div.nav-header-cron-dummy {
+    height: 56px;
   }
 
 }

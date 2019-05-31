@@ -35,17 +35,19 @@
   </ul>
     <?= $this->element('elmSearch'); ?>
   <div class="row">
-    <?php foreach ($selectList['genre'] as $key => $value): ?>
+    <?php foreach ($genreCounts as $key => $row): ?>
       <div class="col s12 m4 l3">
-        <div class="card small">
+        <div class="card small hoverable">
           <div class="card-image">
             <img src="/img/common/top/top1.jpg">
           </div>
           <div class="card-content">
-            <p><?=$value?></p>
+            <p><?=$row['label'].'（'.$row['count'].'）'?></p>
           </div>
           <div class="card-action">
-            <a href="miyakojima/genre/<?=$key?>"><?=$value?>一覧へ</a>
+          <!-- <a href="genre/?genre=<?=$row['path']?>"><?=$row['label']?>一覧へ</a> -->
+          <?php $link = $row['area']."/genre/?genre=".$row['path'].""?>
+          <a href=<?=$link?>><?=$row['label']."一覧へ"?></a>
           </div>
         </div>
       </div>

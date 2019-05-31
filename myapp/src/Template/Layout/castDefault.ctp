@@ -60,9 +60,10 @@
     <li><a href="/owner/casts/logout" class="waves-effect"><i class="material-icons" href="">info_outline</i><?= COMMON_LM['007'] ?></a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
-  <nav>
+  <div class="nav-header-cron-dummy"></div>
+  <nav id="nav-header-menu" class="nav-header-menu">
     <div class="nav-wrapper">
-      <a href="#" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
+      <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
       <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'] ?></a>
       <ul class="right">
         <li><a data-target="modal-help" class="modal-trigger"><i class="material-icons">help</i></a></li>

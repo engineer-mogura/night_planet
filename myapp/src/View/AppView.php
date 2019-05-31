@@ -46,6 +46,19 @@ class AppView extends View{
       $title .= LT['001'];
       $this->assign('title', $title);
 
+      $breadcrumbList = explode('/', rtrim($this->request->url, "/"));
+      if(array_key_exists($breadcrumbList[0], AREA)) {
+        $this->Breadcrumbs->add([
+          ['title' => '<i class="material-icons">home</i>', 'url' => '/'],
+          ['title' => AREA[$breadcrumbList[0]]['label'], 'url' => ['controller' => $breadcrumbList[0], 'action' => 'index']]
+        ]);
+        // リストの最後に追加
+        $this->Breadcrumbs->add(
+          GENRE[$this->request->query('genre')]['label'],
+          ['controller' => 'search', 'action' => 'index'],
+          ['class' => 'breadcrumbs-tail']
+        );
+      }
       // パンくず設定
       if($this->template == 'top') {
         $this->Breadcrumbs->add(
@@ -54,7 +67,7 @@ class AppView extends View{
         );
       }
       // 検索画面のパンくず設定
-      if($this->request->url == 'search/') {
+      if($breadcrumbList[0] == 'search') {
         $this->Breadcrumbs->add([
           ['title' => '<i class="material-icons">home</i>', 'url' => '/'],
           // ['title' => '検索', 'url' => ['controller' => 'search', 'action' => 'index']]

@@ -22,6 +22,7 @@ a.button-collapse.oki-button-collapse{
 }
 nav.nav-breadcrumb {
   margin: 10px 0;
+  display: table;
 }
 .nav-wrapper.nav-wrapper-oki {
   padding-left: initial;
@@ -268,6 +269,12 @@ div.message.hidden {
 
 
 /* 店舗ページ START */
+  #shop-page {
+
+  }
+  #shop-main {
+    margin-top: 0.5rem;
+  }
   div.description {
     display: -webkit-box;
     margin: 2em 0 2.5em;
@@ -276,7 +283,7 @@ div.message.hidden {
     border: 1px dashed #cdcdcd;
     background: #fcfcfc;
     box-shadow: 0 1px 3px 0 rgba(195,195,195,0.3);
-}
+  }
   span.or-header {
     color: aliceblue;
   }
@@ -294,6 +301,25 @@ div.message.hidden {
   .shop-image {
     margin-top:5px;
   }
+  .cast-list.row img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+  .cast-list.row h6 {
+    text-align: center;
+  }
+  .card.diary-card {
+    margin: 0 10px;
+  }
+  div.card.diary-card .col{
+    padding: initial;
+  }
+  .diary-list .title {
+    border-bottom-style: groove;
+    padding-bottom: 5px;
+  }
+
 /* 店舗ページ END */
 
 /* 更新ぐるぐる START */

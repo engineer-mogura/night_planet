@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"php.validate.executablePath": "C:\\xampp\\php\\php.exe",
+		"php.suggest.basic": false,
+		"files.exclude": {
+			"myapp/webroot/img": true,
+			"phpmyadmin": true
+		}
+	}
+}

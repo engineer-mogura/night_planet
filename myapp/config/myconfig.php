@@ -27,6 +27,8 @@ return [
 		'TMP'=> 'tmp',
 		'IMAGE'=> 'image',
 		'IMG'=> 'img', // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える
+		'CREDIT'=> 'credit',
+		'COMMON'=> 'common',
 
 	)),
 
@@ -89,7 +91,8 @@ return [
 		'006'=>'登録',
 		'050'=>'でログイン中',
 		'051'=>'ログイン',
-		'008'=>'',
+		'052'=>'もっと見る',
+		'053'=>'店舗詳細',
 	)),
 
 	// ラベル定数 common.label menu
@@ -174,6 +177,78 @@ return [
 			'label' => "パブ",
 			'path' => "pub"
 		],
+	)),
+	// 星座リスト
+	define('CONSTELLATION', array(
+		'constellation1'=> [
+			'label' => "おひつじ座",
+			'path' => "constellation1"
+		],
+		'constellation2'=> [
+			'label' => "おうし座",
+			'path' => "constellation2"
+		],
+		'constellation3'=> [
+			'label' => "ふたご座",
+			'path' => "constellation3"
+		],
+		'constellation4'=> [
+			'label' => "かに座",
+			'path' => "constellation4"
+		],
+		'constellation5'=> [
+			'label' => "しし座",
+			'path' => "constellation5"
+		],
+		'constellation6'=> [
+			'label' => "おとめ座",
+			'path' => "constellation6"
+		],
+		'constellation7'=> [
+			'label' => "てんびん座",
+			'path' => "constellation7"
+		],
+		'constellation8'=> [
+			'label' => "さそり座",
+			'path' => "constellation8"
+		],
+		'constellation9'=> [
+			'label' => "いて座",
+			'path' => "constellation9"
+		],
+		'constellation10'=> [
+			'label' => "やぎ座",
+			'path' => "constellation10"
+		],
+		'constellation11'=> [
+			'label' => "みずがめ座",
+			'path' => "constellation11"
+		],
+		'constellation12'=> [
+			'label' => "うお座",
+			'path' => "constellation12"
+		],
+
+	)),
+	// 血液型リスト
+	define('BLOOD_TYPE', array(
+		'blood_type1'=> [
+			'label' => "A型",
+			'path' => "blood_type1"
+		],
+		'blood_type2'=> [
+			'label' => "B型",
+			'path' => "blood_type2"
+		],
+		'blood_type3'=> [
+			'label' => "O型",
+			'path' => "blood_type3"
+		],
+		'blood_type4'=> [
+			'label' => "AB型",
+			'path' => "blood_type4"
+		],
+
 	)),
 	// 共通メッセージ common.message
 	define('COMMON_M', array(

@@ -652,7 +652,7 @@ class CastsController extends CastsAppController
                 }
                 $this->viewBuilder()->autoLayout(false);
                 $this->autoRender = false;
-                $array = $this->getDiary($id);
+                $array = $this->Util->getDiary($id);
                 $cast = $array['cast'];
                 $dir = $array['dir'];
                 $archive = $array['archive'];
@@ -661,7 +661,7 @@ class CastsController extends CastsAppController
                 $this->response->body();
                 return;
             }
-            $array = $this->getDiary($id);
+            $array = $this->Util->getDiary($id);
             $cast = $array['cast'];
             $dir = $array['dir'];
             $archive = $array['archive'];
@@ -884,7 +884,7 @@ class CastsController extends CastsAppController
                 }
                 $this->viewBuilder()->autoLayout(false);
                 $this->autoRender = false;
-                $array = $this->getDiary($id);
+                $array = $this->Util->getDiary($id);
                 $cast = $array['cast'];
                 $dir = $array['dir'];
                 $archive = $array['archive'];
@@ -955,7 +955,7 @@ class CastsController extends CastsAppController
 
             $this->viewBuilder()->enableAutoLayout(false);
             $this->autoRender = false;
-            $array = $this->getDiary($id);
+            $array = $this->Util->getDiary($id);
             $cast = $array['cast'];
             $dir = $array['dir'];
             $archive = $array['archive'];
@@ -964,38 +964,6 @@ class CastsController extends CastsAppController
             $this->response->getBody();
             return;
         }
-    }
-
-    /**
-     * 日記画面情報取得処理
-     *
-     * @param [type] $id
-     * @return array
-     */
-    public function getDiary($id = null)
-    {
-        $array = array('id','cast_id','title','content','image1','dir');
-        $cast = $this->Casts->find('all')->where(['id' => $id])->first();
-        $diarys = $this->Diarys->find('all')->select($array)
-            ->where(['cast_id' => $id])->order(['created'=>'DESC'])->limit(5);
-        // 過去の日記をアーカイブ形式で取得する
-        // TODO: 年月毎に取得する。月毎の投稿は、アコーディオンを開いたときに年月を条件にsql取得？
-        $query = $this->Diarys->find('all')->select($array);
-        $ym = $query->func()->date_format([
-            'created' => 'identifier',
-            "'%Y年%c月'" => 'literal']);
-        $md = $query->func()->date_format([
-            'created' => 'identifier',
-            "'%c月%e日'" => 'literal']);
-        $count = $query->func()->count('*');
-        $archive = $query->select([
-            'ymCreated' => $ym,
-            'mdCreated' => $md])
-            ->where(['cast_id' => $id])->order(['created' => 'DESC'])->all();
-        $archive = $this->Util->groupArray($archive, 'ymCreated');
-        $archive = array_values($archive);
-        $dir = DS.$this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
-        return array('cast'=>$cast, 'dir'=>$dir, 'archive'=>$archive);
     }
 
     public function login()

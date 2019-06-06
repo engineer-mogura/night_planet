@@ -2,10 +2,11 @@
 
 namespace App\Controller\Component;
 
-use Cake\Controller\Component;
 use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
+use Cake\ORM\TableRegistry;
+use Cake\Controller\Component;
 
 class UtilComponent extends Component
 {
@@ -83,9 +84,6 @@ class UtilComponent extends Component
         $shopArea = $shop['area'];
         $shopGenre = $shop['genre'];
         $shopDir = $shop['dir'];
-        // $areas = array('miyako','ishigakijima','naha','nanjo','tomigusuku',
-        //                 'urasoe','ginowan','okinawashi','uruma','nago');
-        // $genres = array('cabacula','snack','girlsbar','bar');
         $areas = AREA;
         $genres = GENRE;
         $infoArray = array();
@@ -125,7 +123,8 @@ class UtilComponent extends Component
         for ($i = 0; $i < count($array); $i++) {
             foreach ($masterCodeResult as $key => $value) {
                 if ($array[$i] == $value->code) {
-                    $creditsHidden[] = array('tag'=>$value->code,'image'=>"/img/common/credit/".$value->code.".png",'id'=>$value->id);
+                    $creditsHidden[] = array('tag'=>$value->code,'image'=>DS.PATH_ROOT['IMG']
+                        .DS.PATH_ROOT['COMMON'].DS.PATH_ROOT['CREDIT'].DS.$value->code.".png",'id'=>$value->id);
                     continue;
                 }
             }
@@ -187,6 +186,41 @@ class UtilComponent extends Component
         }
 
         return $result;
+    }
+
+        /**
+     * 日記画面情報取得処理
+     *
+     * @param [type] $id
+     * @return array
+     */
+    public function getDiary($id = null)
+    {
+        $Casts = TableRegistry::get('Casts');
+        $Diarys = TableRegistry::get('Diarys');
+
+        $array = array('id','cast_id','title','content','image1','dir');
+        $cast = $Casts->find('all')->where(['id' => $id])->first();
+        $diarys = $Diarys->find('all')->select($array)
+            ->where(['cast_id' => $id])->order(['created'=>'DESC'])->limit(5);
+        // 過去の日記をアーカイブ形式で取得する
+        // TODO: 年月毎に取得する。月毎の投稿は、アコーディオンを開いたときに年月を条件にsql取得？
+        $query = $Diarys->find('all')->select($array);
+        $ym = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%Y年%c月'" => 'literal']);
+        $md = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%c月%e日'" => 'literal']);
+        $count = $query->func()->count('*');
+        $archive = $query->select([
+            'ymCreated' => $ym,
+            'mdCreated' => $md])
+            ->where(['cast_id' => $id])->order(['created' => 'DESC'])->all();
+        $archive = $this->groupArray($archive, 'ymCreated');
+        $archive = array_values($archive);
+        $dir = DS.$this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
+        return array('cast'=>$cast, 'dir'=>$dir, 'archive'=>$archive);
     }
 
     /**

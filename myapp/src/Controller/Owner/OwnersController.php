@@ -161,7 +161,7 @@ class OwnersController extends AppController
         }
         if ($owner->status == 0 ) {
             // 本登録をもってオーナー用のディレクトリを掘る
-            $dir = WWW_ROOT.'img/'.$owner->area.'/'.$owner->genre.'/';
+            $dir = WWW_ROOT.'img/'.$owner->area.DS.$owner->genre.DS;
             // TODO scandirは、リストがないと、falseだけじゃなく
             // warningも吐く。後で対応を考える。
             // 指定フォルダ配下にあればラストの連番に+1していく

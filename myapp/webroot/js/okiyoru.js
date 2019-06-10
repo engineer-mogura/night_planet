@@ -1648,6 +1648,133 @@ function userInitialize() {
     }
     /* トップ画面 END */
 
+    /* エリア画面 START */
+    if($("#area").length) {
+
+    }
+    /* エリア画面 END */
+
+    /* ジャンル画面 START */
+    if($("#genre").length) {
+
+    }
+    /* ジャンル画面 END */
+
+    /* 店舗画面 START */
+    if($("#shop").length) {
+
+    }
+    /* 店舗画面 END */
+
+    /* キャスト画面 START */
+    if($("#cast").length) {
+
+    }
+    /* キャスト画面 END */
+
+    /* 日記画面 START */
+    if($("#diary").length) {
+        // 検索ボタン押した時
+        $(document).on('click', '.archiveLink', function() {
+            $(this).find("input[name='id']").val();
+            $.ajax({
+                type: 'GET',
+                //dataType:'application/json',
+                url: "/naha/diary/",
+                data: { id: $(this).find("input[name='id']").val()},
+                contentType: 'application/json',
+                timeout: 10000,
+                beforeSend : function(xhr, settings){
+                    // 他のアーカイブリンクを無効化する
+                    $(".archiveLink").each(function(i, elem) {
+                        $(elem).css('pointer-events', 'none');
+                    });
+                    //処理中のを通知するアイコンを表示する
+                    $("#dummy").load("/module/Preloader.ctp");
+                },
+                complete: function(xhr, textStatus){
+                    // 他のアーカイブリンクを有効化する
+                    $(".archiveLink").each(function(i, elem) {
+                        $(elem).css('pointer-events', '');
+                    });
+                    //処理中アイコン削除
+                    $('.preloader-wrapper').remove();
+                },
+                success: function(response,dataType) {
+                    // キャストの日記ディレクトリを取得する
+                    var diaryDir = $("input[name='diary_dir']").val() + response['dir'];
+                    // 日記カードの要素を複製し、複製したやつを表示するようにする。
+                    var diaryCard = $(".diary-card").clone(true).insertAfter(".diary-card").addClass('clone').removeClass('hide');
+                    // 日記内容の設定
+                    $(diaryCard).find("p[name='created']").text(response['ymdCreated']);
+                    $(diaryCard).find("p[name='title']").text(response['title']);
+                    $(diaryCard).find("p[name='content']").textWithLF(response['content']);
+                    var images = [];
+                    $.each(response, function(key, value) {
+                        if(key.match(/image[0-9]*/) && value) {
+                            // 値が空じゃない、かつnullじゃない時プッシュする
+                            value !== '' && value !== null ?
+                            images.push(value) :'';
+                        }
+                    })
+                    // 画像表示するグリッドを決定する
+                    if(images.length > 0) {
+                        // 画像表示するグリッド,高さを決定する
+                        var colClass = "";
+                        images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
+                        colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
+                        var col = $(diaryCard).find('.col');
+                        var imgClass = "";
+                        images.length == 1 ? imgClass = 'imageOne materialboxed' : images.length == 2 ?
+                        imgClass = 'materialboxed' : imgClass = 'materialboxed';
+                        $.each(images, function(key, value) {
+                            var cloneCol = $(col).clone(true).removeClass().addClass(colClass).insertAfter(col);
+                            $(cloneCol).find('img').attr({'src': diaryDir + '/' + value,'class':imgClass});
+                        })
+                    }
+
+                    $('#modal-diary').modal({
+                        dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                        opacity: .2, // Opacity of modal background
+                        inDuration: 300, // Transition in duration
+                        outDuration: 200, // Transition out duration
+                        startingTop: '4%', // Starting top style attribute
+                        endingTop: '10%', // Ending top style attribute
+                        // モーダル表示完了コールバック
+                        ready: function() {
+                            scrollPosition = $(window).scrollTop();
+                            // モーダル表示してる時は、背景画面のスクロールを禁止する
+                            $('body').addClass('fixed').css({'top': -scrollPosition});
+                        },
+                        // モーダル非表示完了コールバック
+                        complete: function() {
+
+                            // モーダル非表示した時は、背景画面のスクロールを解除する
+                            $('body').removeClass('fixed').css({'top': 0});
+                            window.scrollTo( 0 , scrollPosition );
+                            $($(this)[0]["$el"]).find('.clone').remove();
+                        }
+                    });
+                    $("#modal-diary").modal('open');
+                    $(document).find('.materialboxed').materialbox();
+
+
+                },
+                error : function(response, textStatus, xhr){
+                    $.notifyBar({
+                        cssClass: 'error',
+                        html: "通信に失敗しました。ステータス：" + textStatus
+                    });
+                }
+            });
+        })
+        // いいねボタン押した時
+        $(document).on('click', '.likeBtn', function() {
+           //$(document).find('.materialboxed').materialbox();
+        });
+    }
+    /* 日記画面 END */
+
     /* 検索画面 START */
     if($("#search").length) {
 
@@ -2064,7 +2191,7 @@ function castInitialize() {
                             var keys = Object.keys(response);
                             var files = [];
                             var castDir = $("input[name='cast_dir']").val();
-                            var diaryDir = castDir+'/'+ response['dir'];
+                            var diaryDir = castDir + response['dir'];
                             $("#diary-delete").find("input[name='diary_id']").val(response['id']);
                             $("#diary-delete").find("input[name='del_path']").val(diaryDir);
                             // 日記レコードの画像ファイル名を取得する

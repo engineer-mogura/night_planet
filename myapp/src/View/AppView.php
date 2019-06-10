@@ -49,7 +49,7 @@ class AppView extends View
         $this->assign('title', $title);
 
         // パンくずを設定する
-        $this->setBreadcrumb(explode('/', rtrim($this->request->url, "/")));
+        $this->setBreadcrumb(explode(DS, rtrim($this->request->url, DS)));
     }
 
     /**
@@ -63,7 +63,7 @@ class AppView extends View
         // 遷移先がエリアのトップ画面の場合
         if (array_key_exists($breadcrumbList[0], AREA)) {
             $this->Breadcrumbs->add([
-          ['title' => '<i class="material-icons">home</i>', 'url' => '/'],
+          ['title' => '<i class="material-icons">home</i>', 'url' => DS],
           ['title' => AREA[$breadcrumbList[0]]['label'], 'url' => ['controller' => $breadcrumbList[0], 'action' => 'index']]
         ]);
         }
@@ -130,13 +130,13 @@ class AppView extends View
         if ($this->template == 'top') {
             $this->Breadcrumbs->add(
             '<i class="material-icons">home</i>',
-            '/'
+            DS
         );
         }
         // 検索画面のパンくず設定
         if ($breadcrumbList[0] == 'search') {
             $this->Breadcrumbs->add([
-          ['title' => '<i class="material-icons">home</i>', 'url' => '/'],
+          ['title' => '<i class="material-icons">home</i>', 'url' => DS],
           // ['title' => '検索', 'url' => ['controller' => 'search', 'action' => 'index']]
         ]);
             // リストの最後に追加

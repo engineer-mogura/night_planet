@@ -159,7 +159,7 @@ class ShopsController extends AppController
             if (isset($this->request->data["file_delete"])) {
                 try {
                     $this->log("file_delete", "debug");
-                    $del_file = new File($dir . "/" .$this->request->getData('file_before'));
+                    $del_file = new File($dir . DS .$this->request->getData('file_before'));
                     // ファイル削除処理実行
                     if ($del_file->delete()) {
                         $shop->top_image = "";
@@ -182,7 +182,7 @@ class ShopsController extends AppController
                         if (isset($this->request->data["file_before"])) {
                             // ファイル名が同じ場合は削除を実行しない
                             if ($this->request->getData('file_before') != $shop->top_image) {
-                                $del_file = new File($dir . "/" . $this->request->data["file_before"]);
+                                $del_file = new File($dir . DS . $this->request->data["file_before"]);
                                 if (!$del_file->delete()) {
                                     $this->log($this->request->getData('file_before'), LOG_DEBUG);
                                 }

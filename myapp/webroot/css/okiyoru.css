@@ -269,58 +269,67 @@ div.message.hidden {
 
 
 /* 店舗ページ START */
-  #shop-page {
+#shop {
 
-  }
-  #shop-main {
-    margin-top: 0.5rem;
-  }
-  div.description {
-    display: -webkit-box;
-    margin: 2em 0 2.5em;
-    padding: 1em 1.5em;
-    line-height: 2.0;
-    border: 1px dashed #cdcdcd;
-    background: #fcfcfc;
-    box-shadow: 0 1px 3px 0 rgba(195,195,195,0.3);
-  }
-  span.or-header {
-    color: aliceblue;
-  }
-  .or-header-wrap {
-    margin-left: 10px;
-    margin-right: 10px;
-  }
-  .coupon {
-    text-align: center;
-    width: 100%;
-  }
-  .material-icons.or-material-icons {
-    width: inherit;
-  }
-  .shop-image {
-    margin-top:5px;
-  }
-  .cast-list.row img {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-  }
-  .cast-list.row h6 {
-    text-align: center;
-  }
-  .card.diary-card {
-    margin: 0 10px;
-  }
-  div.card.diary-card .col{
-    padding: initial;
-  }
-  .diary-list .title {
-    border-bottom-style: groove;
-    padding-bottom: 5px;
-  }
+}
+#shop-main, #cast-main {
+  margin-top: 0.5rem;
+}
+div.description {
+  display: -webkit-box;
+  margin: 2em 0 2.5em;
+  padding: 1em 1.5em;
+  line-height: 2.0;
+  border: 1px dashed #cdcdcd;
+  background: #fcfcfc;
+  box-shadow: 0 1px 3px 0 rgba(195,195,195,0.3);
+}
+span.or-header {
+  color: aliceblue;
+}
+.or-header-wrap {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.coupon {
+  text-align: center;
+  width: 100%;
+}
+.material-icons.or-material-icons {
+  width: inherit;
+}
+.shop-image {
+  margin-top:5px;
+}
+.cast-list.row img {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+.cast-list.row h6 {
+  text-align: center;
+}
+.card.diary-card {
+  margin: 0 10px;
+}
+div.card.diary-card .col{
+  padding: initial;
+}
+.diary-list p.title, #modal-diary p.title {
+  border-bottom-style: groove;
+  padding-bottom: 5px;
+}
+.diary-list p.content, #modal-diary p.content  {
+  margin-top: 10px;
+}
 
 /* 店舗ページ END */
+
+/* 日記ページ START */
+.diary-card .diary-image .col {
+  padding: initial;
+}
+/* 日記ページ END */
 
 /* 更新ぐるぐる START */
 
@@ -562,6 +571,12 @@ ul.collection.archive-panel > li > span > i.material-icons {
   div.nav-header-cron-dummy {
     height: 56px;
   }
+
+  /* 日記ページ START */
+  .diary-card .diary-image .col .imageOne{
+    height: 250px;
+  }
+  /* 日記ページ END */
 
 }
 

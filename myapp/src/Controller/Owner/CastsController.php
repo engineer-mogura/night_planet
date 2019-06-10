@@ -201,7 +201,7 @@ class CastsController extends CastsAppController
             $path = WWW_ROOT. $this->viewVars['infoArray']['dir_path']."cast/".$cast["dir"];
             $dir = realpath($path);
             try {
-                $dir = new Folder($dir."/");
+                $dir = new Folder($dir.DS);
                 $file = new File($dir->path."calendar.json",true);
                 $file->write(json_encode($event));
 
@@ -561,7 +561,7 @@ class CastsController extends CastsAppController
                     $cast = $this->Casts->get($id);
                     // 日記用のディレクトリを掘る
                     $rootDir = WWW_ROOT. $this->viewVars['infoArray']['dir_path']
-                        .'cast'. DS .$cast->dir. DS . 'diary' . DS;
+                        .PATH_ROOT['CAST']. PATH_ROOT['DIARY'] . DS;
                     $rootDirClone = $rootDir;
 
                     // 登録の場合
@@ -652,20 +652,20 @@ class CastsController extends CastsAppController
                 }
                 $this->viewBuilder()->autoLayout(false);
                 $this->autoRender = false;
-                $array = $this->Util->getDiary($id);
-                $cast = $array['cast'];
-                $dir = $array['dir'];
-                $archive = $array['archive'];
-                $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
+                $diarys = $this->Util->getDiary($id);
+
+                $dir = $this->viewVars["infoArray"]["dir_path"].$cast['dir'].DS;
+                $cast = $this->Casts->find('all')->where(['id' => $id])->first();
+                $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+                $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
                 $this->render('/Owner/Casts/diary');
                 $this->response->body();
                 return;
             }
-            $array = $this->Util->getDiary($id);
-            $cast = $array['cast'];
-            $dir = $array['dir'];
-            $archive = $array['archive'];
-            $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
+            $diarys = $this->Util->getDiary($id);
+            $cast = $this->Casts->find('all')->where(['id' => $id])->first();
+            $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+            $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
             $this->render();
     }
 
@@ -884,11 +884,10 @@ class CastsController extends CastsAppController
                 }
                 $this->viewBuilder()->autoLayout(false);
                 $this->autoRender = false;
-                $array = $this->Util->getDiary($id);
-                $cast = $array['cast'];
-                $dir = $array['dir'];
-                $archive = $array['archive'];
-                $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
+                $diarys = $this->Util->getDiary($id);
+                $cast = $this->Casts->find('all')->where(['id' => $id])->first();
+                $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+                $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
                 $this->render('/Owner/Casts/diary');
                 $this->response->body();
                 return;
@@ -955,11 +954,10 @@ class CastsController extends CastsAppController
 
             $this->viewBuilder()->enableAutoLayout(false);
             $this->autoRender = false;
-            $array = $this->Util->getDiary($id);
-            $cast = $array['cast'];
-            $dir = $array['dir'];
-            $archive = $array['archive'];
-            $this->set(compact('cast','dir', 'archive', 'activeTab', 'ajax'));
+            $diarys = $this->Util->getDiary($id);
+            $cast = $this->Casts->find('all')->where(['id' => $id])->first();
+            $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+            $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
             $this->render('/Owner/Casts/diary');
             $this->response->getBody();
             return;

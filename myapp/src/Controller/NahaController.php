@@ -119,13 +119,28 @@ class NahaController extends \App\Controller\AreaController
 
     public function diary($id = null)
     {
-        $array = $this->Util->getDiary($id);
-        $cast = $array['cast'];
-        $dir = $array['dir'];
-        $archive = $array['archive'];
 
+        if ($this->request->is('ajax')) {
+            $this->confReturnJson(); // json返却用の設定
+            $query = $this->Diarys->find();
+            $columns = $this->Diarys->schema()->columns();
+            $ymd = $query->func()->date_format([
+                'created' => 'literal',
+                "'%Y年%c月%e日'" => 'literal']);
+            $columns = $columns + ['ymdCreated'=>$ymd];
+            $diary = $query->select($columns)
+                ->where(['id' => $this->request->query["id"]])->first();
+            // $diary = $this->Diarys->get($this->request->query["id"]);
+            $this->response->body(json_encode($diary));
+            return;
+        }
+        $cast = $this->Casts->find('all')->where(['id' => $id])->first();
         $this->set('infoArray', $this->Util->getItem($this->Shops->get($cast->shop_id)->toArray()));
-        $this->set(compact('cast','dir', 'archive', 'ajax'));
+
+        $diarys = $this->Util->getDiary($id);
+        $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+
+        $this->set(compact('cast','dir', 'diarys', 'ajax'));
         $this->render();
     }
 

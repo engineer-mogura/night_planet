@@ -15,11 +15,12 @@ return [
 	// パス設定 path.config
 	define('PATH_ROOT', array(
 		'NO_IMAGE01'=> '/img/common/no-img16.png',
-		'NO_IMAGE02'=> '/img/common/no-img150_150/no-img6.png',
+		'NO_IMAGE02'=> '/img/common/noimage.jpg',
 		'NO_IMAGE03'=> '/img/common/no-img150_150/no-img7.png',
 		'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
 		'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
-		'SLASH'=> '/',
+		'AREA01'=> '/img/common/top/top1.jpg',
+		'CREDIT'=> '/img/common/credit/',
 		'OWNER'=> 'owner',
 		'USER'=> 'user',
 		'CAST'=> 'cast',
@@ -27,7 +28,6 @@ return [
 		'TMP'=> 'tmp',
 		'IMAGE'=> 'image',
 		'IMG'=> 'img', // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える
-		'CREDIT'=> 'credit',
 		'COMMON'=> 'common',
 
 	)),

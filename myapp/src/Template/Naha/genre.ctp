@@ -1,5 +1,5 @@
 <div id="wrapper">
-  <div id="search" class="container">
+  <div id="genre" class="container">
     <span id="dummy" style="display: hidden;"></span>
     <?= $this->Flash->render() ?>
     <nav class="nav-breadcrumb">
@@ -31,7 +31,7 @@
             </div>
             <div class="card-stacked">
               <div class="card-content">
-                <h5 class="blue-text text-darken-2"><?= $rows['name'] .'/'.AREA[$rows['area']]['label'] .'/'. GENRE[$rows['genre']]['label']?></h5>
+                <h5 class="blue-text text-darken-2"><?= $rows['name'] .DS.AREA[$rows['area']]['label'] .DS. GENRE[$rows['genre']]['label']?></h5>
                 <p class="blue-text text-darken-2"><?= $rows['catch'] ?></p>
               </div>
               <div class="card-action">

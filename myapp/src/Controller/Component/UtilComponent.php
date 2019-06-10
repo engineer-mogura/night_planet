@@ -100,7 +100,7 @@ class UtilComponent extends Component
             }
         }
         $infoArray = $infoArray + array('dir'=> $shopDir);
-        $path = "img".DS.$infoArray['area']['path'].DS.$infoArray['genre']['path'].DS.$infoArray['dir'].DS;
+        $path = DS.PATH_ROOT['IMG'].DS.$infoArray['area']['path'].DS.$infoArray['genre']['path'].DS.$infoArray['dir'].DS;
         $infoArray = $infoArray + array("dir_path"=> $path);
         return  $infoArray;
     }
@@ -123,8 +123,7 @@ class UtilComponent extends Component
         for ($i = 0; $i < count($array); $i++) {
             foreach ($masterCodeResult as $key => $value) {
                 if ($array[$i] == $value->code) {
-                    $creditsHidden[] = array('tag'=>$value->code,'image'=>DS.PATH_ROOT['IMG']
-                        .DS.PATH_ROOT['COMMON'].DS.PATH_ROOT['CREDIT'].DS.$value->code.".png",'id'=>$value->id);
+                    $creditsHidden[] = array('tag'=>$value->code,'image'=>PATH_ROOT['CREDIT'].$value->code.".png",'id'=>$value->id);
                     continue;
                 }
             }
@@ -196,11 +195,9 @@ class UtilComponent extends Component
      */
     public function getDiary($id = null)
     {
-        $Casts = TableRegistry::get('Casts');
         $Diarys = TableRegistry::get('Diarys');
 
         $array = array('id','cast_id','title','content','image1','dir');
-        $cast = $Casts->find('all')->where(['id' => $id])->first();
         $diarys = $Diarys->find('all')->select($array)
             ->where(['cast_id' => $id])->order(['created'=>'DESC'])->limit(5);
         // 過去の日記をアーカイブ形式で取得する
@@ -219,8 +216,7 @@ class UtilComponent extends Component
             ->where(['cast_id' => $id])->order(['created' => 'DESC'])->all();
         $archive = $this->groupArray($archive, 'ymCreated');
         $archive = array_values($archive);
-        $dir = DS.$this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
-        return array('cast'=>$cast, 'dir'=>$dir, 'archive'=>$archive);
+        return $archive;
     }
 
     /**
@@ -297,7 +293,7 @@ class UtilComponent extends Component
             }
 
             // ファイルの移動
-            if (!@move_uploaded_file($file["tmp_name"], $dir . "/" . $uploadFile)) {
+            if (!@move_uploaded_file($file["tmp_name"], $dir . DS . $uploadFile)) {
                 throw new RuntimeException('Failed to move uploaded file.');
             }
 

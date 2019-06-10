@@ -43,7 +43,7 @@ class UsersController extends AppController
     {
         $count = count($path);
         if (!$count) {
-            return $this->redirect('/');
+            return $this->redirect(DS);
         }
         if (in_array('..', $path, true) || in_array('.', $path, true)) {
             throw new ForbiddenException();
@@ -61,7 +61,7 @@ class UsersController extends AppController
         $this->set(compact('page', 'subpage', 'selectList'));
 
         try {
-            $this->render(implode('/', $path));
+            $this->render(implode(DS, $path));
         } catch (MissingTemplateException $exception) {
             if (Configure::read('debug')) {
                 throw $exception;

@@ -26,7 +26,7 @@
   </ul>
   </div>
   </div>
-<div id="top" class="container">
+<div id="area" class="container">
   <ul class="collection">
     <li class="collection-item dismissable">
       <div>【おきよる】那覇の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>

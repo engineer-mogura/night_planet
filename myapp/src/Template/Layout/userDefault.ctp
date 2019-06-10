@@ -85,7 +85,7 @@
           <li><a class="footer-item collection-item" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
           <li><a class="footer-item collection-item" href="#!"><i class="material-icons">event_available</i><?= USER_LM['002'] ?></a></li>
           <li><a class="footer-item collection-item" href="#!"><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/"><i class="material-icons">vertical_align_top</i><?= USER_LM['004'] ?></a></li>
+          <li><a class="footer-item collection-item" href=DS><i class="material-icons">vertical_align_top</i><?= USER_LM['004'] ?></a></li>
         </ul>
       </div>
       <div class="col s12 l6">

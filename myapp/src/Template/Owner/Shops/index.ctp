@@ -23,7 +23,7 @@
         <?php foreach ($shop as $shopRow): ?>
           <div id="show-top-image" style="text-align:center">
             <?php if(!$shopRow->top_image == "") { ?>
-              <img width="100%" height="300" src="<?= "/".$infoArray['dir_path'].$shopRow->top_image ?>" />
+              <img width="100%" height="300" src="<?= DS.$infoArray['dir_path'].$shopRow->top_image ?>" />
               <button type="button" class="waves-effect waves-light btn-large" onclick="topImageChangeBtn($('#top-image'));return false;">変更</button>
               <form id="delete-top-image" name="delete_top_image" method="post" style="display:none;" action="/owner/shops/edit_top_image/<?= $shopRow->owner_id ?>">
                 <input type="hidden" name="_method" value="POST">
@@ -237,7 +237,7 @@
                           <table class="highlight">
                             <thead>
                               <td colspan="2">
-                                <img src="<?=isset($cast->image1) ? "/".$infoArray['dir_path']."cast/".$cast->dir."/image/".$cast->image1:"/img/common/noimage.jpg" ?>" alt="" class="circle left" width="80" height="80">
+                                <img src="<?=isset($cast->image1) ? DS.$infoArray['dir_path']."cast/".$cast->dir."/image/".$cast->image1:"/img/common/noimage.jpg" ?>" alt="" class="circle left" width="80" height="80">
                                 <input type="checkbox" class="check-cast-group" name="check_cast" id="check-cast<?=$i?>" />
                                 <label for="check-cast<?=$i?>">編集する</label>
                                 <div style="display:none;">

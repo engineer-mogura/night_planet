@@ -15,7 +15,7 @@
             <input type="hidden" name="end" value="">
             <input type="hidden" name="all_day" value="">
             <input type="hidden" name="active" value="">
-            <input type="hidden" name="calendar_path" value="<?='/'.$infoArray['dir_path'].'cast/'.$castRow->dir.'/calendar.json' ?>">
+            <input type="hidden" name="calendar_path" value="<?=DS.$infoArray['dir_path'].'cast/'.$castRow->dir.'/calendar.json' ?>">
           </div>
           <div class="row">
             <div class="col">

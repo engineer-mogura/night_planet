@@ -23,7 +23,7 @@
                                 <div class="col s6 m4 l3 card-img <?=$key?>">
                                     <div class="card">
                                         <div class="card-image">
-                                            <img class="materialboxed" data-caption="" height="120" width="100%" src="<?= DS.$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$cast['dir'].DS.PATH_ROOT['IMAGE'].DS.$value ?>">
+                                            <img class="materialboxed" data-caption="" height="120" width="100%" src="<?= $infoArray['dir_path'].PATH_ROOT['CAST'].DS.$cast['dir'].DS.PATH_ROOT['IMAGE'].DS.$value ?>">
                                             <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped deleteBtn" data-delete=<?=$json?> data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
                                         </div>
                                     </div>

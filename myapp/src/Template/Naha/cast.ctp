@@ -4,7 +4,7 @@
 * @var \App\Model\Entity\shop[]|\Cake\Collection\CollectionInterface $owners
 */
 ?>
-<div id="cast-page" class="container">
+<div id="cast" class="container">
   <?= $this->Flash->render() ?>
   <nav class="nav-breadcrumb">
       <div class="nav-wrapper nav-wrapper-oki">
@@ -20,10 +20,10 @@
     </nav>
   <?php foreach ($cast as $row): ?>
   <div class="row">
-    <div id="shop-main" class="col s12 m12 l8">
+    <div id="cast-main" class="col s12 m12 l8">
       <img class="responsive-img" width="100%" src=<?php if($row->image1 != '') {
-        echo('/'.$infoArray['dir_path'].'cast/'.$row->dir.'/image/'.$row->image1);} else {
-        echo("/img/common/top/top1.jpg");} ?> />
+        echo($infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->image1);} else {
+        echo(PATH_ROOT['AREA01']);} ?> />
       <div class="fixed-action-btn share horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
           <i class="material-icons">share</i>
@@ -133,7 +133,7 @@
         foreach ($imageCol as $key => $value) {
           if(!$row->isEmpty($value)) { ?>
             <div class="col s4 m4 l3">
-              <img class="materialboxed" data-caption="店内の様子" width="100%" src="<?="/".$infoArray['dir_path']."cast/".$row->dir."/image/".$row->get($value)?>">
+              <img class="materialboxed" data-caption="店内の様子" width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>">
             </div>
             <?php $isGalleryExists = true;
           }
@@ -149,13 +149,16 @@
         <?php foreach ($dImgCol as $key => $value) { ?>
         <?= $value == reset($dImgCol) ?'<div class="valign-wrapper">':""?>
             <div class="col <?=(count($dImgCol)==1?'s12 m12 l12':(count($dImgCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <img class="materialboxed" data-caption="店内の様子" width="100%" src="<?="/".$infoArray['dir_path']."cast/".$row->dir."/diary/".$row->diarys[0]->dir."/".$row->diarys[0]->get($value)?>">
+              <img class="materialboxed" data-caption="店内の様子" width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>">
             </div>
         <?= $value == end($dImgCol) ?'</div>':""?>
         <?php } ?>
             <div class="card-content">
-            <h6 class="title"><?=$row->diarys[0]->title?><span class="right"><?=$row->diarys[0]->ymdCreated?></span></h6>
-              <p><?=$row->diarys[0]->content?></p>
+            <p class="right-align"><?=$row->diarys[0]->ymdCreated?></p>
+            <p class="title">
+              <?=$row->diarys[0]->title?>
+            </p>
+              <p class="content"><?=$row->diarys[0]->content?></p>
             </div>
             <div class="card-action right-align">
             <a href="/naha/diary/<?=$row->id."?area=".$row->shop->area."&genre=".$row->shop->genre.

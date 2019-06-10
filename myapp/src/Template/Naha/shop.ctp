@@ -4,7 +4,7 @@
 * @var \App\Model\Entity\shop[]|\Cake\Collection\CollectionInterface $owners
 */
 ?>
-<div id="shop-page" class="container">
+<div id="shop" class="container">
   <?= $this->Flash->render() ?>
   <nav class="nav-breadcrumb">
       <div class="nav-wrapper nav-wrapper-oki">
@@ -22,7 +22,7 @@
   <div class="row">
     <div id="shop-main" class="col s12 m12 l8">
       <img class="responsive-img" width="100%" src=<?php if($row->top_image != '') {
-        echo('/'.$infoArray['dir_path'].$row->top_image);} else {
+        echo($infoArray['dir_path'].$row->top_image);} else {
         echo("/img/common/top/top1.jpg");} ?> />
       <div class="fixed-action-btn share horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
@@ -109,8 +109,8 @@
             <?php foreach($row->casts as $cast): ?>
             <div class="col s4 m3 l3">
               <div>
-                <a href="<?='/'.$row['area']."/cast/".$cast['id']."?genre=".$row['genre']."&name=".$row['name']."&shop=".$row['id']."&nickname=".$cast['nickname']?>">
-                  <img src="<?=isset($cast->image1) ? "/".$infoArray['dir_path']."cast/".$cast->dir."/image\/".$cast->image1:"/img/common/noimage.jpg" ?>" alt="" class="circle" width="80" height="80">
+                <a href="<?=DS.$row['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$row['genre']."&name=".$row['name']."&shop=".$row['id']."&nickname=".$cast['nickname']?>">
+                  <img src="<?=isset($cast->image1) ? $infoArray['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1:PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
                 </a>
                 </div>
               <h6><?=$cast->nickname?></h6>
@@ -173,7 +173,7 @@
                       <?php $array =explode(',', $row->credit); ?>
                       <?php for ($i = 0; $i < count($array); $i++) { ?>
                       <div class="chip" name="" value="">
-                        <img src="/img/common/credit/<?=$array[$i]?>.png" id="<?=$array[$i]?>" alt="<?=$array[$i]?>">
+                        <img src="<?=PATH_ROOT['CREDIT'].$array[$i]?>.png" id="<?=$array[$i]?>" alt="<?=$array[$i]?>">
                         <?=$array[$i]?>
                       </div>
                       <?php } ?>

@@ -6,7 +6,7 @@
 			<!-- デスクトップ用ボタン START-->
 			<!-- デスクトップ用ボタン END-->
 			<div class="diary-card hide">
-				<div class="diary-image valign-wrapper">
+				<div class="diary-image">
 					<div class="col s12 m12 l12 hide">
 						<img class="" data-caption="店内の様子" height="" width="100%" src="">
 					</div>
@@ -19,8 +19,19 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<a class="btn-floating red likeBtn"><i class="material-icons">more_horiz</i></a>
-			<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
+			<div class="card-action like-field">
+				<div class="row">
+					<div class="col s6 m4 l4"><span class="btn-floating waves-effect waves-green btn-flat blue">
+						<i class="material-icons">thumb_up</i></span><span class="like-field-span like-count"></span>
+					</div>
+					<div class="col s6 m4 l4"><a class="btn-floating waves-effect waves-green btn-flat red">
+						<i class="material-icons">thumb_up</i></a><span class="like-field-span">LIKE?</span>
+					</div>
+					<div class="col s6 m4 l4">
+						<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

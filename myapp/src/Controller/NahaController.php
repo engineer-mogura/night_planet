@@ -90,17 +90,19 @@ class NahaController extends \App\Controller\AreaController
     {
         $query = $this->Diarys->find();
         $ymd = $query->func()->date_format([
-            'created' => 'literal',
+            'Diarys.created' => 'literal',
             "'%Y年%c月%e日'" => 'literal']);
         $columns = $this->Diarys->schema()->columns();
-        $columns = $columns + ['ymdCreated'=>$ymd];
+        $columns = $columns + ['ymd_created'=>$ymd];
+        // $columns = $columns + ['ymd_created'=>$ymd,'like_count'=>$query->func()->count('Likes.diary_id')];
+        // キャスト情報、最新の日記情報とイイネの総数取得
         $cast = $this->Casts->find("all")->where(['Casts.id' => $id])
             ->contain(['Shops', 'Diarys' => function(Query $q) use ($columns) {
-                    return $q
-                        ->select($columns)
-                        ->order(['created'=>'DESC'])->limit(1);
-                    }, 'Shops.Coupons', 'Shops.Jobs'
-                ]);
+                return $q
+                    ->select($columns)
+                    ->order(['Diarys.created'=>'DESC'])->limit(1);
+                }, 'Diarys.Likes', 'Shops.Coupons', 'Shops.Jobs'
+            ]);
 
         $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
         $diary = $cast->first()->diarys[0];
@@ -127,9 +129,15 @@ class NahaController extends \App\Controller\AreaController
             $ymd = $query->func()->date_format([
                 'created' => 'literal',
                 "'%Y年%c月%e日'" => 'literal']);
-            $columns = $columns + ['ymdCreated'=>$ymd];
-            $diary = $query->select($columns)
-                ->where(['id' => $this->request->query["id"]])->first();
+            $columns = $columns + ['ymd_created'=>$ymd];
+            // $diary = $query->select($columns)
+            //     ->where(['id' => $this->request->query["id"]])->first();
+
+            // キャスト情報、最新の日記情報とイイネの総数取得
+            $diary = $this->Diarys->find("all")
+                ->select($columns)
+                ->where(['id' => $this->request->query["id"]])
+                ->contain(['Likes'])->first();
             // $diary = $this->Diarys->get($this->request->query["id"]);
             $this->response->body(json_encode($diary));
             return;
@@ -137,11 +145,48 @@ class NahaController extends \App\Controller\AreaController
         $cast = $this->Casts->find('all')->where(['id' => $id])->first();
         $this->set('infoArray', $this->Util->getItem($this->Shops->get($cast->shop_id)->toArray()));
 
-        $diarys = $this->Util->getDiary($id);
+        // $diarys1 = $this->getDiarys($id);
+        $diarys = $this->Util->getDiarys($id);
         $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
 
         $this->set(compact('cast','dir', 'diarys', 'ajax'));
         $this->render();
+    }
+        /**
+     * キャストの全ての日記情報を取得する処理
+     *
+     * @param [type] $id
+     * @return array
+     */
+    public function getDiarys($id = null)
+    {
+
+        $columns = array('id','cast_id','title','content','image1','dir');
+        // キャスト情報、最新の日記情報とイイネの総数取得
+        $diarys = $this->Diarys->find("all")
+            ->select($columns)
+            ->where(['cast_id' => $id])
+            ->contain(['Likes'])
+            ->order(['created'=>'DESC'])->limit(5);
+        // 過去の日記をアーカイブ形式で取得する
+        // TODO: 年月毎に取得する。月毎の投稿は、アコーディオンを開いたときに年月を条件にsql取得？
+        $query = $this->Diarys->find('all')->select($columns);
+        $ym = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%Y年%c月'" => 'literal']);
+        $md = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%c月%e日'" => 'literal']);
+        $count = $query->func()->count('*');
+        $archive = $query->select([
+            'ym_created' => $ym,
+            'md_created' => $md])
+            ->where(['cast_id' => $id])
+            ->contain(['Likes'])
+            ->order(['created' => 'DESC'])->all();
+        $archive = $this->Util->groupArray($archive, 'ym_created');
+        $archive = array_values($archive);
+        return $archive;
     }
 
     /**

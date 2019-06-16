@@ -6,7 +6,7 @@
 			<input type="hidden" name="del_path" value="">
 		</form>
 		<!-- モバイル用ボタン START-->
-		<div class="fixed-action-btn horizontal right click-to-toggle modal-more-horiz show-on-small hide-on-large-only	">
+		<div class="right-align fixed-action-btn horizontal click-to-toggle modal-more-horiz show-on-small hide-on-med-and-up">
 			<a class="btn-floating red">
 				<i class="material-icons">more_horiz</i>
 			</a>
@@ -28,7 +28,7 @@
 		</div>
 		<!-- モバイル用ボタン END-->
 		<!-- デスクトップ用ボタン START-->
-		<div class="right show-on-large hide-on-small-only">
+		<div class="right-align hide-on-small-only">
 			<a class="red waves-effect waves-light btn deleteBtn" data-delete="diary"><i class="material-icons left">delete</i>削除する</a>
 			<a class="blue waves-effect waves-light btn updateModeBtn"><i class="material-icons left">mode_edit</i>編集する</a>
 			<a class="blue waves-effect waves-light btn returnBtn hide"><i class="material-icons left">keyboard_return</i>戻る</a>
@@ -68,19 +68,34 @@
 				</form>
 			</div>
 			<div id="view-diary" class="row">
-				<div class="col s12 m12 l12">
-					<p class="title" name="title"></p>
-				</div>
-				<div class="col s12 m12 l12">
-					<p class="content" name="content"></p>
-				</div>
-				<div class="col s12 m12 l12 slider-box">
+				<div class="diary-card hide">
+					<div class="diary-image">
+						<div class="col s12 m12 l12 hide">
+							<img class="" data-caption="店内の様子" height="" width="100%" src="">
+						</div>
+					</div>
+					<div class="card-content">
+						<p class="created right-align" name="created"></p>
+						<p class="title" name="title"></p>
+						<p class="content" name="content"></p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="modal-footer">
-		<a class="modal-action waves-effect waves-light btn-large updateBtn disabled"><i class="material-icons right">update</i>更新</a>
-		<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
+		<div class="card-action like-field">
+			<div class="row">
+				<div class="col s4 m4 l4"><span class="btn-floating waves-effect waves-green btn-flat blue">
+					<i class="material-icons">thumb_up</i></span><span class="like-field-span like-count"></span>
+				</div>
+				<div class="col s4 m4 l4">
+					<a class="modal-action waves-effect waves-light btn-large updateBtn disabled"><i class="material-icons right">update</i>更新</a>
+				</div>
+				<div class="col s4 m4 l4">
+					<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>

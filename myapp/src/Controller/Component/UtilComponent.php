@@ -187,36 +187,55 @@ class UtilComponent extends Component
         return $result;
     }
 
-        /**
-     * 日記画面情報取得処理
+    /**
+     * キャストの全ての日記情報を取得する処理
      *
      * @param [type] $id
      * @return array
      */
-    public function getDiary($id = null)
+    public function getDiarys($id = null)
     {
-        $Diarys = TableRegistry::get('Diarys');
-
-        $array = array('id','cast_id','title','content','image1','dir');
-        $diarys = $Diarys->find('all')->select($array)
-            ->where(['cast_id' => $id])->order(['created'=>'DESC'])->limit(5);
+        $diarys = TableRegistry::get('Diarys');
+        $columns = array('id','cast_id','title','content','image1','dir');
+        // キャスト情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
-        // TODO: 年月毎に取得する。月毎の投稿は、アコーディオンを開いたときに年月を条件にsql取得？
-        $query = $Diarys->find('all')->select($array);
+        $query = $diarys->find('all')->select($columns);
         $ym = $query->func()->date_format([
             'created' => 'identifier',
             "'%Y年%c月'" => 'literal']);
         $md = $query->func()->date_format([
             'created' => 'identifier',
             "'%c月%e日'" => 'literal']);
-        $count = $query->func()->count('*');
         $archive = $query->select([
-            'ymCreated' => $ym,
-            'mdCreated' => $md])
-            ->where(['cast_id' => $id])->order(['created' => 'DESC'])->all();
-        $archive = $this->groupArray($archive, 'ymCreated');
+            'ym_created' => $ym,
+            'md_created' => $md])
+            ->where(['cast_id' => $id])
+            ->contain(['Likes'])
+            ->order(['created' => 'DESC'])->all();
+        $archive = $this->groupArray($archive, 'ym_created');
         $archive = array_values($archive);
         return $archive;
+    }
+
+    /**
+     * 指定した１件の日記情報を取得する処理
+     *
+     * @param [type] $id
+     * @return array
+     */
+    public function getDiary($id = null)
+    {
+        $diary = TableRegistry::get('Diarys');
+        $query = $diary->find('all')->select($diary->Schema()->columns());
+        $ymd = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%Y年%c月%e日'" => 'literal']);
+        $diary = $query->select([
+            'ymd_created' => $ymd])
+            ->where(['id' => $id])
+            ->contain(['Likes'])
+            ->first();
+        return $diary;
     }
 
     /**

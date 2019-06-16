@@ -652,7 +652,7 @@ class CastsController extends CastsAppController
                 }
                 $this->viewBuilder()->autoLayout(false);
                 $this->autoRender = false;
-                $diarys = $this->Util->getDiary($id);
+                $diarys = $this->Util->getDiarys($id);
 
                 $dir = $this->viewVars["infoArray"]["dir_path"].$cast['dir'].DS;
                 $cast = $this->Casts->find('all')->where(['id' => $id])->first();
@@ -662,7 +662,7 @@ class CastsController extends CastsAppController
                 $this->response->body();
                 return;
             }
-            $diarys = $this->Util->getDiary($id);
+            $diarys = $this->Util->getDiarys($id);
             $cast = $this->Casts->find('all')->where(['id' => $id])->first();
             $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
             $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
@@ -684,7 +684,7 @@ class CastsController extends CastsAppController
         }
         if ($this->request->is('ajax')) {
             $this->confReturnJson(); // json返却用の設定
-            $diary = $this->Diarys->get($this->request->query["id"]);
+            $diary = $this->Util->getDiary($this->request->query["id"]);
             $this->response->body(json_encode($diary));
             return;
         }
@@ -884,7 +884,7 @@ class CastsController extends CastsAppController
                 }
                 $this->viewBuilder()->autoLayout(false);
                 $this->autoRender = false;
-                $diarys = $this->Util->getDiary($id);
+                $diarys = $this->Util->getDiarys($id);
                 $cast = $this->Casts->find('all')->where(['id' => $id])->first();
                 $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
                 $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));

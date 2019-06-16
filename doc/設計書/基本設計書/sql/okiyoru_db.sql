@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 6 月 01 日 21:38
+-- Generation Time: 2019 年 6 月 16 日 13:42
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.1.26
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `okiyoru_db`
 --
+CREATE DATABASE IF NOT EXISTS `okiyoru_db` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `okiyoru_db`;
 
 -- --------------------------------------------------------
 
@@ -28,7 +30,6 @@ SET time_zone = "+00:00";
 -- テーブルの構造 `admin_accounts`
 --
 
-DROP TABLE IF EXISTS `admin_accounts`;
 CREATE TABLE `admin_accounts` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -43,7 +44,6 @@ CREATE TABLE `admin_accounts` (
 -- テーブルの構造 `articles`
 --
 
-DROP TABLE IF EXISTS `articles`;
 CREATE TABLE `articles` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
@@ -73,7 +73,6 @@ INSERT INTO `articles` (`id`, `user_id`, `title`, `slug`, `body`, `published`, `
 -- テーブルの構造 `articles_tags`
 --
 
-DROP TABLE IF EXISTS `articles_tags`;
 CREATE TABLE `articles_tags` (
   `article_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL
@@ -96,7 +95,6 @@ INSERT INTO `articles_tags` (`article_id`, `tag_id`) VALUES
 -- テーブルの構造 `casts`
 --
 
-DROP TABLE IF EXISTS `casts`;
 CREATE TABLE `casts` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
@@ -133,7 +131,7 @@ CREATE TABLE `casts` (
 --
 
 INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `holiday`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `remember_token`, `status`, `delete_flag`, `created`, `modified`) VALUES
-(1, 38, 'cast', '山田　敏子', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '1966-04-27 00:00:00', NULL, 'blood_type4', 'constellation3', '36', 'ｄｄtrrtera\r\nｒffdffdsswsdsdsdsdsdsdds\r\n\r\nfdtete', NULL, 'd850c55c7674f7c5b0ca5ee9c4d9bc798010c417.jpg', '09c81edb1ee4c46cb2aeffd4a0c7fca2762f9b53.jpg', '1fa3eb548fdd4a092d84c992964663aae1064f84.jpg', '6ba1b8364eefaa8cdeba8399382926a6e8c10fd4.jpg', '', '', '', '', '00002', NULL, 1, NULL, '2019-03-23 16:51:25', '2019-05-06 14:50:40'),
+(1, 38, 'cast', '山田　敏子', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '1966-04-27 00:00:00', NULL, 'blood_type4', 'constellation3', '36', 'ｄｄtrrtera\r\nｒffdffdsswsdsdsdsdsdsdds\r\n\r\nfdtete', NULL, 'd850c55c7674f7c5b0ca5ee9c4d9bc798010c417.jpg', '09c81edb1ee4c46cb2aeffd4a0c7fca2762f9b53.jpg', '1fa3eb548fdd4a092d84c992964663aae1064f84.jpg', '6ba1b8364eefaa8cdeba8399382926a6e8c10fd4.jpg', '', '', '', '', '00002', '4518176367e82bfe7c0934cb7bc84bd7f561c02587cb1e2c11bf76ca5c69b4fe', 1, NULL, '2019-03-23 16:51:25', '2019-05-06 14:50:40'),
 (13, 38, 'cast', '友利拓真', 'wwww', 't.takuma830@gmail.com', '$2y$10$4u6PBUIBjyWsPKhDndEa4eUm30Ym9JEls.OVRyCSeqO/YuuwWOgsC', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', 'f52389fbef05bdeff3b3f0f1af80f56be8afc552f99348ca49702b9e3315b427', 1, NULL, '2019-04-03 19:47:43', '2019-05-14 19:43:38');
 
 -- --------------------------------------------------------
@@ -142,7 +140,6 @@ INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `pass
 -- テーブルの構造 `coupons`
 --
 
-DROP TABLE IF EXISTS `coupons`;
 CREATE TABLE `coupons` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
@@ -173,7 +170,6 @@ INSERT INTO `coupons` (`id`, `shop_id`, `status`, `from_day`, `to_day`, `title`,
 -- テーブルの構造 `developers`
 --
 
-DROP TABLE IF EXISTS `developers`;
 CREATE TABLE `developers` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -196,24 +192,23 @@ INSERT INTO `developers` (`id`, `email`, `password`, `created`, `modified`) VALU
 -- テーブルの構造 `diarys`
 --
 
-DROP TABLE IF EXISTS `diarys`;
 CREATE TABLE `diarys` (
   `id` int(11) NOT NULL,
   `cast_id` int(11) NOT NULL,
   `title` varchar(50) NOT NULL,
   `content` varchar(255) NOT NULL,
-  `image1` varchar(100) DEFAULT NULL,
-  `image2` varchar(100) DEFAULT NULL,
-  `image3` varchar(100) DEFAULT NULL,
-  `image4` varchar(100) DEFAULT NULL,
-  `image5` varchar(100) DEFAULT NULL,
-  `image6` varchar(100) DEFAULT NULL,
-  `image7` varchar(100) DEFAULT NULL,
-  `image8` varchar(100) DEFAULT NULL,
-  `dir` varchar(255) DEFAULT NULL,
+  `image1` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `image2` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `image3` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `image4` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `image5` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `image6` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `image7` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `image8` varchar(100) CHARACTER SET utf8 DEFAULT NULL,
+  `dir` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- テーブルのデータのダンプ `diarys`
@@ -221,24 +216,29 @@ CREATE TABLE `diarys` (
 
 INSERT INTO `diarys` (`id`, `cast_id`, `title`, `content`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `created`, `modified`) VALUES
 (105, 1, 'tset', 'testdadyd', '09c81edb1ee4c46cb2aeffd4a0c7fca2762f9b53.jpg', '11d8110b1aad2b537bc79006557f7ae8d044f923.png', '', '', '', '', '', NULL, '2019/201905/20190503/20190503_024338', '2019-05-03 02:43:38', '2019-05-03 13:53:21'),
-(107, 1, 'fd', 'ftb', '9db0f572df6d410790a594802e18acc229ee7208.jpg', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', '2c12dfae9753435e1e1d5a6b2d4ad015bfcc0662.jpg', '', '', '', NULL, NULL, '2019/201905/20190503/20190503_130732', '2019-05-03 13:07:33', '2019-05-03 15:30:24'),
-(108, 1, 'fdffd', 'fdff', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_153612', '2019-05-03 15:36:30', '2019-05-03 15:36:30'),
-(109, 1, 'fdf', 'fdfdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154100', '2019-05-03 15:41:03', '2019-05-03 15:41:03'),
+(107, 2, 'fd', 'ftb', '9db0f572df6d410790a594802e18acc229ee7208.jpg', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', '2c12dfae9753435e1e1d5a6b2d4ad015bfcc0662.jpg', '', '', '', NULL, NULL, '2019/201905/20190503/20190503_130732', '2019-05-03 13:07:33', '2019-05-03 15:30:24'),
+(108, 2, 'fdffd', 'fdff', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_153612', '2019-05-03 15:36:30', '2019-05-03 15:36:30'),
+(109, 2, 'fdf', 'fdfdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154100', '2019-05-03 15:41:03', '2019-05-03 15:41:03'),
 (110, 1, 'ssd', 'dssdsd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154123', '2019-05-03 15:41:29', '2019-05-03 15:41:29'),
-(111, 1, 'fdfdfd', 'fdffdfdf', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154847', '2019-05-03 15:48:48', '2019-05-03 15:51:01'),
-(112, 1, 'fdf', 'fdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154904', '2019-05-03 15:49:04', '2019-05-03 15:49:04'),
-(113, 1, 'dssd', 'dsdsd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154913', '2019-05-03 15:49:13', '2019-05-03 15:49:13'),
-(114, 1, 'fdfdfdf', 'fdfdfd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155009', '2019-05-03 15:50:09', '2019-05-03 15:50:09'),
-(115, 1, 'fdf', 'fdfd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155019', '2019-05-03 15:50:20', '2019-05-03 15:50:20'),
-(116, 1, 'sduk', 'sddfdffdfdfdfdfj\r\n\r\n\r\ntytytyy\r\n\r\n', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '2c12dfae9753435e1e1d5a6b2d4ad015bfcc0662.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155040', '2019-05-03 15:50:40', '2019-05-03 15:52:50'),
-(117, 1, 'fdfff', 'fdfdfdfdfdfd', '9db0f572df6d410790a594802e18acc229ee7208.jpg', 'd850c55c7674f7c5b0ca5ee9c4d9bc798010c417.jpg', '09c81edb1ee4c46cb2aeffd4a0c7fca2762f9b53.jpg', '1fa3eb548fdd4a092d84c992964663aae1064f84.jpg', '6ba1b8364eefaa8cdeba8399382926a6e8c10fd4.jpg', '112786fba33c77ce659f05ac31f9842546970058.jpg', '58d0733b578610160243d78f3e9ab37b9ba1727a.jpg', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '2019/201905/20190503/20190503_155203', '2019-05-03 15:52:03', '2019-05-03 15:52:03'),
-(118, 1, 'ｆｄｆｄｆｄ', 'ｆｄｄｆyd', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_161956', '2019-05-03 16:19:56', '2019-05-03 16:19:56'),
-(119, 1, 'ｆｄｆｄｆｄ', 'ｆｄｄｆydｈｇｈ', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_162048', '2019-05-03 16:20:49', '2019-05-03 16:20:49'),
-(120, 1, 'ｆｄｆｄｆｄ', 'ｆｄｄｆydｈｇｈchromeｓtetstettet\r\ntettetette', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_162124', '2019-05-03 16:21:24', '2019-05-06 13:39:27'),
+(111, 2, 'fdfdfd', 'fdffdfdf', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154847', '2019-05-03 15:48:48', '2019-05-03 15:51:01'),
+(112, 2, 'fdf', 'fdf', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154904', '2019-05-03 15:49:04', '2019-05-03 15:49:04'),
+(113, 2, 'dssd', 'dsdsd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_154913', '2019-05-03 15:49:13', '2019-05-03 15:49:13'),
+(114, 2, 'fdfdfdf', 'fdfdfd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155009', '2019-05-03 15:50:09', '2019-05-03 15:50:09'),
+(115, 2, 'fdf', 'fdfd', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155019', '2019-05-03 15:50:20', '2019-05-03 15:50:20'),
+(116, 2, 'sduk', 'sddfdffdfdfdfdfj\r\n\r\n\r\ntytytyy\r\n\r\n', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '2c12dfae9753435e1e1d5a6b2d4ad015bfcc0662.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_155040', '2019-05-03 15:50:40', '2019-05-03 15:52:50'),
+(117, 2, 'fdfff', 'fdfdfdfdfdfd', '9db0f572df6d410790a594802e18acc229ee7208.jpg', 'd850c55c7674f7c5b0ca5ee9c4d9bc798010c417.jpg', '09c81edb1ee4c46cb2aeffd4a0c7fca2762f9b53.jpg', '1fa3eb548fdd4a092d84c992964663aae1064f84.jpg', '6ba1b8364eefaa8cdeba8399382926a6e8c10fd4.jpg', '112786fba33c77ce659f05ac31f9842546970058.jpg', '58d0733b578610160243d78f3e9ab37b9ba1727a.jpg', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '2019/201905/20190503/20190503_155203', '2019-05-03 15:52:03', '2019-05-03 15:52:03'),
+(118, 2, 'ｆｄｆｄｆｄ', 'ｆｄｄｆyd', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_161956', '2019-05-03 16:19:56', '2019-05-03 16:19:56'),
+(119, 2, 'ｆｄｆｄｆｄ', 'ｆｄｄｆydｈｇｈ', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_162048', '2019-05-03 16:20:49', '2019-05-03 16:20:49'),
+(120, 2, 'ｆｄｆｄｆｄ', 'ｆｄｄｆydｈｇｈchromeｓtetstettet\r\ntettetette', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190503/20190503_162124', '2019-05-03 16:21:24', '2019-05-06 13:39:27'),
 (121, 2, 'test', 'test', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(122, 1, 'tes2', 'dtest', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(124, 1, 'fffffｄｆ', 'fdfｆｆfdfdfDfESft', '11d8110b1aad2b537bc79006557f7ae8d044f923.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190511/20190511_234836', '2019-05-11 23:48:36', '2019-05-11 23:50:56'),
-(125, 1, '??????????', '??????????????????????????????❗️❗️❗️❗️❗️????????????????????', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201906/20190601/20190601_213124', '2019-06-01 21:31:24', '2019-06-01 21:31:24');
+(122, 2, 'tes2', 'dtest', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(124, 2, 'fffffｄｆ', 'fdfｆｆfdfdfDfESft', '11d8110b1aad2b537bc79006557f7ae8d044f923.png', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201905/20190511/20190511_234836', '2019-05-11 23:48:36', '2019-05-11 23:50:56'),
+(125, 2, '??????????', '??????????????????????????????❗️❗️❗️❗️❗️????????????????????', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201906/20190601/20190601_213124', '2019-06-01 21:31:24', '2019-06-01 21:31:24'),
+(126, 2, '❗️??????????', '???????❗️❓❗️❗️❗️', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201906/20190601/20190601_214015', '2019-06-01 21:40:15', '2019-06-01 21:40:15'),
+(127, 2, '??❗️❓??', '?????', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201906/20190601/20190601_214352', '2019-06-01 21:43:52', '2019-06-01 21:43:52'),
+(128, 2, '☺️????', '??????', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201906/20190601/20190601_214751', '2019-06-01 21:47:51', '2019-06-01 21:48:30'),
+(129, 2, 'ぁたむちな?????', '?????ちなぬゆは', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019/201906/20190601/20190601_215036', '2019-06-01 21:50:36', '2019-06-01 21:50:36'),
+(131, 2, '💪😣😣😅🙂😊😊🤚❗️❗️テストあ', 'あたと🤔group\r\n🤔🤔🤔🤔🤔🤔❓❓❓Ⅾ\r\n❓❗️❗️❗️🤲🤭♡☆☆☆☆☆☆☆@💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗\r\n💗💗💗💗💗💗💗💗💜❤💙💚\r\n\r\n💗💗💗💗💗💗💗💗\r\n💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💗💜❤💙💚( ˊ\r\n\r\nᵕˋ🙏🏻 )😅\r\n\r\n\r\n🍺☺️', 'd850c55c7674f7c5b0ca5ee9c4d9bc798010c417.jpg', '1fa3eb548fdd4a092d84c992964663aae1064f84.jpg', '969ee3a90e0eaa4df14ddc5205bd4f7c02c4f827.jpg', '83b68eb74cffa94e0479e4727d70702f3014dc11.jpg', '17e335142779847b27818ad120f1240c5eb3d5d2.png', '', '', NULL, '2019/201906/20190601/20190601_215455', '2019-06-01 21:54:55', '2019-06-15 13:55:51');
 
 -- --------------------------------------------------------
 
@@ -246,7 +246,6 @@ INSERT INTO `diarys` (`id`, `cast_id`, `title`, `content`, `image1`, `image2`, `
 -- テーブルの構造 `events`
 --
 
-DROP TABLE IF EXISTS `events`;
 CREATE TABLE `events` (
   `id` int(11) NOT NULL,
   `event_type_id` int(11) DEFAULT NULL,
@@ -278,7 +277,6 @@ INSERT INTO `events` (`id`, `event_type_id`, `cast_id`, `title`, `details`, `sta
 -- テーブルの構造 `event_types`
 --
 
-DROP TABLE IF EXISTS `event_types`;
 CREATE TABLE `event_types` (
   `id` int(11) NOT NULL,
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -291,7 +289,6 @@ CREATE TABLE `event_types` (
 -- テーブルの構造 `jobs`
 --
 
-DROP TABLE IF EXISTS `jobs`;
 CREATE TABLE `jobs` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
@@ -330,7 +327,6 @@ INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `
 -- テーブルの構造 `likes`
 --
 
-DROP TABLE IF EXISTS `likes`;
 CREATE TABLE `likes` (
   `id` int(11) NOT NULL,
   `diary_id` int(11) NOT NULL,
@@ -347,13 +343,14 @@ CREATE TABLE `likes` (
 INSERT INTO `likes` (`id`, `diary_id`, `cast_id`, `user_id`, `created`, `modified`) VALUES
 (0, 105, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (1, 110, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 111, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(3, 999, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(4, 105, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 111, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, 111, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(7, 107, 0, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 121, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(2, 111, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, 105, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(5, 111, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(6, 111, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(7, 107, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(8, 121, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(9, 131, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(10, 131, 2, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -361,7 +358,6 @@ INSERT INTO `likes` (`id`, `diary_id`, `cast_id`, `user_id`, `created`, `modifie
 -- テーブルの構造 `master_codes`
 --
 
-DROP TABLE IF EXISTS `master_codes`;
 CREATE TABLE `master_codes` (
   `id` int(11) NOT NULL,
   `code` varchar(255) NOT NULL,
@@ -516,7 +512,6 @@ INSERT INTO `master_codes` (`id`, `code`, `code_name`, `code_group`, `sort`, `de
 -- テーブルの構造 `master_role`
 --
 
-DROP TABLE IF EXISTS `master_role`;
 CREATE TABLE `master_role` (
   `id` int(11) NOT NULL,
   `role` varchar(64) NOT NULL COMMENT 'ロール名',
@@ -541,7 +536,6 @@ INSERT INTO `master_role` (`id`, `role`, `role_name`, `created`, `modified`) VAL
 -- テーブルの構造 `owners`
 --
 
-DROP TABLE IF EXISTS `owners`;
 CREATE TABLE `owners` (
   `id` int(11) NOT NULL,
   `role` varchar(10) NOT NULL,
@@ -570,7 +564,6 @@ INSERT INTO `owners` (`id`, `role`, `email`, `password`, `area`, `genre`, `dir`,
 -- テーブルの構造 `shops`
 --
 
-DROP TABLE IF EXISTS `shops`;
 CREATE TABLE `shops` (
   `id` int(11) NOT NULL,
   `owner_id` int(11) NOT NULL,
@@ -621,7 +614,6 @@ INSERT INTO `shops` (`id`, `owner_id`, `area`, `genre`, `dir`, `name`, `top_imag
 -- テーブルの構造 `shop_infos`
 --
 
-DROP TABLE IF EXISTS `shop_infos`;
 CREATE TABLE `shop_infos` (
   `id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
@@ -637,7 +629,6 @@ CREATE TABLE `shop_infos` (
 -- テーブルの構造 `tags`
 --
 
-DROP TABLE IF EXISTS `tags`;
 CREATE TABLE `tags` (
   `id` int(11) NOT NULL,
   `title` varchar(191) DEFAULT NULL,
@@ -664,7 +655,6 @@ INSERT INTO `tags` (`id`, `title`, `created`, `modified`) VALUES
 -- テーブルの構造 `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -839,7 +829,7 @@ ALTER TABLE `developers`
 -- AUTO_INCREMENT for table `diarys`
 --
 ALTER TABLE `diarys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
 
 --
 -- AUTO_INCREMENT for table `events`

@@ -119,6 +119,7 @@ div.nav-header-cron-dummy {
 /* トップへスクロールボタン END */
 
 /* ローディング START */
+
 .preloader-wrapper {
     top: 0;
     bottom: 0;
@@ -126,7 +127,7 @@ div.nav-header-cron-dummy {
     right: 0;
     position: fixed;
     margin: auto;
-    z-index: 999;
+    z-index: 1999;
 }
 /* ローディング END */
 
@@ -315,13 +316,6 @@ span.or-header {
 div.card.diary-card .col{
   padding: initial;
 }
-.diary-list p.title, #modal-diary p.title {
-  border-bottom-style: groove;
-  padding-bottom: 5px;
-}
-.diary-list p.content, #modal-diary p.content  {
-  margin-top: 10px;
-}
 
 /* 店舗ページ END */
 
@@ -329,14 +323,26 @@ div.card.diary-card .col{
 .diary-card .diary-image .col {
   padding: initial;
 }
-/* 日記ページ END */
-
-/* 更新ぐるぐる START */
-
-.preloader-wrapper {
- z-index: 999;
+.card-action.like-field {
+  
 }
-/* 更新ぐるぐる END */
+/* .like-field.show-like {
+  float: left;
+}
+.like-field.count-like {
+  position: absolute;
+  left: 50px;
+  top: 20px;
+} */
+/* .like-field.add-like {
+  float: left;
+  margin-left: 22%;
+} */
+.like-field .like-field-span {
+  margin-left: 0.5rem;
+}
+
+/* 日記ページ END */
 
 /* テーブル系共通 START */
 table{
@@ -476,10 +482,31 @@ ul.collapsible.archive-panel > li > div > p > span.secondary-content {
 ul.collection.archive-panel > li > span > i.material-icons {
   display: block;
 }
+
+/* キャスト編集ページ END */
+
+/* 日記カード モジュール START */
 #modal-diary {
   word-break: break-all;
 }
-/* キャスト編集ページ END */
+#view-diary .diary-image {
+  margin-top: 1rem;
+}
+
+div.diary-image {
+  display: inline-block;
+}
+/* .diary-card .diary-image .col .imageOne{
+  height: 250px;
+} */
+.diary-list p.title, #modal-diary p.title {
+  border-bottom-style: groove;
+  padding-bottom: 5px;
+}
+.diary-list p.content, #modal-diary p.content  {
+  margin-top: 10px;
+}
+/* 日記カード モジュール END */
 
 /* スライダーの矢印 START */
 .middle-indicator {
@@ -573,9 +600,7 @@ ul.collection.archive-panel > li > span > i.material-icons {
   }
 
   /* 日記ページ START */
-  .diary-card .diary-image .col .imageOne{
-    height: 250px;
-  }
+ 
   /* 日記ページ END */
 
 }

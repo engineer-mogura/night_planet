@@ -7,7 +7,7 @@ return [
 	// キャスト用設定 cast.config
 	define('CAST_CONFIG', array(
 		'FILE_MAX'=>'8', // アップロードファイル数
-		'TITLE_EXCERPT'=>'10', // 抜粋文字数
+		'TITLE_EXCERPT'=>'6', // 抜粋文字数
 		'CONTENT_EXCERPT'=>'10', // 抜粋文字数
 		'ELLIPSIS'=>'...', // 省略文字
 	)),

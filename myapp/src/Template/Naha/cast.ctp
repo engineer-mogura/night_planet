@@ -147,23 +147,33 @@
         <?php if (count($row->diarys) > 0) { ?>
           <div class="card diary-card">
         <?php foreach ($dImgCol as $key => $value) { ?>
-        <?= $value == reset($dImgCol) ?'<div class="valign-wrapper">':""?>
+        <?= $value == reset($dImgCol) ?'<div class="diary-image">':""?>
             <div class="col <?=(count($dImgCol)==1?'s12 m12 l12':(count($dImgCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
               <img class="materialboxed" data-caption="店内の様子" width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>">
             </div>
         <?= $value == end($dImgCol) ?'</div>':""?>
         <?php } ?>
             <div class="card-content">
-            <p class="right-align"><?=$row->diarys[0]->ymdCreated?></p>
+            <p class="right-align"><?=$row->diarys[0]->ymd_created?></p>
             <p class="title">
               <?=$row->diarys[0]->title?>
             </p>
-              <p class="content"><?=$row->diarys[0]->content?></p>
+              <p class="content"><?=$this->Text->autoParagraph($row->diarys[0]->content)?></p>
             </div>
-            <div class="card-action right-align">
-            <a href="/naha/diary/<?=$row->id."?area=".$row->shop->area."&genre=".$row->shop->genre.
-              "&shop=".$row->shop->id."&name=".$row->shop->name."&cast=".$row->id."&nickname=".$row->nickname?>"
-                class="waves-effect waves-light btn-large createBtn"><i class="material-icons right">chevron_right</i><?=COMMON_LB['052']?></a>
+            <div class="card-action like-field">
+              <div class="row">
+                <div class="col s6 m4 l4"><span class="btn-floating waves-effect waves-green btn-flat blue">
+                  <i class="material-icons">thumb_up</i></span><span class="like-field-span like-count"><?=count($row->diarys[0]->likes)?></span>
+                </div>
+                <div class="col s6 m4 l4"><a class="btn-floating waves-effect waves-green btn-flat red">
+                  <i class="material-icons">thumb_up</i></a><span class="like-field-span">LIKE?</span>
+                </div>
+                <div class="col s6 m4 l4">
+                  <a href="/naha/diary/<?=$row->id."?area=".$row->shop->area."&genre=".$row->shop->genre.
+                    "&shop=".$row->shop->id."&name=".$row->shop->name."&cast=".$row->id."&nickname=".$row->nickname?>"
+                    class="waves-effect waves-light btn-large createBtn"><i class="material-icons right">chevron_right</i><?=COMMON_LB['052']?></a>
+                </div>
+              </div>
             </div>
           </div>
             <?php

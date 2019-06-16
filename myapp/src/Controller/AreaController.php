@@ -16,6 +16,7 @@ class AreaController extends AppController
         $this->Coupons = TableRegistry::get('Coupons');
         $this->Casts = TableRegistry::get('Casts');
         $this->Diarys = TableRegistry::get('Diarys');
+        $this->Likes = TableRegistry::get('Likes');
         $this->Jobs = TableRegistry::get('Jobs');
         $this->MasterCodes = TableRegistry::get("master_codes");
 

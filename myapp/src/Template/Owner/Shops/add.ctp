@@ -23,7 +23,7 @@
             echo $this->Form->control('coupon');
             echo $this->Form->control('cast');
             echo $this->Form->control('tenpo');
-            echo $this->Form->control('tennai');
+            echo $this->Form->control('tenpo-gallery');
             echo $this->Form->control('map');
             echo $this->Form->control('job');
         ?>

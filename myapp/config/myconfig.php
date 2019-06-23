@@ -31,6 +31,12 @@ return [
 		'COMMON'=> 'common',
 
 	)),
+	// SNSパス設定 path.config
+	define('SHARER', array(
+		'TWITTER'=> 'http://twitter.com/share?url=',
+		'FACEBOOK'=> 'https://www.facebook.com/sharer/sharer.php?u=',
+		'LINE'=> 'http://line.me/R/msg/text/?',
+	)),
 
 	// ラベル定数 developer.label menu
 	define('DEVELOPER_LM', array(
@@ -61,21 +67,21 @@ return [
 
 	// ラベル定数 owner.label menu
 	define('OWNER_LM', array(
-		'001'=>'トップ画像を編集する',
-		'002'=>'キャッチコピーを編集する',
-		'003'=>'クーポンを編集する',
-		'004'=>'キャストを編集する',
-		'005'=>'店舗情報を編集する',
-		'006'=>'店内を編集する',
-		'007'=>'マップを編集する',
-		'008'=>'求人情報を編集する',
+		'001'=>'トップ画像',
+		'002'=>'キャッチコピー',
+		'003'=>'クーポン',
+		'004'=>'キャスト',
+		'005'=>'店舗情報',
+		'006'=>'店舗ギャラリー',
+		'007'=>'マップ',
+		'008'=>'求人情報',
 		'009'=>'キャストのトップへ行く',
 	)),
 
 	// ラベル定数 cast.label menu
 	define('CAST_LM', array(
 		'001'=>'ダッシュボード',
-		'002'=>'プロフィールを編集する',
+		'002'=>'プロフィール',
 		'003'=>'日記を書く',
 		'004'=>'画像をアップする',
 		'005'=>'キャストのトップへ行く',

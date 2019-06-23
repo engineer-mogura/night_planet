@@ -1596,6 +1596,9 @@ function castImageDeleteBtn(form, obj){
             ampmclickable: true, // make AM PM clickable
             aftershow: function(){} //Function for after opening timepicker
         });
+
+        // PhotoSwipeを起動する
+        initPhotoSwipeFromDOM('.my-gallery');
         /* 共通処理 end */
     }
 
@@ -1719,20 +1722,20 @@ function userInitialize() {
                         }
                     })
                     // 画像表示するグリッドを決定する
-                    // if(images.length > 0) {
-                    //     // 画像表示するグリッド,高さを決定する
-                    //     var colClass = "";
-                    //     images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
-                    //     colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
-                    //     var col = $(diaryCard).find('.col');
-                    //     var imgClass = "";
-                    //     images.length == 1 ? imgClass = 'imageOne materialboxed' : images.length == 2 ?
-                    //     imgClass = 'materialboxed' : imgClass = 'materialboxed';
-                    //     $.each(images, function(key, value) {
-                    //         var cloneCol = $(col).clone(true).removeClass().addClass(colClass).insertAfter(col);
-                    //         $(cloneCol).find('img').attr({'src': diaryDir + '/' + value,'class':imgClass});
-                    //     })
-                    // }
+                    if(images.length > 0) {
+                        // 画像表示するグリッド,高さを決定する
+                        var colClass = "";
+                        images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
+                        colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
+                        var figure = $(diaryCard).find('figure');
+                        var imgClass = "";
+                        $.each(images, function(key, value) {
+                            var cloneFigure = $(figure).clone(true).removeClass().addClass(colClass).insertAfter(figure);
+                            $(cloneFigure).find('a').attr({'href': diaryDir + '/' + value});
+                            $(cloneFigure).find('img').attr({'src': diaryDir + '/' + value});
+                        })
+                        $(diaryCard).find('figure.hide').remove();
+                    }
 
                     $('#modal-diary').modal({
                         dismissible: true, // Modal can be dismissed by clicking outside of the modal
@@ -1757,6 +1760,7 @@ function userInitialize() {
                         }
                     });
                     $("#modal-diary").modal('open');
+                    initPhotoSwipeFromDOM('.my-gallery');
                     $(document).find('.materialboxed').materialbox();
 
 
@@ -2216,20 +2220,6 @@ function castInitialize() {
                                 }
                             })
                             // 画像表示するグリッドを決定する
-                            if(images.length > 0) {
-                                // 画像表示するグリッド,高さを決定する
-                                var colClass = "";
-                                images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
-                                colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
-                                var col = $(diaryCard).find('.col');
-                                var imgClass = "";
-                                images.length == 1 ? imgClass = 'imageOne materialboxed' : images.length == 2 ?
-                                imgClass = 'materialboxed' : imgClass = 'materialboxed';
-                                $.each(images, function(key, value) {
-                                    var cloneCol = $(col).clone(true).removeClass().addClass(colClass).insertAfter(col);
-                                    $(cloneCol).find('img').attr({'src':value['path'],'class':imgClass});
-                                })
-                            }
                             // if(images.length > 0) {
                             //     // 画像表示するグリッド,高さを決定する
                             //     var colClass = "";
@@ -2244,8 +2234,23 @@ function castInitialize() {
                             //         $(cloneCol).find('img').attr({'src':value['path'],'class':imgClass});
                             //     })
                             // }
+                            // 画像表示するグリッドを決定する
+                            if(images.length > 0) {
+                                // 画像表示するグリッド,高さを決定する
+                                var colClass = "";
+                                images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
+                                colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
+                                var figure = $(diaryCard).find('figure');
+                                var imgClass = "";
+                                $.each(images, function(key, value) {
+                                    var cloneFigure = $(figure).clone(true).removeClass().addClass(colClass).insertAfter(figure);
+                                    $(cloneFigure).find('a').attr({'href': value['path']});
+                                    $(cloneFigure).find('img').attr({'src': value['path']});
+                                })
+                                $(diaryCard).find('figure.hide').remove();
+                                initPhotoSwipeFromDOM('.my-gallery');
+                            }
                             $("#modal-edit-diary").find("input[name='diary_json']").val(JSON.stringify(images));
-                            $('.materialboxed').materialbox();
                         },
 
                         // モーダル非表示完了コールバック

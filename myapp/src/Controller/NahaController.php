@@ -7,7 +7,7 @@ use Cake\Mailer\Email;
 use Cake\Error\Debugger;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
-
+use Cake\Routing\Router;
 /**
 * Users Controller
 *
@@ -76,13 +76,14 @@ class NahaController extends \App\Controller\AreaController
 
     public function shop($id = null)
     {
+       $sharer =  Router::reverse($this->request, true);
         $shop = $this->Shops->find('all')
             ->where(['Shops.id' => $id])
             ->contain(['Owners','Casts', 'Coupons','Jobs']);
         $this->set('infoArray', $this->Util->getItem($shop->first()));
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         $creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
-        $this->set(compact('shop', 'credits','creditsHidden'));
+        $this->set(compact('shop','sharer', 'credits','creditsHidden'));
         $this->render();
     }
 

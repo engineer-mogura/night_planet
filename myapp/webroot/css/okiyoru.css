@@ -241,6 +241,38 @@ div.message.hidden {
 
 /* フラッシュメッセージ系 END */
 
+/* PhotoSwipe START */
+.my-gallery > figure {
+  margin: initial;
+}
+.my-gallery{
+  /* Prevent vertical gaps */
+  line-height: 0;
+  -webkit-column-count: 3;
+  -webkit-column-gap: 0px;
+  -moz-column-count: 3;
+  -moz-column-gap: 0px;
+  column-count: 3;
+  column-gap: 0px;
+  }
+.my-gallery figure{
+  margin:0;
+  /* Just in case there are inline attributes */
+  width: 100% !important;
+  height: auto !important;
+}
+.my-gallery figure.col{
+  padding:initial;
+}
+.my-gallery figure img{
+  width:100%;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-b;
+  border:solid #fff 1px;
+  }
+/* PhotoSwipe END */
+
 /* 新規・ログイン画面 START */
 .or-form-wrap {
     margin: 0 auto;
@@ -320,7 +352,7 @@ div.card.diary-card .col{
 /* 店舗ページ END */
 
 /* 日記ページ START */
-.diary-card .diary-image .col {
+.diary-card .my-gallery .col {
   padding: initial;
 }
 .card-action.like-field {
@@ -489,14 +521,14 @@ ul.collection.archive-panel > li > span > i.material-icons {
 #modal-diary {
   word-break: break-all;
 }
-#view-diary .diary-image {
+#view-diary .my-gallery {
   margin-top: 1rem;
 }
 
-div.diary-image {
+div.my-gallery {
   display: inline-block;
 }
-/* .diary-card .diary-image .col .imageOne{
+/* .diary-card .my-gallery .col .imageOne{
   height: 250px;
 } */
 .diary-list p.title, #modal-diary p.title {

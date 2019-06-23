@@ -6,10 +6,15 @@
 			<!-- デスクトップ用ボタン START-->
 			<!-- デスクトップ用ボタン END-->
 			<div class="diary-card hide">
-				<div class="diary-image">
-					<div class="col s12 m12 l12 hide">
-						<img class="" data-caption="店内の様子" height="" width="100%" src="">
-					</div>
+				<!-- <div class="diary-image">
+						<div class="col s12 m12 l12 hide">
+							<img class="" data-caption="店内の様子" height="" width="100%" src="">
+						</div>
+					</div> -->
+				<div class="my-gallery">
+					<figure class="col s4 m4 l3 hide">
+						<a href="" data-size="800x600"><img width="100%" src="" alt="写真の説明でーす。" /></a>
+					</figure>
 				</div>
 				<div class="card-content">
 					<p class="created right-align" name="created"></p>

@@ -30,16 +30,16 @@
         </a>
         <ul>
           <li>
-            <a class="btn-floating blue"><i class="icon-facebook-rect">icon-facebook-rect</i></a>
+            <a href="<?=SHARER['FACEBOOK'].$sharer?>" class="btn-floating blue"><i class="icon-facebook-rect">icon-facebook-rect</i></a>
           </li>
           <li>
-            <a class="btn-floating blue darken-1"><i class="icon-twitter">icon-twitter</i></a>
+            <a href="<?=SHARER['TWITTER'].$sharer?>" class="btn-floating blue darken-1"><i class="icon-twitter">icon-twitter</i></a>
           </li>
           <li>
             <a class="btn-floating chocolate"><i class="icon-instagram">icon-instagram</i></a>
           </li>
           <li>
-            <a class="btn-floating green"><i class="icon-comment-alt">icon-comment-alt</i></a>
+            <a href="<?=SHARER['LINE'].$sharer?>" class="btn-floating green"><i class="icon-comment-alt">icon-comment-alt</i></a>
           </li>
         </ul>
       </div>
@@ -204,20 +204,19 @@
       <div class="or-header-wrap card-panel red lighten-3">
         <span class="or-header">ギャラリー</span>
       </div>
-      <div class="shop-image col s4 m4 l3">
-        <img class="materialboxed" data-caption="店内の様子" width="100%" src="/img/common/top/top1.jpg">
-      </div>
-      <div class="shop-image col s4 m4 l3">
-        <img class="materialboxed" data-caption="店内の様子" width="100%" src="/img/common/top/top1.jpg">
-      </div>
-      <div class="shop-image col s4 m4 l3">
-        <img class="materialboxed" data-caption="店内の様子" width="100%" src="/img/common/top/top1.jpg">
-      </div>
-      <div class="shop-image col s4 m4 l3">
-        <img class="materialboxed" data-caption="店内の様子" width="100%" src="/img/common/top/top1.jpg">
-      </div>
-      <div class="shop-image col s4 m4 l3">
-        <img class="materialboxed" data-caption="店内の様子" width="100%" src="/img/common/top/top1.jpg">
+      <div class="my-gallery">
+        <figure class="col s4 m4 l3">
+          <a href="/img/common/top/top1.jpg" data-size="800x600"><img width="100%" src="/img/common/top/top1.jpg" alt="写真の説明でーす。" /></a>
+        </figure>
+        <figure class="col s4 m4 l3">
+          <a href="/img/common/top/top2.jpg" data-size="800x600"><img width="100%" src="/img/common/top/top2.jpg" alt="写真の説明でーす。" /></a>
+        </figure>
+        <figure class="col s4 m4 l3">
+          <a href="/img/common/top/top3.jpg" data-size="800x600"><img width="100%" src="/img/common/top/top3.jpg" alt="写真の説明でーす。" /></a>
+        </figure>
+        <figure class="col s4 m4 l3">
+          <a href="/img/common/top/top1.jpg" data-size="800x600"><img width="100%" src="/img/common/top/top1.jpg" alt="写真の説明でーす。" /></a>
+        </figure>
       </div>
     </div>
     <div class="row">
@@ -353,3 +352,4 @@
 </div>
 <?php endforeach; ?>
 </div>
+<?= $this->element('photoSwipe'); ?>

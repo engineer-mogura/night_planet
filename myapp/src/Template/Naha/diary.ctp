@@ -70,6 +70,7 @@
         </div>
     </div>
 </div>
+<?= $this->element('photoSwipe'); ?>
 
 
 

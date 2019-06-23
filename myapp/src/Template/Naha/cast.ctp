@@ -130,14 +130,18 @@
         </div>
         <?php
         $isGalleryExists = false;
+        echo('<div class="my-gallery">');
         foreach ($imageCol as $key => $value) {
           if(!$row->isEmpty($value)) { ?>
-            <div class="col s4 m4 l3">
-              <img class="materialboxed" data-caption="店内の様子" width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>">
-            </div>
+              <figure class="col <?=(count($imageCol)==1?'s12 m12 l12':(count($imageCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
+                <a href="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>" data-size="800x600"><img width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>" alt="写真の説明でーす。" /></a>
+              </figure>
+            <?= $value == end($imageCol) ?'</div>':""?>
             <?php $isGalleryExists = true;
           }
-        }?>
+        }
+        echo('</div>');
+        ?>
         <?= $isGalleryExists ? "" : '<p class="col">ギャラリーの登録はありません。</p>';?>
       </div>
       <div class="row diary-list">
@@ -147,10 +151,10 @@
         <?php if (count($row->diarys) > 0) { ?>
           <div class="card diary-card">
         <?php foreach ($dImgCol as $key => $value) { ?>
-        <?= $value == reset($dImgCol) ?'<div class="diary-image">':""?>
-            <div class="col <?=(count($dImgCol)==1?'s12 m12 l12':(count($dImgCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <img class="materialboxed" data-caption="店内の様子" width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>">
-            </div>
+        <?= $value == reset($dImgCol) ?'<div class="my-gallery">':""?>
+            <figure class="col <?=(count($dImgCol)==1?'s12 m12 l12':(count($dImgCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
+              <a href="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>" data-size="800x600"><img width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>" alt="写真の説明でーす。" /></a>
+            </figure>
         <?= $value == end($dImgCol) ?'</div>':""?>
         <?php } ?>
             <div class="card-content">
@@ -394,3 +398,4 @@
 </div>
 <?php endforeach; ?>
 </div>
+<?= $this->element('photoSwipe'); ?>

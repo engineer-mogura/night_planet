@@ -405,6 +405,17 @@ function getParam(name, url) {
               $($objWrapper).replaceWith(response);
               //初期化
               initialize();
+              if($("#cast-profile")) {
+                castInitialize();
+                var $profile = $("#cast-profile");
+                var profile = JSON.parse($($profile).find('input[name="profile_copy"]').val());
+                var birthday = $(document).find('#birthday').pickadate('picker'); // Date Picker
+                birthday.set('select', [2000, 1, 1]);
+                birthday.set('select', new Date(2000, 1, 1));
+                birthday.set('select', profile['birthday'], { format: 'yyyy-mm-dd' });
+                $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
+                $('select').material_select();
+              }
 
               // $.notifyBar({
               //     // cssClass: 'success',

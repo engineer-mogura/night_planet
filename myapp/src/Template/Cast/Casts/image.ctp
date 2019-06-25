@@ -1,7 +1,7 @@
 <?php
 /**
 * @var \App\View\AppView $this
-* @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
+* @var \App\Model\Entity\Cast[]|\Cake\Collection\CollectionInterface $casts
 */
 ?>
 <div id="wrapper">
@@ -34,7 +34,7 @@
                     }
                     ?>
             </div>
-            <form id="delete-image" name="delete_image" method="post" action="/owner/casts/image/<?= $cast['id'] ?>">
+            <form id="delete-image" name="delete_image" method="post" action="/cast/casts/image/<?= $cast['id'] ?>">
                                 <div style="display:none;">
                                     <input type="hidden" name="_method" value="POST">
                                     <input type="hidden" name="crud_type" value="delete">
@@ -43,7 +43,7 @@
                                 </div>
                             </form>
             <div class="row">
-                <form id="edit-image" name="edit_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/casts/image/<?= $cast->id ?>">
+                <form id="edit-image" name="edit_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/cast/casts/image/<?= $cast->id ?>">
                     <div style="display:none;">
                         <input type="hidden" name="image_json" value='<?=json_encode($imageList); ?>'>
                         <input type="hidden" name="_method" value="POST">

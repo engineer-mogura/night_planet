@@ -13,7 +13,7 @@
             <h3><?= __('おきよるGo') ?></h3>
             <div class="left">
                 <span>オーナーログイン</span>
-                <span class="right"><?= $this->Html->link(('キャストはこちらからログイン'), ['controller' => 'Casts', 'action' => 'login']) ?></span>
+                <span class="right"><a href="/cast/casts/login/">キャストはこちらからログイン</a></span>
             </div>
             <?= $this->Form->create(null, array('class' => 'login')) ?>
             <?= $this->Form->control('email', array('required' => false)) ?>

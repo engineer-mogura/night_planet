@@ -1,7 +1,7 @@
 <?php
 /**
 * @var \App\View\AppView $this
-* @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
+* @var \App\Model\Entity\Cast[]|\Cake\Collection\CollectionInterface $casts
 */
 ?>
 <div id="wrapper">
@@ -16,7 +16,7 @@
             <input type="hidden" name="cast_dir" value=<?=$dir?>>
                 <div class="col s12 m12 l12 xl8">
                     <div class="card-panel grey lighten-5">
-                        <form id="edit-diary" name="edit_diary" method="post" action="/owner/casts/diary/<?= $cast->id ?>">
+                        <form id="edit-diary" name="edit_diary" method="post" action="/cast/casts/diary/<?= $cast->id ?>">
                             <div style="display:none;">
                                 <input type="hidden" name="_method" value="POST">
                                 <input type="hidden" name="diary_json" value=''>

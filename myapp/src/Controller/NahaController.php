@@ -79,10 +79,16 @@ class NahaController extends \App\Controller\AreaController
        $sharer =  Router::reverse($this->request, true);
         $shop = $this->Shops->find('all')
             ->where(['Shops.id' => $id])
-            ->contain(['Owners','Casts', 'Coupons','Jobs']);
+            ->contain(['Owners','Casts' => function(Query $q) {
+                return $q
+                    ->where(['Casts.status'=>'1']);
+                }, 'Coupons' => function(Query $q) {
+                return $q
+                    ->where(['Coupons.status'=>'1']);
+                },'Jobs']);
         $this->set('infoArray', $this->Util->getItem($shop->first()));
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-        $creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
+        //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
         $this->set(compact('shop','sharer', 'credits','creditsHidden'));
         $this->render();
     }
@@ -102,7 +108,10 @@ class NahaController extends \App\Controller\AreaController
                 return $q
                     ->select($columns)
                     ->order(['Diarys.created'=>'DESC'])->limit(1);
-                }, 'Diarys.Likes', 'Shops.Coupons', 'Shops.Jobs'
+                }, 'Diarys.Likes', 'Shops.Coupons' => function(Query $q) {
+                return $q
+                    ->where(['Coupons.status'=>'1']);
+                }, 'Shops.Jobs'
             ]);
 
         $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));

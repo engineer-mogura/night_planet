@@ -110,8 +110,8 @@ class CastsTable extends Table
 
         $validator
             ->scalar('message')
-            ->maxLength('message', 50)
-            ->allowEmptyString('message');
+            ->maxLength('message', 50,'メッセージが長すぎます。')
+            ->allowEmptyString('message', false);
 
         $validator
             ->scalar('holiday')

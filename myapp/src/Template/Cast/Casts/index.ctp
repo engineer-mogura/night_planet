@@ -1,7 +1,7 @@
 <?php
 /**
 * @var \App\View\AppView $this
-* @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
+* @var \App\Model\Entity\Cast[]|\Cake\Collection\CollectionInterface $casts
 */
 ?>
 <?= $this->element('modal/calendarModal'); ?>

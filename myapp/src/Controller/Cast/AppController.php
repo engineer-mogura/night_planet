@@ -1,11 +1,11 @@
 <?php
-namespace App\Controller\Owner;
+namespace App\Controller\Cast;
 
 use Cake\ORM\TableRegistry;
 use Cake\Event\Event;
 use Cake\Core\Configure;
 
-class CastsAppController extends \App\Controller\AppController
+class AppController extends \App\Controller\AppController
 {
     public $components = array('Util');
 

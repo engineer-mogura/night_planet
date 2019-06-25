@@ -1,7 +1,7 @@
 <?php
 /**
 * @var \App\View\AppView $this
-* @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
+* @var \App\Model\Entity\Cast[]|\Cake\Collection\CollectionInterface $casts
 */
 ?>
 
@@ -13,7 +13,7 @@
             <h3><?='おきよるGo'?></h3>
             <div class="left">
                 <span>キャストログイン</span>
-                <span class="right"><?= $this->Html->link(('オーナーはこちらからログイン'), ['controller' => 'Owners', 'action' => 'login']) ?></span>
+                <span class="right"><a href="/owner/owners/login/">オーナーはこちらからログイン</a></span>
             </div>
             <?= $this->Form->create(null, array('class' => 'login')) ?>
             <?= $this->Form->control('email', array('required' => false)) ?>

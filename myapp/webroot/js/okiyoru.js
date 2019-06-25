@@ -2038,14 +2038,12 @@ function castInitialize() {
     if($("#cast-profile").length) {
         var $profile = $("#cast-profile");
         var profile = JSON.parse($($profile).find('input[name="profile_copy"]').val());
-        $($profile).find('select[name="age"]').val(profile['age']);
-        $($profile).find('select[name="constellation"]').val(profile['constellation']);
-        $($profile).find('select[name="blood_type"]').val(profile['blood_type']);
         var birthday = $('#birthday').pickadate('picker'); // Date Picker
         birthday.set('select', [2000, 1, 1]);
         birthday.set('select', new Date(2000, 1, 1));
         birthday.set('select', profile['birthday'], { format: 'yyyy-mm-dd' });
-
+        $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
+        $('select').material_select();
         $($profile).find(":input").on("change", function() {
 
             $($profile).find(".saveBtn").removeClass("disabled");
@@ -2159,7 +2157,7 @@ function castInitialize() {
             $.ajax({
                 type: 'GET',
                 //dataType:'application/json',
-                url: "/owner/casts/diary_view/",
+                url: "/cast/casts/diary_view/",
                 data: { id: $(this).find("input[name='id']").val()},
                 contentType: 'application/json',
                 timeout: 10000,

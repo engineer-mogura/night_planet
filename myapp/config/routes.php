@@ -147,8 +147,12 @@ Router::prefix('developer', function (RouteBuilder $routes) {
 Router::prefix('owner', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
 });
-
 // 認証3
+Router::prefix('cast', function (RouteBuilder $routes) {
+    $routes->fallbacks(DashedRoute::class);
+});
+
+// 認証4
 Router::prefix('user', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
 });

@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Owner;
+namespace App\Controller\Cast;
 
 use Cake\I18n\Time;
 use Cake\Event\Event;
@@ -18,7 +18,7 @@ use Cake\Datasource\ConnectionManager;
 /**
  * Controls the data flow into shops object and updates the view whenever data changes.
  */
-class CastsController extends CastsAppController
+class CastsController extends AppController
 {
     public function beforeFilter(Event $event) {
         // AppController.beforeFilterをコールバック
@@ -94,7 +94,7 @@ class CastsController extends CastsAppController
             $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
 
             $this->set(compact('cast', 'activeTab','selectList', 'ajax'));
-                $html = (String)$this->render('/Owner/Casts/index');
+                $html = (String)$this->render('/Cast/Casts/index');
 
             $response = array(
                 'html' => $html,
@@ -300,7 +300,7 @@ class CastsController extends CastsAppController
                 $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
 
                 $this->set(compact('cast', 'activeTab','selectList', 'ajax'));
-                $this->render('/Owner/Casts/profile');
+                $this->render('/Cast/Casts/profile');
                 $this->response->body();
                 return;
             }
@@ -517,7 +517,7 @@ class CastsController extends CastsAppController
                 }
             }
             $this->set(compact('cast', 'activeTab','imageList', 'ajax'));
-            $this->render('/Owner/Casts/image');
+            $this->render('/Cast/Casts/image');
             $this->response->body();
             return;
 
@@ -658,7 +658,7 @@ class CastsController extends CastsAppController
                 $cast = $this->Casts->find('all')->where(['id' => $id])->first();
                 $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
                 $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
-                $this->render('/Owner/Casts/diary');
+                $this->render('/Cast/Casts/diary');
                 $this->response->body();
                 return;
             }
@@ -888,7 +888,7 @@ class CastsController extends CastsAppController
                 $cast = $this->Casts->find('all')->where(['id' => $id])->first();
                 $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
                 $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
-                $this->render('/Owner/Casts/diary');
+                $this->render('/Cast/Casts/diary');
                 $this->response->body();
                 return;
         }
@@ -958,7 +958,7 @@ class CastsController extends CastsAppController
             $cast = $this->Casts->find('all')->where(['id' => $id])->first();
             $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
             $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
-            $this->render('/Owner/Casts/diary');
+            $this->render('/Cast/Casts/diary');
             $this->response->getBody();
             return;
         }

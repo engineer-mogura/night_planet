@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\Owner;
+namespace App\Controller\Shop;
 
 use Cake\Event\Event;
 use RuntimeException;
@@ -125,13 +125,12 @@ class ShopsController extends AppController
         if (!isset($id)) {
             $id = $this->request->getSession()->read('Auth.Owner.id');
         }
-
-        $shop = $this->Shops->find('all')->where(['owner_id' => $id])->contain(['Coupons' => function(Query $q) {
+        $shop = $this->Shops->find()->where(['owner_id' => $id])->contain(['Coupons' => function(Query $q) {
             return $q
-                ->where(['status'=>'1']);
+                ->where(['Coupons.status'=>'1']);
             },'Jobs','Casts' => function(Query $q) {
             return $q
-                ->where(['status'=>'1']);
+                ->where(['Casts.status'=>'1']);
             }]);
         $masterCodesFind = array('industry','job_type','treatment','day');
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);

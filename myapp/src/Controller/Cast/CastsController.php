@@ -1024,7 +1024,7 @@ class CastsController extends AppController
             $this->Flash->success("cast->tokenVerify(token)メソッドを確認すること");
             return $this->redirect(['action' => 'signup']);
         }
-        if ($cast->status == 0 ) {
+        if ($cast->delete_flag == 1 ) {
             $shop = $this->Shops->get($cast->shop_id);
             // 本登録をもってキャスト用のディレクトリを掘る
             $dir = WWW_ROOT.PATH_ROOT['IMG'].DS.$shop->area.DS.$shop->genre
@@ -1052,7 +1052,7 @@ class CastsController extends AppController
                 // トランザクション処理開始
                 $connection->begin();
                 $cast->dir = $nextDir;
-                $cast->status = 1;
+                $cast->delete_flag = 0;
                 $result = true;
                 if(!$this->Casts->save($cast)) {
                     $this->Flash->error(RESULT_M['AUTH_FAILED']);

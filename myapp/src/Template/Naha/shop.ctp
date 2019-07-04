@@ -204,7 +204,7 @@
       <div class="or-header-wrap card-panel red lighten-3">
         <span class="or-header">ギャラリー</span>
       </div>
-      <div class="my-gallery">
+      <div class="col my-gallery">
         <figure class="col s4 m4 l3">
           <a href="/img/common/top/top1.jpg" data-size="800x600"><img width="100%" src="/img/common/top/top1.jpg" alt="写真の説明でーす。" /></a>
         </figure>

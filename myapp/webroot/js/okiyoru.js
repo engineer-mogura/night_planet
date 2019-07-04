@@ -17,26 +17,6 @@ $(document).ready(function(){
     initialize();
 });
 
-/* オーナーデフォルト start */
-/* トップ画像 関連処理 start */
-
-/**
- * トップ画像 通常表示、変更表示切替え処理
- * @param  {} obj
- */
-function topImageChangeBtn(obj){
-        $(obj).find('#top-image-show').attr({width:'',height:'',src:''});
-        $(obj).find('[name="top_image"]').val('');
-    if ($('#edit-top-image').css('display') == 'block') {
-
-        $(obj).find("#edit-top-image").hide();
-        $(obj).find("#show-top-image").show();
-    } else {
-        $(obj).find('#edit-top-image').show();
-        $(obj).find("#show-top-image").hide();
-    }
-}
-
 function imgDisp() {
     var file = $("#top-image-file").prop("files")[0];
 
@@ -56,713 +36,6 @@ function imgDisp() {
     }
     fileReader.readAsDataURL(file);
 }
-
-/**
- * トップ画像 登録ボタン処理
- */
-function topImageSaveBtn(){
-
-    //加工後の横幅を800pxに設定
-    var processingWidth = 800;
-
-    //加工後の容量を100KB以下に設定
-    var processingCapacity = 100000;
-
-    //ファイル選択済みかチェック
-    var fileCheck = $("#top-image-file").val().length;
-    if (fileCheck === 0) {
-        alert("画像ファイルを選択してください");
-        return false;
-    }
-    if(!confirm('こちらの画像に変更でよろしいですか？')) {
-        return false;
-    }
-    //imgタグに表示した画像をimageオブジェクトとして取得
-    var image = new Image();
-    image.src = $("#top-image-preview").attr("src");
-
-    var h;
-    var w;
-
-    //原寸横幅が加工後横幅より大きければ、縦横比を維持した縮小サイズを取得
-    if(processingWidth < image.width) {
-        w = processingWidth;
-        h = image.height * (processingWidth / image.width);
-
-    //原寸横幅が加工後横幅以下なら、原寸サイズのまま
-    } else {
-        w = image.width;
-        h = image.height;
-    }
-
-    //取得したサイズでcanvasに描画
-    var canvas = $("#top-image-canvas");
-    var ctx = canvas[0].getContext("2d");
-    $("#top-image-canvas").attr("width", w);
-    $("#top-image-canvas").attr("height", h);
-    ctx.drawImage(image, 0, 0, w, h);
-
-    //canvasに描画したデータを取得
-    var canvasImage = $("#top-image-canvas").get(0);
-
-    //オリジナル容量(画質落としてない場合の容量)を取得
-    var originalBinary = canvasImage.toDataURL("image/jpeg"); //画質落とさずバイナリ化
-    var originalBlob = base64ToBlob(originalBinary); //画質落としてないblobデータをアップロード用blobに設定
-    console.log(originalBlob["size"]);
-
-    //オリジナル容量blobデータをアップロード用blobに設定
-    var uploadBlob = originalBlob;
-
-    //オリジナル容量が加工後容量以上かチェック
-    if(processingCapacity <= originalBlob["size"]) {
-        //加工後容量以下に落とす
-        var capacityRatio = processingCapacity / originalBlob["size"];
-        var processingBinary = canvasImage.toDataURL("image/jpeg", capacityRatio); //画質落としてバイナリ化
-        uploadBlob = base64ToBlob(processingBinary); //画質落としたblobデータをアップロード用blobに設定
-        console.log(capacityRatio);
-        console.log(uploadBlob["size"]);
-    }
-
-    //アップロード用blobをformDataに設定
-    var $form = $('#edit-top-image');
-    var formData = new FormData($form.get()[0]);
-    formData.append("top_image_file", uploadBlob);
-
-
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: formData, //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        processData: false,
-        contentType: false,
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.saveBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.saveBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.saveBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-
-/**
- * トップ画像 削除ボタン処理
- */
-function topImageDeleteBtn(){
-
-    var $form = $('#delete-top-image');
-
-    if (!confirm('トップ画像を削除してもよろしいですか？')) {
-        return false;
-    }
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.deleteBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.deleteBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.deleteBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-/* トップ画像 関連処理 end */
-
-/* キャッチコピー 関連処理 start */
-
-/**
- * キャッチコピー 通常表示、変更表示切替え処理
- * @param  {} obj
- */
-function catchChangeBtn(obj){
-    if ($('#edit-catch').css('display') == 'block') {
-        // $(obj).find('[name="catch"]').val(""); //初期値を削除しない
-        $(obj).find("#edit-catch").hide();
-        $(obj).find("#show-catch").show();
-    } else {
-        // catchという変数にしたかったがcatchはjsで予約語になる
-        var catchCopy = $(obj).find('input[name="catch_copy"]').val();
-        $('textarea[name="catch"]').val(catchCopy);
-        $(obj).find('#edit-catch').show();
-        $(obj).find("#show-catch").hide();
-    }
-}
-
-/**
- * キャッチコピー 登録ボタン処理
- */
-function catchSaveBtn(){
-
-    var $form = $('#edit-catch');
-    if($form.find('textarea[name="catch"]').val() == '') {
-        alert('キャッチコピーを入力してください。');
-        return false;
-    }
-    if(!confirm('キャッチコピーを変更してもよろしいですか？')) {
-        return false;
-    }
-
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.saveBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.saveBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.saveBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-
-/**
- * キャッチコピー 削除ボタン処理
- */
-function catchDeleteBtn(){
-
-    if(!confirm('キャッチコピーを削除してもよろしいですか？')) {
-        return false;
-    }
-
-    var $form = $('#delete-catch');
-
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.deleteBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.deleteBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.deleteBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-
-/* キャッチコピー 関連処理 end */
-
-/* クーポン 関連処理 start */
-
-/**
- * クーポン 通常表示、変更表示切替え処理
- * @param  {} obj
- */
-function couponChangeBtn(obj){
-    $("html,body").animate({scrollTop:0});
-
-    if ($('#edit-coupon').css('display') == 'block') {
-        // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
-        $(obj).find("#edit-coupon").hide();
-        $(obj).find("#show-coupon").show();
-    } else {
-        //$("html,body").animate({scrollTop:0});
-        // 編集用のフォームへ変更する
-        if($('input[name="coupon_add"]').length) {
-            $('input[name="coupon_add"]').attr('name', 'coupon_edit');
-        }
-        $(obj).find('input[name="status"]').removeAttr('checked');
-        var $check = $('input[name="check_coupon"]:checked');
-        var coupon = JSON.parse($($check).closest('.coupon-box').find('input[name="coupon_copy"]').val());
-        var from = $('#from-day').pickadate('picker'); // Date Picker
-        var to = $('#to-day').pickadate('picker'); // Date Picker
-        from.set('select', [2000, 1, 1]);
-        from.set('select', new Date(2000, 1, 1));
-        from.set('select', coupon['from_day'], { format: 'yyyy-mm-dd' });
-        to.set('select', [2000, 1, 1]);
-        to.set('select', new Date(2000, 1, 1));
-        to.set('select', coupon['to_day'], { format: 'yyyy-mm-dd' });
-        $(obj).find('input[name="coupon_edit_id"]').val(coupon['id']);
-        $(obj).find('input[name="title"]').val(coupon['title']);
-        $(obj).find('textarea[name="content"]').val(coupon['content']);
-        if(coupon['status'] == 1) {
-            $('input[name="status"]').attr('checked', 'checked');
-        }
-        $(obj).find('#edit-coupon').show();
-        $(obj).find("#show-coupon").hide();
-        Materialize.updateTextFields(); // インプットフィールドの初期化
-    }
-}
-
-/**
- * クーポン 追加ボタン処理
- * @param  {} obj
- */
-function couponAddBtn(obj){
-    if ($('#edit-coupon').css('display') == 'block') {
-        // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
-        $(obj).find("#edit-coupon").hide();
-        $(obj).find("#show-coupon").show();
-    } else {
-        $("html,body").animate({scrollTop:0});
-        // フォームの中身はすべて消す
-        $(obj).find('#from-day').pickadate('picker').set("select",null);
-        $(obj).find('#to-day').pickadate('picker').set("select",null);
-        $(obj).find('#coupon-title').val('');
-        $(obj).find('#coupon-content').val('');
-        $(obj).find('input[name="status"]').removeAttr('checked');
-        // 追加用のフォームへ変更する
-        if($('input[name="coupon_edit"]').length) {
-            $('input[name="coupon_edit"]').attr('name', 'coupon_add');
-        }
-        $(obj).find('#edit-coupon').show();
-        $(obj).find("#show-coupon").hide();
-    }
-}
-
-/**
- * クーポン 登録ボタン処理
- */
-function couponSaveBtn(){
-
-    if (!confirm('こちらのクーポン内容に変更でよろしいですか？')) {
-        return false;
-    }
-
-    var $form = $('form[name="edit_coupon"]');
-    var from_day = $($form).find('input[name="from_day_submit"]').val();
-    var to_day = $($form).find('input[name="to_day_submit"]').val();
-    $($form).find('input[name="from_day"]').val(from_day);
-    $($form).find('input[name="to_day"]').val(to_day);
-
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.saveBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.saveBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.saveBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-
-/**
- * クーポン 削除ボタン処理
- */
-function couponDeleteBtn(){
-
-    var $check = $('input[name="check_coupon"]:checked');
-    var $form = $($check).closest('.coupon-box').find('form[name="delete_coupon"]');
-    var title = $($form).find('input[name="coupon_title"]').val();
-
-    if (!confirm('【'+title+'】\n選択したクーポンを削除してもよろしいですか？')) {
-        return false;
-    }
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.deleteBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.deleteBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.deleteBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-/* クーポン 関連処理 end */
-
-
-/* キャスト 関連処理 start */
-
-/**
- * キャスト 通常表示、変更表示切替え処理
- * @param  {} obj
- */
-function castChangeBtn(obj){
-    $("html,body").animate({scrollTop:0});
-
-    if ($('#edit-cast').css('display') == 'block') {
-        // $(obj).find('[name="cast"]').val(""); //初期値を削除しない
-        $(obj).find("#edit-cast").hide();
-        $(obj).find("#show-cast").show();
-    } else {
-        //$("html,body").animate({scrollTop:0});
-        // 編集用のフォームへ変更する
-        if($('input[name="cast_add"]').length) {
-            $('input[name="cast_add"]').attr('name', 'cast_edit');
-        }
-        $(obj).find('input[name="status"]').removeAttr('checked');
-        var $check = $('input[name="check_cast"]:checked');
-        var cast = JSON.parse($($check).closest('.cast-box').find('input[name="cast_copy"]').val());
-        $(obj).find('input[name="cast_edit_id"]').val(cast['id']);
-        $(obj).find('input[name="name"]').val(cast['name']);
-        $(obj).find('input[name="nickname"]').val(cast['nickname']);
-        $(obj).find('input[name="email"]').val(cast['email']);
-        if(cast['status'] == 1) {
-            $('input[name="status"]').attr('checked', 'checked');
-        }
-        $(obj).find('#edit-cast').show();
-        $(obj).find("#show-cast").hide();
-        Materialize.updateTextFields(); // インプットフィールドの初期化
-    }
-}
-
-/**
- * キャスト 追加ボタン処理
- * @param  {} obj
- */
-function castAddBtn(obj){
-    if ($('#edit-cast').css('display') == 'block') {
-        // $(obj).find('[name="cast"]').val(""); //初期値を削除しない
-        $(obj).find("#edit-cast").hide();
-        $(obj).find("#show-cast").show();
-    } else {
-        $("html,body").animate({scrollTop:0});
-        // フォームの中身はすべて消す
-        $(obj).find('input[name="cast_edit_id"]').val('');
-        $(obj).find('input[name="name"]').val('');
-        $(obj).find('input[name="nickname"]').val('');
-        $(obj).find('input[name="email"]').val('');
-        $(obj).find('input[name="status"]').removeAttr('checked');
-        // 追加用のフォームへ変更する
-        if($('input[name="cast_edit"]').length) {
-            $('input[name="cast_edit"]').attr('name', 'cast_add');
-        }
-        $(obj).find('#edit-cast').show();
-        $(obj).find("#show-cast").hide();
-    }
-}
-
-/**
- * キャスト 登録ボタン処理
- */
-function castSaveBtn(){
-
-    if (!confirm('こちらのキャスト内容に変更でよろしいですか？')) {
-        return false;
-    }
-
-    var $form = $('form[name="edit_cast"]');
-
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.saveBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.saveBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.saveBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-
-/**
- * キャスト 削除ボタン処理
- */
-function castDeleteBtn(){
-
-    var $check = $('input[name="check_cast"]:checked');
-    var $form = $($check).closest('.cast-box').find('form[name="delete_cast"]');
-    var title = $($form).find('input[name="cast_title"]').val();
-
-    if (!confirm('【'+title+'】\n選択したキャストを削除してもよろしいですか？')) {
-        return false;
-    }
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.deleteBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.deleteBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.deleteBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-/* キャスト 関連処理 end */
-
 
 /* 店舗情報 関連処理 start */
 /**
@@ -1455,6 +728,17 @@ function castImageDeleteBtn(form, obj){
             }
         });
 
+        var activeTab = $('#activeTab').val();
+        var options = {
+            //'swipeable':true, // モバイル時のスワイプでタブ切り替え
+            //'responsiveThreshold':991,
+            'onShow': function() {   // タブ切り替え時のコールバック
+            }
+        }
+        $('ul.tabs').tabs(options);
+        // タブの事前選択
+        $('ul.tabs').tabs('select_tab', activeTab);
+
         // materializecss selectbox
         $('select').material_select();
         // materializecss tooltip
@@ -1805,19 +1089,478 @@ function userInitialize() {
  */
 function ownerInitialize() {
 
-    var activeTab = $('#activeTab').val();
-    var options = {
-        //'swipeable':true, // モバイル時のスワイプでタブ切り替え
-        //'responsiveThreshold':991,
-        'onShow': function() {   // タブ切り替え時のコールバック
-        }
-    }
-    $('ul.tabs').tabs(options);
-    // タブの事前選択
-    $('ul.tabs').tabs('select_tab', activeTab);
-
     // 店舗編集のスクリプト 店舗情報 クレジットフォームを入力不可にする
     $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
+
+    /* トップ画像 関連処理 start */
+    // トップ画像 変更、やめるボタン押した時
+    $(document).on("click", ".top-image-changeBtn",function() {
+        // 画像をクリアする
+        $('#top-image').find('#top-image-show').attr({width:'',height:'',src:''});
+        $('#top-image').find('[name="top_image"]').val('');
+
+        // 編集フォームが表示されている場合
+        if ($('#edit-top-image').css('display') == 'block') {
+            // ビュー表示
+            $('#top-image').find("#edit-top-image").hide();
+            $('#top-image').find("#show-top-image").show();
+        } else {
+            // 編集表示
+            $('#top-image').find('#edit-top-image').show();
+            $('#top-image').find("#show-top-image").hide();
+        }
+
+    });
+    // トップ画像 登録ボタン押した時
+    $(document).on("click", ".top-image-saveBtn",function() {
+
+        //加工後の横幅を800pxに設定
+        var processingWidth = 800;
+
+        //加工後の容量を100KB以下に設定
+        var processingCapacity = 100000;
+
+        //ファイル選択済みかチェック
+        var fileCheck = $("#top-image-file").val().length;
+        if (fileCheck === 0) {
+            alert("画像ファイルを選択してください");
+            return false;
+        }
+        if(!confirm('こちらの画像に変更でよろしいですか？')) {
+            return false;
+        }
+        //imgタグに表示した画像をimageオブジェクトとして取得
+        var image = new Image();
+        image.src = $("#top-image-preview").attr("src");
+
+        var h;
+        var w;
+
+        //原寸横幅が加工後横幅より大きければ、縦横比を維持した縮小サイズを取得
+        if(processingWidth < image.width) {
+            w = processingWidth;
+            h = image.height * (processingWidth / image.width);
+
+        //原寸横幅が加工後横幅以下なら、原寸サイズのまま
+        } else {
+            w = image.width;
+            h = image.height;
+        }
+
+        //取得したサイズでcanvasに描画
+        var canvas = $("#top-image-canvas");
+        var ctx = canvas[0].getContext("2d");
+        $("#top-image-canvas").attr("width", w);
+        $("#top-image-canvas").attr("height", h);
+        ctx.drawImage(image, 0, 0, w, h);
+
+        //canvasに描画したデータを取得
+        var canvasImage = $("#top-image-canvas").get(0);
+
+        //オリジナル容量(画質落としてない場合の容量)を取得
+        var originalBinary = canvasImage.toDataURL("image/jpeg"); //画質落とさずバイナリ化
+        var originalBlob = base64ToBlob(originalBinary); //画質落としてないblobデータをアップロード用blobに設定
+        console.log(originalBlob["size"]);
+
+        //オリジナル容量blobデータをアップロード用blobに設定
+        var uploadBlob = originalBlob;
+
+        //オリジナル容量が加工後容量以上かチェック
+        if(processingCapacity <= originalBlob["size"]) {
+            //加工後容量以下に落とす
+            var capacityRatio = processingCapacity / originalBlob["size"];
+            var processingBinary = canvasImage.toDataURL("image/jpeg", capacityRatio); //画質落としてバイナリ化
+            uploadBlob = base64ToBlob(processingBinary); //画質落としたblobデータをアップロード用blobに設定
+            console.log(capacityRatio);
+            console.log(uploadBlob["size"]);
+        }
+
+        //アップロード用blobをformDataに設定
+        var json = JSON.parse($("#top-image").find('input[name="json_data"]').val());
+        $("#top-image").find('input[name="id"]').val(json['id']);
+        var $form = $('#edit-top-image');
+        var formData = new FormData($form.get()[0]);
+        formData.append("top_image_file", uploadBlob);
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        fileUpAjaxCommonOwner($form, formData, $("#top-image"));
+    });
+    // トップ画像 削除ボタン押した時
+    $(document).on("click", ".top-image-deleteBtn",function() {
+
+        if (!confirm('トップ画像を削除してもよろしいですか？')) {
+            return false;
+        }
+        var json = JSON.parse($("#top-image").find('input[name="json_data"]').val());
+        $("#top-image").find('input[name="id"]').val(json['id']);
+        $("#top-image").find('input[name="file_before"]').val(json['top_image']);
+
+        var $form =$('#delete-top-image');
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#top-image"));
+    });
+    /* トップ画像 関連処理 end */
+
+    /* キャッチコピー 関連処理 start */
+    // キャッチコピー 変更、やめるボタン押した時
+    $(document).on("click", ".catch-changeBtn",function() {
+
+        // 編集フォームが表示されている場合
+        if ($('#edit-catch').css('display') == 'block') {
+            // $(obj).find('[name="catch"]').val(""); //初期値を削除しない
+            $("#catch").find("#edit-catch").hide();
+            $("#catch").find("#show-catch").show();
+        } else {
+            // catchという変数にしたかったがcatchはjsで予約語になる
+            var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
+
+            var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
+            $("#catch").find('input[name="id"]').val(json['id']);
+            $("#catch").find('textarea[name="catch"]').val(json['catch']);
+            $("#catch").find('#edit-catch').show();
+            $("#catch").find("#show-catch").hide();
+            $('textarea').trigger('autoresize');
+            Materialize.updateTextFields(); // インプットフィールドの初期化
+        }
+
+    });
+
+    // キャッチコピー 登録ボタン押した時
+    $(document).on("click", ".catch-saveBtn",function() {
+        var $form = $('#edit-catch');
+        if($form.find('textarea[name="catch"]').val() == '') {
+            alert('キャッチコピーを入力してください。');
+            return false;
+        }
+        if(!confirm('キャッチコピーを変更してもよろしいですか？')) {
+            return false;
+        }
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#catch"));
+    });
+
+    // キャッチコピー 削除ボタン押した時
+    $(document).on("click", ".catch-deleteBtn",function() {
+
+        if(!confirm('キャッチコピーを削除してもよろしいですか？')) {
+            return false;
+        }
+        var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
+        $("#catch").find('input[name="id"]').val(json['id']);
+
+        var $form = $('#delete-catch');
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#catch"));
+    });
+    /* キャッチコピー 関連処理 end */
+
+    /* クーポン 関連処理 start */
+    // クーポン 変更、やめるボタン押した時
+    $(document).on("click", ".coupon-changeBtn",function() {
+        $("html,body").animate({scrollTop:0});
+
+        if ($('#edit-coupon').css('display') == 'block') {
+            // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
+            $("#coupon").find("#edit-coupon").hide();
+            $("#coupon").find("#show-coupon").show();
+        } else {
+            // コントローラ側で処理判断するパラメータ
+            $('input[name="crud_type"]').val('update');
+
+            var checked = $('input[name="check_coupon"]:checked');
+            var json = JSON.parse($(checked).closest('.coupon-box').find('input[name="json_data"]').val());
+            var from = $('#from-day').pickadate('picker'); // Date Picker
+            var to = $('#to-day').pickadate('picker'); // Date Picker
+            from.set('select', [2000, 1, 1]);
+            from.set('select', new Date(2000, 1, 1));
+            from.set('select', json['from_day'], { format: 'yyyy-mm-dd' });
+            to.set('select', [2000, 1, 1]);
+            to.set('select', new Date(2000, 1, 1));
+            to.set('select', json['to_day'], { format: 'yyyy-mm-dd' });
+            $("#coupon").find('input[name="id"]').val(json['id']);
+            $("#coupon").find('input[name="title"]').val(json['title']);
+            $("#coupon").find('textarea[name="content"]').val(json['content']);
+            if(json['status'] == 1) {
+                $('input[name="status"]').attr('checked', 'checked');
+            }
+            $("#coupon").find('#edit-coupon').show();
+            $("#coupon").find("#show-coupon").hide();
+            $('textarea').trigger('autoresize');
+            Materialize.updateTextFields(); // インプットフィールドの初期化
+        }
+    });
+
+    // クーポン 追加ボタン押した時
+    $(document).on("click", ".coupon-addBtn",function() {
+        if ($('#edit-coupon').css('display') == 'block') {
+            // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
+            $("#coupon").find("#edit-coupon").hide();
+            $("#coupon").find("#show-coupon").show();
+        } else {
+            $("html,body").animate({scrollTop:0});
+            // フォームの中身はすべて消す
+            $("#coupon").find('input[name="id"]').val('');
+            $("#coupon").find('#from-day').pickadate('picker').set("select",null);
+            $("#coupon").find('#to-day').pickadate('picker').set("select",null);
+            $("#coupon").find('#coupon-title').val('');
+            $("#coupon").find('#coupon-content').val('');
+            // コントローラ側で処理判断するパラメータ
+            $('input[name="crud_type"]').val('insert');
+            $("#edit-coupon").find('button').removeClass('disabled');
+            $("#coupon").find('#edit-coupon').show();
+            $("#coupon").find("#show-coupon").hide();
+        }
+    });
+
+    // クーポン 登録ボタン押した時
+    $(document).on("click", ".coupon-saveBtn",function() {
+
+        if (!confirm('こちらの内容に変更でよろしいですか？')) {
+            return false;
+        }
+
+        var $form = $('form[name="edit_coupon"]');
+        var from_day = $($form).find('input[name="from_day_submit"]').val();
+        var to_day = $($form).find('input[name="to_day_submit"]').val();
+        $($form).find('input[name="from_day"]').val(from_day);
+        $($form).find('input[name="to_day"]').val(to_day);
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#coupon"));
+    });
+
+    /* クーポン チェックボックス押した時 */
+    $(document).on('click','.check-coupon-group', function() {
+        var $button = $('#coupon').find('.coupon-changeBtn,.coupon-deleteBtn');
+        var $addButton = $('#coupon').find('.coupon-addBtn');
+
+        if ($(this).prop('checked')){
+            $("html,body").animate({scrollTop:$('.targetScroll').offset().top},1200);
+            // 一旦全てをクリアして再チェックする
+            $('.check-coupon-group').prop('checked', false);
+            $(this).prop('checked', true);
+            $($button).removeClass('disabled');
+            $($addButton).addClass('disabled');
+        } else {
+            $($button).addClass('disabled');
+            $($addButton).removeClass('disabled');
+        }
+    });
+
+    /* クーポン スイッチ押した時 */
+    $(document).on('change', '.coupon-switchBtn', function() {
+        var target = $(this).closest('.coupon-box');
+        var json = JSON.parse($(target).find('input[name="json_data"]').val());
+        var status = 1; // チェック状態初期値
+        // チェックされてない場合
+        if(!$(this).prop('checked')) {
+            status = 0;
+        }
+        var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_coupon/' };
+
+        $.ajax({
+            type: 'POST',
+            datatype:'json',
+            url: data.action,
+            data: data,
+            timeout: 10000,
+            beforeSend : function(xhr, settings){
+                $("#coupon").find('.coupon-switchBtn').attr('disabled' , true);
+            },
+            complete: function(xhr, textStatus){
+                $("#coupon").find('.coupon-switchBtn').attr('disabled' , false);
+            },
+            success: function(response,dataType) {
+                // OKの場合
+                if(response.success){
+                    Materialize.toast($(target).find(".coupon-num").text() + response.message, 3000, 'rounded')
+                }else{
+                // NGの場合
+                    Materialize.toast($(target).find(".coupon-num").text() + response.message, 3000, 'rounded')
+            }
+            },
+            error : function(response, textStatus, xhr){
+                $("#coupon").find('.coupon-switchBtn').attr('disabled' , false);
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: "通信に失敗しました。ステータス：" + textStatus
+                });
+            }
+        });
+    });
+
+    // クーポン 削除ボタン押した時
+    $(document).on("click", ".coupon-deleteBtn",function() {
+
+        var checked = $('input[name="check_coupon"]:checked');
+        var json = JSON.parse($(checked).closest('.coupon-box').find('input[name="json_data"]').val());
+
+        if (!confirm('【'+json.title+'】\n選択したクーポンを削除してもよろしいですか？')) {
+            return false;
+        }
+        var $form = $('form[id="delete-coupon"]');
+        $($form).find("input[name='id']").val(json.id);
+        $($form).find("input[name='shop_id']").val(json.shop_id);
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#coupon"));
+    });
+    /* クーポン 関連処理 end */
+
+    /* キャスト 関連処理 start */
+    // キャスト 変更、やめるボタン押した時
+    $(document).on("click", ".cast-changeBtn",function() {
+        $("html,body").animate({scrollTop:0});
+
+        if ($('#edit-cast').css('display') == 'block') {
+            // $(obj).find('[name="cast"]').val(""); //初期値を削除しない
+            $("#cast").find("#edit-cast").hide();
+            $("#cast").find("#show-cast").show();
+        } else {
+            // コントローラ側で処理判断するパラメータ
+            $('input[name="crud_type"]').val('update');
+
+            var checked = $('input[name="check_cast"]:checked');
+            var json = JSON.parse($(checked).closest('.cast-box').find('input[name="json_data"]').val());
+            $("#cast").find('input[name="id"]').val(json['id']);
+            $("#cast").find('input[name="name"]').val(json['name']);
+            $("#cast").find('input[name="nickname"]').val(json['nickname']);
+            $("#cast").find('input[name="email"]').val(json['email']);
+
+            if(json['status'] == 1) {
+                $('input[name="status"]').attr('checked', 'checked');
+            }
+            $("#cast").find('#edit-cast').show();
+            $("#cast").find("#show-cast").hide();
+            $('textarea').trigger('autoresize');
+            Materialize.updateTextFields(); // インプットフィールドの初期化
+        }
+    });
+
+
+
+    // キャスト 追加ボタン押した時
+    $(document).on("click", ".cast-addBtn",function() {
+        if ($('#edit-cast').css('display') == 'block') {
+            $("#cast").find("#edit-cast").hide();
+            $("#cast").find("#show-cast").show();
+        } else {
+            $("html,body").animate({scrollTop:0});
+            // フォームの中身はすべて消す
+            $("#cast").find('input[name="id"]').val('');
+            $("#cast").find('input[name="name"]').val('');
+            $("#cast").find('input[name="nickname"]').val('');
+            $("#cast").find('input[name="email"]').val('');
+            // コントローラ側で処理判断するパラメータ
+            $('input[name="crud_type"]').val('insert');
+            $("#edit-cast").find('button').removeClass('disabled');
+            $("#cast").find('#edit-cast').show();
+            $("#cast").find("#show-cast").hide();
+        }
+    });
+
+    // キャスト 登録ボタン押した時
+    $(document).on("click", ".cast-saveBtn",function() {
+
+        if (!confirm('こちらの内容に変更でよろしいですか？')) {
+            return false;
+        }
+
+        var $form = $('form[name="edit_cast"]');
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#cast"));
+    });
+
+    /* キャスト チェックボックス押した時 */
+    $(document).on('click','.check-cast-group', function() {
+        var $button = $('#cast').find('.cast-changeBtn,.cast-deleteBtn');
+        var $addButton = $('#cast').find('.cast-addBtn');
+
+        if ($(this).prop('checked')){
+            $("html,body").animate({scrollTop:$('.targetScroll').offset().top},1200);
+            // 一旦全てをクリアして再チェックする
+            $('.check-cast-group').prop('checked', false);
+            $(this).prop('checked', true);
+            $($button).removeClass('disabled');
+            $($addButton).addClass('disabled');
+        } else {
+            $($button).addClass('disabled');
+            $($addButton).removeClass('disabled');
+        }
+    });
+
+    /* キャスト スイッチ押した時 */
+    $(document).on('change', '.cast-switchBtn', function() {
+        var target = $(this).closest('.cast-box');
+        var json = JSON.parse($(target).find('input[name="json_data"]').val());
+        var status = 1; // チェック状態初期値
+        // チェックされてない場合
+        if(!$(this).prop('checked')) {
+            status = 0;
+        }
+        var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_cast/' };
+
+        $.ajax({
+            type: 'POST',
+            datatype:'json',
+            url: data.action,
+            data: data,
+            timeout: 10000,
+            beforeSend : function(xhr, settings){
+                $("#cast").find('.cast-switchBtn').attr('disabled' , true);
+            },
+            complete: function(xhr, textStatus){
+                $("#cast").find('.cast-switchBtn').attr('disabled' , false);
+            },
+            success: function(response,dataType) {
+                // OKの場合
+                if(response.success){
+                    Materialize.toast($(target).find(".cast-num").text() + response.message, 3000, 'rounded')
+                }else{
+                // NGの場合
+                    Materialize.toast($(target).find(".cast-num").text() + response.message, 3000, 'rounded')
+            }
+            },
+            error : function(response, textStatus, xhr){
+                $("#cast").find('.cast-switchBtn').attr('disabled' , false);
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: "通信に失敗しました。ステータス：" + textStatus
+                });
+            }
+        });
+    });
+
+    // キャスト 削除ボタン押した時
+    $(document).on("click", ".cast-deleteBtn",function() {
+
+        var checked = $('input[name="check_cast"]:checked');
+        var json = JSON.parse($(checked).closest('.cast-box').find('input[name="json_data"]').val());
+
+        if (!confirm('【'+json.name+'】\n選択したキャストを削除してもよろしいですか？')) {
+            return false;
+        }
+        var $form = $('form[id="delete-cast"]');
+        $($form).find("input[name='id']").val(json.id);
+        $($form).find("input[name='shop_id']").val(json.shop_id);
+        $($form).find("input[name='dir']").val(json.dir);
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#cast"));
+    });
+    /* キャスト 関連処理 end */
+
     // 店舗情報 クレジットタグをフォームに追加する
     $('#tenpo').find('.chip').on('click', function() {
         var $chips = $('#tenpo').find('.chips');
@@ -1894,113 +1637,111 @@ function ownerInitialize() {
         return false;
     });
 
-    /* クーポンタブ 関連処理 start */
-    /* クーポン チェックボックスオンオフ時 */
-    $(document).on('click','.check-coupon-group', function() {
-        var $button = $('#coupon').find('button.changeBtn,button.deleteBtn');
-        var $addButton = $('#coupon').find('button.addBtn');
+    /**
+     * オーナーデファルト用ajax共通処理
+     */
+    var ajaxCommonOwner = function($form, $tab) {
 
-        if ($(this).prop('checked')){
-            $("html,body").animate({scrollTop:$('.targetScroll').offset().top},1200);
-            // 一旦全てをクリアして再チェックする
-            $('.check-coupon-group').prop('checked', false);
-            $(this).prop('checked', true);
-            if($($button).hasClass('disabled')){
-                $($button).removeClass('disabled');
-            }
-            $($addButton).addClass('disabled');
-        } else {
-            $($button).each(function(index, element){
-                $($button).addClass('disabled');
-            });
-            $($addButton).removeClass('disabled');
-        }
-    });
-
-    /* クーポン スイッチオンオフ時 ajax更新 */
-    $('.switch_coupon').change(function() {
-        var name = $(this).attr('name');
-        var $form = $('form[name="'+ name +'"]');
-        var status = 1;
-        // チェック状態によって値を入れ替える
-        if(!$(this).prop('checked')) {
-            status = 0;
-        }
-
-        var data = { coupon_switch : status };
         $.ajax({
-            type: 'POST',
-            datatype:'json',
-            url: $($form).attr('action'),
-            data: data,
+            url : $form.attr('action'), //Formのアクションを取得して指定する
+            type: $form.attr('method'),//Formのメソッドを取得して指定する
+            data: $form.serialize(), //データにFormがserialzeした結果を入れる
+            dataType: 'json', //データにFormがserialzeした結果を入れる
             timeout: 10000,
-            success: function(data,dataType) {
-                //console.log(data);
+            beforeSend : function(xhr, settings){
+                //Buttonを無効にする
+                $($tab).find('button').attr('disabled' , true);
+                //処理中のを通知するアイコンを表示する
+                $("#dummy").load("/module/Preloader.ctp");
+            },
+            complete: function(xhr, textStatus){
+                //処理中アイコン削除
+                $('.preloader-wrapper').remove();
+                $($tab).find('button').attr('disabled' , false);
+            },
+            success: function (response, textStatus, xhr) {
+
+                // OKの場合
+                if(response.success){
+                    $($tab).replaceWith(response.html);
+                        $.notifyBar({
+                        cssClass: 'success',
+                        html: response.message
+                    });
+                    initialize();
+                }else{
+                // NGの場合
+                    $.notifyBar({
+                        cssClass: 'error',
+                        html: response.error
+                    });
+                }
             },
             error : function(response, textStatus, xhr){
-                $($form).find('.saveBtn').attr('disabled' , false);
+                $($tab).find('button').attr('disabled' , false);
                 $.notifyBar({
                     cssClass: 'error',
                     html: "通信に失敗しました。ステータス：" + textStatus
                 });
             }
         });
-    });
-    /* クーポンタブ 関連処理 end */
-
-    /* キャストタブ 関連処理 start */
-    $(document).on('click','.check-cast-group', function() {
-        var $button = $('#cast').find('button.changeBtn,button.deleteBtn');
-        var $addButton = $('#cast').find('button.addBtn');
-
-        if ($(this).prop('checked')){
-            $("html,body").animate({scrollTop:$('.targetScroll').offset().top},1200);
-            // 一旦全てをクリアして再チェックする
-            $('.check-cast-group').prop('checked', false);
-            $(this).prop('checked', true);
-            if($($button).hasClass('disabled')){
-                $($button).removeClass('disabled');
-            }
-            $($addButton).addClass('disabled');
-        } else {
-            $($button).each(function(index, element){
-                $($button).addClass('disabled');
-            });
-            $($addButton).removeClass('disabled');
-        }
-    });
-
-    /* キャスト スイッチオンオフ時 ajax更新 */
-    $('.switch_cast').change(function() {
-        var name = $(this).attr('name');
-        var $form = $('form[name="'+ name +'"]');
-        var status = 1;
-        // チェック状態によって値を入れ替える
-        if(!$(this).prop('checked')) {
-            status = 0;
-        }
-
-        var data = { cast_switch : status };
-        $.ajax({
-            type: 'POST',
-            datatype:'json',
-            url: $($form).attr('action'),
-            data: data,
-            timeout: 10000,
-            success: function(data,dataType) {
-                console.log(data);
-            },
-            error : function(response, textStatus, xhr){
-                $($form).find('.saveBtn').attr('disabled' , false);
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: "通信に失敗しました。ステータス：" + textStatus
-                });
-            }
-        });
-    });
-    /* キャストタブ 関連処理 end */
+    }
 }
+
+    /**
+     * オーナーデファルト用画像アップロードajax共通処理
+     */
+    var fileUpAjaxCommonOwner = function($form, formData, $tab) {
+
+        $.ajax({
+            url : $form.attr('action'), //Formのアクションを取得して指定する
+            type: $form.attr('method'),//Formのメソッドを取得して指定する
+            data: formData, //データにFormがserialzeした結果を入れる
+            dataType: 'json', //データにFormがserialzeした結果を入れる
+            processData: false,
+            contentType: false,
+            timeout: 10000,
+            beforeSend : function(xhr, settings){
+                //Buttonを無効にする
+                $($tab).find('button').attr('disabled' , true);
+                //処理中のを通知するアイコンを表示する
+                $("#dummy").load("/module/Preloader.ctp");
+            },
+            complete: function(xhr, textStatus){
+                //処理中アイコン削除
+                $('.preloader-wrapper').remove();
+                $($tab).find('button').attr('disabled' , false);
+            },
+            success: function (response, textStatus, xhr) {
+
+                // OKの場合
+                if(response.success){
+                    $($tab).replaceWith(response.html);
+                        $.notifyBar({
+                        cssClass: 'success',
+                        html: response.message
+                    });
+                    initialize();
+                }else{
+                // NGの場合
+                    $.notifyBar({
+                        cssClass: 'error',
+                        html: response.error
+                    });
+                }
+            },
+            error : function(response, textStatus, xhr){
+                $($tab).find('button').attr('disabled' , false);
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: "通信に失敗しました。ステータス：" + textStatus
+                });
+            }
+        });
+    }
+
+
+
 
 /**
  * キャスト画面の初期化処理

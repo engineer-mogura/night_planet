@@ -1,9 +1,11 @@
 <?php
 namespace App\Model\Table;
 
+use ArrayObject;
 use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Event\Event;
+use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
 
 /**
@@ -43,7 +45,7 @@ class CouponsTable extends Table
 
         $this->belongsTo('Shops', [
             'foreignKey' => 'shop_id',
-            'joinType' => 'INNER'
+            'joinType' => 'OUTER'
         ]);
     }
 
@@ -122,4 +124,21 @@ class CouponsTable extends Table
 
         return $rules;
     }
+
+        /**
+     * リクエストデータがエンティティーに変換される前に呼ばれる処理。 
+     * 主にリクエストデータに変換を掛けたり、バリデーションを条件次第で事前に解除したりできる。
+     * @param Event $event
+     * @param ArrayObject $data
+     * @param ArrayObject $options
+     * @return void
+     */
+    // public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    // {
+    //     // startは、DateTime型に変換
+    //     if (isset($data['status'])) {
+    //         $data['status'] = 0;
+    //     }
+
+    // }
 }

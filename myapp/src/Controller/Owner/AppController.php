@@ -61,8 +61,13 @@ class AppController extends \App\Controller\AppController
     {
         $action = $this->request->getParam('action');
         // ログイン時に許可するアクション
-        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit',
-                                'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob'])) {
+        // if (in_array($action, ['index', 'view', 'add', 'delete', 'edit',
+        //                         'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob'])) {
+        //     return true;
+        // }
+        $access = ['saveTopImage','deleteTopImage','saveCatch','deleteCatch','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast','deleteCast'];
+        if (in_array($action, array_merge($access, ['index', 'view', 'add', 'delete', 'edit',
+                                'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob']))) {
             return true;
         }
         return false;

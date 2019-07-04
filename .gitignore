@@ -1,4 +1,5 @@
 /phpmyadmin/
+/myapp/webroot/tmp/
 /myapp/webroot/img/**/*.jpg
 /myapp/webroot/img/**/*.png
 /myapp/webroot/img/**/calendar.json

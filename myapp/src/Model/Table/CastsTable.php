@@ -2,8 +2,9 @@
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 /**
@@ -64,20 +65,31 @@ class CastsTable extends Table
 
         $validator
             ->scalar('name')
+            ->notEmpty('name','名前を入力してください。')
             ->maxLength('name', 30, '名前が長すぎます。')
             ->requirePresence('name', 'create')
             ->allowEmptyString('name', false);
 
         $validator
             ->scalar('nickname')
+            ->notEmpty('nickname','ニックネームを入力してください。')
             ->maxLength('nickname', 30, 'ニックネームが長すぎます。')
             ->requirePresence('nickname', 'create')
             ->allowEmptyString('nickname', false);
 
         $validator
-            ->email('email')
+            ->email('email',false, "メールアドレスの形式が不正です。")
+            ->notEmpty('email','メールアドレスを入力してください。')
             ->requirePresence('email', 'create')
-            ->allowEmptyString('email', false);
+            ->allowEmptyString('email', false)
+            ->add('email', [
+                'exists' => [
+                    'rule' => function($value, $context) {
+                        return !TableRegistry::get('Casts')->exists(['email' => $value]);
+                    },
+                    'message' => 'そのメールアドレスは既に登録されています。'
+                ],
+            ]);
 
         $validator
             ->scalar('password')

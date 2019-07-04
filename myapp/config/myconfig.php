@@ -272,6 +272,8 @@ return [
 		'SIGNUP_SUCCESS'=>'登録しました。',
 		'UPDATE_SUCCESS'=>'編集しました。',
 		'DELETE_SUCCESS'=>'削除しました。',
+		'DISPLAY_SUCCESS'=>'を表示にしました',
+		'HIDDEN_SUCCESS'=>'を非表示にしました',
 		'AUTH_SUCCESS'=>'認証完了しました。ログインしてください。',
 		'SIGNUP_FAILED'=>'登録に失敗しました。もう一度登録しなおしてください。',
 		'UPDATE_FAILED'=>'編集に失敗しました。もう一度編集しなおしてください。',
@@ -279,6 +281,12 @@ return [
 		'AUTH_FAILED'=>'認証に失敗しました。もう一度登録しなおしてください。',
 		'REGISTERED_FAILED'=>'すでに登録されてます。ログインしてください。',
 		'FRAUD_INPUT_FAILED'=>'ユーザー名またはパスワードが不正です。',
+		'CHANGE_FAILED'=>'切り替えに失敗しました。もう一度お試しください。',
+	)),
+	// メールメッセージ info.result.message
+	define('MAIL', array(
+		'AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。メールを確認し認証を完了するようキャストへお伝えください。
+			</ br>今から〇〇時間以内に完了しないと、やり直しになりますのでご注意ください。',
 	)),
 ]
 ?>

@@ -126,7 +126,7 @@ class EventsTable extends Table
         return $rules;
     }
 
-            /**
+    /**
      * リクエストデータがエンティティーに変換される前に呼ばれる処理。 
      * 主にリクエストデータに変換を掛けたり、バリデーションを条件次第で事前に解除したりできる。
      * @param Event $event

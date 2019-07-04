@@ -99,9 +99,9 @@ class UtilComponent extends Component
                 break;
             }
         }
-        $infoArray = $infoArray + array('dir'=> $shopDir);
+        $infoArray = $infoArray + array('shop_id'=> $shop->id, 'dir'=> $shopDir);
         $path = DS.PATH_ROOT['IMG'].DS.$infoArray['area']['path'].DS.$infoArray['genre']['path'].DS.$infoArray['dir'].DS;
-        $infoArray = $infoArray + array("dir_path"=> $path);
+        $infoArray = $infoArray + array('shop_id'=> $shop->id, 'dir'=> $shopDir, 'dir_path'=> $path);
         return  $infoArray;
     }
 
@@ -331,7 +331,7 @@ class UtilComponent extends Component
      * @param File $dir
      * @return void
      */
-    public function createTmpDirectoy(string $tmpPath, folder $dir)
+    public function createTmpDirectoy(string $tmpPath, Folder $dir)
     {
         // "/$tmpPath/{現在の時間}"というディレクトリをパーミッション777で作ります
         $result = new Folder;
@@ -339,6 +339,21 @@ class UtilComponent extends Component
         $dir->copy($tmpDir->path);
         return $tmpDir;
     }
+
+    /**
+     * 一時ディレクトリにファイルのバックアップを作成する
+     *
+     * @param String $tmpPath
+     * @param File $dir
+     * @return void
+     */
+    // public function createFileTmpDirectoy(string $tmpPath, File $file)
+    // {
+    //     // "/$tmpPath/{現在の時間}"というディレクトリをパーミッション777で作ります
+    //     $tmpDir = new File($tmpPath . DS . time(), true, 0777);
+    //     $file->copy($tmpDir->path);
+    //     return $tmpDir;
+    // }
 
     /**
      * エラーメッセージをセットする

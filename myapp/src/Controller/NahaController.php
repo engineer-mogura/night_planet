@@ -86,7 +86,7 @@ class NahaController extends \App\Controller\AreaController
                 return $q
                     ->where(['Coupons.status'=>'1']);
                 },'Jobs']);
-        $this->set('infoArray', $this->Util->getItem($shop->first()));
+        $this->set('shopInfo', $this->Util->getItem($shop->first()));
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
         $this->set(compact('shop','sharer', 'credits','creditsHidden'));
@@ -124,7 +124,7 @@ class NahaController extends \App\Controller\AreaController
                 }
             }
         }
-        $this->set('infoArray', $this->Util->getItem($cast->first()->shop));
+        $this->set('shopInfo', $this->Util->getItem($cast->first()->shop));
         $this->set(compact('cast','dImgCol' ,'imageCol'));
         $this->render();
     }
@@ -153,11 +153,11 @@ class NahaController extends \App\Controller\AreaController
             return;
         }
         $cast = $this->Casts->find('all')->where(['id' => $id])->first();
-        $this->set('infoArray', $this->Util->getItem($this->Shops->get($cast->shop_id)->toArray()));
+        $this->set('shopInfo', $this->Util->getItem($this->Shops->get($cast->shop_id)->toArray()));
 
         // $diarys1 = $this->getDiarys($id);
         $diarys = $this->Util->getDiarys($id);
-        $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+        $dir = $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
 
         $this->set(compact('cast','dir', 'diarys', 'ajax'));
         $this->render();

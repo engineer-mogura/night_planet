@@ -44,15 +44,11 @@
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>
     </li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= OWNER_LM['001'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=catch" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['002'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=coupon" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['003'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=cast" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['004'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=tenpo" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= OWNER_LM['005'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=tenpo-gallery" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= OWNER_LM['006'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=map" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">vertical_align_top</i><?= OWNER_LM['007'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=job" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= OWNER_LM['008'] ?></a></li>
-    <li><a href="/owner/casts/index/<?=$id?>?activeTab=index" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= OWNER_LM['009'] ?></a></li>
+    <li><a href="/owner/owners/index/?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= OWNER_LM['001'] ?></a></li>
+    <li><a href="/owner/owners/index/?activeTab=catch" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['002'] ?></a></li>
+    <li><a href="/owner/owners/index/?activeTab=coupon" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['003'] ?></a></li>
+    <li><a href="/owner/owners/index/?activeTab=cast" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['004'] ?></a></li>
+    <li><a href="/owner/owners/index/?activeTab=tenpo" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= OWNER_LM['005'] ?></a></li>
     <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">help_outline</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
@@ -74,7 +70,6 @@
   </nav>
   <!-- ヘルプモーダル -->
   <?= $this->element('modal/helpModal'); ?>
-  <?= $this->element('modal/jobModal'); ?>
   <?= $this->fetch('content') ?>
   <footer class="page-footer">
     <div class="footer-copyright oki-footer-copyright">
@@ -85,11 +80,5 @@
       <a href="#body" class="red"><i class="medium material-icons return_top">keyboard_arrow_up</i></a>
     </div><!-- END #return_top -->
   </footer>
-  <?= $this->Html->scriptstart() ?>
-$(document).ready(function(){
-  googlemap_init('google_map', '沖縄県浦添市屋富祖３丁目１５');
-});
-<?= $this->Html->scriptend() ?>
-
 </body>
 </html>

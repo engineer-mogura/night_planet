@@ -23,10 +23,20 @@ class ShopsController extends AppController
     public function beforeFilter(Event $event) {
         // AppController.beforeFilterをコールバック
         parent::beforeFilter($event);
-        // オーナーに関する情報をセット
+        // 店舗編集用テンプレート
+        $this->viewBuilder()->layout('shopDefault');
+        // 店舗に関する情報をセット
         if(!is_null($user = $this->Auth->user())){
-            $shop = $this->Shops->find('all')->where(['owner_id' => $user['id']])->first();
-            $this->set('infoArray', $this->Util->getItem($shop));
+            if($this->request->getQuery('id')) {
+                $id = $this->request->getQuery('id');
+            } else {
+                $id = $this->request->getData('id');
+            }
+
+            $shop = $this->Shops->find('all')
+                ->where(['id' => $id , 'owner_id' => $user['id']])
+                ->first();
+            $this->set('shopInfo', $this->Util->getItem($shop));
         }
     }
 
@@ -49,94 +59,29 @@ class ShopsController extends AppController
             $activeTab = $this->request->session()->consume('activeTab');
         }
         if(!is_null($user = $this->Auth->user())){
-            $shop = $this->Shops->find('all')->where(['owner_id' => $user['id']])->first();
-            $this->set('infoArray', $this->Util->getItem($shop));
-        }
-
-        if ($this->request->session()->check('ajax')) {
-            $ajax = $this->request->session()->consume('ajax'); // セッションを開放する
-            $this->viewBuilder()->autoLayout(false);
-            $this->autoRender = false;
-            $this->response->charset('UTF-8');
-            $this->response->type('json');
-            $isException = $this->request->session()->consume('exception');
-            $resultflg = $this->request->session()->consume('resultflg');
-            $resultMessage = $this->request->session()->consume('resultMessage');
-            $valideteErrors = $this->request->session()->consume('errors');
-
-            //$valideteErrors = array('fluts'=> array('apple' => 'リンゴ','banana' => 'バナナ'));
-            $errors = "";
-            // 各タブでのチェックエラー内容があればセットする。
-            if (count($valideteErrors) > 0) {
-                foreach ($valideteErrors as $key1 => $value1) {
-                    foreach ($value1 as $key2 => $value2) {
-                        if (is_array($value2)) {
-                            foreach ($value2 as $key3 => $value3) {
-                                $errors .= $value3."<br/>";
-                            }
-
-                        } else {
-                            $errors .= $value2."<br/>";
-                            //$this->Flash->error($value2);
-                        }
-                    }
-                }
-            }
-            // 各タブでの例外があればセットする。
-            if ($isException) {
-                $errors = $resultMessage;
-                //$this->Flash->error($valideteErrors);
-            }
-
-            // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
-            if (!isset($id)) {
-                $id = $this->request->getSession()->read('Auth.Owner.id');
-            }
-
-            $shop = $this->Shops->find()->where(['owner_id' => $id])->contain(['Coupons','Jobs','Casts' => function(Query $q) {
-                return $q
-                    ->where(['Casts.delete_flag'=>'0']);
-                }])->first();
-            $masterCodesFind = array('industry','job_type','treatment','day');
-            $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-            $creditsHidden = $this->Util->getCredit($shop,$credits);
-            $treatments = $this->MasterCodes->find()->where(['code_group' => 'treatment']);
-            $treatmentHidden = $this->Util->getTreatment($shop,$treatments);
-            $masterCodeHidden = array('credit'=>json_encode($creditsHidden));
-            $masterCodeHidden = array_merge($masterCodeHidden, array('treatment'=>json_encode($treatmentHidden)));
-            $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
-    
-            $this->set(compact('shop','credits','masterCodeHidden','selectList', 'activeTab', 'ajax'));
-            $html = (String)$this->render('/Owner/Shops/index');
-
-            $response = array(
-                'html' => $html,
-                'error' => $errors,
-                'success' => $resultflg,
-                'message' => $resultMessage
-            );
-
-            $this->response->body(json_encode($response));
-            return;
-        }
-        // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
-        if (!isset($id)) {
-            $id = $this->request->getSession()->read('Auth.Owner.id');
-        }
-        $shop = $this->Shops->find()->where(['owner_id' => $id])->contain(['Coupons','Jobs','Casts' => function(Query $q) {
-            return $q
-                ->where(['Casts.delete_flag'=>'0']);
+            $shop = $this->Shops->find()
+            ->where(['Shops.id'=> $this->viewVars["shopInfo"]["shop_id"] , 'owner_id' => $user['id']])
+            ->contain(['Coupons','Jobs','Casts' => function(Query $q) {
+                return $q->where(['Casts.delete_flag'=>'0']);
             }])->first();
-        $masterCodesFind = array('industry','job_type','treatment','day');
-        $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-        $creditsHidden = $this->Util->getCredit($shop,$credits);
-        $treatments = $this->MasterCodes->find()->where(['code_group' => 'treatment']);
-        $treatmentHidden = $this->Util->getTreatment($shop,$treatments);
-        $masterCodeHidden = array('credit'=>json_encode($creditsHidden));
-        $masterCodeHidden = array_merge($masterCodeHidden, array('treatment'=>json_encode($treatmentHidden)));
-        $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
+        }
 
-        $this->set(compact('shop','credits','masterCodeHidden','selectList', 'activeTab', 'ajax'));
+        // 作成するセレクトボックスを指定する
+        $masCodeFind = array('industry','job_type','treatment','day');
+        // セレクトボックスを作成する
+        $selectList = $this->Util->getSelectList($masCodeFind,$this->MasterCodes,true);
+        // マスタコードのクレジットリスト取得
+        $masCredit = $this->MasterCodes->find()->where(['code_group' => 'credit'])->toArray();
+        // 店舗のクレジットリストを作成する
+        $shopCredits = $this->Util->getCredit($shop, $masCredit);
+        // マスタコードの待遇リスト取得
+        $masTreatment = $this->MasterCodes->find()->where(['code_group' => 'treatment'])->toArray();
+        // 店舗の待遇リストを作成する
+        $shopTreatments = $this->Util->getTreatment($shop, $masTreatment);
+        // クレジット、待遇リストをセット
+        $masData = array('credit'=>json_encode($shopCredits),'treatment'=>json_encode($shopTreatments));
+
+        $this->set(compact('shop','masCredit','masData','selectList', 'activeTab', 'ajax'));
         $this->render();
     }
 
@@ -153,7 +98,7 @@ class ShopsController extends AppController
 
         $tmpDir = new Folder; // バックアップ用
         $del_path = preg_replace('/(^\/)/', '', 
-            $this->viewVars['infoArray']['dir_path']);
+            $this->viewVars['shopInfo']['dir_path']);
         $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('file_before'));
         // ロールバック用に一時フォルダにバックアップする。
         //$tmpDir = $this->Util->createFileTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $fileClone);
@@ -212,7 +157,7 @@ class ShopsController extends AppController
         }
 
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['infoArray']['shop_id']])->first();
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/top-image');
         $response = array(
@@ -225,7 +170,7 @@ class ShopsController extends AppController
         return;
     }
 
-        /**
+    /**
      * トップ画像 編集押下処理
      *
      * @return void
@@ -238,10 +183,10 @@ class ShopsController extends AppController
 
         $shop = $this->Shops->get($this->request->getData('id'));
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
-        //new Folder(WWW_ROOT. $this->viewVars['infoArray']['dir_path'], true, 0755);
+        //new Folder(WWW_ROOT. $this->viewVars['shopInfo']['dir_path'], true, 0755);
         $dirPath = preg_replace('/(^\/)/', '', 
-            $this->viewVars['infoArray']['dir_path']);
-         $dir = new Folder(WWW_ROOT. $this->viewVars['infoArray']['dir_path'], true, 0755);
+            $this->viewVars['shopInfo']['dir_path']);
+         $dir = new Folder(WWW_ROOT. $this->viewVars['shopInfo']['dir_path'], true, 0755);
         // ファイルが入力されたとき
         if ($this->request->getData('top_image_file.name')) {
             $limitFileSize = 1024 * 1024;
@@ -294,7 +239,7 @@ class ShopsController extends AppController
             return;
         }
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['infoArray']['shop_id']])->first();
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/top-image');
         $response = array(
@@ -326,9 +271,9 @@ class ShopsController extends AppController
             $resultflg = true;
             $isException = false;
             $errors = array(); // バリデーションチェックが無い場合に空を一時的に作成
-            $dir = realpath(WWW_ROOT. $this->viewVars['infoArray']['dir_path']);
+            $dir = realpath(WWW_ROOT. $this->viewVars['shopInfo']['dir_path']);
             if (!$dir) {
-                $dir = new Folder(WWW_ROOT. $this->viewVars['infoArray']['dir_path'], true, 0755);
+                $dir = new Folder(WWW_ROOT. $this->viewVars['shopInfo']['dir_path'], true, 0755);
             }
             // ファイルが入力されたとき
             if ($this->request->getData('top_image_file.name')) {
@@ -411,7 +356,7 @@ class ShopsController extends AppController
         }
 
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['infoArray']['shop_id']])->first();
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/catch');
         $response = array(
@@ -477,7 +422,7 @@ class ShopsController extends AppController
             return;
         }
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['infoArray']['shop_id']])->first();
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/catch');
         $response = array(
@@ -570,7 +515,7 @@ class ShopsController extends AppController
         // 新規登録 店舗IDとステータスもセットする
         if($this->request->getData('crud_type') == 'insert') {
             $coupon = $this->Coupons->newEntity(array_merge(
-                ['shop_id' => $this->viewVars['infoArray']['shop_id'], 'status'=>0]
+                ['shop_id' => $this->viewVars['shopInfo']['shop_id'], 'status'=>0]
                     ,$this->request->getData()));
             $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
         } else if($this->request->getData('crud_type') == 'update') {
@@ -618,7 +563,7 @@ class ShopsController extends AppController
             return;
         }
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['infoArray']['shop_id']])
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])
             ->contain(['Coupons'])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/coupon');
@@ -674,7 +619,7 @@ class ShopsController extends AppController
 
         $tmpDir = new Folder; // バックアップ用
         $del_path = preg_replace('/(^\/)/', '', 
-            $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$this->request->getData('dir').DS);
+            $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$this->request->getData('dir').DS);
         $delFolder = new Folder(WWW_ROOT.$del_path);
 
         $dirClone = new Folder($delFolder->path, true, 0755);
@@ -758,7 +703,7 @@ class ShopsController extends AppController
         // 新規登録(仮登録) 店舗IDとステータスも論理削除フラグセットする
         if($this->request->getData('crud_type') == 'insert') {
             $cast = $this->Casts->newEntity(array_merge(
-                ['shop_id' => $this->viewVars['infoArray']['shop_id'], 'status' => 0 , 'delete_flag' => 1]
+                ['shop_id' => $this->viewVars['shopInfo']['shop_id'], 'status' => 0 , 'delete_flag' => 1]
                     ,$this->request->getData()));
             $message = MAIL['AUTH_CONFIRMATION']; // 返却メッセージ
         } else if($this->request->getData('crud_type') == 'update') {
@@ -810,12 +755,87 @@ class ShopsController extends AppController
             $this->getMailer('Cast')->send('castRegistration', [$cast]);
         }
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['infoArray']['shop_id']])
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])
             ->contain(['Casts' => function(Query $q) {
                 return $q->where(['Casts.delete_flag'=>'0']);
             }])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/cast');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
+    }
+
+    /**
+     * 店舗情報 編集押下処理
+     *
+     * @return void
+     */
+    public function saveTenpo()
+    {
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+
+        // 更新
+        $shop = $this->Shops->patchEntity($this->Shops
+            ->get($this->request->getData('id')), $this->request->getData());
+        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+
+        // バリデーションチェックエラーがあればセットし返却する。
+        if ($shop->errors()) {
+            $flg = false;
+            if (count($shop->errors()) > 0) {
+                foreach ($shop->errors() as $key1 => $value1) {
+                    foreach ($value1 as $key2 => $value2) {
+                        if (is_array($value2)) {
+                            foreach ($value2 as $key3 => $value3) {
+                                $errors .= $value3."<br/>";
+                            }
+                        } else {
+                            $errors .= $value2."<br/>";
+                            //$this->Flash->error($value2);
+                        }
+                    }
+                }
+            }
+            $response = array(
+                'error' => $errors,
+                'success' => $flg,
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        // ＤＢ登録
+        if (!$this->Shops->save($shop)) {
+            $message = RESULT_M['UPDATE_FAILED'];
+            $flg = false;
+            $response = array(
+                'error' => $message,
+                'success' => $flg,
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        $shop = $this->Shops->find()
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])
+            ->contain(['Casts' => function(Query $q) {
+                return $q->where(['Casts.delete_flag'=>'0']);
+            }])->first();
+
+        // マスタコードのクレジットリスト取得
+        $masCredit = $this->MasterCodes->find()->where(['code_group' => 'credit'])->toArray();
+        // 店舗のクレジットリストを作成する
+        $shopCredits = $this->Util->getCredit($shop, $masCredit);
+        // クレジットリストをセット
+        $masData = array('credit'=>json_encode($shopCredits));
+        $this->set(compact('shop','masData','masCredit'));
+        $this->render('/Element/shopEdit/tenpo');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,

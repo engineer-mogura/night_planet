@@ -81,7 +81,7 @@
                         <li>
                             <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                             <?php foreach ($rows as $row): ?>
-                            <?php !empty($row['image1'])? $imgPath = DS.$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                            <?php !empty($row['image1'])? $imgPath = DS.$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <div class="collapsible-body waves-effect archiveLink">
                             <input type="hidden" name="id" value=<?=$row->id?>>
                             <p><?= $this->Text->excerpt($row['title'], 'method', CAST_CONFIG['TITLE_EXCERPT'], CAST_CONFIG['ELLIPSIS']); ?><span class="badge"><?=$row['md_created']?></span></p>

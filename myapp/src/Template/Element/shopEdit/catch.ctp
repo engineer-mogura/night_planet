@@ -27,7 +27,7 @@
       <?php } ?>
     </div>
   </div>
-  <form id="edit-catch" name="edit_catch" method="post" action="/owner/shops/save_catch/" style="display:none;">
+  <form id="save-catch" name="save_catch" method="post" action="/owner/shops/save_catch/" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="id" value="">

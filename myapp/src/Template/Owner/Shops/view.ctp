@@ -23,7 +23,7 @@
   <div class="row">
     <div id="shop-main" class="col s12 m12 l8">
       <img class="responsive-img" width="100%" src=<?php if($row->top_image != '') {
-        echo($infoArray['dir_path'].$row->top_image);} else {
+        echo($shopInfo['dir_path'].$row->top_image);} else {
         echo("/img/common/top/top1.jpg");} ?> />
       <div class="fixed-action-btn share horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
@@ -111,7 +111,7 @@
             <div class="col s4 m3 l3">
               <div>
                 <a href="<?=DS.$row['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$row['genre']."&name=".$row['name']."&shop=".$row['id']."&nickname=".$cast['nickname']?>">
-                  <img src="<?=isset($cast->image1) ? $infoArray['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1:PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
+                  <img src="<?=isset($cast->image1) ? $shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1:PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
                 </a>
                 </div>
               <h6><?=$cast->nickname?></h6>

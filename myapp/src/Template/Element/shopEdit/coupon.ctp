@@ -69,7 +69,7 @@
       </div>
     </div>
   </div>
-  <form id="edit-coupon" name="edit_coupon" method="post" action="/owner/shops/save_coupon/" style="display:none;">
+  <form id="save-coupon" name="edit_coupon" method="post" action="/owner/shops/save_coupon/" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="crud_type" value="">

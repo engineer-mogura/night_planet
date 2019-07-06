@@ -26,7 +26,9 @@ class ShopsTableTest extends TestCase
     public $fixtures = [
         'app.Shops',
         'app.Owners',
-        'app.Coupons'
+        'app.Jobs',
+        'app.Coupons',
+        'app.Casts'
     ];
 
     /**
@@ -79,6 +81,16 @@ class ShopsTableTest extends TestCase
      * @return void
      */
     public function testBuildRules()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test beforeMarshal method
+     *
+     * @return void
+     */
+    public function testBeforeMarshal()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

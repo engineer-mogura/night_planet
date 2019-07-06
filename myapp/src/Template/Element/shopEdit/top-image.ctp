@@ -6,7 +6,7 @@
       <input type="hidden" name="json_data" value='<?=$shop ?>'>
     </div>
     <?php if(!$shop->top_image == "") { ?>
-      <img width="100%" height="300" src="<?= $infoArray['dir_path'].$shop->top_image ?>" />
+      <img width="100%" height="300" src="<?= $shopInfo['dir_path'].$shop->top_image ?>" />
       <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">変更</button>
       <form id="delete-top-image" name="delete_top_image" method="post" style="display:none;" action="/owner/shops/delete_top_image/">
         <input type="hidden" name="_method" value="POST">
@@ -19,7 +19,7 @@
       <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">登録</button>
     <?php } ?>
   </div>
-  <form id="edit-top-image" name="edit_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/save_top_image/" style="display:none;">
+  <form id="save-top-image" name="save_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/save_top_image/" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="id" value="">

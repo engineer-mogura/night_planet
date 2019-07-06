@@ -26,7 +26,7 @@ class CastsController extends AppController
         // キャストに関する情報をセット
         if(!is_null($user = $this->Auth->user())){
             $shop = $this->Shops->get($user['shop_id']);
-            $this->set('infoArray', $this->Util->getItem($shop));
+            $this->set('shopInfo', $this->Util->getItem($shop));
         }
     }
 
@@ -198,7 +198,7 @@ class CastsController extends AppController
             );
             $event = $this->Events->find('all', array('fields' => $Columns))->where(['cast_id' => $id]);
             // jsonファイルに書き込む
-            $path = WWW_ROOT. $this->viewVars['infoArray']['dir_path']."cast/".$cast["dir"];
+            $path = WWW_ROOT. $this->viewVars['shopInfo']['dir_path']."cast/".$cast["dir"];
             $dir = realpath($path);
             try {
                 $dir = new Folder($dir.DS);
@@ -340,7 +340,7 @@ class CastsController extends AppController
                 // キャスト取得
                 $cast = $this->Casts->get($id);
                 // キャスト用画像のディレクトリパスを取得
-                $dirPath = WWW_ROOT. $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir. DS .PATH_ROOT['IMAGE'].DS;
+                $dirPath = WWW_ROOT. $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir. DS .PATH_ROOT['IMAGE'].DS;
                 // キャスト用画像のディレクトリが無い場合は作成する
                 $dir = new Folder($dirPath, true, 0755);
                 // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
@@ -560,7 +560,7 @@ class CastsController extends AppController
                     // キャスト取得
                     $cast = $this->Casts->get($id);
                     // 日記用のディレクトリを掘る
-                    $rootDir = WWW_ROOT. $this->viewVars['infoArray']['dir_path']
+                    $rootDir = WWW_ROOT. $this->viewVars['shopInfo']['dir_path']
                         .PATH_ROOT['CAST']. PATH_ROOT['DIARY'] . DS;
                     $rootDirClone = $rootDir;
 
@@ -654,9 +654,9 @@ class CastsController extends AppController
                 $this->autoRender = false;
                 $diarys = $this->Util->getDiarys($id);
 
-                $dir = $this->viewVars["infoArray"]["dir_path"].$cast['dir'].DS;
+                $dir = $this->viewVars["shopInfo"]["dir_path"].$cast['dir'].DS;
                 $cast = $this->Casts->find('all')->where(['id' => $id])->first();
-                $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+                $dir = $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
                 $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
                 $this->render('/Cast/Casts/diary');
                 $this->response->body();
@@ -664,7 +664,7 @@ class CastsController extends AppController
             }
             $diarys = $this->Util->getDiarys($id);
             $cast = $this->Casts->find('all')->where(['id' => $id])->first();
-            $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+            $dir = $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
             $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
             $this->render();
     }
@@ -725,7 +725,7 @@ class CastsController extends AppController
             $cast = $this->Casts->get($id);
             // 本登録をもってキャスト用のディレクトリを掘る
             $diary = $this->Diarys->get($this->request->data["diary_id"]);
-            $dir = WWW_ROOT. $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST']
+            $dir = WWW_ROOT. $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST']
                 .DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$diary->dir;
             $deleteFiles = json_decode($this->request->data["del_list"], true);
             // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
@@ -886,7 +886,7 @@ class CastsController extends AppController
                 $this->autoRender = false;
                 $diarys = $this->Util->getDiarys($id);
                 $cast = $this->Casts->find('all')->where(['id' => $id])->first();
-                $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+                $dir = $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
                 $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
                 $this->render('/Cast/Casts/diary');
                 $this->response->body();
@@ -956,7 +956,7 @@ class CastsController extends AppController
             $this->autoRender = false;
             $diarys = $this->Util->getDiary($id);
             $cast = $this->Casts->find('all')->where(['id' => $id])->first();
-            $dir = $this->viewVars['infoArray']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+            $dir = $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
             $this->set(compact('cast','dir', 'diarys', 'activeTab', 'ajax'));
             $this->render('/Cast/Casts/diary');
             $this->response->getBody();

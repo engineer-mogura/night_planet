@@ -44,15 +44,15 @@
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>
     </li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= OWNER_LM['001'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=catch" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['002'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=coupon" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['003'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=cast" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= OWNER_LM['004'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=tenpo" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= OWNER_LM['005'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=tenpo-gallery" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= OWNER_LM['006'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=map" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">vertical_align_top</i><?= OWNER_LM['007'] ?></a></li>
-    <li><a href="/owner/shops/index/<?=$id?>?activeTab=job" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= OWNER_LM['008'] ?></a></li>
-    <li><a href="/owner/casts/index/<?=$id?>?activeTab=index" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= OWNER_LM['009'] ?></a></li>
+    <li><a href="/owner/shops/index/?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= SHOP_LM['001'] ?></a></li>
+    <li><a href="/owner/shops/index/?activeTab=catch" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= SHOP_LM['002'] ?></a></li>
+    <li><a href="/owner/shops/index/?activeTab=coupon" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= SHOP_LM['003'] ?></a></li>
+    <li><a href="/owner/shops/index/?activeTab=cast" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= SHOP_LM['004'] ?></a></li>
+    <li><a href="/owner/shops/index/?activeTab=tenpo" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= SHOP_LM['005'] ?></a></li>
+    <li><a href="/owner/shops/index/?activeTab=tenpo-gallery" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= SHOP_LM['006'] ?></a></li>
+    <li><a href="/owner/shops/index/?activeTab=map" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">vertical_align_top</i><?= SHOP_LM['007'] ?></a></li>
+    <li><a href="/owner/shops/index/?activeTab=job" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= SHOP_LM['008'] ?></a></li>
+    <li><a href="/owner/casts/index/?activeTab=index" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= SHOP_LM['009'] ?></a></li>
     <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">help_outline</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

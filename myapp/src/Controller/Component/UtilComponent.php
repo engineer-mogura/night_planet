@@ -86,75 +86,71 @@ class UtilComponent extends Component
         $shopDir = $shop['dir'];
         $areas = AREA;
         $genres = GENRE;
-        $infoArray = array();
+        $shopInfo = array();
         foreach ($areas as $area) {
             if ($area['path'] == $shopArea) {
-                $infoArray = $infoArray + array('area' => $area);
+                $shopInfo = $shopInfo + array('area' => $area);
                 break;
             }
         }
         foreach ($genres as $genre) {
             if ($genre['path'] == $shopGenre) {
-                $infoArray = $infoArray + array('genre' => $genre);
+                $shopInfo = $shopInfo + array('genre' => $genre);
                 break;
             }
         }
-        $infoArray = $infoArray + array('shop_id'=> $shop->id, 'dir'=> $shopDir);
-        $path = DS.PATH_ROOT['IMG'].DS.$infoArray['area']['path'].DS.$infoArray['genre']['path'].DS.$infoArray['dir'].DS;
-        $infoArray = $infoArray + array('shop_id'=> $shop->id, 'dir'=> $shopDir, 'dir_path'=> $path);
-        return  $infoArray;
+        $shopInfo = $shopInfo + array('shop_id'=> $shop->id, 'dir'=> $shopDir);
+        $path = DS.PATH_ROOT['IMG'].DS.$shopInfo['area']['path'].DS.$shopInfo['genre']['path'].DS.$shopInfo['dir'].DS;
+        $shopInfo = $shopInfo + array('shop_id'=> $shop->id, 'dir'=> $shopDir, 'dir_path'=> $path);
+        return  $shopInfo;
     }
 
     /**
      * クレジットリストを作成する
      *
      * @param object $shop
-     * @param array $masterCodeResult
+     * @param array $masCredit
      * @return void
      */
-    public function getCredit($shop, $masterCodeResult)
+    public function getCredit($shop, $masCredit)
     {
-        $array = array();
-        $creditsHidden = array();
-        foreach ($shop as $key => $value) {
-            $array = explode(',', $value->shop->credit);
-        }
+        $creditsList = array();
+        // クレジットが登録されてる場合は配列にセットする
+        !empty($shop) ? $array = explode(',', $shop->credit) : $array = array();
 
         for ($i = 0; $i < count($array); $i++) {
-            foreach ($masterCodeResult as $key => $value) {
+            foreach ($masCredit as $key => $value) {
                 if ($array[$i] == $value->code) {
-                    $creditsHidden[] = array('tag'=>$value->code,'image'=>PATH_ROOT['CREDIT'].$value->code.".png",'id'=>$value->id);
+                    $creditsList[] = array('tag'=>$value->code,'image'=>PATH_ROOT['CREDIT'].$value->code.".png",'id'=>$value->id);
                     continue;
                 }
             }
         }
-        return $creditsHidden;
+        return $creditsList;
     }
 
     /**
      * 待遇リストを作成する
      *
      * @param [type] $shop
-     * @param [type] $masterCodeResult
+     * @param [type] $query
      * @return void
      */
-    public function getTreatment($shop, $masterCodeResult)
+    public function getTreatment($shop, $masTreatment)
     {
-        $array = array();
-        $treatmentsHidden = array();
-        foreach ($shop as $key => $value) {
-            $array = explode(',', $value->job->treatment);
-        }
+        $treatmentsList = array();
+        // 待遇が登録されてる場合は配列にセットする
+        !empty($shop) ? $array = explode(',', $shop->job->treatment) : $array = array();
 
         for ($i = 0; $i < count($array); $i++) {
-            foreach ($masterCodeResult as $key => $value) {
+            foreach ($masTreatment as $key => $value) {
                 if ($array[$i] == $value->code_name) {
-                    $treatmentsHidden[] = array('tag'=>$value->code_name,'id'=>$value->code);
+                    $treatmentsList[] = array('tag'=>$value->code_name,'id'=>$value->code);
                     continue;
                 }
             }
         }
-        return $treatmentsHidden;
+        return $treatmentsList;
     }
 
     /**

@@ -65,7 +65,9 @@ class AppController extends \App\Controller\AppController
         //                         'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob'])) {
         //     return true;
         // }
-        $access = ['saveTopImage','deleteTopImage','saveCatch','deleteCatch','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast','deleteCast'];
+        $access = ['saveTopImage','deleteTopImage','saveCatch','deleteCatch',
+            'deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
+            'deleteCast','saveTenpo'];
         if (in_array($action, array_merge($access, ['index', 'view', 'add', 'delete', 'edit',
                                 'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob']))) {
             return true;
@@ -78,7 +80,6 @@ class AppController extends \App\Controller\AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['signup','verify','logout']);
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
-        $this->viewBuilder()->layout('ownerDefault');
     }
 
 }

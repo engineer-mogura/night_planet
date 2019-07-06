@@ -2,6 +2,7 @@
 namespace App\Controller\Owner;
 
 use Cake\ORM\Query;
+use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Mailer\Email;
 use Cake\Core\Configure;
@@ -22,6 +23,18 @@ use Cake\Datasource\ConnectionManager;
 class OwnersController extends AppController
 {
     use MailerAwareTrait;
+
+    public function beforeFilter(Event $event) {
+        // AppController.beforeFilterをコールバック
+        parent::beforeFilter($event);
+        // オーナー用テンプレート
+        $this->viewBuilder()->layout('ownerDefault');
+        // オーナーに関する情報をセット
+        if(!is_null($user = $this->Auth->user())){
+            $shop = $this->Shops->find('all')->where(['owner_id' => $user['id']])->first();
+            $this->set('shopInfo', $this->Util->getItem($shop));
+        }
+    }
 
     public function signup()
     {
@@ -86,7 +99,6 @@ class OwnersController extends AppController
 
     public function login()
     {
-        $OwnersTable = TableRegistry::get('Owners');
 
         if ($this->request->is('post')) {
 
@@ -96,32 +108,16 @@ class OwnersController extends AppController
             if(!$owner->errors()) {
 
                 $this->log($this->request->getData("remember_me"),"debug");
+                // 現在リクエスト中のユーザーを識別する
                 $owner = $this->Auth->identify();
                 if ($owner) {
-                    // TODO: この自動ログインのコメントは削除予定。\node-link\cakephp-remember-meプラグインで対応できてる
-                    // // 自動ログインチェック時にcookie設定
-                    // if ($this->request->getData('remember_me') === '1') {
-                    //     // ユーザー確認用の乱数生成
-                    //     $set_key = hash('sha256', (uniqid() . mt_rand(1, 999999999) . '_auto_logins'));
-                    //     $entity = $this->Owners->get($owner['id']);
-                    //     $entity->remember_token = $set_key;
-                    //     $this->Owners->save($entity);
-                    //     // Cookieセット
-                    //     $this->response = $this->response->withCookie('AUTO_LOGIN', [
-                    //         'value' => $set_key,
-                    //         'path' => '/',
-                    //         'httpOnly' => true,
-                    //         'secure' => false,
-                    //         'expire' => strtotime('+1 year')]);
-                    // }
-
+                  // セッションにユーザー情報を保存する
                   $this->Auth->setUser($owner);
                   return $this->redirect($this->Auth->redirectUrl());
                 }
 
                 $this->Flash->error(RESULT_M['FRAUD_INPUT_FAILED']);
             } else {
-                debug("this->request->getData()");
                 debug($this->request->getData());
                 foreach ($owner->errors() as $key1 => $value1) {
                     foreach ($value1 as $key2 => $value2) {
@@ -130,7 +126,7 @@ class OwnersController extends AppController
                 }
             }
         } else {
-            $owner = $OwnersTable->newEntity();
+            $owner = $this->Owners->newEntity();
         }
         $this->set('owner', $owner);
     }
@@ -203,7 +199,7 @@ class OwnersController extends AppController
                     // 成功: commit
                     $connection->commit();
                     // ショップテーブルが登録されて初めて、求人情報の空テーブル作成
-                    $findShop = $this->Shops->find()->where(['owner_id' => $owner->id])->first();
+                    $findShop = $this->Shops->find('all')->where(['owner_id' => $owner->id])->first();
                     $this->Jobs->findOrCreate(['shop_id' => $findShop->id]);
                     // commit出来たらディレクトリを掘る
                     $dir = new Folder($dir.$nextDir, true, 0755);
@@ -229,18 +225,13 @@ class OwnersController extends AppController
 
     public function index()
     {
-        $owner = $this->Owners->find('all')->where(['Owners.id' => $this->request->getSession()->read('Auth.Owner.id')])->contain(['Shops.Coupons','Shops.Jobs']);
-        foreach ($owner as $key => $row) {
-           $id = $row->id;
-        }
-        // オーナーに関する情報をセット
-        $shop = $this->Shops->find('all')->where(['Shops.owner_id' => $id])->first();
+        $shops = $this->Shops->newEntity();
+        // 認証されてる場合
         if(!is_null($user = $this->Auth->user())){
-            $this->set('infoArray', $this->Util->getItem($shop));
+            // オーナーに所属する全ての店舗を取得する
+            $shops = $this->Shops->find('all')->where(['owner_id' => $user['id']]);
         }
-        $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-        $creditsHidden = json_encode($this->Util->getCredit($owner,$credits));
-        $this->set(compact('owner', 'credits','creditsHidden'));
+        $this->set('shops', $shops);
         $this->render();
     }
 

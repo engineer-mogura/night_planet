@@ -12,7 +12,10 @@ use Cake\Validation\Validator;
  * Shops Model
  *
  * @property \App\Model\Table\OwnersTable|\Cake\ORM\Association\BelongsTo $Owners
+ * @property \App\Model\Table\CastsTable|\Cake\ORM\Association\HasMany $Casts
  * @property \App\Model\Table\CouponsTable|\Cake\ORM\Association\HasMany $Coupons
+ * @property \App\Model\Table\JobsTable|\Cake\ORM\Association\HasMany $Jobs
+ * @property |\Cake\ORM\Association\HasMany $ShopInfos
  *
  * @method \App\Model\Entity\Shop get($primaryKey, $options = [])
  * @method \App\Model\Entity\Shop newEntity($data = null, array $options = [])
@@ -48,13 +51,16 @@ class ShopsTable extends Table
             'foreignKey' => 'owner_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasOne('Jobs', [
-            'foreignKey' => 'shop_id',
+        $this->hasMany('Casts', [
+            'foreignKey' => 'shop_id'
         ]);
         $this->hasMany('Coupons', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->hasMany('Casts', [
+        $this->hasMany('Jobs', [
+            'foreignKey' => 'shop_id'
+        ]);
+        $this->hasMany('ShopInfos', [
             'foreignKey' => 'shop_id'
         ]);
     }
@@ -73,6 +79,21 @@ class ShopsTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', 'create');
+
+        $validator
+            ->scalar('area')
+            ->maxLength('area', 255)
+            ->allowEmptyString('area');
+
+        $validator
+            ->scalar('genre')
+            ->maxLength('genre', 255)
+            ->allowEmptyString('genre');
+
+        $validator
+            ->scalar('dir')
+            ->maxLength('dir', 255)
+            ->allowEmptyString('dir');
 
         $validator
             ->scalar('name')
@@ -116,12 +137,12 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('bus_hosoku')
-            ->maxLength('bus_hosoku', 120,"スタッフは120文字以内にしてください。")
+            ->maxLength('bus_hosoku', 120,"補足は120文字以内にしてください。")
             ->allowEmptyString('bus_hosoku');
 
         $validator
             ->scalar('system')
-            ->maxLength('system', 255,"スタッフは255文字以内にしてください。")
+            ->maxLength('system', 255,"システムは255文字以内にしてください。")
             ->allowEmptyString('system');
 
         $validator
@@ -176,7 +197,7 @@ class ShopsTable extends Table
     {
         // telは、ハイフン削除
         if (isset($data['tel'])) {
-            $data['tel'] = str_replace(array('-', 'ー', '−', '―', '‐'), '', $data['tel']);
+            $data['tel'] = str_replace(array('-', 'ー', '"', '―', '‐'), '', $data['tel']);
         }
 
     }

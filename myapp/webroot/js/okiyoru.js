@@ -37,116 +37,6 @@ function imgDisp() {
     fileReader.readAsDataURL(file);
 }
 
-/* 店舗情報 関連処理 start */
-/**
- * 店舗情報 通常表示、変更表示切替え処理
- * @param  {} obj
- */
-function tenpoChangeBtn(obj){
-    if ($('#edit-tenpo').css('display') == 'block') {
-        // $(obj).find('[name="tenpo"]').val(""); //初期値を削除しない
-        $(obj).find("#edit-tenpo").hide();
-        $(obj).find("#show-tenpo").show();
-    } else {
-        var tenpo = JSON.parse($(obj).find('input[name="tenpo_copy"]').val());
-        var $from = $(obj).find('#bus-from-time').pickatime().pickatime('picker');
-        var $to = $(obj).find('#bus-to-time').pickatime().pickatime('picker');
-        var from = new Date(tenpo['bus_from_time']);
-        var to = new Date(tenpo['bus_to_time']);
-        $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
-        $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
-        $(obj).find('input[name="tenpo_edit_id"]').val(tenpo['id']);
-        $(obj).find('input[name="name"]').val(tenpo['name']);
-        $(obj).find('input[name="pref21"]').val(tenpo['pref21']);
-        $(obj).find('input[name="addr21"]').val(tenpo['addr21']);
-        $(obj).find('input[name="strt21"]').val(tenpo['strt21']);
-        $(obj).find('input[name="tel"]').val(tenpo['tel']);
-        $(obj).find('input[name="bus_hosoku"]').val(tenpo['bus_hosoku']);
-        $(obj).find('textarea[name="staff"]').val(tenpo['staff']);
-        $(obj).find('textarea[name="system"]').val(tenpo['system']);
-        //クレジットフィールドにあるタグを取得して配列にセット
-        var data = JSON.parse($(obj).find('input[name="credit_hidden"]').val());
-        // クレジットフィールドの初期化
-        $('.chips-initial').material_chip({
-            data:data
-        });
-        $(obj).find('#edit-tenpo').show();
-        $(obj).find("#show-tenpo").hide();
-        Materialize.updateTextFields(); // インプットフィールドの初期化
-        $($(obj).find('div[name="credit"]')).find('input').prop('disabled',true);
-
-    }
-}
-
-/**
- * 店舗情報 登録ボタン処理
- */
-function tenpoSaveBtn(){
-
-    if (!confirm('こちらの店舗内容でよろしいですか？')) {
-        return false;
-    }
-
-    var $form = $('form[name="edit_tenpo"]');
-    var tagData = $($form).find('.chips').material_chip('data');
-    if (tagData.length > 0) {
-        var csvTag = "";
-        for (var i = 0; i < tagData.length; i++) {
-            csvTag = csvTag += tagData[i].tag + ",";
-        }
-        csvTag = csvTag.slice(0, -1);
-        $($form).find('input[name="credit"]').val(csvTag);
-    }
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.saveBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.saveBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.saveBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-/* 店舗情報 関連処理 end */
-
 /* 求人情報 関連処理 start */
 /**
  * 求人情報 通常表示、変更表示切替え処理
@@ -1100,13 +990,13 @@ function ownerInitialize() {
         $('#top-image').find('[name="top_image"]').val('');
 
         // 編集フォームが表示されている場合
-        if ($('#edit-top-image').css('display') == 'block') {
+        if ($('#save-top-image').css('display') == 'block') {
             // ビュー表示
-            $('#top-image').find("#edit-top-image").hide();
+            $('#top-image').find("#save-top-image").hide();
             $('#top-image').find("#show-top-image").show();
         } else {
             // 編集表示
-            $('#top-image').find('#edit-top-image').show();
+            $('#top-image').find('#save-top-image').show();
             $('#top-image').find("#show-top-image").hide();
         }
 
@@ -1178,7 +1068,7 @@ function ownerInitialize() {
         //アップロード用blobをformDataに設定
         var json = JSON.parse($("#top-image").find('input[name="json_data"]').val());
         $("#top-image").find('input[name="id"]').val(json['id']);
-        var $form = $('#edit-top-image');
+        var $form = $('#save-top-image');
         var formData = new FormData($form.get()[0]);
         formData.append("top_image_file", uploadBlob);
         //通常のアクションをキャンセルする
@@ -1208,9 +1098,9 @@ function ownerInitialize() {
     $(document).on("click", ".catch-changeBtn",function() {
 
         // 編集フォームが表示されている場合
-        if ($('#edit-catch').css('display') == 'block') {
+        if ($('#save-catch').css('display') == 'block') {
             // $(obj).find('[name="catch"]').val(""); //初期値を削除しない
-            $("#catch").find("#edit-catch").hide();
+            $("#catch").find("#save-catch").hide();
             $("#catch").find("#show-catch").show();
         } else {
             // catchという変数にしたかったがcatchはjsで予約語になる
@@ -1219,7 +1109,7 @@ function ownerInitialize() {
             var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
             $("#catch").find('input[name="id"]').val(json['id']);
             $("#catch").find('textarea[name="catch"]').val(json['catch']);
-            $("#catch").find('#edit-catch').show();
+            $("#catch").find('#save-catch').show();
             $("#catch").find("#show-catch").hide();
             $('textarea').trigger('autoresize');
             Materialize.updateTextFields(); // インプットフィールドの初期化
@@ -1229,7 +1119,7 @@ function ownerInitialize() {
 
     // キャッチコピー 登録ボタン押した時
     $(document).on("click", ".catch-saveBtn",function() {
-        var $form = $('#edit-catch');
+        var $form = $('#save-catch');
         if($form.find('textarea[name="catch"]').val() == '') {
             alert('キャッチコピーを入力してください。');
             return false;
@@ -1265,9 +1155,9 @@ function ownerInitialize() {
     $(document).on("click", ".coupon-changeBtn",function() {
         $("html,body").animate({scrollTop:0});
 
-        if ($('#edit-coupon').css('display') == 'block') {
+        if ($('#save-coupon').css('display') == 'block') {
             // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
-            $("#coupon").find("#edit-coupon").hide();
+            $("#coupon").find("#save-coupon").hide();
             $("#coupon").find("#show-coupon").show();
         } else {
             // コントローラ側で処理判断するパラメータ
@@ -1289,7 +1179,7 @@ function ownerInitialize() {
             if(json['status'] == 1) {
                 $('input[name="status"]').attr('checked', 'checked');
             }
-            $("#coupon").find('#edit-coupon').show();
+            $("#coupon").find('#save-coupon').show();
             $("#coupon").find("#show-coupon").hide();
             $('textarea').trigger('autoresize');
             Materialize.updateTextFields(); // インプットフィールドの初期化
@@ -1298,9 +1188,9 @@ function ownerInitialize() {
 
     // クーポン 追加ボタン押した時
     $(document).on("click", ".coupon-addBtn",function() {
-        if ($('#edit-coupon').css('display') == 'block') {
+        if ($('#save-coupon').css('display') == 'block') {
             // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
-            $("#coupon").find("#edit-coupon").hide();
+            $("#coupon").find("#save-coupon").hide();
             $("#coupon").find("#show-coupon").show();
         } else {
             $("html,body").animate({scrollTop:0});
@@ -1312,8 +1202,8 @@ function ownerInitialize() {
             $("#coupon").find('#coupon-content').val('');
             // コントローラ側で処理判断するパラメータ
             $('input[name="crud_type"]').val('insert');
-            $("#edit-coupon").find('button').removeClass('disabled');
-            $("#coupon").find('#edit-coupon').show();
+            $("#save-coupon").find('button').removeClass('disabled');
+            $("#coupon").find('#save-coupon').show();
             $("#coupon").find("#show-coupon").hide();
         }
     });
@@ -1420,9 +1310,9 @@ function ownerInitialize() {
     $(document).on("click", ".cast-changeBtn",function() {
         $("html,body").animate({scrollTop:0});
 
-        if ($('#edit-cast').css('display') == 'block') {
+        if ($('#save-cast').css('display') == 'block') {
             // $(obj).find('[name="cast"]').val(""); //初期値を削除しない
-            $("#cast").find("#edit-cast").hide();
+            $("#cast").find("#save-cast").hide();
             $("#cast").find("#show-cast").show();
         } else {
             // コントローラ側で処理判断するパラメータ
@@ -1438,19 +1328,17 @@ function ownerInitialize() {
             if(json['status'] == 1) {
                 $('input[name="status"]').attr('checked', 'checked');
             }
-            $("#cast").find('#edit-cast').show();
+            $("#cast").find('#save-cast').show();
             $("#cast").find("#show-cast").hide();
             $('textarea').trigger('autoresize');
             Materialize.updateTextFields(); // インプットフィールドの初期化
         }
     });
 
-
-
     // キャスト 追加ボタン押した時
     $(document).on("click", ".cast-addBtn",function() {
-        if ($('#edit-cast').css('display') == 'block') {
-            $("#cast").find("#edit-cast").hide();
+        if ($('#save-cast').css('display') == 'block') {
+            $("#cast").find("#save-cast").hide();
             $("#cast").find("#show-cast").show();
         } else {
             $("html,body").animate({scrollTop:0});
@@ -1461,14 +1349,14 @@ function ownerInitialize() {
             $("#cast").find('input[name="email"]').val('');
             // コントローラ側で処理判断するパラメータ
             $('input[name="crud_type"]').val('insert');
-            $("#edit-cast").find('button').removeClass('disabled');
-            $("#cast").find('#edit-cast').show();
+            $("#save-cast").find('button').removeClass('disabled');
+            $("#cast").find('#save-cast').show();
             $("#cast").find("#show-cast").hide();
         }
     });
 
-    // キャスト 登録ボタン押した時
-    $(document).on("click", ".cast-saveBtn",function() {
+     /* キャスト 登録ボタン押した時 */
+     $(document).on("click", ".cast-saveBtn",function() {
 
         if (!confirm('こちらの内容に変更でよろしいですか？')) {
             return false;
@@ -1561,8 +1449,72 @@ function ownerInitialize() {
     });
     /* キャスト 関連処理 end */
 
+    /* 店舗情報 関連処理 start */
+    // 店舗情報 変更、やめるボタン押した時
+    $(document).on("click", ".tenpo-changeBtn",function() {
+        $("html,body").animate({scrollTop:0});
+
+        if ($('#save-tenpo').css('display') == 'block') {
+            // $(obj).find('[name="tenpo"]').val(""); //初期値を削除しない
+            $('#tenpo').find("#save-tenpo").hide();
+            $('#tenpo').find("#show-tenpo").show();
+        } else {
+            var json = JSON.parse($('#tenpo').find('input[name="json_data"]').val());
+            var $from = $('#tenpo').find('#bus-from-time').pickatime().pickatime('picker');
+            var $to = $('#tenpo').find('#bus-to-time').pickatime().pickatime('picker');
+            var from = new Date(json['bus_from_time']);
+            var to = new Date(json['bus_to_time']);
+            $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
+            $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
+            $('#tenpo').find('input[name="id"]').val(json['id']);
+            $('#tenpo').find('input[name="name"]').val(json['name']);
+            $('#tenpo').find('input[name="pref21"]').val(json['pref21']);
+            $('#tenpo').find('input[name="addr21"]').val(json['addr21']);
+            $('#tenpo').find('input[name="strt21"]').val(json['strt21']);
+            $('#tenpo').find('input[name="tel"]').val(json['tel']);
+            $('#tenpo').find('input[name="bus_hosoku"]').val(json['bus_hosoku']);
+            $('#tenpo').find('textarea[name="staff"]').val(json['staff']);
+            $('#tenpo').find('textarea[name="system"]').val(json['system']);
+            //クレジットフィールドにあるタグを取得して配列にセット
+            var data = JSON.parse($('#tenpo').find('input[name="credit_hidden"]').val());
+            // クレジットフィールドの初期化
+            $('.chips-initial').material_chip({
+                data:data
+            });
+            $('#tenpo').find('#save-tenpo').show();
+            $('#tenpo').find("#show-tenpo").hide();
+
+            $('textarea').trigger('autoresize'); // テキストエリアの初期化
+            Materialize.updateTextFields(); // インプットフィールドの初期化
+            $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
+        }
+    });
+
+    // 店舗情報 登録ボタン押した時
+    $(document).on("click", ".tenpo-saveBtn",function() {
+
+        if (!confirm('こちらの店舗内容でよろしいですか？')) {
+            return false;
+        }
+
+        var $form = $('form[name="save_tenpo"]');
+        var tagData = $($form).find('.chips').material_chip('data');
+        if (tagData.length > 0) {
+            var csvTag = "";
+            for (var i = 0; i < tagData.length; i++) {
+                csvTag = csvTag += tagData[i].tag + ",";
+            }
+            csvTag = csvTag.slice(0, -1);
+            $($form).find('input[name="credit"]').val(csvTag);
+        }
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#tenpo"));
+    });
+
     // 店舗情報 クレジットタグをフォームに追加する
-    $('#tenpo').find('.chip').on('click', function() {
+    $(document).on('click','.chips-credit', function() {
         var $chips = $('#tenpo').find('.chips');
         $($chips).val($(this).children().attr('alt'));
         // クレジットフィールドにあるタグを取得して配列にセット
@@ -1591,6 +1543,9 @@ function ownerInitialize() {
 
         return false;
     });
+    /* 店舗情報 関連処理 end */
+
+    /* 求人情報 関連処理 start */
     // 求人情報 待遇タグをフォームに追加する
     $('#modal-job').find('.chip').on('click', function() {
         var $chips = $('#job').find('.chips');

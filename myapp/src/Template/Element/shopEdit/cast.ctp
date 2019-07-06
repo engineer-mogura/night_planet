@@ -25,7 +25,7 @@
                   </tr>
                   <tr>
                     <td colspan="2">
-                      <img src="<?=isset($cast->image1) ? $infoArray['dir_path']."cast/".$cast->dir."/image/".$cast->image1:"/img/common/noimage.jpg" ?>" alt="" class="circle left" width="80" height="80">
+                      <img src="<?=isset($cast->image1) ? $shopInfo['dir_path']."cast/".$cast->dir."/image/".$cast->image1:"/img/common/noimage.jpg" ?>" alt="" class="circle left" width="80" height="80">
                       <input type="checkbox" class="check-cast-group" name="check_cast" id="check-cast<?=$key?>" />
                       <label for="check-cast<?=$key?>">編集する</label>
                       <div style="display:none;">
@@ -69,7 +69,7 @@
       </div>
     </div>
   </div>
-  <form id="edit-cast" name="edit_cast" method="post" action="/owner/shops/save_cast/" style="display:none;">
+  <form id="save-cast" name="edit_cast" method="post" action="/owner/shops/save_cast/" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="crud_type" value="">

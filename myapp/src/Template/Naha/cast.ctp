@@ -22,7 +22,7 @@
   <div class="row">
     <div id="cast-main" class="col s12 m12 l8">
       <img class="responsive-img" width="100%" src=<?php if($row->image1 != '') {
-        echo($infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->image1);} else {
+        echo($shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->image1);} else {
         echo(PATH_ROOT['AREA01']);} ?> />
       <div class="fixed-action-btn share horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
@@ -134,7 +134,7 @@
         foreach ($imageCol as $key => $value) {
           if(!$row->isEmpty($value)) { ?>
               <figure class="col <?=(count($imageCol)==1?'s12 m12 l12':(count($imageCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-                <a href="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>" data-size="800x600"><img width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>" alt="写真の説明でーす。" /></a>
+                <a href="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>" alt="写真の説明でーす。" /></a>
               </figure>
             <?= $value == end($imageCol) ?'</div>':""?>
             <?php $isGalleryExists = true;
@@ -153,7 +153,7 @@
         <?php foreach ($dImgCol as $key => $value) { ?>
         <?= $value == reset($dImgCol) ?'<div class="my-gallery">':""?>
             <figure class="col <?=(count($dImgCol)==1?'s12 m12 l12':(count($dImgCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <a href="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>" data-size="800x600"><img width="100%" src="<?=$infoArray['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>" alt="写真の説明でーす。" /></a>
+              <a href="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>" alt="写真の説明でーす。" /></a>
             </figure>
         <?= $value == end($dImgCol) ?'</div>':""?>
         <?php } ?>
@@ -197,7 +197,7 @@
             </tr>
             <tr>
               <th align="center">所在地</th>
-              <td><?= h($row->shop->pref21.$row->shop->addr21.$row->shop->strt21);?></td>
+              <td><?= h($row->shop->full_address);?></td>
             </tr>
             <tr>
               <th align="center">連絡先</th>

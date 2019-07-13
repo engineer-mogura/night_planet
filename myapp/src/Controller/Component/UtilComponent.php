@@ -108,15 +108,15 @@ class UtilComponent extends Component
     /**
      * クレジットリストを作成する
      *
-     * @param object $shop
+     * @param object $credit
      * @param array $masCredit
      * @return void
      */
-    public function getCredit($shop, $masCredit)
+    public function getCredit($credit, $masCredit)
     {
         $creditsList = array();
         // クレジットが登録されてる場合は配列にセットする
-        !empty($shop) ? $array = explode(',', $shop->credit) : $array = array();
+        !empty($credit) ? $array = explode(',', $credit) : $array = array();
 
         for ($i = 0; $i < count($array); $i++) {
             foreach ($masCredit as $key => $value) {
@@ -132,15 +132,15 @@ class UtilComponent extends Component
     /**
      * 待遇リストを作成する
      *
-     * @param [type] $shop
+     * @param [type] $treatment
      * @param [type] $query
      * @return void
      */
-    public function getTreatment($shop, $masTreatment)
+    public function getTreatment($treatment, $masTreatment)
     {
         $treatmentsList = array();
         // 待遇が登録されてる場合は配列にセットする
-        !empty($shop) ? $array = explode(',', $shop->job->treatment) : $array = array();
+        !empty($treatment) ? $array = explode(',', $treatment) : $array = array();
 
         for ($i = 0; $i < count($array); $i++) {
             foreach ($masTreatment as $key => $value) {

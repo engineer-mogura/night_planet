@@ -1,3 +1,7 @@
+
+html {
+  font-family: GillSans, Calibri, Trebuchet, sans-serif;
+}
 html,body {
   -webkit-overflow-scrolling: touch;
 }
@@ -460,22 +464,77 @@ tbody.tbody-coupon-group:before ,tbody.tbody-cast-group:before{
 	padding: 2px 0;
 	display: block;
 }
-
-.chip-box > .chip {
+/* .chip-box > .chip-dummy {
   pointer-events: auto;
+  display: inline-block;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  background-color: #e4e4e4;
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
-.chip-box > .chip:hover {
+.chip-box > .chip-dummy > img {
+  float: left;
+  margin: 0 8px 0 -12px;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+}
+.chip-box > .chip-dummy:hover {
   background-color: #26a69a;
   color: white;
   cursor : pointer;
 }
-.back-color {
+.chip-box > .chip-dummy.back-color {
+  background-color: #26a69a;
+  color: white;
+} */
+.chip-dummy {
+  pointer-events: auto;
+  display: inline-block;
+  height: 32px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 32px;
+  padding: 0 12px;
+  border-radius: 16px;
+  background-color: #e4e4e4;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+.chip-dummy > img {
+  float: left;
+  margin: 0 8px 0 -12px;
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+}
+.chip-dummy:hover:hover {
+  background-color: #26a69a;
+  color: white;
+  cursor : pointer;
+}
+.chip-dummy.back-color.back-color {
   background-color: #26a69a;
   color: white;
 }
 li.daylist,li.eventlist {
   float: left;
   margin-left: 60px;
+}
+.deleteBtn.test {
+  position: relative;
+    top: 56%;
+    left: 62%;
+    transform: translateY(-50%) translateX(-50%);
+    -webkit- transform: translateY(-50%) translateX(-50%);
+    margin: auto;
 }
 
 /* 店舗編集ページ END */

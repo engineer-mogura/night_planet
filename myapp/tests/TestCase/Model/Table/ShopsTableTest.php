@@ -26,9 +26,10 @@ class ShopsTableTest extends TestCase
     public $fixtures = [
         'app.Shops',
         'app.Owners',
-        'app.Jobs',
+        'app.Casts',
         'app.Coupons',
-        'app.Casts'
+        'app.Jobs',
+        'app.ShopInfos'
     ];
 
     /**

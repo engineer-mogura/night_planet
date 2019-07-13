@@ -6,7 +6,7 @@
 ?>
 <div class="container">
   <?= $this->Flash->render() ?>
-  <h5><?= __('オーナー画面ｎ') ?></h5>
+  <h5><?= __('オーナー画面') ?></h5>
   <?php foreach ($shops  as $key => $shop): ?>
   <div class="row">
     <div class="col s12 m6 l6">

@@ -30,6 +30,7 @@
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
+</head>
   <?php $id = $this->request->getSession()->read('Auth.Owner.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.Owner.role') ?>
 <body id="owner-default">

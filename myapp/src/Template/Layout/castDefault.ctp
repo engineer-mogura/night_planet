@@ -37,7 +37,7 @@
   <?= $this->fetch('script') ?>
   <?php $id = $this->request->getSession()->read('Auth.Cast.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.Cast.role') ?>
-
+</head>
 <body id="cast-default">
   <ul id="slide-out" class="side-nav fixed">
     <li>

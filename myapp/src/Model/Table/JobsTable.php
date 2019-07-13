@@ -85,7 +85,7 @@ class JobsTable extends Table
 
         $validator
             ->scalar('work_time_hosoku')
-            ->maxLength('work_time_hosoku', 50)
+            ->maxLength('work_time_hosoku', 50,"時間についての補足は50文字以内にしてください。")
             ->allowEmptyString('work_time_hosoku');
 
         $validator
@@ -117,7 +117,7 @@ class JobsTable extends Table
 
         $validator
             ->scalar('qualification_hosoku')
-            ->maxLength('qualification_hosoku', 50)
+            ->maxLength('qualification_hosoku', 50,'資格についての補足は50文字以内にしてください。')
             ->allowEmptyString('qualification_hosoku');
 
         $validator
@@ -127,7 +127,7 @@ class JobsTable extends Table
 
         $validator
             ->scalar('holiday_hosoku')
-            ->maxLength('holiday_hosoku', 50)
+            ->maxLength('holiday_hosoku', 50,'休日についての補足は50文字以内にしてください。')
             ->allowEmptyString('holiday_hosoku');
 
         $validator
@@ -137,6 +137,7 @@ class JobsTable extends Table
 
         $validator
             ->scalar('pr')
+            ->maxLength('pr', 100,'PR文は100文字以内にしてください。')
             ->maxLength('pr', 100)
             ->allowEmptyString('pr');
 
@@ -164,18 +165,11 @@ class JobsTable extends Table
 
         $validator
             ->email('email',false, "メールアドレスの形式が不正です。")
-            ->allowEmpty('email')
-            ->add('email', [
-                'exists' => [
-                    'rule' => function($value, $context) {
-                        return !TableRegistry::get('Jobs')->exists(['email' => $value]);
-                    },
-                    'message' => 'そのメールアドレスは既に登録されています。'
-                ],
-            ]);
+            ->allowEmpty('email');
 
         $validator
             ->scalar('lineid')
+            ->maxLength('lineid', 20,"電話番号１は長いです。")
             ->maxLength('lineid', 20)
             ->allowEmptyString('lineid');
 

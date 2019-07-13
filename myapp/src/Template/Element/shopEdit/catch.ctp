@@ -3,7 +3,7 @@
   <h5>キャッチコピー</h5>
   <div id="show-catch">
     <div class="row">
-      <form id="delete-catch" name="delete_catch" method="post" style="display:none;" action="/owner/shops/delete_catch/">
+      <form id="delete-catch" name="delete_catch" method="post" style="display:none;" action="/owner/shops/delete_catch?id=<?=$shop->id?>">
         <input type="hidden" name="_method" value="POST">
         <input type="hidden" name="id" value="">
         <input type="hidden" name="catch" value="">
@@ -27,7 +27,7 @@
       <?php } ?>
     </div>
   </div>
-  <form id="save-catch" name="save_catch" method="post" action="/owner/shops/save_catch/" style="display:none;">
+  <form id="save-catch" name="save_catch" method="post" action="/owner/shops/save_catch?id=<?=$shop->id?>" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="id" value="">

@@ -4,7 +4,7 @@
         <p>複数選択できます</p>
         <div class="chip-box">
             <?php foreach ($selectList['treatment'] as $key => $value): ?>
-            <div class="chip" name=""id="<?=$key?>" value="<?=$value?>"><?=$value?></div>
+            <div class="chip-dummy chip-treatment" name=""id="<?=$key?>" value="<?=$value?>"><?=$value?></div>
             <?php endforeach ?>
         </div>
     </div>

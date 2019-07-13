@@ -85,11 +85,19 @@ class NahaController extends \App\Controller\AreaController
                 }, 'Coupons' => function(Query $q) {
                 return $q
                     ->where(['Coupons.status'=>'1']);
-                },'Jobs']);
-        $this->set('shopInfo', $this->Util->getItem($shop->first()));
+                },'Jobs'])->first();
+        $shopInfo = $this->Util->getItem($shop);
+        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+        $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // 画像リストを作成する
+        foreach ($imageCol as $key => $value) {
+            if (!empty($shop[$imageCol[$key]])) {
+                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+            }
+        }
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
-        $this->set(compact('shop','sharer', 'credits','creditsHidden'));
+        $this->set(compact('shop','shopInfo','sharer','imageList','credits','creditsHidden'));
         $this->render();
     }
 
@@ -112,20 +120,29 @@ class NahaController extends \App\Controller\AreaController
                 return $q
                     ->where(['Coupons.status'=>'1']);
                 }, 'Shops.Jobs'
-            ]);
-
+            ])->first();
+        // キャストのギャラリーリストを作成
         $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
-        $diary = $cast->first()->diarys[0];
-        $dImgCol = array(); // 日記の画像が存在するカラムリスト
+        $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // 画像リストを作成する
+        foreach ($imageCol as $key => $value) {
+            if (!empty($cast[$imageCol[$key]])) {
+                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$cast[$imageCol[$key]]]);
+            }
+        }
+        // 日記のギャラリーリストを作成
+        $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
+        $diary = $cast->diarys[0];
+        $dImageList = array(); // 日記の画像が存在するカラムリスト
         if(count($diary) > 0) {
             foreach ($imageCol as $key => $value) {
                 if (!empty($diary[$value])) {
-                    array_push($dImgCol, $value);
+                    array_push($dImageList, ['key'=>$imageCol[$key],'name'=>$diary[$imageCol[$key]]]);
                 }
             }
         }
-        $this->set('shopInfo', $this->Util->getItem($cast->first()->shop));
-        $this->set(compact('cast','dImgCol' ,'imageCol'));
+        $this->set('shopInfo', $this->Util->getItem($cast->shop));
+        $this->set(compact('cast','imageList','dImageList'));
         $this->render();
     }
 

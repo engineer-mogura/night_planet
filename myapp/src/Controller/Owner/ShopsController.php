@@ -27,10 +27,9 @@ class ShopsController extends AppController
         $this->viewBuilder()->layout('shopDefault');
         // 店舗に関する情報をセット
         if(!is_null($user = $this->Auth->user())){
+            // shopControllerにアクセスするときは、URLに必ず店舗IDが存在することを想定
             if($this->request->getQuery('id')) {
                 $id = $this->request->getQuery('id');
-            } else {
-                $id = $this->request->getData('id');
             }
 
             $shop = $this->Shops->find('all')
@@ -65,6 +64,14 @@ class ShopsController extends AppController
                 return $q->where(['Casts.delete_flag'=>'0']);
             }])->first();
         }
+        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+        $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // 画像リストを作成する
+        foreach ($imageCol as $key => $value) {
+            if (!empty($shop[$imageCol[$key]])) {
+                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+            }
+        }
 
         // 作成するセレクトボックスを指定する
         $masCodeFind = array('industry','job_type','treatment','day');
@@ -72,16 +79,16 @@ class ShopsController extends AppController
         $selectList = $this->Util->getSelectList($masCodeFind,$this->MasterCodes,true);
         // マスタコードのクレジットリスト取得
         $masCredit = $this->MasterCodes->find()->where(['code_group' => 'credit'])->toArray();
-        // 店舗のクレジットリストを作成する
-        $shopCredits = $this->Util->getCredit($shop, $masCredit);
+        // 店舗情報のクレジットリストを作成する
+        $shopCredits = $this->Util->getCredit($shop->credit, $masCredit);
         // マスタコードの待遇リスト取得
         $masTreatment = $this->MasterCodes->find()->where(['code_group' => 'treatment'])->toArray();
-        // 店舗の待遇リストを作成する
-        $shopTreatments = $this->Util->getTreatment($shop, $masTreatment);
+        // 求人情報の待遇リストを作成する
+        $jobTreatments = $this->Util->getTreatment(reset($shop->jobs)['treatment'], $masTreatment);
         // クレジット、待遇リストをセット
-        $masData = array('credit'=>json_encode($shopCredits),'treatment'=>json_encode($shopTreatments));
+        $masData = array('credit'=>json_encode($shopCredits),'treatment'=>json_encode($jobTreatments));
 
-        $this->set(compact('shop','masCredit','masData','selectList', 'activeTab', 'ajax'));
+        $this->set(compact('shop','imageList','masCredit','masData','selectList', 'activeTab', 'ajax'));
         $this->render();
     }
 
@@ -250,88 +257,6 @@ class ShopsController extends AppController
         );
         $this->response->body(json_encode($response));
         return;
-    }
-
-    /**
-     * トップ画像タブの処理
-     *
-     * @param [type] $id
-     * @return void
-     */
-    public function editTopImage($id = null)
-    {
-        $delFlg = false; // 削除実行フラグ
-        $shopTable = TableRegistry::get('Shops');
-        $shop = $shopTable->find()->where(['owner_id' => $id])->first();
-        $this->request->session()->write('activeTab', 'top-image');
-
-    if ($this->request->is('ajax')) {
-            $this->log($this,"debug");
-            $resultMessage = '';
-            $resultflg = true;
-            $isException = false;
-            $errors = array(); // バリデーションチェックが無い場合に空を一時的に作成
-            $dir = realpath(WWW_ROOT. $this->viewVars['shopInfo']['dir_path']);
-            if (!$dir) {
-                $dir = new Folder(WWW_ROOT. $this->viewVars['shopInfo']['dir_path'], true, 0755);
-            }
-            // ファイルが入力されたとき
-            if ($this->request->getData('top_image_file.name')) {
-                $limitFileSize = 1024 * 1024;
-                try {
-                    $shop->top_image = $this->Util->file_upload($this->request->getData('top_image_file'),
-                        ['name'=>$this->request->getData('file_before')], $dir, $limitFileSize);
-                    // ファイル更新の場合は古いファイルは削除
-                    if (isset($this->request->data["file_before"])) {
-                        // ファイル名が同じ場合は削除を実行しない
-                        if ($this->request->getData('file_before') != $shop->top_image) {
-                            $file = new File($dir . DS . $this->request->data["file_before"]);
-                            if (!$file->delete()) {
-                                $this->log($this->request->getData('file_before'), LOG_DEBUG);
-                            }
-                        }
-                    }
-                } catch (RuntimeException $e) {
-                    // アップロード失敗の時、既登録ファイルがある場合はそれを保持
-                    if (isset($this->request->data["file_before"])) {
-                        $shop->top_image = $this->request->getData('file_before');
-                    }
-                    $resultMessage = $e->getMessage();
-                    $resultflg = false;
-                    $isException = true;
-                }
-            } else {
-                // ファイルは入力されていないけど登録されているファイルがあるとき
-                if (isset($this->request->data["file_before"])) {
-                    $shop->top_image = $this->request->getData('file_before');
-                }
-            }
-            // 例外があればsaveしない
-            if (!$isException) {
-                if ($shopTable->save($shop)) {
-                    $this->log("save成功", "debug");
-                    if ($delFlg == true) {
-                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
-                    } else {
-                        $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
-                    }
-                } else {
-                    if ($delFlg == true) {
-                        $resultMessage = RESULT_M['DELETE_FAILED'];
-                    } else {
-                        $resultMessage = RESULT_M['SIGNUP_FAILED'];
-                    }
-                    $resultflg = false;
-                }
-            }
-
-            $this->request->session()->write('exception', $isException);
-            $this->request->session()->write('resultMessage', $resultMessage);
-            $this->request->session()->write('resultflg', $resultflg);
-            $this->request->session()->write('errors', $errors);
-            $this->request->session()->write('ajax', true);
-        }
-        return $this->redirect($this->referer());
     }
 
     /**
@@ -831,7 +756,7 @@ class ShopsController extends AppController
         // マスタコードのクレジットリスト取得
         $masCredit = $this->MasterCodes->find()->where(['code_group' => 'credit'])->toArray();
         // 店舗のクレジットリストを作成する
-        $shopCredits = $this->Util->getCredit($shop, $masCredit);
+        $shopCredits = $this->Util->getCredit($shop->credit, $masCredit);
         // クレジットリストをセット
         $masData = array('credit'=>json_encode($shopCredits));
         $this->set(compact('shop','masData','masCredit'));
@@ -847,199 +772,307 @@ class ShopsController extends AppController
     }
 
     /**
-     * 店舗情報タブの処理
+     * 求人情報 編集押下処理
      *
-     * @param [type] $id
      * @return void
      */
-    public function editTenpo($id = null)
+    public function saveJob()
     {
-        $addFlg = false; // 追加実行フラグ
-        $shopsTable = TableRegistry::get('Shops');
-        $entity = $shopsTable->newEntity();
-        $this->request->session()->write('activeTab', 'tenpo');
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
 
-        // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
-        if (isset($this->request->data["tenpo_edit"])) {
-            $entity = $shopsTable->newEntity($this->request->getData());
-        }
-        if ($this->request->is('ajax')) {
-            $resultMessage = '';
-            $resultflg = true;
-            $isException = false;
-            $isSave = false;
-            if (!$entity->errors()) {
+        // 更新
+        $job = $this->Jobs->patchEntity($this->Jobs
+            ->get($this->request->getData('id')), $this->request->getData());
+        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
 
-                // 店舗情報削除の場合
-                if (isset($this->request->data["tenpo_delete"])) {
-                    $shop = $shopsTable->get($id);
-                    if ($shopsTable->delete($shop)) {
-                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
-                    } else {
-                        $resultMessage = RESULT_M['DELETE_FAILED'];
-                        $resultflg = false;
-                    }
-                } elseif (isset($this->request->data["tenpo_edit"])) {
-                    // 店舗情報編集の場合
-                    $shop = $shopsTable->find()->where(['id'
-                        => $this->request->getData('tenpo_edit_id')])->first();
-
-                    // 店舗情報内容をセット
-                    $shop->name = $this->request->getData('name');
-                    $shop->tel = $entity['tel'];
-                    $shop->staff = $this->request->getData('staff');
-                    $shop->bus_from_time = $this->request->getData('bus_from_time');
-                    $shop->bus_to_time = $this->request->getData('bus_to_time');
-                    $shop->bus_hosoku = $this->request->getData('bus_hosoku');
-                    $shop->system = $this->request->getData('system');
-                    $shop->credit = $this->request->getData('credit');
-                    $shop->pref21 = $this->request->getData('pref21');
-                    $shop->addr21 = $this->request->getData('addr21');
-                    $shop->strt21 = $this->request->getData('strt21');
-                }
-                // saveするか判定する
-                if (array_key_exists('tenpo_edit', $this->request->getData())) {
-                    $isSave = true;
-                }
-                if ($isSave) {
-                    if ($shopsTable->save($shop)) {
-                        if ($addFlg == true) {
-                            $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
+        // バリデーションチェックエラーがあればセットし返却する。
+        if ($job->errors()) {
+            $flg = false;
+            if (count($job->errors()) > 0) {
+                foreach ($job->errors() as $key1 => $value1) {
+                    foreach ($value1 as $key2 => $value2) {
+                        if (is_array($value2)) {
+                            foreach ($value2 as $key3 => $value3) {
+                                $errors .= $value3."<br/>";
+                            }
                         } else {
-                            $resultMessage = RESULT_M['UPDATE_SUCCESS'];
+                            $errors .= $value2."<br/>";
+                            //$this->Flash->error($value2);
                         }
-                    } else {
-                        if ($addFlg == true) {
-                            $resultMessage = RESULT_M['SIGNUP_FAILED'];
-                        } else {
-                            $resultMessage = RESULT_M['UPDATE_FAILED'];
-                        }
-                        $resultflg = false;
                     }
                 }
-            } else {
-                $resultflg = false;
             }
-            $this->request->session()->write('exception', $isException);
-            $this->request->session()->write('resultMessage', $resultMessage);
-            $this->request->session()->write('resultflg', $resultflg);
-            $this->request->session()->write('errors', $entity->errors());
-            $this->request->session()->write('ajax', true);
+            $response = array(
+                'error' => $errors,
+                'success' => $flg,
+            );
+            $this->response->body(json_encode($response));
+            return;
         }
-        return $this->redirect($this->referer());
+        // ＤＢ登録
+        if (!$this->Jobs->save($job)) {
+            $message = RESULT_M['UPDATE_FAILED'];
+            $flg = false;
+            $response = array(
+                'error' => $message,
+                'success' => $flg,
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        $shop = $this->Shops->find()
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])
+            ->contain(['Jobs'])->first();
+
+        // マスタコードの待遇リスト取得
+        $masTreatment = $this->MasterCodes->find()->where(['code_group' => 'treatment'])->toArray();
+        // 求人情報の待遇リストを作成する
+        $jobTreatments = $this->Util->getTreatment(reset($shop->jobs)['treatment'], $masTreatment);
+        // クレジット、待遇リストをセット
+        $masData = array('treatment'=>json_encode($jobTreatments));
+
+        $this->set(compact('shop','masData','masTreatment'));
+        $this->render('/Element/shopEdit/job');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
     }
 
-        /**
-     * 求人情報タブの処理
+    /**
+     * ギャラリー 編集押下処理
      *
-     * @param [type] $id
      * @return void
      */
-    public function editJob($id = null)
+    public function saveGallery()
     {
-        $addFlg = false; // 追加実行フラグ
-        $jobsTable = TableRegistry::get('Jobs');
-        $entity = $jobsTable->newEntity();
-        $this->request->session()->write('activeTab', 'job');
 
-        // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
-        if (isset($this->request->data["job_edit"])) {
-            $entity = $jobsTable->newEntity($this->request->getData());
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+
+        $tmpDir = new Folder; // バックアップ用
+        $dirPath = preg_replace('/(^\/)/', '', 
+            $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['IMAGE']);
+        $dir = new Folder(WWW_ROOT. $dirPath, true, 0755);
+
+        $files = array();
+        // ショップ取得
+        $shop = $this->Shops->get($this->viewVars['shopInfo']['shop_id']);
+
+        // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
+        ($files_befor = json_decode($this->request->getData("gallery_befor"), true)) > 0 ? : $files_befor = array();
+        $fileMax = CAST_CONFIG['FILE_MAX'];
+        // カラム「image*」を格納する
+        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+
+        // ファイルのバックアップを取得
+        $dirClone = new Folder($dir->path, true, 0755);
+        // ロールバック用に一時フォルダにバックアップする。
+        $tmpDir = $this->Util->createTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $dirClone);
+
+        // 追加画像がある場合
+        if (isset($this->request->data["image"])) {
+            $files = $this->request->data['image'];
         }
-        if ($this->request->is('ajax')) {
-            $resultMessage = '';
-            $resultflg = true;
-            $isException = false;
-            $isSave = false;
-            if (!$entity->errors()) {
+        foreach ($files as $key => $file) {
+            // ファイルが入力されたとき
+            if (count($file["name"]) > 0) {
+                $limitFileSize = 1024 * 1024;
+                try {
+                    // TODO: 検証用
+                    // if($key == 1) {
+                    //     throw new RuntimeException('画像の削除に失敗しました。');
+                    // }
+                    // ファイル名を取得する
+                    $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
 
-                // 求人情報削除の場合
-                if (isset($this->request->data["job_delete"])) {
-                    $job = $jobsTable->get($id);
-                    if ($jobsTable->delete($job)) {
-                        $resultMessage = RESULT_M['DELETE_SUCCESS'];
-                    } else {
-                        $resultMessage = RESULT_M['DELETE_FAILED'];
-                        $resultflg = false;
+                    // ファイル名が同じ場合は処理をスキップする
+                    if ($convertFile === false) {
+                        $errors = '同じ画像はアップできません。'."\n";
+                        continue;
                     }
-                } elseif (isset($this->request->data["job_edit"])) {
-                    // 求人情報編集の場合
-                    $job = $jobsTable->get($id);
 
-                    // // 求人情報内容をセット
-                    $job->industry = $entity['industry'];
-                    $job->job_type = $entity['job_type'];
-                    $job->work_from_time = $entity['work_from_time'];
-                    $job->work_to_time = $entity['work_to_time'];
-                    $job->work_time_hosoku = $entity['work_time_hosoku'];
-                    $job->from_age = $entity['from_age'];
-                    $job->to_age = $entity['to_age'];
-                    $job->qualification_hosoku = $entity['qualification_hosoku'];
-                    $job->holiday = $entity['holiday'];
-                    $job->holiday_hosoku = $entity['holiday_hosoku'];
-                    $job->treatment = $entity['treatment'];
-                    $job->pr = $entity['pr'];
-                    $job->tel1 = $entity['tel1'];
-                    $job->tel2 = $entity['tel2'];
-                    // TODO: isUnique()は、他のカラムが空文字でもuniqueチェックを行うため、
-                    // 重複エラーになるためスルーする。
-                    $job->email = $this->Util->ifnullString($entity['email']);
-                    $job->lineid = $entity['lineid'];
-                    // 求人情報内容をセット
-                    // $job->industry = $this->request->getData('industry');
-                    // $job->job_type = $this->request->getData('job_type');
-                    // $job->work_from_time = $this->request->getData('work_from_time');
-                    // $job->work_to_time = $this->request->getData('work_to_time');
-                    // $job->work_time_hosoku = $this->request->getData('work_time_hosoku');
-                    // $job->from_age = $this->request->getData('from_age');
-                    // $job->to_age = $this->request->getData('to_age');
-                    // $job->qualification_hosoku = $this->request->getData('qualification_hosoku');
-                    // $job->holiday = $entity['holiday'];
-                    // $job->holiday_hosoku = $this->request->getData('holiday_hosoku');
-                    // $job->treatment = $this->request->getData('treatment');
-                    // $job->pr = $this->request->getData('pr');
-                    // $job->tel1 = $this->request->getData('tel1');
-                    // $job->tel2 = $this->request->getData('tel2');
-                    // $job->email = $this->request->getData('email');
-                    // $job->lineid = $this->request->getData('lineid');
+                } catch (RuntimeException $e) {
 
-                }
-                // saveするか判定する
-                if (array_key_exists('job_edit', $this->request->getData())) {
-                    $isSave = true;
-                }
-                if ($isSave) {
-                    try {
-                        if ($jobsTable->saveOrFail($job)) {
-                            if ($addFlg == true) {
-                                $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
-                            } else {
-                                $resultMessage = RESULT_M['UPDATE_SUCCESS'];
-                            }
-                        } else {
-                            if ($addFlg == true) {
-                                $resultMessage = RESULT_M['SIGNUP_FAILED'];
-                            } else {
-                                $resultMessage = RESULT_M['UPDATE_FAILED'];
-                            }
-                            $resultflg = false;
+                    // アップロード失敗の時、処理を中断する
+                    if (is_dir($tmpDir->path)) {
+                        // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
+                        $files = $dirClone->find('.*\.*');
+                        foreach ($files as $file) {
+                            $file = new File($dir->path . DS . $file);
+                            $file->delete(); // このファイルを削除します
                         }
-                    } catch (\Cake\ORM\Exception\PersistenceFailedException $e) {
-                        echo $e;
-                        //  echo $e->getEntity();
-                            return '500(Save Failed)';
+                        $tmpDir->copy($dirClone->path);
+                        $tmpDir->delete();// tmpフォルダ削除
                     }
+                    $this->log($e->getMessage(), LOG_DEBUG);
+                    $message = RESULT_M['UPDATE_FAILED'];
+                    $flg = false;
+                    $response = array(
+                        'success' => $flg,
+                        'message' => $message
+                    );
+                    $this->response->body(json_encode($response));
+                    return;
                 }
-            } else {
-                $resultflg = false;
             }
-            $this->request->session()->write('exception', $isException);
-            $this->request->session()->write('resultMessage', $resultMessage);
-            $this->request->session()->write('resultflg', $resultflg);
-            $this->request->session()->write('errors', $entity->errors());
-            $this->request->session()->write('ajax', true);
+            // カラムimage1～image8の空いてる場所に入れる
+            for($i = 0; $i < $fileMax; $i++) {
+                if(empty($shop->get($imageCol[$i]))) {
+                    $shop->set($imageCol[$i], $convertFile);
+                    break;
+                }
+            }
+
         }
-        return $this->redirect($this->referer());
+        // ＤＢ登録
+        if (!$this->Shops->save($shop)) {
+            // 更新失敗の時
+            if (is_dir($tmpDir->path)) {
+                // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
+                $files = $dirClone->find('.*\.*');
+                foreach ($files as $file) {
+                    $file = new File($dir->path . DS . $file);
+                    $file->delete(); // このファイルを削除します
+                }
+                $tmpDir->copy($dirClone->path);
+                $tmpDir->delete();// tmpフォルダ削除
+            }
+            $message = RESULT_M['UPDATE_FAILED'];
+            $flg = false;
+
+            $response = array(
+                'error' => $message,
+                'success' => $flg,
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        // フォルダを削除
+        if (is_dir($tmpDir->path)) {
+            $tmpDir->delete();
+        }
+        $shop = $this->Shops->find()
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
+        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+        $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // 画像リストを作成する
+        foreach ($imageCol as $key => $value) {
+            if (!empty($shop[$imageCol[$key]])) {
+                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+            }
+        }
+        $this->set(compact('shop','imageList'));
+        $this->render('/Element/shopEdit/gallery');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
+    }
+
+    /**
+     * ギャラリー 削除押下処理
+     *
+     * @return void
+     */
+    public function deleteGallery()
+    {
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+
+        $tmpDir = new Folder; // バックアップ用
+        $del_path = preg_replace('/(^\/)/', '', 
+            $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['IMAGE']);
+        $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
+        // ロールバック用に一時フォルダにバックアップする。
+        //$tmpDir = $this->Util->createFileTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $fileClone);
+
+        try {
+            // ロールバック用に一時フォルダにバックアップ
+            if(!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
+                throw new RuntimeException('画像のバックアップに失敗しました。');
+            }
+            // バックアップしたファイルを取得
+            $tmpFile = new File (WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name); // バックアップ用
+            // 画像削除処理実行
+            if (!$file->delete()) {
+                throw new RuntimeException('画像の削除に失敗しました。');
+            }
+        } catch (RuntimeException $e) {
+            // 変数が存在するかつバックアップファイルがあれば削除する
+            if (isset($tmpFile) && $tmpFile->exists()) {
+                $tmpFile->delete();// tmpファイル削除
+            }
+
+            $message = RESULT_M['DELETE_FAILED'];
+            $flg = false;
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        $shop = $this->Shops->get($this->viewVars['shopInfo']['shop_id']);
+        $shop->set($this->request->getData('key'), "");
+        // テーブル更新
+        if($this->Shops->save($shop)) {
+            // 変数が存在するかつバックアップファイルがあれば削除する
+            if (isset($tmpFile) && $tmpFile->exists()) {
+                $tmpFile->delete();// tmpファイル削除
+            }
+            $message = RESULT_M['DELETE_SUCCESS'];
+            $flg = true;
+       } else {
+            // 失敗
+            // 変数が存在するかつバックアップファイルがファイルを戻す
+            if (isset($tmpFile) && $tmpFile->exists()) {
+                $tmpFile->copy($file->path);
+                $tmpFile->delete();// tmpファイル削除
+            }
+            $message = RESULT_M['DELETE_FAILED'];
+            $flg = false;
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+
+        $shop = $this->Shops->find()
+            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
+        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+        $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // 画像リストを作成する
+        foreach ($imageCol as $key => $value) {
+            if (!empty($shop[$imageCol[$key]])) {
+                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+            }
+        }
+        $this->set(compact('shop','imageList'));
+        $this->render('/Element/shopEdit/gallery');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
     }
 
     /**

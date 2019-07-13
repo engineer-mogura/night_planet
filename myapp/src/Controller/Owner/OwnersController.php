@@ -38,6 +38,9 @@ class OwnersController extends AppController
 
     public function signup()
     {
+        // レイアウトを使用しない
+        $this->viewBuilder()->autoLayout(false);
+
         // 登録ボタン押下時
         if ($this->request->is('post')) {
             // バリデーションは新規登録用を使う。
@@ -99,6 +102,8 @@ class OwnersController extends AppController
 
     public function login()
     {
+        // レイアウトを使用しない
+        $this->viewBuilder()->autoLayout(false);
 
         if ($this->request->is('post')) {
 
@@ -133,6 +138,9 @@ class OwnersController extends AppController
 
     public function logout()
     {
+        // レイアウトを使用しない
+        $this->viewBuilder()->autoLayout(false);
+
         // TODO: この自動ログインのコメントは削除予定。\node-link\cakephp-remember-meプラグインで対応できてる
         // // ※ $userにユーザー情報取得済み前提
         // // ユーザー自動ログイン管理テーブルからレコード削除

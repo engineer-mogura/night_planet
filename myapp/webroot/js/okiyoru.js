@@ -37,162 +37,104 @@ function imgDisp() {
     fileReader.readAsDataURL(file);
 }
 
-/* 求人情報 関連処理 start */
-/**
- * 求人情報 通常表示、変更表示切替え処理
- * @param  {} obj
- */
-function jobChangeBtn(obj){
-    if ($('#edit-job').css('display') == 'block') {
-        // $(obj).find('[name="job"]').val(""); //初期値を削除しない
-        $(obj).find("#edit-job").hide();
-        $(obj).find("#show-job").show();
-    } else {
-        var job = JSON.parse($(obj).find('input[name="job_copy"]').val());
-        $(obj).find('input[name="job_edit_id"]').val(job['id']);
-        $(obj).find('p[name="name"]').text($(obj).find('.show-job-name').text());
-        $(obj).find('select[name="industry"]').val(job['industry']);
-        $(obj).find('select[name="job_type"]').val(job['job_type']);
+// /**
+//  * 求人情報 登録ボタン処理
+//  */
+// function jobSaveBtn(){
 
-        var $from = $('#work-from-time').pickatime().pickatime('picker');
-        var $to = $('#work-to-time').pickatime().pickatime('picker');
-        var from = new Date(job['work_from_time']);
-        var to = new Date(job['work_to_time']);
-        $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
-        $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
-        $(obj).find('input[name="work_time_hosoku"]').val(job['work_time_hosoku']);
-        $(obj).find('input[name="qualification_hosoku"]').val(job['qualification_hosoku']);
-        $(obj).find('select[name="from_age"]').val(job['from_age']);
-        $(obj).find('select[name="to_age"]').val(job['to_age']);
-        var dayArray = job['holiday'].split(",");
-        $.each(dayArray, function(index, val) {
-            $(obj).find('input[name="holiday[]"]').each(function(i,o){
-                if (val == $(o).val()) {
-                    $(o).prop('checked',true);
-                }
-                });
-        });
+//     if (!confirm('こちらの求人内容でよろしいですか？')) {
+//         return false;
+//     }
 
-        $(obj).find('input[name="holiday_hosoku"]').val(job['holiday_hosoku']);
-        $(obj).find('input[name="treatment"]').val(job['treatment']);
-        $(obj).find('textarea[name="pr"]').val(job['pr']);
-        $(obj).find('input[name="tel1"]').val(job['tel1']);
-        $(obj).find('input[name="tel2"]').val(job['tel2']);
-        $(obj).find('input[name="email"]').val(job['email']);
-        $(obj).find('input[name="lineid"]').val(job['lineid']);
-        //待遇フィールドにあるタグを取得して配列にセット
-        var data = JSON.parse($('#job').find('input[name="treatment_hidden"]').val());
-        // 待遇フィールドの初期化
-        $(obj).find('.chips-initial').material_chip({
-            data:data
-        });
-        $(obj).find('#edit-job').show();
-        $(obj).find("#show-job").hide();
-        Materialize.updateTextFields(); // インプットフィールドの初期化
-        $(obj).find('select').material_select(); // セレクトボックスの値を動的に変えたら初期化する必要がある
-        $($(obj).find('div[name="credit"]')).find('input').prop('disabled',true);
+//     var $form = $('form[name="save_job"]');
+//     var tagData = $($form).find('.chips').material_chip('data');
+//     if (tagData.length > 0) {
+//         var csvTag = "";
+//         for (var i = 0; i < tagData.length; i++) {
+//             csvTag = csvTag += tagData[i].tag + ",";
+//         }
+//         csvTag = csvTag.slice(0, -1);
+//         $($form).find('input[name="treatment"]').val(csvTag);
+//     }
+//     //通常のアクションをキャンセルする
+//     event.preventDefault();
 
-    }
-}
+//     $.ajax({
+//         url : $form.attr('action'), //Formのアクションを取得して指定する
+//         type: $form.attr('method'),//Formのメソッドを取得して指定する
+//         data: $form.serialize(), //データにFormがserialzeした結果を入れる
+//         dataType: 'json', //データにFormがserialzeした結果を入れる
+//         timeout: 10000,
+//         beforeSend : function(xhr, settings){
+//             //Buttonを無効にする
+//             $($form).find('.saveBtn').attr('disabled' , true);
+//             //処理中のを通知するアイコンを表示する
+//             $("#dummy").load("/module/Preloader.ctp");
+//         },
+//         complete: function(xhr, textStatus){
+//             //処理中アイコン削除
+//             $('.preloader-wrapper').remove();
+//             $($form).find('.saveBtn').attr('disabled' , false);
+//         },
+//         success: function (response, textStatus, xhr) {
 
-/**
- * 求人情報 登録ボタン処理
- */
-function jobSaveBtn(){
+//             // OKの場合
+//             if(response.success){
+//                 var $objWrapper = $("#wrapper");
+//                 $($objWrapper).replaceWith(response.html);
+//                     $.notifyBar({
+//                     cssClass: 'success',
+//                     html: response.message
+//                 });
+//                 initialize();
+//             }else{
+//             // NGの場合
+//                 $.notifyBar({
+//                     cssClass: 'error',
+//                     html: response.error
+//                 });
+//             }
+//         },
+//         error : function(response, textStatus, xhr){
+//             $($form).find('.saveBtn').attr('disabled' , false);
+//             $.notifyBar({
+//                 cssClass: 'error',
+//                 html: "通信に失敗しました。ステータス：" + textStatus
+//             });
+//         }
+//     });
+// }
 
-    if (!confirm('こちらの求人内容でよろしいですか？')) {
-        return false;
-    }
+// /**
+//  * 求人タブのモーダル呼び出し時の処理
+//  * @param {*} obj 
+//  */
+// function modalJobTriggerBtn(obj) {
 
-    var $form = $('form[name="edit_job"]');
-    var tagData = $($form).find('.chips').material_chip('data');
-    if (tagData.length > 0) {
-        var csvTag = "";
-        for (var i = 0; i < tagData.length; i++) {
-            csvTag = csvTag += tagData[i].tag + ",";
-        }
-        csvTag = csvTag.slice(0, -1);
-        $($form).find('input[name="treatment"]').val(csvTag);
-    }
-    //通常のアクションをキャンセルする
-    event.preventDefault();
+//     // オブジェクトを配列に変換
+//     //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
+//     var $chips = $('#job').find('.chips');
+//     var $chipList = $('#modal-job').find('.chip');
+//     $($chips).val($(this).attr('id'));
+//         // 待遇フィールドにあるタグを取得して配列にセット
+//         var data = $($chips).material_chip('data');
 
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($form).find('.saveBtn').attr('disabled' , true);
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($form).find('.saveBtn').attr('disabled' , false);
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response.success){
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response.html);
-                    $.notifyBar({
-                    cssClass: 'success',
-                    html: response.message
-                });
-                initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $($form).find('.saveBtn').attr('disabled' , false);
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-}
-
-/**
- * 求人タブのモーダル呼び出し時の処理
- * @param {*} obj 
- */
-function modalJobTriggerBtn(obj) {
-
-    // オブジェクトを配列に変換
-    //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
-    var $chips = $('#job').find('.chips');
-    var $chipList = $('#modal-job').find('.chip');
-    $($chips).val($(this).attr('id'));
-        // 待遇フィールドにあるタグを取得して配列にセット
-        var data = $($chips).material_chip('data');
-
-    var addFlg = true;
-    // 配列dataを順に処理
-    // タグの背景色を初期化する
-    $($chipList).each(function(i,o){
-        $(o).removeClass('back-color');
-    });
-    // インプットフィールドにあるタグは選択済にする
-    $.each(data, function(index, val) {
-        $($chipList).each(function(i,o){
-            if($(o).attr('id') == val.id) {
-                $(o).addClass('back-color');
-                return true;
-            }
-        });
-    });
-}
+//     var addFlg = true;
+//     // 配列dataを順に処理
+//     // タグの背景色を初期化する
+//     $($chipList).each(function(i,o){
+//         $(o).removeClass('back-color');
+//     });
+//     // インプットフィールドにあるタグは選択済にする
+//     $.each(data, function(index, val) {
+//         $($chipList).each(function(i,o){
+//             if($(o).attr('id') == val.id) {
+//                 $(o).addClass('back-color');
+//                 return true;
+//             }
+//         });
+//     });
+// }
 /* 求人情報 関連処理 end */
 /* オーナーデフォルト end */
 
@@ -674,9 +616,10 @@ function castImageDeleteBtn(form, obj){
             }
         });
         // materializecss Chips
-        $('.chips-initial').material_chip();
+        $(document).find('.chips').material_chip();
         // materializecss Chips 追加イベント
         $('.chips').on('chip.add', function(e, chip){
+            console.log(this);
             //alert("chip.add");
         });
         // materializecss Chips 削除イベント
@@ -685,6 +628,7 @@ function castImageDeleteBtn(form, obj){
         });
         // materializecss Chips 選択イベント
         $('.chips').on('chip.select', function(e, chip){
+            console.log(this);
             //alert("chip.select");
         });
 
@@ -1215,7 +1159,7 @@ function ownerInitialize() {
             return false;
         }
 
-        var $form = $('form[name="edit_coupon"]');
+        var $form = $('form[name="save_coupon"]');
         var from_day = $($form).find('input[name="from_day_submit"]').val();
         var to_day = $($form).find('input[name="to_day_submit"]').val();
         $($form).find('input[name="from_day"]').val(from_day);
@@ -1253,7 +1197,7 @@ function ownerInitialize() {
         if(!$(this).prop('checked')) {
             status = 0;
         }
-        var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_coupon/' };
+        var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_coupon?' + json.shop_id };
 
         $.ajax({
             type: 'POST',
@@ -1362,7 +1306,7 @@ function ownerInitialize() {
             return false;
         }
 
-        var $form = $('form[name="edit_cast"]');
+        var $form = $('form[name="save_cast"]');
 
         //通常のアクションをキャンセルする
         event.preventDefault();
@@ -1396,7 +1340,7 @@ function ownerInitialize() {
         if(!$(this).prop('checked')) {
             status = 0;
         }
-        var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_cast/' };
+        var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_cast/' + json.shop_id };
 
         $.ajax({
             type: 'POST',
@@ -1513,8 +1457,120 @@ function ownerInitialize() {
         ajaxCommonOwner($form, $("#tenpo"));
     });
 
+    // ギャラリー 削除ボタン押した時
+    $(document).on("click", ".gallery-deleteBtn",function() {
+
+        var json = $(this).data('delete');
+
+        if (!confirm('選択したギャラリーを削除してもよろしいですか？')) {
+            return false;
+        }
+        var $form = $('form[id="delete-gallery"]');
+        $($form).find("input[name='key']").val(json.key);
+        $($form).find("input[name='name']").val(json.name);
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#gallery"));
+    });
+    // ギャラリー 画像を選択した時
+    $(document).on("change", "#image-file", function() {
+
+        if($("#image-file").prop("files").length == 0) {
+            $(".cancelBtn").addClass("disabled");
+            $(".createBtn").addClass("disabled");
+        } else {
+            $(".cancelBtn").removeClass("disabled");
+            $(".createBtn").removeClass("disabled");
+        }
+        $(document).find(".card-img.new").remove();
+        var fileList = $("#image-file").prop("files");
+        var imgCount = $(".card-img").length;
+        var fimeMax = $("input[name='file_max']").val();
+        var modulePath = "/module/materialboxed.ctp";
+
+        $.each(fileList, function(index, file){
+            //画像ファイルかチェック
+            if (file["type"] != "image/jpeg" && file["type"] != "image/png" && file["type"] != "image/gif") {
+                alert("jpgかpngかgifファイルを選択してください");
+                $("#image-file").val('');
+                return false;
+            }
+        });
+        // ファイル数を制限する
+        if(fileList.length + imgCount > fimeMax) {
+            alert("アップロードできる画像は" + fimeMax + "ファイルまでです。");
+            resetBtn($(document), true);
+            return false;
+        }
+        for(var i = 0; i < fileList.length; i++){
+
+            imgCount += 1;
+            fileload(fileList[i], $("#gallery .row"), imgCount, modulePath);
+        }
+
+    });
+    // ギャラリー 登録ボタン押した時
+    $(document).on("click", ".gallery-saveBtn",function() {
+
+        //ファイル選択済みかチェック
+        var fileCheck = $("#image-file").val().length;
+        if (fileCheck === 0) {
+            alert("画像ファイルを選択してください");
+            return false;
+        }
+        if(!confirm('こちらの画像に変更でよろしいですか？')) {
+            return false;
+        }
+
+        var $form = $('#save-gallery');
+        // ファイル変換
+        var formData = fileConvert("#image-canvas", $form, '.card-img');
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        fileUpAjaxCommonOwner($form, formData, $("#gallery"));
+
+    });
+    // ギャラリー やめるボタン押した時
+    $(document).on("click", ".gallery-chancelBtn",function() {
+        // newタグが付いたファイルを表示エリアから削除する
+        $('#gallery').find('.card-img.new').remove();
+        // フォーム入力も削除する
+        $("#gallery").find("#image-file, .file-path").val("");
+    });
+    /* ギャラリー 関連処理 end */
+
+    // 求人情報 リストから選ぶボタン押した時
+    $(document).on("click", ".jobModal-callBtn",function() {
+
+        // オブジェクトを配列に変換
+        //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
+        var $chips = $('#job').find('.chips');
+        var $chipList = $('#modal-job').find('.chip-dummy');
+        $($chips).val($(this).attr('id'));
+            // 待遇フィールドにあるタグを取得して配列にセット
+            var data = $($chips).material_chip('data');
+
+        var addFlg = true;
+        // 配列dataを順に処理
+        // タグの背景色を初期化する
+        $($chipList).each(function(i,o){
+            $(o).removeClass('back-color');
+        });
+        // インプットフィールドにあるタグは選択済にする
+        $.each(data, function(index, val) {
+            $($chipList).each(function(i,o){
+                if($(o).attr('id') == val.id) {
+                    $(o).addClass('back-color');
+                    return true;
+                }
+            });
+        });
+    });
+
     // 店舗情報 クレジットタグをフォームに追加する
-    $(document).on('click','.chips-credit', function() {
+    $(document).on('click','.chip-credit', function() {
         var $chips = $('#tenpo').find('.chips');
         $($chips).val($(this).children().attr('alt'));
         // クレジットフィールドにあるタグを取得して配列にセット
@@ -1540,14 +1596,96 @@ function ownerInitialize() {
             data:data
         });
         $($chips).find('input').prop('disabled',true);
+        //フレームワークmaterializecssの本来のイベントをキャンセルする
+        //※ブラウザでエラー発生するため（Uncaught TypeError: Cannot read property '*' of undefined）
+        event.stopImmediatePropagation();
 
-        return false;
     });
     /* 店舗情報 関連処理 end */
 
     /* 求人情報 関連処理 start */
+    // 求人情報 変更、やめるボタン押した時
+    $(document).on("click", ".job-changeBtn",function() {
+        $("html,body").animate({scrollTop:0});
+
+        if ($('#save-job').css('display') == 'block') {
+            $('#job').find("#save-job").hide();
+            $('#job').find("#show-job").show();
+        } else {
+            var job = JSON.parse($('#job').find('input[name="json_data"]').val());
+            $('#job').find('input[name="id"]').val(job['id']);
+            $('#job').find('p[name="name"]').text($('#job').find('.show-job-name').text());
+            $('#job').find('select[name="industry"]').val(job['industry']);
+            $('#job').find('select[name="job_type"]').val(job['job_type']);
+
+            var $from = $('#work-from-time').pickatime().pickatime('picker');
+            var $to = $('#work-to-time').pickatime().pickatime('picker');
+            var from = new Date(job['work_from_time']);
+            var to = new Date(job['work_to_time']);
+            $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
+            $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
+            $('#job').find('input[name="work_time_hosoku"]').val(job['work_time_hosoku']);
+            $('#job').find('input[name="qualification_hosoku"]').val(job['qualification_hosoku']);
+            $('#job').find('select[name="from_age"]').val(job['from_age']);
+            $('#job').find('select[name="to_age"]').val(job['to_age']);
+            var dayArray = job['holiday'].split(",");
+            $.each(dayArray, function(index, val) {
+                $('#job').find('input[name="holiday[]"]').each(function(i,o){
+                    if (val == $(o).val()) {
+                        $(o).prop('checked',true);
+                    }
+                    });
+            });
+
+            $('#job').find('input[name="holiday_hosoku"]').val(job['holiday_hosoku']);
+            $('#job').find('input[name="treatment"]').val(job['treatment']);
+            $('#job').find('textarea[name="pr"]').val(job['pr']);
+            $('#job').find('input[name="tel1"]').val(job['tel1']);
+            $('#job').find('input[name="tel2"]').val(job['tel2']);
+            $('#job').find('input[name="email"]').val(job['email']);
+            $('#job').find('input[name="lineid"]').val(job['lineid']);
+            //待遇フィールドにあるタグを取得して配列にセット
+            var data = JSON.parse($('#job').find('input[name="treatment_hidden"]').val());
+            // 待遇フィールドの初期化
+            $('#job').find('.chips-initial').material_chip({
+                data:data
+            });
+            $('#job').find('#save-job').show();
+            $('#job').find("#show-job").hide();
+
+            $('textarea').trigger('autoresize'); // テキストエリアの初期化
+            Materialize.updateTextFields(); // インプットフィールドの初期化
+            $('#job').find('select').material_select(); // セレクトボックスの値を動的に変えたら初期化する必要がある
+            $($('#job').find('div[name="credit"]')).find('input').prop('disabled',true);
+
+        }
+    });
+
+    // 求人情報 登録ボタン押した時
+    $(document).on("click", ".job-saveBtn",function() {
+
+        if (!confirm('こちらの求人内容でよろしいですか？')) {
+            return false;
+        }
+
+        var $form = $('form[name="save_job"]');
+        var tagData = $($form).find('.chips').material_chip('data');
+        if (tagData.length > 0) {
+            var csvTag = "";
+            for (var i = 0; i < tagData.length; i++) {
+                csvTag = csvTag += tagData[i].tag + ",";
+            }
+            csvTag = csvTag.slice(0, -1);
+            $($form).find('input[name="treatment"]').val(csvTag);
+        }
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommonOwner($form, $("#job"));
+    });
+
     // 求人情報 待遇タグをフォームに追加する
-    $('#modal-job').find('.chip').on('click', function() {
+    $(document).on('click','.chip-treatment', function(event) {
         var $chips = $('#job').find('.chips');
         $($chips).val($(this).attr('id'));
         // 待遇フィールドにあるタグを取得して配列にセット
@@ -1588,8 +1726,9 @@ function ownerInitialize() {
             data:data
         });
         $($chips).find('input').prop('disabled',true);
-
-        return false;
+        //フレームワークmaterializecssの本来のイベントをキャンセルする
+        //※ブラウザでエラー発生するため（Uncaught TypeError: Cannot read property '*' of undefined）
+        event.stopImmediatePropagation();
     });
 
     /**

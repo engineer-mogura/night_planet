@@ -1,11 +1,9 @@
 <?php
 namespace App\Model\Table;
 
-use ArrayObject;
 use Cake\ORM\Query;
-use Cake\ORM\Table;
-use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
@@ -15,7 +13,7 @@ use Cake\Validation\Validator;
  * @property \App\Model\Table\CastsTable|\Cake\ORM\Association\HasMany $Casts
  * @property \App\Model\Table\CouponsTable|\Cake\ORM\Association\HasMany $Coupons
  * @property \App\Model\Table\JobsTable|\Cake\ORM\Association\HasMany $Jobs
- * @property |\Cake\ORM\Association\HasMany $ShopInfos
+ * @property \App\Model\Table\ShopInfosTable|\Cake\ORM\Association\HasMany $ShopInfos
  *
  * @method \App\Model\Entity\Shop get($primaryKey, $options = [])
  * @method \App\Model\Entity\Shop newEntity($data = null, array $options = [])
@@ -78,7 +76,8 @@ class ShopsTable extends Table
 
         $validator
             ->integer('id')
-            ->allowEmptyString('id', 'create');
+            ->requirePresence('id', 'create')
+            ->allowEmptyString('id', false);
 
         $validator
             ->scalar('area')
@@ -97,7 +96,7 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 120,"店舗名は120文字以内にしてください。")
+            ->maxLength('name', 30,"店舗名は120文字以内にしてください。")
             ->allowEmptyString('name');
 
         $validator
@@ -106,9 +105,49 @@ class ShopsTable extends Table
             ->allowEmptyFile('top_image');
 
         $validator
+            ->scalar('image1')
+            ->maxLength('image1', 100)
+            ->allowEmptyFile('image1');
+
+        $validator
+            ->scalar('image2')
+            ->maxLength('image2', 100)
+            ->allowEmptyFile('image2');
+
+        $validator
+            ->scalar('image3')
+            ->maxLength('image3', 100)
+            ->allowEmptyFile('image3');
+
+        $validator
+            ->scalar('image4')
+            ->maxLength('image4', 100)
+            ->allowEmptyFile('image4');
+
+        $validator
+            ->scalar('image5')
+            ->maxLength('image5', 100)
+            ->allowEmptyFile('image5');
+
+        $validator
+            ->scalar('image6')
+            ->maxLength('image6', 100)
+            ->allowEmptyFile('image6');
+
+        $validator
+            ->scalar('image7')
+            ->maxLength('image7', 100)
+            ->allowEmptyFile('image7');
+
+        $validator
+            ->scalar('image8')
+            ->maxLength('image8', 100)
+            ->allowEmptyFile('image8');
+
+        $validator
             ->scalar('catch')
             ->minLength('catch', 5,"キャッチコピーが短すぎます。")
-            ->maxLength('catch', 120,"キャッチコピーは120文字以内にしてください。")
+            ->maxLength('catch', 100,"キャッチコピーは120文字以内にしてください。")
             ->allowEmptyString('catch');
 
         $validator
@@ -124,20 +163,20 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('staff')
-            ->maxLength('staff', 120,"スタッフは120文字以内にしてください。")
+            ->maxLength('staff', 255,"スタッフは120文字以内にしてください。")
             ->allowEmptyString('staff');
 
         $validator
             ->time('bus_from_time')
-            ->allowEmptyDateTime('bus_from_time');
+            ->allowEmptyTime('bus_from_time');
         // TODO: bus_to_time => 営業時間の終了は「LAST」も含めた方がよいのでは？
         $validator
             ->time('bus_to_time')
-            ->allowEmptyDateTime('bus_to_time');
+            ->allowEmptyTime('bus_to_time');
 
         $validator
             ->scalar('bus_hosoku')
-            ->maxLength('bus_hosoku', 120,"補足は120文字以内にしてください。")
+            ->maxLength('bus_hosoku', 255,"補足は120文字以内にしてください。")
             ->allowEmptyString('bus_hosoku');
 
         $validator
@@ -152,17 +191,19 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('cast')
-            ->maxLength('cast', 255)
+            ->maxLength('cast', 255,"キャストは255文字以内にしてください。")
             ->allowEmptyString('cast');
 
         $validator
             ->scalar('pref21')
             ->maxLength('pref21', 3,"都道府県が不正です。")
             ->allowEmptyString('pref21');
+
         $validator
             ->scalar('addr21')
             ->maxLength('addr21', 10,"市町村が不正です。")
             ->allowEmptyString('addr21');
+
         $validator
             ->scalar('strt21')
             ->maxLength('strt21', 20,"以降の住所が不正です。")

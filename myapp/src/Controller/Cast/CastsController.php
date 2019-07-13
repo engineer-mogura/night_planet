@@ -966,7 +966,8 @@ class CastsController extends AppController
 
     public function login()
     {
-        $CastsTable = TableRegistry::get('Casts');
+        // レイアウトを使用しない
+        $this->viewBuilder()->autoLayout(false);
 
         if ($this->request->is('post')) {
 
@@ -994,13 +995,16 @@ class CastsController extends AppController
                 }
             }
         } else {
-            $cast = $CastsTable->newEntity();
+            $cast = $this->Casts->newEntity();
         }
         $this->set('cast', $cast);
     }
 
     public function logout()
     {
+        // レイアウトを使用しない
+        $this->viewBuilder()->autoLayout(false);
+
         // TODO: この自動ログインのコメントは削除予定。\node-link\cakephp-remember-meプラグインで対応できてる
         // // ※ $userにユーザー情報取得済み前提
         // // ユーザー自動ログイン管理テーブルからレコード削除

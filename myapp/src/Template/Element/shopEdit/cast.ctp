@@ -3,7 +3,7 @@
   <h5>キャスト</h5>
   <div id="show-cast">
     <div class="row">
-      <form id="delete-cast" name="delete_cast" method="post" style="display:none;" action="/owner/shops/delete_cast/">
+      <form id="delete-cast" name="delete_cast" method="post" style="display:none;" action="/owner/shops/delete_cast?id=<?=$shop->id?>">
         <input type="hidden" name="_method" value="POST">
         <input type="hidden" name="id" value="">
         <input type="hidden" name="shop_id" value="">
@@ -69,7 +69,7 @@
       </div>
     </div>
   </div>
-  <form id="save-cast" name="edit_cast" method="post" action="/owner/shops/save_cast/" style="display:none;">
+  <form id="save-cast" name="save_cast" method="post" action="/owner/shops/save_cast?id=<?=$shop->id?>" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="crud_type" value="">

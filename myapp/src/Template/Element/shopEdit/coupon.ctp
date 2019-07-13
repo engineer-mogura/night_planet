@@ -3,7 +3,7 @@
   <h5>クーポン</h5>
   <div id="show-coupon">
     <div class="row">
-      <form id="delete-coupon" name="delete_coupon" method="post" style="display:none;" action="/owner/shops/delete_coupon/">
+      <form id="delete-coupon" name="delete_coupon" method="post" style="display:none;" action="/owner/shops/delete_coupon?id=<?=$shop->id?>">
         <input type="hidden" name="_method" value="POST">
         <input type="hidden" name="id" value="">
         <input type="hidden" name="shop_id" value="">
@@ -69,7 +69,7 @@
       </div>
     </div>
   </div>
-  <form id="save-coupon" name="edit_coupon" method="post" action="/owner/shops/save_coupon/" style="display:none;">
+  <form id="save-coupon" name="save_coupon" method="post" action="/owner/shops/save_coupon?id=<?=$shop->id?>" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="crud_type" value="">

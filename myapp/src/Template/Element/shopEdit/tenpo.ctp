@@ -63,7 +63,7 @@
             <td><?php if(!$shop->credit == '') { ?>
                 <?php $array =explode(',', $shop->credit); ?>
                 <?php for ($i = 0; $i < count($array); $i++) { ?>
-                <div class="chip" name="" value="">
+                <div class="chip-dummy" name="" value="">
                   <img src="/img/common/credit/<?=$array[$i]?>.png" id="<?=$array[$i]?>" alt="<?=$array[$i]?>">
                   <?=$array[$i]?>
                 </div>
@@ -78,7 +78,7 @@
       </div>
     </div>
   </div>
-  <form id="save-tenpo" name="save_tenpo" method="post" action="/owner/shops/save_tenpo/" style="display:none;">
+  <form id="save-tenpo" name="save_tenpo" method="post" action="/owner/shops/save_tenpo?id=<?=$shop->id?>" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="id" value="">
@@ -161,7 +161,7 @@
           <div class="card-panel">
           <div class="chip-box">
           <?php foreach ($masCredit as $key => $value): ?>
-            <div class="chip chips-credit" name="" value="">
+            <div class="chip-dummy chip-credit" name="" value="">
               <img src="/img/common/credit/<?=$value->code?>.png" id="<?=$value->id?>" alt="<?=$value->code?>">
               <?=$value->code?>
             </div>
@@ -172,7 +172,7 @@
     </div>
     <div class="card-content" style="text-align:center;">
       <button type="button" href="#" class="waves-effect waves-light btn-large tenpo-changeBtn">やめる</button>
-      <button type="button" class="waves-effect waves-light btn-large tenpo-saveBtn">確定</button>
+      <button type="button" class="waves-effect waves-light btn-large tenpo-saveBtn">登録</button>
     </div>
   </form>
 </div>

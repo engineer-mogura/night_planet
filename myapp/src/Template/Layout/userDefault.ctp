@@ -34,9 +34,9 @@
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
+</head>
   <?php $id = $this->request->getSession()->read('Auth.User.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.User.role') ?>
-
 <body id="user-default">
   <ul id="slide-out" class="side-nav fixed">
     <li>

@@ -65,11 +65,12 @@ class AppController extends \App\Controller\AppController
         //                         'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob'])) {
         //     return true;
         // }
-        $access = ['saveTopImage','deleteTopImage','saveCatch','deleteCatch',
-            'deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
-            'deleteCast','saveTenpo'];
-        if (in_array($action, array_merge($access, ['index', 'view', 'add', 'delete', 'edit',
-                                'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob']))) {
+
+        // ログイン時に許可するアクション
+        $access = ['index','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
+            'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
+            'deleteCast','saveTenpo','saveJob','saveGallery','deleteGallery'];
+        if (in_array($action, $access)) {
             return true;
         }
         return false;

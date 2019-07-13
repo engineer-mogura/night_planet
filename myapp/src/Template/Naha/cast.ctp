@@ -18,11 +18,10 @@
         </div>
       </div>
     </nav>
-  <?php foreach ($cast as $row): ?>
   <div class="row">
     <div id="cast-main" class="col s12 m12 l8">
-      <img class="responsive-img" width="100%" src=<?php if($row->image1 != '') {
-        echo($shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->image1);} else {
+      <img class="responsive-img" width="100%" src=<?php if($cast->image1 != '') {
+        echo($shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1);} else {
         echo(PATH_ROOT['AREA01']);} ?> />
       <div class="fixed-action-btn share horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
@@ -44,8 +43,8 @@
         </ul>
       </div>
       <?= $this->element('shop-edit-form') ?>
-      <h5 class="left-align"><?php if($row->nickname != '') {
-        echo($row->nickname);} else {
+      <h5 class="left-align"><?php if($cast->nickname != '') {
+        echo($cast->nickname);} else {
         echo("店舗名を決めてください。");} ?>
       </h5>
       <div class="header-area">
@@ -77,13 +76,13 @@
               </p>
             </div>
           </div>
-            <?php if(count($row->shop->coupons) > 0) { ?>
-            <?php foreach($row->shop->coupons as $coupon): ?>
+            <?php if(count($cast->shop->coupons) > 0) { ?>
+            <?php foreach($cast->shop->coupons as $coupon): ?>
               <div class="collapsible-body orange lighten-4">
                 <span><?= $this->Time->format($coupon->from_day, 'Y/M/d') ?>～<?= $this->Time->format($coupon->to_day, 'Y/M/d') ?></span><br />
                   <span>★☆★<?=$coupon->title ?>★☆★<br />
                 <?=$coupon->content ?><br />
-              <?php if($coupon === end($row->shop->coupons)){echo ('こちらの画面をお店側に見せ、使用するクーポンをお知らせください。');}?></span>
+              <?php if($coupon === end($cast->shop->coupons)){echo ('こちらの画面をお店側に見せ、使用するクーポンをお知らせください。');}?></span>
               </div>
             <?php endforeach; ?>
             <?php } else { ?>
@@ -102,23 +101,23 @@
           <table class="bordered shop-table z-depth-2" border="1">
             <tbody>
               <tr>
-                <th class="table-header" colspan="2" align="center"><?= h($row->nickname);?></th>
+                <th class="table-header" colspan="2" align="center"><?= h($cast->nickname);?></th>
               </tr>
               <tr>
                 <th align="center">誕生日</th>
-                <td><?=!$row->isEmpty("birthday") ? $this->Time->format($row->birthday, 'M/d'):"-" ?></td>
+                <td><?=!$cast->isEmpty("birthday") ? $this->Time->format($cast->birthday, 'M/d'):"-" ?></td>
               </tr>
               <tr>
                 <th align="center">星座</th>
-                <td><?=!$row->isEmpty("constellation") ? CONSTELLATION[$row->constellation]['label']:"-" ?></td>
+                <td><?=!$cast->isEmpty("constellation") ? CONSTELLATION[$cast->constellation]['label']:"-" ?></td>
               </tr>
               <tr>
                 <th align="center">血液型</th>
-                <td><?=!$row->isEmpty("blood_type") ? BLOOD_TYPE[$row->blood_type]['label']:"-" ?></td>
+                <td><?=!$cast->isEmpty("blood_type") ? BLOOD_TYPE[$cast->blood_type]['label']:"-" ?></td>
               </tr>
               <tr>
                 <th align="center">メッセージ</th>
-                <td class="left-align"><?=!$row->isEmpty("message") ? $this->Text->autoParagraph($row->message):"-" ?></td>
+                <td class="left-align"><?=!$cast->isEmpty("message") ? $this->Text->autoParagraph($cast->message):"-" ?></td>
               </tr>
             </tbody>
           </table>
@@ -126,55 +125,50 @@
       </div>
       <div class="row gallery-list">
         <div class="or-header-wrap card-panel red lighten-3">
-          <span class="or-header"><?=$row->nickname?>さんのギャラリー</span>
+          <span class="or-header"><?=$cast->nickname?>さんのギャラリー</span>
         </div>
-        <?php
-        $isGalleryExists = false;
-        echo('<div class="my-gallery">');
-        foreach ($imageCol as $key => $value) {
-          if(!$row->isEmpty($value)) { ?>
-              <figure class="col <?=(count($imageCol)==1?'s12 m12 l12':(count($imageCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-                <a href="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['IMAGE'].DS.$row->get($value)?>" alt="写真の説明でーす。" /></a>
-              </figure>
-            <?= $value == end($imageCol) ?'</div>':""?>
-            <?php $isGalleryExists = true;
-          }
-        }
-        echo('</div>');
-        ?>
+        <?php $isGalleryExists = false; ?>
+        <?php foreach ($imageList as $key => $value): ?>
+          <?= $value == reset($imageList) ?'<div class="my-gallery">':""?>
+            <figure class="col <?=(count($imageList)==1?'s12 m12 l12':(count($imageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
+              <a href="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+            </figure>
+          <?= $value == end($imageList) ?'</div>':""?>
+          <?php $isGalleryExists = true; ?>
+        <?php endforeach; ?>
         <?= $isGalleryExists ? "" : '<p class="col">ギャラリーの登録はありません。</p>';?>
       </div>
       <div class="row diary-list">
         <div class="or-header-wrap card-panel red lighten-3">
-          <span class="or-header"><?=$row->nickname?>さんの日記</span>
+          <span class="or-header"><?=$cast->nickname?>さんの日記</span>
         </div>
-        <?php if (count($row->diarys) > 0) { ?>
+        <?php if (count($cast->diarys) > 0) { ?>
           <div class="card diary-card">
-        <?php foreach ($dImgCol as $key => $value) { ?>
-        <?= $value == reset($dImgCol) ?'<div class="my-gallery">':""?>
-            <figure class="col <?=(count($dImgCol)==1?'s12 m12 l12':(count($dImgCol)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <a href="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$row->dir.DS.PATH_ROOT['DIARY'].DS.$row->diarys[0]->dir.DS.$row->diarys[0]->get($value)?>" alt="写真の説明でーす。" /></a>
+        <?php foreach ($dImageList as $key => $value): ?>
+        <?= $value == reset($dImageList) ?'<div class="my-gallery">':""?>
+            <figure class="col <?=(count($dImageList)==1?'s12 m12 l12':(count($dImageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
+              <a href="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$cast->diarys[0]->dir.DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$cast->diarys[0]->dir.DS.$value['name']?>" alt="写真の説明でーす。" /></a>
             </figure>
-        <?= $value == end($dImgCol) ?'</div>':""?>
-        <?php } ?>
+        <?= $value == end($dImageList) ?'</div>':""?>
+        <?php endforeach; ?>
             <div class="card-content">
-            <p class="right-align"><?=$row->diarys[0]->ymd_created?></p>
+            <p class="right-align"><?=$cast->diarys[0]->ymd_created?></p>
             <p class="title">
-              <?=$row->diarys[0]->title?>
+              <?=$cast->diarys[0]->title?>
             </p>
-              <p class="content"><?=$this->Text->autoParagraph($row->diarys[0]->content)?></p>
+              <p class="content"><?=$this->Text->autoParagraph($cast->diarys[0]->content)?></p>
             </div>
             <div class="card-action like-field">
               <div class="row">
                 <div class="col s6 m4 l4"><span class="btn-floating waves-effect waves-green btn-flat blue">
-                  <i class="material-icons">thumb_up</i></span><span class="like-field-span like-count"><?=count($row->diarys[0]->likes)?></span>
+                  <i class="material-icons">thumb_up</i></span><span class="like-field-span like-count"><?=count($cast->diarys[0]->likes)?></span>
                 </div>
                 <div class="col s6 m4 l4"><a class="btn-floating waves-effect waves-green btn-flat red">
                   <i class="material-icons">thumb_up</i></a><span class="like-field-span">LIKE?</span>
                 </div>
                 <div class="col s6 m4 l4">
-                  <a href="/naha/diary/<?=$row->id."?area=".$row->shop->area."&genre=".$row->shop->genre.
-                    "&shop=".$row->shop->id."&name=".$row->shop->name."&cast=".$row->id."&nickname=".$row->nickname?>"
+                  <a href="/naha/diary/<?=$cast->id."?area=".$cast->shop->area."&genre=".$cast->shop->genre.
+                    "&shop=".$cast->shop->id."&name=".$cast->shop->name."&cast=".$cast->id."&nickname=".$cast->nickname?>"
                     class="waves-effect waves-light btn-large createBtn"><i class="material-icons right">chevron_right</i><?=COMMON_LB['052']?></a>
                 </div>
               </div>
@@ -193,34 +187,34 @@
          <table class="bordered shop-table z-depth-2" border="1">
           <tbody>
             <tr>
-              <th class="table-header" colspan="2" align="center"><?= h($row->shop->name);?></th>
+              <th class="table-header" colspan="2" align="center"><?= h($cast->shop->name);?></th>
             </tr>
             <tr>
               <th align="center">所在地</th>
-              <td><?= h($row->shop->full_address);?></td>
+              <td><?= h($cast->shop->full_address);?></td>
             </tr>
             <tr>
               <th align="center">連絡先</th>
-              <td><?=h($row->shop->tel);?></td>
+              <td><?=h($cast->shop->tel);?></td>
             </tr>
             <tr>
               <th align="center">営業時間</th>
-              <td><?php if((!$row->shop->bus_from_time == '')
-                            && (!$row->shop->bus_to_time == '')
-                            && (!$row->shop->bus_hosoku == '')) {
-                              $busTime = $this->Time->format($row->shop->bus_from_time, 'HH:mm')
-                              ."～".$this->Time->format($row->shop->bus_to_time, 'HH:mm')
-                              ."</br>".$row->shop->bus_hosoku;
+              <td><?php if((!$cast->shop->bus_from_time == '')
+                            && (!$cast->shop->bus_to_time == '')
+                            && (!$cast->shop->bus_hosoku == '')) {
+                              $busTime = $this->Time->format($cast->shop->bus_from_time, 'HH:mm')
+                              ."～".$this->Time->format($cast->shop->bus_to_time, 'HH:mm')
+                              ."</br>".$cast->shop->bus_hosoku;
                               echo ($busTime);
                             } else { echo ('-'); } ?></td>
             </tr>
             <tr>
               <th align="center">スタッフ</th>
-              <td><?=h($row->shop->staff);?></td>
+              <td><?=h($cast->shop->staff);?></td>
             </tr>
             <tr>
               <th align="center" valign="top">システム</th>
-              <td><?=h($row->shop->system);?></td>
+              <td><?=h($cast->shop->system);?></td>
             </tr>
           </tbody>
         </table>
@@ -234,8 +228,8 @@
               </tr>
               <tr>
                 <th align="center">ご利用できるクレジットカード</th>
-                <td><?php if(!$row->shop->credit == '') { ?>
-                      <?php $array =explode(',', $row->shop->credit); ?>
+                <td><?php if(!$cast->shop->credit == '') { ?>
+                      <?php $array =explode(',', $cast->shop->credit); ?>
                       <?php for ($i = 0; $i < count($array); $i++) { ?>
                       <div class="chip" name="" value="">
                         <img src="/img/common/credit/<?=$array[$i]?>.png" id="<?=$array[$i]?>" alt="<?=$array[$i]?>">
@@ -283,54 +277,54 @@
         <tbody>
           <tr>
           <tr>
-            <th  class="table-header" colspan="2" align="center"><?php if(!$row->shop->name == '') {
-              echo ($row->shop->name);
+            <th  class="table-header" colspan="2" align="center"><?php if(!$cast->shop->name == '') {
+              echo ($cast->shop->name);
             } else {echo ('-');}?></th>
           </tr>
           <tr>
             <th align="center">業種</th>
             <td>
-              <?php if(!$row->shop->job->industry == '') {
-                      echo ($this->Text->autoParagraph($row->shop->job->industry));
+              <?php if(!$cast->shop->jobs[0]->industry == '') {
+                      echo ($this->Text->autoParagraph($cast->shop->jobs[0]->industry));
                     } else {echo ('-');} ?>
             </td>
           </tr>
           <tr>
             <th align="center">職種</th>
             <td>
-              <?php if(!$row->shop->job->job_type == '') {
-                      echo ($this->Text->autoParagraph($row->shop->job->job_type));
+              <?php if(!$cast->shop->jobs[0]->job_type == '') {
+                      echo ($this->Text->autoParagraph($cast->shop->jobs[0]->job_type));
                     } else {echo ('-');} ?>
             </td>
           </tr>
           <th align="center">時間</th>
-            <td><?php if((!$row->shop->job->work_from_time == '')
-                      && (!$row->shop->job->work_to_time == '')) {
-                        $workTime = $this->Time->format($row->shop->job->work_from_time, 'HH:mm')
-                        ."～".$this->Time->format($row->shop->job->work_to_time, 'HH:mm');
-                        if (!$row->shop->job->work_time_hosoku == '') {
-                          $workTime = $workTime.="</br>".$row->shop->job->work_time_hosoku;
+            <td><?php if((!$cast->shop->jobs[0]->work_from_time == '')
+                      && (!$cast->shop->jobs[0]->work_to_time == '')) {
+                        $workTime = $this->Time->format($cast->shop->jobs[0]->work_from_time, 'HH:mm')
+                        ."～".$this->Time->format($cast->shop->jobs[0]->work_to_time, 'HH:mm');
+                        if (!$cast->shop->jobs[0]->work_time_hosoku == '') {
+                          $workTime = $workTime.="</br>".$cast->shop->jobs[0]->work_time_hosoku;
                         }
                         echo ($workTime);
                       } else { echo ('-'); } ?>
             </td>
           </tr>
           <th align="center">資格</th>
-          <td><?php if((!$row->shop->job->from_age == '')
-                      && (!$row->shop->job->to_age == '')) {
-                        $qualification = $row->shop->job->from_age."歳～".$row->shop->job->to_age."歳くらいまで";
-                        if (!$row->shop->job->qualification_hosoku == '') {
-                          $qualification = $qualification.="</br>".$row->shop->job->qualification_hosoku;
+          <td><?php if((!$cast->shop->jobs[0]->from_age == '')
+                      && (!$cast->shop->jobs[0]->to_age == '')) {
+                        $qualification = $cast->shop->jobs[0]->from_age."歳～".$cast->shop->jobs[0]->to_age."歳くらいまで";
+                        if (!$cast->shop->jobs[0]->qualification_hosoku == '') {
+                          $qualification = $qualification.="</br>".$cast->shop->jobs[0]->qualification_hosoku;
                         }
                         echo ($qualification);
                       } else { echo ('-'); } ?>
             </td>
           </tr>
           <th align="center">休日</th>
-            <td><?php if(!$row->shop->job->holiday == '') {
-                        $holiday = $row->shop->job->holiday;
-                        if (!$row->shop->job->holiday_hosoku == '') {
-                          $holiday = $holiday.="</br>".$row->shop->job->holiday_hosoku;
+            <td><?php if(!$cast->shop->jobs[0]->holiday == '') {
+                        $holiday = $cast->shop->jobs[0]->holiday;
+                        if (!$cast->shop->jobs[0]->holiday_hosoku == '') {
+                          $holiday = $holiday.="</br>".$cast->shop->jobs[0]->holiday_hosoku;
                         }
                         echo ($holiday);
                       } else { echo ('-'); } ?>
@@ -338,8 +332,8 @@
           </tr>
             <th align="center">待遇</th>
             <td>
-              <?php if(!$row->shop->job->treatment == '') { ?>
-                <?php $array =explode(',', $row->shop->job->treatment); ?>
+              <?php if(!$cast->shop->jobs[0]->treatment == '') { ?>
+                <?php $array =explode(',', $cast->shop->jobs[0]->treatment); ?>
                 <?php for ($i = 0; $i < count($array); $i++) { ?>
                 <div class="chip" name=""id="<?=$array[$i]?>" value="<?=$array[$i]?>"><?=$array[$i]?></div>
                 </div>
@@ -349,8 +343,8 @@
           </tr>
           <tr>
             <th align="center">PR</th>
-            <td><?php if(!$row->shop->job->pr == '') {
-              echo ($row->shop->job->pr);
+            <td><?php if(!$cast->shop->jobs[0]->pr == '') {
+              echo ($cast->shop->jobs[0]->pr);
             } else {echo ('-');}?>
             </td>
           </tr>
@@ -365,29 +359,29 @@
           </tr>
           <tr>
             <th align="center">連絡先1</th>
-            <td><?php if(!$row->shop->job->tel1 == '') {
-              echo ($row->shop->job->tel1);
+            <td><?php if(!$cast->shop->jobs[0]->tel1 == '') {
+              echo ($cast->shop->jobs[0]->tel1);
             } else {echo ('-');} ?>
             </td>
           </tr>
           <tr>
             <th align="center">連絡先2</th>
-            <td><?php if(!$row->shop->job->tel2 == '') {
-              echo ($row->shop->job->tel2);
+            <td><?php if(!$cast->shop->jobs[0]->tel2 == '') {
+              echo ($cast->shop->jobs[0]->tel2);
             } else {echo ('-');} ?>
             </td>
           </tr>
           <tr>
             <th align="center">メール</th>
-            <td><?php if(!$row->shop->job->email == '') {
-              echo ($row->shop->job->email);
+            <td><?php if(!$cast->shop->jobs[0]->email == '') {
+              echo ($cast->shop->jobs[0]->email);
             } else {echo ('-');} ?>
             </td>
           </tr>
           <tr>
             <th align="center">LINE ID</th>
-            <td><?php if(!$row->shop->job->lineid == '') {
-              echo ($row->shop->job->lineid);
+            <td><?php if(!$cast->shop->jobs[0]->lineid == '') {
+              echo ($cast->shop->jobs[0]->lineid);
             } else {echo ('-');} ?>
             </td>
           </tr>
@@ -396,6 +390,5 @@
     </div>
   </div>
 </div>
-<?php endforeach; ?>
 </div>
 <?= $this->element('photoSwipe'); ?>

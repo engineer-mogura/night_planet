@@ -50,10 +50,10 @@
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Cast.email')?></span></a>
       </div>
     </li>
-    <li><a href="/cast/casts/index/<?=$id?>?activeTab=dashbord" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= CAST_LM['001'] ?></a></li>
-    <li><a href="/cast/casts/profile/<?=$id?>?activeTab=profile" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['002'] ?></a></li>
-    <li><a href="/cast/casts/diary/<?=$id?>?activeTab=diary" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['003'] ?></a></li>
-    <li><a href="/cast/casts/image/<?=$id?>?activeTab=image" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['004'] ?></a></li>
+    <li><a href="/cast/casts/index?activeTab=dashbord" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= CAST_LM['001'] ?></a></li>
+    <li><a href="/cast/casts/profile?activeTab=profile" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['002'] ?></a></li>
+    <li><a href="/cast/casts/diary?activeTab=diary" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['003'] ?></a></li>
+    <li><a href="/cast/casts/gallery?activeTab=gallery" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="/cast/casts"><i class="material-icons">help_outline</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

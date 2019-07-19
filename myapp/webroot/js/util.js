@@ -45,27 +45,23 @@
 
   /**
    * ファイル変換処理
-   * @param  {} canvas
-   * @param  {} form
+   * @param  {} canvasArea
    * @param  {} imgList
    */
-  var fileConvert = function(canvasArea, form, imgList) {
+  var fileConvert = function(canvasArea, imgList) {
 
     //加工後の横幅を800pxに設定
     var processingWidth = 800;
 
     //加工後の容量を100KB以下に設定
     var processingCapacity = 100000;
-    // form 初期化
-    var $form = null;
-    var formData = null;
     var blob = [];
 
     $(imgList).each(function(index, element){
 
       //imgタグに表示した画像をimageオブジェクトとして取得
       var image = new Image();
-      image.src = $(this).find("img").attr("src");
+      image.src = $(element).attr("src");
 
       var h;
       var w;
@@ -109,11 +105,7 @@
       blob.push(uploadBlob);
     });
 
-    //アップロード用blobをformDataに設定
-    $form = $(form);
-    formData = new FormData($form.get()[0]);
-    formData.append("image", blob);
-    return formData;
+    return blob;
 
   }
 

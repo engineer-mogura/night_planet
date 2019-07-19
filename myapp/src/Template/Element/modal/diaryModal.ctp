@@ -36,7 +36,7 @@
 		<!-- デスクトップ用ボタン END-->
 		<div>
 			<div class="row modal-edit-diary hide">
-				<form id="modal-edit-diary" name="modal_edit_diary" method="post" action="/owner/casts/diary_update/">
+				<form id="modal-edit-diary" name="modal_edit_diary" method="post" action="/cast/casts/diary_update/">
 					<div style="display:none;">
 						<input type="hidden" name="_method" value="POST">
 						<input type="hidden" name="diary_id" value=''>

@@ -25,8 +25,9 @@ class CastsController extends AppController
         parent::beforeFilter($event);
         // キャストに関する情報をセット
         if(!is_null($user = $this->Auth->user())){
+            $cast = $this->Casts->get($user['id']);
             $shop = $this->Shops->get($user['shop_id']);
-            $this->set('shopInfo', $this->Util->getItem($shop));
+            $this->set('userInfo', $this->Util->getCastItem($cast, $shop));
         }
     }
 
@@ -223,56 +224,30 @@ class CastsController extends AppController
     }
 
     /**
-     * 編集画面の処理
+     * プロフィール画面の処理
      *
-     * @param [type] $id
      * @return void
      */
-    public function profile($id = null)
+    public function profile()
     {
 
-            $this->request->session()->write('activeTab', 'cast');
-            // アクティブタブを空で初期化
-            $activeTab = "";
+        $id = $this->request->getSession()->read('Auth.Cast.id');
 
-            if (isset($this->request->query["activeTab"])) {
-                $activeTab = $this->request->getQuery("activeTab");
-            }
-                    // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
-            if (!isset($id)) {
-                $id = $this->request->getSession()->read('Auth.Cast.id');
-            }
-            if ($this->request->is('ajax')) {
-                $resultMessage = '';
-                $isSave = false;
-                $errors = '';
+        if ($this->request->is('ajax')) {
 
-                // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
-                if (isset($this->request->data["profile_edit"])) {
-                    $entity = $this->Casts->newEntity($this->request->getData());
-                }
+            $flg = true; // 返却フラグ
+            $errors = ""; // 返却メッセージ
+            $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
 
-                if (!$entity->errors()) {
-
-                    if (isset($this->request->data["profile_edit"])) {
-                        // キャスト編集の場合
-                        $cast = $this->Casts->get($id);
-                        $cast = $this->Events->patchEntity($cast, $this->request->getData());
-
-                    }
-                    // saveするか判定する
-                    if (array_key_exists('profile_edit', $this->request->getData())){
-                        $isSave = true;
-                    }
-                    if ($isSave) {
-                        if ($this->Casts->save($cast)) {
-                            $resultMessage = RESULT_M['SIGNUP_SUCCESS'];
-                        } else {
-                            $errors = RESULT_M['SIGNUP_FAILED'];
-                        }
-                    }
-                } else {
-                    foreach ($entity->errors() as $key1 => $value1) {
+            // バリデーションはプロフィール変更用を使う。
+            $cast = $this->Casts->patchEntity($this->Casts
+                ->get($id), $this->request->getData(), ['validate' => 'profile']);
+            $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+            // バリデーションチェックエラーがあればセットする。
+            if ($cast->errors()) {
+                $flg = false;
+                if (count($cast->errors()) > 0) {
+                    foreach ($cast->errors() as $key1 => $value1) {
                         foreach ($value1 as $key2 => $value2) {
                             if (is_array($value2)) {
                                 foreach ($value2 as $key3 => $value3) {
@@ -285,198 +260,131 @@ class CastsController extends AppController
                         }
                     }
                 }
-
-                $this->viewBuilder()->autoLayout(false);
-                $this->autoRender = false;
-                if (strlen($errors) > 0 && strlen($resultMessage) > 0) {
-                    $this->Flash->success($errors .= "\n".$resultMessage);
-                } else if(strlen($errors) > 0) {
-                    $this->Flash->error($errors);
-                } else if(strlen($resultMessage) > 0) {
-                    $this->Flash->success($resultMessage);
-                }
-                $cast = $this->Casts->find()->where(['id' => $id]);
-                $masterCodesFind = array('time','constellation','blood_type','age');
-                $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
-
-                $this->set(compact('cast', 'activeTab','selectList', 'ajax'));
-                $this->render('/Cast/Casts/profile');
-                $this->response->body();
+                $response = array(
+                    'error' => $errors,
+                    'success' => $flg,
+                );
+                $this->response->body(json_encode($response));
                 return;
             }
+            // ＤＢ登録
+            if (!$this->Casts->save($cast)) {
+                // 登録失敗
+                $message = RESULT_M['UPDATE_FAILED'];
+                $flg = false;
+                $response = array(
+                    'error' => $message,
+                    'success' => $flg,
+                );
+                $this->response->body(json_encode($response));
+                return;
+            }
+            $cast = $this->Casts->find()->where(['id' => $id])->first();
+            // 作成するセレクトボックスを指定する
+            $masCodeFind = array('time','constellation','blood_type','age');
+            // セレクトボックスを作成する
+            $selectList = $this->Util->getSelectList($masCodeFind,$this->MasterCodes,true);
 
-        $cast = $this->Casts->find()->where(['id' => $id]);
-        $masterCodesFind = array('time','constellation','blood_type','age');
-        $selectList = $this->Util->getSelectList($masterCodesFind,$this->MasterCodes,true);
+            $this->set(compact('cast', 'activeTab','selectList'));
+            $this->render('/Cast/Casts/profile');
+            $response = array(
+                'html' => $this->response->body(),
+                'error' => $errors,
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
 
-        $this->set(compact('cast', 'activeTab','selectList', 'ajax'));
+        $cast = $this->Casts->find()->where(['id' => $id])->first();
+        // 作成するセレクトボックスを指定する
+        $masCodeFind = array('time','constellation','blood_type','age');
+        // セレクトボックスを作成する
+        $selectList = $this->Util->getSelectList($masCodeFind,$this->MasterCodes,true);
+
+        $this->set(compact('cast', 'activeTab','selectList'));
         $this->render();
     }
 
-    public function image($id = null)
+    /**
+     * ギャラリー 画面表示処理
+     *
+     * @return void
+     */
+    public function gallery()
+    {
+        $id = $this->request->getSession()->read('Auth.Cast.id');
+        $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
+
+        $cast = $this->Casts->find('all')->select($imageCol)->where(['id' => $id])->first();
+        $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // 画像リストを作成する
+        for ($i = 0; $i < count($imageCol); $i++) {
+            if (!empty($cast[$imageCol[$i]])) {
+                array_push($imageList, ['key'=>$imageCol[$i],'name'=>$cast[$imageCol[$i]]]);
+            }
+        }
+        $this->set(compact('activeTab','imageList'));
+        $this->render();
+    }
+
+        /**
+     * ギャラリー 編集押下処理
+     *
+     * @return void
+     */
+    public function saveGallery()
     {
 
-        $delFlg = false; // 削除実行フラグ
-        $this->request->session()->write('activeTab', 'cast');
-        // アクティブタブを空で初期化
-        $activeTab = "";
-        if (isset($this->request->query["activeTab"])) {
-            $activeTab = $this->request->getQuery("activeTab");
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $isDuplicate = false; // 画像重複フラグ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+
+        $tmpDir = new Folder; // バックアップ用
+        $dirPath = preg_replace('/(^\/)/', '', 
+            $this->viewVars['userInfo']['dir_path'].PATH_ROOT['IMAGE']);
+        $dir = new Folder(WWW_ROOT. $dirPath, true, 0755);
+
+        $files = array();
+        // ショップ取得
+        $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
+
+        // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
+        ($files_befor = json_decode($this->request->getData("gallery_befor"), true)) > 0 ? : $files_befor = array();
+        $fileMax = CAST_CONFIG['FILE_MAX'];
+        // カラム「image*」を格納する
+        $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
+
+        // ファイルのバックアップを取得
+        $dirClone = new Folder($dir->path, true, 0755);
+        // ロールバック用に一時フォルダにバックアップする。
+        $tmpDir = $this->Util->createTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $dirClone);
+
+        // 追加画像がある場合
+        if (isset($this->request->data["image"])) {
+            $files = $this->request->data['image'];
         }
-        // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
-        if (!isset($id)) {
-            $id = $this->request->getSession()->read('Auth.Cast.id');
-        }
-        if ($this->request->is('ajax')) {
-            $errors = '';
+        foreach ($files as $key => $file) {
+            // ファイルが存在する、かつファイル名がblobの画像のとき
+            if (!empty($file["name"]) && $file["name"] == 'blob') {
+                $limitFileSize = 1024 * 1024;
+                try {
 
-            // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
-            $entity = $this->Casts->newEntity($this->request->getData(),['validate' => false]);
+                    // ファイル名を取得する
+                    $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
 
-            if (!$entity->errors()) {
-
-                $tmpDir = new Folder; // バックアップ用
-                $files = array();
-                // キャスト取得
-                $cast = $this->Casts->get($id);
-                // キャスト用画像のディレクトリパスを取得
-                $dirPath = WWW_ROOT. $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir. DS .PATH_ROOT['IMAGE'].DS;
-                // キャスト用画像のディレクトリが無い場合は作成する
-                $dir = new Folder($dirPath, true, 0755);
-                // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
-                ($files_befor = json_decode($this->request->data["image_json"], true)) > 0 ? : $diary_befor = array();
-                $fileMax = CAST_CONFIG['FILE_MAX'];
-                // カラム「image*」を格納する
-                $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
-
-                // ファイルのバックアップを取得
-                $dirClone = new Folder($dir->path, true, 0755);
-                // ロールバック用に一時フォルダにバックアップする。
-                $tmpDir = $this->Util->createTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $dirClone);
-
-                if ($this->request->data["crud_type"] == 'update') {
-                    // 追加画像がある場合
-                    if (isset($this->request->data["image"])) {
-                        $files = $this->request->data['image'];
-                    }
-                    foreach ($files as $key => $file) {
-                        // ファイルが入力されたとき
-                        if (count($file["name"]) > 0) {
-                            $limitFileSize = 1024 * 1024;
-                            try {
-                                // TODO: 検証用
-                                // if($key == 1) {
-                                //     throw new RuntimeException('画像の削除に失敗しました。');
-                                // }
-                                // ファイル名を取得する
-                                $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
-
-                                // ファイル名が同じ場合は処理をスキップする
-                                if ($convertFile === false) {
-                                    $errors = '同じ画像はアップできません。'."\n";
-                                    continue;
-                                }
-
-                            } catch (RuntimeException $e) {
-
-                                // アップロード失敗の時、処理を中断する
-                                if (is_dir($tmpDir->path)) {
-                                    // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
-                                    $files = $dirClone->find('.*\.*');
-                                    foreach ($files as $file) {
-                                        $file = new File($dir->path . DS . $file);
-                                        $file->delete(); // このファイルを削除します
-                                    }
-                                    $tmpDir->copy($dirClone->path);
-                                    $tmpDir->delete();// tmpフォルダ削除
-                                }
-                                $this->confReturnJson(); // json返却用の設定
-                                $errors = $e->getMessage(); // TODO:　運用でログに出す？
-                                $errors = RESULT_M['UPDATE_FAILED'];
-                                $response = array('result'=>false,'errors'=>$errors);
-                                $this->response->getBody()->write(json_encode($response));
-                                return;
-                            }
-                        }
-                        // カラムimage1～image8の空いてる場所に入れる
-                        for($i = 0; $i < $fileMax; $i++) {
-                            if(empty($cast->get($imageCol[$i]))) {
-                                $cast->set($imageCol[$i], $convertFile);
-                                break;
-                            }
-                        }
-
+                    // ファイル名が同じ場合は処理をスキップする
+                    if ($convertFile === false) {
+                        $isDuplicate = true;
+                        continue;
                     }
 
-                } else if ($this->request->data["crud_type"] == 'delete') {
-                    $delFlg = true;
-                    try {
-                        // TODO: 検証用
-                        // if($key == 1) {
-                        //     throw new RuntimeException('画像の削除に失敗しました。');
-                        // }
-                        $delFile = new File($dir->path . DS .$this->request->getData('file_name'));
-                        // ファイル削除処理実行
-                        if ($delFile->delete()) {
-                            $cast->set($this->request->getData('col_name'), "");
-                        } else {
-                            throw new RuntimeException('画像の削除に失敗しました。');
-                        }
-                    } catch (RuntimeException $e) {
-                        // アップロード失敗の時、処理を中断する
-                        if (is_dir($tmpDir->path)) {
-                            // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
-                            $files = $dirClone->find('.*\.*');
-                            foreach ($files as $file) {
-                                $file = new File($dir->path . DS . $file);
-                                $file->delete(); // このファイルを削除します
-                            }
-                            $tmpDir->copy($dirClone->path);
-                            $tmpDir->delete();// tmpフォルダ削除
-                        }
-                        $this->confReturnJson(); // json返却用の設定
-                        $errors = $e->getMessage(); // TODO:　運用でログに出す？
-                        $errors = RESULT_M['DELETE_FAILED'];
-                        $response = array('result'=>false,'errors'=>$errors);
-                        $this->response->getBody()->write(json_encode($response));
-                        return;
+                } catch (RuntimeException $e) {
 
-                    }
-                    $moveImageList = array(); // 移動対象リスト
-                    // 削除したカラムの空きを詰める。
-                    for ($i = 0; $i < $fileMax; $i++) {
-                        if (!empty($cast->get($imageCol[$i]))) {
-                            array_push($moveImageList, $cast->get($imageCol[$i]));
-                            $cast->set($imageCol[$i], '');
-                        }
-                    }
-                    // カラムimage1から詰めてセットする
-                    for ($i = 0; $i < count($moveImageList); $i++) {
-                        if (empty($cast->get($imageCol[$i]))) {
-                            $cast->set($imageCol[$i], $moveImageList[$i]);
-                        }
-                    }
-
-                }
-
-                // データべース登録
-                if($this->Casts->save($cast)) {
-                    // 成功: フォルダを削除
-                    if (is_dir($tmpDir->path)) {
-                        $tmpDir->delete();// tmpフォルダ削除
-                    }
-                    if ($delFlg == true) {
-                        $this->Flash->success(RESULT_M['DELETE_SUCCESS']);
-                    } else {
-                        $this->Flash->success(RESULT_M['SIGNUP_SUCCESS']);
-                    }
-                } else {
-                    if ($delFlg == true) {
-                        $errors = RESULT_M['DELETE_FAILED'];
-                    } else {
-                        $errors = RESULT_M['SIGNUP_FAILED'];
-                    }
-
+                    // アップロード失敗の時、処理を中断する
                     if (is_dir($tmpDir->path)) {
                         // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
                         $files = $dirClone->find('.*\.*');
@@ -487,55 +395,388 @@ class CastsController extends AppController
                         $tmpDir->copy($dirClone->path);
                         $tmpDir->delete();// tmpフォルダ削除
                     }
-
-                    $this->confReturnJson(); // json返却用の設定
-                    $response = array('result'=>false,'errors'=>$errors);
-                    $this->response->getBody()->write(json_encode($response));
+                    $this->log($e->getMessage());
+                    $message = RESULT_M['UPDATE_FAILED'];
+                    $flg = false;
+                    $response = array(
+                        'success' => $flg,
+                        'message' => $message
+                    );
+                    $this->response->body(json_encode($response));
                     return;
                 }
-
-            } else {
-                // 入力エラーがあれば、メッセージをセットして返す
-                $errors = $this->Util->setErrMessage($entity); // エラーメッセージをセット
-                $this->confReturnJson(); // json返却用の設定
-                $response = array('result'=>false,'errors'=>$errors);
-                $this->response->getBody()->write(json_encode($response));
-                return;
-            }
-
-            $this->viewBuilder()->autoLayout(false);
-            $this->autoRender = false;
-            $array = array('id','name','image1','image2','image3','image4',
-                            'image5','image6','image7','image8','dir');
-            $cast = $this->Casts->find('all')->select($array)->where(['id' => $id])->first()->toArray();
-            $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
-            $imageList = array(); // 画面側でjsonとして使う画像リスト
-            // 画像リストを作成する
-            for ($i = 0; $i < count($imageCol); $i++) {
-                if (!empty($cast[$imageCol[$i]])) {
-                    array_push($imageList, ['key'=>$imageCol[$i],'name'=>$cast[$imageCol[$i]]]);
+                // カラムimage1～image8の空いてる場所に入れる
+                for($i = 0; $i < $fileMax; $i++) {
+                    if(empty($cast->get($imageCol[$i]))) {
+                        $cast->set($imageCol[$i], $convertFile);
+                        break;
+                    }
                 }
             }
-            $this->set(compact('cast', 'activeTab','imageList', 'ajax'));
-            $this->render('/Cast/Casts/image');
-            $this->response->body();
-            return;
-
         }
+        // ＤＢ登録
+        if (!$this->Casts->save($cast)) {
+            // 更新失敗の時
+            if (is_dir($tmpDir->path)) {
+                // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
+                $files = $dirClone->find('.*\.*');
+                foreach ($files as $file) {
+                    $file = new File($dir->path . DS . $file);
+                    $file->delete(); // このファイルを削除します
+                }
+                $tmpDir->copy($dirClone->path);
+                $tmpDir->delete();// tmpフォルダ削除
+            }
+            $message = RESULT_M['UPDATE_FAILED'];
+            $flg = false;
 
-        $array = array('id','name','image1','image2','image3','image4','image5','image6','image7','image8','dir');
-        $cast = $this->Casts->find('all')->select($array)->where(['id' => $id])->first()->toArray();
+            $response = array(
+                'error' => $message,
+                'success' => $flg,
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        // フォルダを削除
+        if (is_dir($tmpDir->path)) {
+            $tmpDir->delete();
+        }
+        $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
         $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
         $imageList = array(); // 画面側でjsonとして使う画像リスト
         // 画像リストを作成する
-        for ($i = 0; $i < count($imageCol); $i++) {
-            if (!empty($cast[$imageCol[$i]])) {
-                array_push($imageList, ['key'=>$imageCol[$i],'name'=>$cast[$imageCol[$i]]]);
+        foreach ($imageCol as $key => $value) {
+            if (!empty($cast[$imageCol[$key]])) {
+                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$cast[$imageCol[$key]]]);
             }
         }
-        $this->set(compact('cast', 'activeTab','imageList', 'ajax'));
-        $this->render();
+        $this->set(compact('imageList'));
+        $this->render('/Cast/Casts/gallery');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $isDuplicate ? $message . "\n" . RESULT_M['DUPLICATE'] : $message
+        );
+        $this->response->body(json_encode($response));
+        return;
     }
+
+    /**
+     * ギャラリー 削除押下処理
+     *
+     * @return void
+     */
+    public function deleteGallery()
+    {
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+
+        $tmpDir = new Folder; // バックアップ用
+        $del_path = preg_replace('/(^\/)/', '', 
+            $this->viewVars['userInfo']['dir_path'].PATH_ROOT['IMAGE']);
+        $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
+        // ロールバック用に一時フォルダにバックアップする。
+        //$tmpDir = $this->Util->createFileTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $fileClone);
+
+        try {
+            // ロールバック用に一時フォルダにバックアップ
+            if(!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
+                throw new RuntimeException('画像のバックアップに失敗しました。');
+            }
+            // バックアップしたファイルを取得
+            $tmpFile = new File (WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name); // バックアップ用
+            // 画像削除処理実行
+            if (!$file->delete()) {
+                throw new RuntimeException('画像の削除に失敗しました。');
+            }
+        } catch (RuntimeException $e) {
+            // 変数が存在するかつバックアップファイルがあれば削除する
+            if (isset($tmpFile) && $tmpFile->exists()) {
+                $tmpFile->delete();// tmpファイル削除
+            }
+            $this->log($e->getMessage());
+            $message = RESULT_M['DELETE_FAILED'];
+            $flg = false;
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
+        $cast->set($this->request->getData('key'), "");
+        // テーブル更新
+        if($this->Casts->save($cast)) {
+            // 変数が存在するかつバックアップファイルがあれば削除する
+            if (isset($tmpFile) && $tmpFile->exists()) {
+                $tmpFile->delete();// tmpファイル削除
+            }
+            $message = RESULT_M['DELETE_SUCCESS'];
+            $flg = true;
+       } else {
+            // 失敗
+            // 変数が存在するかつバックアップファイルがファイルを戻す
+            if (isset($tmpFile) && $tmpFile->exists()) {
+                $tmpFile->copy($file->path);
+                $tmpFile->delete();// tmpファイル削除
+            }
+            $message = RESULT_M['DELETE_FAILED'];
+            $flg = false;
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+
+        $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
+        $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
+        $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // 画像リストを作成する
+        foreach ($imageCol as $key => $value) {
+            if (!empty($cast[$imageCol[$key]])) {
+                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$cast[$imageCol[$key]]]);
+            }
+        }
+        $this->set(compact('imageList'));
+        $this->render('/Cast/Casts/gallery');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
+    }
+
+    // public function image($id = null)
+    // {
+
+    //     $delFlg = false; // 削除実行フラグ
+    //     $this->request->session()->write('activeTab', 'cast');
+    //     // アクティブタブを空で初期化
+    //     $activeTab = "";
+    //     if (isset($this->request->query["activeTab"])) {
+    //         $activeTab = $this->request->getQuery("activeTab");
+    //     }
+    //     // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
+    //     if (!isset($id)) {
+    //         $id = $this->request->getSession()->read('Auth.Cast.id');
+    //     }
+    //     if ($this->request->is('ajax')) {
+    //         $errors = '';
+
+    //         // 追加、編集時はバリデーションチェックするため、requestをエンティティにマッピングする
+    //         $entity = $this->Casts->newEntity($this->request->getData(),['validate' => false]);
+
+    //         if (!$entity->errors()) {
+
+    //             $tmpDir = new Folder; // バックアップ用
+    //             $files = array();
+    //             // キャスト取得
+    //             $cast = $this->Casts->get($id);
+    //             // キャスト用画像のディレクトリパスを取得
+    //             $dirPath = WWW_ROOT. $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir. DS .PATH_ROOT['IMAGE'].DS;
+    //             // キャスト用画像のディレクトリが無い場合は作成する
+    //             $dir = new Folder($dirPath, true, 0755);
+    //             // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
+    //             ($files_befor = json_decode($this->request->data["image_json"], true)) > 0 ? : $diary_befor = array();
+    //             $fileMax = CAST_CONFIG['FILE_MAX'];
+    //             // カラム「image*」を格納する
+    //             $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
+
+    //             // ファイルのバックアップを取得
+    //             $dirClone = new Folder($dir->path, true, 0755);
+    //             // ロールバック用に一時フォルダにバックアップする。
+    //             $tmpDir = $this->Util->createTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $dirClone);
+
+    //             if ($this->request->data["crud_type"] == 'update') {
+    //                 // 追加画像がある場合
+    //                 if (isset($this->request->data["image"])) {
+    //                     $files = $this->request->data['image'];
+    //                 }
+    //                 foreach ($files as $key => $file) {
+    //                     // ファイルが入力されたとき
+    //                     if (count($file["name"]) > 0) {
+    //                         $limitFileSize = 1024 * 1024;
+    //                         try {
+    //                             // TODO: 検証用
+    //                             // if($key == 1) {
+    //                             //     throw new RuntimeException('画像の削除に失敗しました。');
+    //                             // }
+    //                             // ファイル名を取得する
+    //                             $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
+
+    //                             // ファイル名が同じ場合は処理をスキップする
+    //                             if ($convertFile === false) {
+    //                                 $errors = '同じ画像はアップできません。'."\n";
+    //                                 continue;
+    //                             }
+
+    //                         } catch (RuntimeException $e) {
+
+    //                             // アップロード失敗の時、処理を中断する
+    //                             if (is_dir($tmpDir->path)) {
+    //                                 // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
+    //                                 $files = $dirClone->find('.*\.*');
+    //                                 foreach ($files as $file) {
+    //                                     $file = new File($dir->path . DS . $file);
+    //                                     $file->delete(); // このファイルを削除します
+    //                                 }
+    //                                 $tmpDir->copy($dirClone->path);
+    //                                 $tmpDir->delete();// tmpフォルダ削除
+    //                             }
+    //                             $this->confReturnJson(); // json返却用の設定
+    //                             $errors = $e->getMessage(); // TODO:　運用でログに出す？
+    //                             $errors = RESULT_M['UPDATE_FAILED'];
+    //                             $response = array('result'=>false,'errors'=>$errors);
+    //                             $this->response->getBody()->write(json_encode($response));
+    //                             return;
+    //                         }
+    //                     }
+    //                     // カラムimage1～image8の空いてる場所に入れる
+    //                     for($i = 0; $i < $fileMax; $i++) {
+    //                         if(empty($cast->get($imageCol[$i]))) {
+    //                             $cast->set($imageCol[$i], $convertFile);
+    //                             break;
+    //                         }
+    //                     }
+
+    //                 }
+
+    //             } else if ($this->request->data["crud_type"] == 'delete') {
+    //                 $delFlg = true;
+    //                 try {
+    //                     // TODO: 検証用
+    //                     // if($key == 1) {
+    //                     //     throw new RuntimeException('画像の削除に失敗しました。');
+    //                     // }
+    //                     $delFile = new File($dir->path . DS .$this->request->getData('file_name'));
+    //                     // ファイル削除処理実行
+    //                     if ($delFile->delete()) {
+    //                         $cast->set($this->request->getData('col_name'), "");
+    //                     } else {
+    //                         throw new RuntimeException('画像の削除に失敗しました。');
+    //                     }
+    //                 } catch (RuntimeException $e) {
+    //                     // アップロード失敗の時、処理を中断する
+    //                     if (is_dir($tmpDir->path)) {
+    //                         // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
+    //                         $files = $dirClone->find('.*\.*');
+    //                         foreach ($files as $file) {
+    //                             $file = new File($dir->path . DS . $file);
+    //                             $file->delete(); // このファイルを削除します
+    //                         }
+    //                         $tmpDir->copy($dirClone->path);
+    //                         $tmpDir->delete();// tmpフォルダ削除
+    //                     }
+    //                     $this->confReturnJson(); // json返却用の設定
+    //                     $errors = $e->getMessage(); // TODO:　運用でログに出す？
+    //                     $errors = RESULT_M['DELETE_FAILED'];
+    //                     $response = array('result'=>false,'errors'=>$errors);
+    //                     $this->response->getBody()->write(json_encode($response));
+    //                     return;
+
+    //                 }
+    //                 $moveImageList = array(); // 移動対象リスト
+    //                 // 削除したカラムの空きを詰める。
+    //                 for ($i = 0; $i < $fileMax; $i++) {
+    //                     if (!empty($cast->get($imageCol[$i]))) {
+    //                         array_push($moveImageList, $cast->get($imageCol[$i]));
+    //                         $cast->set($imageCol[$i], '');
+    //                     }
+    //                 }
+    //                 // カラムimage1から詰めてセットする
+    //                 for ($i = 0; $i < count($moveImageList); $i++) {
+    //                     if (empty($cast->get($imageCol[$i]))) {
+    //                         $cast->set($imageCol[$i], $moveImageList[$i]);
+    //                     }
+    //                 }
+
+    //             }
+
+    //             // データべース登録
+    //             if($this->Casts->save($cast)) {
+    //                 // 成功: フォルダを削除
+    //                 if (is_dir($tmpDir->path)) {
+    //                     $tmpDir->delete();// tmpフォルダ削除
+    //                 }
+    //                 if ($delFlg == true) {
+    //                     $this->Flash->success(RESULT_M['DELETE_SUCCESS']);
+    //                 } else {
+    //                     $this->Flash->success(RESULT_M['SIGNUP_SUCCESS']);
+    //                 }
+    //             } else {
+    //                 if ($delFlg == true) {
+    //                     $errors = RESULT_M['DELETE_FAILED'];
+    //                 } else {
+    //                     $errors = RESULT_M['SIGNUP_FAILED'];
+    //                 }
+
+    //                 if (is_dir($tmpDir->path)) {
+    //                     // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
+    //                     $files = $dirClone->find('.*\.*');
+    //                     foreach ($files as $file) {
+    //                         $file = new File($dir->path . DS . $file);
+    //                         $file->delete(); // このファイルを削除します
+    //                     }
+    //                     $tmpDir->copy($dirClone->path);
+    //                     $tmpDir->delete();// tmpフォルダ削除
+    //                 }
+
+    //                 $this->confReturnJson(); // json返却用の設定
+    //                 $response = array('result'=>false,'errors'=>$errors);
+    //                 $this->response->getBody()->write(json_encode($response));
+    //                 return;
+    //             }
+
+    //         } else {
+    //             // 入力エラーがあれば、メッセージをセットして返す
+    //             $errors = $this->Util->setErrMessage($entity); // エラーメッセージをセット
+    //             $this->confReturnJson(); // json返却用の設定
+    //             $response = array('result'=>false,'errors'=>$errors);
+    //             $this->response->getBody()->write(json_encode($response));
+    //             return;
+    //         }
+
+    //         $this->viewBuilder()->autoLayout(false);
+    //         $this->autoRender = false;
+    //         $array = array('id','name','image1','image2','image3','image4',
+    //                         'image5','image6','image7','image8','dir');
+    //         $cast = $this->Casts->find('all')->select($array)->where(['id' => $id])->first();
+    //         $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
+    //         $imageList = array(); // 画面側でjsonとして使う画像リスト
+    //         // 画像リストを作成する
+    //         for ($i = 0; $i < count($imageCol); $i++) {
+    //             if (!empty($cast[$imageCol[$i]])) {
+    //                 array_push($imageList, ['key'=>$imageCol[$i],'name'=>$cast[$imageCol[$i]]]);
+    //             }
+    //         }
+    //         $this->set(compact('cast', 'activeTab','imageList', 'ajax'));
+    //         $this->render('/Cast/Casts/image');
+    //         $this->response->body();
+    //         return;
+
+    //     }
+
+    //     $array = array('id','name','image1','image2','image3','image4','image5','image6','image7','image8','dir');
+    //     $cast = $this->Casts->find('all')->select($array)->where(['id' => $id])->first();
+    //     $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
+    //     $imageList = array(); // 画面側でjsonとして使う画像リスト
+    //     // 画像リストを作成する
+    //     for ($i = 0; $i < count($imageCol); $i++) {
+    //         if (!empty($cast[$imageCol[$i]])) {
+    //             array_push($imageList, ['key'=>$imageCol[$i],'name'=>$cast[$imageCol[$i]]]);
+    //         }
+    //     }
+    //     $this->set(compact('cast', 'activeTab','imageList', 'ajax'));
+    //     $this->render();
+    // }
 
     public function diary($id = null)
     {
@@ -698,13 +939,12 @@ class CastsController extends AppController
      */
     public function diaryUpdate($id = null)
     {
+
         $errors = '';
 
-        $this->request->session()->write('activeTab', 'cast');
+        // $this->request->session()->write('activeTab', 'cast');
         // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
-        if (!isset($id)) {
-            $id = $this->request->getSession()->read('Auth.Cast.id');
-        }
+        // $id = $this->request->getSession()->read('Auth.Cast.id');
         if ($this->request->is('ajax')) {
             // バリデーションチェック
             $validate = $this->Diarys->newEntity($this->request->getData());
@@ -718,16 +958,24 @@ class CastsController extends AppController
                 return;
             }
 
+            $flg = true; // 返却フラグ
+            $errors = ""; // 返却メッセージ
+            $isDuplicate = false; // 画像重複フラグ
+            $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+            $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+
             $tmpDir = new Folder; // バックアップ用
             $files = array();
             $fileMax = CAST_CONFIG['FILE_MAX'];
+            // 引数にID(URLパラメータにID)がセットされていない場合は、authから直接セット
+            $id = $this->request->getSession()->read('Auth.Cast.id');
             // キャスト取得
             $cast = $this->Casts->get($id);
             // 本登録をもってキャスト用のディレクトリを掘る
             $diary = $this->Diarys->get($this->request->data["diary_id"]);
             $dir = WWW_ROOT. $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST']
                 .DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$diary->dir;
-            $deleteFiles = json_decode($this->request->data["del_list"], true);
+            $delFiles = json_decode($this->request->data["del_list"], true);
             // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
             ($diary_befor = json_decode($this->request->data["diary_json"], true)) > 0 ? : $diary_befor = array();
             // カラム「image*」を格納する
@@ -752,15 +1000,11 @@ class CastsController extends AppController
             $diary->content = $this->request->data["content"];
 
             // 削除画像分処理する
-            if(count($deleteFiles) > 0) {
+            if(count($delFiles) > 0) {
 
-                foreach ($deleteFiles as $key => $file) {
+                foreach ($delFiles as $key => $file) {
                     try {
-                        // TODO: 検証用
-                        // if($key == 1) {
-                        //     throw new RuntimeException('画像の削除に失敗しました。');
-                        // }
-                        $this->log("file_delete", "debug");
+
                         $delFile = new File($dir . DS .$file['name']);
                         // ファイル削除処理実行
                         if ($delFile->delete()) {
@@ -768,18 +1012,28 @@ class CastsController extends AppController
                         } else {
                             throw new RuntimeException('画像の削除に失敗しました。');
                         }
+                        //throw new RuntimeException('画像の削除に失敗しました。');
                     } catch (RuntimeException $e) {
                         if (is_dir($tmpDir->path)) {
                             $tmpDir->copy($dirClone->path);
                             $tmpDir->delete();// tmpフォルダ削除
                         }
-                        $errors = $e->getMessage(); // TODO:　運用でログに出す？
-                        $errors = RESULT_M['UPDATE_FAILED'];
-                        $this->confReturnJson(); // json返却用の設定
-                        $response = array('result'=>false,'errors'=>$errors);
-                        $this->response->getBody()->write(json_encode($response));
-
+                        $this->log($e->getMessage());
+                        $message = RESULT_M['UPDATE_FAILED'];
+                        $flg = false;
+                        $response = array(
+                            'success' => $flg,
+                            'message' => $message
+                        );
+                        $this->response->body(json_encode($response));
                         return;
+
+                        // $errors = $e->getMessage(); // TODO:　運用でログに出す？
+                        // $errors = RESULT_M['UPDATE_FAILED'];
+                        // $response = array('result'=>false,'errors'=>$errors);
+                        // $this->response->getBody()->write(json_encode($response));
+
+                        // return;
                     }
                 }
                 $moveImageList = array(); // 移動対象リスト
@@ -800,8 +1054,9 @@ class CastsController extends AppController
 
             // 追加画像分処理する
             foreach ($files as $key => $file) {
-                // ファイルが入力されたとき
-                if (count($file["name"]) > 0) {
+                // ファイルが存在する、かつファイル名がblobの画像のとき
+                if (!empty($file["name"]) && $file["name"] == 'blob') {
+
                     $limitFileSize = 1024 * 1024;
                     try {
                         // TODO: 検証用
@@ -813,7 +1068,7 @@ class CastsController extends AppController
 
                         // ファイル名が同じ場合は処理をスキップする
                         if ($convertFile === false) {
-                            $errors = '同じ画像はアップできませんでした。'."\n";
+                            $isDuplicate = true;
                             continue;
                         }
                     } catch (RuntimeException $e) {
@@ -828,12 +1083,22 @@ class CastsController extends AppController
                             $tmpDir->copy($dirClone->path);
                             $tmpDir->delete();// tmpフォルダ削除
                         }
-                        $this->confReturnJson(); // json返却用の設定
-                        $errors = $e->getMessage(); // TODO:　運用でログに出す？
-                        $errors = RESULT_M['UPDATE_FAILED'];
-                        $response = array('result'=>false,'errors'=>$errors);
-                        $this->response->getBody()->write(json_encode($response));
+                        $this->log($e->getMessage());
+                        $message = RESULT_M['UPDATE_FAILED'];
+                        $flg = false;
+                        $response = array(
+                            'success' => $flg,
+                            'message' => $message
+                        );
+                        $this->response->body(json_encode($response));
                         return;
+
+                        // $this->confReturnJson(); // json返却用の設定
+                        // $errors = $e->getMessage(); // TODO:　運用でログに出す？
+                        // $errors = RESULT_M['UPDATE_FAILED'];
+                        // $response = array('result'=>false,'errors'=>$errors);
+                        // $this->response->getBody()->write(json_encode($response));
+                        // return;
                     }
 
                 }
@@ -857,6 +1122,7 @@ class CastsController extends AppController
                 }
                 $this->Flash->success(RESULT_M['UPDATE_SUCCESS']);
            } else {
+
                 // 失敗: ファイルを戻す
                 if (count($diary_befor) > 0) {
                     if (is_dir($tmpDir->path)) {
@@ -870,20 +1136,29 @@ class CastsController extends AppController
                        $tmpDir->delete();// tmpフォルダ削除
                    }
                 }
-                $this->confReturnJson(); // json返却用の設定
-                $response = array('result'=>false,'errors'=>RESULT_M['UPDATE_FAILED']);
-                $this->response->getBody()->write(json_encode($response));
+                $this->log($e->getMessage());
+                $message = RESULT_M['UPDATE_FAILED'];
+                $flg = false;
+                $response = array(
+                    'success' => $flg,
+                    'message' => $message
+                );
+                $this->response->body(json_encode($response));
                 return;
+                // $this->confReturnJson(); // json返却用の設定
+                // $response = array('result'=>false,'errors'=>RESULT_M['UPDATE_FAILED']);
+                // $this->response->getBody()->write(json_encode($response));
+                // return;
 
             }
                 // アクティブタブを空で初期化
-                $activeTab = "";
+                // $activeTab = "";
 
-                if (isset($this->request->query["activeTab"])) {
-                    $activeTab = $this->request->getQuery("activeTab");
-                }
-                $this->viewBuilder()->autoLayout(false);
-                $this->autoRender = false;
+                // if (isset($this->request->query["activeTab"])) {
+                //     $activeTab = $this->request->getQuery("activeTab");
+                // }
+                // $this->viewBuilder()->autoLayout(false);
+                // $this->autoRender = false;
                 $diarys = $this->Util->getDiarys($id);
                 $cast = $this->Casts->find('all')->where(['id' => $id])->first();
                 $dir = $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;

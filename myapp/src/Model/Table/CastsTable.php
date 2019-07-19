@@ -186,7 +186,7 @@ class CastsTable extends Table
         return $validator;
     }
 
-        /**
+    /**
      * バリデーション ログイン.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
@@ -214,6 +214,59 @@ class CastsTable extends Table
         $validator
             ->integer('status')
             ->allowEmptyString('status');
+
+        return $validator;
+    }
+
+    /**
+     * バリデーション プロフィール変更用.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationProfile(Validator $validator)
+{
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', 'create');
+
+        $validator
+            ->scalar('name')
+            ->notEmpty('name','名前を入力してください。')
+            ->maxLength('name', 30, '名前が長すぎます。')
+            ->requirePresence('name', 'create')
+            ->allowEmptyString('name', false);
+
+        $validator
+            ->scalar('nickname')
+            ->notEmpty('nickname','ニックネームを入力してください。')
+            ->maxLength('nickname', 30, 'ニックネームが長すぎます。')
+            ->requirePresence('nickname', 'create')
+            ->allowEmptyString('nickname', false);
+
+        $validator
+            ->date('birthday')
+            ->allowEmptyTime('birthday');
+
+        $validator
+            ->scalar('age')
+            ->maxLength('age', 5)
+            ->allowEmptyString('age');
+
+        $validator
+            ->scalar('blood_type')
+            ->maxLength('blood_type', 20)
+            ->allowEmptyString('blood_type');
+
+        $validator
+            ->scalar('constellation')
+            ->maxLength('constellation', 20)
+            ->allowEmptyString('constellation');
+
+        $validator
+            ->scalar('message')
+            ->maxLength('message', 50,'メッセージが長すぎます。')
+            ->allowEmptyString('message', true);
 
         return $validator;
     }

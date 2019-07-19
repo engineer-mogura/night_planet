@@ -106,6 +106,41 @@ class UtilComponent extends Component
     }
 
     /**
+     * キャスト情報を取得する。
+     *
+     * @return void
+     */
+    public function getCastItem($cast, $shop)
+    {
+        // TODO: Authセッションからオーナー情報を取得せず、shopsテーブルから取る？
+        $shopArea = $shop['area'];
+        $shopGenre = $shop['genre'];
+        $shopDir = $shop['dir'];
+        $areas = AREA;
+        $genres = GENRE;
+        $castInfo = array();
+        foreach ($areas as $area) {
+            if ($area['path'] == $shopArea) {
+                $castInfo = $castInfo + array('area' => $area);
+                break;
+            }
+        }
+        foreach ($genres as $genre) {
+            if ($genre['path'] == $shopGenre) {
+                $castInfo = $castInfo + array('genre' => $genre);
+                break;
+            }
+        }
+        $castInfo = $castInfo + array('id'=>$cast->id,'shop_id'=>$shop->id,'dir'=>$cast->dir, 'shop_dir'=> $shopDir);
+        $path = DS.PATH_ROOT['IMG'].DS.$castInfo['area']['path']
+                .DS.$castInfo['genre']['path'].DS.$shop->dir
+                .DS.PATH_ROOT['CAST'].DS.$cast->dir.DS;
+        $castInfo = $castInfo + array('dir_path'=> $path);
+        return  $castInfo;
+    }
+
+
+    /**
      * クレジットリストを作成する
      *
      * @param object $credit

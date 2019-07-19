@@ -46,12 +46,21 @@ class AppController extends \App\Controller\AppController
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
+
         // ログイン時に許可するアクション
-        if (in_array($action, ['index', 'view', 'add', 'delete', 'edit','editCast',
-            'editCalendar','profile','image','diary','diaryView','diaryUpdate','diaryDelete'])) {
+        $access = ['index','editCalendar','profile','gallery','saveGallery','deleteGallery',
+        'diary','diaryView','diaryUpdate','diaryDelete'];
+        if (in_array($action, $access)) {
             return true;
         }
         return false;
+
+        // // ログイン時に許可するアクション
+        // if (in_array($action, ['index', 'view', 'add', 'delete', 'edit','editCast',
+        //     'editCalendar','profile','image','diary','diaryView','diaryUpdate','diaryDelete'])) {
+        //     return true;
+        // }
+        // return false;
     }
 
     public function beforeFilter(Event $event)

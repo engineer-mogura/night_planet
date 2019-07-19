@@ -3,20 +3,127 @@ document.write("<script type='text/javascript' src='/js/util.js'></script>");
         /** */
 $(document).ready(function(){
 
+    allInitialize();
+
+});
+
+/**
+ * オール初期化
+ */
+function allInitialize() {
+
     if($('#user-default').length) {
-        userInitialize();
+        initializeUser();
     }
     if($('#owner-default').length) {
-        ownerInitialize();
+        initializeOwner();
     }
     if($('#cast-default').length) {
-        castInitialize();
+        initializeCast();
     }
 
     // 初期化
     initialize();
-});
+}
 
+/**
+ * イベントオールクリア
+ */
+function crearAllevents() {
+
+    if($('#user-default').length) {
+        crearUserEvents();
+    }
+    if($('#owner-default').length) {
+        crearOwnerEvents();
+    }
+    if($('#cast-default').length) {
+        crearCastEvents();
+    }
+
+    crearCommonEvents();
+}
+
+/**
+ * ユーザー画面のイベントクリア
+ */
+function crearUserEvents() {
+
+}
+
+/**
+ * オーナー画面のイベントクリア
+ */
+function crearOwnerEvents() {
+
+    $(document).off('click', '.top-image-changeBtn');
+    $(document).off('click', '.top-image-saveBtn');
+    $(document).off('click', '.top-image-deleteBtn');
+    $(document).off('click', '.catch-changeBtn');
+    $(document).off('click', '.catch-saveBtn');
+    $(document).off('click', '.catch-deleteBtn');
+    $(document).off('click', '.coupon-changeBtn');
+    $(document).off('click', '.coupon-addBtn');
+    $(document).off('click', '.coupon-saveBtn');
+    $(document).off('click', '.check-coupon-group');
+    $(document).off('change', '.coupon-switchBtn');
+    $(document).off('click', '.coupon-deleteBtn');
+    $(document).off('click', '.cast-changeBtn');
+    $(document).off('click', '.cast-addBtn');
+    $(document).off('click', '.cast-saveBtn');
+    $(document).off('click', '.check-cast-group');
+    $(document).off('change', '.cast-switchBtn');
+    $(document).off('click', '.cast-deleteBtn');
+    $(document).off('click', '.tenpo-changeBtn');
+    $(document).off('click', '.tenpo-saveBtn');
+    $(document).off('click', '.gallery-deleteBtn');
+    $(document).off('change', '#image-file');
+    $(document).off('click', '.gallery-saveBtn');
+    $(document).off('click', '.gallery-chancelBtn');
+    $(document).off('click', '.jobModal-callBtn');
+    $(document).off('click','.chip-credit');
+    $(document).off('click', '.job-changeBtn');
+    $(document).off('click', '.job-saveBtn');
+    $(document).off('click','.chip-treatment');
+}
+
+/**
+ * キャスト画面のイベントクリア
+ */
+function crearCastEvents() {
+
+    $(document).off('input');
+    $(document).off('change','select');
+    $(document).off('change', '#title, #content, #image-file');
+    $(document).off('change', '#modal-title, #modal-content, #modal-image-file');
+    $(document).off('change', '#image-file');
+    $(document).off('change', '#modal-image-file');
+    $(document).off('click', '.createBtn');
+    $(document).off('click', '.updateBtn');
+    $(document).off('click', '.archiveLink');
+    $(document).off('click', '.updateModeBtn');
+    $(document).off('click', '.returnBtn');
+    $(document).off('click', '.deleteBtn');
+    $(document).off('click', '.gallery-deleteBtn');
+    $(document).off('change', '#image-file');
+    $(document).off('click', '.gallery-saveBtn');
+    $(document).off('click', '.gallery-chancelBtn');
+}
+
+/**
+ * 共通画面のイベントクリア
+ */
+function crearCommonEvents() {
+
+    $(document).off('click', '.moveNextCarousel');
+    $(document).off('click', '.movePrevCarousel');
+    $(document).off('click','.coupon');
+    $(document).off('click','#return_top a');
+}
+
+/**
+ * 
+ */
 function imgDisp() {
     var file = $("#top-image-file").prop("files")[0];
 
@@ -37,110 +144,12 @@ function imgDisp() {
     fileReader.readAsDataURL(file);
 }
 
-// /**
-//  * 求人情報 登録ボタン処理
-//  */
-// function jobSaveBtn(){
-
-//     if (!confirm('こちらの求人内容でよろしいですか？')) {
-//         return false;
-//     }
-
-//     var $form = $('form[name="save_job"]');
-//     var tagData = $($form).find('.chips').material_chip('data');
-//     if (tagData.length > 0) {
-//         var csvTag = "";
-//         for (var i = 0; i < tagData.length; i++) {
-//             csvTag = csvTag += tagData[i].tag + ",";
-//         }
-//         csvTag = csvTag.slice(0, -1);
-//         $($form).find('input[name="treatment"]').val(csvTag);
-//     }
-//     //通常のアクションをキャンセルする
-//     event.preventDefault();
-
-//     $.ajax({
-//         url : $form.attr('action'), //Formのアクションを取得して指定する
-//         type: $form.attr('method'),//Formのメソッドを取得して指定する
-//         data: $form.serialize(), //データにFormがserialzeした結果を入れる
-//         dataType: 'json', //データにFormがserialzeした結果を入れる
-//         timeout: 10000,
-//         beforeSend : function(xhr, settings){
-//             //Buttonを無効にする
-//             $($form).find('.saveBtn').attr('disabled' , true);
-//             //処理中のを通知するアイコンを表示する
-//             $("#dummy").load("/module/Preloader.ctp");
-//         },
-//         complete: function(xhr, textStatus){
-//             //処理中アイコン削除
-//             $('.preloader-wrapper').remove();
-//             $($form).find('.saveBtn').attr('disabled' , false);
-//         },
-//         success: function (response, textStatus, xhr) {
-
-//             // OKの場合
-//             if(response.success){
-//                 var $objWrapper = $("#wrapper");
-//                 $($objWrapper).replaceWith(response.html);
-//                     $.notifyBar({
-//                     cssClass: 'success',
-//                     html: response.message
-//                 });
-//                 initialize();
-//             }else{
-//             // NGの場合
-//                 $.notifyBar({
-//                     cssClass: 'error',
-//                     html: response.error
-//                 });
-//             }
-//         },
-//         error : function(response, textStatus, xhr){
-//             $($form).find('.saveBtn').attr('disabled' , false);
-//             $.notifyBar({
-//                 cssClass: 'error',
-//                 html: "通信に失敗しました。ステータス：" + textStatus
-//             });
-//         }
-//     });
-// }
-
-// /**
-//  * 求人タブのモーダル呼び出し時の処理
-//  * @param {*} obj 
-//  */
-// function modalJobTriggerBtn(obj) {
-
-//     // オブジェクトを配列に変換
-//     //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
-//     var $chips = $('#job').find('.chips');
-//     var $chipList = $('#modal-job').find('.chip');
-//     $($chips).val($(this).attr('id'));
-//         // 待遇フィールドにあるタグを取得して配列にセット
-//         var data = $($chips).material_chip('data');
-
-//     var addFlg = true;
-//     // 配列dataを順に処理
-//     // タグの背景色を初期化する
-//     $($chipList).each(function(i,o){
-//         $(o).removeClass('back-color');
-//     });
-//     // インプットフィールドにあるタグは選択済にする
-//     $.each(data, function(index, val) {
-//         $($chipList).each(function(i,o){
-//             if($(o).attr('id') == val.id) {
-//                 $(o).addClass('back-color');
-//                 return true;
-//             }
-//         });
-//     });
-// }
-/* 求人情報 関連処理 end */
-/* オーナーデフォルト end */
-
-/* キャストデフォルト start */
-// TODO: ショップページとキャストページは分離していることから、jsファイルも分けるか
-// 要素の存在判定で読み込まない処理にするか後で考える。
+/**
+ * TODO: ショップページとキャストページは分離していることから、jsファイルも分けるか
+ * 要素の存在判定で読み込まない処理にするか後で考える。
+ * @param  {} obj
+ * @param  {} action
+ */
 function calendarBtn(obj, action) {
     var $button = $(obj).find('.modal-footer');
     var $form = $(obj).find('#edit-calendar');
@@ -639,7 +648,7 @@ function castImageDeleteBtn(form, obj){
                 headerHeight = $header.outerHeight(),
                 startPos = 0;
 
-            $win.on('load scroll', function() {
+            $($win).on('load scroll',function() {
                 var value = $(this).scrollTop();
                 if ( value > startPos && value > headerHeight ) {
                 $header.css('top', '-' + headerHeight + 'px');
@@ -662,14 +671,14 @@ function castImageDeleteBtn(form, obj){
                 }
             });
             // click return top
-            $('#return_top a').click(function() {
+            $(document).on('click','#return_top a',function() {
                 $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
                 return false;
             });
         });
 
         /* ショップページプレビュ クーポン クリックイベント */
-        $('.coupon').click(function() {
+        $(document).on('click','.coupon',function() {
             $(this).find('.arrow').toggleClass("active");
             $(this).find('.arrow').toggleClass('nonActive');
             if (!$(this).find('.arrow').hasClass('active')) {
@@ -723,7 +732,7 @@ function castImageDeleteBtn(form, obj){
 /**
  * ユーザー画面の初期化処理
  */
-function userInitialize() {
+function initializeUser() {
 
     // ユーザーの初期化処理
     var x = $(window).width();
@@ -921,7 +930,7 @@ function userInitialize() {
 /**
  * TODO: オーナー？ショップ？画面の初期化処理
  */
-function ownerInitialize() {
+function initializeOwner() {
 
     // 店舗編集のスクリプト 店舗情報 クレジットフォームを入力不可にする
     $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
@@ -948,12 +957,6 @@ function ownerInitialize() {
     // トップ画像 登録ボタン押した時
     $(document).on("click", ".top-image-saveBtn",function() {
 
-        //加工後の横幅を800pxに設定
-        var processingWidth = 800;
-
-        //加工後の容量を100KB以下に設定
-        var processingCapacity = 100000;
-
         //ファイル選択済みかチェック
         var fileCheck = $("#top-image-file").val().length;
         if (fileCheck === 0) {
@@ -963,58 +966,21 @@ function ownerInitialize() {
         if(!confirm('こちらの画像に変更でよろしいですか？')) {
             return false;
         }
-        //imgタグに表示した画像をimageオブジェクトとして取得
-        var image = new Image();
-        image.src = $("#top-image-preview").attr("src");
 
-        var h;
-        var w;
-
-        //原寸横幅が加工後横幅より大きければ、縦横比を維持した縮小サイズを取得
-        if(processingWidth < image.width) {
-            w = processingWidth;
-            h = image.height * (processingWidth / image.width);
-
-        //原寸横幅が加工後横幅以下なら、原寸サイズのまま
-        } else {
-            w = image.width;
-            h = image.height;
-        }
-
-        //取得したサイズでcanvasに描画
-        var canvas = $("#top-image-canvas");
-        var ctx = canvas[0].getContext("2d");
-        $("#top-image-canvas").attr("width", w);
-        $("#top-image-canvas").attr("height", h);
-        ctx.drawImage(image, 0, 0, w, h);
-
-        //canvasに描画したデータを取得
-        var canvasImage = $("#top-image-canvas").get(0);
-
-        //オリジナル容量(画質落としてない場合の容量)を取得
-        var originalBinary = canvasImage.toDataURL("image/jpeg"); //画質落とさずバイナリ化
-        var originalBlob = base64ToBlob(originalBinary); //画質落としてないblobデータをアップロード用blobに設定
-        console.log(originalBlob["size"]);
-
-        //オリジナル容量blobデータをアップロード用blobに設定
-        var uploadBlob = originalBlob;
-
-        //オリジナル容量が加工後容量以上かチェック
-        if(processingCapacity <= originalBlob["size"]) {
-            //加工後容量以下に落とす
-            var capacityRatio = processingCapacity / originalBlob["size"];
-            var processingBinary = canvasImage.toDataURL("image/jpeg", capacityRatio); //画質落としてバイナリ化
-            uploadBlob = base64ToBlob(processingBinary); //画質落としたblobデータをアップロード用blobに設定
-            console.log(capacityRatio);
-            console.log(uploadBlob["size"]);
-        }
-
-        //アップロード用blobをformDataに設定
         var json = JSON.parse($("#top-image").find('input[name="json_data"]').val());
         $("#top-image").find('input[name="id"]').val(json['id']);
+
         var $form = $('#save-top-image');
+
+        // blobファイル変換
+        var blobList = fileConvert("#top-image-canvas", '.top-image-preview');
+
+        // アップロード用blobをformDataに設定
+        $($form).find('input[name="top_image_file"]').val("");
+        // アップロード用blobをformDataに設定
         var formData = new FormData($form.get()[0]);
-        formData.append("top_image_file", uploadBlob);
+        formData.append("top_image_file", blobList[0]);
+
         //通常のアクションをキャンセルする
         event.preventDefault();
         fileUpAjaxCommonOwner($form, formData, $("#top-image"));
@@ -1457,6 +1423,7 @@ function ownerInitialize() {
         ajaxCommonOwner($form, $("#tenpo"));
     });
 
+    /* ギャラリー 関連処理 start */
     // ギャラリー 削除ボタン押した時
     $(document).on("click", ".gallery-deleteBtn",function() {
 
@@ -1522,11 +1489,21 @@ function ownerInitialize() {
         if(!confirm('こちらの画像に変更でよろしいですか？')) {
             return false;
         }
+        // 新しく追加された画像のみを対象にする
+        $selecter = $('.card-img.new').find('img');
 
         var $form = $('#save-gallery');
         // ファイル変換
-        var formData = fileConvert("#image-canvas", $form, '.card-img');
-
+        var blobList = fileConvert("#image-canvas", $selecter);
+        //アップロード用blobをformDataに設定
+        $($form).find('#image-file, .file-path').val("");
+        formData = new FormData($form.get()[0]);
+        for(item of blobList) {
+          formData.append("image[]", item);
+        }
+        for (item of formData) {
+          console.log(item);
+        }
         //通常のアクションをキャンセルする
         event.preventDefault();
         fileUpAjaxCommonOwner($form, formData, $("#gallery"));
@@ -1730,9 +1707,12 @@ function ownerInitialize() {
         //※ブラウザでエラー発生するため（Uncaught TypeError: Cannot read property '*' of undefined）
         event.stopImmediatePropagation();
     });
+}
 
     /**
      * オーナーデファルト用ajax共通処理
+     * @param  {Object} $form 対象のフォーム
+     * @param  {Object} $tab jsonのhtmlを挿入する対象セレクタ
      */
     var ajaxCommonOwner = function($form, $tab) {
 
@@ -1762,12 +1742,14 @@ function ownerInitialize() {
                         cssClass: 'success',
                         html: response.message
                     });
-                    initialize();
+                    crearAllevents();
+                    allInitialize();
+
                 }else{
                 // NGの場合
                     $.notifyBar({
                         cssClass: 'error',
-                        html: response.error
+                        html: response.message
                     });
                 }
             },
@@ -1780,10 +1762,11 @@ function ownerInitialize() {
             }
         });
     }
-}
 
-    /**
-     * オーナーデファルト用画像アップロードajax共通処理
+    /** @description オーナーデファルト用画像アップロードajax共通処理
+     * @param  {Object} $form 対象のフォーム
+     * @param  {Object} formData 画像データを追加した$formの複製
+     * @param  {Object} $tab jsonのhtmlを挿入する対象セレクタ
      */
     var fileUpAjaxCommonOwner = function($form, formData, $tab) {
 
@@ -1815,12 +1798,14 @@ function ownerInitialize() {
                         cssClass: 'success',
                         html: response.message
                     });
-                    initialize();
+                    crearAllevents();
+                    allInitialize();
+
                 }else{
                 // NGの場合
                     $.notifyBar({
                         cssClass: 'error',
-                        html: response.error
+                        html: response.message
                     });
                 }
             },
@@ -1840,7 +1825,7 @@ function ownerInitialize() {
 /**
  * キャスト画面の初期化処理
  */
-function castInitialize() {
+function initializeCast() {
 
     // TODO: サイドナビのAJAX化は後で考える。
     // $(".side-nav").on("click","a", function() {
@@ -1870,17 +1855,22 @@ function castInitialize() {
     fullcalendarSetting();
     birthdayPickerIni();
     /* プロフィール 画面 START */
-    if($("#cast-profile").length) {
-        var $profile = $("#cast-profile");
-        var profile = JSON.parse($($profile).find('input[name="profile_copy"]').val());
+    if($("#profile").length) {
+        var $profile = $("#profile");
+        var profile = JSON.parse($($profile).find('input[name="json_data"]').val());
         var birthday = $('#birthday').pickadate('picker'); // Date Picker
         birthday.set('select', [2000, 1, 1]);
         birthday.set('select', new Date(2000, 1, 1));
         birthday.set('select', profile['birthday'], { format: 'yyyy-mm-dd' });
         $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
         $('select').material_select();
-        $($profile).find(":input").on("change", function() {
 
+        // プロフィールを変更した時
+        $(document).on("input", function() {
+            $($profile).find(".saveBtn").removeClass("disabled");
+        });
+        // リストボックスを変更した時
+        $(document).on("change","select", function() {
             $($profile).find(".saveBtn").removeClass("disabled");
         });
         // 登録ボタン押した時
@@ -1888,8 +1878,11 @@ function castInitialize() {
             if (!confirm('こちらのプロフィール内容でよろしいですか？')) {
                 return false;
             }
-            // ajax処理
-            ajaxCommon($("#edit-profile"));
+            var $form =$('#save-profile');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommonOwner($form, $("#wrapper"));
         });
     }
     // /* プロフィール 画面 END */
@@ -1938,7 +1931,7 @@ function castInitialize() {
         $(document).on("click", ".updateBtn",function() {
             // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
             var oldImgList = $('.card-img').not(".new"); // 既に登録した画像リスト
-            var newImgList =  $('.card-img.new'); // 追加した画像リスト
+            var newImgList = $('.card-img.new').find('img'); // 追加した画像リスト
             var delList = new Array(); // 削除対象リスト
             if($('#modal-edit-diary').find("input[name='diary_json']").val() != '') {
                 delList = JSON.parse($('#modal-edit-diary').find("input[name='diary_json']").val());
@@ -1961,8 +1954,15 @@ function castInitialize() {
             var fileCheck = $(tmpForm).find("#modal-image-file").val().length;
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
+
                 // ファイル変換
-                var formData = fileConvert("#image-canvas", tmpForm, newImgList);
+                var blobList = fileConvert("#image-canvas", newImgList);
+                //アップロード用blobをformDataに設定
+                $(tmpForm).find('#image-file, .file-path').val("");
+                formData = new FormData(tmpForm.get()[0]);
+                for(item of blobList) {
+                    formData.append("image[]", item);
+                }
                 fileUpAjaxCommon(tmpForm, formData);
 
             } else {
@@ -2198,9 +2198,24 @@ function castInitialize() {
     }
     /* 日記 画面 END */
     /* 画像アップロード 画面 START */
-    if($("#cast-image").length) {
+    if($("#gallery").length) {
+        // ギャラリー 削除ボタン押した時
+        $(document).on("click", ".gallery-deleteBtn",function() {
 
-        // 画像を選択した時
+            var json = $(this).data('delete');
+
+            if (!confirm('選択したギャラリーを削除してもよろしいですか？')) {
+                return false;
+            }
+            var $form = $('form[id="delete-gallery"]');
+            $($form).find("input[name='key']").val(json.key);
+            $($form).find("input[name='name']").val(json.name);
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommonOwner($form, $("#wrapper"));
+        });
+        // ギャラリー 画像を選択した時
         $(document).on("change", "#image-file", function() {
 
             if($("#image-file").prop("files").length == 0) {
@@ -2233,12 +2248,12 @@ function castInitialize() {
             for(var i = 0; i < fileList.length; i++){
 
                 imgCount += 1;
-                fileload(fileList[i], $("#cast-image"), imgCount, modulePath);
+                fileload(fileList[i], $("#gallery .row"), imgCount, modulePath);
             }
 
         });
-        // 登録ボタン押した時
-        $(document).on("click", ".createBtn",function() {
+        // ギャラリー 登録ボタン押した時
+        $(document).on("click", ".gallery-saveBtn",function() {
 
             //ファイル選択済みかチェック
             var fileCheck = $("#image-file").val().length;
@@ -2249,22 +2264,34 @@ function castInitialize() {
             if(!confirm('こちらの画像に変更でよろしいですか？')) {
                 return false;
             }
+            // 新しく追加された画像のみを対象にする
+            $selecter = $('.card-img.new').find('img');
+
+            var $form = $('#save-gallery');
             // ファイル変換
-            var formData = fileConvert("#image-canvas", $('#edit-image'), '.card-img');
-
-            fileUpAjaxCommon($('#edit-image'), formData);
-        });
-        // 削除ボタン押した時
-        $(document).on("click", ".deleteBtn",function() {
-
-            if (!confirm('削除しますか？')) {
-                return false;
+            var blobList = fileConvert("#image-canvas", $selecter);
+            //アップロード用blobをformDataに設定
+            $($form).find('#image-file, .file-path').val("");
+            formData = new FormData($form.get()[0]);
+            for(item of blobList) {
+            formData.append("image[]", item);
             }
-            var json = JSON.parse($(this).attr("data-delete"));
-            $("#delete-image").find("input[name='col_name']").val(json['col_name']);
-            $("#delete-image").find("input[name='file_name']").val(json['file_name']);
-            ajaxCommon($("#delete-image"));
+            for (item of formData) {
+            console.log(item);
+            }
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            fileUpAjaxCommonOwner($form, formData, $("#wrapper"));
+
         });
+        // ギャラリー やめるボタン押した時
+        $(document).on("click", ".gallery-chancelBtn",function() {
+            // newタグが付いたファイルを表示エリアから削除する
+            $('#gallery').find('.card-img.new').remove();
+            // フォーム入力も削除する
+            $("#gallery").find("#image-file, .file-path").val("");
+        });
+    /* ギャラリー 関連処理 end */
 
     }
     /* 画像アップロード 画面 END */

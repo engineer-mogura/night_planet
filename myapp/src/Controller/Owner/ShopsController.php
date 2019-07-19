@@ -215,7 +215,7 @@ class ShopsController extends AppController
                 if (isset($this->request->data["file_before"])) {
                     $shop->top_image = $this->request->getData('file_before');
                 }
-                $this->log($e->getMessage(), LOG_DEBUG);
+                $this->log($e->getMessage());
                 $message = RESULT_M['UPDATE_FAILED'];
                 $flg = false;
                 $response = array(
@@ -855,6 +855,7 @@ class ShopsController extends AppController
 
         $flg = true; // 返却フラグ
         $errors = ""; // 返却メッセージ
+        $isDuplicate = false; // 画像重複フラグ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
 
@@ -883,20 +884,16 @@ class ShopsController extends AppController
             $files = $this->request->data['image'];
         }
         foreach ($files as $key => $file) {
-            // ファイルが入力されたとき
-            if (count($file["name"]) > 0) {
+            // ファイルが存在する、かつファイル名がblobの画像のとき
+            if (!empty($file["name"]) && $file["name"] == 'blob') {
                 $limitFileSize = 1024 * 1024;
                 try {
-                    // TODO: 検証用
-                    // if($key == 1) {
-                    //     throw new RuntimeException('画像の削除に失敗しました。');
-                    // }
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
 
                     // ファイル名が同じ場合は処理をスキップする
                     if ($convertFile === false) {
-                        $errors = '同じ画像はアップできません。'."\n";
+                        $isDuplicate = true;
                         continue;
                     }
 
@@ -913,7 +910,7 @@ class ShopsController extends AppController
                         $tmpDir->copy($dirClone->path);
                         $tmpDir->delete();// tmpフォルダ削除
                     }
-                    $this->log($e->getMessage(), LOG_DEBUG);
+                    $this->log($e->getMessage());
                     $message = RESULT_M['UPDATE_FAILED'];
                     $flg = false;
                     $response = array(
@@ -923,14 +920,15 @@ class ShopsController extends AppController
                     $this->response->body(json_encode($response));
                     return;
                 }
-            }
-            // カラムimage1～image8の空いてる場所に入れる
-            for($i = 0; $i < $fileMax; $i++) {
-                if(empty($shop->get($imageCol[$i]))) {
-                    $shop->set($imageCol[$i], $convertFile);
-                    break;
+                // カラムimage1～image8の空いてる場所に入れる
+                for($i = 0; $i < $fileMax; $i++) {
+                    if(empty($shop->get($imageCol[$i]))) {
+                        $shop->set($imageCol[$i], $convertFile);
+                        break;
+                    }
                 }
             }
+
 
         }
         // ＤＢ登録
@@ -976,7 +974,7 @@ class ShopsController extends AppController
             'html' => $this->response->body(),
             'error' => $errors,
             'success' => $flg,
-            'message' => $message
+            'message' => $isDuplicate ? $message . "\n" . RESULT_M['DUPLICATE'] : $message
         );
         $this->response->body(json_encode($response));
         return;
@@ -1016,7 +1014,7 @@ class ShopsController extends AppController
             if (isset($tmpFile) && $tmpFile->exists()) {
                 $tmpFile->delete();// tmpファイル削除
             }
-
+            $this->log($e->getMessage());
             $message = RESULT_M['DELETE_FAILED'];
             $flg = false;
             $response = array(

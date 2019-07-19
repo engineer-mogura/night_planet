@@ -35,7 +35,7 @@
       </div>
     </div>
     <img src="" id="top-image-show" />
-    <img src="" id="top-image-preview" style="display:none;" />
+    <img src="" id="top-image-preview" class="top-image-preview" style="display:none;" />
     <canvas id="top-image-canvas" style="display:none;"></canvas>
     <div class="card-content" style="text-align:center;">
       <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">やめる</button>

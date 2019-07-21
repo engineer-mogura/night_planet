@@ -6,12 +6,11 @@
 ?>
 <div id="wrapper">
 <?= $this->element('modal/diaryModal'); ?>
-
     <div class="container">
         <span id="dummy" style="display: hidden;"></span>
         <?= $this->Flash->render() ?>
         <h5><?=('日記') ?></h5>
-            <div id="cast-diary" class="row">
+            <div id="diary" class="row">
             <input type="hidden" name="file_max" value=<?=CAST_CONFIG['FILE_MAX']?>>
             <input type="hidden" name="cast_dir" value=<?=$dir?>>
                 <div class="col s12 m12 l12 xl8">
@@ -49,6 +48,10 @@
                                     <a class="waves-effect waves-light btn-large cancelBtn disabled"><i class="material-icons right">search</i>やめる</a>
                                 </div>
                             </div>
+                        </form>
+                        <form id="view-archive-diary" name="view_archive_diary" method="get" style="display:none;" action="/cast/casts/view_diary/">
+                            <input type="hidden" name="_method" value="POST">
+                            <input type="hidden" name="id" value="">
                         </form>
                     </div>
                 </div>

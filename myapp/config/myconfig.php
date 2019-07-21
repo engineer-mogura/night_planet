@@ -4,6 +4,11 @@ use Cake\Core\Configure;
 return [
 
 
+	// プロパティ関連
+	define('CAPACITY', array(
+		'MAX_NUM_BYTES_COPY'=> 10485760 , // コピー制限バイト数10MB
+	)),
+
 	// キャスト用設定 cast.config
 	define('CAST_CONFIG', array(
 		'FILE_MAX'=>'8', // アップロードファイル数

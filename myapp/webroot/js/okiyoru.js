@@ -486,7 +486,7 @@ function resetModal(){
     $("#modal-diary").find(".updateBtn").addClass("disabled");
 
     //$(".modal-edit-diary").find('form')[0].reset();
-    $(".modal-edit-diary").find("input[name='diary_json']").val('');
+    $(".modal-edit-diary").find("input[name='json_data']").val('');
     $(".modal-edit-diary").find("textarea[name='content']").text('');
     $(".modal-edit-diary").find("textarea").trigger('autoresize');
 }
@@ -806,99 +806,13 @@ function initializeUser() {
     if($("#diary").length) {
         // アーカイブ日記をクリックした時
         $(document).on('click', '.archiveLink', function() {
-            $(this).find("input[name='id']").val();
-            $.ajax({
-                type: 'GET',
-                //dataType:'application/json',
-                url: "/naha/diary/",
-                data: { id: $(this).find("input[name='id']").val()},
-                contentType: 'application/json',
-                timeout: 10000,
-                beforeSend : function(xhr, settings){
-                    // 他のアーカイブリンクを無効化する
-                    $(".archiveLink").each(function(i, elem) {
-                        $(elem).css('pointer-events', 'none');
-                    });
-                    //処理中のを通知するアイコンを表示する
-                    $("#dummy").load("/module/Preloader.ctp");
-                },
-                complete: function(xhr, textStatus){
-                    // 他のアーカイブリンクを有効化する
-                    $(".archiveLink").each(function(i, elem) {
-                        $(elem).css('pointer-events', '');
-                    });
-                    //処理中アイコン削除
-                    $('.preloader-wrapper').remove();
-                },
-                success: function(response,dataType) {
-                    // キャストの日記ディレクトリを取得する
-                    var diaryDir = $("input[name='diary_dir']").val() + response['dir'];
-                    // 日記カードの要素を複製し、複製したやつを表示するようにする。
-                    var diaryCard = $(".diary-card").clone(true).insertAfter(".diary-card").addClass('clone').removeClass('hide');
-                    // 日記内容の設定
-                    $(diaryCard).find("p[name='created']").text(response['ymd_created']);
-                    $(diaryCard).find("p[name='title']").text(response['title']);
-                    $(diaryCard).find("p[name='content']").textWithLF(response['content']);
-                    $("#modal-diary").find(".like-count").text(response['likes'].length);
-                    var images = [];
-                    $.each(response, function(key, value) {
-                        if(key.match(/image[0-9]*/) && value) {
-                            // 値が空じゃない、かつnullじゃない時プッシュする
-                            value !== '' && value !== null ?
-                            images.push(value) :'';
-                        }
-                    })
-                    // 画像表示するグリッドを決定する
-                    if(images.length > 0) {
-                        // 画像表示するグリッド,高さを決定する
-                        var colClass = "";
-                        images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
-                        colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
-                        var figure = $(diaryCard).find('figure');
-                        var imgClass = "";
-                        $.each(images, function(key, value) {
-                            var cloneFigure = $(figure).clone(true).removeClass().addClass(colClass).insertAfter(figure);
-                            $(cloneFigure).find('a').attr({'href': diaryDir + '/' + value});
-                            $(cloneFigure).find('img').attr({'src': diaryDir + '/' + value});
-                        })
-                        $(diaryCard).find('figure.hide').remove();
-                    }
 
-                    $('#modal-diary').modal({
-                        dismissible: true, // Modal can be dismissed by clicking outside of the modal
-                        opacity: .2, // Opacity of modal background
-                        inDuration: 300, // Transition in duration
-                        outDuration: 200, // Transition out duration
-                        startingTop: '4%', // Starting top style attribute
-                        endingTop: '10%', // Ending top style attribute
-                        // モーダル表示完了コールバック
-                        ready: function() {
-                            scrollPosition = $(window).scrollTop();
-                            // モーダル表示してる時は、背景画面のスクロールを禁止する
-                            $('body').addClass('fixed').css({'top': -scrollPosition});
-                        },
-                        // モーダル非表示完了コールバック
-                        complete: function() {
-
-                            // モーダル非表示した時は、背景画面のスクロールを解除する
-                            $('body').removeClass('fixed').css({'top': 0});
-                            window.scrollTo( 0 , scrollPosition );
-                            $($(this)[0]["$el"]).find('.clone').remove();
-                        }
-                    });
-                    $("#modal-diary").modal('open');
-                    initPhotoSwipeFromDOM('.my-gallery');
-                    $(document).find('.materialboxed').materialbox();
-
-
-                },
-                error : function(response, textStatus, xhr){
-                    $.notifyBar({
-                        cssClass: 'error',
-                        html: "通信に失敗しました。ステータス：" + textStatus
-                    });
-                }
-            });
+            var $form =$('#view-archive-diary');
+            $($form).find("input[name='id']").val($(this).find("input[name='id']").val());
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            callModalDiaryWithAjax($form, 'user');
+            $('.materialboxed').materialbox();
         })
         // いいねボタン押した時
         $(document).on('click', '.likeBtn', function() {
@@ -1819,8 +1733,133 @@ function initializeOwner() {
         });
     }
 
+    /**
+     * @description モーダル日記表示 ユーザー、キャストのみで使用
+     * @param  {} $form
+     */
+    var callModalDiaryWithAjax = function($form, userType){
+        $.ajax({
+            url : $form.attr('action'), //Formのアクションを取得して指定する
+            type: $form.attr('method'),//Formのメソッドを取得して指定する
+            data: $form.serialize(), //データにFormがserialzeした結果を入れる
+            dataType: 'json', //データにFormがserialzeした結果を入れる
+            timeout: 10000,
+            beforeSend : function(xhr, settings){
+                // 他のアーカイブリンクを無効化する
+                $(".archiveLink").each(function(i, elem) {
+                    $(elem).css('pointer-events', 'none');
+                });
+                //処理中のを通知するアイコンを表示する
+                $("#dummy").load("/module/Preloader.ctp");
+            },
+            complete: function(xhr, textStatus){
+                // 他のアーカイブリンクを有効化する
+                $(".archiveLink").each(function(i, elem) {
+                    $(elem).css('pointer-events', '');
+                });
+                //処理中アイコン削除
+                $('.preloader-wrapper').remove();
+            },
+            success: function(response,dataType) {
 
+                $('#modal-diary').modal({
+                    dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                    opacity: .2, // Opacity of modal background
+                    inDuration: 300, // Transition in duration
+                    outDuration: 200, // Transition out duration
+                    startingTop: '4%', // Starting top style attribute
+                    endingTop: '10%', // Ending top style attribute
+                    // モーダル表示完了コールバック
+                    ready: function() {
+                        scrollPosition = $(window).scrollTop();
+                        // モーダル表示してる時は、背景画面のスクロールを禁止する
+                        $('body').addClass('fixed').css({'top': -scrollPosition});
+                        // キャストの日記ディレクトリを取得する
+                        var diaryDir = $("input[name='cast_dir']").val() + response['dir'];
+                        // 日記カードの要素を複製し、複製したやつを表示するようにする。
+                        var diaryCard = $(".diary-card").clone(true).insertAfter(".diary-card").addClass('clone').removeClass('hide');
+                        // 日記内容の設定
+                        $(diaryCard).find("p[name='created']").text(response['ymd_created']);
+                        $(diaryCard).find("p[name='title']").text(response['title']);
+                        $(diaryCard).find("p[name='content']").textWithLF(response['content']);
+                        $("#modal-diary").find(".like-count").text(response['likes'].length);
+                        var images = [];
+                        $.each(response, function(key, value) {
 
+                            if(key.match(/image[0-9]*/) && value) {
+                                // 値が空じゃない、かつnullじゃない時プッシュする
+                                value !== '' && value !== null ?
+                                images.push({"id":response['id'],
+                                                "path":diaryDir + '/'+ value,
+                                                "key":key,
+                                                "name":value}) :'';
+                            }
+                        })
+                        // 画像表示するグリッドを決定する
+                        if(images.length > 0) {
+                            // 画像表示するグリッド,高さを決定する
+                            var colClass = "";
+                            images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
+                            colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
+                            var figure = $(diaryCard).find('figure');
+                            var imgClass = "";
+                            $.each(images, function(key, value) {
+                                var cloneFigure = $(figure).clone(true).removeClass().addClass(colClass).insertAfter(figure);
+                                $(cloneFigure).find('a').attr({'href': value['path']});
+                                $(cloneFigure).find('img').attr({'src': value['path']});
+                            })
+                            $(diaryCard).find('figure.hide').remove();
+                            initPhotoSwipeFromDOM('.my-gallery');
+                        }
+                        // キャストの場合JSONデータを保持する
+                        if(userType == 'cast') {
+                            var dir = $("#diary").find("input[name='cast_dir']").val();
+                            $("#delete-diary").find("input[name='id']").val(response['id']);
+                            $("#delete-diary").find("input[name='dir_path']").val(dir + response['dir']);
+                            $("#modal-edit-diary").find("input[name='id']").val(response['id']);
+                            $("#modal-edit-diary").find("input[name='json_data']").val(JSON.stringify(images));
+                        }
+                    },
+
+                    // モーダル非表示完了コールバック
+                    complete: function() {
+                        // ユーザーの場合
+                        if(userType == 'user') {
+                            // モーダル非表示した時は、背景画面のスクロールを解除する
+                            $('body').removeClass('fixed').css({'top': 0});
+                            window.scrollTo( 0 , scrollPosition );
+                            $($(this)[0]["$el"]).find('.clone').remove();
+
+                        } else if(userType == 'cast') {
+                            //キャストの場合
+                            // モーダルフォームをクリアする
+                            $("#modal-edit-diary").find(".card-img").remove();
+                            $("#modal-edit-diary").find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
+                            $("#modal-edit-diary").find("input[name='modal_file_path']").val('');
+                            // モーダルを初期化
+                            resetModal();
+                            // モーダル非表示した時は、背景画面のスクロールを解除する
+                            $('body').removeClass('fixed').css({'top': 0});
+                            window.scrollTo( 0 , scrollPosition );
+                            $(".modal-edit-diary").addClass('hide');
+                            $("#view-diary").removeClass('hide');
+                            $("#view-diary").find('.clone').remove();
+                            $(".updateBtn").addClass("disabled");
+                        }
+                        $('.tooltipped').tooltip({delay: 50});
+
+                    }
+                });
+                $("#modal-diary").modal('open');
+            },
+            error : function(response, textStatus, xhr){
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: "通信に失敗しました。ステータス：" + textStatus
+                });
+            }
+        });
+    }
 
 /**
  * キャスト画面の初期化処理
@@ -1887,20 +1926,20 @@ function initializeCast() {
     }
     // /* プロフィール 画面 END */
     /* 日記 画面 START */
-    if($("#cast-diary").length) {
+    if($("#diary").length) {
 
         // 入力フォームに変更があった時
-        $(document).on("change", "#title, #content, #image-file", function() {
+        $(document).on("input", "#title, #content, #image-file", function() {
             $("#edit-diary").find(".createBtn").removeClass("disabled");
             $("#edit-diary").find(".cancelBtn").removeClass("disabled");
         });
-        // モーダルの入力フォームに変更があった時
-        $(document).on("change", "#modal-title, #modal-content, #modal-image-file", function() {
+        // プロフィールを変更した時
+        $(document).on("input","#modal-title, #modal-content, #modal-image-file", function() {
             $(".updateBtn").removeClass("disabled");
         });
         // 画像を選択した時
         $(document).on("change", "#image-file", function() {
-            canvasRender("#cast-diary", this, true);
+            canvasRender("#diary", this, true);
         });
         // モーダル日記で画像を選択した時
         $(document).on("change", "#modal-image-file", function() {
@@ -1912,9 +1951,9 @@ function initializeCast() {
                 return false;
             }
             // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
-            $("#cast-diary").find("input[name='crud_type']").val('create');
+            $("#diary").find("input[name='crud_type']").val('create');
 
-            var fileCheck = $("#cast-diary").find("#image-file").val().length;
+            var fileCheck = $("#diary").find("#image-file").val().length;
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
                 // ファイル変換
@@ -1933,8 +1972,8 @@ function initializeCast() {
             var oldImgList = $('.card-img').not(".new"); // 既に登録した画像リスト
             var newImgList = $('.card-img.new').find('img'); // 追加した画像リスト
             var delList = new Array(); // 削除対象リスト
-            if($('#modal-edit-diary').find("input[name='diary_json']").val() != '') {
-                delList = JSON.parse($('#modal-edit-diary').find("input[name='diary_json']").val());
+            if($('#modal-edit-diary').find("input[name='json_data']").val() != '') {
+                delList = JSON.parse($('#modal-edit-diary').find("input[name='json_data']").val());
             }
             // 既に登録した画像リストを元に削除対象を絞る
             $(oldImgList).each(function(i, elm1) {
@@ -1971,148 +2010,27 @@ function initializeCast() {
             }
         });
         // キャンセルボタン押した時
-        $("#cast-diary").on("click", ".cancelBtn", function() {
+        $("#diary").on("click", ".cancelBtn", function() {
 
             if (!confirm('取り消しますか？')) {
                 return false;
             }
-            $("#cast-diary").find(".createBtn").addClass("disabled");
-            $("#cast-diary").find(".updateBtn").addClass("disabled");
-            $("#cast-diary").find(".cancelBtn").addClass("disabled");
-            $("#cast-diary").find("#title, #content, #image-file, #file-path").val("");
-            $("#cast-diary").find(".card-img").remove();
+            $("#diary").find(".createBtn").addClass("disabled");
+            $("#diary").find(".updateBtn").addClass("disabled");
+            $("#diary").find(".cancelBtn").addClass("disabled");
+            $("#diary").find("#title, #content, #image-file, #file-path").val("");
+            $("#diary").find(".card-img").remove();
         });
 
         // アーカイブ日記をクリックした時
         $(document).on("click", ".archiveLink",function() {
-            var path = "/module/carousel.ctp";
-            $(this).find("input[name='id']").val();
+
+            var $form =$('#view-archive-diary');
+            $($form).find("input[name='id']").val($(this).find("input[name='id']").val());
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            callModalDiaryWithAjax($form, 'cast');
             $('.materialboxed').materialbox();
-
-            $.ajax({
-                type: 'GET',
-                //dataType:'application/json',
-                url: "/cast/casts/diary_view/",
-                data: { id: $(this).find("input[name='id']").val()},
-                contentType: 'application/json',
-                timeout: 10000,
-                beforeSend : function(xhr, settings){
-                    // 他のアーカイブリンクを無効化する
-                    $(".archiveLink").each(function(i, elem) {
-                        $(elem).css('pointer-events', 'none');
-                    });
-                    //処理中のを通知するアイコンを表示する
-                    $("#dummy").load("/module/Preloader.ctp");
-                },
-                complete: function(xhr, textStatus){
-                    // 他のアーカイブリンクを有効化する
-                    $(".archiveLink").each(function(i, elem) {
-                        $(elem).css('pointer-events', '');
-                    });
-                    //処理中アイコン削除
-                    $('.preloader-wrapper').remove();
-                },
-                success: function(response,dataType) {
-                    // $("#view-diary").find("p[name='title']").text(response['title']);
-                    // $("#view-diary").find("p[name='content']").textWithLF(response['content']);
-                    $('#modal-diary').modal({
-                        dismissible: true, // Modal can be dismissed by clicking outside of the modal
-                        opacity: .2, // Opacity of modal background
-                        inDuration: 300, // Transition in duration
-                        outDuration: 200, // Transition out duration
-                        startingTop: '4%', // Starting top style attribute
-                        endingTop: '10%', // Ending top style attribute
-                        // モーダル表示完了コールバック
-                        ready: function() {
-                            scrollPosition = $(window).scrollTop();
-                            // モーダル表示してる時は、背景画面のスクロールを禁止する
-                            $('body').addClass('fixed').css({'top': -scrollPosition});
-
-                            // キャストの日記ディレクトリを取得する
-                            var diaryDir = $("input[name='cast_dir']").val() + response['dir'];
-                            $("#diary-delete").find("input[name='diary_id']").val(response['id']);
-                            $("#diary-delete").find("input[name='del_path']").val(diaryDir);
- 
-                            // 日記カードの要素を複製し、複製したやつを表示するようにする。
-                            var diaryCard = $(".diary-card").clone(true).insertAfter(".diary-card").addClass('clone').removeClass('hide');
-                            // 日記内容の設定
-                            $(diaryCard).find("p[name='created']").text(response['ymd_created']);
-                            $(diaryCard).find("p[name='title']").text(response['title']);
-                            $(diaryCard).find("p[name='content']").textWithLF(response['content']);
-                            $("#modal-diary").find(".like-count").text(response['likes'].length);
-
-                            var images = [];
-                            $.each(response, function(key, value) {
-                                if(key.match(/image[0-9]*/) && value) {
-                                    // 値が空じゃない、かつnullじゃない時プッシュする
-                                    value !== '' && value !== null ?
-                                    images.push({"id":response['id'],
-                                                    "path":diaryDir + '/'+ value,
-                                                    "key":key,
-                                                    "name":value}) :'';
-                                }
-                            })
-                            // 画像表示するグリッドを決定する
-                            // if(images.length > 0) {
-                            //     // 画像表示するグリッド,高さを決定する
-                            //     var colClass = "";
-                            //     images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
-                            //     colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
-                            //     var col = $(diaryCard).find('.col');
-                            //     var imgClass = "";
-                            //     images.length == 1 ? imgClass = 'imageOne materialboxed' : images.length == 2 ?
-                            //     imgClass = 'materialboxed' : imgClass = 'materialboxed';
-                            //     $.each(images, function(key, value) {
-                            //         var cloneCol = $(col).clone(true).removeClass().addClass(colClass).insertAfter(col);
-                            //         $(cloneCol).find('img').attr({'src':value['path'],'class':imgClass});
-                            //     })
-                            // }
-                            // 画像表示するグリッドを決定する
-                            if(images.length > 0) {
-                                // 画像表示するグリッド,高さを決定する
-                                var colClass = "";
-                                images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
-                                colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
-                                var figure = $(diaryCard).find('figure');
-                                var imgClass = "";
-                                $.each(images, function(key, value) {
-                                    var cloneFigure = $(figure).clone(true).removeClass().addClass(colClass).insertAfter(figure);
-                                    $(cloneFigure).find('a').attr({'href': value['path']});
-                                    $(cloneFigure).find('img').attr({'src': value['path']});
-                                })
-                                $(diaryCard).find('figure.hide').remove();
-                                initPhotoSwipeFromDOM('.my-gallery');
-                            }
-                            $("#modal-edit-diary").find("input[name='diary_json']").val(JSON.stringify(images));
-                        },
-
-                        // モーダル非表示完了コールバック
-                        complete: function() {
-                            // モーダルフォームをクリアする
-                            $("#modal-edit-diary").find(".card-img").remove();
-                            $("#modal-edit-diary").find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
-                            $("#modal-edit-diary").find("input[name='modal_file_path']").val('');
-                            // モーダルを初期化
-                            resetModal();
-                            // モーダル非表示した時は、背景画面のスクロールを解除する
-                            $('body').removeClass('fixed').css({'top': 0});
-                            window.scrollTo( 0 , scrollPosition );
-                            $(".modal-edit-diary").addClass('hide');
-                            $("#view-diary").removeClass('hide');
-                            $("#view-diary").find('.clone').remove();
-                            $(".updateBtn").addClass("disabled");
-
-                        }
-                    });
-                    $("#modal-diary").modal('open');
-                },
-                error : function(response, textStatus, xhr){
-                    $.notifyBar({
-                        cssClass: 'error',
-                        html: "通信に失敗しました。ステータス：" + textStatus
-                    });
-                }
-            });
         });
         // モーダル日記の更新モードボタン押した時
         $(document).on("click", ".updateModeBtn",function() {
@@ -2128,8 +2046,8 @@ function initializeCast() {
                             .find("p[name='content']").textWithLF());
             $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
             // 画像が１つ以上ある場合にmaterialboxed生成
-            if($("#modal-edit-diary").find("input[name='diary_json']").val().length > 0) {
-                var images = JSON.parse($("#modal-edit-diary").find("input[name='diary_json']").val());
+            if($("#modal-edit-diary").find("input[name='json_data']").val().length > 0) {
+                var images = JSON.parse($("#modal-edit-diary").find("input[name='json_data']").val());
                 $.get("/module/materialboxed.ctp", {}, function(html) {
                     var materialTmp = $(html).clone(); // materialboxedの部品を複製しておく
                     $(materialTmp).removeClass('new'); // newバッチを削除する
@@ -2177,10 +2095,10 @@ function initializeCast() {
         $(document).on("click", ".deleteBtn",function() {
             // 画像の削除ボタンの場合
             if($(this).data('delete') == 'image') {
-                var $newImage = $(this).closest(".card-img");
+                var $image = $(this).closest(".card-img");
                 // var serachName = $newImage.find("input[name='name']").val();
                 $('.tooltipped').tooltip({delay: 50});
-                $newImage.remove();
+                $image.remove();
                 $("#modal-diary").find(".updateBtn").removeClass("disabled");
                 return;
             }
@@ -2189,9 +2107,11 @@ function initializeCast() {
                 return false;
             }
 
-            ajaxCommon($("#diary-delete"));
-            // TODO: モーダル表示時は、背景画面をFIXIDしているので、
-            // close処理を呼んで、FIXIDを解除する
+            var $form = $('form[id="delete-diary"]');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommonOwner($form, $("#wrapper"));
             $("#modal-diary").modal('close');
         });
 

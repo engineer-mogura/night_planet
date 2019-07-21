@@ -49,7 +49,7 @@ class AppController extends \App\Controller\AppController
 
         // ログイン時に許可するアクション
         $access = ['index','editCalendar','profile','gallery','saveGallery','deleteGallery',
-        'diary','diaryView','diaryUpdate','diaryDelete'];
+        'diary','saveDiary','viewDiary','deleteDiary','diaryUpdate','diaryDelete'];
         if (in_array($action, $access)) {
             return true;
         }

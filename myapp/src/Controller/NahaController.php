@@ -179,6 +179,32 @@ class NahaController extends \App\Controller\AreaController
         $this->set(compact('cast','dir', 'diarys', 'ajax'));
         $this->render();
     }
+
+    public function viewDiary($id = null)
+    {
+
+        if ($this->request->is('ajax')) {
+            $this->confReturnJson(); // json返却用の設定
+            $query = $this->Diarys->find();
+            $columns = $this->Diarys->schema()->columns();
+            $ymd = $query->func()->date_format([
+                'created' => 'literal',
+                "'%Y年%c月%e日'" => 'literal']);
+            $columns = $columns + ['ymd_created'=>$ymd];
+            // $diary = $query->select($columns)
+            //     ->where(['id' => $this->request->query["id"]])->first();
+
+            // キャスト情報、最新の日記情報とイイネの総数取得
+            $diary = $this->Diarys->find("all")
+                ->select($columns)
+                ->where(['id' => $this->request->query["id"]])
+                ->contain(['Likes'])->first();
+            // $diary = $this->Diarys->get($this->request->query["id"]);
+            $this->response->body(json_encode($diary));
+            return;
+        }
+
+    }
         /**
      * キャストの全ての日記情報を取得する処理
      *

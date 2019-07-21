@@ -8,7 +8,7 @@
 <div id="wrapper">
     <div id="diary" class="container">
         <div style="display:none;">
-            <input type="hidden" name="diary_dir" value="<?=$dir?>">
+            <input type="hidden" name="cast_dir" value="<?=$dir?>">
             <input type="hidden" name="diary_id" value=''>
         </div>
         <span id="dummy" style="display: hidden;"></span>
@@ -26,6 +26,10 @@
             </div>
           </nav>
             <div class="row">
+                <form id="view-archive-diary" name="view_archive_diary" method="get" style="display:none;" action="/naha/view_diary/">
+                    <input type="hidden" name="_method" value="POST">
+                    <input type="hidden" name="id" value="">
+                </form>
                 <div class="col s12 m12 l12 xl12">
                 <?php if(count($diarys) > 0) { ?>
                     <ul class="collection card-panel archive-panel">

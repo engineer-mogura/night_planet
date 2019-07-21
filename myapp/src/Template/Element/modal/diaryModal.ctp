@@ -1,9 +1,9 @@
 <div id="modal-diary" class="modal modal-fixed-footer">
 	<div class="modal-content">
-		<form id="diary-delete" name="diary_delete" method="post" style="display:none;" action="/owner/casts/diary_delete/">
+		<form id="delete-diary" name="delete_diary" method="post" style="display:none;" action="/cast/casts/delete_diary/">
 			<input type="hidden" name="_method" value="POST">
-			<input type="hidden" name="diary_id" value="">
-			<input type="hidden" name="del_path" value="">
+			<input type="hidden" name="id" value="">
+			<input type="hidden" name="dir_path" value="">
 		</form>
 		<!-- モバイル用ボタン START-->
 		<div class="right-align fixed-action-btn horizontal click-to-toggle modal-more-horiz show-on-small hide-on-med-and-up">
@@ -36,11 +36,11 @@
 		<!-- デスクトップ用ボタン END-->
 		<div>
 			<div class="row modal-edit-diary hide">
-				<form id="modal-edit-diary" name="modal_edit_diary" method="post" action="/cast/casts/diary_update/">
+				<form id="modal-edit-diary" name="modal_edit_diary" method="post" action="/cast/casts/update_diary/">
 					<div style="display:none;">
 						<input type="hidden" name="_method" value="POST">
 						<input type="hidden" name="diary_id" value=''>
-						<input type="hidden" name="diary_json" value=''>
+						<input type="hidden" name="json_data" value=''>
 						<input type="hidden" name="del_list" value="">
 						<input type="hidden" name="del_path" value="">
 						<input type="hidden" name="crud_type" value="">

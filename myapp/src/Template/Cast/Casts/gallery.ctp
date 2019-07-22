@@ -2,7 +2,7 @@
 <div id="wrapper">
     <div class="container">
         <div class="row">
-            <div id="gallery" class="col">
+            <div id="gallery" class="col s12">
                 <span id="dummy" style="display: hidden;"></span>
                 <?= $this->Flash->render() ?>
                 <h5><?=('ギャラリー') ?></h5>

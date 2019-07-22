@@ -12,7 +12,6 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Collection\Collection;
-use PersistenceFailedException;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Datasource\ConnectionManager;
 
@@ -470,50 +469,61 @@ class CastsController extends AppController
      */
     public function deleteGallery()
     {
-
         // AJAXのアクセス以外は不正とみなす。
         if (!$this->request->is('ajax')) {
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
         $flg = true; // 返却フラグ
+        $isRemoved = false; // ファイル削除フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
-        $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
-
-        $id = $this->request->getSession()->read('Auth.Cast.id');
-        $del_path = preg_replace('/(^\/)/', '', $this->request->getData('dir_path'));
-        $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
-        $tmpFile = new File (WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name); // バックアップ用
+        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+        $tmpFile = null; // バックアップ用
 
         try {
-            // ロールバック用に一時フォルダにバックアップ
+            $del_path = preg_replace('/(^\/)/', '', 
+            $this->viewVars['userInfo']['dir_path'].PATH_ROOT['IMAGE']);
+            // 削除対象ファイルを取得
+            $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
+
+            // 削除対象ファイルパス存在チェック
+            if(!file_exists($file->path)) {
+                throw new RuntimeException('ファイルが存在しません。');
+            }
+
+            // ロールバック用のファイルサイズチェック
+            if($file->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
+                throw new RuntimeException('ファイルサイズが大きすぎます。');
+            }
+
+            // 一時ファイル作成
             if(!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
                 throw new RuntimeException('画像のバックアップに失敗しました。');
             }
-            // 画像削除処理実行
+
+            // 一時ファイル取得
+            $tmpFile = new File (WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name);
+
+            // 日記ファイル削除処理実行
             if (!$file->delete()) {
-                throw new RuntimeException('画像の削除に失敗しました。');
+                throw new RuntimeException('ファイルの削除ができませんでした。');
             }
+            // ファイル削除フラグを立てる
+            $isRemoved = true;
             // 更新対象レコード取得
             $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
             $cast->set($this->request->getData('key'), "");
             // レコード更新実行
-            if($this->Casts->save($cast)) {
-                throw new PersistenceFailedException('レコードの更新ができませんでした。');
+            if(!$this->Casts->save($cast)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
             }
-
         } catch (RuntimeException $e) {
-            // 変数が存在するかつバックアップファイルがあれば削除する
-            if (isset($tmpFile) && $tmpFile->exists()) {
-                $tmpFile->delete();// tmpファイル削除
-            }
-            $this->log($e->getMessage());
-            $flg = false;
-
-        } catch (PersistenceFailedException $e) {
-            // 変数が存在するかつバックアップファイルを戻して一時ファイル削除する
-            if (isset($tmpFile) && $tmpFile->exists()) {
+            // ファイルを削除していた場合は復元する
+            if($isRemoved) {
                 $tmpFile->copy($file->path);
+            }
+            // 一時ファイルがあれば削除する
+            if (isset($tmpFile) && file_exists($tmpFile->path)) {
                 $tmpFile->delete();// tmpファイル削除
             }
             $this->log($e->getMessage());
@@ -528,6 +538,11 @@ class CastsController extends AppController
             );
             $this->response->body(json_encode($response));
             return;
+        }
+
+        // 一時ファイル削除
+        if (file_exists($tmpFile->path)) {
+            $tmpFile->delete();
         }
 
         $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
@@ -550,6 +565,7 @@ class CastsController extends AppController
         $this->response->body(json_encode($response));
         return;
     }
+
 
     /**
      * 日記 画面表示処理
@@ -1274,50 +1290,53 @@ class CastsController extends AppController
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
         $flg = true; // 返却フラグ
+        $isRemoved = false; // ディレクトリ削除フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
-
-        $id = $this->request->getSession()->read('Auth.Cast.id');
-
-        $tmpDir = new Folder; // バックアップ用
-        $del_path = preg_replace('/(^\/)/', '', $this->request->getData('dir_path'));
-        $dir = new Folder(WWW_ROOT.$del_path);
-
-        $dirClone = new Folder($dir->path, true, 0755);
-        $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+        $id = $this->request->getSession()->read('Auth.Cast.id'); // キャストID
+        $tmpDir = null; // バックアップ用
 
         try {
+            $del_path = preg_replace('/(^\/)/', '', $this->request->getData('dir_path'));
+            // 削除対象ディレクトリパス取得
+            $dir = new Folder(WWW_ROOT.$del_path);
+            // 削除対象ディレクトリパス存在チェック
+            if(!file_exists($dir->path)) {
+                throw new RuntimeException('ディレクトリが存在しません。');
+            }
+
             // ロールバック用のディレクトリサイズチェック
-            if($dirClone->dirsize() > CAPACITY['MAX_NUM_BYTES_COPY']) {
+            if($dir->dirsize() > CAPACITY['MAX_NUM_BYTES_DIR']) {
                 throw new RuntimeException('ディレクトリサイズが大きすぎます。');
             }
-            // ロールバック用に一時フォルダにバックアップ実行
-            if(!$dirClone->copy($tmpDir->path)) {
-                throw new RuntimeException('画像のバックアップに失敗しました。');
+
+            // 一時ディレクトリ作成
+            $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+            // 一時ディレクトリにバックアップ実行
+            if(!$dir->copy($tmpDir->path)) {
+                throw new RuntimeException('バックアップに失敗しました。');
             }
-            // 日記フォルダ削除処理実行
+            // 日記ディレクトリ削除処理実行
             if (!$dir->delete()) {
-                throw new RuntimeException('日記の削除ができませんでした。');
+                throw new RuntimeException('ディレクトリの削除ができませんでした。');
             }
+            // ディレクトリ削除フラグを立てる
+            $isRemoved = true;
             // 削除対象レコード取得
             $diary = $this->Diarys->get($this->request->getData('id'));
             // レコード削除実行
             if(!$this->Diarys->delete($diary)) {
-                throw new PersistenceFailedException('レコードの削除ができませんでした。');
+                throw new RuntimeException('レコードの削除ができませんでした。');
             }
         } catch (RuntimeException $e) {
-            // 変数が存在するかつ一時フォルダがあれば削除する
-            if (isset($tmpDir) && $tmpDir->exists()) {
-                $tmpDir->delete();// tmpファイル削除
+            // ディレクトリを削除していた場合は復元する
+            if($isRemoved) {
+                $tmpDir->copy($dir->path);
             }
-            $this->log($e->getMessage());
-            $flg = false;
-        } catch (PersistenceFailedException $e) {
-            // 失敗: ディレクトリを戻す
-            if (is_dir($tmpDir->path)) {
-                $tmpDir->copy($dirClone->path);
-                $tmpDir->delete();// tmpフォルダ削除
+            // 一時ディレクトリがあれば削除する
+            if (isset($tmpDir) && file_exists($tmpDir->path)) {
+                $tmpDir->delete();// tmpディレクトリ削除
             }
             $this->log($e->getMessage());
             $flg = false;
@@ -1333,8 +1352,8 @@ class CastsController extends AppController
             return;
         }
 
-        // 一時フォルダ削除
-        if (is_dir($tmpDir->path)) {
+        // 一時ディレクトリ削除
+        if (file_exists($tmpDir->path)) {
             $tmpDir->delete();
         }
 

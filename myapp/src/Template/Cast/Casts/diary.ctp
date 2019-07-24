@@ -15,12 +15,10 @@
             <input type="hidden" name="cast_dir" value=<?=$dir?>>
                 <div class="col s12 m12 l12 xl8">
                     <div class="card-panel grey lighten-5">
-                        <form id="edit-diary" name="edit_diary" method="post" action="/cast/casts/diary/<?= $cast->id ?>">
+                        <form id="edit-diary" name="edit_diary" method="post" action="/cast/casts/save_diary/">
                             <div style="display:none;">
                                 <input type="hidden" name="_method" value="POST">
-                                <input type="hidden" name="diary_json" value=''>
                                 <input type="hidden" name="cast_id" value=<?= $cast->id ?>>
-                                <input type="hidden" name="crud_type" value="">
                             </div>
                             <div class="row scrollspy">
                                 <div class="input-field col s12 m12 l12">
@@ -62,12 +60,12 @@
                         <?php foreach ($diarys as $key => $rows): ?>
                         <?php foreach ($rows as $key => $row): ?>
                         <li class="collection-item avatar waves-effect archiveLink">
-                            <input type="hidden" name="id" value=<?=$row->id?>>
-                        <?php !empty($row->image1)? $imgPath = $dir.$row->dir.DS.$row->image1 : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                            <input type="hidden" name="id" value=<?=$row['id']?>>
+                        <?php !empty($row['image1'])? $imgPath = $dir.$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <img src="<?= $imgPath ?>" alt="" class="circle">
-                            <span class="title"><?=$this->Text->excerpt($row->title, 'method', CAST_CONFIG['TITLE_EXCERPT'], CAST_CONFIG['ELLIPSIS']); ?></span><span class="badge"><?= $row->md_created ?></span>
-                            <p><?= $this->Text->excerpt($row->content, 'method', CAST_CONFIG['CONTENT_EXCERPT'], CAST_CONFIG['ELLIPSIS']);?></p>
-                            <span class="like-count secondary-content center-align"><i class="material-icons">thumb_up</i><?=count($row->likes)?></span>
+                            <span class="title"><?=$this->Text->excerpt($row->title, 'method', CAST_CONFIG['TITLE_EXCERPT'], CAST_CONFIG['ELLIPSIS']); ?></span><span class="badge"><?= $row['md_created'] ?></span>
+                            <p><?= $this->Text->excerpt($row['content'], 'method', CAST_CONFIG['CONTENT_EXCERPT'], CAST_CONFIG['ELLIPSIS']);?></p>
+                            <span class="like-count secondary-content center-align"><i class="material-icons">thumb_up</i><?=count($row['likes'])?></span>
                         </li>
                         <?php $count = $count + 1;?>
                         <?php if ($count == 5) {break;} ?>
@@ -84,7 +82,7 @@
                         <li>
                             <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                             <?php foreach ($rows as $row): ?>
-                            <?php !empty($row['image1'])? $imgPath = DS.$shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                            <?php !empty($row['image1'])? $imgPath = $dir . $row['dir'] . $row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <div class="collapsible-body waves-effect archiveLink">
                             <input type="hidden" name="id" value=<?=$row->id?>>
                             <p><?= $this->Text->excerpt($row['title'], 'method', CAST_CONFIG['TITLE_EXCERPT'], CAST_CONFIG['ELLIPSIS']); ?><span class="badge"><?=$row['md_created']?></span></p>

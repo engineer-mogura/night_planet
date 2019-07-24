@@ -408,5 +408,19 @@ class UtilComponent extends Component
         }
         return $errors;
     }
+    /**
+     * ログを加工してセットする
+     *
+     * @param Array $user
+     * @param Array $e
+     * @return String $log
+     */
+    public function setLog($user, $e)
+    {
+        $log = ""; // 例外内容格納用
+        $log = "ロールユーザー：【".$user['role']."】, アドレス：【".$user['email']."】\n";
+        $log = $log.$e;
+        return $log;
+    }
 
 }

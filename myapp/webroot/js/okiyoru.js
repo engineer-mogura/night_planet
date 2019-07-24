@@ -1950,18 +1950,32 @@ function initializeCast() {
             if (!confirm('こちらの日記内容でよろしいですか？')) {
                 return false;
             }
-            // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
-            $("#diary").find("input[name='crud_type']").val('create');
 
+            var $form = $("#edit-diary");
             var fileCheck = $("#diary").find("#image-file").val().length;
+
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
+                // 新しく追加された画像のみを対象にする
+                $selecter = $('.card-img').find('img');
+
                 // ファイル変換
-                var formData = fileConvert("#image-canvas", "#edit-diary", '.card-img');
-                fileUpAjaxCommon($("#edit-diary"), formData);
+                var blobList = fileConvert("#image-canvas", $selecter);
+                //アップロード用blobをformDataに設定
+                $($form).find('#image-file, .file-path').val("");
+                formData = new FormData($form.get()[0]);
+                for(item of blobList) {
+                formData.append("image[]", item);
+                }
+                for (item of formData) {
+                console.log(item);
+                }
+                //通常のアクションをキャンセルする
+                event.preventDefault();
+                fileUpAjaxCommonOwner($form, formData, $("#wrapper"));
 
             } else {
-                ajaxCommon($("#edit-diary"));
+                ajaxCommonOwner($form, $("#wrapper"));
 
             }
 

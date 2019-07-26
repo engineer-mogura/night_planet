@@ -42,8 +42,7 @@
 						<input type="hidden" name="diary_id" value=''>
 						<input type="hidden" name="json_data" value=''>
 						<input type="hidden" name="del_list" value="">
-						<input type="hidden" name="del_path" value="">
-						<input type="hidden" name="crud_type" value="">
+						<input type="hidden" name="dir_path" value="">
 					</div>
 					<div class="row">
 						<div class="input-field col s12 m12 l12">

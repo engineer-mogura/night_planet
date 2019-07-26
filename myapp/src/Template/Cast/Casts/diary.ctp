@@ -12,13 +12,13 @@
         <h5><?=('日記') ?></h5>
             <div id="diary" class="row">
             <input type="hidden" name="file_max" value=<?=CAST_CONFIG['FILE_MAX']?>>
-            <input type="hidden" name="cast_dir" value=<?=$dir?>>
+            <input type="hidden" name="cast_dir" value=<?=$userInfo['diary_path'] ?>>
                 <div class="col s12 m12 l12 xl8">
                     <div class="card-panel grey lighten-5">
                         <form id="edit-diary" name="edit_diary" method="post" action="/cast/casts/save_diary/">
                             <div style="display:none;">
                                 <input type="hidden" name="_method" value="POST">
-                                <input type="hidden" name="cast_id" value=<?= $cast->id ?>>
+                                <input type="hidden" name="cast_id" value=<?= $userInfo['id'] ?>>
                             </div>
                             <div class="row scrollspy">
                                 <div class="input-field col s12 m12 l12">
@@ -61,7 +61,7 @@
                         <?php foreach ($rows as $key => $row): ?>
                         <li class="collection-item avatar waves-effect archiveLink">
                             <input type="hidden" name="id" value=<?=$row['id']?>>
-                        <?php !empty($row['image1'])? $imgPath = $dir.$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                        <?php !empty($row['image1'])? $imgPath = $userInfo['diary_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <img src="<?= $imgPath ?>" alt="" class="circle">
                             <span class="title"><?=$this->Text->excerpt($row->title, 'method', CAST_CONFIG['TITLE_EXCERPT'], CAST_CONFIG['ELLIPSIS']); ?></span><span class="badge"><?= $row['md_created'] ?></span>
                             <p><?= $this->Text->excerpt($row['content'], 'method', CAST_CONFIG['CONTENT_EXCERPT'], CAST_CONFIG['ELLIPSIS']);?></p>
@@ -82,7 +82,7 @@
                         <li>
                             <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                             <?php foreach ($rows as $row): ?>
-                            <?php !empty($row['image1'])? $imgPath = $dir . $row['dir'] . $row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                            <?php !empty($row['image1'])? $imgPath = $userInfo['diary_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <div class="collapsible-body waves-effect archiveLink">
                             <input type="hidden" name="id" value=<?=$row->id?>>
                             <p><?= $this->Text->excerpt($row['title'], 'method', CAST_CONFIG['TITLE_EXCERPT'], CAST_CONFIG['ELLIPSIS']); ?><span class="badge"><?=$row['md_created']?></span></p>

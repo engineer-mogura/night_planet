@@ -134,8 +134,10 @@ class UtilComponent extends Component
         $castInfo = $castInfo + array('id'=>$cast->id,'shop_id'=>$shop->id,'dir'=>$cast->dir, 'shop_dir'=> $shopDir);
         $path = DS.PATH_ROOT['IMG'].DS.$castInfo['area']['path']
                 .DS.$castInfo['genre']['path'].DS.$shop->dir
-                .DS.PATH_ROOT['CAST'].DS.$cast->dir.DS;
-        $castInfo = $castInfo + array('dir_path'=> $path);
+                .DS.PATH_ROOT['CAST'].DS.$cast->dir;
+
+        $castInfo = $castInfo + array('cast_path'=> $path,'image_path'=> $path.DS.PATH_ROOT['IMAGE']
+        , 'diary_path'=> $path.DS.PATH_ROOT['DIARY']);
         return  $castInfo;
     }
 

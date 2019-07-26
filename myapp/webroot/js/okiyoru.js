@@ -1409,8 +1409,13 @@ function initializeOwner() {
         var $form = $('#save-gallery');
         // ファイル変換
         var blobList = fileConvert("#image-canvas", $selecter);
-        //アップロード用blobをformDataに設定
+
+        // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+        // POSTでリクエスト内のデータが全部なくなるので。
+        // TODO: 後で対策を考えよう
         $($form).find('#image-file, .file-path').val("");
+
+        //アップロード用blobをformDataに設定
         formData = new FormData($form.get()[0]);
         for(item of blobList) {
           formData.append("image[]", item);
@@ -1961,14 +1966,19 @@ function initializeCast() {
 
                 // ファイル変換
                 var blobList = fileConvert("#image-canvas", $selecter);
-                //アップロード用blobをformDataに設定
+
+                // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                // POSTでリクエスト内のデータが全部なくなるので。
+                // TODO: 後で対策を考えよう
                 $($form).find('#image-file, .file-path').val("");
+
+                //アップロード用blobをformDataに設定
                 formData = new FormData($form.get()[0]);
                 for(item of blobList) {
-                formData.append("image[]", item);
+                    formData.append("image[]", item);
                 }
                 for (item of formData) {
-                console.log(item);
+                    console.log(item);
                 }
                 //通常のアクションをキャンセルする
                 event.preventDefault();
@@ -1982,6 +1992,7 @@ function initializeCast() {
         });
         // 更新ボタン押した時
         $(document).on("click", ".updateBtn",function() {
+
             // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
             var oldImgList = $('.card-img').not(".new"); // 既に登録した画像リスト
             var newImgList = $('.card-img.new').find('img'); // 追加した画像リスト
@@ -2000,26 +2011,39 @@ function initializeCast() {
             })
             var tmpForm = $('#modal-edit-diary').clone();
             $(tmpForm).find("input[name='del_list']").val(JSON.stringify(delList));
-            $(tmpForm).find("input[name='diary_id']").val($('#diary-delete').find("input[name='diary_id']").val());
-            $(tmpForm).find("input[name='del_path']").val($('#diary-delete').find("input[name='del_path']").val());
+            $(tmpForm).find("input[name='diary_id']").val($('#delete-diary').find("input[name='id']").val());
+            $(tmpForm).find("input[name='dir_path']").val($('#delete-diary').find("input[name='dir_path']").val());
             $(tmpForm).find('.card-img').remove();
 
             var fileCheck = $(tmpForm).find("#modal-image-file").val().length;
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
+                // 新しく追加された画像のみを対象にする
+                $selecter = $('.card-img.new').find('img');
 
                 // ファイル変換
-                var blobList = fileConvert("#image-canvas", newImgList);
+                var blobList = fileConvert("#image-canvas", $selecter);
+
+                // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                // POSTでリクエスト内のデータが全部なくなるので。
+                // TODO: 後で対策を考えよう
+                $(tmpForm).find('#modal-image-file, .modal-file-path').val("");
+
                 //アップロード用blobをformDataに設定
-                $(tmpForm).find('#image-file, .file-path').val("");
                 formData = new FormData(tmpForm.get()[0]);
+
                 for(item of blobList) {
                     formData.append("image[]", item);
                 }
-                fileUpAjaxCommon(tmpForm, formData);
+                for (item of formData) {
+                    console.log(item);
+                }
+                //通常のアクションをキャンセルする
+                event.preventDefault();
+                fileUpAjaxCommonOwner(tmpForm, formData, $("#wrapper"));
 
             } else {
-                ajaxCommon($(tmpForm));
+                ajaxCommonOwner(tmpForm, $("#wrapper"));
 
             }
         });
@@ -2053,7 +2077,6 @@ function initializeCast() {
             $("#modal-diary").find(".returnBtn").removeClass("hide");
             // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
             $("#modal-edit-diary").find("input[name='_method']").val('POST');
-            $("#modal-edit-diary").find("input[name='crud_type']").val('update');
             $("#modal-edit-diary").find("input[name='title']").val($(".diary-card.clone")
                             .find("p[name='title']").text());
             $("#modal-edit-diary").find("textarea[name='content']").val($(".diary-card.clone")
@@ -2204,14 +2227,19 @@ function initializeCast() {
             var $form = $('#save-gallery');
             // ファイル変換
             var blobList = fileConvert("#image-canvas", $selecter);
-            //アップロード用blobをformDataに設定
+
+            // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+            // POSTでリクエスト内のデータが全部なくなるので。
+            // TODO: 後で対策を考えよう
             $($form).find('#image-file, .file-path').val("");
+
+            //アップロード用blobをformDataに設定
             formData = new FormData($form.get()[0]);
             for(item of blobList) {
-            formData.append("image[]", item);
+                formData.append("image[]", item);
             }
             for (item of formData) {
-            console.log(item);
+                console.log(item);
             }
             //通常のアクションをキャンセルする
             event.preventDefault();

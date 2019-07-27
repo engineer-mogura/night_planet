@@ -131,13 +131,14 @@ class UtilComponent extends Component
                 break;
             }
         }
-        $castInfo = $castInfo + array('id'=>$cast->id,'shop_id'=>$shop->id,'dir'=>$cast->dir, 'shop_dir'=> $shopDir);
+        $castInfo = $castInfo + array('id'=>$cast['id'],'shop_id'=>$shop['id']
+            ,'dir'=>$cast['dir'], 'shop_dir'=> $shopDir,'main_image'=>$cast['image1']);
         $path = DS.PATH_ROOT['IMG'].DS.$castInfo['area']['path']
-                .DS.$castInfo['genre']['path'].DS.$shop->dir
-                .DS.PATH_ROOT['CAST'].DS.$cast->dir;
+                .DS.$castInfo['genre']['path'].DS.$shop['dir']
+                .DS.PATH_ROOT['CAST'].DS.$cast['dir'];
 
         $castInfo = $castInfo + array('cast_path'=> $path,'image_path'=> $path.DS.PATH_ROOT['IMAGE']
-        , 'diary_path'=> $path.DS.PATH_ROOT['DIARY']);
+        , 'diary_path'=> $path.DS.PATH_ROOT['DIARY'], 'event_path'=> $path.DS.PATH_ROOT['EVENT']);
         return  $castInfo;
     }
 

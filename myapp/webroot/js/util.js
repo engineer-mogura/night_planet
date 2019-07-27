@@ -114,7 +114,6 @@
    * 
    */
   var fullcalendarSetting = function() {
-    var jsonPath = $("input[name='calendar_path']").val();
     var $form = $("#edit-calendar");
     var jsonPath = $($form).find("input[name='calendar_path']").val();
     var $calendar = $("#modal-calendar");
@@ -137,44 +136,44 @@
       time_start: '13:00',
       time_end: '14:00',
       active: '1'
-  }, {
-      id: 2,
-      cast_id: '0',
-      title: 'Repeating Event',
-      start: new Date(y, m, d - 3, 16, 0),
-      time_start: '13:00',
-      time_end: '14:00',
-      allDay: false,
-      active: '1'
-  }, {
-      id: 3,
-      cast_id: '0',
-      title: 'Repeating Event',
-      start: new Date(y, m, d + 4, 16, 0),
-      time_start: '13:00',
-      time_end: '14:00',
-      allDay: false,
-      active: '1'
-  }, {
-      id: 4,
-      cast_id: '0',
-      title: 'travel',
-      start: new Date(y, m, d + 1, 19, 0),
-      end: new Date(y, m, d + 1, 22, 30),
-      time_start: '13:00',
-      time_end: '14:00',
-      allDay: false,
-      active: '1'
-  }, {
-      id: 5,
-      cast_id: '0',
-      title: 'Click for Google',
-      start: new Date(y, m, 28),
-      end: new Date(y, m, 29),
-      time_start: '13:00',
-      time_end: '14:00',
-      active: '1'
-  }];
+    }, {
+        id: 2,
+        cast_id: '0',
+        title: 'Repeating Event',
+        start: new Date(y, m, d - 3, 16, 0),
+        time_start: '13:00',
+        time_end: '14:00',
+        allDay: false,
+        active: '1'
+    }, {
+        id: 3,
+        cast_id: '0',
+        title: 'Repeating Event',
+        start: new Date(y, m, d + 4, 16, 0),
+        time_start: '13:00',
+        time_end: '14:00',
+        allDay: false,
+        active: '1'
+    }, {
+        id: 4,
+        cast_id: '0',
+        title: 'travel',
+        start: new Date(y, m, d + 1, 19, 0),
+        end: new Date(y, m, d + 1, 22, 30),
+        time_start: '13:00',
+        time_end: '14:00',
+        allDay: false,
+        active: '1'
+    }, {
+        id: 5,
+        cast_id: '0',
+        title: 'Click for Google',
+        start: new Date(y, m, 28),
+        end: new Date(y, m, 29),
+        time_start: '13:00',
+        time_end: '14:00',
+        active: '1'
+    }];
 
       // 初期処理
       $('#calendar').fullCalendar({
@@ -215,15 +214,7 @@
           $($form).find("input[name='active']").val(1);
           $($form).find(".target-day").text(date.format());
           //クリックした日付が取れるよ
-          modalCalendarTriggerBtn();
-          console.log('Clicked on: ' + date.format());
-          console.log('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-          console.log('Current view: ' + view.name);
-          console.log(date.format());
-          console.log(jsEvent);
-          console.log(view);
           $($calendar).modal('open');
-
       },
       eventClick: function(calEvent, jsEvent, view) {
 
@@ -234,8 +225,6 @@
           $($calendar).find(".deleteBtn").show(); //削除ボタン表示
           // フォーム内を初期化
           $($form)[0].reset();
-          //イベントをクリックしたときの処理
-          modalCalendarTriggerBtn();
 
           var targetDay = calEvent['start'].format("YYYY-MM-DD");
           var timeStart = "";
@@ -280,12 +269,6 @@
             }
           });
           $($form).find('select').material_select(); // セレクトボックスの値を動的に変えたら初期化する必要がある
-          console.log('Event: ' + calEvent.title);
-          console.log('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-          console.log('View: ' + view.name);
-          console.log(calEvent);
-          console.log(jsEvent);
-          console.log(view);
           $($calendar).modal('open');
 
       },
@@ -300,30 +283,6 @@
     });
   }
 
-  /**
-   * カレンダーの再描画
-   */
-  var fullcalendarInitialize = function(jsonPath) {
-    $.ajax({ // json読み込み開始
-      type: 'GET',
-      url: jsonPath,
-      dataType: 'json',
-      timeout: 10000,
-  })
-    .then(
-      function(json) { // jsonの読み込みに成功した時
-        console.log('成功');
-        // $('#calendar').fullCalendar('removeEvents');
-        // $('#calendar').fullCalendar('addEventSource', json);
-        // $('#calendar').fullCalendar('rerenderEvents');
-        //$('#calendar').fullCalendar('refetchEvents');
-      },
-      function() { //jsonの読み込みに失敗した時
-        console.log('失敗');
-      }
-    );
-
-  }
 /**
  * パラメータを設定したURLを返す
  * @param  {} paramsArray
@@ -352,90 +311,6 @@ function getParam(name, url) {
   if (!results) return null;
   if (!results[2]) return '';
   return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
-
-  /**
-   * ajax共通処理
-   */
-  var ajaxCommon = function($form) {
-
-    //通常のアクションをキャンセルする
-    event.preventDefault();
-
-    $.ajax({
-      url : $form.attr('action'), //Formのアクションを取得して指定する
-      type: $form.attr('method'),//Formのメソッドを取得して指定する
-      data: $form.serialize(), //データにFormがserialzeした結果を入れる
-      //dataType: 'html', //データにFormがserialzeした結果を入れる
-      timeout: 10000,
-      beforeSend : function(xhr, settings){
-          //Buttonを無効にする
-          $(document).find('.saveBtn').addClass('disabled');
-          $(document).find('.createBtn').addClass('disabled');
-          $(document).find('.updateBtn').addClass('disabled');
-          $(document).find('.cancelBtn').addClass('disabled');
-          //処理中のを通知するアイコンを表示する
-          $("#dummy").load("/module/Preloader.ctp");
-      },
-      complete: function(xhr, textStatus){
-
-        //処理中アイコン削除
-        $('.preloader-wrapper').remove();
-        $(document).find('.saveBtn').addClass('disabled');
-        $(document).find('.createBtn').addClass('disabled');
-        $(document).find('.updateBtn').addClass('disabled');
-        $(document).find('.cancelBtn').addClass('disabled');
-      },
-      success: function (response, textStatus, xhr) {
-
-        // OKの場合
-        if(typeof(response) !== "object"){
-            // TODO: モーダル表示時は、背景画面をFIXIDしているので、
-            // close処理を呼んで、FIXIDを解除する
-            $(".modal").modal('close');
-              var $objWrapper = $("#wrapper");
-              $($objWrapper).replaceWith(response);
-              //初期化
-              initialize();
-              if($("#cast-profile")) {
-                castInitialize();
-                var $profile = $("#cast-profile");
-                var profile = JSON.parse($($profile).find('input[name="profile_copy"]').val());
-                var birthday = $(document).find('#birthday').pickadate('picker'); // Date Picker
-                birthday.set('select', [2000, 1, 1]);
-                birthday.set('select', new Date(2000, 1, 1));
-                birthday.set('select', profile['birthday'], { format: 'yyyy-mm-dd' });
-                $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
-                $('select').material_select();
-              }
-
-              // $.notifyBar({
-              //     // cssClass: 'success',
-              //     // //html: response.message
-              // });
-          }else{
-            // var response = $.parseJSON(response);
-          // NGの場合
-              $.notifyBar({
-                  cssClass: 'error',
-                  html: response['errors']
-              });
-
-          }
-      },
-      error : function(response, textStatus, xhr){
-        $(document).find('.saveBtn').removeClass('disabled');
-        $(document).find('.createBtn').removeClass('disabled');
-        $(document).find('.updateBtn').removeClass('disabled');
-        $(document).find('.cancelBtn').removeClass('disabled');
-        $.notifyBar({
-          cssClass: 'error',
-          html: "通信に失敗しました。ステータス：" + textStatus
-        });
-      }
-  });
-  return false;
-
 }
 
   /**
@@ -491,108 +366,6 @@ function getParam(name, url) {
   return false;
 
 }
-
-/**
- * 画像アップロードajax共通処理
- */
-var fileUpAjaxCommon = function($form, formData) {
-
-  //通常のアクションをキャンセルする
-  event.preventDefault();
-
-  $.ajax({
-      url : $form.attr('action'), //Formのアクションを取得して指定する
-      type: $form.attr('method'),//Formのメソッドを取得して指定する
-      data: formData, //データにFormがserialzeした結果を入れる
-      //dataType: 'html', //データにFormがserialzeした結果を入れる
-      processData: false,
-      contentType: false,
-      timeout: 10000,
-      beforeSend : function(xhr, settings){
-          //Buttonを無効にする
-          $(document).find('.saveBtn').addClass('disabled');
-          $(document).find('.createBtn').addClass('disabled');
-          $(document).find('.updateBtn').addClass('disabled');
-          $(document).find('.cancelBtn').addClass('disabled');
-          //処理中のを通知するアイコンを表示する
-          $("#dummy").load("/module/Preloader.ctp");
-      },
-      complete: function(xhr, textStatus){
-          //処理中アイコン削除
-          $('.preloader-wrapper').remove();
-          $(document).find('.saveBtn').addClass('disabled');
-          $(document).find('.createBtn').addClass('disabled');
-          $(document).find('.updateBtn').addClass('disabled');
-          $(document).find('.cancelBtn').addClass('disabled');
-      },
-      success: function (response, textStatus, xhr) {
-        // OKの場合
-        if(typeof(response) !== "object"){
-          // TODO: モーダル表示時は、背景画面をFIXIDしているので、
-            // close処理を呼んで、FIXIDを解除する
-            $(".modal").modal('close');
-                var $objWrapper = $("#wrapper");
-                $($objWrapper).replaceWith(response);
-                //初期化
-                initialize();
-                // $.notifyBar({
-                //     // cssClass: 'success',
-                //     // //html: response.message
-                // });
-        }else{
-            // var response = $.parseJSON(response);
-            // NGの場合
-            $.notifyBar({
-                cssClass: 'error',
-                html: response['errors']
-            });
-
-        }
-      },
-      error : function(response, textStatus, xhr){
-          $(document).find('.saveBtn').removeClass('disabled');
-          $(document).find('.createBtn').removeClass('disabled');
-          $(document).find('.updateBtn').removeClass('disabled');
-          $(document).find('.cancelBtn').removeClass('disabled');
-          $.notifyBar({
-              cssClass: 'error',
-              html: "通信に失敗しました。ステータス：" + textStatus
-          });
-      }
-  });
-}
-
-     /**
-     * フルカレンダーのモーダル呼び出し時の処理
-     * @param {*} obj 
-     */
-    function modalCalendarTriggerBtn(obj) {
-
-      // オブジェクトを配列に変換
-      //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
-      // var $chips = $('#job').find('.chips');
-      // var $chipList = $('#modal-job').find('.chip');
-      // $($chips).val($(this).attr('id'));
-      //  // 待遇フィールドにあるタグを取得して配列にセット
-      //  var data = $($chips).material_chip('data');
-
-      // var addFlg = true;
-      // // 配列dataを順に処理
-      // // タグの背景色を初期化する
-      // $($chipList).each(function(i,o){
-      //     $(o).removeClass('back-color');
-      // });
-      // // インプットフィールドにあるタグは選択済にする
-      // $.each(data, function(index, val) {
-      //     $($chipList).each(function(i,o){
-      //         if($(o).attr('id') == val.id) {
-      //             $(o).addClass('back-color');
-      //             return true;
-      //         }
-      //     });
-      // });
-  }
-
 
   /**
    * 文字列のjson形式であるかどうか

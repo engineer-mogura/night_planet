@@ -31,6 +31,7 @@ return [
 		'USER'=> 'user',
 		'CAST'=> 'cast',
 		'DIARY'=> 'diary',
+		'EVENT'=> 'event',
 		'TMP'=> 'tmp',
 		'IMAGE'=> 'image',
 		'IMG'=> 'img', // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える

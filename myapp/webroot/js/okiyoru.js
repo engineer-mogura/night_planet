@@ -145,94 +145,6 @@ function imgDisp() {
 }
 
 /**
- * TODO: ショップページとキャストページは分離していることから、jsファイルも分けるか
- * 要素の存在判定で読み込まない処理にするか後で考える。
- * @param  {} obj
- * @param  {} action
- */
-function calendarBtn(obj, action) {
-    var $button = $(obj).find('.modal-footer');
-    var $form = $(obj).find('#edit-calendar');
-    var radio = $($form).find('input[name="title"]:checked').attr('id');
-    var timeStart = $($form).find('select[name="time_start"]').val();
-    var timeEnd = $($form).find('select[name="time_end"]').val();
-    if(timeStart != null) {
-        $($form).find("input[name='start']").val($($form).find("input[name='start']").val() + " " + timeStart);
-    }
-    // TODO: sart日時は必ず生成されるけど、end日時はstartのHH:MMを超えると生成される。
-    if(timeEnd != null) {
-        $($form).find("input[name='end']").val($($form).find("input[name='end']").val() + " " + timeEnd);
-    }
-    $($form).find("input[type='hidden'] + input[name='all_day']").val(function () {
-        return $($form).find("input[id='all-day']").prop("checked") ? 1 : 0;
-    });
-    // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
-    $($form).find("input[name='crud_type']").val(action);
-    if ((action == 'create') || (action == 'update')) {
-        if (radio == "work") {
-            if (timeStart == null) {
-                alert("仕事の場合、最低でも出勤時間は選択して下さい。");
-                return;
-            }
-        }
-    }
-
-    event.preventDefault();
-
-    $.ajax({
-        url : $form.attr('action'), //Formのアクションを取得して指定する
-        type: $form.attr('method'),//Formのメソッドを取得して指定する
-        data: $form.serialize(), //データにFormがserialzeした結果を入れる
-        dataType: 'json', //データにFormがserialzeした結果を入れる
-        timeout: 10000,
-        beforeSend : function(xhr, settings){
-            //Buttonを無効にする
-            $($button).find('.createBtn').attr('disabled' , true);
-            $($button).find('.updateBtn').attr('disabled' , true);
-            $($button).find('.deleteBtn').attr('disabled' , true);
-            $(obj).modal('close');
-
-            //処理中のを通知するアイコンを表示する
-            $("#dummy").load("/module/Preloader.ctp");
-        },
-        complete: function(xhr, textStatus){
-            //処理中アイコン削除
-            $('.preloader-wrapper').remove();
-            $($button).find('.createBtn').attr('disabled' , false);
-            $($button).find('.updateBtn').attr('disabled' , false);
-            $($button).find('.deleteBtn').attr('disabled' , false);
-            //fullcalendarInitialize($("input[name='calendar_path']").val());
-            $('#calendar').fullCalendar('refetchEvents');
-        },
-        success: function (response, textStatus, xhr) {
-
-            // OKの場合
-            if(response){
-                var $objWrapper = $("#wrapper");
-                    // $.notifyBar({
-                    // cssClass: 'success',
-                    // //html: response.message
-                //});
-                //initialize();
-            }else{
-            // NGの場合
-                $.notifyBar({
-                    cssClass: 'error',
-                    //html: response.error
-                });
-            }
-        },
-        error : function(response, textStatus, xhr){
-            $.notifyBar({
-                cssClass: 'error',
-                html: "通信に失敗しました。ステータス：" + textStatus
-            });
-        }
-    });
-
-}
-
-/**
  * 誕生日用 datepicker初期化処理
  */
 function birthdayPickerIni () {
@@ -889,15 +801,18 @@ function initializeOwner() {
         // blobファイル変換
         var blobList = fileConvert("#top-image-canvas", '.top-image-preview');
 
-        // アップロード用blobをformDataに設定
+        // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+        // POSTでリクエスト内のデータが全部なくなるので。
+        // TODO: 後で対策を考えよう
         $($form).find('input[name="top_image_file"]').val("");
+
         // アップロード用blobをformDataに設定
         var formData = new FormData($form.get()[0]);
         formData.append("top_image_file", blobList[0]);
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        fileUpAjaxCommonOwner($form, formData, $("#top-image"));
+        fileUpAjaxCommon($form, formData, $("#top-image"));
     });
     // トップ画像 削除ボタン押した時
     $(document).on("click", ".top-image-deleteBtn",function() {
@@ -913,7 +828,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#top-image"));
+        ajaxCommon($form, $("#top-image"));
     });
     /* トップ画像 関連処理 end */
 
@@ -954,7 +869,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#catch"));
+        ajaxCommon($form, $("#catch"));
     });
 
     // キャッチコピー 削除ボタン押した時
@@ -970,7 +885,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#catch"));
+        ajaxCommon($form, $("#catch"));
     });
     /* キャッチコピー 関連処理 end */
 
@@ -1047,7 +962,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#coupon"));
+        ajaxCommon($form, $("#coupon"));
     });
 
     /* クーポン チェックボックス押した時 */
@@ -1125,7 +1040,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#coupon"));
+        ajaxCommon($form, $("#coupon"));
     });
     /* クーポン 関連処理 end */
 
@@ -1190,7 +1105,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#cast"));
+        ajaxCommon($form, $("#cast"));
     });
 
     /* キャスト チェックボックス押した時 */
@@ -1269,7 +1184,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#cast"));
+        ajaxCommon($form, $("#cast"));
     });
     /* キャスト 関連処理 end */
 
@@ -1334,7 +1249,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#tenpo"));
+        ajaxCommon($form, $("#tenpo"));
     });
 
     /* ギャラリー 関連処理 start */
@@ -1352,7 +1267,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#gallery"));
+        ajaxCommon($form, $("#gallery"));
     });
     // ギャラリー 画像を選択した時
     $(document).on("change", "#image-file", function() {
@@ -1420,12 +1335,12 @@ function initializeOwner() {
         for(item of blobList) {
           formData.append("image[]", item);
         }
-        for (item of formData) {
-          console.log(item);
-        }
+        // for (item of formData) {
+        //   console.log(item);
+        // }
         //通常のアクションをキャンセルする
         event.preventDefault();
-        fileUpAjaxCommonOwner($form, formData, $("#gallery"));
+        fileUpAjaxCommon($form, formData, $("#gallery"));
 
     });
     // ギャラリー やめるボタン押した時
@@ -1577,7 +1492,7 @@ function initializeOwner() {
 
         //通常のアクションをキャンセルする
         event.preventDefault();
-        ajaxCommonOwner($form, $("#job"));
+        ajaxCommon($form, $("#job"));
     });
 
     // 求人情報 待遇タグをフォームに追加する
@@ -1629,11 +1544,11 @@ function initializeOwner() {
 }
 
     /**
-     * オーナーデファルト用ajax共通処理
+     * ajax共通処理
      * @param  {Object} $form 対象のフォーム
      * @param  {Object} $tab jsonのhtmlを挿入する対象セレクタ
      */
-    var ajaxCommonOwner = function($form, $tab) {
+    var ajaxCommon = function($form, $tab) {
 
         $.ajax({
             url : $form.attr('action'), //Formのアクションを取得して指定する
@@ -1682,12 +1597,12 @@ function initializeOwner() {
         });
     }
 
-    /** @description オーナーデファルト用画像アップロードajax共通処理
+    /** @description 画像アップロードajax共通処理
      * @param  {Object} $form 対象のフォーム
      * @param  {Object} formData 画像データを追加した$formの複製
      * @param  {Object} $tab jsonのhtmlを挿入する対象セレクタ
      */
-    var fileUpAjaxCommonOwner = function($form, formData, $tab) {
+    var fileUpAjaxCommon = function($form, formData, $tab) {
 
         $.ajax({
             url : $form.attr('action'), //Formのアクションを取得して指定する
@@ -1871,33 +1786,93 @@ function initializeOwner() {
  */
 function initializeCast() {
 
-    // TODO: サイドナビのAJAX化は後で考える。
-    // $(".side-nav").on("click","a", function() {
-    //     console.log(getParam("activeTab",$(this).attr("href")));
-    //     //通常のアクションをキャンセルする
-    //     event.preventDefault();
-    //     $.ajax({
-    //         type: 'POST',
-    //         datatype:'html',
-    //         url: $(this).attr("href"),
-    //         data: null,
-    //         success: function(data,dataType) {
-    //             $("html").html(data);
-    //         },
-    //         error : function(response, textStatus, xhr){
-    //             $.notifyBar({
-    //                 cssClass: 'error',
-    //                 html: "通信に失敗しました。ステータス：" + textStatus
-    //             });
-    //         }
-    //     });
-    // });
-
     // TODO: ショップページとキャストページは分離していることから、jsファイルも分けるか
     // 要素の存在判定で読み込まない処理にするか後で考える。
     // キャスト用の初期化処理
-    fullcalendarSetting();
+
     birthdayPickerIni();
+
+    /* ダッシュボード 画面 START */
+    if($("#dashboard").length) {
+
+        fullcalendarSetting();
+
+        // 登録,更新,削除ボタン押した時
+        $(document).on("click",".createBtn, .updateBtn, .deleteBtn", function() {
+
+            var $dashboard = $("#dashboard");
+            var $form = $('#edit-calendar');
+            var action = $(this).data("action");
+            var radio = $($form).find('input[name="title"]:checked').attr('id');
+            var timeStart = $($form).find('select[name="time_start"]').val();
+            var timeEnd = $($form).find('select[name="time_end"]').val();
+            if(timeStart != null) {
+                $($form).find("input[name='start']").val($($form).find("input[name='start']").val() + " " + timeStart);
+            }
+            // TODO: sart日時は必ず生成されるけど、end日時はstartのHH:MMを超えると生成される。
+            if(timeEnd != null) {
+                $($form).find("input[name='end']").val($($form).find("input[name='end']").val() + " " + timeEnd);
+            }
+            $($form).find("input[type='hidden'] + input[name='all_day']").val(function () {
+                return $($form).find("input[id='all-day']").prop("checked") ? 1 : 0;
+            });
+            // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
+            $($form).find("input[name='crud_type']").val(action);
+            if ((action == 'create') || (action == 'update')) {
+                if (radio == "work") {
+                    if (timeStart == null) {
+                        alert("仕事の場合、最低でも出勤時間は選択して下さい。");
+                        return;
+                    }
+                }
+            }
+            $.ajax({
+                url : $form.attr('action'), //Formのアクションを取得して指定する
+                type: $form.attr('method'),//Formのメソッドを取得して指定する
+                data: $form.serialize(), //データにFormがserialzeした結果を入れる
+                dataType: 'json', //データにFormがserialzeした結果を入れる
+                timeout: 10000,
+                beforeSend : function(xhr, settings){
+                    //Buttonを無効にする
+                    $($form).find('button').attr('disabled' , true);
+                    $("#modal-calendar").modal('close');
+                    //処理中を通知するアイコンを表示する
+                    $("#dummy").load("/module/Preloader.ctp");
+                },
+                complete: function(xhr, textStatus){
+                    //Buttonを有効にする
+                    $('.preloader-wrapper').remove();
+                    $($form).find('button').attr('disabled' , false);
+                    $('#calendar').fullCalendar('refetchEvents');
+                },
+                success: function (response, textStatus, xhr) {
+
+                    // OKの場合
+                    if(response){
+                        $.notifyBar({
+                        cssClass: 'success',
+                        html: response.message
+                        });
+                    }else{
+                        // NGの場合
+                        $.notifyBar({
+                            cssClass: 'error',
+                            html: response.error
+                        });
+                    }
+                },
+                error : function(response, textStatus, xhr){
+                    $.notifyBar({
+                        cssClass: 'error',
+                        html: "通信に失敗しました。ステータス：" + textStatus
+                    });
+                }
+            });
+        });
+ 
+    }
+    /* ダッシュボード 画面 END */
+
     /* プロフィール 画面 START */
     if($("#profile").length) {
         var $profile = $("#profile");
@@ -1926,7 +1901,7 @@ function initializeCast() {
 
             //通常のアクションをキャンセルする
             event.preventDefault();
-            ajaxCommonOwner($form, $("#wrapper"));
+            ajaxCommon($form, $("#wrapper"));
         });
     }
     // /* プロフィール 画面 END */
@@ -1977,15 +1952,15 @@ function initializeCast() {
                 for(item of blobList) {
                     formData.append("image[]", item);
                 }
-                for (item of formData) {
-                    console.log(item);
-                }
+                // for (item of formData) {
+                //     console.log(item);
+                // }
                 //通常のアクションをキャンセルする
                 event.preventDefault();
-                fileUpAjaxCommonOwner($form, formData, $("#wrapper"));
+                fileUpAjaxCommon($form, formData, $("#wrapper"));
 
             } else {
-                ajaxCommonOwner($form, $("#wrapper"));
+                ajaxCommon($form, $("#wrapper"));
 
             }
 
@@ -2035,15 +2010,15 @@ function initializeCast() {
                 for(item of blobList) {
                     formData.append("image[]", item);
                 }
-                for (item of formData) {
-                    console.log(item);
-                }
+                // for (item of formData) {
+                //     console.log(item);
+                // }
                 //通常のアクションをキャンセルする
                 event.preventDefault();
-                fileUpAjaxCommonOwner(tmpForm, formData, $("#wrapper"));
+                fileUpAjaxCommon(tmpForm, formData, $("#wrapper"));
 
             } else {
-                ajaxCommonOwner(tmpForm, $("#wrapper"));
+                ajaxCommon(tmpForm, $("#wrapper"));
 
             }
         });
@@ -2148,7 +2123,7 @@ function initializeCast() {
 
             //通常のアクションをキャンセルする
             event.preventDefault();
-            ajaxCommonOwner($form, $("#wrapper"));
+            ajaxCommon($form, $("#wrapper"));
             $("#modal-diary").modal('close');
         });
 
@@ -2170,7 +2145,7 @@ function initializeCast() {
 
             //通常のアクションをキャンセルする
             event.preventDefault();
-            ajaxCommonOwner($form, $("#wrapper"));
+            ajaxCommon($form, $("#wrapper"));
         });
         // ギャラリー 画像を選択した時
         $(document).on("change", "#image-file", function() {
@@ -2238,12 +2213,12 @@ function initializeCast() {
             for(item of blobList) {
                 formData.append("image[]", item);
             }
-            for (item of formData) {
-                console.log(item);
-            }
+            // for (item of formData) {
+            //     console.log(item);
+            // }
             //通常のアクションをキャンセルする
             event.preventDefault();
-            fileUpAjaxCommonOwner($form, formData, $("#wrapper"));
+            fileUpAjaxCommon($form, formData, $("#wrapper"));
 
         });
         // ギャラリー やめるボタン押した時

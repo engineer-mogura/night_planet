@@ -35,6 +35,7 @@
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
+  <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?>
   <?php $id = $this->request->getSession()->read('Auth.Cast.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.Cast.role') ?>
 </head>
@@ -42,10 +43,10 @@
   <ul id="slide-out" class="side-nav fixed">
     <li>
       <div class="user-view">
-        <div class="background">
-          <img src="/img/common/top/top1.jpg">
+        <div class="background" style="background-color: orange;">
+        <!-- <img src="/img/common/top/top1.jpg"> -->
         </div>
-        <a href="#!user"><img class="circle" src="/img/common/top/top1.jpg"></a>
+        <a href="#!user"><img class="circle" src="<?=$mainImage?>"></a>
         <a href="#!name"><span class="white-text name"><?=$this->request->getSession()->read('Auth.Cast.name')?></span></a>
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Cast.email')?></span></a>
       </div>

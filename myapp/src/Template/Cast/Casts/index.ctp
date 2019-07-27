@@ -10,7 +10,7 @@
                     <div class="col s12 m4 l4">
                         <div class="card">
                             <div class="card-image">
-                                <img src="/img/common/top/top1.jpg">
+                                <img src="/img/common/notebook1.png">
                                 <span class="card-title">日記の投稿数</span>
                                 <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
                             </div>
@@ -22,7 +22,7 @@
                     <div class="col s12 m4 l4">
                         <div class="card">
                             <div class="card-image">
-                                <img src="/img/common/top/top1.jpg">
+                                <img src="/img/common/calendar1.png">
                                 <span class="card-title">出勤率</span>
                                 <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">directions_run</i></a>
                             </div>
@@ -34,7 +34,7 @@
                     <div class="col s12 m4 l4">
                         <div class="card">
                             <div class="card-image">
-                                <img src="/img/common/top/top1.jpg">
+                                <img src="/img/common/like1.png">
                                 <span class="card-title">いいねの数</span>
                                 <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">favorite_border</i></a>
                             </div>
@@ -48,7 +48,7 @@
                     <div class="col s12 m6 l6">
                         <div class="card">
                             <div class="card-image">
-                                <img src="/img/common/top/top1.jpg">
+                                <img src="/img/common/pencil1.png">
                                 <span class="card-title">Card Title</span>
                                 <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
                             </div>
@@ -66,7 +66,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col s12 m6 l6">
+                </div>
+                <div class="row">
+                    <div class="col s12 m12 l12">
                         <div id="calendar"></div>
                     </div>
                 </div>

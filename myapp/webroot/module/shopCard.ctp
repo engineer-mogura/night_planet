@@ -1,6 +1,6 @@
 <div class="col card horizontal waves-effect hoverable search-result-card">
 	<div class="card-image">
-		<img src="/img/common/top/top1.jpg" height="200">
+		<img src="/img/common/area/top1.jpg" height="200">
 	</div>
 	<div class="card-stacked">
 		<div class="card-content">

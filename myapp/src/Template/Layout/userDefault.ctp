@@ -35,18 +35,19 @@
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
 </head>
+  <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?>
   <?php $id = $this->request->getSession()->read('Auth.User.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.User.role') ?>
 <body id="user-default">
   <ul id="slide-out" class="side-nav fixed">
     <li>
       <div class="user-view">
-        <div class="background">
-          <img src="/img/common/top/top1.jpg">
+        <div class="background" style="background-color: orange;">
+          <!-- <img src="/img/common/area/top1.jpg"> -->
         </div>
-        <a href="#!user"><img class="circle" src="/img/common/top/top1.jpg"></a>
-        <a href="#!name"><span class="white-text name"><?=$this->request->getSession()->read('Auth.Cast.name')?></span></a>
-        <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Cast.email')?></span></a>
+        <a href="#!user"><img class="circle" src="<?=$mainImage?>"></a>
+        <a href="#!name"><span class="white-text name"><?=!empty($this->request->getSession()->read('Auth.User.name'))?$this->request->getSession()->read('Auth.User.name'):"ゲストさん"?></span></a>
+        <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.User.email')?></span></a>
       </div>
     </li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
@@ -68,7 +69,7 @@
   <nav id="nav-header-menu" class="nav-header-menu">
     <div class="nav-wrapper">
       <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
-      <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'] ?><?=!empty($areaTitle)?'<span class="area-logo"> '.$areaTitle.'</span><span class="area-logo-tail">エリア</span>':LT['005'] ?></a>
+      <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'] ?><?=!empty($areaTitle)?'<span class="area-logo"> '.$areaTitle.'</span><span class="area-logo-tail">エリア</span>':"" ?></a>
       <ul class="right">
         <li><a data-target="modal-search" class="modal-trigger"><i class="material-icons">search</i></a></li>
         <li><a data-target="modal-login" class="modal-trigger"><i class="material-icons">vpn_key</i></a></li>
@@ -88,7 +89,7 @@
           <li><a class="footer-item collection-item" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
           <li><a class="footer-item collection-item" href="#!"><i class="material-icons">event_available</i><?= USER_LM['002'] ?></a></li>
           <li><a class="footer-item collection-item" href="#!"><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></a></li>
-          <li><a class="footer-item collection-item" href=DS><i class="material-icons">vertical_align_top</i><?= USER_LM['004'] ?></a></li>
+          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">vertical_align_top</i><?= USER_LM['004'] ?></a></li>
         </ul>
       </div>
       <div class="col s12 l6">

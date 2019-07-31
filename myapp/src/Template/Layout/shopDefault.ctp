@@ -38,9 +38,9 @@
     <li>
       <div class="user-view">
         <div class="background">
-          <img src="/img/common/top/top1.jpg">
+          <img src="/img/common/area/top1.jpg">
         </div>
-        <a href="#!user"><img class="circle" src="/img/common/top/top1.jpg"></a>
+        <a href="#!user"><img class="circle" src="/img/common/area/top1.jpg"></a>
         <a href="#!name"><span class="white-text name">John Doe</span></a>
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>

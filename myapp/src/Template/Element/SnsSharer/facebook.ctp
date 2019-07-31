@@ -4,4 +4,4 @@
 <meta property="og:title" content=" ページの タイトル" />
 <meta property="og:description" content=" ページのディスクリプション" />
 <meta property="og:site_name" content="サイト名" />
-<meta property="og:image" content="<?=$shopInfo['dir_path'].$row->top_image?>" />
+<meta property="og:image" content="<?=$shopInfo['shop_path'].$row->top_image?>" />

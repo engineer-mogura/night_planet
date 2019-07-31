@@ -793,9 +793,6 @@ function initializeOwner() {
             return false;
         }
 
-        var json = JSON.parse($("#top-image").find('input[name="json_data"]').val());
-        $("#top-image").find('input[name="id"]').val(json['id']);
-
         var $form = $('#save-top-image');
 
         // blobファイル変換
@@ -820,9 +817,6 @@ function initializeOwner() {
         if (!confirm('トップ画像を削除してもよろしいですか？')) {
             return false;
         }
-        var json = JSON.parse($("#top-image").find('input[name="json_data"]').val());
-        $("#top-image").find('input[name="id"]').val(json['id']);
-        $("#top-image").find('input[name="file_before"]').val(json['top_image']);
 
         var $form =$('#delete-top-image');
 

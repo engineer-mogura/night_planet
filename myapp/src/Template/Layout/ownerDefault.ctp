@@ -37,12 +37,12 @@
   <ul id="slide-out" class="side-nav fixed">
     <li>
       <div class="user-view">
-        <div class="background">
-          <img src="/img/common/top/top1.jpg">
+        <div class="background" style="background-color: orange;">
+        <!-- <img src="/img/common/area/top1.jpg"> -->
         </div>
-        <a href="#!user"><img class="circle" src="/img/common/top/top1.jpg"></a>
-        <a href="#!name"><span class="white-text name">John Doe</span></a>
-        <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
+        <a href="#!user"><img class="circle" src="<?=$mainImage?>"></a>
+        <a href="#!name"><span class="white-text name"><?=$this->request->getSession()->read('Auth.Cast.name')?></span></a>
+        <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Cast.email')?></span></a>
       </div>
     </li>
     <li><a href="/owner/owners/index/?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= OWNER_LM['001'] ?></a></li>

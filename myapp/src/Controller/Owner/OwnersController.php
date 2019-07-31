@@ -32,7 +32,7 @@ class OwnersController extends AppController
         // オーナーに関する情報をセット
         if(!is_null($user = $this->Auth->user())){
             $shop = $this->Shops->find('all')->where(['owner_id' => $user['id']])->first();
-            $this->set('shopInfo', $this->Util->getItem($shop));
+            $this->set('shopInfo', $this->Util->getShopInfo($shop));
         }
     }
 

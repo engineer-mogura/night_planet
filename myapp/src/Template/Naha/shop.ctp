@@ -21,8 +21,8 @@
   <div class="row">
     <div id="shop-main" class="col s12 m12 l8">
       <img class="responsive-img" width="100%" src=<?php if($shop->top_image != '') {
-        echo($shopInfo['dir_path'].$shop->top_image);} else {
-        echo("/img/common/top/top1.jpg");} ?> />
+        echo($shopInfo['shop_path'].DS.$shop->top_image);} else {
+        echo("/img/common/area/top1.jpg");} ?> />
       <div class="fixed-action-btn share horizontal click-to-toggle">
         <a class="btn-floating btn-large red">
           <i class="material-icons">share</i>
@@ -109,7 +109,7 @@
             <div class="col s4 m3 l3">
               <div>
                 <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
-                  <img src="<?=isset($cast->image1) ? $shopInfo['dir_path'].PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1:PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
+                  <img src="<?=isset($cast->image1) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1 : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
                 </a>
                 </div>
               <h6><?=$cast->nickname?></h6>
@@ -207,7 +207,7 @@
         <?php foreach ($imageList as $key => $value): ?>
           <?= $value == reset($imageList) ?'<div class="my-gallery">':""?>
             <figure class="col <?=(count($imageList)==1?'s12 m12 l12':(count($imageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <a href="<?=$shopInfo['dir_path'].PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['dir_path'].PATH_ROOT['IMAGE'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+              <a href="<?=$shopInfo['shop_path'].PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['shop_path'].PATH_ROOT['IMAGE'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
             </figure>
           <?= $value == end($imageList) ?'</div>':""?>
           <?php $isGalleryExists = true; ?>

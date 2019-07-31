@@ -2,12 +2,13 @@
 namespace App\Controller;
 
 use \Cake\ORM\Query;
+use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Mailer\Email;
 use Cake\Error\Debugger;
+use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
-use Cake\Routing\Router;
 /**
 * Users Controller
 *
@@ -19,6 +20,16 @@ class NahaController extends \App\Controller\AreaController
 {
     use MailerAwareTrait;
 
+    // public function beforeFilter(Event $event)
+    // {
+    //     // AppController.beforeFilterをコールバック
+    //     parent::beforeFilter($event);
+    //     // キャストに関する情報をセット
+    //     if (!is_null($user = $this->Auth->user())) {
+    //         $cast = $this->Users->get($user['id']);
+    //         $this->set('userInfo', $this->Util->getCastItem($cast));
+    //     }
+    // }
     public function index()
     {
         if ($this->request->is('ajax')) {
@@ -86,7 +97,7 @@ class NahaController extends \App\Controller\AreaController
                 return $q
                     ->where(['Coupons.status'=>'1']);
                 },'Jobs'])->first();
-        $shopInfo = $this->Util->getItem($shop);
+        $shopInfo = $this->Util->getShopInfo($shop);
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
         $imageList = array(); // 画面側でjsonとして使う画像リスト
         // 画像リストを作成する
@@ -141,7 +152,7 @@ class NahaController extends \App\Controller\AreaController
                 }
             }
         }
-        $this->set('shopInfo', $this->Util->getItem($cast->shop));
+        $this->set('shopInfo', $this->Util->getShopInfo($cast->shop));
         $this->set(compact('cast','imageList','dImageList'));
         $this->render();
     }
@@ -170,11 +181,11 @@ class NahaController extends \App\Controller\AreaController
             return;
         }
         $cast = $this->Casts->find('all')->where(['id' => $id])->first();
-        $this->set('shopInfo', $this->Util->getItem($this->Shops->get($cast->shop_id)->toArray()));
+        $this->set('shopInfo', $this->Util->getShopInfo($this->Shops->get($cast->shop_id)->toArray()));
 
         // $diarys1 = $this->getDiarys($id);
         $diarys = $this->Util->getDiarys($id);
-        $dir = $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+        $dir = $this->viewVars['shopInfo']['shop_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
 
         $this->set(compact('cast','dir', 'diarys', 'ajax'));
         $this->render();

@@ -13,7 +13,7 @@
         <div class="col s6 m4 l3 card-img">
             <div class="card">
                 <div class="card-image">
-                    <img class="materialboxed" data-caption="" height="120" width="100%" src="<?=$shopInfo['dir_path'].PATH_ROOT['IMAGE'].DS.$image['name']?>">
+                    <img class="materialboxed" data-caption="" height="120" width="100%" src="<?=$shopInfo['image_path'].DS.$image['name']?>">
                     <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped gallery-deleteBtn" data-delete=<?=JSON_ENCODE(['key'=>$image['key'],'name'=>$image['name']])?> data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
                 </div>
             </div>

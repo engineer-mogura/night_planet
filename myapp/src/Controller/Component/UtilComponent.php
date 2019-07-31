@@ -74,11 +74,11 @@ class UtilComponent extends Component
     }
 
     /**
-     * オーナーのディレクトリを取得する。
+     * 店舗情報を取得する。
      *
      * @return void
      */
-    public function getItem($shop)
+    public function getShopInfo($shop)
     {
         // TODO: Authセッションからオーナー情報を取得せず、shopsテーブルから取る？
         $shopArea = $shop['area'];
@@ -99,10 +99,15 @@ class UtilComponent extends Component
                 break;
             }
         }
-        $shopInfo = $shopInfo + array('shop_id'=> $shop->id, 'dir'=> $shopDir);
-        $path = DS.PATH_ROOT['IMG'].DS.$shopInfo['area']['path'].DS.$shopInfo['genre']['path'].DS.$shopInfo['dir'].DS;
-        $shopInfo = $shopInfo + array('shop_id'=> $shop->id, 'dir'=> $shopDir, 'dir_path'=> $path);
+        $shopInfo = $shopInfo + array('id'=>$shop['id']
+            ,'dir'=>$shop['dir'],'main_image'=>$shop['top_image']);
+        $path = DS.PATH_ROOT['IMG'].DS.$shopInfo['area']['path']
+                .DS.$shopInfo['genre']['path'].DS.$shop['dir'];
+
+        $shopInfo = $shopInfo + array('shop_path'=> $path
+            ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']);
         return  $shopInfo;
+
     }
 
     /**

@@ -102,8 +102,8 @@ class ShopsTable extends Table
         $validator
             ->scalar('top_image')
             ->maxLength('top_image', 100)
-            ->allowEmptyFile('top_image');
-
+            ->allowEmptyFile('top_image')
+            ->maxLength('top_image', 10,"以降の住所が不正です。");
         $validator
             ->scalar('image1')
             ->maxLength('image1', 100)
@@ -234,12 +234,12 @@ class ShopsTable extends Table
      * @param ArrayObject $options
      * @return void
      */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
-    {
-        // telは、ハイフン削除
-        if (isset($data['tel'])) {
-            $data['tel'] = str_replace(array('-', 'ー', '"', '―', '‐'), '', $data['tel']);
-        }
+    // public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    // {
+    //     // telは、ハイフン削除
+    //     if (isset($data['tel'])) {
+    //         $data['tel'] = str_replace(array('-', 'ー', '"', '―', '‐'), '', $data['tel']);
+    //     }
 
-    }
+    // }
 }

@@ -12,7 +12,7 @@
     <div class="col s12 m6 l6">
       <div class="card <?php if(count($shops) == $key + 1) { echo('targetScroll');}?>">
         <div class="card-image">
-          <img src="<?=isset($shop->top_image) ? $shopInfo['dir_path']. DS .$shop->top_image:"/img/common/noimage.jpg" ?>" alt="">
+          <img src="<?=isset($shop->top_image) ? $shopInfo['shop_path']. DS .$shop->top_image:"/img/common/noimage.jpg" ?>" alt="">
         </div>
         <div class="card-content">
           <table class="highlight">

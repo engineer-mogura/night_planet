@@ -35,7 +35,7 @@ class ShopsController extends AppController
             $shop = $this->Shops->find('all')
                 ->where(['id' => $id , 'owner_id' => $user['id']])
                 ->first();
-            $this->set('shopInfo', $this->Util->getItem($shop));
+            $this->set('shopInfo', $this->Util->getShopInfo($shop));
         }
     }
 
@@ -59,7 +59,7 @@ class ShopsController extends AppController
         }
         if(!is_null($user = $this->Auth->user())){
             $shop = $this->Shops->find()
-            ->where(['Shops.id'=> $this->viewVars["shopInfo"]["shop_id"] , 'owner_id' => $user['id']])
+            ->where(['Shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
             ->contain(['Coupons','Jobs','Casts' => function(Query $q) {
                 return $q->where(['Casts.delete_flag'=>'0']);
             }])->first();
@@ -99,62 +99,58 @@ class ShopsController extends AppController
      */
     public function deleteTopImage()
     {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
+        $isRemoved = false; // ディレクトリ削除フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+        $dirPath = preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$this->viewVars['shopInfo']['shop_path']);
 
-        $tmpDir = new Folder; // バックアップ用
-        $del_path = preg_replace('/(^\/)/', '', 
-            $this->viewVars['shopInfo']['dir_path']);
-        $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('file_before'));
-        // ロールバック用に一時フォルダにバックアップする。
-        //$tmpDir = $this->Util->createFileTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $fileClone);
+        $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
+        // 削除ファイル取得
+        $file = new File($dirPath . DS .$shop->top_image, true, 0755);
 
         try {
             // ロールバック用に一時フォルダにバックアップ
             if(!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
-                throw new RuntimeException('トップ画像のバックアップに失敗しました。');
+                throw new RuntimeException('バックアップに失敗しました。');
             }
             // バックアップしたファイルを取得
             $tmpFile = new File (WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name); // バックアップ用
             // トップ画像削除処理実行
             if (!$file->delete()) {
-                throw new RuntimeException('トップ画像の削除に失敗しました。');
+                throw new RuntimeException('画像の削除に失敗しました。');
             }
+            $isRemoved = true;
+            // トップ画像を空にする
+            $shop->top_image = "";
+            // レコード更新実行
+            if (!$this->Shops->save($shop)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
+            }
+
         } catch (RuntimeException $e) {
-            // 変数が存在するかつバックアップファイルがあれば削除する
-            if (isset($tmpFile) && $tmpFile->exists()) {
-                $tmpFile->delete();// tmpファイル削除
-            }
-
-            $message = RESULT_M['DELETE_FAILED'];
-            $flg = false;
-            $response = array(
-                'success' => $flg,
-                'message' => $message
-            );
-            $this->response->body(json_encode($response));
-            return;
-        }
-        $shop = $this->Shops->get($this->request->getData('id'));
-        $shop->top_image = "";
-        // データべース削除
-        if($this->Shops->save($shop)) {
-            // 変数が存在するかつバックアップファイルがあれば削除する
-            if (isset($tmpFile) && $tmpFile->exists()) {
-                $tmpFile->delete();// tmpファイル削除
-            }
-            $message = RESULT_M['DELETE_SUCCESS'];
-            $flg = true;
-       } else {
-            // 失敗
-            // 変数が存在するかつバックアップファイルがファイルを戻す
-            if (isset($tmpFile) && $tmpFile->exists()) {
+            // ファイルを削除していた場合は復元する
+            if ($isRemoved) {
                 $tmpFile->copy($file->path);
+            }
+            // 一時ファイルがあれば削除する
+            if (isset($tmpFile) && file_exists($tmpFile->path)) {
                 $tmpFile->delete();// tmpファイル削除
             }
-            $message = RESULT_M['DELETE_FAILED'];
+            $this->log($this->Util->setLog($auth, $e));
             $flg = false;
+        }
+        // 例外が発生している場合にメッセージをセットして返却する
+        if (!$flg) {
+            $message = RESULT_M['DELETE_FAILED'];
             $response = array(
                 'success' => $flg,
                 'message' => $message
@@ -163,8 +159,12 @@ class ShopsController extends AppController
             return;
         }
 
-        $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
+        // 一時ファイル削除
+        if (file_exists($tmpFile->path)) {
+            $tmpFile->delete();
+        }
+
+        $shop = $this->Shops->get(['id' => $this->viewVars['shopInfo']['id']]);
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/top-image');
         $response = array(
@@ -177,76 +177,112 @@ class ShopsController extends AppController
         return;
     }
 
-    /**
+   /**
      * トップ画像 編集押下処理
      *
      * @return void
      */
     public function saveTopImage()
     {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
+        $isRemoved = false; // ディレクトリ削除フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+        $dirPath = preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$this->viewVars['shopInfo']['shop_path']);
 
-        $shop = $this->Shops->get($this->request->getData('id'));
-        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
-        //new Folder(WWW_ROOT. $this->viewVars['shopInfo']['dir_path'], true, 0755);
-        $dirPath = preg_replace('/(^\/)/', '', 
-            $this->viewVars['shopInfo']['dir_path']);
-         $dir = new Folder(WWW_ROOT. $this->viewVars['shopInfo']['dir_path'], true, 0755);
-        // ファイルが入力されたとき
-        if ($this->request->getData('top_image_file.name')) {
+        $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
+        // ディクレトリ取得
+        $dir = new Folder($dirPath, true, 0755);
+        // 前のファイル取得
+        $fileBefor = new File($dirPath . DS .$shop->top_image, true, 0755);
+
+        $file = $this->request->getData('top_image_file');
+        // ファイルが存在する、かつファイル名がblobの画像のとき
+        if (!empty($file["name"]) && $file["name"] == 'blob') {
             $limitFileSize = 1024 * 1024;
             try {
+                if(file_exists($fileBefor->path) && !empty($shop->top_image)) {
+                    // ロールバック用のファイルサイズチェック
+                    if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
+                        throw new RuntimeException('ファイルサイズが大きすぎます。');
+                    }
+
+                    // 一時ファイル作成
+                    if (!$fileBefor->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name)) {
+                        throw new RuntimeException('バックアップに失敗しました。');
+                    }
+
+                    // 一時ファイル取得
+                    $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name);
+                }
+
                 $shop->top_image = $this->Util->file_upload($this->request->getData('top_image_file'),
-                    ['name'=>$this->request->getData('file_before')], $dir->path, $limitFileSize);
+                    ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
                 // ファイル更新の場合は古いファイルは削除
-                if (!empty($this->request->data["file_before"])) {
+                if (!empty($fileBefor->name)) {
                     // ファイル名が同じ場合は削除を実行しない
-                    if ($this->request->getData('file_before') != $shop->top_image) {
-                        $file = new File($dir->path . DS . $this->request->data["file_before"]);
-                        if (!$file->delete()) {
-                            $this->log($this->request->getData('file_before'), LOG_DEBUG);
+                    if ($fileBefor->name != $shop->top_image) {
+                        // ファイル削除処理実行
+                        if (!$fileBefor->delete()) {
+                            throw new RuntimeException('ファイルの削除ができませんでした。');
                         }
+                        // ファイル削除フラグを立てる
+                        $isRemoved = true;
                     }
                 }
-            } catch (RuntimeException $e) {
-                // アップロード失敗の時、既登録ファイルがある場合はそれを保持
-                if (isset($this->request->data["file_before"])) {
-                    $shop->top_image = $this->request->getData('file_before');
+
+                // レコード更新実行
+                if (!$this->Shops->save($shop)) {
+                    throw new RuntimeException('レコードの更新ができませんでした。');
                 }
-                $this->log($e->getMessage());
-                $message = RESULT_M['UPDATE_FAILED'];
+
+            } catch (RuntimeException $e) {
+                // ファイルを削除していた場合は復元する
+                if ($isRemoved) {
+                    $tmpFile->copy($file->path);
+                }
+                // ファイルがアップロードされていた場合は削除を行う
+                if($shop->isDirty('top_image')) {
+                    $file = new File($dirPath . DS .$shop->top_image, true, 0755);
+                    // 一時ファイルがあれば削除する
+                    if (isset($file) && file_exists($file->path)) {
+                        $file->delete();// tmpファイル削除
+                    }
+                }
+                // 一時ファイルがあれば削除する
+                if (isset($tmpFile) && file_exists($tmpFile->path)) {
+                    $tmpFile->delete();// tmpファイル削除
+                }
+                $this->log($this->Util->setLog($auth, $e));
                 $flg = false;
-                $response = array(
-                    'success' => $flg,
-                    'message' => $message
-                );
-                $this->response->body(json_encode($response));
-                return;
             }
-        } else {
-            // ファイルは入力されていないけど登録されているファイルがあるとき
-            if (isset($this->request->data["file_before"])) {
-                $shop->top_image = $this->request->getData('file_before');
-            }
+
         }
-        // ＤＢ登録
-        if (!$this->Shops->save($shop)) {
-            $message = RESULT_M['UPDATE_FAILED'];
-            $flg = false;
-            if($this->request->getData('crud_type') == 'insert') {
-                $message = RESULT_M['SIGNUP_FAILED'];
-            }
+        // 例外が発生している場合にメッセージをセットして返却する
+            if (!$flg) {
+            $message = RESULT_M['SIGNUP_FAILED'];
             $response = array(
-                'error' => $message,
                 'success' => $flg,
+                'message' => $message
             );
             $this->response->body(json_encode($response));
             return;
         }
-        $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
+
+        // 一時ファイル削除
+        if (file_exists($tmpFile->path)) {
+            $tmpFile->delete();
+        }
+
+        $shop = $this->Shops->get(['id' => $this->viewVars['shopInfo']['id']]);
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/top-image');
         $response = array(
@@ -266,22 +302,28 @@ class ShopsController extends AppController
      */
     public function deleteCatch()
     {
-
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
         $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
 
         $shop = $this->Shops->patchEntity($this->Shops
-            ->get($this->request->getData('id')), $this->request->getData());
+            ->get($this->viewVars['shopInfo']['id']), $this->request->getData());
 
         if (!$this->Shops->save($shop)) {
+            $this->log($this->Util->setLog($auth, $e));
             $message = RESULT_M['DELETE_FAILED'];
             $flg = false;
         }
 
-        $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
+        $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
+
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/catch');
         $response = array(
@@ -301,53 +343,46 @@ class ShopsController extends AppController
      */
     public function saveCatch()
     {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
 
         $shop = $this->Shops->patchEntity($this->Shops
-            ->get($this->request->getData('id')), $this->request->getData());
-        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
-        // バリデーションチェックエラーがあればセットする。
+            ->get($this->viewVars['shopInfo']['id']), $this->request->getData());
+
+        // バリデーションチェック
         if ($shop->errors()) {
-            $flg = false;
-            if (count($shop->errors()) > 0) {
-                foreach ($shop->errors() as $key1 => $value1) {
-                    foreach ($value1 as $key2 => $value2) {
-                        if (is_array($value2)) {
-                            foreach ($value2 as $key3 => $value3) {
-                                $errors .= $value3."<br/>";
-                            }
-                        } else {
-                            $errors .= $value2."<br/>";
-                            //$this->Flash->error($value2);
-                        }
-                    }
-                }
-            }
-            $response = array(
-                'error' => $errors,
-                'success' => $flg,
-            );
+            // 入力エラーがあれば、メッセージをセットして返す
+            $errors = $this->Util->setErrMessage($shop); // エラーメッセージをセット
+            $response = array('success'=>false,'message'=>$errors);
             $this->response->body(json_encode($response));
             return;
         }
-        // ＤＢ登録
-        if (!$this->Shops->save($shop)) {
+        try {
+            // レコード更新実行
+            if (!$this->Shops->save($shop)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
+            }
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
+            $flg = false;
             $message = RESULT_M['UPDATE_FAILED'];
-            $flg = false;
-            if($this->request->getData('crud_type') == 'insert') {
-                $message = RESULT_M['SIGNUP_FAILED'];
-            }
             $response = array(
-                'error' => $message,
                 'success' => $flg,
+                'message' => $message
             );
             $this->response->body(json_encode($response));
             return;
         }
-        $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
+
+        $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/catch');
         $response = array(
@@ -367,10 +402,15 @@ class ShopsController extends AppController
      */
     public function switchCoupon()
     {
-        // TODO: 全体的にajaxのPOSTか確認せないかん。
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
         $message = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
 
         $this->request->session()->write('activeTab', 'coupon'); // タブ状態を保持
         $coupon = $this->Coupons->get($this->request->getData('id'));
@@ -379,10 +419,17 @@ class ShopsController extends AppController
         // メッセージをセット
         $coupon->status == 1 ? 
             $message = RESULT_M['DISPLAY_SUCCESS']: $message = RESULT_M['HIDDEN_SUCCESS'];
-        if (!$this->Coupons->save($coupon)) {
+        try {
+            // レコード更新実行
+            if (!$this->Coupons->save($coupon)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
+            }
+        } catch(RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
             $message = RESULT_M['CHANGE_FAILED'];
             $flg = false;
         }
+
         $response = array(
             'success' => $flg,
             'message' => $message
@@ -398,14 +445,21 @@ class ShopsController extends AppController
      */
     public function deleteCoupon()
     {
-        $coupon = $this->Coupons->get($this->request->getData('id'));
-
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
         $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+
+        $coupon = $this->Coupons->get($this->request->getData('id'));
 
         if (!$this->Coupons->delete($coupon)) {
+            $this->log($this->Util->setLog($auth, $e));
             $message = RESULT_M['DELETE_FAILED'];
             $flg = false;
         }
@@ -433,14 +487,20 @@ class ShopsController extends AppController
      */
     public function saveCoupon()
     {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
 
         // 新規登録 店舗IDとステータスもセットする
         if($this->request->getData('crud_type') == 'insert') {
             $coupon = $this->Coupons->newEntity(array_merge(
-                ['shop_id' => $this->viewVars['shopInfo']['shop_id'], 'status'=>0]
+                ['shop_id' => $this->viewVars['shopInfo']['id'], 'status'=>0]
                     ,$this->request->getData()));
             $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
         } else if($this->request->getData('crud_type') == 'update') {
@@ -449,46 +509,41 @@ class ShopsController extends AppController
                 ->get($this->request->getData('id')), $this->request->getData());
             $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
         }
-        // バリデーションチェックエラーがあればセットする。
+
+        // バリデーションチェック
         if ($coupon->errors()) {
-            $flg = false;
-            if (count($coupon->errors()) > 0) {
-                foreach ($coupon->errors() as $key1 => $value1) {
-                    foreach ($value1 as $key2 => $value2) {
-                        if (is_array($value2)) {
-                            foreach ($value2 as $key3 => $value3) {
-                                $errors .= $value3."<br/>";
-                            }
-                        } else {
-                            $errors .= $value2."<br/>";
-                            //$this->Flash->error($value2);
-                        }
-                    }
-                }
-            }
-            $response = array(
-                'error' => $errors,
-                'success' => $flg,
-            );
+            // 入力エラーがあれば、メッセージをセットして返す
+            $errors = $this->Util->setErrMessage($coupon); // エラーメッセージをセット
+            $response = array('success'=>false,'message'=>$errors);
             $this->response->body(json_encode($response));
             return;
         }
-        // ＤＢ登録
-        if (!$this->Coupons->save($coupon)) {
-            $message = RESULT_M['UPDATE_FAILED'];
+        try {
+            // レコード登録、更新実行
+            if (!$this->Coupons->save($coupon)) {
+                if($this->request->getData('crud_type') == 'insert') {
+                    throw new RuntimeException('レコードの登録ができませんでした。');
+                } else {
+                    throw new RuntimeException('レコードの更新ができませんでした。');
+                }
+            }
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
             $flg = false;
+            $message = RESULT_M['UPDATE_FAILED'];
             if($this->request->getData('crud_type') == 'insert') {
                 $message = RESULT_M['SIGNUP_FAILED'];
             }
             $response = array(
-                'error' => $message,
                 'success' => $flg,
+                'message' => $message
             );
             $this->response->body(json_encode($response));
             return;
         }
+
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])
+            ->where(['id' => $this->viewVars['shopInfo']['id']])
             ->contain(['Coupons'])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/coupon');
@@ -509,21 +564,34 @@ class ShopsController extends AppController
      */
     public function switchCast()
     {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
-        $message = ""; // 返却メッセージ
+        $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
+        $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
 
-        $this->request->session()->write('activeTab', 'cast'); // タブ状態を保持
         $cast = $this->Casts->get($this->request->getData('id'));
         // ステータスをセット
         $cast->status = $this->request->getData('status');
         // メッセージをセット
         $cast->status == 1 ? 
             $message = RESULT_M['DISPLAY_SUCCESS']: $message = RESULT_M['HIDDEN_SUCCESS'];
-        if (!$this->Casts->save($cast)) {
+        try {
+            // レコード更新実行
+            if (!$this->Casts->save($cast)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
+            }
+        } catch(RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
             $message = RESULT_M['CHANGE_FAILED'];
             $flg = false;
         }
+
         $response = array(
             'success' => $flg,
             'message' => $message
@@ -537,34 +605,67 @@ class ShopsController extends AppController
      */
     public function deleteCast()
     {
-
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
+        $isRemoved = false; // ディレクトリ削除フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
-
-        $tmpDir = new Folder; // バックアップ用
-        $del_path = preg_replace('/(^\/)/', '', 
-            $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['CAST'].DS.$this->request->getData('dir').DS);
-        $delFolder = new Folder(WWW_ROOT.$del_path);
-
-        $dirClone = new Folder($delFolder->path, true, 0755);
-        // ロールバック用に一時フォルダにバックアップする。
-        $tmpDir = $this->Util->createTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $dirClone);
+        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+        $tmpDir = null; // バックアップ用
 
         try {
+            $del_path = preg_replace('/(\/\/)/', '/',
+                WWW_ROOT.$this->viewVars['shopInfo']['cast_path'].DS.$this->request->getData('dir'));
+            // 削除対象ディレクトリパス取得
+            $dir = new Folder($del_path);
+            // 削除対象ディレクトリパス存在チェック
+            if (!file_exists($dir->path)) {
+                throw new RuntimeException('ディレクトリが存在しません。');
+            }
 
-            // 日記フォルダ削除処理実行
-            if (!$delFolder->delete()) {
-                throw new RuntimeException('キャストの削除ができませんでした。');
+            // ロールバック用のディレクトリサイズチェック
+            if ($dir->dirsize() > CAPACITY['MAX_NUM_BYTES_DIR']) {
+                throw new RuntimeException('ディレクトリサイズが大きすぎます。');
+            }
+
+            // 一時ディレクトリ作成
+            $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+            // 一時ディレクトリにバックアップ実行
+            if (!$dir->copy($tmpDir->path)) {
+                throw new RuntimeException('バックアップに失敗しました。');
+            }
+            // 日記ディレクトリ削除処理実行
+            if (!$dir->delete()) {
+                throw new RuntimeException('ディレクトリの削除ができませんでした。');
+            }
+            // ディレクトリ削除フラグを立てる
+            $isRemoved = true;
+            // 削除対象レコード取得
+            $cast = $this->Casts->get($this->request->getData('id'));
+            // レコード削除実行
+            if (!$this->Casts->delete($cast)) {
+                throw new RuntimeException('レコードの削除ができませんでした。');
             }
         } catch (RuntimeException $e) {
-            if (is_dir($tmpDir->path)) {
-                $tmpDir->copy($dirClone->path);
-                $tmpDir->delete();// tmpフォルダ削除
+            // ディレクトリを削除していた場合は復元する
+            if ($isRemoved) {
+                $tmpDir->copy($dir->path);
             }
-
-            $message = RESULT_M['DELETE_FAILED'];
+            // 一時ディレクトリがあれば削除する
+            if (isset($tmpDir) && file_exists($tmpDir->path)) {
+                $tmpDir->delete();// tmpディレクトリ削除
+            }
+            $this->log($this->Util->setLog($auth, $e));
             $flg = false;
+        }
+        // 例外が発生している場合にメッセージをセットして返却する
+        if (!$flg) {
+            $message = RESULT_M['DELETE_FAILED'];
             $response = array(
                 'success' => $flg,
                 'message' => $message
@@ -572,29 +673,10 @@ class ShopsController extends AppController
             $this->response->body(json_encode($response));
             return;
         }
-        $cast = $this->Casts->get($this->request->getData('id'));
-        // データべース削除
-        if($this->Casts->delete($cast)) {
-            // 成功: tmpフォルダ削除
-            if (is_dir($tmpDir->path)) {
-                $tmpDir->delete();// tmpフォルダ削除
-            }
-            $message = RESULT_M['DELETE_SUCCESS'];
-            $flg = true;
-       } else {
-            // 失敗: ファイルを戻す
-            if (is_dir($tmpDir->path)) {
-                $tmpDir->copy($dirClone->path);
-                $tmpDir->delete();// tmpフォルダ削除
-            }
-            $message = RESULT_M['DELETE_FAILED'];
-            $flg = false;
-            $response = array(
-                'success' => $flg,
-                'message' => $message
-            );
-            $this->response->body(json_encode($response));
-            return;
+
+        // 一時ディレクトリ削除
+        if (file_exists($tmpDir->path)) {
+            $tmpDir->delete();
         }
 
         $shop = $this->Shops->find()
@@ -621,6 +703,10 @@ class ShopsController extends AppController
      */
     public function saveCast()
     {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
@@ -628,7 +714,7 @@ class ShopsController extends AppController
         // 新規登録(仮登録) 店舗IDとステータスも論理削除フラグセットする
         if($this->request->getData('crud_type') == 'insert') {
             $cast = $this->Casts->newEntity(array_merge(
-                ['shop_id' => $this->viewVars['shopInfo']['shop_id'], 'status' => 0 , 'delete_flag' => 1]
+                ['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => 0 , 'delete_flag' => 1]
                     ,$this->request->getData()));
             $message = MAIL['AUTH_CONFIRMATION']; // 返却メッセージ
         } else if($this->request->getData('crud_type') == 'update') {
@@ -637,50 +723,45 @@ class ShopsController extends AppController
                 ->get($this->request->getData('id')), $this->request->getData());
             $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
         }
-        // バリデーションチェックエラーがあればセットし返却する。
+        // バリデーションチェック
         if ($cast->errors()) {
             $flg = false;
-            if (count($cast->errors()) > 0) {
-                foreach ($cast->errors() as $key1 => $value1) {
-                    foreach ($value1 as $key2 => $value2) {
-                        if (is_array($value2)) {
-                            foreach ($value2 as $key3 => $value3) {
-                                $errors .= $value3."<br/>";
-                            }
-                        } else {
-                            $errors .= $value2."<br/>";
-                            //$this->Flash->error($value2);
-                        }
-                    }
+            // 入力エラーがあれば、メッセージをセットして返す
+            $message = $this->Util->setErrMessage($cast); // エラーメッセージをセット
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        try {
+            // レコード登録、更新実行
+            if (!$this->Casts->save($cast)) {
+                if($this->request->getData('crud_type') == 'insert') {
+                    $message = RESULT_M['SIGNUP_FAILED'];
+                    throw new RuntimeException('レコードの登録ができませんでした。');
                 }
+                $message = RESULT_M['UPDATE_FAILED'];
+                throw new RuntimeException('レコードの更新ができませんでした。');
             }
-            $response = array(
-                'error' => $errors,
-                'success' => $flg,
-            );
-            $this->response->body(json_encode($response));
-            return;
-        }
-        // ＤＢ登録
-        if (!$this->Casts->save($cast)) {
-            $message = RESULT_M['UPDATE_FAILED'];
+        } catch(RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
             $flg = false;
-            if($this->request->getData('crud_type') == 'insert') {
-                $message = RESULT_M['SIGNUP_FAILED'];
-            }
             $response = array(
-                'error' => $message,
                 'success' => $flg,
+                'message' => $message,
             );
             $this->response->body(json_encode($response));
             return;
         }
+
         // 新規登録(仮登録)できた場合、登録したメールアドレスに認証メールを送る
         if ($this->request->getData('crud_type') == 'insert') {
             $this->getMailer('Cast')->send('castRegistration', [$cast]);
         }
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])
+            ->where(['id' => $this->viewVars['shopInfo']['id']])
             ->contain(['Casts' => function(Query $q) {
                 return $q->where(['Casts.delete_flag'=>'0']);
             }])->first();
@@ -703,52 +784,47 @@ class ShopsController extends AppController
      */
     public function saveTenpo()
     {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
-
-        // 更新
-        $shop = $this->Shops->patchEntity($this->Shops
-            ->get($this->request->getData('id')), $this->request->getData());
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
 
-        // バリデーションチェックエラーがあればセットし返却する。
+        $shop = $this->Shops->patchEntity($this->Shops
+            ->get($this->viewVars['shopInfo']['id']), $this->request->getData());
+
+        // バリデーションチェック
         if ($shop->errors()) {
-            $flg = false;
-            if (count($shop->errors()) > 0) {
-                foreach ($shop->errors() as $key1 => $value1) {
-                    foreach ($value1 as $key2 => $value2) {
-                        if (is_array($value2)) {
-                            foreach ($value2 as $key3 => $value3) {
-                                $errors .= $value3."<br/>";
-                            }
-                        } else {
-                            $errors .= $value2."<br/>";
-                            //$this->Flash->error($value2);
-                        }
-                    }
-                }
+            // 入力エラーがあれば、メッセージをセットして返す
+            $errors = $this->Util->setErrMessage($shop); // エラーメッセージをセット
+            $response = array('success'=>false,'message'=>$errors);
+            $this->response->body(json_encode($response));
+            return;
+        }
+        try {
+            // レコード更新実行
+            if (!$this->Shops->save($shop)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
             }
-            $response = array(
-                'error' => $errors,
-                'success' => $flg,
-            );
-            $this->response->body(json_encode($response));
-            return;
-        }
-        // ＤＢ登録
-        if (!$this->Shops->save($shop)) {
-            $message = RESULT_M['UPDATE_FAILED'];
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
             $flg = false;
+            $message = RESULT_M['UPDATE_FAILED'];
             $response = array(
-                'error' => $message,
                 'success' => $flg,
+                'message' => $message
             );
             $this->response->body(json_encode($response));
             return;
         }
+
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])
+            ->where(['id' => $this->viewVars['shopInfo']['id']])
             ->contain(['Casts' => function(Query $q) {
                 return $q->where(['Casts.delete_flag'=>'0']);
             }])->first();
@@ -778,52 +854,47 @@ class ShopsController extends AppController
      */
     public function saveJob()
     {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
-
-        // 更新
-        $job = $this->Jobs->patchEntity($this->Jobs
-            ->get($this->request->getData('id')), $this->request->getData());
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
 
-        // バリデーションチェックエラーがあればセットし返却する。
+        $job = $this->Shops->patchEntity($this->Jobs
+            ->get($this->request->getData('id')), $this->request->getData());
+
+        // バリデーションチェック
         if ($job->errors()) {
-            $flg = false;
-            if (count($job->errors()) > 0) {
-                foreach ($job->errors() as $key1 => $value1) {
-                    foreach ($value1 as $key2 => $value2) {
-                        if (is_array($value2)) {
-                            foreach ($value2 as $key3 => $value3) {
-                                $errors .= $value3."<br/>";
-                            }
-                        } else {
-                            $errors .= $value2."<br/>";
-                            //$this->Flash->error($value2);
-                        }
-                    }
-                }
+            // 入力エラーがあれば、メッセージをセットして返す
+            $errors = $this->Util->setErrMessage($job); // エラーメッセージをセット
+            $response = array('success'=>false,'message'=>$errors);
+            $this->response->body(json_encode($response));
+            return;
+        }
+        try {
+            // レコード更新実行
+            if (!$this->Jobs->save($job)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
             }
-            $response = array(
-                'error' => $errors,
-                'success' => $flg,
-            );
-            $this->response->body(json_encode($response));
-            return;
-        }
-        // ＤＢ登録
-        if (!$this->Jobs->save($job)) {
-            $message = RESULT_M['UPDATE_FAILED'];
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
             $flg = false;
+            $message = RESULT_M['UPDATE_FAILED'];
             $response = array(
-                'error' => $message,
                 'success' => $flg,
+                'message' => $message
             );
             $this->response->body(json_encode($response));
             return;
         }
+
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])
+            ->where(['id' => $this->viewVars['shopInfo']['id']])
             ->contain(['Jobs'])->first();
 
         // マスタコードの待遇リスト取得
@@ -852,21 +923,26 @@ class ShopsController extends AppController
      */
     public function saveGallery()
     {
-
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
+        $isRemoved = false; // ディレクトリ削除フラグ
         $errors = ""; // 返却メッセージ
-        $isDuplicate = false; // 画像重複フラグ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+        $tmpDir = null; // バックアップ用設定
 
-        $tmpDir = new Folder; // バックアップ用
-        $dirPath = preg_replace('/(^\/)/', '', 
-            $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['IMAGE']);
-        $dir = new Folder(WWW_ROOT. $dirPath, true, 0755);
-
+        $dirPath = preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$this->viewVars['shopInfo']['image_path']);
         $files = array();
+        // 対象ディレクトリパス取得
+        $dir = new Folder($dirPath, true, 0755);
         // ショップ取得
-        $shop = $this->Shops->get($this->viewVars['shopInfo']['shop_id']);
+        $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
 
         // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
         ($files_befor = json_decode($this->request->getData("gallery_befor"), true)) > 0 ? : $files_befor = array();
@@ -874,20 +950,33 @@ class ShopsController extends AppController
         // カラム「image*」を格納する
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
 
-        // ファイルのバックアップを取得
-        $dirClone = new Folder($dir->path, true, 0755);
-        // ロールバック用に一時フォルダにバックアップする。
-        $tmpDir = $this->Util->createTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $dirClone);
+        try{
 
-        // 追加画像がある場合
-        if (isset($this->request->data["image"])) {
-            $files = $this->request->data['image'];
-        }
-        foreach ($files as $key => $file) {
-            // ファイルが存在する、かつファイル名がblobの画像のとき
-            if (!empty($file["name"]) && $file["name"] == 'blob') {
-                $limitFileSize = 1024 * 1024;
-                try {
+            // 削除対象ディレクトリパス存在チェック
+            if (!file_exists($dir->path)) {
+                throw new RuntimeException('ディレクトリが存在しません。');
+            }
+
+            // ロールバック用のディレクトリサイズチェック
+            if ($dir->dirsize() > CAPACITY['MAX_NUM_BYTES_DIR']) {
+                throw new RuntimeException('ディレクトリサイズが大きすぎます。');
+            }
+
+            // 一時ディレクトリ作成
+            $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+            // 一時ディレクトリにバックアップ実行
+            if (!$dir->copy($tmpDir->path)) {
+                throw new RuntimeException('バックアップに失敗しました。');
+            }
+            // 追加画像がある場合
+            if (isset($this->request->data["image"])) {
+                $files = $this->request->data['image'];
+            }
+            foreach ($files as $key => $file) {
+                // ファイルが存在する、かつファイル名がblobの画像のとき
+                if (!empty($file["name"]) && $file["name"] == 'blob') {
+                    $limitFileSize = 1024 * 1024;
+
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
 
@@ -897,69 +986,52 @@ class ShopsController extends AppController
                         continue;
                     }
 
-                } catch (RuntimeException $e) {
-
-                    // アップロード失敗の時、処理を中断する
-                    if (is_dir($tmpDir->path)) {
-                        // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
-                        $files = $dirClone->find('.*\.*');
-                        foreach ($files as $file) {
-                            $file = new File($dir->path . DS . $file);
-                            $file->delete(); // このファイルを削除します
+                    // カラムimage1～image8の空いてる場所に入れる
+                    for ($i = 0; $i < $fileMax; $i++) {
+                        if (empty($shop->get($imageCol[$i]))) {
+                            $shop->set($imageCol[$i], $convertFile);
+                            break;
                         }
-                        $tmpDir->copy($dirClone->path);
-                        $tmpDir->delete();// tmpフォルダ削除
-                    }
-                    $this->log($e->getMessage());
-                    $message = RESULT_M['UPDATE_FAILED'];
-                    $flg = false;
-                    $response = array(
-                        'success' => $flg,
-                        'message' => $message
-                    );
-                    $this->response->body(json_encode($response));
-                    return;
-                }
-                // カラムimage1～image8の空いてる場所に入れる
-                for($i = 0; $i < $fileMax; $i++) {
-                    if(empty($shop->get($imageCol[$i]))) {
-                        $shop->set($imageCol[$i], $convertFile);
-                        break;
                     }
                 }
             }
 
+            // レコード更新実行
+            if (!$this->Shops->save($shop)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
+            }
 
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
+            $flg = false;
         }
-        // ＤＢ登録
-        if (!$this->Shops->save($shop)) {
-            // 更新失敗の時
-            if (is_dir($tmpDir->path)) {
+
+        // 例外が発生している場合にメッセージをセットして返却する
+        if (!$flg) {
+            if (file_exists($tmpDir->path)) {
                 // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
-                $files = $dirClone->find('.*\.*');
+                $files = $dir->find('.*\.*');
                 foreach ($files as $file) {
                     $file = new File($dir->path . DS . $file);
                     $file->delete(); // このファイルを削除します
                 }
-                $tmpDir->copy($dirClone->path);
+                $tmpDir->copy($dir->path);
                 $tmpDir->delete();// tmpフォルダ削除
             }
             $message = RESULT_M['UPDATE_FAILED'];
-            $flg = false;
-
             $response = array(
-                'error' => $message,
                 'success' => $flg,
+                'message' => $message
             );
             $this->response->body(json_encode($response));
             return;
         }
         // フォルダを削除
-        if (is_dir($tmpDir->path)) {
+        if (file_exists($tmpDir->path)) {
             $tmpDir->delete();
         }
-        $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
+
+        $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
         $imageList = array(); // 画面側でjsonとして使う画像リスト
         // 画像リストを作成する
@@ -987,36 +1059,71 @@ class ShopsController extends AppController
      */
     public function deleteGallery()
     {
+
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
         $flg = true; // 返却フラグ
+        $isRemoved = false; // ファイル削除フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
-
-        $tmpDir = new Folder; // バックアップ用
-        $del_path = preg_replace('/(^\/)/', '', 
-            $this->viewVars['shopInfo']['dir_path'].PATH_ROOT['IMAGE']);
-        $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
-        // ロールバック用に一時フォルダにバックアップする。
-        //$tmpDir = $this->Util->createFileTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $fileClone);
+        $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+        $tmpFile = null; // バックアップ用
 
         try {
-            // ロールバック用に一時フォルダにバックアップ
-            if(!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
+            $del_path = preg_replace('/(^\/)/', '', $this->viewVars['shopInfo']['image_path']);
+            // 削除対象ファイルを取得
+            $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
+
+            // 削除対象ファイルパス存在チェック
+            if (!file_exists($file->path)) {
+                throw new RuntimeException('ファイルが存在しません。');
+            }
+
+            // ロールバック用のファイルサイズチェック
+            if ($file->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
+                throw new RuntimeException('ファイルサイズが大きすぎます。');
+            }
+
+            // 一時ファイル作成
+            if (!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
                 throw new RuntimeException('画像のバックアップに失敗しました。');
             }
-            // バックアップしたファイルを取得
-            $tmpFile = new File (WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name); // バックアップ用
-            // 画像削除処理実行
+
+            // 一時ファイル取得
+            $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name);
+
+            // 日記ファイル削除処理実行
             if (!$file->delete()) {
-                throw new RuntimeException('画像の削除に失敗しました。');
+                throw new RuntimeException('ファイルの削除ができませんでした。');
+            }
+            // ファイル削除フラグを立てる
+            $isRemoved = true;
+            // 更新対象レコード取得
+            $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
+            $shop->set($this->request->getData('key'), "");
+            // レコード更新実行
+            if (!$this->Shops->save($shop)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
             }
         } catch (RuntimeException $e) {
-            // 変数が存在するかつバックアップファイルがあれば削除する
-            if (isset($tmpFile) && $tmpFile->exists()) {
+            // ファイルを削除していた場合は復元する
+            if ($isRemoved) {
+                $tmpFile->copy($file->path);
+            }
+            // 一時ファイルがあれば削除する
+            if (isset($tmpFile) && file_exists($tmpFile->path)) {
                 $tmpFile->delete();// tmpファイル削除
             }
-            $this->log($e->getMessage());
-            $message = RESULT_M['DELETE_FAILED'];
+            $this->log($this->Util->setLog($auth, $e));
             $flg = false;
+        }
+        // 例外が発生している場合にメッセージをセットして返却する
+        if (!$flg) {
+            $message = RESULT_M['DELETE_FAILED'];
             $response = array(
                 'success' => $flg,
                 'message' => $message
@@ -1024,35 +1131,14 @@ class ShopsController extends AppController
             $this->response->body(json_encode($response));
             return;
         }
-        $shop = $this->Shops->get($this->viewVars['shopInfo']['shop_id']);
-        $shop->set($this->request->getData('key'), "");
-        // テーブル更新
-        if($this->Shops->save($shop)) {
-            // 変数が存在するかつバックアップファイルがあれば削除する
-            if (isset($tmpFile) && $tmpFile->exists()) {
-                $tmpFile->delete();// tmpファイル削除
-            }
-            $message = RESULT_M['DELETE_SUCCESS'];
-            $flg = true;
-       } else {
-            // 失敗
-            // 変数が存在するかつバックアップファイルがファイルを戻す
-            if (isset($tmpFile) && $tmpFile->exists()) {
-                $tmpFile->copy($file->path);
-                $tmpFile->delete();// tmpファイル削除
-            }
-            $message = RESULT_M['DELETE_FAILED'];
-            $flg = false;
-            $response = array(
-                'success' => $flg,
-                'message' => $message
-            );
-            $this->response->body(json_encode($response));
-            return;
+
+        // 一時ファイル削除
+        if (file_exists($tmpFile->path)) {
+            $tmpFile->delete();
         }
 
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['shop_id']])->first();
+            ->where(['id' => $this->viewVars['shopInfo']['id']])->first();
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
         $imageList = array(); // 画面側でjsonとして使う画像リスト
         // 画像リストを作成する
@@ -1072,6 +1158,99 @@ class ShopsController extends AppController
         $this->response->body(json_encode($response));
         return;
     }
+
+    // /**
+    //  * ギャラリー 削除押下処理
+    //  *
+    //  * @return void
+    //  */
+    // public function deleteGallery()
+    // {
+    //     $flg = true; // 返却フラグ
+    //     $errors = ""; // 返却メッセージ
+    //     $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+
+    //     $tmpDir = new Folder; // バックアップ用
+    //     $del_path = preg_replace('/(^\/)/', '', 
+    //         $this->viewVars['shopInfo']['image_path']);
+    //     $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
+    //     // ロールバック用に一時フォルダにバックアップする。
+    //     //$tmpDir = $this->Util->createFileTmpDirectoy(WWW_ROOT.PATH_ROOT['TMP'], $fileClone);
+
+    //     try {
+    //         // ロールバック用に一時フォルダにバックアップ
+    //         if(!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
+    //             throw new RuntimeException('バックアップに失敗しました。');
+    //         }
+    //         // バックアップしたファイルを取得
+    //         $tmpFile = new File (WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name); // バックアップ用
+    //         // 画像削除処理実行
+    //         if (!$file->delete()) {
+    //             throw new RuntimeException('画像の削除に失敗しました。');
+    //         }
+    //     } catch (RuntimeException $e) {
+    //         // 変数が存在するかつバックアップファイルがあれば削除する
+    //         if (isset($tmpFile) && $tmpFile->exists()) {
+    //             $tmpFile->delete();// tmpファイル削除
+    //         }
+    //         $this->log($e->getMessage());
+    //         $message = RESULT_M['DELETE_FAILED'];
+    //         $flg = false;
+    //         $response = array(
+    //             'success' => $flg,
+    //             'message' => $message
+    //         );
+    //         $this->response->body(json_encode($response));
+    //         return;
+    //     }
+    //     $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
+    //     $shop->set($this->request->getData('key'), "");
+    //     // テーブル更新
+    //     if($this->Shops->save($shop)) {
+    //         // 変数が存在するかつバックアップファイルがあれば削除する
+    //         if (isset($tmpFile) && $tmpFile->exists()) {
+    //             $tmpFile->delete();// tmpファイル削除
+    //         }
+    //         $message = RESULT_M['DELETE_SUCCESS'];
+    //         $flg = true;
+    //    } else {
+    //         // 失敗
+    //         // 変数が存在するかつバックアップファイルがファイルを戻す
+    //         if (isset($tmpFile) && $tmpFile->exists()) {
+    //             $tmpFile->copy($file->path);
+    //             $tmpFile->delete();// tmpファイル削除
+    //         }
+    //         $message = RESULT_M['DELETE_FAILED'];
+    //         $flg = false;
+    //         $response = array(
+    //             'success' => $flg,
+    //             'message' => $message
+    //         );
+    //         $this->response->body(json_encode($response));
+    //         return;
+    //     }
+
+    //     $shop = $this->Shops->find()
+    //         ->where(['id' => $this->viewVars['shopInfo']['id']])->first();
+    //     $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+    //     $imageList = array(); // 画面側でjsonとして使う画像リスト
+    //     // 画像リストを作成する
+    //     foreach ($imageCol as $key => $value) {
+    //         if (!empty($shop[$imageCol[$key]])) {
+    //             array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+    //         }
+    //     }
+    //     $this->set(compact('shop','imageList'));
+    //     $this->render('/Element/shopEdit/gallery');
+    //     $response = array(
+    //         'html' => $this->response->body(),
+    //         'error' => $errors,
+    //         'success' => $flg,
+    //         'message' => $message
+    //     );
+    //     $this->response->body(json_encode($response));
+    //     return;
+    // }
 
     /**
      * json返却用の設定

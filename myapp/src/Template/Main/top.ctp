@@ -3,21 +3,21 @@
 <div class="slider">
   <ul class="slides">
     <li>
-      <img src="/img/common/top/top1.jpg"> <!-- random image -->
+      <img src="/img/common/area/top1.jpg"> <!-- random image -->
       <div class="caption center-align">
         <h3>沖縄の夜遊び探しは【おきよる】!</h3>
         <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
       </div>
     </li>
     <li>
-      <img src="/img/common/top/top2.jpg"> <!-- random image -->
+      <img src="/img/common/area/top2.jpg"> <!-- random image -->
       <div class="caption left-align">
         <h3>沖縄の夜遊び探しは【おきよる】!</h3>
         <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
       </div>
     </li>
     <li>
-      <img src="/img/common/top/top3.jpg"> <!-- random image -->
+      <img src="/img/common/area/top3.jpg"> <!-- random image -->
       <div class="caption right-align">
         <h3>沖縄の夜遊び探しは【おきよる】!</h3>
         <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
@@ -35,17 +35,15 @@
   </ul>
     <?= $this->element('elmSearch'); ?>
   <div class="row">
-    <?php foreach ($selectList['area'] as $key => $value): ?>
+    <?php foreach (AREA as $key => $value): ?>
       <div class="col s12 m4 l3">
-        <div class="card small">
+        <div class="card">
           <div class="card-image">
-            <img src="/img/common/top/top1.jpg">
+            <img src="<?=$value['image']?>" style="width: 100%;height: 200px;object-fit: cover; background-color: lightsalmon;">
+            <span class="card-title"><?=$value['label']?></span>
           </div>
           <div class="card-content">
-            <p><?=$value?></p>
-          </div>
-          <div class="card-action">
-            <a href="<?=$key?>"><?=$value?>エリア</a>
+            <a href="<?=$value['path']?>"><?=$value['label']?>エリア</a>
           </div>
         </div>
       </div>
@@ -56,7 +54,7 @@
       <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">新着情報</h6></div>
       <ul class="collection">
         <li class="collection-item avatar">
-          <img src="/img/common/top/top1.jpg" alt="" class="circle">
+          <img src="/img/common/area/top1.jpg" alt="" class="circle">
           <span class="title">Title</span>
           <p>First Line <br>
             Second Line
@@ -93,7 +91,7 @@
       <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">店舗からのお知らせ</h6></div>
       <ul class="collection">
         <li class="collection-item avatar">
-          <img src="/img/common/top/top1.jpg" alt="" class="circle">
+          <img src="/img/common/area/top1.jpg" alt="" class="circle">
           <span class="title">Title</span>
           <p>First Line <br>
             Second Line
@@ -130,7 +128,7 @@
       <div class="card-panel teal lighten-2 oki-card-panel"><h6 class="white-text">キャスト日記</h6></div>
       <ul class="collection">
         <li class="collection-item avatar">
-          <img src="/img/common/top/top1.jpg" alt="" class="circle">
+          <img src="/img/common/area/top1.jpg" alt="" class="circle">
           <span class="title">Title</span>
           <p>First Line <br>
             Second Line

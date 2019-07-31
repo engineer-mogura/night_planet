@@ -44,7 +44,7 @@
     <li>
       <div class="user-view">
         <div class="background" style="background-color: orange;">
-        <!-- <img src="/img/common/top/top1.jpg"> -->
+        <!-- <img src="/img/common/area/top1.jpg"> -->
         </div>
         <a href="#!user"><img class="circle" src="<?=$mainImage?>"></a>
         <a href="#!name"><span class="white-text name"><?=$this->request->getSession()->read('Auth.Cast.name')?></span></a>

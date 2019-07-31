@@ -63,18 +63,17 @@ class AppView extends View
         // 遷移先がエリアのトップ画面の場合
         if (array_key_exists($breadcrumbList[0], AREA)) {
             $this->Breadcrumbs->add([
-          ['title' => '<i class="material-icons">home</i>', 'url' => DS],
-          ['title' => AREA[$breadcrumbList[0]]['label'], 'url' => ['controller' => $breadcrumbList[0], 'action' => 'index']]
-        ]);
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS],
+                ['title' => AREA[$breadcrumbList[0]]['label'], 'url' => ['controller' => $breadcrumbList[0], 'action' => 'index']]
+            ]);
         }
         // 遷移先がエリア ⇒ ジャンル画面の場合
         if ($breadcrumbList[1] == 'genre') {
             // リストの最後に追加
             $this->Breadcrumbs->add(
-            GENRE[$this->request->query('genre')]['label'],
-            "#!",
-            ['class' => 'breadcrumbs-tail']
-        );
+                GENRE[$this->request->query('genre')]['label'],
+                "#!", ['class' => 'breadcrumbs-tail']
+            );
         }
         // 遷移先がエリア ⇒ ショップ画面の場合
         if ($breadcrumbList[1] == 'shop') {
@@ -85,10 +84,9 @@ class AppView extends View
             ]);
             // リストの最後に追加
             $this->Breadcrumbs->add(
-            $this->request->query['name'],
-            "#!",
-            ['class' => 'breadcrumbs-tail']
-        );
+                $this->request->query['name'],
+                "#!", ['class' => 'breadcrumbs-tail']
+            );
         }
         // 遷移先がエリア ⇒ キャスト画面の場合
         if ($breadcrumbList[1] == 'cast') {

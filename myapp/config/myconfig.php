@@ -134,70 +134,86 @@ return [
 	define('AREA', array(
 		'miyakojima'=> [
 			'label' => "宮古島",
-			'path' => "miyakojima"
+			'path' => "miyakojima",
+			'image' => "/img/common/area/area_1.png"
 		],
 		'ishigakijima'=> [
 			'label' => "石垣島",
-			'path' => "ishigakijima"
+			'path' => "ishigakijima",
+			'image' => "/img/common/area/area_2.png"
 		],
 		'naha'=> [
 			'label' => "那覇",
-			'path' => "naha"
+			'path' => "naha",
+			'image' => "/img/common/area/area_3.png"
 		],
 		'nanjo'=> [
 			'label' => "南城",
-			'path' => "nanjo"
+			'path' => "nanjo",
+			'image' => "/img/common/area/area_4.png"
 		],
 		'tomigusuku'=> [
 			'label' => "豊見城",
-			'path' => "tomigusuku"
+			'path' => "tomigusuku",
+			'image' => "/img/common/area/area_5.png"
 		],
 		'urasoe'=> [
 			'label' => "浦添",
-			'path' => "urasoe"
+			'path' => "urasoe",
+			'image' => "/img/common/area/area_6.png"
 		],
 		'ginowan'=> [
 			'label' => "宜野湾",
-			'path' => "ginowan"
+			'path' => "ginowan",
+			'image' => "/img/common/area/area_7.png"
 		],
 		'okinawashi'=> [
 			'label' => "沖縄市",
-			'path' => "okinawashi"
+			'path' => "okinawashi",
+			'image' => "/img/common/area/area_8.png"
 		],
 		'uruma'=> [
 			'label' => "うるま",
-			'path' => "uruma"
+			'path' => "uruma",
+			'image' => "/img/common/area/area_9.png"
 		],
 		'nago'=> [
 			'label' => "名護",
-			'path' => "nago"
+			'path' => "nago",
+			'image' => "/img/common/area/area_10.png"
 		],
 	)),
 	// 業種リスト
 	define('GENRE', array(
 		'cabacula'=> [
 			'label' => "キャバクラ",
-			'path' => "cabacula"
+			'path' => "cabacula",
+			'image' => "/img/common/genre/genre_1.png"
 		],
 		'snack'=> [
 			'label' => "スナック",
-			'path' => "snack"
+			'path' => "snack",
+			'image' => "/img/common/genre/genre_1.png"
 		],
 		'girlsbar'=> [
 			'label' => "ガールズバー",
-			'path' => "girlsbar"
+			'path' => "girlsbar",
+			'image' => "/img/common/genre/genre_1.png"
 		],
 		'club'=> [
 			'label' => "クラブ",
-			'path' => "club"
+			'path' => "club",
+			'image' => "/img/common/genre/genre_1.png"
 		],
 		'lounge'=> [
 			'label' => "ラウンジ",
-			'path' => "lounge"
+			'path' => "lounge",
+			'image' => "/img/common/genre/genre_1.png"
 		],
 		'pub'=> [
 			'label' => "パブ",
-			'path' => "pub"
+			'path' => "pub",
+			'image' => "/img/common/genre/genre_1.png"
 		],
 	)),
 	// 星座リスト

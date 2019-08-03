@@ -3,4 +3,4 @@
 # /myapp/webroot/img/**/*.jpg
 # /myapp/webroot/img/**/*.png
 # /myapp/webroot/img/**/calendar.json
-
+/admin/

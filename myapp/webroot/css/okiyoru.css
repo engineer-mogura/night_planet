@@ -346,6 +346,9 @@ span.or-header {
 .cast-list.row h6 {
   text-align: center;
 }
+.gallery-box {
+  margin: 0 10px;
+}
 .card.diary-card {
   margin: 0 10px;
 }

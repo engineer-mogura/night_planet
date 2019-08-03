@@ -69,37 +69,11 @@
           echo ($this->Text->autoParagraph($shop->catch)); } else {
           echo ('キャッチコピーがありません。');} ?>
       </div>
-      <ul class="collapsible popout" data-collapsible="accordion">
-        <li>
-          <div class="collapsible-header orange lighten-4">
-            <div class="coupon">
-              <i class="material-icons">filter_drama</i>
-              クーポン<p class="label">クーポンを表示する</p>
-              <p class="arrow nonActive">
-                <a class="btn-floating btn-large red">
-                  <i class="large material-icons or-material-icons">expand_more</i>
-
-                </a>
-              </p>
-            </div>
-          </div>
-            <?php if(count($shop->coupons) > 0) { ?>
-            <?php foreach($shop->coupons as $coupon): ?>
-              <div class="collapsible-body orange lighten-4">
-                <span><?= $this->Time->format($coupon->from_day, 'Y/M/d') ?>～<?= $this->Time->format($coupon->to_day, 'Y/M/d') ?></span><br />
-                  <span>★☆★<?=$coupon->title ?>★☆★<br />
-                <?=$coupon->content ?><br />
-              <?php if($coupon === end($shop->coupons)){echo ('こちらの画面をお店側に見せ、使用するクーポンをお知らせください。');}?></span>
-              </div>
-            <?php endforeach; ?>
-            <?php } else { ?>
-              <div class="collapsible-body orange lighten-4">
-                <p>クーポンの登録はありません。</p>
-              </div>
-            <?php } ?>
-
-        </li>
-      </ul>
+      <div class="row">
+        <div class="col s12">
+          <a class="waves-effect waves-light btn-large modal-trigger" style="width:100%" href="#coupons-modal">クーポン一覧を見る<i class="material-icons right">keyboard_arrow_right</i></a>
+        </div>
+      </div>
       <div class="row cast-list">
         <div class="or-header-wrap card-panel red lighten-3">
           <span class="or-header">キャスト</span>
@@ -205,11 +179,11 @@
       </div>
       <?php $isGalleryExists = false; ?>
         <?php foreach ($imageList as $key => $value): ?>
-          <?= $value == reset($imageList) ?'<div class="my-gallery">':""?>
+          <?= $value == reset($imageList) ?'<div class="gallery-box"><div class="my-gallery">':""?>
             <figure class="col <?=(count($imageList)==1?'s12 m12 l12':(count($imageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <a href="<?=$shopInfo['shop_path'].PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['shop_path'].PATH_ROOT['IMAGE'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+              <a href="<?=$shopInfo['image_path'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['image_path'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
             </figure>
-          <?= $value == end($imageList) ?'</div>':""?>
+          <?= $value == end($imageList) ?'</div></div>':""?>
           <?php $isGalleryExists = true; ?>
         <?php endforeach; ?>
         <?= $isGalleryExists ? "" : '<p class="col">ギャラリーの登録はありません。</p>';?>
@@ -346,4 +320,29 @@
   </div>
 </div>
 </div>
+<!-- Modal Structure -->
+<div id="coupons-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+    <?php if(count($shop->coupons) > 0) { ?>
+    <ul class="collection with-header">
+      <li class="collection-header"><h4>使いたいクーポン番号をお店の人に見せてね☆</h4></li>
+    <?php foreach($shop->coupons as  $key => $coupon): ?>
+      <li class="collection-item">
+        <!-- <i class="material-icons circle">folder</i> -->
+        <span><?= "#".($key + 1)."　".$this->Time->format($coupon->from_day, 'Y/M/d') ?> ～ <?= $this->Time->format($coupon->to_day, 'Y/M/d') ?></span><br>
+        <span class="title blue-text text-darken-2"><?=$coupon->title ?></span>
+        <p><?=$this->Text->autoParagraph($coupon->content) ?></p>
+      </li>
+    <?php endforeach; ?>
+    </ul>
+  <?php } else { ?>
+      <div class="">
+        <p>クーポンの登録はありません。</p>
+      </div>
+    <?php } ?>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">とじる</a>
+    </div>
+  </div>
 <?= $this->element('photoSwipe'); ?>

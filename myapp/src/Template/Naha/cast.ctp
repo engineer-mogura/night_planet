@@ -102,16 +102,18 @@
         <div class="or-header-wrap card-panel red lighten-3">
           <span class="or-header"><?=$cast->nickname?>さんのギャラリー</span>
         </div>
-        <?php $isGalleryExists = false; ?>
-        <?php foreach ($imageList as $key => $value): ?>
-          <?= $value == reset($imageList) ?'<div class="my-gallery">':""?>
-            <figure class="col <?=(count($imageList)==1?'s12 m12 l12':(count($imageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <a href="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
-            </figure>
-          <?= $value == end($imageList) ?'</div>':""?>
-          <?php $isGalleryExists = true; ?>
-        <?php endforeach; ?>
-        <?= $isGalleryExists ? "" : '<p class="col">ギャラリーの登録はありません。</p>';?>
+        <div class="card gallery-card">
+          <?php $isGalleryExists = false; ?>
+          <?php foreach ($imageList as $key => $value): ?>
+            <?= $value == reset($imageList) ?'<div class="my-gallery">':""?>
+              <figure class="col <?=(count($imageList)==1?'s12 m12 l12':(count($imageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
+                <a href="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+              </figure>
+            <?= $value == end($imageList) ?'</div>':""?>
+            <?php $isGalleryExists = true; ?>
+          <?php endforeach; ?>
+          <?= $isGalleryExists ? "" : '<p class="col">ギャラリーの登録はありません。</p>';?>
+        </div>
       </div>
       <div class="row diary-list">
         <div class="or-header-wrap card-panel red lighten-3">

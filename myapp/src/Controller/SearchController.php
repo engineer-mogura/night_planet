@@ -35,13 +35,22 @@ class SearchController extends AppController
     {
         if ($this->request->is('ajax')) {
 
+            $this->confReturnJson(); // json返却用の設定
+
             $columns = array('Shops.name', 'Shops.catch'); // like条件用
             $shops = $this->getShopList($this->request->getQuery(), $columns);
             // 検索ページからの場合は、結果のみを返却する
-            $this->confReturnJson(); // json返却用の設定
-            $this->response->body(json_encode($shops));
-            return;
 
+            $this->set(compact('shops'));
+            $this->render('/Element/shopCard');
+            $response = array(
+                'html' => $this->response->body(),
+                'error' => "",
+                'success' => true,
+                'message' => ""
+            );
+            $this->response->body(json_encode($response));
+            return;
         }
         $shops = array(); // 店舗情報格納用
         // トップページからの遷移の場合
@@ -50,11 +59,11 @@ class SearchController extends AppController
             $columns = array('Shops.name', 'Shops.catch'); // like条件用
             $shops = $this->getShopList($this->request->getQuery(), $columns);
             // 検索条件を取得し、画面側でselectedする
-            $conditionSelected = $this->request->getQuery();
+            $selected = $this->request->getQuery();
         }
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('shops', 'selectList','conditionSelected'));
+        $this->set(compact('shops', 'selectList','selected'));
         $this->render();
     }
 

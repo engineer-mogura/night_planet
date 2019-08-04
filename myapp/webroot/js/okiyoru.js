@@ -222,12 +222,12 @@ function createShopCard(form, response, path) {
         $title = '';
         if (($(form).find("[name='area']").val()) !== '' && ($(form).find("[name='genre']").val()) !== '') {
             // コントローラでセットされたtitleを代入してセパレータを追加
-            $title +=  area[$(form).find("[name='area']").val()]['label'] + 'のおすすめ' +
+            $title +=  area[$(form).find("[name='area']").val()]['label'] + 'の' +
                         genre[$(form).find("[name='genre']").val()]['label'] + '一覧';
         } else if($(form).find("[name='area']").val() !== '') {
-            $title +=  area[$(form).find("[name='area']").val()]['label'] + 'のおすすめ一覧';
+            $title +=  area[$(form).find("[name='area']").val()]['label'] + '一覧';
         } else if($(form).find("[name='genre']").val() !== '') {
-            $title +=  genre[$(form).find("[name='genre']").val()]['label'] + 'のおすすめ一覧';
+            $title +=  genre[$(form).find("[name='genre']").val()]['label'] + '一覧';
         }
         $(resultDom).find(".title").text($title);
         $(resultDom).find(".header").text('検索結果 ' + response.length + '件');
@@ -491,7 +491,7 @@ function castImageDeleteBtn(form, obj){
         $('ul.tabs').tabs(options);
         // タブの事前選択
         $('ul.tabs').tabs('select_tab', activeTab);
-
+        $('.slider').slider();
         // materializecss selectbox
         $('select').material_select();
         // materializecss tooltip
@@ -676,15 +676,7 @@ function initializeUser() {
                     alert("なにかしら条件を入れてね");
                     return false;
             }
-            //通常のアクションをキャンセルする
-            event.preventDefault();
-
-            var params = [];
-            params['key_word'] = $(form).find("input[name='key_word']").val();
-            params['area'] = $(form).find("[name='area']").val();
-            params['genre'] = $(form).find("[name='area']").val();
             form.submit();
-            //window.location.href = setParameter(params);
         });
 
     }
@@ -692,13 +684,37 @@ function initializeUser() {
 
     /* エリア画面 START */
     if($("#area").length) {
-
+        // 検索ボタン押した時
+        $(document).on('click', '.searchBtn', function() {
+            $form = $(this).closest($(".search-form"));
+            if(($form.find("input[name='key_word']").val() == "") &&
+                ($form.find("[name='genre']").val() == "")) {
+                    alert("なにかしら条件を入れてね");
+                    return false;
+                }
+            
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            searchAjax("#search-result", $form);
+        });
     }
     /* エリア画面 END */
 
     /* ジャンル画面 START */
     if($("#genre").length) {
-
+        // 検索ボタン押した時
+        $(document).on('click', '.searchBtn', function() {
+            $form = $(this).closest($(".search-form"));
+            if(($form.find("input[name='key_word']").val() == "") &&
+                ($form.find("[name='area']").val() == "") &&
+                ($form.find("[name='genre']").val() == "")) {
+                    alert("なにかしら条件を入れてね");
+                    return false;
+                }
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            searchAjax("#search-result", $form);
+        });
     }
     /* ジャンル画面 END */
 
@@ -738,15 +754,16 @@ function initializeUser() {
 
         // 検索ボタン押した時
         $(document).on('click', '.searchBtn', function() {
-            form = $(this).closest("form[name='search_form']");
-            if(($(form).find("input[name='key_word']").val() == "") &&
-                ($(form).find("[name='area']").val() == "") &&
-                ($(form).find("[name='genre']").val() == "")) {
+            $form = $(this).closest($(".search-form"));
+            if(($form.find("input[name='key_word']").val() == "") &&
+                ($form.find("[name='area']").val() == "") &&
+                ($form.find("[name='genre']").val() == "")) {
                     alert("なにかしら条件を入れてね");
                     return false;
                 }
-
-            searchAjax($(this).closest("form[name='search_form']"));
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            searchAjax("#search-result", $form);
         });
     }
     /* 検索画面 画面 END */
@@ -1645,6 +1662,43 @@ function initializeOwner() {
                 });
             }
         });
+    }
+
+    /**
+     * 検索ajax処理
+     * @param  {} replace
+     * @param  {} form
+     */
+    var searchAjax = function(searchResult, form) {
+
+        $.ajax({
+            url : form.attr('action'), //Formのアクションを取得して指定する
+            type: form.attr('method'),//Formのメソッドを取得して指定する
+            data: form.serialize(), //データにFormがserialzeした結果を入れる
+            dataType: 'json', //データにFormがserialzeした結果を入れる
+            timeout: 10000000,
+            beforeSend : function(xhr, settings){
+                //Buttonを無効にする
+                $(document).find('.searchBtn').addClass('disabled');
+                //処理中の通知するアイコンを表示する
+                $("#dummy").load("/module/Preloader.ctp");
+            },
+            complete: function(xhr, textStatus){
+                //処理中アイコン削除
+                $('.preloader-wrapper').remove();
+                $(document).find('.searchBtn').removeClass('disabled');
+            },
+            success: function (response, textStatus, xhr) {
+                $(searchResult).replaceWith(response.html);
+            },
+            error : function(response, textStatus, xhr){
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: "通信に失敗しました。ステータス：" + textStatus
+                });
+            }
+        });
+
     }
 
     /**

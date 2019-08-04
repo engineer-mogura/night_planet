@@ -163,9 +163,3 @@
     </div>
   </div>
 </div>
-<?= $this->Html->scriptstart() ?>
-$(document).ready(function(){
-$('.slider').slider();
-$('select').material_select();
-});
-<?= $this->Html->scriptend() ?>

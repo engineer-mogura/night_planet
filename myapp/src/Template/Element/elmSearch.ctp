@@ -3,7 +3,7 @@
     <!-- <input type="hidden" name="_method" value="GET"> -->
     <li class="search col s12 l3">
       <div class="input-field oki-input-field">
-        <input placeholder="キーワード" value="<?= $conditionSelected['key_word']?>" name="key_word" type="text" class="validate input-search">
+        <input placeholder="キーワード" value="<?= $selected['key_word']?>" name="key_word" type="text" class="validate input-search">
       </div>
     </li>
     <li class="search col s12 m6 l3">
@@ -16,7 +16,7 @@
               <option value="<?=$isAreaScreen?>" disabled selected><?=AREA[$isAreaScreen]['label']?></option>
           <?php } ?>
           <?php foreach ($selectList['area'] as $key => $value) {?>
-            <option value="<?=$key?>" <?= $conditionSelected['area'] == $key? "selected":"" ?>><?=$value?></option>
+            <option value="<?=$key?>" <?= $selected['area'] == $key? "selected":"" ?>><?=$value?></option>
           <?php } ?>
         </select>
       </div>
@@ -26,7 +26,7 @@
         <select name="genre">
           <option value="" selected>ジャンルを選択してください。</option>
           <?php foreach ($selectList['genre'] as $key => $value) {?>
-            <option value="<?=$key?>" <?= $conditionSelected['genre'] == $key? "selected":"" ?>><?=$value?></option>
+            <option value="<?=$key?>" <?= $selected['genre'] == $key? "selected":"" ?>><?=$value?></option>
           <?php } ?>
         </select>
       </div>

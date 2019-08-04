@@ -64,10 +64,10 @@ class MiyakojimaController extends \App\Controller\AreaController
                     ->where(['area'=>mb_strtolower($this->request->getparam("controller")),
                         'genre' => $this->request->getQuery("genre")])->toArray();
         // 検索条件を取得し、画面側でselectedする
-        $conditionSelected = $this->request->getQuery();
+        $selected = $this->request->getQuery();
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('shops', 'selectList','conditionSelected'));
+        $this->set(compact('shops', 'selectList','selected'));
         $this->render();
     }
 

@@ -78,10 +78,10 @@ class NahaController extends \App\Controller\AreaController
                     ->where(['area'=>mb_strtolower($this->request->getparam("controller")),
                         'genre' => $this->request->getQuery("genre")])->toArray();
         // 検索条件を取得し、画面側でselectedする
-        $conditionSelected = $this->request->getQuery();
+        $selected = $this->request->getQuery();
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('isAreaScreen', 'shops', 'selectList','conditionSelected'));
+        $this->set(compact('isAreaScreen', 'shops', 'selectList','selected'));
         $this->render();
     }
 
@@ -99,7 +99,7 @@ class NahaController extends \App\Controller\AreaController
                 },'Jobs'])->first();
         $shopInfo = $this->Util->getShopInfo($shop);
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-        $imageList = array(); // 画面側でjsonとして使う画像リスト
+        $imageList = array(); // 画面側でJSONとして使う画像リスト
         // 画像リストを作成する
         foreach ($imageCol as $key => $value) {
             if (!empty($shop[$imageCol[$key]])) {
@@ -185,7 +185,7 @@ class NahaController extends \App\Controller\AreaController
 
         // $diarys1 = $this->getDiarys($id);
         $diarys = $this->Util->getDiarys($id);
-        $dir = $this->viewVars['shopInfo']['shop_path'].PATH_ROOT['CAST'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'].DS;
+        $dir = $this->viewVars['shopInfo']['cast_path'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
 
         $this->set(compact('cast','dir', 'diarys', 'ajax'));
         $this->render();

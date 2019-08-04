@@ -51,12 +51,12 @@ class AppController extends Controller{
     $title = '';
     if (!empty($query['area']) && !empty($query['genre'])) {
         // コントローラでセットされたtitleを代入してセパレータを追加
-        $title .=  AREA[$query['area']]['label'] . 'のおすすめ'.
+        $title .=  AREA[$query['area']]['label'] . 'の'.
                     GENRE[$query['genre']]['label'].'一覧';
     } else if(!empty($query['area'])) {
-        $title .=  AREA[$query['area']]['label'] . 'のおすすめ一覧';
+        $title .=  AREA[$query['area']]['label'] . '一覧';
     } else if(!empty($query['genre'])) {
-        $title .=  GENRE[$query['genre']]['label'] . 'のおすすめ一覧';
+        $title .=  GENRE[$query['genre']]['label'] . '一覧';
     }
     $this->set('title', $title);
   }

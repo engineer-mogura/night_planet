@@ -43,9 +43,8 @@
         </ul>
       </div>
       <?= $this->element('shop-edit-form') ?>
-      <h5 class="left-align"><?php if($shop->name != '') {
-        echo($shop->name);} else {
-        echo("店舗名を決めてください。");} ?>
+      <h5 class="left-align">
+        <?= !empty($shop->name) ? h($shop->name) : h('-') ?>
       </h5>
       <div class="header-area">
         <div class="share right-align">
@@ -90,7 +89,7 @@
             </div>
             <?php endforeach; ?>
         <?php } else { ?>
-            <p>キャストの登録はありません。</p>
+            <p class="col">キャストの登録はありません。</p>
         <?php } ?>
       </div>
       <div class="row">
@@ -101,21 +100,21 @@
          <table class="bordered shop-table z-depth-2" border="1">
           <tbody>
             <tr>
-              <th class="table-header" colspan="2" align="center"><?= h($shop->name);?></th>
+              <th class="table-header" colspan="2" align="center"><?= !empty($shop->name) ? h($shop->name) : h('-') ?></th>
             </tr>
             <tr>
               <th align="center">所在地</th>
-              <td><?= h($shop->full_address);?></td>
+              <td><?= !empty($shop->full_address) ? h($shop->full_address) : h('-') ?></td>
             </tr>
             <tr>
               <th align="center">連絡先</th>
-              <td><?=h($shop->tel);?></td>
+              <td><?= !empty($shop->tel) ? h($shop->tel) : h('-') ?></td>
             </tr>
             <tr>
               <th align="center">営業時間</th>
-              <td><?php if((!$shop->bus_from_time == '')
-                            && (!$shop->bus_to_time == '')
-                            && (!$shop->bus_hosoku == '')) {
+              <td><?php if((!empty($shop->bus_from_time))
+                            && (!empty($shop->bus_to_time))
+                            && (!empty($shop->bus_hosoku))) {
                               $busTime = $this->Time->format($shop->bus_from_time, 'HH:mm')
                               ."～".$this->Time->format($shop->bus_to_time, 'HH:mm')
                               ."</br>".$shop->bus_hosoku;
@@ -124,11 +123,11 @@
             </tr>
             <tr>
               <th align="center">スタッフ</th>
-              <td><?=h($shop->staff);?></td>
+              <td><?= !empty($shop->staff) ? h($shop->staff) : h('-') ?></td>
             </tr>
             <tr>
               <th align="center" valign="top">システム</th>
-              <td><?=h($shop->system);?></td>
+              <td><?= !empty($shop->system) ? h($shop->system) : h('-') ?></td>
             </tr>
           </tbody>
         </table>
@@ -142,7 +141,7 @@
               </tr>
               <tr>
                 <th align="center">ご利用できるクレジットカード</th>
-                <td><?php if(!$shop->credit == '') { ?>
+                <td><?php if(!empty($shop->credit)) { ?>
                       <?php $array =explode(',', $shop->credit); ?>
                       <?php for ($i = 0; $i < count($array); $i++) { ?>
                       <div class="chip" name="" value="">
@@ -206,32 +205,30 @@
         <tbody>
           <tr>
           <tr>
-            <th  class="table-header" colspan="2" align="center"><?php if(!$shop->name == '') {
+            <th  class="table-header" colspan="2" align="center"><?php if(!empty($shop->name)) {
               echo ($shop->name);
             } else {echo ('-');}?></th>
           </tr>
           <tr>
             <th align="center">業種</th>
             <td>
-              <?php if(!$shop->jobs[0]->industry == '') {
-                      echo ($this->Text->autoParagraph($shop->jobs[0]->industry));
-                    } else {echo ('-');} ?>
+              <?= !empty($shop->jobs[0]->industry) ? 
+                $this->Text->autoParagraph($shop->jobs[0]->industry): h('-') ?>
             </td>
           </tr>
           <tr>
             <th align="center">職種</th>
             <td>
-              <?php if(!$shop->jobs[0]->job_type == '') {
-                      echo ($this->Text->autoParagraph($shop->jobs[0]->job_type));
-                    } else {echo ('-');} ?>
+              <?= !empty($shop->jobs[0]->job_type) ? 
+                $this->Text->autoParagraph($shop->jobs[0]->job_type): h('-') ?>
             </td>
           </tr>
           <th align="center">時間</th>
-            <td><?php if((!$shop->jobs[0]->work_from_time == '')
-                      && (!$shop->jobs[0]->work_to_time == '')) {
+            <td><?php if((!empty($shop->jobs[0]->work_from_time))
+                      && (!empty($shop->jobs[0]->work_to_time))) {
                         $workTime = $this->Time->format($shop->jobs[0]->work_from_time, 'HH:mm')
                         ."～".$this->Time->format($shop->jobs[0]->work_to_time, 'HH:mm');
-                        if (!$shop->jobs[0]->work_time_hosoku == '') {
+                        if (!empty($shop->jobs[0]->work_time_hosoku)) {
                           $workTime = $workTime.="</br>".$shop->jobs[0]->work_time_hosoku;
                         }
                         echo ($workTime);
@@ -239,10 +236,10 @@
             </td>
           </tr>
           <th align="center">資格</th>
-          <td><?php if((!$shop->jobs[0]->from_age == '')
-                      && (!$shop->jobs[0]->to_age == '')) {
+          <td><?php if((!empty($shop->jobs[0]->from_age))
+                      && (!empty($shop->jobs[0]->to_age))) {
                         $qualification = $shop->jobs[0]->from_age."歳～".$shop->jobs[0]->to_age."歳くらいまで";
-                        if (!$shop->jobs[0]->qualification_hosoku == '') {
+                        if (!empty($shop->jobs[0]->qualification_hosoku)) {
                           $qualification = $qualification.="</br>".$shop->jobs[0]->qualification_hosoku;
                         }
                         echo ($qualification);
@@ -250,9 +247,9 @@
             </td>
           </tr>
           <th align="center">休日</th>
-            <td><?php if(!$shop->jobs[0]->holiday == '') {
+            <td><?php if(!empty($shop->jobs[0]->holiday)) {
                         $holiday = $shop->jobs[0]->holiday;
-                        if (!$shop->jobs[0]->holiday_hosoku == '') {
+                        if (!empty($shop->jobs[0]->holiday_hosoku)) {
                           $holiday = $holiday.="</br>".$shop->jobs[0]->holiday_hosoku;
                         }
                         echo ($holiday);
@@ -261,7 +258,7 @@
           </tr>
             <th align="center">待遇</th>
             <td>
-              <?php if(!$shop->jobs[0]->treatment == '') { ?>
+              <?php if(!empty($shop->jobs[0]->treatment)) { ?>
                 <?php $array =explode(',', $shop->jobs[0]->treatment); ?>
                 <?php for ($i = 0; $i < count($array); $i++) { ?>
                 <div class="chip" name=""id="<?=$array[$i]?>" value="<?=$array[$i]?>"><?=$array[$i]?></div>
@@ -272,7 +269,7 @@
           </tr>
           <tr>
             <th align="center">PR</th>
-            <td><?php if(!$shop->jobs[0]->pr == '') {
+            <td><?php if(!empty($shop->jobs[0]->pr)) {
               echo ($shop->jobs[0]->pr);
             } else {echo ('-');}?>
             </td>
@@ -288,28 +285,28 @@
           </tr>
           <tr>
             <th align="center">連絡先1</th>
-            <td><?php if(!$shop->jobs[0]->tel1 == '') {
+            <td><?php if(!empty($shop->jobs[0]->tel1)) {
               echo ($shop->jobs[0]->tel1);
             } else {echo ('-');} ?>
             </td>
           </tr>
           <tr>
             <th align="center">連絡先2</th>
-            <td><?php if(!$shop->jobs[0]->tel2 == '') {
+            <td><?php if(!empty($shop->jobs[0]->tel2)) {
               echo ($shop->jobs[0]->tel2);
             } else {echo ('-');} ?>
             </td>
           </tr>
           <tr>
             <th align="center">メール</th>
-            <td><?php if(!$shop->jobs[0]->email == '') {
+            <td><?php if(!empty($shop->jobs[0]->email)) {
               echo ($shop->jobs[0]->email);
             } else {echo ('-');} ?>
             </td>
           </tr>
           <tr>
             <th align="center">LINE ID</th>
-            <td><?php if(!$shop->jobs[0]->lineid == '') {
+            <td><?php if(!empty($shop->jobs[0]->lineid)) {
               echo ($shop->jobs[0]->lineid);
             } else {echo ('-');} ?>
             </td>

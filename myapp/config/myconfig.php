@@ -193,27 +193,27 @@ return [
 		'snack'=> [
 			'label' => "スナック",
 			'path' => "snack",
-			'image' => "/img/common/genre/genre_1.png"
+			'image' => "/img/common/genre/genre_2.png"
 		],
 		'girlsbar'=> [
 			'label' => "ガールズバー",
 			'path' => "girlsbar",
-			'image' => "/img/common/genre/genre_1.png"
+			'image' => "/img/common/genre/genre_3.png"
 		],
 		'club'=> [
 			'label' => "クラブ",
 			'path' => "club",
-			'image' => "/img/common/genre/genre_1.png"
+			'image' => "/img/common/genre/genre_4.png"
 		],
 		'lounge'=> [
 			'label' => "ラウンジ",
 			'path' => "lounge",
-			'image' => "/img/common/genre/genre_1.png"
+			'image' => "/img/common/genre/genre_5.png"
 		],
 		'pub'=> [
 			'label' => "パブ",
 			'path' => "pub",
-			'image' => "/img/common/genre/genre_1.png"
+			'image' => "/img/common/genre/genre_6.png"
 		],
 	)),
 	// 星座リスト

@@ -33,7 +33,6 @@
       </div>
     </li>
   </ul>
-    <?= $this->element('elmSearch'); ?>
   <div class="row">
     <?php foreach ($genreCounts as $key => $row): ?>
       <div class="col s12 m4 l3">

@@ -10,12 +10,13 @@
   <?= $this->Html->meta('icon') ?>
   <?= $this->Html->script('jquery-3.1.0.min.js') ?>
   <!-- <?= $this->Html->script('materialize.js') ?> --><!-- 検証用 -->
- <?= $this->Html->script('materialize.min.js') ?>
+  <?= $this->Html->script('materialize.min.js') ?>
   <?= $this->Html->script('map.js') ?>
   <?= $this->Html->script('okiyoru.js') ?>
   <?= $this->Html->script('ja_JP.js') ?>
   <?= $this->Html->script('jquery.notifyBar.js') ?>
   <?= $this->Html->script('ajaxzip3.js') ?>
+  <?= $this->Html->script('masonry.pkgd.min.js') ?><!-- タイル表示プラグイン TODO: 未使用状態 -->
   <?= $this->Html->script('moment.min.js') ?><!-- fullcalendar-3.9.0 -->
   <?= $this->Html->script('fullcalendar.js') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
   <?= $this->Html->script('fullcalendar_locale/ja.js') ?><!-- fullcalendar-3.9.0 -->

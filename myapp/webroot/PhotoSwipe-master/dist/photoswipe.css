@@ -22,7 +22,7 @@
     -webkit-box-sizing: border-box;
             box-sizing: border-box; }
   .pswp img {
-    max-width: none; }
+    max-width: none; object-fit: contain; }
 
 /* style is added when JS option showHideOpacity is set to true */
 .pswp--animate_opacity {

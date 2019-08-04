@@ -250,7 +250,6 @@ div.message.hidden {
   margin: initial;
 }
 .my-gallery{
-  /* Prevent vertical gaps */
   line-height: 0;
   -webkit-column-count: 3;
   -webkit-column-gap: 0px;
@@ -261,7 +260,6 @@ div.message.hidden {
   }
 .my-gallery figure{
   margin:0;
-  /* Just in case there are inline attributes */
   width: 100% !important;
   height: auto !important;
 }
@@ -349,7 +347,7 @@ span.or-header {
 .gallery-box {
   margin: 0 10px;
 }
-.card.diary-card {
+.card.diary-card, .card.gallery-card {
   margin: 0 10px;
 }
 div.card.diary-card .col{

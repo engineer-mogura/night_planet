@@ -326,15 +326,14 @@ span.or-header {
   margin-left: 10px;
   margin-right: 10px;
 }
-.coupon {
-  text-align: center;
-  width: 100%;
-}
 .material-icons.or-material-icons {
   width: inherit;
 }
 .shop-image {
   margin-top:5px;
+}
+.share.right-align {
+  margin-right: 10px;
 }
 .cast-list.row img {
   margin-left: auto;

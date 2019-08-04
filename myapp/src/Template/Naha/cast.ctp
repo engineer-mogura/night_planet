@@ -48,7 +48,7 @@
         echo("店舗名を決めてください。");} ?>
       </h5>
       <div class="header-area">
-        <div class="share right-align">
+        <div class="row share right-align">
           <a class="btn-floating blue btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="facebookでシェア">
             <i class="icon-facebook-rect">icon-facebook-rect</i>
           </a>

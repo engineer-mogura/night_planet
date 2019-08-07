@@ -101,7 +101,7 @@
           <li><a class="footer-item collection-item" href="/Users/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
           <li><a class="footer-item collection-item" href="/Users/privacy_policy"><i class="material-icons">note</i><?= COMMON_LM['003'] ?></a></li>
           <li><a class="footer-item collection-item" href="/Users/contract"><i class="material-icons">note</i><?= COMMON_LM['005'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/Users/membership_join"><i class="material-icons">star_half</i><?= USER_LM['006'] ?></a></li>
+          <li><a class="footer-item collection-item" href="/entry/member_ship"><i class="material-icons">star_half</i><?= USER_LM['006'] ?></a></li>
           <li><a class="footer-item collection-item" href="/owner/owners/login"><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?></a></li>
         </ul>
       </div>

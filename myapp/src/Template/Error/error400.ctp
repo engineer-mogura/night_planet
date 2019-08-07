@@ -31,8 +31,26 @@ endif;
 $this->end();
 endif;
 ?>
-<h2><?= h($message) ?></h2>
+<!-- okiyoru error -->
+<?php $this->layout = 'error_okiyoru';?>
+
+<blockquote>
+    <h4><?= __d('cake', 'The requested address {0} was not found on this server.', "<strong>'{$url}'</strong>") ?>></h4>
+</blockquote>
+<div>
+    <div>
+    <p class="center-align">以下のような原因が考えられます。</p>
+    <div class="card-panel teal">
+        <span class="white-text">
+            <ul class="center-align">
+                <li>一時的にアクセスできません。</li>
+                <li>移動、もしくは削除された可能性があります。</li>
+            </ul>
+        </span>
+    </div>
+    </div>
+</div>
 <p class="error">
     <strong><?= __d('cake', 'Error') ?>: </strong>
-    <?= __d('cake', 'The requested address {0} was not found on this server.', "<strong>'{$url}'</strong>") ?>
+    <?= h($message) ?>
 </p>

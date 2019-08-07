@@ -5,7 +5,7 @@ use Cake\Mailer\Mailer;
 
 class OwnerMailer extends Mailer
 {
-    public function registration($owner)
+    public function ownerRegistration($owner)
     {
         $this
             ->to($owner->email)

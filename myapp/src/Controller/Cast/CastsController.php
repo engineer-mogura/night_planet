@@ -990,7 +990,11 @@ class CastsController extends AppController
 
         // 以下でトークンの有効期限や改ざんを検証することが出来る
         if (!$cast->tokenVerify($token)) {
-            $this->Flash->success("cast->tokenVerify(token)メソッドを確認すること");
+            $this->log($this->Util->setLog($cast
+                , 'トークンの有効期限が切れたか、改ざんが行われた可能性があります。'));
+            // 仮登録してるレコードを削除する
+            $this->Casts->delete($cast);
+            $this->Flash->success(RESULT_M['AUTH_FAILED']);
             return $this->redirect(['action' => 'signup']);
         }
         // 仮登録時点で削除フラグは立っている想定。
@@ -1016,9 +1020,11 @@ class CastsController extends AppController
                 }
             }
             $nextDir = sprintf("%05d", count($dirArray) + 1);
+
         } else {
             // 指定フォルダが空なら00001連番から振る
             $nextDir = sprintf("%05d", 1);
+
         }
         // コネクションオブジェクト取得
         $connection = ConnectionManager::get('default');
@@ -1029,22 +1035,22 @@ class CastsController extends AppController
             // パスが存在しなければディレクトリを掘ってDB登録
             if (!realpath($dir->path.$nextDir)) {
 
-                $cast->dir = $nextDir; // 連番ディレクトリをセット
-                $cast->delete_flag = 0; // 論理削除フラグを下げる
-                if ($this->Casts->save($cast)) {
-
-                    // ディレクトリを掘る
-                    $dir = new Folder($dir->path.$nextDir, true, 0755);
-                    // コミット
-                    $connection->commit();
-
-                } else {
-                    throw new RuntimeException('レコードの更新に失敗しました。');
-                }
-
-            } else {
                 throw new RuntimeException('既にディレクトリが存在します。');
             }
+            // キャスト情報セット
+            $cast->dir = $nextDir; // 連番ディレクトリをセット
+            $cast->delete_flag = 0; // 論理削除フラグを下げる
+            // キャスト登録
+            if (!$this->Casts->save($cast)) {
+
+                throw new RuntimeException('レコードの更新に失敗しました。');
+            }
+
+            // ディレクトリを掘る
+            $dir = new Folder($dir->path.$nextDir, true, 0755);
+            // コミット
+            $connection->commit();
+
         } catch(RuntimeException $e) {
             // ロールバック
             $connection->rollback();

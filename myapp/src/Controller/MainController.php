@@ -35,7 +35,7 @@ class MainController extends AppController
     {
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('page', 'subpage', 'selectList'));
+        $this->set(compact('selectList'));
     }
 
     public function search()

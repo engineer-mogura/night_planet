@@ -155,79 +155,119 @@ class OwnersController extends AppController
         return $this->redirect($this->Auth->logout());
     }
 
+    /**
+     * トークンをチェックして不整合が無ければ
+     * ディレクトリを掘り、オーナー、店舗情報を登録する
+     *
+     * @param [type] $token
+     * @return void
+     */
     public function verify($token)
     {
         $owner = $this->Owners->get(Token::getId($token));
+        // 以下でトークンの有効期限や改ざんを検証することが出来る
         if (!$owner->tokenVerify($token)) {
-
+            $this->log($this->Util->setLog($owner
+                , 'トークンの有効期限が切れたか、改ざんが行われた可能性があります。'));
+            // 仮登録してるレコードを削除する
+            $this->Owners->delete($owner);
             $this->Flash->success(RESULT_M['AUTH_FAILED']);
             return $this->redirect(['action' => 'signup']);
         }
-        if ($owner->status == 0 ) {
-            // 本登録をもってオーナー用のディレクトリを掘る
-            $dir = WWW_ROOT.'img/'.$owner->area.DS.$owner->genre.DS;
-            // TODO scandirは、リストがないと、falseだけじゃなく
-            // warningも吐く。後で対応を考える。
-            // 指定フォルダ配下にあればラストの連番に+1していく
-            if (file_exists($dir)) {
-                $dirArray = scandir($dir);
-                for($i = 0; $i < count($dirArray); $i++) {
-                    if(strpos($dirArray[$i],'.') !== false) {
-                        unset($dirArray[$i]);
-                    }
-                }
-                $nextDir = sprintf("%05d",count($dirArray) + 1);
+        // 仮登録時点で仮登録フラグは立っていない想定。
+        if ($owner->status != 0) {
+            // すでに登録しているとみなし、ログイン画面へ
+            $this->Flash->success(RESULT_M['REGISTERED_FAILED']);
+            return $this->redirect(['action' => 'login']);
+        }
+        // 本登録をもってオーナー用のディレクトリを掘る
+        $dir = new Folder( preg_replace('/(\/\/)/', '/',
+            WWW_ROOT . PATH_ROOT['IMG'] . DS . $owner->area . DS . $owner->genre . DS) , true, 0755);
 
-            } else {
-            // 指定フォルダが空なら00001連番から振る
-                $nextDir = sprintf("%05d", 1);
+        // TODO: scandirは、リストがないと、falseだけじゃなく
+        // warningも吐く。後で対応を考える。
+        // 指定フォルダ配下にあればラストの連番に+1していく
+        if (file_exists($dir->path)) {
+            $dirArray = scandir($dir->path);
+            for($i = 0; $i < count($dirArray); $i++) {
+                if(strpos($dirArray[$i],'.') !== false) {
+                    unset($dirArray[$i]);
+                }
+            }
+            $nextDir = sprintf("%05d",count($dirArray) + 1);
 
-            }
-            // パスが存在しなければディレクトリを掘ってDB登録
-            if (!realpath($dir.$nextDir)) {
-                $connection = ConnectionManager::get('default');
-                // トランザクション処理開始
-                $connection->begin();
-                $owner->dir = $nextDir;
-                $owner->status = 1;
-                $shop = $this->Shops->newEntity();
-                $shop->area = $owner->area;
-                $shop->genre = $owner->genre;
-                $shop->dir = $owner->dir;
-                $result = true;
-                if(!$this->Owners->save($owner)) {
-                    $this->Flash->error('オーナーテーブルの更新に失敗した。');
-                    $result = false;
-                }
-                if(!$this->Shops->save($shop)) {
-                    $this->Flash->error('ショップテーブルの登録に失敗した。');
-                    $result = false;
-                }
-                if($result) {
-                    // 成功: commit
-                    $connection->commit();
-                    // ショップテーブルが登録されて初めて、求人情報の空テーブル作成
-                    $findShop = $this->Shops->find('all')->where(['owner_id' => $owner->id])->first();
-                    $this->Jobs->findOrCreate(['shop_id' => $findShop->id]);
-                    // commit出来たらディレクトリを掘る
-                    $dir = new Folder($dir.$nextDir, true, 0755);
-                    // ユーザーステータスを本登録にする。(statusカラムを本登録に更新する)
-                    $this->Flash->success(RESULT_M['AUTH_SUCCESS']);
-                    return $this->redirect(['action' => 'login']);
-                } else {
-                    // 失敗: rollback
-                    $connection->rollback();
-                $this->Flash->error(RESULT_M['AUTH_FAILED']);
-                return $this->redirect(['action' => 'signup']);
-                }
-            } else {
-                $this->Flash->error('既にディレクトリが存在します。');
-                $this->Flash->error(RESULT_M['AUTH_FAILED']);
-                return $this->redirect(['action' => 'signup']);
-            }
+        } else {
+        // 指定フォルダが空なら00001連番から振る
+            $nextDir = sprintf("%05d", 1);
 
         }
-        $this->Flash->success(RESULT_M['REGISTERED_FAILED']);
+        // コネクションオブジェクト取得
+        $connection = ConnectionManager::get('default');
+        // トランザクション処理開始
+        $connection->begin();
+
+        try{
+            // パスが存在しなければディレクトリを掘ってDB登録
+            if (realpath($dir->path.$nextDir)) {
+
+                throw new RuntimeException('既にディレクトリが存在します。');
+            }
+
+            // オーナー情報セット
+            $owner->dir = $nextDir; // 連番ディレクトリをセット
+            $owner->status = 1; // 仮登録フラグを下げる
+            // オーナー登録
+            if (!$this->Owners->save($owner)) {
+
+                throw new RuntimeException('レコードの更新に失敗しました。');
+            }
+
+            // 店舗情報セット
+            $shop = $this->Shops->newEntity();
+            $shop->owner_id = $owner->id;
+            $shop->area = $owner->area;
+            $shop->genre = $owner->genre;
+            $shop->dir = $owner->dir;
+            // 店舗登録
+            if(!$this->Shops->save($shop)) {
+
+                throw new RuntimeException('レコードの登録に失敗しました。');
+            }
+
+            // ディレクトリを掘る
+            $dir = new Folder($dir->path.$nextDir, true, 0755);
+            // コミット
+            $connection->commit();
+
+        } catch(RuntimeException $e) {
+            // ロールバック
+            $connection->rollback();
+            $this->log($this->Util->setLog($owner, $e));
+            // 仮登録してるレコードを削除する
+            $this->Owners->delete($owner);
+            $this->Flash->error(RESULT_M['AUTH_FAILED']);
+            return $this->redirect('/entry/siginup');
+        }
+        try {
+            // ショップ情報を取得
+            $shop = $this->Shops->find()
+                ->where(['owner_id' => $owner->id])->first();
+            // 求人情報セット
+            $job = $this->Jobs->newEntity();
+            $job->shop_id = $shop->id;
+            // 求人登録
+            if(!$this->Jobs->save($job)) {
+
+                throw new RuntimeException('レコードの登録に失敗しました。');
+            }
+        } catch(RuntimeException $e) {
+
+            $this->log($this->Util->setLog($owner, $e));
+        }
+
+
+        // 認証完了でログインページへ
+        $this->Flash->success(RESULT_M['AUTH_SUCCESS']);
         return $this->redirect(['action' => 'login']);
     }
 

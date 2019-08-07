@@ -68,6 +68,12 @@ Router::scope('/', function ($routes) {
     //     'action' => 'top'
     // ]);
 
+    // オーナー登録関連
+    // $routes->connect('/entry/*', [
+    //     'controller' => 'Entry',
+    //     'action' => 'display'
+    // ]);
+
     // 規約に基づいたデフォルトルートを接続。
     $routes->fallbacks();
 });

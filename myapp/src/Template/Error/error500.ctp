@@ -36,7 +36,27 @@ if (Configure::read('debug')) :
     $this->end();
 endif;
 ?>
-<h2><?= __d('cake', 'An Internal Error Has Occurred') ?></h2>
+<!-- okiyoru error -->
+<?php $this->layout = 'error_okiyoru';?>
+
+<blockquote>
+    <h4><?= __d('cake', 'An Internal Error Has Occurred')?></h4>
+</blockquote>
+<div>
+    <div>
+    <p class="center-align">以下のような原因が考えられます。</p>
+    <div class="card-panel teal">
+        <span class="white-text">
+            <ul class="center-align">
+                <li>サーバーエラーが発生しました。</li>
+                <li>お探しのページを表示できません。</li>
+                <li>一時的にアクセスできません。</li>
+                <li>混雑のためアクセスしにくくなっています。</li>
+            </ul>
+        </span>
+    </div>
+    </div>
+</div>
 <p class="error">
     <strong><?= __d('cake', 'Error') ?>: </strong>
     <?= h($message) ?>

@@ -115,7 +115,6 @@ function crearCastEvents() {
  */
 function crearCommonEvents() {
 
-    $(document).off('click','.coupon');
     $(document).off('click','#return_top a');
 }
 
@@ -498,16 +497,6 @@ function castImageDeleteBtn(form, obj){
             });
         });
 
-        /* ショップページプレビュ クーポン クリックイベント */
-        $(document).on('click','.coupon',function() {
-            $(this).find('.arrow').toggleClass("active");
-            $(this).find('.arrow').toggleClass('nonActive');
-            if (!$(this).find('.arrow').hasClass('active')) {
-                $(this).find('.label').text('クーポンを表示する');
-            } else {
-                $(this).find('.label').text('クーポンをとじる');
-            }
-        });
         // TODO: ピッカー系がgoogle chomeブラウザで不具合が出てるっぽい。2019/03/28時点
         // 症状は、クリックしても一瞬表示されるだけ。現時点の解決策としては<label>タグを付与することで表示される
         /* 店舗編集のスクリプト クーポン materializecss Date Picker */

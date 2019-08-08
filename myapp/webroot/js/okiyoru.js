@@ -115,14 +115,13 @@ function crearCastEvents() {
  */
 function crearCommonEvents() {
 
-    $(document).off('click', '.moveNextCarousel');
-    $(document).off('click', '.movePrevCarousel');
     $(document).off('click','.coupon');
     $(document).off('click','#return_top a');
 }
 
 /**
- * 
+ * TODO: fileload関数でも対応できそうなので、後で考える。
+ * 店舗のトップイメージの変更時画像を差し替える処理
  */
 function imgDisp() {
     var file = $("#top-image-file").prop("files")[0];
@@ -246,82 +245,6 @@ function createShopCard(form, response, path) {
         }
 
     });
-}
-
-/**
- * カルーセルスライダーを描画する
- * @param  {} obj
- * @param  {} path
- * @param  {} fileList
- */
-function CarouselRender(obj, path, fileList) {
-    $.get(path, {}, function(html) {
-        var dom = $(html); // html部品をdomに変換
-
-        var carouselTmp = dom.find(".carousel-item").clone(); // カルーセルの部品を複製しておく
-        dom.find(".carousel-item").remove(); // カルーセルの部品を削除しておく ※複製した部品を都度生成して使う
-        $.each(fileList, function(index, file) {
-            var carousel = $(carouselTmp).clone();
-            // 属性などを追加する
-            $(carousel).addClass(file['key']);
-            $(carousel).find("img").attr('src',file['path']);
-            $(dom['2']).append(carousel);
-        })
-        // 生成したスライダーをスライダーボックスに配置
-        $(obj).find("#view-diary").find(".slider-box").append(dom);
-        // 画像が１枚の時のみ、スライダーのprev,nextボタンを非表示にする
-        if(fileList.length == 1) {
-            $(obj).find("#view-diary").find(".carousel-fixed-item").remove();
-        }
-        // モーダル描画後のタイミングでカルーセルを初期化してあげないと、うまくいかない
-        $(document).find('.carousel.carousel-slider').carousel({
-            fullWidth: true
-        });
-    });
-
-}
-
-/**
- * Material Boxを描画する
- * @param  {} obj
- * @param  {} path
- * @param  {} fileList
- */
-function materialboxedRender(obj, path, fileList) {
-    $.get(path, {}, function(html) {
-        var dom = $(html); // html部品をdomに変換
-        // 前に描画したスライダーを削除する
-        $.each(fileList, function(index, file) {
-            var carousel = $(carouselTmp).clone();
-            var count = index + 1; // カラムがimage1～始まるためのカウント用
-            // 属性などを追加する
-            $(carousel).addClass("image"+count);
-            $(carousel).val("image"+count);
-            $(carousel).find("img").attr('src',fileList[index]);
-            $(dom['2']).append(carousel);
-        })
-        $.get(path, {}, function(html) {
-
-            var $dom = $(html);
-            $($dom).addClass("image"+imgCount);
-            $($dom).find("input[name='file_name']").val(file.name);
-            $($dom).find('img').attr({src:fileReader.result});
-            $(obj).append($dom);
-            $('.materialboxed').materialbox();
-            $('.tooltipped').tooltip({delay: 50});
-        });
-        // 生成したスライダーをスライダーボックスに配置
-        $(obj).find("#view-diary").find(".slider-box").append(dom);
-        // 画像が１枚の時のみ、スライダーのprev,nextボタンを非表示にする
-        if(fileList.length == 1) {
-            (obj).find("#view-diary").find(".carousel-fixed-item").remove();
-        }
-        // モーダル描画後のタイミングでカルーセルを初期化してあげないと、うまくいかない
-        $(document).find('.carousel.carousel-slider').carousel({
-            fullWidth: true
-        });
-    });
-
 }
 
 /**
@@ -500,21 +423,7 @@ function castImageDeleteBtn(form, obj){
         $('.scrollspy').scrollSpy();
         $('.collapsible').collapsible();
         Materialize.updateTextFields();
-        $('.carousel.carousel-slider').carousel({
-            fullWidth: true
-        });
-        // move next carousel
-        $(document).on('click', '.moveNextCarousel', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            $('.carousel').carousel('next');
-        });
-        // move prev carousel
-        $(document).on('click', '.movePrevCarousel', function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            $('.carousel').carousel('prev');
-        });
+    
         // materializecss modal モーダル表示してる時は、背景のスクロール禁止する
         // $('.modal').modal();
         $('.modal').modal({

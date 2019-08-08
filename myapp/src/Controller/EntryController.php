@@ -90,6 +90,12 @@ class EntryController extends AppController
             throw new NotFoundException();
         }
     }
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
     public function memberShip()
     {
         $this->render();

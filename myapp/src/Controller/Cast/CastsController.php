@@ -1060,73 +1060,11 @@ class CastsController extends AppController
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
             return $this->redirect(['action' => 'login']);
         }
-        // ステータスを本登録にする。(statusカラムを本登録に更新する)
+        // 認証完了でログインページへ
         $this->Flash->success(RESULT_M['AUTH_SUCCESS']);
         return $this->redirect(['action' => 'login']);
 
     }
-
-    // public function verify($token)
-    // {
-    //     $cast = $this->Casts->get(Token::getId($token));
-    //     if (!$cast->tokenVerify($token)) {
-    //         $this->Flash->success("cast->tokenVerify(token)メソッドを確認すること");
-    //         return $this->redirect(['action' => 'signup']);
-    //     }
-    //     if ($cast->delete_flag == 1) {
-    //         $shop = $this->Shops->get($cast->shop_id);
-    //         // 本登録をもってキャスト用のディレクトリを掘る
-    //         $dir = WWW_ROOT.PATH_ROOT['IMG'].DS.$shop->area.DS.$shop->genre
-    //             .DS.$shop->dir.DS.PATH_ROOT['CAST'].DS;
-    //         // TODO: scandirは、リストがないと、falseだけじゃなく
-    //         // warningも吐く。後で対応を考える。
-    //         // 指定フォルダ配下にあればラストの連番に+1していく
-    //         if (file_exists($dir)) {
-    //             $dirArray = scandir($dir);
-    //             for ($i = 0; $i < count($dirArray); $i++) {
-    //                 if (strpos($dirArray[$i], '.') !== false) {
-    //                     unset($dirArray[$i]);
-    //                 }
-    //             }
-    //             $nextDir = sprintf("%05d", count($dirArray) + 1);
-    //         } else {
-    //             // 指定フォルダが空なら00001連番から振る
-    //             $nextDir = sprintf("%05d", 1);
-    //         }
-    //         // パスが存在しなければディレクトリを掘ってDB登録
-    //         if (!realpath($dir.$nextDir)) {
-    //             $connection = ConnectionManager::get('default');
-    //             // トランザクション処理開始
-    //             $connection->begin();
-    //             $cast->dir = $nextDir;
-    //             $cast->delete_flag = 0;
-    //             $result = true;
-    //             if (!$this->Casts->save($cast)) {
-    //                 $this->Flash->error(RESULT_M['AUTH_FAILED']);
-    //                 $result = false;
-    //             }
-    //             if ($result) {
-    //                 // 成功: commit
-    //                 $connection->commit();
-    //                 // commit出来たらディレクトリを掘る
-    //                 $dir = new Folder($dir.$nextDir, true, 0755);
-    //                 // ステータスを本登録にする。(statusカラムを本登録に更新する)
-    //                 $this->Flash->success(RESULT_M['AUTH_SUCCESS']);
-    //                 return $this->redirect(['action' => 'login']);
-    //             } else {
-    //                 // 失敗: rollback
-    //                 $connection->rollback();
-    //                 $this->Flash->error(RESULT_M['AUTH_FAILED']);
-    //                 return $this->redirect(['action' => 'login']);
-    //             }
-    //         } else {
-    //             $this->Flash->error(RESULT_M['AUTH_FAILED']);
-    //             return $this->redirect(['action' => 'login']);
-    //         }
-    //     }
-    //     $this->Flash->success(RESULT_M['REGISTERED_FAILED']);
-    //     return $this->redirect(['action' => 'login']);
-    // }
 
     /**
      * json返却用の設定

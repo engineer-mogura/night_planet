@@ -140,24 +140,13 @@ class OwnersController extends AppController
     {
         // レイアウトを使用しない
         $this->viewBuilder()->autoLayout(false);
-
-        // TODO: この自動ログインのコメントは削除予定。\node-link\cakephp-remember-meプラグインで対応できてる
-        // // ※ $userにユーザー情報取得済み前提
-        // // ユーザー自動ログイン管理テーブルからレコード削除
-        // $entity = $this->Owners->get(['id' => $this->Auth->user('id')]);
-        // $entity->remember_token = "";
-        // if ($this->Owners->save($entity)) {
-        //     // Cookie削除
-        //     $this->response = $this->response->withExpiredCookie('AUTO_LOGIN');
-        // }
-
         $this->Flash->success(COMMON_M['LOGGED_OUT']);
         return $this->redirect($this->Auth->logout());
     }
 
     /**
      * トークンをチェックして不整合が無ければ
-     * ディレクトリを掘り、オーナー、店舗情報を登録する
+     * ディレクトリを掘り、オーナー、店舗、求人情報を登録する
      *
      * @param [type] $token
      * @return void
@@ -216,7 +205,7 @@ class OwnersController extends AppController
             // オーナー情報セット
             $owner->dir = $nextDir; // 連番ディレクトリをセット
             $owner->status = 1; // 仮登録フラグを下げる
-            // オーナー登録
+            // オーナー本登録
             if (!$this->Owners->save($owner)) {
 
                 throw new RuntimeException('レコードの更新に失敗しました。');
@@ -264,8 +253,6 @@ class OwnersController extends AppController
 
             $this->log($this->Util->setLog($owner, $e));
         }
-
-
         // 認証完了でログインページへ
         $this->Flash->success(RESULT_M['AUTH_SUCCESS']);
         return $this->redirect(['action' => 'login']);

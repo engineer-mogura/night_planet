@@ -8,6 +8,9 @@ html,body {
 .container {
     width: 94.5%;
 }
+.entry.container {
+  padding: initial;
+}
 body.fixed {
   position: fixed;
   width: 100%;
@@ -598,34 +601,6 @@ div.my-gallery {
   margin-top: 10px;
 }
 /* 日記カード モジュール END */
-
-/* スライダーの矢印 START */
-.middle-indicator {
-  position: absolute;
-  display: inline;
-  width: 87%;
-  margin-top: 30%;
-}
- .middle-indicator-text{
-  font-size: 3.2rem;
- }
- a.middle-indicator-text{
-   color:white !important;
-   background-color: dodgerblue;
-   opacity: 0.5;
- }
-.content-indicator{
-   width: 44px;
-   height: 44px;
-   background: none;
-   -moz-border-radius: 50px;
-   -webkit-border-radius: 50px;
-   border-radius: 50px; 
- }
-   /* .indicators{
-   visibility: hidden;
- } */
-/* スライダーの矢印 END */
 
 /* モーダルメニュー START */
 .fixed-action-btn.modal-more-horiz {

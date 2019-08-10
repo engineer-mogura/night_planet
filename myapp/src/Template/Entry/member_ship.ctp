@@ -15,7 +15,7 @@
                 <p><?= __d('cake', 'どのように掲載されるのかは、下のURL先をサンプルとして用意しておりますのでご覧ください。')?></p>
             </blockquote>
                 <div class="org-link">
-                    <a href="https://okiyoru.com/introduce/miyakojima-mitsuki/">ラウンジ 三月 -みつき-</a>
+                    <a href="http://okiyoru.local/naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83">Club琉球</a>
                 </div>
             <blockquote>
                 <p><?= __d('cake', '店舗掲載をご希望の方は、下のURLからユーザー登録をお願いします。')?></p>

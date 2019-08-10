@@ -31,17 +31,18 @@
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
 </head>
+  <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?> 
   <?php $id = $this->request->getSession()->read('Auth.Owner.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.Owner.role') ?>
-<body id="owner-default">
+<body id="owner-default"><!--TODO: 本来は、【shopDefault】のレイアウトなので、jsでの初期化処理が必要-->
   <ul id="slide-out" class="side-nav fixed">
     <li>
       <div class="user-view">
-        <div class="background">
-          <img src="/img/common/area/top1.jpg">
+      <div class="background" style="background-color: orange;">
+        <!-- <img src="/img/common/area/top1.jpg"> -->
         </div>
-        <a href="#!user"><img class="circle" src="/img/common/area/top1.jpg"></a>
-        <a href="#!name"><span class="white-text name">John Doe</span></a>
+        <a href="#!user"><img class="circle" src="<?=$mainImage?>"></a>
+        <a href="#!name"><span class="white-text name"><?=$this->request->getSession()->read('Auth.Owner.name')?></span></a>
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>
     </li>
@@ -53,7 +54,6 @@
     <li><a href="/owner/shops/index/?activeTab=tenpo-gallery" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= SHOP_LM['006'] ?></a></li>
     <li><a href="/owner/shops/index/?activeTab=map" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">vertical_align_top</i><?= SHOP_LM['007'] ?></a></li>
     <li><a href="/owner/shops/index/?activeTab=job" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= SHOP_LM['008'] ?></a></li>
-    <li><a href="/owner/casts/index/?activeTab=index" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= SHOP_LM['009'] ?></a></li>
     <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">help_outline</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

@@ -97,14 +97,14 @@
           <span class="or-header">店舗情報</span>
         </div>
         <div class="col s12 m6 l6">
-         <table class="bordered shop-table z-depth-2" border="1">
+         <table id="basic-info" class="bordered shop-table z-depth-2" border="1">
           <tbody>
             <tr>
               <th class="table-header" colspan="2" align="center"><?= !empty($shop->name) ? h($shop->name) : h('-') ?></th>
             </tr>
             <tr>
               <th align="center">所在地</th>
-              <td><?= !empty($shop->full_address) ? h($shop->full_address) : h('-') ?></td>
+              <td name="address"><?= !empty($shop->full_address) ? h($shop->full_address) : h('-') ?></td>
             </tr>
             <tr>
               <th align="center">連絡先</th>
@@ -112,14 +112,15 @@
             </tr>
             <tr>
               <th align="center">営業時間</th>
-              <td><?php if((!empty($shop->bus_from_time))
-                            && (!empty($shop->bus_to_time))
-                            && (!empty($shop->bus_hosoku))) {
-                              $busTime = $this->Time->format($shop->bus_from_time, 'HH:mm')
-                              ."～".$this->Time->format($shop->bus_to_time, 'HH:mm')
-                              ."</br>".$shop->bus_hosoku;
-                              echo ($busTime);
-                            } else { echo ('-'); } ?></td>
+              <td><?php if((!empty($shop->bus_from_time))) {
+                        $busTime = $this->Time->format($shop->bus_from_time, 'HH:mm')
+                        ." ～ ".(empty($shop->bus_to_time) ? 'ラスト' : $this->Time->format($shop->bus_to_time, 'HH:mm'));
+                        if (!empty($shop->bus_hosoku)) {
+                          $busTime = $busTime.="</br>".$shop->bus_hosoku;
+                        }
+                        echo (mb_convert_kana($busTime,'N'));
+                      } else { echo ('-'); } ?>
+              </td>
             </tr>
             <tr>
               <th align="center">スタッフ</th>
@@ -127,7 +128,7 @@
             </tr>
             <tr>
               <th align="center" valign="top">システム</th>
-              <td><?= !empty($shop->system) ? h($shop->system) : h('-') ?></td>
+              <td><?= !empty($shop->system) ? $this->Text->autoParagraph($shop->system) : h('-') ?></td>
             </tr>
           </tbody>
         </table>
@@ -224,14 +225,13 @@
             </td>
           </tr>
           <th align="center">時間</th>
-            <td><?php if((!empty($shop->jobs[0]->work_from_time))
-                      && (!empty($shop->jobs[0]->work_to_time))) {
+            <td><?php if((!empty($shop->jobs[0]->work_from_time))) {
                         $workTime = $this->Time->format($shop->jobs[0]->work_from_time, 'HH:mm')
-                        ."～".$this->Time->format($shop->jobs[0]->work_to_time, 'HH:mm');
+                        ." ～ ".(empty($shop->jobs[0]->work_to_time) ? 'ラスト' : $this->Time->format($shop->jobs[0]->work_to_time, 'HH:mm'));
                         if (!empty($shop->jobs[0]->work_time_hosoku)) {
                           $workTime = $workTime.="</br>".$shop->jobs[0]->work_time_hosoku;
                         }
-                        echo ($workTime);
+                        echo (mb_convert_kana($workTime,'N'));
                       } else { echo ('-'); } ?>
             </td>
           </tr>
@@ -242,7 +242,7 @@
                         if (!empty($shop->jobs[0]->qualification_hosoku)) {
                           $qualification = $qualification.="</br>".$shop->jobs[0]->qualification_hosoku;
                         }
-                        echo ($qualification);
+                        echo (mb_convert_kana($qualification,'N'));
                       } else { echo ('-'); } ?>
             </td>
           </tr>

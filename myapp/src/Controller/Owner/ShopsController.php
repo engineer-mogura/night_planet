@@ -865,7 +865,7 @@ class ShopsController extends AppController
         $auth = $this->request->session()->read('Auth.Owner');
         $id = $auth['id']; // ユーザーID
 
-        $job = $this->Shops->patchEntity($this->Jobs
+        $job = $this->Jobs->patchEntity($this->Jobs
             ->get($this->request->getData('id')), $this->request->getData());
 
         // バリデーションチェック
@@ -897,14 +897,18 @@ class ShopsController extends AppController
             ->where(['id' => $this->viewVars['shopInfo']['id']])
             ->contain(['Jobs'])->first();
 
+        // 作成するセレクトボックスを指定する
+        $masCodeFind = array('industry','job_type','treatment','day');
+        // セレクトボックスを作成する
+        $selectList = $this->Util->getSelectList($masCodeFind,$this->MasterCodes,true);
         // マスタコードの待遇リスト取得
         $masTreatment = $this->MasterCodes->find()->where(['code_group' => 'treatment'])->toArray();
         // 求人情報の待遇リストを作成する
         $jobTreatments = $this->Util->getTreatment(reset($shop->jobs)['treatment'], $masTreatment);
-        // クレジット、待遇リストをセット
+        // 待遇リストをセット
         $masData = array('treatment'=>json_encode($jobTreatments));
 
-        $this->set(compact('shop','masData','masTreatment'));
+        $this->set(compact('shop','masData','selectList'));
         $this->render('/Element/shopEdit/job');
         $response = array(
             'html' => $this->response->body(),

@@ -140,23 +140,10 @@
                     <i class="material-icons">thumb_up</i></a><span class="like-field-span like-count"><?=count($cast->diarys[0]->likes)?></span>
               <a class="btn-floating waves-effect waves-green btn-flat red">
                     <i class="material-icons">thumb_up</i></a><span class="like-field-span">LIKE?</span>
-              <a href="/naha/diary/<?=$cast->id."?area=".$cast->shop->area."&genre=".$cast->shop->genre.
+              <a href="<?=DS.$shopInfo['area']['path'].DS.PATH_ROOT['DIARY'].DS.$cast->id."?area=".$cast->shop->area."&genre=".$cast->shop->genre.
                       "&shop=".$cast->shop->id."&name=".$cast->shop->name."&cast=".$cast->id."&nickname=".$cast->nickname?>"
                       class="right waves-effect waves-light btn-large createBtn"><i class="material-icons right">chevron_right</i><?=COMMON_LB['052']?></a>
               </p>
-              <!-- <div class="row">
-                <div class="col s6 m4 l4"><span class="btn-floating waves-effect waves-green btn-flat blue">
-                  <i class="material-icons">thumb_up</i></span><span class="like-field-span like-count"><?=count($cast->diarys[0]->likes)?></span>
-                </div>
-                <div class="col s6 m4 l4"><a class="btn-floating waves-effect waves-green btn-flat red">
-                  <i class="material-icons">thumb_up</i></a><span class="like-field-span">LIKE?</span>
-                </div>
-                <div class="col s6 m4 l4">
-                  <a href="/naha/diary/<?=$cast->id."?area=".$cast->shop->area."&genre=".$cast->shop->genre.
-                    "&shop=".$cast->shop->id."&name=".$cast->shop->name."&cast=".$cast->id."&nickname=".$cast->nickname?>"
-                    class="waves-effect waves-light btn-large createBtn"><i class="material-icons right">chevron_right</i><?=COMMON_LB['052']?></a>
-                </div>
-              </div> -->
             </div>
           </div>
             <?php
@@ -169,14 +156,14 @@
           <span class="or-header">店舗情報</span>
         </div>
         <div class="col s12 m6 l6">
-         <table class="bordered shop-table z-depth-2" border="1">
+         <table id="basic-info" class="bordered shop-table z-depth-2" border="1">
           <tbody>
             <tr>
               <th class="table-header" colspan="2" align="center"><?= !empty($shop->name) ? h($shop->name) : h('-') ?></th>
             </tr>
             <tr>
               <th align="center">所在地</th>
-              <td><?= !empty($cast->shop->full_address) ? h($cast->shop->full_address) : h('-') ?></td>
+              <td name="address"><?= !empty($cast->shop->full_address) ? h($cast->shop->full_address) : h('-') ?></td>
             </tr>
             <tr>
               <th align="center">連絡先</th>
@@ -184,14 +171,15 @@
             </tr>
             <tr>
               <th align="center">営業時間</th>
-              <td><?php if((!empty($cast->shop->bus_from_time))
-                            && (!empty($cast->shop->bus_to_time))
-                            && (!empty($cast->shop->bus_hosoku))) {
-                              $busTime = $this->Time->format($cast->shop->bus_from_time, 'HH:mm')
-                              ."～".$this->Time->format($cast->shop->bus_to_time, 'HH:mm')
-                              ."</br>".$cast->shop->bus_hosoku;
-                              echo ($busTime);
-                            } else { echo ('-'); } ?></td>
+              <td><?php if((!empty($shop->bus_from_time))) {
+                      $busTime = $this->Time->format($shop->bus_from_time, 'HH:mm')
+                      ." ～ ".(empty($shop->bus_to_time) ? 'ラスト' : $this->Time->format($shop->bus_to_time, 'HH:mm'));
+                      if (!empty($shop->bus_hosoku)) {
+                        $busTime = $busTime.="</br>".$shop->bus_hosoku;
+                      }
+                      echo (mb_convert_kana($busTime,'N'));
+                    } else { echo ('-'); } ?>
+              </td>
             </tr>
             <tr>
               <th align="center">スタッフ</th>
@@ -199,7 +187,7 @@
             </tr>
             <tr>
               <th align="center" valign="top">システム</th>
-              <td><?= !empty($cast->shop->system) ? h($cast->shop->system) : h('-') ?></td>
+              <td><?= !empty($cast->shop->system) ? $this->Text->autoParagraph($cast->shop->system) : h('-') ?></td>
             </tr>
           </tbody>
         </table>
@@ -280,14 +268,13 @@
             </td>
           </tr>
           <th align="center">時間</th>
-            <td><?php if((!empty($cast->shop->jobs[0]->work_from_time))
-                      && (!empty($cast->shop->jobs[0]->work_to_time))) {
+            <td><?php if((!empty($cast->shop->jobs[0]->work_from_time))) {
                         $workTime = $this->Time->format($cast->shop->jobs[0]->work_from_time, 'HH:mm')
-                        ."～".$this->Time->format($cast->shop->jobs[0]->work_to_time, 'HH:mm');
+                        ." ～ ".(empty($cast->shop->jobs[0]->work_to_time) ? 'ラスト' : $this->Time->format($cast->shop->jobs[0]->work_to_time, 'HH:mm'));
                         if (!empty($cast->shop->jobs[0]->work_time_hosoku)) {
                           $workTime = $workTime.="</br>".$cast->shop->jobs[0]->work_time_hosoku;
                         }
-                        echo ($workTime);
+                        echo (mb_convert_kana($workTime,'N'));
                       } else { echo ('-'); } ?>
             </td>
           </tr>
@@ -298,7 +285,7 @@
                         if (!empty($cast->shop->jobs[0]->qualification_hosoku)) {
                           $qualification = $qualification.="</br>".$cast->shop->jobs[0]->qualification_hosoku;
                         }
-                        echo ($qualification);
+                        echo (mb_convert_kana($qualification,'N'));
                       } else { echo ('-'); } ?>
             </td>
           </tr>

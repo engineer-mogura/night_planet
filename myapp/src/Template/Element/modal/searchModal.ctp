@@ -1,7 +1,7 @@
 <div id="modal-search" class="modal">
   <div class="modal-content">
-    <h4>search</h4>
-    <p>A bunch of text</p>
+    <h4>検索</h4>
+    <p>店舗名でも検索できます</p>
     <div class="modal-box">
       <?= $this->element('elmSearch'); ?>
     </div>

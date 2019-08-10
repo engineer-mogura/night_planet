@@ -4,10 +4,7 @@ namespace App\Controller;
 use \Cake\ORM\Query;
 use Cake\Event\Event;
 use Token\Util\Token;
-use Cake\Mailer\Email;
-use Cake\Error\Debugger;
 use Cake\Routing\Router;
-use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
 /**
 * Users Controller
@@ -35,26 +32,24 @@ class NahaController extends \App\Controller\AreaController
         if ($this->request->is('ajax')) {
             $this->render();
         }
-        $isAreaScreen = mb_strtolower($this->request->getparam("controller"));
-        $masterCodesFind = array('area','genre');
-        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+
         $query = $this->Shops->find();
         $query = $this->Shops->find('all', Array('fields' =>
                     Array('area', 'genre', 'count' => $query->func()->count('genre'))));
-        $tmpList = $query->where(['area' => AREA[$isAreaScreen]['path']])
+        $tmpList = $query->where(['area' => AREA[$this->viewVars['isArea']]['path']])
             ->group('genre')->toArray();
         $genreCounts = GENRE; // ジャンルの配列をコピー
         // それぞれのジャンルの初期値カウントに０,エリア名をセットする
         foreach ($genreCounts as $key => $row) {
-            $genreCounts[$key] = $row + array('count'=> 0,'area' => AREA[$isAreaScreen]['path']);
+            $genreCounts[$key] = $row + array('count'=> 0,'area' => AREA[$this->viewVars['isArea']]['path']);
         }
         // DBから取得したジャンルのカウントをセットする
         foreach ($tmpList as $key => $row) {
-            $genreCounts[$row['genre']]['area'] = AREA[$isAreaScreen]['path'];
+            $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['isArea']]['path'];
             $genreCounts[$row['genre']]['count'] = $row['count'];
         }
 
-        $this->set(compact('isAreaScreen', 'genreCounts', 'selectList'));
+        $this->set(compact('genreCounts'));
         $this->render();
     }
 
@@ -70,18 +65,12 @@ class NahaController extends \App\Controller\AreaController
             return;
 
         }
-        $isAreaScreen = mb_strtolower($this->request->getparam("controller"));
-
         $shops = array(); // 店舗情報格納用
         $columns = array('Shops.name', 'Shops.catch'); // like条件用
         $shops = $this->Shops->find('all')
-                    ->where(['area'=>mb_strtolower($this->request->getparam("controller")),
+                    ->where(['area'=>$this->viewVars['isArea'],
                         'genre' => $this->request->getQuery("genre")])->toArray();
-        // 検索条件を取得し、画面側でselectedする
-        $selected = $this->request->getQuery();
-        $masterCodesFind = array('area','genre');
-        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('isAreaScreen', 'shops', 'selectList','selected'));
+        $this->set(compact('shops'));
         $this->render();
     }
 

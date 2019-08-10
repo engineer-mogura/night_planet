@@ -422,7 +422,7 @@ function castImageDeleteBtn(form, obj){
         $('.scrollspy').scrollSpy();
         $('.collapsible').collapsible();
         Materialize.updateTextFields();
-    
+        $('input, textarea').characterCounter();
         // materializecss modal モーダル表示してる時は、背景のスクロール禁止する
         // $('.modal').modal();
         $('.modal').modal({
@@ -590,7 +590,7 @@ function initializeUser() {
                     alert("なにかしら条件を入れてね");
                     return false;
                 }
-            
+
             //通常のアクションをキャンセルする
             event.preventDefault();
             searchAjax("#search-result", $form);
@@ -618,13 +618,15 @@ function initializeUser() {
 
     /* 店舗画面 START */
     if($("#shop").length) {
-
+        var address = $("table td[name='address']").text();
+        googlemap_init('google_map', address);
     }
     /* 店舗画面 END */
 
     /* キャスト画面 START */
     if($("#cast").length) {
-
+        var address = $("table td[name='address']").text();
+        googlemap_init('google_map', address);
     }
     /* キャスト画面 END */
 
@@ -753,9 +755,6 @@ function initializeOwner() {
         } else {
             // catchという変数にしたかったがcatchはjsで予約語になる
             var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
-
-            var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
-            $("#catch").find('input[name="id"]').val(json['id']);
             $("#catch").find('textarea[name="catch"]').val(json['catch']);
             $("#catch").find('#save-catch').show();
             $("#catch").find("#show-catch").hide();
@@ -1108,13 +1107,18 @@ function initializeOwner() {
             $('#tenpo').find("#show-tenpo").show();
         } else {
             var json = JSON.parse($('#tenpo').find('input[name="json_data"]').val());
-            var $from = $('#tenpo').find('#bus-from-time').pickatime().pickatime('picker');
-            var $to = $('#tenpo').find('#bus-to-time').pickatime().pickatime('picker');
-            var from = new Date(json['bus_from_time']);
-            var to = new Date(json['bus_to_time']);
-            $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
-            $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
-            $('#tenpo').find('input[name="id"]').val(json['id']);
+            // 時間開始に初期値があればセット
+            if(json['bus_from_time']) {
+                var $from = $('#tenpo').find('#bus-from-time').pickatime().pickatime('picker');
+                var from = new Date(json['bus_from_time']);
+                $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
+            }
+            // 時間終了に初期値があればセット
+            if(json['bus_to_time']) {
+                var $to = $('#tenpo').find('#bus-to-time').pickatime().pickatime('picker');
+                var to = new Date(json['bus_to_time']);
+                $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
+            }
             $('#tenpo').find('input[name="name"]').val(json['name']);
             $('#tenpo').find('input[name="pref21"]').val(json['pref21']);
             $('#tenpo').find('input[name="addr21"]').val(json['addr21']);
@@ -1337,24 +1341,30 @@ function initializeOwner() {
             $('#job').find('p[name="name"]').text($('#job').find('.show-job-name').text());
             $('#job').find('select[name="industry"]').val(job['industry']);
             $('#job').find('select[name="job_type"]').val(job['job_type']);
-
-            var $from = $('#work-from-time').pickatime().pickatime('picker');
-            var $to = $('#work-to-time').pickatime().pickatime('picker');
-            var from = new Date(job['work_from_time']);
-            var to = new Date(job['work_to_time']);
-            $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
-            $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
+            // 時間開始に初期値があればセット
+            if(job['work_from_time']) {
+                var $from = $('#work-from-time').pickatime().pickatime('picker');
+                var from = new Date(job['work_from_time']);
+                $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
+            }
+            // 時間終了に初期値があればセット
+            if(job['work_to_time']) {
+                var $to = $('#work-to-time').pickatime().pickatime('picker');
+                var to = new Date(job['work_to_time']);
+                $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
+            }
             $('#job').find('input[name="work_time_hosoku"]').val(job['work_time_hosoku']);
             $('#job').find('input[name="qualification_hosoku"]').val(job['qualification_hosoku']);
             $('#job').find('select[name="from_age"]').val(job['from_age']);
             $('#job').find('select[name="to_age"]').val(job['to_age']);
-            var dayArray = job['holiday'].split(",");
+            // NULLか空の場合は、空を代入する
+            var dayArray = job['holiday'] ? job['holiday'].split(",") : "";
             $.each(dayArray, function(index, val) {
                 $('#job').find('input[name="holiday[]"]').each(function(i,o){
                     if (val == $(o).val()) {
                         $(o).prop('checked',true);
                     }
-                    });
+                });
             });
 
             $('#job').find('input[name="holiday_hosoku"]').val(job['holiday_hosoku']);

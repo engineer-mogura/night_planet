@@ -215,6 +215,11 @@ return [
 			'path' => "pub",
 			'image' => "/img/common/genre/genre_6.png"
 		],
+		'bar'=> [
+			'label' => "バー",
+			'path' => "bar",
+			'image' => "/img/common/genre/genre_7.png"
+		],
 	)),
 	// 星座リスト
 	define('CONSTELLATION', array(

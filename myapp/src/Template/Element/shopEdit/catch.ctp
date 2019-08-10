@@ -5,11 +5,10 @@
     <div class="row">
       <form id="delete-catch" name="delete_catch" method="post" style="display:none;" action="/owner/shops/delete_catch?id=<?=$shop->id?>">
         <input type="hidden" name="_method" value="POST">
-        <input type="hidden" name="id" value="">
         <input type="hidden" name="catch" value="">
       </form>
       <div style="display:none;">
-        <input type="hidden" name="json_data" value='<?=$shop ?>'>
+        <input type="hidden" name="json_data" value='<?=json_encode(['catch' => $shop->catch]) ?>'>
       </div>
       <?php if(!$shop->catch == "") { ?>
         <div class="row">
@@ -30,7 +29,6 @@
   <form id="save-catch" name="save_catch" method="post" action="/owner/shops/save_catch?id=<?=$shop->id?>" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
-      <input type="hidden" name="id" value="">
     </div>
     <div class="row">
       <div class="input-field col s12 m6 l6">

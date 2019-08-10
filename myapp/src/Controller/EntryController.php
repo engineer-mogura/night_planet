@@ -33,6 +33,9 @@ use Cake\View\Exception\MissingTemplateException;
 class EntryController extends AppController
 {
     use MailerAwareTrait;
+
+    public $components = array('Security');
+
     public function beforeFilter(Event $event)
     {
         $this->MasterCodes = TableRegistry::get("master_codes");

@@ -28,6 +28,12 @@ class AreaController extends AppController
 
     public function beforeFilter(Event $event)
     {
+        // 常に現在エリアを取得
+        $isArea = mb_strtolower($this->request->getparam("controller"));
+        // 常にエリア、ジャンルセレクトリストを取得
+        $masterCodesFind = array('area','genre');
+        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+        $this->set(compact('selectList','isArea'));
         // parent::beforeFilter($event);
         // $this->Auth->allow(['signup','verify','logout']);
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ

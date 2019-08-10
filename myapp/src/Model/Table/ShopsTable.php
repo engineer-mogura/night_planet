@@ -96,14 +96,14 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 30,"店舗名は120文字以内にしてください。")
+            ->maxLength('name', 40,"店舗名は40文字以内にしてください。")
             ->allowEmptyString('name');
 
         $validator
             ->scalar('top_image')
             ->maxLength('top_image', 100)
-            ->allowEmptyFile('top_image')
-            ->maxLength('top_image', 10,"以降の住所が不正です。");
+            ->allowEmptyFile('top_image');
+
         $validator
             ->scalar('image1')
             ->maxLength('image1', 100)
@@ -181,7 +181,7 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('system')
-            ->maxLength('system', 255,"システムは255文字以内にしてください。")
+            ->maxLength('system', 600,"システムは600文字以内にしてください。")
             ->allowEmptyString('system');
 
         $validator
@@ -206,7 +206,7 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('strt21')
-            ->maxLength('strt21', 20,"以降の住所が不正です。")
+            ->maxLength('strt21', 30,"以降の住所が不正です。")
             ->allowEmptyString('strt21');
 
         return $validator;

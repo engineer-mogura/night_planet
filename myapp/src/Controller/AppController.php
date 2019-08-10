@@ -45,7 +45,6 @@ class AppController extends Controller{
       'enableBeforeRedirect' => false,
     ]);
     $this->loadComponent('Flash');
-    $this->loadComponent('Security');
 
     $query = $this->request->getQuery();
     // 検索結果でタイトルで決める

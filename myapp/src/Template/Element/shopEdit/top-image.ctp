@@ -2,9 +2,6 @@
   <?php echo $this->Flash->render(); ?>
   <h5>トップ画像</h5>
   <div id="show-top-image" style="text-align:center">
-    <div style="display:none;">
-      <input type="hidden" name="json_data" value='<?=$shop ?>'>
-    </div>
     <?php if(!$shop->top_image == "") { ?>
       <img width="100%" height="300" src="<?= $shopInfo['shop_path'].DS.$shop->top_image ?>" />
       <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">変更</button>

@@ -1014,7 +1014,7 @@ class CastsController extends AppController
         // 指定フォルダ配下にあればラストの連番に+1していく
         if (file_exists($dir->path)) {
             $dirArray = scandir($dir->path);
-            for ($i = 0; $i < count($dirArray); $i++) {
+            for ($i = 0; $i <= count($dirArray); $i++) {
                 if (strpos($dirArray[$i], '.') !== false) {
                     unset($dirArray[$i]);
                 }
@@ -1033,7 +1033,7 @@ class CastsController extends AppController
 
         try{
             // パスが存在しなければディレクトリを掘ってDB登録
-            if (!realpath($dir->path.$nextDir)) {
+            if (realpath($dir->path.$nextDir)) {
 
                 throw new RuntimeException('既にディレクトリが存在します。');
             }

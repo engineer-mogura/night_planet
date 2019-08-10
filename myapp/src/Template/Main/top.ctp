@@ -1,31 +1,7 @@
 <?= $this->fetch('sidebar') ?>
 <div class="nav-wrapper">
-<div class="slider">
-  <ul class="slides">
-    <li>
-      <img src="/img/common/area/top1.jpg"> <!-- random image -->
-      <div class="caption center-align">
-        <h3>沖縄の夜遊び探しは【おきよる】!</h3>
-        <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
-      </div>
-    </li>
-    <li>
-      <img src="/img/common/area/top2.jpg"> <!-- random image -->
-      <div class="caption left-align">
-        <h3>沖縄の夜遊び探しは【おきよる】!</h3>
-        <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
-      </div>
-    </li>
-    <li>
-      <img src="/img/common/area/top3.jpg"> <!-- random image -->
-      <div class="caption right-align">
-        <h3>沖縄の夜遊び探しは【おきよる】!</h3>
-        <h5 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h5>
-      </div>
-    </li>
-  </ul>
-  </div>
-  </div>
+  <?= $this->element('top-slider'); ?>
+</div>
 <div id="top" class="container">
   <ul class="collection">
     <li class="collection-item dismissable">

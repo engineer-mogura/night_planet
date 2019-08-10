@@ -3,9 +3,13 @@
   <h5>店舗情報</h5>
   <div id="show-tenpo">
     <div class="row">
-      <div class="col s12 m6 l6">
+      <div class="col s12 m12 l12">
           <div style="display:none;">
-            <input type="hidden" name="json_data" value='<?=$shop ?>'>
+          <?php $tenpo = array("name"=>$shop->name, "pref21"=>$shop->pref21, "addr21"=>$shop->addr21,
+                              "strt21"=>$shop->strt21, "tel"=>$shop->tel, "bus_from_time"=>$shop->bus_from_time,
+                              "bus_to_time"=>$shop->bus_to_time, "bus_hosoku"=>$shop->bus_hosoku,
+                              "staff"=>$shop->staff, "system"=>$shop->system);?>
+            <input type="hidden" name="json_data" value='<?=json_encode($tenpo) ?>'>
             <input type="hidden" name="credit_hidden" value='<?=$masData['credit']?>'>
           </div>
           <table class="bordered shop-table z-depth-2" border="1">
@@ -31,17 +35,15 @@
             </td>
           </tr>
           <tr>
-            <th align="center">営業時間</th>
-            <td><?php if((!$shop->bus_from_time == '')
-                      && (!$shop->bus_to_time == '')
-                      && (!$shop->bus_hosoku == '')) {
-                        $busTime = $this->Time->format($shop->bus_from_time, 'HH:mm')
-                        ."～".$this->Time->format($shop->bus_to_time, 'HH:mm');
-                        if (!$shop->bus_hosoku == '') {
-                            $busTime = $busTime.="</br>".$shop->bus_hosoku;
-                        }
-                        echo ($busTime);
-                      } else { echo ('登録されていません。'); } ?>
+          <th align="center">営業時間</th>
+            <td><?php if((!empty($shop->bus_from_time))) {
+                      $busTime = $this->Time->format($shop->bus_from_time, 'HH:mm')
+                      ." ～ ".(empty($shop->bus_to_time) ? 'ラスト' : $this->Time->format($shop->bus_to_time, 'HH:mm'));
+                      if (!empty($shop->bus_hosoku)) {
+                        $busTime = $busTime.="</br>".$shop->bus_hosoku;
+                      }
+                      echo (mb_convert_kana($busTime,'N'));
+                    } else { echo ('登録されていません。'); } ?>
             </td>
           </tr>
           <tr>
@@ -81,11 +83,10 @@
   <form id="save-tenpo" name="save_tenpo" method="post" action="/owner/shops/save_tenpo?id=<?=$shop->id?>" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
-      <input type="hidden" name="id" value="">
       <input type="hidden" name="credit" value="">
     </div>
     <div class="row">
-      <div class="input-field col s12 m6 l6">
+      <div class="input-field col s12 m10 l12 ">
         <input type="text" class="validate" name="name" data-length="50">
         <label for="name">店舗名</label>
       </div>
@@ -105,26 +106,26 @@
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s12 m6 l6">
+      <div class="input-field col s12 m10 l12 ">
         <input type="text" id="pref21" name="pref21" class="validate" size="3">
         <label for="pref21">都道府県</label>
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s12 m6 l6">
+      <div class="input-field col s12 m10 l12 ">
         <input type="text" id="addr21" name="addr21" class="validate" size="10">
         <label for="addr21">市区町村</label>
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s12 m6 l6">
-        <input type="text" id="strt21" name="strt21" class="validate" size="20">
+      <div class="input-field col s12 m10 l12 ">
+        <input type="text" id="strt21" name="strt21" class="validate" size="20" data-length="30">
         <label for="strt21">以降の住所</label>
       </div>
     </div>
 
     <div class="row">
-      <div class="input-field col s12 m6 l6">
+      <div class="input-field col s12 m10 l12 ">
         <input type="tel" id="tel" class="validate" name="tel">
         <label for="tel">連絡先</label>
       </div>
@@ -136,25 +137,25 @@
       <div class="col s5 m2 l2"><input id="bus-to-time" class="timepicker" name="bus_to_time"></div>
     </div>
     <div class="row">
-      <div class="input-field col s12 m6 l6">
+      <div class="input-field col s12 m10 l12 ">
         <input type="text" id="bus-hosoku" class="validate" name="bus_hosoku" data-length="50">
         <label for="bus-hosoku">営業時間についての補足</label>
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s12 m6 l6">
+      <div class="input-field col s12 m10 l12 ">
         <textarea id="staff" class="validate materialize-textarea" name="staff" data-length="50"></textarea>
         <label for="staff">スタッフ</label>
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s12 m6 l6">
-        <textarea id="system" class="validate materialize-textarea" name="system" data-length="250"></textarea>
+      <div class="input-field col s12 m10 l12 ">
+        <textarea id="system" class="validate materialize-textarea" name="system" data-length="600"></textarea>
         <label for="system">システム</label>
       </div>
     </div>
     <div class="row">
-      <div class="input-field col s12 m6 l6">
+      <div class="input-field col s12 m10 l12 ">
       <div class="chips chips-initial disabled" name="credit"></div>
         <label for="chips-autocomplete">クレジットカード</label>
         <span>クレジット一覧から選択してください。</span>

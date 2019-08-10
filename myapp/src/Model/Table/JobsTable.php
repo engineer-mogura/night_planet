@@ -137,8 +137,7 @@ class JobsTable extends Table
 
         $validator
             ->scalar('pr')
-            ->maxLength('pr', 100,'PR文は100文字以内にしてください。')
-            ->maxLength('pr', 100)
+            ->maxLength('pr', 200,'PR文は200文字以内にしてください。')
             ->allowEmptyString('pr');
 
         $validator
@@ -185,7 +184,6 @@ class JobsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['email']));
         $rules->add($rules->existsIn(['shop_id'], 'Shops'));
 
         return $rules;

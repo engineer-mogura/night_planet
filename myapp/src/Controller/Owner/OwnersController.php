@@ -178,7 +178,7 @@ class OwnersController extends AppController
         // 指定フォルダ配下にあればラストの連番に+1していく
         if (file_exists($dir->path)) {
             $dirArray = scandir($dir->path);
-            for($i = 0; $i < count($dirArray); $i++) {
+            for($i = 0; $i <= count($dirArray); $i++) {
                 if(strpos($dirArray[$i],'.') !== false) {
                     unset($dirArray[$i]);
                 }

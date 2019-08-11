@@ -8,7 +8,7 @@
     <div class="card or-card">
         <div class="card-image waves-block waves-light">
             <div class="or-form-wrap">
-                <h3><?= __('おきよるGo') ?></h3>
+                <h3><?= __(LT['001']) ?></h3>
                 <p>認証メールをご指定のメールアドレスに送りました。<br>
                 ２４時間以内に完了しないと、やり直しになりますのでご注意ください。</p>
                 <div class="or-button">

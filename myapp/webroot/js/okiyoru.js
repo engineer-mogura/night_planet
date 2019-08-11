@@ -566,72 +566,61 @@ function initializeUser() {
     /* トップ画面 START */
     if($("#top").length) {
         // 検索ボタン押した時
-        $(document).on('click', '.searchBtn', function() {
-            form = $(this).closest("form[name='search_form']");
-            if(($(form).find("input[name='key_word']").val() == "") &&
-                ($(form).find("[name='area']").val() == "") &&
-                ($(form).find("[name='genre']").val() == "")) {
-                    alert("なにかしら条件を入れてね");
-                    return false;
-            }
-            form.submit();
-        });
-
+        commonSearch(false);
     }
     /* トップ画面 END */
 
     /* エリア画面 START */
     if($("#area").length) {
         // 検索ボタン押した時
-        $(document).on('click', '.searchBtn', function() {
-            $form = $(this).closest($(".search-form"));
-            if(($form.find("input[name='key_word']").val() == "") &&
-                ($form.find("[name='genre']").val() == "")) {
-                    alert("なにかしら条件を入れてね");
-                    return false;
-                }
-
-            //通常のアクションをキャンセルする
-            event.preventDefault();
-            searchAjax("#search-result", $form);
-        });
+        commonSearch(false);
     }
     /* エリア画面 END */
 
     /* ジャンル画面 START */
     if($("#genre").length) {
         // 検索ボタン押した時
-        $(document).on('click', '.searchBtn', function() {
-            $form = $(this).closest($(".search-form"));
-            if(($form.find("input[name='key_word']").val() == "") &&
-                ($form.find("[name='area']").val() == "") &&
-                ($form.find("[name='genre']").val() == "")) {
-                    alert("なにかしら条件を入れてね");
-                    return false;
-                }
-            //通常のアクションをキャンセルする
-            event.preventDefault();
-            searchAjax("#search-result", $form);
-        });
+        commonSearch(false);
     }
     /* ジャンル画面 END */
 
+    /* 検索画面 START */
+    if($("#search").length) {
+        // 検索ボタン押した時
+        commonSearch(true);
+    }
+    /* 検索画面 画面 END */
+
     /* 店舗画面 START */
     if($("#shop").length) {
+
+        // 検索ボタン押した時
+        commonSearch(false);
+        // 店舗住所取得
         var address = $("table td[name='address']").text();
+        // Googleマップ初期化処理
         googlemap_init('google_map', address);
     }
     /* 店舗画面 END */
 
     /* キャスト画面 START */
     if($("#cast").length) {
+
+        // 検索ボタン押した時
+        commonSearch(false);
+        // 店舗住所取得
         var address = $("table td[name='address']").text();
+        // Googleマップ初期化処理
         googlemap_init('google_map', address);
     }
     /* キャスト画面 END */
 
     /* 日記画面 START */
     if($("#diary").length) {
+
+        // 検索ボタン押した時
+        commonSearch(false);
+
         // アーカイブ日記をクリックした時
         $(document).on('click', '.archiveLink', function() {
 
@@ -649,25 +638,33 @@ function initializeUser() {
     }
     /* 日記画面 END */
 
-    /* 検索画面 START */
-    if($("#search").length) {
+}
 
-        // 検索ボタン押した時
-        $(document).on('click', '.searchBtn', function() {
-            $form = $(this).closest($(".search-form"));
-            if(($form.find("input[name='key_word']").val() == "") &&
-                ($form.find("[name='area']").val() == "") &&
-                ($form.find("[name='genre']").val() == "")) {
-                    alert("なにかしら条件を入れてね");
-                    return false;
-                }
+/**
+ * 検索ボタン押下時の処理
+ * @param  {boolean} isAjax
+ */
+function commonSearch(isAjax) {
+
+    $(document).on('click', '.searchBtn', function() {
+        form = $(this).closest($(".search-form"));
+        if((form.find("input[name='key_word']").val() == "") &&
+            (form.find("[name='area']").val() == "") &&
+            (form.find("[name='genre']").val() == "")) {
+                alert("なにかしら条件を入れてね");
+                return false;
+        }
+        // AJAX送信
+        if(isAjax) {
             //通常のアクションをキャンセルする
             event.preventDefault();
-            searchAjax("#search-result", $form);
-        });
-    }
-    /* 検索画面 画面 END */
+            searchAjax("#search-result", form);
+        } else {
+            // POST送信
+            form.submit();
+        }
 
+    });
 }
 
 /**
@@ -1595,6 +1592,8 @@ function initializeOwner() {
                 //処理中アイコン削除
                 $('.preloader-wrapper').remove();
                 $(document).find('.searchBtn').removeClass('disabled');
+                $("#modal-search").modal('close');
+
             },
             success: function (response, textStatus, xhr) {
                 $(searchResult).replaceWith(response.html);

@@ -322,7 +322,7 @@ class CastsController extends AppController
 
         // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
         ($files_befor = json_decode($this->request->getData("gallery_befor"), true)) > 0 ? : $files_befor = array();
-        $fileMax = CAST_CONFIG['FILE_MAX'];
+        $fileMax = PROPERTY['FILE_MAX'];
         // カラム「image*」を格納する
         $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
 
@@ -565,7 +565,7 @@ class CastsController extends AppController
         $id = $auth['id']; // キャストID
         $files = array();
 
-        $fileMax = CAST_CONFIG['FILE_MAX']; // ファイルアップの制限数
+        $fileMax = PROPERTY['FILE_MAX']; // ファイルアップの制限数
         $files_befor = array(); // 新規なので空の配列
         $imageCol = array_values(preg_grep("/^image/", $this->Diarys->schema()->columns()));
 
@@ -698,7 +698,7 @@ class CastsController extends AppController
         // 対象ディレクトリパス取得
         $dir = new Folder($dir, true, 0755);
         $files = array();
-        $fileMax = CAST_CONFIG['FILE_MAX'];
+        $fileMax = PROPERTY['FILE_MAX'];
 
         // エンティティにマッピングする
         $diary = $this->Diarys->patchEntity($this->Diarys

@@ -539,7 +539,7 @@ $(document).ready(function () {
   if(duplicateIdArr.length > 0) {
     console.error('IDの重複があります:', duplicateIdArr);
   } else {
-    console.success('IDの重複はありません。');
+    console.info('IDの重複はありません。');
   }
 });
 

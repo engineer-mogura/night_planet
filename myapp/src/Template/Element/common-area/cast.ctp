@@ -6,18 +6,7 @@
 ?>
 <div id="cast" class="container">
   <?= $this->Flash->render() ?>
-  <nav class="nav-breadcrumb">
-      <div class="nav-wrapper nav-wrapper-oki">
-        <div class="col s12">
-          <?=
-            $this->Breadcrumbs->render(
-              ['class' => 'breadcrumb'],
-              ['separator' => '<i class="material-icons">chevron_right</i>']
-            );
-          ?>
-        </div>
-      </div>
-    </nav>
+  <?= $this->element('nav-breadcrumb'); ?>
   <div class="row">
     <div id="cast-main" class="col s12 m12 l8">
       <img class="responsive-img" width="100%" src=<?php if(!empty($cast->image1)) {
@@ -159,7 +148,7 @@
          <table id="basic-info" class="bordered shop-table z-depth-2" border="1">
           <tbody>
             <tr>
-              <th class="table-header" colspan="2" align="center"><?= !empty($cast->shop->name) ? h($cast->shop->name) : h('-') ?></th>
+              <th class="table-header" colspan="2" align="center"><?= !empty($shop->name) ? h($shop->name) : h('-') ?></th>
             </tr>
             <tr>
               <th align="center">所在地</th>
@@ -171,11 +160,11 @@
             </tr>
             <tr>
               <th align="center">営業時間</th>
-              <td><?php if((!empty($cast->shop->bus_from_time))) {
-                      $busTime = $this->Time->format($cast->shop->bus_from_time, 'HH:mm')
-                      ." ～ ".(empty($cast->shop->bus_to_time) ? 'ラスト' : $this->Time->format($cast->shop->bus_to_time, 'HH:mm'));
-                      if (!empty($cast->shop->bus_hosoku)) {
-                        $busTime = $busTime.="</br>".$cast->shop->bus_hosoku;
+              <td><?php if((!empty($shop->bus_from_time))) {
+                      $busTime = $this->Time->format($shop->bus_from_time, 'HH:mm')
+                      ." ～ ".(empty($shop->bus_to_time) ? 'ラスト' : $this->Time->format($shop->bus_to_time, 'HH:mm'));
+                      if (!empty($shop->bus_hosoku)) {
+                        $busTime = $busTime.="</br>".$shop->bus_hosoku;
                       }
                       echo (mb_convert_kana($busTime,'N'));
                     } else { echo ('-'); } ?>

@@ -950,7 +950,7 @@ class ShopsController extends AppController
 
         // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
         ($files_befor = json_decode($this->request->getData("gallery_befor"), true)) > 0 ? : $files_befor = array();
-        $fileMax = CAST_CONFIG['FILE_MAX'];
+        $fileMax = PROPERTY['FILE_MAX'];
         // カラム「image*」を格納する
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
 

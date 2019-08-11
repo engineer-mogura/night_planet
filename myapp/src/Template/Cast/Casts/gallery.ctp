@@ -12,7 +12,7 @@
                         <input type="hidden" name="key" value="">
                         <input type="hidden" name="name" value="">
                     </form>
-                    <input type="hidden" name="file_max" value=<?=CAST_CONFIG['FILE_MAX']?>>
+                    <input type="hidden" name="file_max" value=<?=PROPERTY['FILE_MAX']?>>
                     <?php foreach ($imageList as $key => $image) : ?>
                         <div class="col s6 m4 l3 card-img">
                             <div class="card">

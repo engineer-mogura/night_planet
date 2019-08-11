@@ -9,7 +9,7 @@
     <div class="card or-card">
         <div class="card-image waves-block waves-light">
             <div class="or-form-wrap">
-                <h3><?= __('おきよるGo') ?></h3>
+                <h3><?= __(LT['001']) ?></h3>
                 <?= $this->Form->create($owner) ?>
                 <?= $this->Form->control('email', array('label'=>'メールアドレス')) ?>
                 <?= $this->Form->control('password', array('label'=>'パスワード')) ?>

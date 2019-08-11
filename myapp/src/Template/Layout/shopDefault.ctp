@@ -86,11 +86,5 @@
       <a href="#body" class="red"><i class="medium material-icons return_top">keyboard_arrow_up</i></a>
     </div><!-- END #return_top -->
   </footer>
-  <?= $this->Html->scriptstart() ?>
-$(document).ready(function(){
-  googlemap_init('google_map', '沖縄県浦添市屋富祖３丁目１５');
-});
-<?= $this->Html->scriptend() ?>
-
 </body>
 </html>

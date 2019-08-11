@@ -235,16 +235,16 @@ class UtilComponent extends Component
     public function getDiarys($id = null)
     {
         $diarys = TableRegistry::get('Diarys');
-        $columns = array('id','cast_id','title','content','image1','dir');
+        $columns = array('id','cast_id','title','content','image1','dir',);
         // キャスト情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
         $query = $diarys->find('all')->select($columns);
         $ym = $query->func()->date_format([
             'created' => 'identifier',
-            "'%Y年%c月'" => 'literal']);
+            "'%Y/%c'" => 'literal']);
         $md = $query->func()->date_format([
             'created' => 'identifier',
-            "'%c月%e日'" => 'literal']);
+            "'%c/%e'" => 'literal']);
         $archive = $query->select([
             'ym_created' => $ym,
             'md_created' => $md])
@@ -275,6 +275,25 @@ class UtilComponent extends Component
             ->contain(['Likes'])
             ->first();
         return $diary;
+    }
+
+    /**
+     * 日記テーブルから最新の日記情報を取得する処理
+     *
+     * @param [type] $rowNum
+     * @return void
+     */
+    public function getNewDiarys($rowNum)
+    {
+        $diarys = TableRegistry::get('Diarys');
+        $columns = array('id','cast_id','title','content','image1','dir');
+        // キャスト情報、最新の日記情報とイイネの総数取得
+        // 過去の日記をアーカイブ形式で取得する
+        $diarys = $diarys->find('all')
+            ->contain(['Likes','Casts','Casts.Shops'])
+            ->order(['Diarys.created' => 'DESC'])
+            ->limit($rowNum)->all();
+        return $diarys->toArray();
     }
 
     /**

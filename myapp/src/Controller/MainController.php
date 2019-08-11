@@ -35,7 +35,8 @@ class MainController extends AppController
     {
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('selectList'));
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX']);
+        $this->set(compact('selectList', 'diarys'));
     }
 
     public function search()

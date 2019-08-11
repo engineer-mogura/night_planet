@@ -5,26 +5,12 @@
 <div id="area" class="container">
   <ul class="collection">
     <li class="collection-item dismissable">
-      <div>【おきよる】那覇の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
+      <div>【<?= LT['001']?>】の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
       </div>
     </li>
   </ul>
   <div class="row">
-    <?php foreach ($genreCounts as $key => $row): ?>
-      <div class="col s12 m4 l3">
-        <div class="card small hoverable">
-          <div class="card-image">
-            <img src="<?=$row['image']?>" style="width: 100%;height: 200px;object-fit: cover; background-color: lightsalmon;">
-          </div>
-          <div class="card-content">
-            <p><?=$row['label'].'（'.$row['count'].'）'?></p>
-          </div>
-          <div class="card-action">
-          <a href="<?=$row['area']."/genre/?genre=".$row['path']?>"><?=$row['label']."一覧へ"?></a>
-          </div>
-        </div>
-      </div>
-    <?php endforeach; ?>
+    <?= $this->element('genreCard'); ?>
   </div>
   <div class="row">
     <div class="col s12 m6 l6">
@@ -140,9 +126,3 @@
     </div>
   </div>
 </div>
-<?= $this->Html->scriptstart() ?>
-$(document).ready(function(){
-$('.slider').slider();
-$('select').material_select();
-});
-<?= $this->Html->scriptend() ?>

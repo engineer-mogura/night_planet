@@ -4,7 +4,7 @@ use Cake\Core\Configure;
 return [
 
 
-	// プロパティ関連
+	// バイトサイズ関連
 	define('CAPACITY', array(
 		'MAX_NUM_BYTES_DIR'=> 10485760 , // ディレクトリ制限バイト数10MB
 		'MAX_NUM_BYTES_FILE'=> 1048576 , // ファイル制限バイト数1MB
@@ -12,6 +12,15 @@ return [
 
 	// キャスト用設定 cast.config
 	define('CAST_CONFIG', array(
+		'FILE_MAX'=>'8', // アップロードファイル数
+		'TITLE_EXCERPT'=>'6', // 抜粋文字数
+		'CONTENT_EXCERPT'=>'10', // 抜粋文字数
+		'ELLIPSIS'=>'...', // 省略文字
+	)),
+
+	// プロパティ設定
+	define('PROPERTY', array(
+		'NEW_INFO_MAX'=>'15', // 新着情報関連の表示数
 		'FILE_MAX'=>'8', // アップロードファイル数
 		'TITLE_EXCERPT'=>'6', // 抜粋文字数
 		'CONTENT_EXCERPT'=>'10', // 抜粋文字数
@@ -54,9 +63,9 @@ return [
 
 	// ラベル定数 label title
 	define('LT', array(
-		'001'=>'OKIYORU Go',
+		'001'=>'(仮)OKIYORU Go',
 		'002'=>'Copyright 2018',
-		'003'=>'OKIYORU Go All Rights Reserved.',
+		'003'=>'(仮)OKIYORU Go All Rights Reserved.',
 		'004'=>'管理画面',
 		'005'=>'<span class="area-logo-tail">☽ナイト検索☽</span>',
 		'006'=>'オーナーログイン画面',
@@ -128,7 +137,7 @@ return [
 		'007'=>'ログアウト',
 	)),
 
-	define('CATCHCOPY','【おきよる】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。(\※ソープ、デリヘル等の風俗情報を除く)。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。更に店舗ごとに多彩なクーポン券などご用意しておりますのでお店に行く前に検索してクーポン券があるのかチェックしてみるのもいいでしょう。'),
+	define('CATCHCOPY','【(仮)OKIYORU Go】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。(\※ソープ、デリヘル等の風俗情報を除く)。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。更に店舗ごとに多彩なクーポン券などご用意しておりますのでお店に行く前に検索してクーポン券があるのかチェックしてみるのもいいでしょう。'),
 
 	// 所属エリアリスト
 	define('AREA', array(

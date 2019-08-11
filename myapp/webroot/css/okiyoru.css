@@ -128,13 +128,29 @@ div.nav-header-cron-dummy {
 /* ローディング START */
 
 .preloader-wrapper {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    position: fixed;
-    margin: auto;
-    z-index: 1999;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
+  margin: auto;
+  z-index: 1999;
+}
+/* ローディング END */
+
+/* ローディング START */
+
+.linkbox {
+  position: relative;
+}
+
+.linkbox a {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  height:100%;
+  width: 100%;
 }
 /* ローディング END */
 
@@ -365,18 +381,7 @@ div.card.diary-card .col{
 .card-action.like-field {
   
 }
-/* .like-field.show-like {
-  float: left;
-}
-.like-field.count-like {
-  position: absolute;
-  left: 50px;
-  top: 20px;
-} */
-/* .like-field.add-like {
-  float: left;
-  margin-left: 22%;
-} */
+
 .like-field .like-field-span {
   margin-left: 0.5rem;
 }
@@ -407,19 +412,6 @@ table th{
   padding: 10px 0 ;
   font-weight: initial;
 }
-
-/* table th:after{
-  display: block;
-  content: "";
-  width: 0px;
-  height: 0px;
-  position: absolute;
-  top:calc(50% - 10px);
-  right:-10px;
-  border-left: 10px solid #52c2d0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-} */
 
 table td{
   text-align: left;
@@ -467,36 +459,7 @@ tbody.tbody-coupon-group:before ,tbody.tbody-cast-group:before{
 	padding: 2px 0;
 	display: block;
 }
-/* .chip-box > .chip-dummy {
-  pointer-events: auto;
-  display: inline-block;
-  height: 32px;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.6);
-  line-height: 32px;
-  padding: 0 12px;
-  border-radius: 16px;
-  background-color: #e4e4e4;
-  margin-bottom: 5px;
-  margin-right: 5px;
-}
-.chip-box > .chip-dummy > img {
-  float: left;
-  margin: 0 8px 0 -12px;
-  height: 32px;
-  width: 32px;
-  border-radius: 50%;
-}
-.chip-box > .chip-dummy:hover {
-  background-color: #26a69a;
-  color: white;
-  cursor : pointer;
-}
-.chip-box > .chip-dummy.back-color {
-  background-color: #26a69a;
-  color: white;
-} */
+
 .chip-dummy {
   pointer-events: auto;
   display: inline-block;
@@ -550,33 +513,6 @@ li.daylist,li.eventlist {
   z-index: 999;
   position: absolute;
 }
-
-.collapsible-body {
-  pointer-events: auto;
-}
-.collapsible-body:hover {
-  background-color: #26a69a;
-  color: white;
-  cursor : pointer;
-}
-ul.archive-panel > li.collection-item:hover {
-  background-color: #26a69a;
-  color: white;
-  cursor : pointer;
-}
-ul.archive-panel > li.collection-item {
-  display: block;
-  padding: 10px 0px;
-}
-ul.collection.archive-panel > li.collection-item > span.secondary-content,
-ul.collapsible.archive-panel > li > div > p > span.secondary-content {
-  top: 32px;
-  color: #0087ff;
-}
-ul.collection.archive-panel > li > span > i.material-icons {
-  display: block;
-}
-
 /* キャスト編集ページ END */
 
 /* 日記カード モジュール START */
@@ -607,6 +543,21 @@ div.my-gallery {
   position: initial;
 }
 /* モーダルメニュー END */
+
+/* カラー共通 START */
+.color-blue {
+  color:cornflowerblue;
+}
+/* カラー共通 END */
+
+/* フォーム共通 START */
+textarea {
+  overflow-y:auto;
+}
+textarea::-webkit-scrollbar {
+  display:none;
+}
+/* フォーム共通 END */
 
 @media only screen and (max-width: 992px) {
   .brand-logo.oki-brand-logo{

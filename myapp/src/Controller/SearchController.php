@@ -53,14 +53,14 @@ class SearchController extends AppController
             return;
         }
         $shops = array(); // 店舗情報格納用
-        // トップページからの遷移の場合
-        if ($referer = (($this->referer()) == "http://okiyoru.local/") ||
-            /** ローカル環境スマホ用 */(($this->referer()) == "http://192.168.33.10/")) {
+        // // トップページからの遷移の場合
+        // if ($referer = (($this->referer()) == "http://okiyoru.local/") ||
+        //     /** ローカル環境スマホ用 */(($this->referer()) == "http://192.168.33.10/")) {
             $columns = array('Shops.name', 'Shops.catch'); // like条件用
             $shops = $this->getShopList($this->request->getQuery(), $columns);
             // 検索条件を取得し、画面側でselectedする
             $selected = $this->request->getQuery();
-        }
+        // }
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
         $this->set(compact('shops', 'selectList','selected'));
@@ -70,7 +70,8 @@ class SearchController extends AppController
     /**
      * ショップテーブルから検索条件による店舗情報を取得する
      *
-     * @param array $validate
+     * @param [type] $requestData
+     * @param [type] $columns
      * @return void
      */
     public function getShopList($requestData, $columns)

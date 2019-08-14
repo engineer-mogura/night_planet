@@ -80,7 +80,7 @@
       </div>
     </div>
   </div>
-  <form id="save-tenpo" name="save_tenpo" method="post" action="/owner/shops/save_tenpo?id=<?=$shop->id?>" style="display:none;">
+  <form id="save-tenpo" name="save_tenpo" method="post" action="/owner/shops/save_tenpo" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="credit" value="">

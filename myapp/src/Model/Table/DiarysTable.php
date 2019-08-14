@@ -73,7 +73,7 @@ class DiarysTable extends Table
 
         $validator
             ->scalar('content')
-            ->maxLength('content', 255,'内容が長すぎます。')
+            ->maxLength('content', 600,'内容が長すぎます。')
             ->notEmpty('content','内容を入力してください。')
             ->requirePresence('content', 'create')
             ->allowEmptyString('content', false);

@@ -570,6 +570,7 @@ class CastsController extends AppController
         $imageCol = array_values(preg_grep("/^image/", $this->Diarys->schema()->columns()));
 
         // エンティティにマッピングする
+
         $diary = $this->Diarys->newEntity($this->request->getData());
         // バリデーションチェック
         if ($diary->errors()) {
@@ -656,10 +657,9 @@ class CastsController extends AppController
     /**
      * 日記アーカイブ表示画面の処理
      *
-     * @param [type] $id
      * @return void
      */
-    public function viewDiary($id = null)
+    public function viewDiary()
     {
         // AJAXのアクセス以外は不正とみなす。
         if (!$this->request->is('ajax')) {
@@ -674,7 +674,6 @@ class CastsController extends AppController
     /**
      * 日記アーカイブ更新処理
      *
-     * @param [type] $id
      * @return void
      */
     public function updateDiary()
@@ -842,7 +841,6 @@ class CastsController extends AppController
     /**
      * 日記アーカイブ削除処理
      *
-     * @param [type] $id
      * @return void
      */
     public function deleteDiary()

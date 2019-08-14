@@ -33,7 +33,7 @@
     <div class="container" style="padding:initial">
         <?= $this->Flash->render() ?>
         <div id="header">
-            <?php if($code == 500) :?> {
+            <?php if($code == 500) :?>
                 <h3><?= __('アクセスしようとしたページは表示できませんでした。') ?></h3>
             <?php else : ?>
                 <h3><?= __('お探しのページは見つかりませんでした。') ?></h3>

@@ -116,11 +116,16 @@ class OwnersController extends AppController
                 // 現在リクエスト中のユーザーを識別する
                 $owner = $this->Auth->identify();
                 if ($owner) {
-                  // セッションにユーザー情報を保存する
-                  $this->Auth->setUser($owner);
-                  return $this->redirect($this->Auth->redirectUrl());
+                    // セッションにユーザー情報を保存する
+                    $this->Auth->setUser($owner);
+                // TODO: 本来ログイン後は、元々のURLに飛ばしたい所だけど、固定でオーナーのトップ画面にする。
+                // AuthComponent.loginRedirectでURLの固定が難しい。
+                // 何かいい方法があれば...。
+                //   $this->request->session()->delete('Auth.redirect');
+                //   return $this->redirect($this->Auth->redirectUrl());
+                    return $this->redirect(['action' => 'index']);
                 }
-
+                // ログイン失敗
                 $this->Flash->error(RESULT_M['FRAUD_INPUT_FAILED']);
             } else {
                 debug($this->request->getData());

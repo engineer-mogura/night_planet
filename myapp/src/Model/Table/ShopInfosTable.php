@@ -60,15 +60,22 @@ class ShopInfosTable extends Table
             ->allowEmptyString('id', 'create');
 
         $validator
+            ->scalar('title')
+            ->maxLength('title', 50,'タイトルが長すぎます。')
+            ->notEmpty('title','タイトルを入力してください。')
+            ->requirePresence('title', 'create')
+            ->allowEmptyString('title', false);
+
+        $validator
             ->scalar('content')
-            ->maxLength('content', 255)
+            ->maxLength('content', 600)
             ->requirePresence('content', 'create')
             ->allowEmptyString('content', false);
 
         $validator
-            ->scalar('image')
-            ->maxLength('image', 255)
-            ->allowEmptyFile('image');
+            ->scalar('image1')
+            ->maxLength('image1', 100)
+            ->allowEmptyFile('image1');
 
         return $validator;
     }

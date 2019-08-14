@@ -1,5 +1,5 @@
 <div id="wrapper">
-    <div class="container">
+    <div id="shop-edit" class="container">
         <span id="dummy" style="display: hidden;"></span>
         <div class="row">
             <div class="col s12 m12 l12 edit-menu">

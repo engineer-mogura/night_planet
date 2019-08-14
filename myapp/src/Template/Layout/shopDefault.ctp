@@ -46,21 +46,23 @@
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>
     </li>
-    <li><a href="/owner/shops/index/?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= SHOP_LM['001'] ?></a></li>
-    <li><a href="/owner/shops/index/?activeTab=catch" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= SHOP_LM['002'] ?></a></li>
-    <li><a href="/owner/shops/index/?activeTab=coupon" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= SHOP_LM['003'] ?></a></li>
-    <li><a href="/owner/shops/index/?activeTab=cast" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= SHOP_LM['004'] ?></a></li>
-    <li><a href="/owner/shops/index/?activeTab=tenpo" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= SHOP_LM['005'] ?></a></li>
-    <li><a href="/owner/shops/index/?activeTab=tenpo-gallery" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">trending_up</i><?= SHOP_LM['006'] ?></a></li>
-    <li><a href="/owner/shops/index/?activeTab=map" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">vertical_align_top</i><?= SHOP_LM['007'] ?></a></li>
-    <li><a href="/owner/shops/index/?activeTab=job" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">cloud</i><?= SHOP_LM['008'] ?></a></li>
-    <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">help_outline</i><?= COMMON_LM['004'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">note</i><?= COMMON_LM['003'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">note</i><?= COMMON_LM['005'] ?></a></li>
+    <!-- <li><a href="#" data-tab="top-image" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">image</i><?= SHOP_LM['001'] ?></a></li> -->
+    <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="top-image" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">image</i><?= SHOP_LM['001'] ?></a></li>
+    <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="catch" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">mode_edit</i><?= SHOP_LM['002'] ?></a></li>
+    <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="coupon" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">stars</i><?= SHOP_LM['003'] ?></a></li>
+    <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="cast" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">group_add</i><?= SHOP_LM['004'] ?></a></li>
+    <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="tenpo" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= SHOP_LM['005'] ?></a></li>
+    <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="gallery" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">photo_library</i><?= SHOP_LM['006'] ?></a></li>
+    <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="map" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">place</i><?= SHOP_LM['007'] ?></a></li>
+    <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="job" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">business_center</i><?= SHOP_LM['008'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="/owner/shops/notice"><i class="material-icons">notifications_active</i><?= SHOP_LM['009'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="/owner/owners"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="#!"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="#!"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
     <li><div class="divider"></div></li>
-    <li><a href="/owner/owners/logout" class="waves-effect"><i class="material-icons" href="">info_outline</i><?= COMMON_LM['007'] ?></a></li>
+    <li><a href="/owner/owners/logout" class="waves-effect"><i class="material-icons" href="">keyboard_backspace</i><?= COMMON_LM['007'] ?></a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
   <div class="nav-header-cron-dummy"></div>

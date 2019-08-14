@@ -42,7 +42,7 @@
 							</table>
 						</div>
 						<div class="card-action">
-							<a href="/owner/shops/index?id=<?=$shop->id?>">店舗詳細</a>
+							<a href="/owner/shops/index?shop_id=<?=$shop->id?>">店舗詳細</a>
 						</div>
 					</div>
 				</div>

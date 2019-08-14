@@ -2,9 +2,8 @@
     <?php echo $this->Flash->render();  ?>
     <h5>ギャラリー</h5>
     <div class="row">
-        <form id="delete-gallery" name="delete_gallery" method="post" style="display:none;" action="/owner/shops/delete_gallery?id=<?=$shop->id?>">
+        <form id="delete-gallery" name="delete_gallery" method="post" style="display:none;" action="/owner/shops/delete_gallery">
             <input type="hidden" name="_method" value="POST">
-            <input type="hidden" name="id" value="">
             <input type="hidden" name="key" value="">
             <input type="hidden" name="name" value="">
         </form>
@@ -20,7 +19,7 @@
         </div>
         <?php endforeach; ?>
     </div>
-    <form id="save-gallery" name="save_gallery" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/save_gallery?id=<?=$shop->id?>">
+    <form id="save-gallery" name="save_gallery" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/save_gallery">
         <div style="display:none;">
             <input type="hidden" name="gallery_befor" value='<?=json_encode($imageList); ?>'>
             <input type="hidden" name="_method" value="POST">

@@ -17,6 +17,7 @@ class AppController extends \App\Controller\AppController
         $this->Coupons = TableRegistry::get('Coupons');
         $this->Casts = TableRegistry::get('Casts');
         $this->Jobs = TableRegistry::get('Jobs');
+        $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
             'authenticate' => [
@@ -69,7 +70,8 @@ class AppController extends \App\Controller\AppController
         // ログイン時に許可するアクション
         $access = ['index','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
             'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
-            'deleteCast','saveTenpo','saveJob','saveGallery','deleteGallery'];
+            'deleteCast','saveTenpo','saveJob','saveGallery','deleteGallery','notice','viewNotice',
+            'saveNotice','updateNotice','deleteNotice'];
         if (in_array($action, $access)) {
             return true;
         }

@@ -39,10 +39,10 @@ li > a.sideNav-active {
   color: #fff;
   background-color: #26a69a;
 }
-.side-nav > li > a:hover {
+/* .side-nav > li > a:hover {
   color: #fff;
   background-color: #26a69a;
-}
+} */
 .brand-logo.oki-brand-logo{
   margin-left: 50px;
 }
@@ -529,11 +529,11 @@ div.my-gallery {
 /* .diary-card .my-gallery .col .imageOne{
   height: 250px;
 } */
-.diary-list p.title, #modal-diary p.title {
+.diary-list p.title, #modal-diary p.title, #modal-notice p.title {
   border-bottom-style: groove;
   padding-bottom: 5px;
 }
-.diary-list p.content, #modal-diary p.content  {
+.diary-list p.content, #modal-diary p.content, #modal-notice p.content  {
   margin-top: 10px;
 }
 /* 日記カード モジュール END */

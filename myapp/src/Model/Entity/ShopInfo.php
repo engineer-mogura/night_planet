@@ -29,8 +29,10 @@ class ShopInfo extends Entity
      */
     protected $_accessible = [
         'shop_id' => true,
+        'title' => true,
         'content' => true,
-        'image' => true,
+        'image1' => true,
+        'dir' => true,
         'created' => true,
         'modified' => true,
         'shop' => true

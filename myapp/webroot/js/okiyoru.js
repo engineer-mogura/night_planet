@@ -388,7 +388,7 @@ function castImageDeleteBtn(form, obj){
     // common initialize
     function initialize() {
 
-        /* 共通初期化処理 start */
+        /* 共通初期化処理 START */
         // materializecss sideNav サイドバーの初期化
         $('nav.nav-header-menu .button-collapse').sideNav({
             menuWidth: 300,
@@ -536,7 +536,7 @@ function castImageDeleteBtn(form, obj){
 
         // PhotoSwipeを起動する
         initPhotoSwipeFromDOM('.my-gallery');
-        /* 共通処理 end */
+        /* 共通処理 END */
     }
 
 /**
@@ -672,791 +672,1040 @@ function commonSearch(isAjax) {
  */
 function initializeOwner() {
 
-    // 店舗編集のスクリプト 店舗情報 クレジットフォームを入力不可にする
-    $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
+    /* 店舗情報 画面 START */
+    if($("#shop-edit").length) {
 
-    /* トップ画像 関連処理 start */
-    // トップ画像 変更、やめるボタン押した時
-    $(document).on("click", ".top-image-changeBtn",function() {
-        // 画像をクリアする
-        $('#top-image').find('#top-image-show').attr({width:'',height:'',src:''});
-        $('#top-image').find('[name="top_image"]').val('');
+        // 店舗編集のスクリプト 店舗情報 クレジットフォームを入力不可にする
+        $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
 
-        // 編集フォームが表示されている場合
-        if ($('#save-top-image').css('display') == 'block') {
-            // ビュー表示
-            $('#top-image').find("#save-top-image").hide();
-            $('#top-image').find("#show-top-image").show();
-        } else {
-            // 編集表示
-            $('#top-image').find('#save-top-image').show();
-            $('#top-image').find("#show-top-image").hide();
-        }
+        /* サイドメニュータブ 関連処理 START */
+        // タブメニューボタン押した時
+        $(document).on("click", ".tab-click", function() {
+            var tab =  $(this).data('tab');
+            $('ul.tabs').tabs('select_tab', tab);
+            // 左にスクロールするか判定する
+            var isLeft = (tab == ('top-image') || tab == ('catch') || tab == ('coupon') ? true: false);
+            if(isLeft) {
+                $('ul.tabs').animate({
+                    scrollLeft:$('ul.tabs').offset()
+                });
+                return;
+            }
+            $('ul.tabs').animate({
+                scrollLeft:$('#' + tab).offset().top
+            });
 
-    });
-    // トップ画像 登録ボタン押した時
-    $(document).on("click", ".top-image-saveBtn",function() {
+        });
+        /* サイドメニュータブ 関連処理 END */
 
-        //ファイル選択済みかチェック
-        var fileCheck = $("#top-image-file").val().length;
-        if (fileCheck === 0) {
-            alert("画像ファイルを選択してください");
-            return false;
-        }
-        if(!confirm('こちらの画像に変更でよろしいですか？')) {
-            return false;
-        }
+        /* トップ画像 関連処理 START */
+        // トップ画像 変更、やめるボタン押した時
+        $(document).on("click", ".top-image-changeBtn",function() {
+            // 画像をクリアする
+            $('#top-image').find('#top-image-show').attr({width:'',height:'',src:''});
+            $('#top-image').find('[name="top_image"]').val('');
 
-        var $form = $('#save-top-image');
+            // 編集フォームが表示されている場合
+            if ($('#save-top-image').css('display') == 'block') {
+                // ビュー表示
+                $('#top-image').find("#save-top-image").hide();
+                $('#top-image').find("#show-top-image").show();
+            } else {
+                // 編集表示
+                $('#top-image').find('#save-top-image').show();
+                $('#top-image').find("#show-top-image").hide();
+            }
 
-        // blobファイル変換
-        var blobList = fileConvert("#top-image-canvas", '.top-image-preview');
+        });
+        // トップ画像 登録ボタン押した時
+        $(document).on("click", ".top-image-saveBtn",function() {
 
-        // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
-        // POSTでリクエスト内のデータが全部なくなるので。
-        // TODO: 後で対策を考えよう
-        $($form).find('input[name="top_image_file"]').val("");
+            //ファイル選択済みかチェック
+            var fileCheck = $("#top-image-file").val().length;
+            if (fileCheck === 0) {
+                alert("画像ファイルを選択してください");
+                return false;
+            }
+            if(!confirm('こちらの画像に変更でよろしいですか？')) {
+                return false;
+            }
 
-        // アップロード用blobをformDataに設定
-        var formData = new FormData($form.get()[0]);
-        formData.append("top_image_file", blobList[0]);
+            var $form = $('#save-top-image');
 
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        fileUpAjaxCommon($form, formData, $("#top-image"));
-    });
-    // トップ画像 削除ボタン押した時
-    $(document).on("click", ".top-image-deleteBtn",function() {
+            // blobファイル変換
+            var blobList = fileConvert("#top-image-canvas", '.top-image-preview');
 
-        if (!confirm('トップ画像を削除してもよろしいですか？')) {
-            return false;
-        }
+            // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+            // POSTでリクエスト内のデータが全部なくなるので。
+            // TODO: 後で対策を考えよう
+            $($form).find('input[name="top_image_file"]').val("");
 
-        var $form =$('#delete-top-image');
+            // アップロード用blobをformDataに設定
+            var formData = new FormData($form.get()[0]);
+            formData.append("top_image_file", blobList[0]);
 
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#top-image"));
-    });
-    /* トップ画像 関連処理 end */
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            fileUpAjaxCommon($form, formData, $("#top-image"));
+        });
+        // トップ画像 削除ボタン押した時
+        $(document).on("click", ".top-image-deleteBtn",function() {
 
-    /* キャッチコピー 関連処理 start */
-    // キャッチコピー 変更、やめるボタン押した時
-    $(document).on("click", ".catch-changeBtn",function() {
+            if (!confirm('トップ画像を削除してもよろしいですか？')) {
+                return false;
+            }
 
-        // 編集フォームが表示されている場合
-        if ($('#save-catch').css('display') == 'block') {
-            // $(obj).find('[name="catch"]').val(""); //初期値を削除しない
-            $("#catch").find("#save-catch").hide();
-            $("#catch").find("#show-catch").show();
-        } else {
-            // catchという変数にしたかったがcatchはjsで予約語になる
+            var $form =$('#delete-top-image');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#top-image"));
+        });
+        /* トップ画像 関連処理 END */
+
+        /* キャッチコピー 関連処理 START */
+        // キャッチコピー 変更、やめるボタン押した時
+        $(document).on("click", ".catch-changeBtn",function() {
+
+            // 編集フォームが表示されている場合
+            if ($('#save-catch').css('display') == 'block') {
+                // $(obj).find('[name="catch"]').val(""); //初期値を削除しない
+                $("#catch").find("#save-catch").hide();
+                $("#catch").find("#show-catch").show();
+            } else {
+                // catchという変数にしたかったがcatchはjsで予約語になる
+                var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
+                $("#catch").find('textarea[name="catch"]').val(json['catch']);
+                $("#catch").find('#save-catch').show();
+                $("#catch").find("#show-catch").hide();
+                $('textarea').trigger('autoresize');
+                Materialize.updateTextFields(); // インプットフィールドの初期化
+            }
+
+        });
+
+        // キャッチコピー 登録ボタン押した時
+        $(document).on("click", ".catch-saveBtn",function() {
+            var $form = $('#save-catch');
+            if($form.find('textarea[name="catch"]').val() == '') {
+                alert('キャッチコピーを入力してください。');
+                return false;
+            }
+            if(!confirm('キャッチコピーを変更してもよろしいですか？')) {
+                return false;
+            }
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#catch"));
+        });
+
+        // キャッチコピー 削除ボタン押した時
+        $(document).on("click", ".catch-deleteBtn",function() {
+
+            if(!confirm('キャッチコピーを削除してもよろしいですか？')) {
+                return false;
+            }
             var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
-            $("#catch").find('textarea[name="catch"]').val(json['catch']);
-            $("#catch").find('#save-catch').show();
-            $("#catch").find("#show-catch").hide();
-            $('textarea').trigger('autoresize');
-            Materialize.updateTextFields(); // インプットフィールドの初期化
-        }
+            $("#catch").find('input[name="id"]').val(json['id']);
 
-    });
+            var $form = $('#delete-catch');
 
-    // キャッチコピー 登録ボタン押した時
-    $(document).on("click", ".catch-saveBtn",function() {
-        var $form = $('#save-catch');
-        if($form.find('textarea[name="catch"]').val() == '') {
-            alert('キャッチコピーを入力してください。');
-            return false;
-        }
-        if(!confirm('キャッチコピーを変更してもよろしいですか？')) {
-            return false;
-        }
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#catch"));
+        });
+        /* キャッチコピー 関連処理 END */
 
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#catch"));
-    });
+        /* クーポン 関連処理 START */
+        // クーポン 変更、やめるボタン押した時
+        $(document).on("click", ".coupon-changeBtn",function() {
+            $("html,body").animate({scrollTop:0});
 
-    // キャッチコピー 削除ボタン押した時
-    $(document).on("click", ".catch-deleteBtn",function() {
+            if ($('#save-coupon').css('display') == 'block') {
+                // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
+                $("#coupon").find("#save-coupon").hide();
+                $("#coupon").find("#show-coupon").show();
+            } else {
+                // コントローラ側で処理判断するパラメータ
+                $('input[name="crud_type"]').val('update');
 
-        if(!confirm('キャッチコピーを削除してもよろしいですか？')) {
-            return false;
-        }
-        var json = JSON.parse($("#catch").find('input[name="json_data"]').val());
-        $("#catch").find('input[name="id"]').val(json['id']);
+                var checked = $('input[name="check_coupon"]:checked');
+                var json = JSON.parse($(checked).closest('.coupon-box').find('input[name="json_data"]').val());
+                var from = $('#from-day').pickadate('picker'); // Date Picker
+                var to = $('#to-day').pickadate('picker'); // Date Picker
+                from.set('select', [2000, 1, 1]);
+                from.set('select', new Date(2000, 1, 1));
+                from.set('select', json['from_day'], { format: 'yyyy-mm-dd' });
+                to.set('select', [2000, 1, 1]);
+                to.set('select', new Date(2000, 1, 1));
+                to.set('select', json['to_day'], { format: 'yyyy-mm-dd' });
+                $("#coupon").find('input[name="id"]').val(json['id']);
+                $("#coupon").find('input[name="title"]').val(json['title']);
+                $("#coupon").find('textarea[name="content"]').val(json['content']);
+                if(json['status'] == 1) {
+                    $('input[name="status"]').attr('checked', 'checked');
+                }
+                $("#coupon").find('#save-coupon').show();
+                $("#coupon").find("#show-coupon").hide();
+                $('textarea').trigger('autoresize');
+                Materialize.updateTextFields(); // インプットフィールドの初期化
+            }
+        });
 
-        var $form = $('#delete-catch');
+        // クーポン 追加ボタン押した時
+        $(document).on("click", ".coupon-addBtn",function() {
+            if ($('#save-coupon').css('display') == 'block') {
+                // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
+                $("#coupon").find("#save-coupon").hide();
+                $("#coupon").find("#show-coupon").show();
+            } else {
+                $("html,body").animate({scrollTop:0});
+                // フォームの中身はすべて消す
+                $("#coupon").find('input[name="id"]').val('');
+                $("#coupon").find('#from-day').pickadate('picker').set("select",null);
+                $("#coupon").find('#to-day').pickadate('picker').set("select",null);
+                $("#coupon").find('#coupon-title').val('');
+                $("#coupon").find('#coupon-content').val('');
+                // コントローラ側で処理判断するパラメータ
+                $('input[name="crud_type"]').val('insert');
+                $("#save-coupon").find('button').removeClass('disabled');
+                $("#coupon").find('#save-coupon').show();
+                $("#coupon").find("#show-coupon").hide();
+            }
+        });
 
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#catch"));
-    });
-    /* キャッチコピー 関連処理 end */
+        // クーポン 登録ボタン押した時
+        $(document).on("click", ".coupon-saveBtn",function() {
 
-    /* クーポン 関連処理 start */
-    // クーポン 変更、やめるボタン押した時
-    $(document).on("click", ".coupon-changeBtn",function() {
-        $("html,body").animate({scrollTop:0});
+            if (!confirm('こちらの内容に変更でよろしいですか？')) {
+                return false;
+            }
 
-        if ($('#save-coupon').css('display') == 'block') {
-            // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
-            $("#coupon").find("#save-coupon").hide();
-            $("#coupon").find("#show-coupon").show();
-        } else {
-            // コントローラ側で処理判断するパラメータ
-            $('input[name="crud_type"]').val('update');
+            var $form = $('form[name="save_coupon"]');
+            var from_day = $($form).find('input[name="from_day_submit"]').val();
+            var to_day = $($form).find('input[name="to_day_submit"]').val();
+            $($form).find('input[name="from_day"]').val(from_day);
+            $($form).find('input[name="to_day"]').val(to_day);
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#coupon"));
+        });
+
+        /* クーポン チェックボックス押した時 */
+        $(document).on('click','.check-coupon-group', function() {
+            var $button = $('#coupon').find('.coupon-changeBtn,.coupon-deleteBtn');
+            var $addButton = $('#coupon').find('.coupon-addBtn');
+
+            if ($(this).prop('checked')){
+                $("html,body").animate({scrollTop:$('.targetScroll').offset().top},1200);
+                // 一旦全てをクリアして再チェックする
+                $('.check-coupon-group').prop('checked', false);
+                $(this).prop('checked', true);
+                $($button).removeClass('disabled');
+                $($addButton).addClass('disabled');
+            } else {
+                $($button).addClass('disabled');
+                $($addButton).removeClass('disabled');
+            }
+        });
+
+        /* クーポン スイッチ押した時 */
+        $(document).on('change', '.coupon-switchBtn', function() {
+            var target = $(this).closest('.coupon-box');
+            var json = JSON.parse($(target).find('input[name="json_data"]').val());
+            var status = 1; // チェック状態初期値
+            // チェックされてない場合
+            if(!$(this).prop('checked')) {
+                status = 0;
+            }
+            var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_coupon'};
+
+            $.ajax({
+                type: 'POST',
+                datatype:'json',
+                url: data.action,
+                data: data,
+                timeout: 10000,
+                beforeSend : function(xhr, settings){
+                    $("#coupon").find('.coupon-switchBtn').attr('disabled' , true);
+                },
+                complete: function(xhr, textStatus){
+                    $("#coupon").find('.coupon-switchBtn').attr('disabled' , false);
+                },
+                success: function(response,dataType) {
+                    // OKの場合
+                    if(response.success){
+                        Materialize.toast($(target).find(".coupon-num").text() + response.message, 3000, 'rounded')
+                    }else{
+                    // NGの場合
+                        Materialize.toast($(target).find(".coupon-num").text() + response.message, 3000, 'rounded')
+                }
+                },
+                error : function(response, textStatus, xhr){
+                    $("#coupon").find('.coupon-switchBtn').attr('disabled' , false);
+                    $.notifyBar({
+                        cssClass: 'error',
+                        html: "通信に失敗しました。ステータス：" + textStatus
+                    });
+                }
+            });
+        });
+
+        // クーポン 削除ボタン押した時
+        $(document).on("click", ".coupon-deleteBtn",function() {
 
             var checked = $('input[name="check_coupon"]:checked');
             var json = JSON.parse($(checked).closest('.coupon-box').find('input[name="json_data"]').val());
-            var from = $('#from-day').pickadate('picker'); // Date Picker
-            var to = $('#to-day').pickadate('picker'); // Date Picker
-            from.set('select', [2000, 1, 1]);
-            from.set('select', new Date(2000, 1, 1));
-            from.set('select', json['from_day'], { format: 'yyyy-mm-dd' });
-            to.set('select', [2000, 1, 1]);
-            to.set('select', new Date(2000, 1, 1));
-            to.set('select', json['to_day'], { format: 'yyyy-mm-dd' });
-            $("#coupon").find('input[name="id"]').val(json['id']);
-            $("#coupon").find('input[name="title"]').val(json['title']);
-            $("#coupon").find('textarea[name="content"]').val(json['content']);
-            if(json['status'] == 1) {
-                $('input[name="status"]').attr('checked', 'checked');
-            }
-            $("#coupon").find('#save-coupon').show();
-            $("#coupon").find("#show-coupon").hide();
-            $('textarea').trigger('autoresize');
-            Materialize.updateTextFields(); // インプットフィールドの初期化
-        }
-    });
 
-    // クーポン 追加ボタン押した時
-    $(document).on("click", ".coupon-addBtn",function() {
-        if ($('#save-coupon').css('display') == 'block') {
-            // $(obj).find('[name="coupon"]').val(""); //初期値を削除しない
-            $("#coupon").find("#save-coupon").hide();
-            $("#coupon").find("#show-coupon").show();
-        } else {
+            if (!confirm('【'+json.title+'】\n選択したクーポンを削除してもよろしいですか？')) {
+                return false;
+            }
+            var $form = $('form[id="delete-coupon"]');
+            $($form).find("input[name='id']").val(json.id);
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#coupon"));
+        });
+        /* クーポン 関連処理 END */
+
+        /* キャスト 関連処理 START */
+        // キャスト 変更、やめるボタン押した時
+        $(document).on("click", ".cast-changeBtn",function() {
             $("html,body").animate({scrollTop:0});
-            // フォームの中身はすべて消す
-            $("#coupon").find('input[name="id"]').val('');
-            $("#coupon").find('#from-day').pickadate('picker').set("select",null);
-            $("#coupon").find('#to-day').pickadate('picker').set("select",null);
-            $("#coupon").find('#coupon-title').val('');
-            $("#coupon").find('#coupon-content').val('');
-            // コントローラ側で処理判断するパラメータ
-            $('input[name="crud_type"]').val('insert');
-            $("#save-coupon").find('button').removeClass('disabled');
-            $("#coupon").find('#save-coupon').show();
-            $("#coupon").find("#show-coupon").hide();
-        }
-    });
 
-    // クーポン 登録ボタン押した時
-    $(document).on("click", ".coupon-saveBtn",function() {
+            if ($('#save-cast').css('display') == 'block') {
+                // $(obj).find('[name="cast"]').val(""); //初期値を削除しない
+                $("#cast").find("#save-cast").hide();
+                $("#cast").find("#show-cast").show();
+            } else {
+                // コントローラ側で処理判断するパラメータ
+                $('input[name="crud_type"]').val('update');
 
-        if (!confirm('こちらの内容に変更でよろしいですか？')) {
-            return false;
-        }
+                var checked = $('input[name="check_cast"]:checked');
+                var json = JSON.parse($(checked).closest('.cast-box').find('input[name="json_data"]').val());
+                $("#cast").find('input[name="id"]').val(json['id']);
+                $("#cast").find('input[name="name"]').val(json['name']);
+                $("#cast").find('input[name="nickname"]').val(json['nickname']);
+                $("#cast").find('input[name="email"]').val(json['email']);
 
-        var $form = $('form[name="save_coupon"]');
-        var from_day = $($form).find('input[name="from_day_submit"]').val();
-        var to_day = $($form).find('input[name="to_day_submit"]').val();
-        $($form).find('input[name="from_day"]').val(from_day);
-        $($form).find('input[name="to_day"]').val(to_day);
-
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#coupon"));
-    });
-
-    /* クーポン チェックボックス押した時 */
-    $(document).on('click','.check-coupon-group', function() {
-        var $button = $('#coupon').find('.coupon-changeBtn,.coupon-deleteBtn');
-        var $addButton = $('#coupon').find('.coupon-addBtn');
-
-        if ($(this).prop('checked')){
-            $("html,body").animate({scrollTop:$('.targetScroll').offset().top},1200);
-            // 一旦全てをクリアして再チェックする
-            $('.check-coupon-group').prop('checked', false);
-            $(this).prop('checked', true);
-            $($button).removeClass('disabled');
-            $($addButton).addClass('disabled');
-        } else {
-            $($button).addClass('disabled');
-            $($addButton).removeClass('disabled');
-        }
-    });
-
-    /* クーポン スイッチ押した時 */
-    $(document).on('change', '.coupon-switchBtn', function() {
-        var target = $(this).closest('.coupon-box');
-        var json = JSON.parse($(target).find('input[name="json_data"]').val());
-        var status = 1; // チェック状態初期値
-        // チェックされてない場合
-        if(!$(this).prop('checked')) {
-            status = 0;
-        }
-        var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_coupon?' + json.shop_id };
-
-        $.ajax({
-            type: 'POST',
-            datatype:'json',
-            url: data.action,
-            data: data,
-            timeout: 10000,
-            beforeSend : function(xhr, settings){
-                $("#coupon").find('.coupon-switchBtn').attr('disabled' , true);
-            },
-            complete: function(xhr, textStatus){
-                $("#coupon").find('.coupon-switchBtn').attr('disabled' , false);
-            },
-            success: function(response,dataType) {
-                // OKの場合
-                if(response.success){
-                    Materialize.toast($(target).find(".coupon-num").text() + response.message, 3000, 'rounded')
-                }else{
-                // NGの場合
-                    Materialize.toast($(target).find(".coupon-num").text() + response.message, 3000, 'rounded')
-            }
-            },
-            error : function(response, textStatus, xhr){
-                $("#coupon").find('.coupon-switchBtn').attr('disabled' , false);
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: "通信に失敗しました。ステータス：" + textStatus
-                });
+                if(json['status'] == 1) {
+                    $('input[name="status"]').attr('checked', 'checked');
+                }
+                $("#cast").find('#save-cast').show();
+                $("#cast").find("#show-cast").hide();
+                $('textarea').trigger('autoresize');
+                Materialize.updateTextFields(); // インプットフィールドの初期化
             }
         });
-    });
 
-    // クーポン 削除ボタン押した時
-    $(document).on("click", ".coupon-deleteBtn",function() {
+        // キャスト 追加ボタン押した時
+        $(document).on("click", ".cast-addBtn",function() {
+            if ($('#save-cast').css('display') == 'block') {
+                $("#cast").find("#save-cast").hide();
+                $("#cast").find("#show-cast").show();
+            } else {
+                $("html,body").animate({scrollTop:0});
+                // フォームの中身はすべて消す
+                $("#cast").find('input[name="id"]').val('');
+                $("#cast").find('input[name="name"]').val('');
+                $("#cast").find('input[name="nickname"]').val('');
+                $("#cast").find('input[name="email"]').val('');
+                // コントローラ側で処理判断するパラメータ
+                $('input[name="crud_type"]').val('insert');
+                $("#save-cast").find('button').removeClass('disabled');
+                $("#cast").find('#save-cast').show();
+                $("#cast").find("#show-cast").hide();
+            }
+        });
 
-        var checked = $('input[name="check_coupon"]:checked');
-        var json = JSON.parse($(checked).closest('.coupon-box').find('input[name="json_data"]').val());
+        /* キャスト 登録ボタン押した時 */
+        $(document).on("click", ".cast-saveBtn",function() {
 
-        if (!confirm('【'+json.title+'】\n選択したクーポンを削除してもよろしいですか？')) {
-            return false;
-        }
-        var $form = $('form[id="delete-coupon"]');
-        $($form).find("input[name='id']").val(json.id);
-        $($form).find("input[name='shop_id']").val(json.shop_id);
+            if (!confirm('こちらの内容に変更でよろしいですか？')) {
+                return false;
+            }
 
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#coupon"));
-    });
-    /* クーポン 関連処理 end */
+            var $form = $('form[name="save_cast"]');
 
-    /* キャスト 関連処理 start */
-    // キャスト 変更、やめるボタン押した時
-    $(document).on("click", ".cast-changeBtn",function() {
-        $("html,body").animate({scrollTop:0});
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#cast"));
+        });
 
-        if ($('#save-cast').css('display') == 'block') {
-            // $(obj).find('[name="cast"]').val(""); //初期値を削除しない
-            $("#cast").find("#save-cast").hide();
-            $("#cast").find("#show-cast").show();
-        } else {
-            // コントローラ側で処理判断するパラメータ
-            $('input[name="crud_type"]').val('update');
+        /* キャスト チェックボックス押した時 */
+        $(document).on('click','.check-cast-group', function() {
+            var $button = $('#cast').find('.cast-changeBtn,.cast-deleteBtn');
+            var $addButton = $('#cast').find('.cast-addBtn');
+
+            if ($(this).prop('checked')){
+                $("html,body").animate({scrollTop:$('.targetScroll').offset().top},1200);
+                // 一旦全てをクリアして再チェックする
+                $('.check-cast-group').prop('checked', false);
+                $(this).prop('checked', true);
+                $($button).removeClass('disabled');
+                $($addButton).addClass('disabled');
+            } else {
+                $($button).addClass('disabled');
+                $($addButton).removeClass('disabled');
+            }
+        });
+
+        /* キャスト スイッチ押した時 */
+        $(document).on('change', '.cast-switchBtn', function() {
+            var target = $(this).closest('.cast-box');
+            var json = JSON.parse($(target).find('input[name="json_data"]').val());
+            var status = 1; // チェック状態初期値
+            // チェックされてない場合
+            if(!$(this).prop('checked')) {
+                status = 0;
+            }
+            var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_cast'};
+
+            $.ajax({
+                type: 'POST',
+                datatype:'json',
+                url: data.action,
+                data: data,
+                timeout: 10000,
+                beforeSend : function(xhr, settings){
+                    $("#cast").find('.cast-switchBtn').attr('disabled' , true);
+                },
+                complete: function(xhr, textStatus){
+                    $("#cast").find('.cast-switchBtn').attr('disabled' , false);
+                },
+                success: function(response,dataType) {
+                    // OKの場合
+                    if(response.success){
+                        Materialize.toast($(target).find(".cast-num").text() + response.message, 3000, 'rounded')
+                    }else{
+                    // NGの場合
+                        Materialize.toast($(target).find(".cast-num").text() + response.message, 3000, 'rounded')
+                }
+                },
+                error : function(response, textStatus, xhr){
+                    $("#cast").find('.cast-switchBtn').attr('disabled' , false);
+                    $.notifyBar({
+                        cssClass: 'error',
+                        html: "通信に失敗しました。ステータス：" + textStatus
+                    });
+                }
+            });
+        });
+
+        // キャスト 削除ボタン押した時
+        $(document).on("click", ".cast-deleteBtn",function() {
 
             var checked = $('input[name="check_cast"]:checked');
             var json = JSON.parse($(checked).closest('.cast-box').find('input[name="json_data"]').val());
-            $("#cast").find('input[name="id"]').val(json['id']);
-            $("#cast").find('input[name="name"]').val(json['name']);
-            $("#cast").find('input[name="nickname"]').val(json['nickname']);
-            $("#cast").find('input[name="email"]').val(json['email']);
 
-            if(json['status'] == 1) {
-                $('input[name="status"]').attr('checked', 'checked');
-            }
-            $("#cast").find('#save-cast').show();
-            $("#cast").find("#show-cast").hide();
-            $('textarea').trigger('autoresize');
-            Materialize.updateTextFields(); // インプットフィールドの初期化
-        }
-    });
-
-    // キャスト 追加ボタン押した時
-    $(document).on("click", ".cast-addBtn",function() {
-        if ($('#save-cast').css('display') == 'block') {
-            $("#cast").find("#save-cast").hide();
-            $("#cast").find("#show-cast").show();
-        } else {
-            $("html,body").animate({scrollTop:0});
-            // フォームの中身はすべて消す
-            $("#cast").find('input[name="id"]').val('');
-            $("#cast").find('input[name="name"]').val('');
-            $("#cast").find('input[name="nickname"]').val('');
-            $("#cast").find('input[name="email"]').val('');
-            // コントローラ側で処理判断するパラメータ
-            $('input[name="crud_type"]').val('insert');
-            $("#save-cast").find('button').removeClass('disabled');
-            $("#cast").find('#save-cast').show();
-            $("#cast").find("#show-cast").hide();
-        }
-    });
-
-     /* キャスト 登録ボタン押した時 */
-     $(document).on("click", ".cast-saveBtn",function() {
-
-        if (!confirm('こちらの内容に変更でよろしいですか？')) {
-            return false;
-        }
-
-        var $form = $('form[name="save_cast"]');
-
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#cast"));
-    });
-
-    /* キャスト チェックボックス押した時 */
-    $(document).on('click','.check-cast-group', function() {
-        var $button = $('#cast').find('.cast-changeBtn,.cast-deleteBtn');
-        var $addButton = $('#cast').find('.cast-addBtn');
-
-        if ($(this).prop('checked')){
-            $("html,body").animate({scrollTop:$('.targetScroll').offset().top},1200);
-            // 一旦全てをクリアして再チェックする
-            $('.check-cast-group').prop('checked', false);
-            $(this).prop('checked', true);
-            $($button).removeClass('disabled');
-            $($addButton).addClass('disabled');
-        } else {
-            $($button).addClass('disabled');
-            $($addButton).removeClass('disabled');
-        }
-    });
-
-    /* キャスト スイッチ押した時 */
-    $(document).on('change', '.cast-switchBtn', function() {
-        var target = $(this).closest('.cast-box');
-        var json = JSON.parse($(target).find('input[name="json_data"]').val());
-        var status = 1; // チェック状態初期値
-        // チェックされてない場合
-        if(!$(this).prop('checked')) {
-            status = 0;
-        }
-        var data = { 'id' : json.id, 'status' : status, 'action' : '/owner/shops/switch_cast/' + json.shop_id };
-
-        $.ajax({
-            type: 'POST',
-            datatype:'json',
-            url: data.action,
-            data: data,
-            timeout: 10000,
-            beforeSend : function(xhr, settings){
-                $("#cast").find('.cast-switchBtn').attr('disabled' , true);
-            },
-            complete: function(xhr, textStatus){
-                $("#cast").find('.cast-switchBtn').attr('disabled' , false);
-            },
-            success: function(response,dataType) {
-                // OKの場合
-                if(response.success){
-                    Materialize.toast($(target).find(".cast-num").text() + response.message, 3000, 'rounded')
-                }else{
-                // NGの場合
-                    Materialize.toast($(target).find(".cast-num").text() + response.message, 3000, 'rounded')
-            }
-            },
-            error : function(response, textStatus, xhr){
-                $("#cast").find('.cast-switchBtn').attr('disabled' , false);
-                $.notifyBar({
-                    cssClass: 'error',
-                    html: "通信に失敗しました。ステータス：" + textStatus
-                });
-            }
-        });
-    });
-
-    // キャスト 削除ボタン押した時
-    $(document).on("click", ".cast-deleteBtn",function() {
-
-        var checked = $('input[name="check_cast"]:checked');
-        var json = JSON.parse($(checked).closest('.cast-box').find('input[name="json_data"]').val());
-
-        if (!confirm('【'+json.name+'】\n選択したキャストを削除してもよろしいですか？')) {
-            return false;
-        }
-        var $form = $('form[id="delete-cast"]');
-        $($form).find("input[name='id']").val(json.id);
-        $($form).find("input[name='shop_id']").val(json.shop_id);
-        $($form).find("input[name='dir']").val(json.dir);
-
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#cast"));
-    });
-    /* キャスト 関連処理 end */
-
-    /* 店舗情報 関連処理 start */
-    // 店舗情報 変更、やめるボタン押した時
-    $(document).on("click", ".tenpo-changeBtn",function() {
-        $("html,body").animate({scrollTop:0});
-
-        if ($('#save-tenpo').css('display') == 'block') {
-            // $(obj).find('[name="tenpo"]').val(""); //初期値を削除しない
-            $('#tenpo').find("#save-tenpo").hide();
-            $('#tenpo').find("#show-tenpo").show();
-        } else {
-            var json = JSON.parse($('#tenpo').find('input[name="json_data"]').val());
-            // 時間開始に初期値があればセット
-            if(json['bus_from_time']) {
-                var $from = $('#tenpo').find('#bus-from-time').pickatime().pickatime('picker');
-                var from = new Date(json['bus_from_time']);
-                $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
-            }
-            // 時間終了に初期値があればセット
-            if(json['bus_to_time']) {
-                var $to = $('#tenpo').find('#bus-to-time').pickatime().pickatime('picker');
-                var to = new Date(json['bus_to_time']);
-                $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
-            }
-            $('#tenpo').find('input[name="name"]').val(json['name']);
-            $('#tenpo').find('input[name="pref21"]').val(json['pref21']);
-            $('#tenpo').find('input[name="addr21"]').val(json['addr21']);
-            $('#tenpo').find('input[name="strt21"]').val(json['strt21']);
-            $('#tenpo').find('input[name="tel"]').val(json['tel']);
-            $('#tenpo').find('input[name="bus_hosoku"]').val(json['bus_hosoku']);
-            $('#tenpo').find('textarea[name="staff"]').val(json['staff']);
-            $('#tenpo').find('textarea[name="system"]').val(json['system']);
-            //クレジットフィールドにあるタグを取得して配列にセット
-            var data = JSON.parse($('#tenpo').find('input[name="credit_hidden"]').val());
-            // クレジットフィールドの初期化
-            $('.chips-initial').material_chip({
-                data:data
-            });
-            $('#tenpo').find('#save-tenpo').show();
-            $('#tenpo').find("#show-tenpo").hide();
-
-            $('textarea').trigger('autoresize'); // テキストエリアの初期化
-            Materialize.updateTextFields(); // インプットフィールドの初期化
-            $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
-        }
-    });
-
-    // 店舗情報 登録ボタン押した時
-    $(document).on("click", ".tenpo-saveBtn",function() {
-
-        if (!confirm('こちらの店舗内容でよろしいですか？')) {
-            return false;
-        }
-
-        var $form = $('form[name="save_tenpo"]');
-        var tagData = $($form).find('.chips').material_chip('data');
-        if (tagData.length > 0) {
-            var csvTag = "";
-            for (var i = 0; i < tagData.length; i++) {
-                csvTag = csvTag += tagData[i].tag + ",";
-            }
-            csvTag = csvTag.slice(0, -1);
-            $($form).find('input[name="credit"]').val(csvTag);
-        }
-
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#tenpo"));
-    });
-
-    /* ギャラリー 関連処理 start */
-    // ギャラリー 削除ボタン押した時
-    $(document).on("click", ".gallery-deleteBtn",function() {
-
-        var json = $(this).data('delete');
-
-        if (!confirm('選択したギャラリーを削除してもよろしいですか？')) {
-            return false;
-        }
-        var $form = $('form[id="delete-gallery"]');
-        $($form).find("input[name='key']").val(json.key);
-        $($form).find("input[name='name']").val(json.name);
-
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#gallery"));
-    });
-    // ギャラリー 画像を選択した時
-    $(document).on("change", "#image-file", function() {
-
-        if($("#image-file").prop("files").length == 0) {
-            $(".cancelBtn").addClass("disabled");
-            $(".createBtn").addClass("disabled");
-        } else {
-            $(".cancelBtn").removeClass("disabled");
-            $(".createBtn").removeClass("disabled");
-        }
-        $(document).find(".card-img.new").remove();
-        var fileList = $("#image-file").prop("files");
-        var imgCount = $(".card-img").length;
-        var fimeMax = $("input[name='file_max']").val();
-        var modulePath = "/module/materialboxed.ctp";
-
-        $.each(fileList, function(index, file){
-            //画像ファイルかチェック
-            if (file["type"] != "image/jpeg" && file["type"] != "image/png" && file["type"] != "image/gif") {
-                alert("jpgかpngかgifファイルを選択してください");
-                $("#image-file").val('');
+            if (!confirm('【'+json.name+'】\n選択したキャストを削除してもよろしいですか？')) {
                 return false;
             }
+            var $form = $('form[id="delete-cast"]');
+            $($form).find("input[name='id']").val(json.id);
+            $($form).find("input[name='dir']").val(json.dir);
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#cast"));
         });
-        // ファイル数を制限する
-        if(fileList.length + imgCount > fimeMax) {
-            alert("アップロードできる画像は" + fimeMax + "ファイルまでです。");
-            resetBtn($(document), true);
-            return false;
-        }
-        for(var i = 0; i < fileList.length; i++){
+        /* キャスト 関連処理 END */
 
-            imgCount += 1;
-            fileload(fileList[i], $("#gallery .row"), imgCount, modulePath);
-        }
+        /* 店舗情報 関連処理 START */
+        // 店舗情報 変更、やめるボタン押した時
+        $(document).on("click", ".tenpo-changeBtn",function() {
+            $("html,body").animate({scrollTop:0});
 
-    });
-    // ギャラリー 登録ボタン押した時
-    $(document).on("click", ".gallery-saveBtn",function() {
-
-        //ファイル選択済みかチェック
-        var fileCheck = $("#image-file").val().length;
-        if (fileCheck === 0) {
-            alert("画像ファイルを選択してください");
-            return false;
-        }
-        if(!confirm('こちらの画像に変更でよろしいですか？')) {
-            return false;
-        }
-        // 新しく追加された画像のみを対象にする
-        $selecter = $('.card-img.new').find('img');
-
-        var $form = $('#save-gallery');
-        // ファイル変換
-        var blobList = fileConvert("#image-canvas", $selecter);
-
-        // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
-        // POSTでリクエスト内のデータが全部なくなるので。
-        // TODO: 後で対策を考えよう
-        $($form).find('#image-file, .file-path').val("");
-
-        //アップロード用blobをformDataに設定
-        formData = new FormData($form.get()[0]);
-        for(item of blobList) {
-          formData.append("image[]", item);
-        }
-        // for (item of formData) {
-        //   console.log(item);
-        // }
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        fileUpAjaxCommon($form, formData, $("#gallery"));
-
-    });
-    // ギャラリー やめるボタン押した時
-    $(document).on("click", ".gallery-chancelBtn",function() {
-        // newタグが付いたファイルを表示エリアから削除する
-        $('#gallery').find('.card-img.new').remove();
-        // フォーム入力も削除する
-        $("#gallery").find("#image-file, .file-path").val("");
-    });
-    /* ギャラリー 関連処理 end */
-
-    // 求人情報 リストから選ぶボタン押した時
-    $(document).on("click", ".jobModal-callBtn",function() {
-
-        // オブジェクトを配列に変換
-        //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
-        var $chips = $('#job').find('.chips');
-        var $chipList = $('#modal-job').find('.chip-dummy');
-        $($chips).val($(this).attr('id'));
-            // 待遇フィールドにあるタグを取得して配列にセット
-            var data = $($chips).material_chip('data');
-
-        var addFlg = true;
-        // 配列dataを順に処理
-        // タグの背景色を初期化する
-        $($chipList).each(function(i,o){
-            $(o).removeClass('back-color');
-        });
-        // インプットフィールドにあるタグは選択済にする
-        $.each(data, function(index, val) {
-            $($chipList).each(function(i,o){
-                if($(o).attr('id') == val.id) {
-                    $(o).addClass('back-color');
-                    return true;
+            if ($('#save-tenpo').css('display') == 'block') {
+                // $(obj).find('[name="tenpo"]').val(""); //初期値を削除しない
+                $('#tenpo').find("#save-tenpo").hide();
+                $('#tenpo').find("#show-tenpo").show();
+            } else {
+                var json = JSON.parse($('#tenpo').find('input[name="json_data"]').val());
+                // 時間開始に初期値があればセット
+                if(json['bus_from_time']) {
+                    var $from = $('#tenpo').find('#bus-from-time').pickatime().pickatime('picker');
+                    var from = new Date(json['bus_from_time']);
+                    $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
                 }
-            });
-        });
-    });
-
-    // 店舗情報 クレジットタグをフォームに追加する
-    $(document).on('click','.chip-credit', function() {
-        var $chips = $('#tenpo').find('.chips');
-        $($chips).val($(this).children().attr('alt'));
-        // クレジットフィールドにあるタグを取得して配列にセット
-        var data = $($chips).material_chip('data');
-        console.log(data);
-
-        // クリックしたタグを取得
-        var newTag = $(this).children().attr('alt');
-        var newId = $(this).children().attr('id');
-        var addFlg = true;
-        // 配列dataを順に処理
-        $.each(data, function(index, val) {
-            if(newId == val.id) {
-                addFlg = false;
-            }
-        });
-        // 重複したクレジットが無い、またはデータが１つも無ければクレジット追加
-        if(addFlg || data.length == 0) {
-            data.push({'tag' : newTag, 'image':'/img/common/credit/'+ newTag +'.png', 'id':newId});
-        }
-        // クレジットフィールドの初期化
-        $($chips).material_chip({
-            data:data
-        });
-        $($chips).find('input').prop('disabled',true);
-        //フレームワークmaterializecssの本来のイベントをキャンセルする
-        //※ブラウザでエラー発生するため（Uncaught TypeError: Cannot read property '*' of undefined）
-        event.stopImmediatePropagation();
-
-    });
-    /* 店舗情報 関連処理 end */
-
-    /* 求人情報 関連処理 start */
-    // 求人情報 変更、やめるボタン押した時
-    $(document).on("click", ".job-changeBtn",function() {
-        $("html,body").animate({scrollTop:0});
-
-        if ($('#save-job').css('display') == 'block') {
-            $('#job').find("#save-job").hide();
-            $('#job').find("#show-job").show();
-        } else {
-            var job = JSON.parse($('#job').find('input[name="json_data"]').val());
-            $('#job').find('input[name="id"]').val(job['id']);
-            $('#job').find('p[name="name"]').text($('#job').find('.show-job-name').text());
-            $('#job').find('select[name="industry"]').val(job['industry']);
-            $('#job').find('select[name="job_type"]').val(job['job_type']);
-            // 時間開始に初期値があればセット
-            if(job['work_from_time']) {
-                var $from = $('#work-from-time').pickatime().pickatime('picker');
-                var from = new Date(job['work_from_time']);
-                $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
-            }
-            // 時間終了に初期値があればセット
-            if(job['work_to_time']) {
-                var $to = $('#work-to-time').pickatime().pickatime('picker');
-                var to = new Date(job['work_to_time']);
-                $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
-            }
-            $('#job').find('input[name="work_time_hosoku"]').val(job['work_time_hosoku']);
-            $('#job').find('input[name="qualification_hosoku"]').val(job['qualification_hosoku']);
-            $('#job').find('select[name="from_age"]').val(job['from_age']);
-            $('#job').find('select[name="to_age"]').val(job['to_age']);
-            // NULLか空の場合は、空を代入する
-            var dayArray = job['holiday'] ? job['holiday'].split(",") : "";
-            $.each(dayArray, function(index, val) {
-                $('#job').find('input[name="holiday[]"]').each(function(i,o){
-                    if (val == $(o).val()) {
-                        $(o).prop('checked',true);
-                    }
+                // 時間終了に初期値があればセット
+                if(json['bus_to_time']) {
+                    var $to = $('#tenpo').find('#bus-to-time').pickatime().pickatime('picker');
+                    var to = new Date(json['bus_to_time']);
+                    $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
+                }
+                $('#tenpo').find('input[name="name"]').val(json['name']);
+                $('#tenpo').find('input[name="pref21"]').val(json['pref21']);
+                $('#tenpo').find('input[name="addr21"]').val(json['addr21']);
+                $('#tenpo').find('input[name="strt21"]').val(json['strt21']);
+                $('#tenpo').find('input[name="tel"]').val(json['tel']);
+                $('#tenpo').find('input[name="bus_hosoku"]').val(json['bus_hosoku']);
+                $('#tenpo').find('textarea[name="staff"]').val(json['staff']);
+                $('#tenpo').find('textarea[name="system"]').val(json['system']);
+                //クレジットフィールドにあるタグを取得して配列にセット
+                var data = JSON.parse($('#tenpo').find('input[name="credit_hidden"]').val());
+                // クレジットフィールドの初期化
+                $('.chips-initial').material_chip({
+                    data:data
                 });
-            });
+                $('#tenpo').find('#save-tenpo').show();
+                $('#tenpo').find("#show-tenpo").hide();
 
-            $('#job').find('input[name="holiday_hosoku"]').val(job['holiday_hosoku']);
-            $('#job').find('input[name="treatment"]').val(job['treatment']);
-            $('#job').find('textarea[name="pr"]').val(job['pr']);
-            $('#job').find('input[name="tel1"]').val(job['tel1']);
-            $('#job').find('input[name="tel2"]').val(job['tel2']);
-            $('#job').find('input[name="email"]').val(job['email']);
-            $('#job').find('input[name="lineid"]').val(job['lineid']);
-            //待遇フィールドにあるタグを取得して配列にセット
-            var data = JSON.parse($('#job').find('input[name="treatment_hidden"]').val());
-            // 待遇フィールドの初期化
-            $('#job').find('.chips-initial').material_chip({
-                data:data
-            });
-            $('#job').find('#save-job').show();
-            $('#job').find("#show-job").hide();
-
-            $('textarea').trigger('autoresize'); // テキストエリアの初期化
-            Materialize.updateTextFields(); // インプットフィールドの初期化
-            $('#job').find('select').material_select(); // セレクトボックスの値を動的に変えたら初期化する必要がある
-            $($('#job').find('div[name="credit"]')).find('input').prop('disabled',true);
-
-        }
-    });
-
-    // 求人情報 登録ボタン押した時
-    $(document).on("click", ".job-saveBtn",function() {
-
-        if (!confirm('こちらの求人内容でよろしいですか？')) {
-            return false;
-        }
-
-        var $form = $('form[name="save_job"]');
-        var tagData = $($form).find('.chips').material_chip('data');
-        if (tagData.length > 0) {
-            var csvTag = "";
-            for (var i = 0; i < tagData.length; i++) {
-                csvTag = csvTag += tagData[i].tag + ",";
-            }
-            csvTag = csvTag.slice(0, -1);
-            $($form).find('input[name="treatment"]').val(csvTag);
-        }
-
-        //通常のアクションをキャンセルする
-        event.preventDefault();
-        ajaxCommon($form, $("#job"));
-    });
-
-    // 求人情報 待遇タグをフォームに追加する
-    $(document).on('click','.chip-treatment', function(event) {
-        var $chips = $('#job').find('.chips');
-        $($chips).val($(this).attr('id'));
-        // 待遇フィールドにあるタグを取得して配列にセット
-        var data = $($chips).material_chip('data');
-
-        // クリックしたタグを取得
-        var newTag = $(this).attr('value');
-        var newId = $(this).attr('id');
-        var addFlg = true;
-        var removeFlg = false;
-        if ($(this).hasClass('back-color')) {
-            $(this).removeClass('back-color');
-            removeFlg = true;
-        } else {
-            $(this).addClass('back-color');
-        }
-        // 配列dataを順に処理
-        $.each(data, function(index, val) {
-            if(newId == val.id) {
-                addFlg = false;
+                $('textarea').trigger('autoresize'); // テキストエリアの初期化
+                Materialize.updateTextFields(); // インプットフィールドの初期化
+                $($('#tenpo').find('div[name="credit"]')).find('input').prop('disabled',true);
             }
         });
-        // 重複した待遇が無い、またはデータが１つも無ければ待遇追加
-        if(addFlg || data.length == 0) {
-            data.push({'tag' : newTag, 'id':newId});
-        }
-        //タグの選択解除
-        if (removeFlg) {
-            $.each(data, function(index, val) {
-                if(newId == val.id) {
-                    data.splice(index,1);
+
+        // 店舗情報 登録ボタン押した時
+        $(document).on("click", ".tenpo-saveBtn",function() {
+
+            if (!confirm('こちらの店舗内容でよろしいですか？')) {
+                return false;
+            }
+
+            var $form = $('form[name="save_tenpo"]');
+            var tagData = $($form).find('.chips').material_chip('data');
+            if (tagData.length > 0) {
+                var csvTag = "";
+                for (var i = 0; i < tagData.length; i++) {
+                    csvTag = csvTag += tagData[i].tag + ",";
+                }
+                csvTag = csvTag.slice(0, -1);
+                $($form).find('input[name="credit"]').val(csvTag);
+            }
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#tenpo"));
+        });
+
+        /* ギャラリー 関連処理 START */
+        // ギャラリー 削除ボタン押した時
+        $(document).on("click", ".gallery-deleteBtn",function() {
+
+            var json = $(this).data('delete');
+
+            if (!confirm('選択したギャラリーを削除してもよろしいですか？')) {
+                return false;
+            }
+            var $form = $('form[id="delete-gallery"]');
+            $($form).find("input[name='key']").val(json.key);
+            $($form).find("input[name='name']").val(json.name);
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#gallery"));
+        });
+        // ギャラリー 画像を選択した時
+        $(document).on("change", "#image-file", function() {
+
+            if($("#image-file").prop("files").length == 0) {
+                $(".cancelBtn").addClass("disabled");
+                $(".createBtn").addClass("disabled");
+            } else {
+                $(".cancelBtn").removeClass("disabled");
+                $(".createBtn").removeClass("disabled");
+            }
+            $(document).find(".card-img.new").remove();
+            var fileList = $("#image-file").prop("files");
+            var imgCount = $(".card-img").length;
+            var fimeMax = $("input[name='file_max']").val();
+            var modulePath = "/module/materialboxed.ctp";
+
+            $.each(fileList, function(index, file){
+                //画像ファイルかチェック
+                if (file["type"] != "image/jpeg" && file["type"] != "image/png" && file["type"] != "image/gif") {
+                    alert("jpgかpngかgifファイルを選択してください");
+                    $("#image-file").val('');
                     return false;
                 }
             });
-        }
-        // 待遇フィールドの初期化
-        $($chips).material_chip({
-            data:data
+            // ファイル数を制限する
+            if(fileList.length + imgCount > fimeMax) {
+                alert("アップロードできる画像は" + fimeMax + "ファイルまでです。");
+                resetBtn($(document), true);
+                return false;
+            }
+            for(var i = 0; i < fileList.length; i++){
+
+                imgCount += 1;
+                fileload(fileList[i], $("#gallery .row"), imgCount, modulePath);
+            }
+
         });
-        $($chips).find('input').prop('disabled',true);
-        //フレームワークmaterializecssの本来のイベントをキャンセルする
-        //※ブラウザでエラー発生するため（Uncaught TypeError: Cannot read property '*' of undefined）
-        event.stopImmediatePropagation();
-    });
+        // ギャラリー 登録ボタン押した時
+        $(document).on("click", ".gallery-saveBtn",function() {
+
+            //ファイル選択済みかチェック
+            var fileCheck = $("#image-file").val().length;
+            if (fileCheck === 0) {
+                alert("画像ファイルを選択してください");
+                return false;
+            }
+            if(!confirm('こちらの画像に変更でよろしいですか？')) {
+                return false;
+            }
+            // 新しく追加された画像のみを対象にする
+            $selecter = $('.card-img.new').find('img');
+
+            var $form = $('#save-gallery');
+            // ファイル変換
+            var blobList = fileConvert("#image-canvas", $selecter);
+
+            // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+            // POSTでリクエスト内のデータが全部なくなるので。
+            // TODO: 後で対策を考えよう
+            $($form).find('#image-file, .file-path').val("");
+
+            //アップロード用blobをformDataに設定
+            formData = new FormData($form.get()[0]);
+            for(item of blobList) {
+            formData.append("image[]", item);
+            }
+            // for (item of formData) {
+            //   console.log(item);
+            // }
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            fileUpAjaxCommon($form, formData, $("#gallery"));
+
+        });
+        // ギャラリー やめるボタン押した時
+        $(document).on("click", ".gallery-chancelBtn",function() {
+            // newタグが付いたファイルを表示エリアから削除する
+            $('#gallery').find('.card-img.new').remove();
+            // フォーム入力も削除する
+            $("#gallery").find("#image-file, .file-path").val("");
+        });
+        /* ギャラリー 関連処理 END */
+
+        // 求人情報 リストから選ぶボタン押した時
+        $(document).on("click", ".jobModal-callBtn",function() {
+
+            // オブジェクトを配列に変換
+            //var treatment = Object.entries(JSON.parse($(obj).find('input[name="treatment_hidden"]').val()));
+            var $chips = $('#job').find('.chips');
+            var $chipList = $('#modal-job').find('.chip-dummy');
+            $($chips).val($(this).attr('id'));
+                // 待遇フィールドにあるタグを取得して配列にセット
+                var data = $($chips).material_chip('data');
+
+            var addFlg = true;
+            // 配列dataを順に処理
+            // タグの背景色を初期化する
+            $($chipList).each(function(i,o){
+                $(o).removeClass('back-color');
+            });
+            // インプットフィールドにあるタグは選択済にする
+            $.each(data, function(index, val) {
+                $($chipList).each(function(i,o){
+                    if($(o).attr('id') == val.id) {
+                        $(o).addClass('back-color');
+                        return true;
+                    }
+                });
+            });
+        });
+
+        // 店舗情報 クレジットタグをフォームに追加する
+        $(document).on('click','.chip-credit', function() {
+            var $chips = $('#tenpo').find('.chips');
+            $($chips).val($(this).children().attr('alt'));
+            // クレジットフィールドにあるタグを取得して配列にセット
+            var data = $($chips).material_chip('data');
+            console.log(data);
+
+            // クリックしたタグを取得
+            var newTag = $(this).children().attr('alt');
+            var newId = $(this).children().attr('id');
+            var addFlg = true;
+            // 配列dataを順に処理
+            $.each(data, function(index, val) {
+                if(newId == val.id) {
+                    addFlg = false;
+                }
+            });
+            // 重複したクレジットが無い、またはデータが１つも無ければクレジット追加
+            if(addFlg || data.length == 0) {
+                data.push({'tag' : newTag, 'image':'/img/common/credit/'+ newTag +'.png', 'id':newId});
+            }
+            // クレジットフィールドの初期化
+            $($chips).material_chip({
+                data:data
+            });
+            $($chips).find('input').prop('disabled',true);
+            //フレームワークmaterializecssの本来のイベントをキャンセルする
+            //※ブラウザでエラー発生するため（Uncaught TypeError: Cannot read property '*' of undefined）
+            event.stopImmediatePropagation();
+
+        });
+        /* 店舗情報 関連処理 END */
+
+        /* 求人情報 関連処理 START */
+        // 求人情報 変更、やめるボタン押した時
+        $(document).on("click", ".job-changeBtn",function() {
+            $("html,body").animate({scrollTop:0});
+
+            if ($('#save-job').css('display') == 'block') {
+                $('#job').find("#save-job").hide();
+                $('#job').find("#show-job").show();
+            } else {
+                var job = JSON.parse($('#job').find('input[name="json_data"]').val());
+                $('#job').find('input[name="id"]').val(job['id']);
+                $('#job').find('p[name="name"]').text($('#job').find('.show-job-name').text());
+                $('#job').find('select[name="industry"]').val(job['industry']);
+                $('#job').find('select[name="job_type"]').val(job['job_type']);
+                // 時間開始に初期値があればセット
+                if(job['work_from_time']) {
+                    var $from = $('#work-from-time').pickatime().pickatime('picker');
+                    var from = new Date(job['work_from_time']);
+                    $($from).val(toDoubleDigits(from.getHours()) + ":" + toDoubleDigits(from.getMinutes()));
+                }
+                // 時間終了に初期値があればセット
+                if(job['work_to_time']) {
+                    var $to = $('#work-to-time').pickatime().pickatime('picker');
+                    var to = new Date(job['work_to_time']);
+                    $($to).val(toDoubleDigits(to.getHours()) + ":" + toDoubleDigits(to.getMinutes()));
+                }
+                $('#job').find('input[name="work_time_hosoku"]').val(job['work_time_hosoku']);
+                $('#job').find('input[name="qualification_hosoku"]').val(job['qualification_hosoku']);
+                $('#job').find('select[name="from_age"]').val(job['from_age']);
+                $('#job').find('select[name="to_age"]').val(job['to_age']);
+                // NULLか空の場合は、空を代入する
+                var dayArray = job['holiday'] ? job['holiday'].split(",") : "";
+                $.each(dayArray, function(index, val) {
+                    $('#job').find('input[name="holiday[]"]').each(function(i,o){
+                        if (val == $(o).val()) {
+                            $(o).prop('checked',true);
+                        }
+                    });
+                });
+
+                $('#job').find('input[name="holiday_hosoku"]').val(job['holiday_hosoku']);
+                $('#job').find('input[name="treatment"]').val(job['treatment']);
+                $('#job').find('textarea[name="pr"]').val(job['pr']);
+                $('#job').find('input[name="tel1"]').val(job['tel1']);
+                $('#job').find('input[name="tel2"]').val(job['tel2']);
+                $('#job').find('input[name="email"]').val(job['email']);
+                $('#job').find('input[name="lineid"]').val(job['lineid']);
+                //待遇フィールドにあるタグを取得して配列にセット
+                var data = JSON.parse($('#job').find('input[name="treatment_hidden"]').val());
+                // 待遇フィールドの初期化
+                $('#job').find('.chips-initial').material_chip({
+                    data:data
+                });
+                $('#job').find('#save-job').show();
+                $('#job').find("#show-job").hide();
+
+                $('textarea').trigger('autoresize'); // テキストエリアの初期化
+                Materialize.updateTextFields(); // インプットフィールドの初期化
+                $('#job').find('select').material_select(); // セレクトボックスの値を動的に変えたら初期化する必要がある
+                $($('#job').find('div[name="credit"]')).find('input').prop('disabled',true);
+
+            }
+        });
+
+        // 求人情報 登録ボタン押した時
+        $(document).on("click", ".job-saveBtn",function() {
+
+            if (!confirm('こちらの求人内容でよろしいですか？')) {
+                return false;
+            }
+
+            var $form = $('form[name="save_job"]');
+            var tagData = $($form).find('.chips').material_chip('data');
+            if (tagData.length > 0) {
+                var csvTag = "";
+                for (var i = 0; i < tagData.length; i++) {
+                    csvTag = csvTag += tagData[i].tag + ",";
+                }
+                csvTag = csvTag.slice(0, -1);
+                $($form).find('input[name="treatment"]').val(csvTag);
+            }
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#job"));
+        });
+
+        // 求人情報 待遇タグをフォームに追加する
+        $(document).on('click','.chip-treatment', function(event) {
+            var $chips = $('#job').find('.chips');
+            $($chips).val($(this).attr('id'));
+            // 待遇フィールドにあるタグを取得して配列にセット
+            var data = $($chips).material_chip('data');
+
+            // クリックしたタグを取得
+            var newTag = $(this).attr('value');
+            var newId = $(this).attr('id');
+            var addFlg = true;
+            var removeFlg = false;
+            if ($(this).hasClass('back-color')) {
+                $(this).removeClass('back-color');
+                removeFlg = true;
+            } else {
+                $(this).addClass('back-color');
+            }
+            // 配列dataを順に処理
+            $.each(data, function(index, val) {
+                if(newId == val.id) {
+                    addFlg = false;
+                }
+            });
+            // 重複した待遇が無い、またはデータが１つも無ければ待遇追加
+            if(addFlg || data.length == 0) {
+                data.push({'tag' : newTag, 'id':newId});
+            }
+            //タグの選択解除
+            if (removeFlg) {
+                $.each(data, function(index, val) {
+                    if(newId == val.id) {
+                        data.splice(index,1);
+                        return false;
+                    }
+                });
+            }
+            // 待遇フィールドの初期化
+            $($chips).material_chip({
+                data:data
+            });
+            $($chips).find('input').prop('disabled',true);
+            //フレームワークmaterializecssの本来のイベントをキャンセルする
+            //※ブラウザでエラー発生するため（Uncaught TypeError: Cannot read property '*' of undefined）
+            event.stopImmediatePropagation();
+        });
+
+    }
+    /* 店舗情報 画面 END */
+
+    /* お知らせ 画面 START */
+    if($("#notice").length) {
+
+        // 入力フォームに変更があった時
+        $(document).on("input", "#title, #content, #image-file", function() {
+            $("#edit-notice").find(".createBtn").removeClass("disabled");
+            $("#edit-notice").find(".cancelBtn").removeClass("disabled");
+        });
+        // 画像を変更した時
+        $(document).on("input","#modal-title, #modal-content, #modal-image-file", function() {
+            $(".updateBtn").removeClass("disabled");
+        });
+        // 画像を選択した時
+        $(document).on("change", "#image-file", function() {
+            canvasRender("#notice", this, true);
+        });
+        // モーダルお知らせで画像を選択した時
+        $(document).on("change", "#modal-image-file", function() {
+            canvasRender("#modal-notice", this, true);
+        });
+        // 登録ボタン押した時
+        $(document).on("click", ".createBtn",function() {
+            if (!confirm('こちらのお知らせ内容でよろしいですか？')) {
+                return false;
+            }
+
+            var $form = $("#edit-notice");
+            var fileCheck = $("#notice").find("#image-file").val().length;
+
+            //ファイル選択済みの場合はajax処理を切り替える
+            if (fileCheck > 0) {
+                // 新しく追加された画像のみを対象にする
+                $selecter = $('.card-img').find('img');
+
+                // ファイル変換
+                var blobList = fileConvert("#image-canvas", $selecter);
+
+                // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                // POSTでリクエスト内のデータが全部なくなるので。
+                // TODO: 後で対策を考えよう
+                $($form).find('#image-file, .file-path').val("");
+
+                //アップロード用blobをformDataに設定
+                formData = new FormData($form.get()[0]);
+                for(item of blobList) {
+                    formData.append("image[]", item);
+                }
+                // for (item of formData) {
+                //     console.log(item);
+                // }
+                //通常のアクションをキャンセルする
+                event.preventDefault();
+                fileUpAjaxCommon($form, formData, $("#wrapper"));
+
+            } else {
+                ajaxCommon($form, $("#wrapper"));
+
+            }
+
+        });
+        // 更新ボタン押した時
+        $(document).on("click", ".updateBtn",function() {
+
+            // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
+            var oldImgList = $('.card-img').not(".new"); // 既に登録した画像リスト
+            var newImgList = $('.card-img.new').find('img'); // 追加した画像リスト
+            var delList = new Array(); // 削除対象リスト
+            if($('#modal-edit-notice').find("input[name='json_data']").val() != '') {
+                delList = JSON.parse($('#modal-edit-notice').find("input[name='json_data']").val());
+            }
+            // 既に登録した画像リストを元に削除対象を絞る
+            $(oldImgList).each(function(i, elm1) {
+                $.each(delList, function(i, elm2) {
+                    if($(elm1).find("input[name='name']").val() == elm2.name) {
+                        delList.splice(i, 1);
+                        return false;
+                    }
+                })
+            })
+            var tmpForm = $('#modal-edit-notice').clone();
+            $(tmpForm).find("input[name='del_list']").val(JSON.stringify(delList));
+            $(tmpForm).find("input[name='notice_id']").val($('#delete-notice').find("input[name='id']").val());
+            $(tmpForm).find("input[name='dir_path']").val($('#delete-notice').find("input[name='dir_path']").val());
+            $(tmpForm).find('.card-img').remove();
+
+            var fileCheck = $(tmpForm).find("#modal-image-file").val().length;
+            //ファイル選択済みの場合はajax処理を切り替える
+            if (fileCheck > 0) {
+                // 新しく追加された画像のみを対象にする
+                $selecter = $('.card-img.new').find('img');
+
+                // ファイル変換
+                var blobList = fileConvert("#image-canvas", $selecter);
+
+                // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                // POSTでリクエスト内のデータが全部なくなるので。
+                // TODO: 後で対策を考えよう
+                $(tmpForm).find('#modal-image-file, .modal-file-path').val("");
+
+                //アップロード用blobをformDataに設定
+                formData = new FormData(tmpForm.get()[0]);
+
+                for(item of blobList) {
+                    formData.append("image[]", item);
+                }
+                // for (item of formData) {
+                //     console.log(item);
+                // }
+                //通常のアクションをキャンセルする
+                event.preventDefault();
+                fileUpAjaxCommon(tmpForm, formData, $("#wrapper"));
+
+            } else {
+                ajaxCommon(tmpForm, $("#wrapper"));
+
+            }
+        });
+        // キャンセルボタン押した時
+        $("#notice").on("click", ".cancelBtn", function() {
+
+            if (!confirm('取り消しますか？')) {
+                return false;
+            }
+            $("#notice").find(".createBtn").addClass("disabled");
+            $("#notice").find(".updateBtn").addClass("disabled");
+            $("#notice").find(".cancelBtn").addClass("disabled");
+            $("#notice").find("#title, #content, #image-file, #file-path").val("");
+            $("#notice").find(".card-img").remove();
+        });
+
+        // アーカイブお知らせをクリックした時
+        $(document).on("click", ".archiveLink",function() {
+
+            var $form =$('#view-archive-notice');
+            $($form).find("input[name='id']").val($(this).find("input[name='id']").val());
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            callModalNoticeWithAjax($form, 'cast');
+            $('.materialboxed').materialbox();
+        });
+        // モーダルお知らせの更新モードボタン押した時
+        $(document).on("click", ".updateModeBtn",function() {
+
+            $("#modal-notice").find(".updateModeBtn").addClass("hide");
+            $("#modal-notice").find(".returnBtn").removeClass("hide");
+            // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
+            $("#modal-edit-notice").find("input[name='_method']").val('POST');
+            $("#modal-edit-notice").find("input[name='title']").val($(".notice-card.clone")
+                            .find("p[name='title']").text());
+            $("#modal-edit-notice").find("textarea[name='content']").val($(".notice-card.clone")
+                            .find("p[name='content']").textWithLF());
+            $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
+            // 画像が１つ以上ある場合にmaterialboxed生成
+            if($("#modal-edit-notice").find("input[name='json_data']").val().length > 0) {
+                var images = JSON.parse($("#modal-edit-notice").find("input[name='json_data']").val());
+                $.get("/module/materialboxed.ctp", {}, function(html) {
+                    var materialTmp = $(html).clone(); // materialboxedの部品を複製しておく
+                    $(materialTmp).removeClass('new'); // newバッチを削除する
+                    $(materialTmp).find('span.new').remove(); // newバッチを削除する
+                    var materials = $();
+                    $.each(images, function(index, image) {
+                        var material = $(materialTmp).clone();
+                        $(material).find("input[name='id']").val(image['id']);
+                        $(material).find("input[name='name']").val(image['name']);
+                        $(material).find("input[name='key']").val(image['key']);
+                        $(material).find("input[name='path']").val(image['path']);
+                        $(material).find('img').attr("src",image['path']);
+                        materials = materials.add(material);
+                    });
+                    $(".modal-edit-notice").find(".row").append(materials);
+                    $('.materialboxed').materialbox();
+                    Materialize.updateTextFields();
+                    $('.tooltipped').tooltip({delay: 50});
+                });
+            }
+            // 更新画面を表示する
+            $(".modal-edit-notice").removeClass('hide');
+            $("#view-notice").addClass('hide');
+
+        });
+        // モーダルお知らせの戻るボタン押した時
+        $(document).on("click", ".returnBtn",function() {
+            // 画像フォームをクリアする
+            $("#modal-edit-notice").find(".card-img").remove();
+            $("#modal-edit-notice").find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
+            $("#modal-edit-notice").find("input[name='modal_file_path']").val('');
+            // 通常の表示モードに切り替える。
+            $("#modal-notice").find(".updateModeBtn").removeClass("hide");
+            $("#modal-notice").find(".returnBtn").addClass("hide");
+            $(".modal-edit-notice").addClass('hide');
+            $("#view-notice").removeClass('hide');
+            $("#modal-notice").find(".updateBtn").addClass("disabled");
+            $(".modal-edit-notice").find("input[name='title']").val('');
+            $(".modal-edit-notice").find("textarea[name='content']").text('');
+            $(".modal-edit-notice").find("textarea").trigger('autoresize');
+            //resetModal();
+
+        });
+        // モーダルお知らせの削除ボタン押した時
+        $(document).on("click", ".deleteBtn",function() {
+            // 画像の削除ボタンの場合
+            if($(this).data('delete') == 'image') {
+                var $image = $(this).closest(".card-img");
+                // var serachName = $newImage.find("input[name='name']").val();
+                $('.tooltipped').tooltip({delay: 50});
+                $image.remove();
+                $("#modal-notice").find(".updateBtn").removeClass("disabled");
+                return;
+            }
+            // お知らせ削除の場合
+            if (!confirm('このお知らせを削除しますか？')) {
+                return false;
+            }
+
+            var $form = $('form[id="delete-notice"]');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#wrapper"));
+            $("#modal-notice").modal('close');
+        });
+
+    }
+    /* お知らせ 画面 END */
 }
 
     /**
@@ -1611,6 +1860,7 @@ function initializeOwner() {
     /**
      * @description モーダル日記表示 ユーザー、キャストのみで使用
      * @param  {} $form
+     * @param  {} userType
      */
     var callModalDiaryWithAjax = function($form, userType){
         $.ajax({
@@ -1736,6 +1986,134 @@ function initializeOwner() {
         });
     }
 
+    /**
+     * @description モーダルお知らせ表示 ユーザー、キャストのみで使用
+     * @param  {} $form
+     * @param  {} userType
+     */
+    var callModalNoticeWithAjax = function($form, userType){
+        $.ajax({
+            url : $form.attr('action'), //Formのアクションを取得して指定する
+            type: $form.attr('method'),//Formのメソッドを取得して指定する
+            data: $form.serialize(), //データにFormがserialzeした結果を入れる
+            dataType: 'json', //データにFormがserialzeした結果を入れる
+            timeout: 10000,
+            beforeSend : function(xhr, settings){
+                // 他のアーカイブリンクを無効化する
+                $(".archiveLink").each(function(i, elem) {
+                    $(elem).css('pointer-events', 'none');
+                });
+                //処理中のを通知するアイコンを表示する
+                $("#dummy").load("/module/Preloader.ctp");
+            },
+            complete: function(xhr, textStatus){
+                // 他のアーカイブリンクを有効化する
+                $(".archiveLink").each(function(i, elem) {
+                    $(elem).css('pointer-events', '');
+                });
+                //処理中アイコン削除
+                $('.preloader-wrapper').remove();
+            },
+            success: function(response,dataType) {
+
+                $('#modal-notice').modal({
+                    dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                    opacity: .2, // Opacity of modal background
+                    inDuration: 300, // Transition in duration
+                    outDuration: 200, // Transition out duration
+                    startingTop: '4%', // Starting top style attribute
+                    endingTop: '10%', // Ending top style attribute
+                    // モーダル表示完了コールバック
+                    ready: function() {
+                        scrollPosition = $(window).scrollTop();
+                        // モーダル表示してる時は、背景画面のスクロールを禁止する
+                        $('body').addClass('fixed').css({'top': -scrollPosition});
+                        // キャストのお知らせディレクトリを取得する
+                        var noticeDir = $("input[name='notice_dir']").val() + response['dir'];
+                        // お知らせカードの要素を複製し、複製したやつを表示するようにする。
+                        var noticeCard = $(".notice-card").clone(true).insertAfter(".notice-card").addClass('clone').removeClass('hide');
+                        // お知らせ内容の設定
+                        $(noticeCard).find("p[name='created']").text(response['ymd_created']);
+                        $(noticeCard).find("p[name='title']").text(response['title']);
+                        $(noticeCard).find("p[name='content']").textWithLF(response['content']);
+                        var images = [];
+                        $.each(response, function(key, value) {
+
+                            if(key.match(/image[0-9]*/) && value) {
+                                // 値が空じゃない、かつnullじゃない時プッシュする
+                                value !== '' && value !== null ?
+                                images.push({"id":response['id'],
+                                                "path":noticeDir + '/'+ value,
+                                                "key":key,
+                                                "name":value}) :'';
+                            }
+                        })
+                        // 画像表示するグリッドを決定する
+                        if(images.length > 0) {
+                            // 画像表示するグリッド,高さを決定する
+                            var colClass = "";
+                            images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
+                            colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
+                            var figure = $(noticeCard).find('figure');
+                            var imgClass = "";
+                            $.each(images, function(key, value) {
+                                var cloneFigure = $(figure).clone(true).removeClass().addClass(colClass).insertAfter(figure);
+                                $(cloneFigure).find('a').attr({'href': value['path']});
+                                $(cloneFigure).find('img').attr({'src': value['path']});
+                            })
+                            $(noticeCard).find('figure.hide').remove();
+                            initPhotoSwipeFromDOM('.my-gallery');
+                        }
+                        // キャストの場合JSONデータを保持する
+                        if(userType == 'cast') {
+                            var dir = $("#notice").find("input[name='cast_dir']").val();
+                            $("#delete-notice").find("input[name='id']").val(response['id']);
+                            $("#delete-notice").find("input[name='dir_path']").val(dir + response['dir']);
+                            $("#modal-edit-notice").find("input[name='id']").val(response['id']);
+                            $("#modal-edit-notice").find("input[name='json_data']").val(JSON.stringify(images));
+                        }
+                    },
+
+                    // モーダル非表示完了コールバック
+                    complete: function() {
+                        // ユーザーの場合
+                        if(userType == 'user') {
+                            // モーダル非表示した時は、背景画面のスクロールを解除する
+                            $('body').removeClass('fixed').css({'top': 0});
+                            window.scrollTo( 0 , scrollPosition );
+                            $($(this)[0]["$el"]).find('.clone').remove();
+
+                        } else if(userType == 'cast') {
+                            //キャストの場合
+                            // モーダルフォームをクリアする
+                            $("#modal-edit-notice").find(".card-img").remove();
+                            $("#modal-edit-notice").find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
+                            $("#modal-edit-notice").find("input[name='modal_file_path']").val('');
+                            // モーダルを初期化
+                            resetModal();
+                            // モーダル非表示した時は、背景画面のスクロールを解除する
+                            $('body').removeClass('fixed').css({'top': 0});
+                            window.scrollTo( 0 , scrollPosition );
+                            $(".modal-edit-notice").addClass('hide');
+                            $("#view-notice").removeClass('hide');
+                            $("#view-notice").find('.clone').remove();
+                            $(".updateBtn").addClass("disabled");
+                        }
+                        $('.tooltipped').tooltip({delay: 50});
+
+                    }
+                });
+                $("#modal-notice").modal('open');
+            },
+            error : function(response, textStatus, xhr){
+                $.notifyBar({
+                    cssClass: 'error',
+                    html: "通信に失敗しました。ステータス：" + textStatus
+                });
+            }
+        });
+    }
+
 /**
  * キャスト画面の初期化処理
  */
@@ -1839,7 +2217,7 @@ function initializeCast() {
         $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
         $('select').material_select();
 
-        // プロフィールを変更した時
+        // 画像を変更した時
         $(document).on("input", function() {
             $($profile).find(".saveBtn").removeClass("disabled");
         });
@@ -1868,7 +2246,7 @@ function initializeCast() {
             $("#edit-diary").find(".createBtn").removeClass("disabled");
             $("#edit-diary").find(".cancelBtn").removeClass("disabled");
         });
-        // プロフィールを変更した時
+        // 画像を変更した時
         $(document).on("input","#modal-title, #modal-content, #modal-image-file", function() {
             $(".updateBtn").removeClass("disabled");
         });
@@ -2183,7 +2561,7 @@ function initializeCast() {
             // フォーム入力も削除する
             $("#gallery").find("#image-file, .file-path").val("");
         });
-    /* ギャラリー 関連処理 end */
+    /* ギャラリー 関連処理 END */
 
     }
     /* 画像アップロード 画面 END */

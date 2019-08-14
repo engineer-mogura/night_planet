@@ -1,5 +1,4 @@
 <?php
-use Cake\Core\Configure;
  
 return [
 
@@ -10,21 +9,16 @@ return [
 		'MAX_NUM_BYTES_FILE'=> 1048576 , // ファイル制限バイト数1MB
 	)),
 
-	// キャスト用設定 cast.config
-	define('CAST_CONFIG', array(
-		'FILE_MAX'=>'8', // アップロードファイル数
-		'TITLE_EXCERPT'=>'6', // 抜粋文字数
-		'CONTENT_EXCERPT'=>'10', // 抜粋文字数
-		'ELLIPSIS'=>'...', // 省略文字
-	)),
-
 	// プロパティ設定
 	define('PROPERTY', array(
 		'NEW_INFO_MAX'=>'15', // 新着情報関連の表示数
 		'FILE_MAX'=>'8', // アップロードファイル数
-		'TITLE_EXCERPT'=>'6', // 抜粋文字数
-		'CONTENT_EXCERPT'=>'10', // 抜粋文字数
-		'ELLIPSIS'=>'...', // 省略文字
+	)),
+
+	// 店舗編集画面のタブ制御設定
+	define('TAB_CONTROLE', array(
+		'notice', // 店舗お知らせ
+		'', // 店舗お知らせ
 	)),
 
 	// パス設定 path.config
@@ -39,6 +33,7 @@ return [
 		'OWNER'=> 'owner',
 		'USER'=> 'user',
 		'CAST'=> 'cast',
+		'NOTICE'=> 'notice',
 		'DIARY'=> 'diary',
 		'EVENT'=> 'event',
 		'TMP'=> 'tmp',
@@ -101,6 +96,7 @@ return [
 		'006'=>'店舗ギャラリー',
 		'007'=>'マップ',
 		'008'=>'求人情報',
+		'009'=>'店舗お知らせ',
 	)),
 
 	// ラベル定数 cast.label menu

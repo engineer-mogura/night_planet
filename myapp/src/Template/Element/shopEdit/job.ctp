@@ -120,10 +120,9 @@
       <?php endforeach; ?>
     </div>
   </div>
-  <form id="save-job" name="save_job" method="post" action="/owner/shops/save_job?id=<?=$shop->id?>" style="display:none;">
+  <form id="save-job" name="save_job" method="post" action="/owner/shops/save_job" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
-      <input type="hidden" name="id" value="">
       <input type="hidden" name="treatment" value="">
     </div>
     <div class="row">

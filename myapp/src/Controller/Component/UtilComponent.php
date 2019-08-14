@@ -2,7 +2,6 @@
 
 namespace App\Controller\Component;
 
-use Cake\Core\Configure;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
@@ -105,7 +104,8 @@ class UtilComponent extends Component
                 .DS.$shopInfo['genre']['path'].DS.$shop['dir'];
 
         $shopInfo = $shopInfo + array('shop_path'=> $path
-            ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']);
+            ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']
+            ,'notice_path'=>$path.DS.PATH_ROOT['NOTICE']);
         return  $shopInfo;
 
     }
@@ -235,7 +235,7 @@ class UtilComponent extends Component
     public function getDiarys($id = null)
     {
         $diarys = TableRegistry::get('Diarys');
-        $columns = array('id','cast_id','title','content','image1','dir',);
+        $columns = array('id','cast_id','title','content','image1','dir');
         // キャスト情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
         $query = $diarys->find('all')->select($columns);
@@ -294,6 +294,55 @@ class UtilComponent extends Component
             ->order(['Diarys.created' => 'DESC'])
             ->limit($rowNum)->all();
         return $diarys->toArray();
+    }
+
+    /**
+     * 店舗の全てのお知らせ情報を取得する処理
+     *
+     * @param [type] $id
+     * @return array
+     */
+    public function getNotices($id)
+    {
+        $shopInfos = TableRegistry::get('shop_infos');
+        $columns = array('id','shop_id','title','content','image1','dir');
+        // キャスト情報、最新の日記情報とイイネの総数取得
+        // 過去の日記をアーカイブ形式で取得する
+        $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
+        $ym = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%Y/%c'" => 'literal']);
+        $md = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%c/%e'" => 'literal']);
+        $shopInfos = $query->select([
+            'ym_created' => $ym,
+            'md_created' => $md])
+            ->where(['shop_id' => $id])
+            ->order(['created' => 'DESC'])->all();
+        $shopInfos = $this->groupArray($shopInfos, 'ym_created');
+        $shopInfos = array_values($shopInfos);
+        return $shopInfos;
+    }
+
+     /**
+     * 指定した１件のお知らせ情報を取得する処理
+     *
+     * @param [type] $id
+     * @return array
+     */
+    public function getNotice($id = null)
+    {
+        $shopInfos = TableRegistry::get('shop_infos');
+        $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
+        $ymd = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%Y年%c月%e日'" => 'literal']);
+        $shopInfo = $query->select([
+            'ymd_created' => $ymd])
+            ->where(['id' => $id])
+            ->first();
+        return $shopInfo;
     }
 
     /**

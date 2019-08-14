@@ -1,6 +1,6 @@
-<div id="modal-diary" class="modal modal-fixed-footer">
+<div id="modal-notice" class="modal modal-fixed-footer">
 	<div class="modal-content">
-		<form id="delete-diary" name="delete_diary" method="post" style="display:none;" action="/cast/casts/delete_diary/">
+		<form id="delete-notice" name="delete_notice" method="post" style="display:none;" action="/owner/shops/delete_notice/">
 			<input type="hidden" name="_method" value="POST">
 			<input type="hidden" name="id" value="">
 			<input type="hidden" name="dir_path" value="">
@@ -12,7 +12,7 @@
 			</a>
 			<ul>
 				<li>
-					<a class="btn-floating red waves-effect waves-light deleteBtn" data-delete="diary">
+					<a class="btn-floating red waves-effect waves-light deleteBtn" data-delete="notice">
 						<i class="material-icons">delete</i>
 					</a>
 				</li>
@@ -29,17 +29,17 @@
 		<!-- モバイル用ボタン END-->
 		<!-- デスクトップ用ボタン START-->
 		<div class="right-align hide-on-small-only">
-			<a class="red waves-effect waves-light btn deleteBtn" data-delete="diary"><i class="material-icons left">delete</i>削除する</a>
+			<a class="red waves-effect waves-light btn deleteBtn" data-delete="notice"><i class="material-icons left">delete</i>削除する</a>
 			<a class="blue waves-effect waves-light btn updateModeBtn"><i class="material-icons left">mode_edit</i>編集する</a>
 			<a class="blue waves-effect waves-light btn returnBtn hide"><i class="material-icons left">keyboard_return</i>戻る</a>
 		</div>
 		<!-- デスクトップ用ボタン END-->
 		<div>
-			<div class="row modal-edit-diary hide">
-				<form id="modal-edit-diary" name="modal_edit_diary" method="post" action="/cast/casts/update_diary/">
+			<div class="row modal-edit-notice hide">
+				<form id="modal-edit-notice" name="modal_edit_notice" method="post" action="/owner/shops/update_notice/">
 					<div style="display:none;">
 						<input type="hidden" name="_method" value="POST">
-						<input type="hidden" name="diary_id" value=''>
+						<input type="hidden" name="notice_id" value=''>
 						<input type="hidden" name="json_data" value=''>
 						<input type="hidden" name="del_list" value="">
 						<input type="hidden" name="dir_path" value="">
@@ -66,8 +66,8 @@
 					</div>
 				</form>
 			</div>
-			<div id="view-diary" class="row">
-				<div class="diary-card hide">
+			<div id="view-notice" class="row">
+				<div class="notice-card hide">
 					<div class="my-gallery">
 						<figure class="col s4 m4 l3 hide">
 							<a href="" data-size="800x600"><img width="100%" src="" alt="写真の説明でーす。" /></a>

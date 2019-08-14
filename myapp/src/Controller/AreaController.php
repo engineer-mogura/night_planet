@@ -60,8 +60,10 @@ class AreaController extends AppController
             $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['isArea']]['path'];
             $genreCounts[$row['genre']]['count'] = $row['count'];
         }
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX']);
+        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
+        $this->set(compact('genreCounts', 'selectList', 'diarys', 'notices'));
 
-        $this->set(compact('genreCounts'));
         $this->render();
     }
 

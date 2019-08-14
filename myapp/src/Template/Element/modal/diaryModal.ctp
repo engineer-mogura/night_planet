@@ -50,7 +50,7 @@
 							<label for="title">タイトル</label>
 						</div>
 						<div class="input-field col s12 m12 l12" style="margin-bottom: 20px;">
-							<textarea id="modal-content" class="validate materialize-textarea" name="content" data-length="250"></textarea>
+							<textarea id="modal-content" class="validate materialize-textarea" name="content" data-length="600"></textarea>
 							<label for="content">内容</label>
 						</div>
 					</div>

@@ -11,7 +11,7 @@ return [
 
 	// プロパティ設定
 	define('PROPERTY', array(
-		'NEW_INFO_MAX'=>'15', // 新着情報関連の表示数
+		'NEW_INFO_MAX'=>'10', // 新着情報関連の表示数
 		'FILE_MAX'=>'8', // アップロードファイル数
 	)),
 

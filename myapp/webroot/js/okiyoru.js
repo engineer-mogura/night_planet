@@ -85,6 +85,18 @@ function crearOwnerEvents() {
     $(document).off('click', '.job-changeBtn');
     $(document).off('click', '.job-saveBtn');
     $(document).off('click','.chip-treatment');
+    /** お知らせ画面 */
+    $(document).off('change', '#title, #content, #image-file');
+    $(document).off('change', '#modal-title, #modal-content, #modal-image-file');
+    $(document).off('change', '#image-file');
+    $(document).off('change', '#modal-image-file');
+    $(document).off('click', '.createBtn');
+    $(document).off('click', '.updateBtn');
+    $(document).off('click', '.archiveLink');
+    $(document).off('click', '.updateModeBtn');
+    $(document).off('click', '.returnBtn');
+    $(document).off('click', '.deleteBtn');
+    /** お知らせ画面 */
 }
 
 /**
@@ -323,6 +335,29 @@ function resetModal(){
     $(".modal-edit-diary").find("input[name='json_data']").val('');
     $(".modal-edit-diary").find("textarea[name='content']").text('');
     $(".modal-edit-diary").find("textarea").trigger('autoresize');
+}
+
+/**
+ * 共通バリデーション処理
+ */
+function formValidete(form){
+
+    var validete = "";
+    var result = false;
+    if($(form).find('input[name="title"]').val().length == 0) {
+        validete =  "タイトルを入力してください";
+    } else if($(form).find('input[name="title"]').val().length > 50) {
+        validete =  "タイトルが長すぎです。";
+    } else if($(form).find('textarea[name="content"]').val().length == 0) {
+        validete =  "内容を入力してください";
+    } else if($(form).find('textarea[name="content"]').val().length > 600) {
+        validete =  "内容が長すぎです。";
+    }
+    if(validete.length > 0) {
+        alert(validete);
+        result = true;
+    }
+    return result;
 }
 
 /**
@@ -1490,7 +1525,7 @@ function initializeOwner() {
             $("#edit-notice").find(".createBtn").removeClass("disabled");
             $("#edit-notice").find(".cancelBtn").removeClass("disabled");
         });
-        // 画像を変更した時
+        // モーダルお知らせの入力フォームに変更があった時
         $(document).on("input","#modal-title, #modal-content, #modal-image-file", function() {
             $(".updateBtn").removeClass("disabled");
         });
@@ -1504,11 +1539,16 @@ function initializeOwner() {
         });
         // 登録ボタン押した時
         $(document).on("click", ".createBtn",function() {
+
+            var form = $("#edit-notice");
+            if(formValidete(form)) {
+                return false;
+            }
+
             if (!confirm('こちらのお知らせ内容でよろしいですか？')) {
                 return false;
             }
 
-            var $form = $("#edit-notice");
             var fileCheck = $("#notice").find("#image-file").val().length;
 
             //ファイル選択済みの場合はajax処理を切り替える
@@ -1522,10 +1562,10 @@ function initializeOwner() {
                 // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
                 // POSTでリクエスト内のデータが全部なくなるので。
                 // TODO: 後で対策を考えよう
-                $($form).find('#image-file, .file-path').val("");
+                $(form).find('#image-file, .file-path').val("");
 
                 //アップロード用blobをformDataに設定
-                formData = new FormData($form.get()[0]);
+                formData = new FormData(form.get()[0]);
                 for(item of blobList) {
                     formData.append("image[]", item);
                 }
@@ -1534,16 +1574,22 @@ function initializeOwner() {
                 // }
                 //通常のアクションをキャンセルする
                 event.preventDefault();
-                fileUpAjaxCommon($form, formData, $("#wrapper"));
+                fileUpAjaxCommon(form, formData, $("#wrapper"));
 
             } else {
-                ajaxCommon($form, $("#wrapper"));
+                ajaxCommon(form, $("#wrapper"));
 
             }
 
         });
+
         // 更新ボタン押した時
         $(document).on("click", ".updateBtn",function() {
+
+            var form = $('#modal-edit-notice');
+            if(formValidete(form)) {
+                return false;
+            }
 
             // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
             var oldImgList = $('.card-img').not(".new"); // 既に登録した画像リスト
@@ -1561,13 +1607,14 @@ function initializeOwner() {
                     }
                 })
             })
-            var tmpForm = $('#modal-edit-notice').clone();
-            $(tmpForm).find("input[name='del_list']").val(JSON.stringify(delList));
-            $(tmpForm).find("input[name='notice_id']").val($('#delete-notice').find("input[name='id']").val());
-            $(tmpForm).find("input[name='dir_path']").val($('#delete-notice').find("input[name='dir_path']").val());
-            $(tmpForm).find('.card-img').remove();
+            var form = $('#modal-edit-notice').clone();
+            $(form).find("input[name='del_list']").val(JSON.stringify(delList));
+            $(form).find("input[name='notice_id']").val($('#delete-notice').find("input[name='id']").val());
+            $(form).find("input[name='dir_path']").val($('#delete-notice').find("input[name='dir_path']").val());
+            $(form).find('.card-img').remove();
+            $(form).find('.card-img input').remove();
 
-            var fileCheck = $(tmpForm).find("#modal-image-file").val().length;
+            var fileCheck = $(form).find("#modal-image-file").val().length;
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
                 // 新しく追加された画像のみを対象にする
@@ -1576,13 +1623,14 @@ function initializeOwner() {
                 // ファイル変換
                 var blobList = fileConvert("#image-canvas", $selecter);
 
+                var cloneForm = $(form).clone(true);
                 // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
                 // POSTでリクエスト内のデータが全部なくなるので。
                 // TODO: 後で対策を考えよう
-                $(tmpForm).find('#modal-image-file, .modal-file-path').val("");
+                $(cloneForm).find('#modal-image-file, .modal-file-path').val("");
 
                 //アップロード用blobをformDataに設定
-                formData = new FormData(tmpForm.get()[0]);
+                formData = new FormData(cloneForm.get()[0]);
 
                 for(item of blobList) {
                     formData.append("image[]", item);
@@ -1592,10 +1640,10 @@ function initializeOwner() {
                 // }
                 //通常のアクションをキャンセルする
                 event.preventDefault();
-                fileUpAjaxCommon(tmpForm, formData, $("#wrapper"));
+                fileUpAjaxCommon(cloneForm, formData, $("#wrapper"));
 
             } else {
-                ajaxCommon(tmpForm, $("#wrapper"));
+                ajaxCommon(form, $("#wrapper"));
 
             }
         });
@@ -2242,29 +2290,38 @@ function initializeCast() {
     if($("#diary").length) {
 
         // 入力フォームに変更があった時
-        $(document).on("input", "#title, #content, #image-file", function() {
+        $(document).on("input", "#title, #content", function() {
             $("#edit-diary").find(".createBtn").removeClass("disabled");
             $("#edit-diary").find(".cancelBtn").removeClass("disabled");
         });
-        // 画像を変更した時
-        $(document).on("input","#modal-title, #modal-content, #modal-image-file", function() {
+        // モーダル日記の入力フォームに変更があった時
+        $(document).on("input","#modal-title, #modal-content", function() {
             $(".updateBtn").removeClass("disabled");
         });
         // 画像を選択した時
         $(document).on("change", "#image-file", function() {
+            $("#edit-diary").find(".createBtn").removeClass("disabled");
+            $("#edit-diary").find(".cancelBtn").removeClass("disabled");
             canvasRender("#diary", this, true);
         });
         // モーダル日記で画像を選択した時
         $(document).on("change", "#modal-image-file", function() {
+            $(".updateBtn").removeClass("disabled");
             canvasRender("#modal-diary", this, true);
         });
+
         // 登録ボタン押した時
         $(document).on("click", ".createBtn",function() {
-            if (!confirm('こちらの日記内容でよろしいですか？')) {
+
+            var form = $("#edit-diary");
+            if(formValidete(form)) {
                 return false;
             }
 
-            var $form = $("#edit-diary");
+        if (!confirm('こちらの日記内容でよろしいですか？')) {
+                return false;
+            }
+
             var fileCheck = $("#diary").find("#image-file").val().length;
 
             //ファイル選択済みの場合はajax処理を切り替える
@@ -2278,10 +2335,10 @@ function initializeCast() {
                 // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
                 // POSTでリクエスト内のデータが全部なくなるので。
                 // TODO: 後で対策を考えよう
-                $($form).find('#image-file, .file-path').val("");
+                $(form).find('#image-file, .file-path').val("");
 
                 //アップロード用blobをformDataに設定
-                formData = new FormData($form.get()[0]);
+                formData = new FormData(form.get()[0]);
                 for(item of blobList) {
                     formData.append("image[]", item);
                 }
@@ -2290,16 +2347,21 @@ function initializeCast() {
                 // }
                 //通常のアクションをキャンセルする
                 event.preventDefault();
-                fileUpAjaxCommon($form, formData, $("#wrapper"));
+                fileUpAjaxCommon(form, formData, $("#wrapper"));
 
             } else {
-                ajaxCommon($form, $("#wrapper"));
+                ajaxCommon(form, $("#wrapper"));
 
             }
 
         });
         // 更新ボタン押した時
         $(document).on("click", ".updateBtn",function() {
+
+            var form = $('#modal-edit-diary');
+            if(formValidete(form)) {
+                return false;
+            }
 
             // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
             var oldImgList = $('.card-img').not(".new"); // 既に登録した画像リスト
@@ -2317,13 +2379,14 @@ function initializeCast() {
                     }
                 })
             })
-            var tmpForm = $('#modal-edit-diary').clone();
-            $(tmpForm).find("input[name='del_list']").val(JSON.stringify(delList));
-            $(tmpForm).find("input[name='diary_id']").val($('#delete-diary').find("input[name='id']").val());
-            $(tmpForm).find("input[name='dir_path']").val($('#delete-diary').find("input[name='dir_path']").val());
-            $(tmpForm).find('.card-img').remove();
+            var form = $('#modal-edit-diary');
+            $(form).find("input[name='del_list']").val(JSON.stringify(delList));
+            $(form).find("input[name='diary_id']").val($('#delete-diary').find("input[name='id']").val());
+            $(form).find("input[name='dir_path']").val($('#delete-diary').find("input[name='dir_path']").val());
+            //$(form).find('.card-img').not('.new').remove();
+            $(form).find('.card-img input').remove();
 
-            var fileCheck = $(tmpForm).find("#modal-image-file").val().length;
+            var fileCheck = $(form).find("#modal-image-file").val().length;
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
                 // 新しく追加された画像のみを対象にする
@@ -2332,13 +2395,14 @@ function initializeCast() {
                 // ファイル変換
                 var blobList = fileConvert("#image-canvas", $selecter);
 
+                var cloneForm = $(form).clone(true);
                 // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
                 // POSTでリクエスト内のデータが全部なくなるので。
                 // TODO: 後で対策を考えよう
-                $(tmpForm).find('#modal-image-file, .modal-file-path').val("");
+                $(cloneForm).find('#modal-image-file, .modal-file-path').val("");
 
                 //アップロード用blobをformDataに設定
-                formData = new FormData(tmpForm.get()[0]);
+                formData = new FormData(cloneForm.get()[0]);
 
                 for(item of blobList) {
                     formData.append("image[]", item);
@@ -2348,10 +2412,10 @@ function initializeCast() {
                 // }
                 //通常のアクションをキャンセルする
                 event.preventDefault();
-                fileUpAjaxCommon(tmpForm, formData, $("#wrapper"));
+                fileUpAjaxCommon(cloneForm, formData, $("#wrapper"));
 
             } else {
-                ajaxCommon(tmpForm, $("#wrapper"));
+                ajaxCommon(form, $("#wrapper"));
 
             }
         });

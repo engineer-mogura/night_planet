@@ -68,7 +68,8 @@ class ShopInfosTable extends Table
 
         $validator
             ->scalar('content')
-            ->maxLength('content', 600)
+            ->maxLength('content', 600,'内容が長すぎます。')
+            ->notEmpty('content','内容を入力してください。')
             ->requirePresence('content', 'create')
             ->allowEmptyString('content', false);
 
@@ -76,6 +77,46 @@ class ShopInfosTable extends Table
             ->scalar('image1')
             ->maxLength('image1', 100)
             ->allowEmptyFile('image1');
+
+        $validator
+            ->scalar('image2')
+            ->maxLength('image2', 100)
+            ->allowEmptyFile('image2');
+
+        $validator
+            ->scalar('image3')
+            ->maxLength('image3', 100)
+            ->allowEmptyFile('image3');
+
+        $validator
+            ->scalar('image4')
+            ->maxLength('image4', 100)
+            ->allowEmptyFile('image4');
+
+        $validator
+            ->scalar('image5')
+            ->maxLength('image5', 100)
+            ->allowEmptyFile('image5');
+
+        $validator
+            ->scalar('image6')
+            ->maxLength('image6', 100)
+            ->allowEmptyFile('image6');
+
+        $validator
+            ->scalar('image7')
+            ->maxLength('image7', 100)
+            ->allowEmptyFile('image7');
+
+        $validator
+            ->scalar('image8')
+            ->maxLength('image8', 100)
+            ->allowEmptyFile('image8');
+
+        $validator
+            ->scalar('dir')
+            ->maxLength('dir', 255)
+            ->allowEmptyString('dir');
 
         return $validator;
     }

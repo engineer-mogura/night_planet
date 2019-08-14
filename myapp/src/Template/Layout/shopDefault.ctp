@@ -58,9 +58,9 @@
     <li><a class="waves-effect hoverable" href="/owner/shops/notice"><i class="material-icons">notifications_active</i><?= SHOP_LM['009'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/owner/owners"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect hoverable" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
-    <li><a class="waves-effect hoverable" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-    <li><a class="waves-effect hoverable" href="#!"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
-    <li><a class="waves-effect hoverable" href="#!"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="/entry/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="/entry/privacy_policy"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="/entry/contract"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
     <li><div class="divider"></div></li>
     <li><a href="/owner/owners/logout" class="waves-effect"><i class="material-icons" href="">keyboard_backspace</i><?= COMMON_LM['007'] ?></a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>

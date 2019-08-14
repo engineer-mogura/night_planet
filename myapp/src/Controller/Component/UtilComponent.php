@@ -346,6 +346,26 @@ class UtilComponent extends Component
     }
 
     /**
+     * 日記テーブルから最新の日記情報を取得する処理
+     *
+     * @param [type] $rowNum
+     * @return void
+     */
+    public function getNewNotices($rowNum)
+    {
+        $shopInfos = TableRegistry::get('shop_infos');
+        $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
+        // キャスト情報、最新の日記情報とイイネの総数取得
+        // 過去の日記をアーカイブ形式で取得する
+            $shopInfos = $shopInfos->find('all')
+            ->contain(['Shops'])
+            ->order(['shop_infos.created' => 'DESC'])
+            ->limit($rowNum)->all();
+        return $shopInfos->toArray();
+    }
+
+
+    /**
      * ファイルアップロードの処理
      *
      * @param array $file

@@ -706,7 +706,7 @@ class CastsController extends AppController
         if ($diary->errors()) {
             // 入力エラーがあれば、メッセージをセットして返す
             $errors = $this->Util->setErrMessage($diary); // エラーメッセージをセット
-            $response = array('result'=>false,'errors'=>$errors);
+            $response = array('result'=>false,'message'=>$errors);
             $this->response->body(json_encode($response));
             return;
         }

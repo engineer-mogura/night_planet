@@ -1272,7 +1272,7 @@ class ShopsController extends AppController
             return;
         }
 
-        $notices = $this->Util->getNotices($id);
+        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
         $this->set(compact('notices'));
         $this->render('/owner/shops/notice');
         $response = array(

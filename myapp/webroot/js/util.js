@@ -101,7 +101,6 @@
           var processingBinary = canvasImage.toDataURL("image/jpeg", capacityRatio); //画質落としてバイナリ化
           uploadBlob = base64ToBlob(processingBinary); //画質落としたblobデータをアップロード用blobに設定
       }
-
       blob.push(uploadBlob);
     });
 

@@ -39,6 +39,8 @@
 					</li>
 					<?php endforeach ?>
 				</ul>
+			<?php else:?>
+				<p class="col">まだお知らせがありません。</p>
 			<?php endif ?>
 		</div>
 		<div class="col s12 m6 l6">
@@ -67,6 +69,8 @@
 						</li>
 					<?php endforeach ?>
 				</ul>
+			<?php else:?>
+				<p class="col">まだ日記がありません。</p>
 			<?php endif ?>
 		</div>
 	</div>

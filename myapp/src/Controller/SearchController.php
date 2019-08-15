@@ -29,6 +29,20 @@ class SearchController extends AppController
         $this->Jobs = TableRegistry::get('Jobs');
         $this->MasterCodes = TableRegistry::get("master_codes");
 
+        $query = $this->request->getQuery();
+        // 検索結果でタイトルで決める
+        $title = '';
+        if (!empty($query['area']) && !empty($query['genre'])) {
+            // コントローラでセットされたtitleを代入してセパレータを追加
+            $title .=  AREA[$query['area']]['label'] . 'の'.
+                        GENRE[$query['genre']]['label'].'一覧';
+        } else if(!empty($query['area'])) {
+            $title .=  AREA[$query['area']]['label'] . '一覧';
+        } else if(!empty($query['genre'])) {
+            $title .=  GENRE[$query['genre']]['label'] . '一覧';
+        }
+        $this->set('title', $title);
+
     }
 
     public function index()

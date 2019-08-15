@@ -54,12 +54,12 @@
     <li><a class="waves-effect" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">event_available</i><?= USER_LM['002'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></a></li>
-    <li><a class="waves-effect" href="http://okiyoru.local"><i class="material-icons">vertical_align_top</i><?= USER_LM['004'] ?></a></li>
+    <li><a class="waves-effect" href="http://okiyoru.local"><i class="material-icons">home</i><?= USER_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">cloud</i><?= USER_LM['005'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">note</i><?= COMMON_LM['003'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">note</i><?= COMMON_LM['005'] ?></a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">star_half</i><?= USER_LM['006'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?></a></li>
     <li><div class="divider"></div></li>

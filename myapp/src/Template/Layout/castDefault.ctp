@@ -51,17 +51,17 @@
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Cast.email')?></span></a>
       </div>
     </li>
-    <li><a href="/cast/casts/index?activeTab=dashbord" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= CAST_LM['001'] ?></a></li>
-    <li><a href="/cast/casts/profile?activeTab=profile" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['002'] ?></a></li>
-    <li><a href="/cast/casts/diary?activeTab=diary" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['003'] ?></a></li>
-    <li><a href="/cast/casts/gallery?activeTab=gallery" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">event_available</i><?= CAST_LM['004'] ?></a></li>
-    <li><a class="waves-effect" href="/cast/casts"><i class="material-icons">help_outline</i><?= COMMON_LM['004'] ?></a></li>
+    <li><a href="/cast/casts/index?activeTab=dashbord" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons" href="">dashboard</i><?= CAST_LM['001'] ?></a></li>
+    <li><a href="/cast/casts/profile?activeTab=profile" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">person</i><?= CAST_LM['002'] ?></a></li>
+    <li><a href="/cast/casts/diary?activeTab=diary" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">note_add</i><?= CAST_LM['003'] ?></a></li>
+    <li><a href="/cast/casts/gallery?activeTab=gallery" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">image</i><?= CAST_LM['004'] ?></a></li>
+    <li><a class="waves-effect" href="/cast/casts"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">note</i><?= COMMON_LM['003'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">note</i><?= COMMON_LM['005'] ?></a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
     <li><div class="divider"></div></li>
-    <li><a href="/cast/casts/logout" class="waves-effect"><i class="material-icons" href="">info_outline</i><?= COMMON_LM['007'] ?></a></li>
+    <li><a href="/cast/casts/logout" class="waves-effect"><i class="material-icons" href="">keyboard_backspace</i><?= COMMON_LM['007'] ?></a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
   <div class="nav-header-cron-dummy"></div>

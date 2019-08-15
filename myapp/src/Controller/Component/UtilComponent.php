@@ -277,22 +277,33 @@ class UtilComponent extends Component
         return $diary;
     }
 
+
     /**
-     * 日記テーブルから最新の日記情報を取得する処理
+     * 日記テーブルから最新の日記情報とイイネの総数を取得する処理
      *
      * @param [type] $rowNum
-     * @return void
+     * @param [type] $isArea
+     * @return array
      */
-    public function getNewDiarys($rowNum)
+    public function getNewDiarys($rowNum, $isArea = null)
     {
         $diarys = TableRegistry::get('Diarys');
         $columns = array('id','cast_id','title','content','image1','dir');
-        // キャスト情報、最新の日記情報とイイネの総数取得
-        // 過去の日記をアーカイブ形式で取得する
-        $diarys = $diarys->find('all')
+        if(!empty($isArea)) {
+            $diarys = $diarys->find('all')
             ->contain(['Likes','Casts','Casts.Shops'])
+            ->matching('Casts.Shops', function($q) use ($isArea){
+                return $q->where(['Shops.area'=>$isArea]);
+            })
             ->order(['Diarys.created' => 'DESC'])
             ->limit($rowNum)->all();
+        } else {
+            $diarys = $diarys->find('all')
+                ->contain(['Likes','Casts','Casts.Shops'])
+                ->order(['Diarys.created' => 'DESC'])
+                ->limit($rowNum)->all();
+        }
+
         return $diarys->toArray();
     }
 
@@ -351,19 +362,28 @@ class UtilComponent extends Component
      * @param [type] $rowNum
      * @return void
      */
-    public function getNewNotices($rowNum)
+    public function getNewNotices($rowNum, $isArea = null)
     {
         $shopInfos = TableRegistry::get('shop_infos');
         $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
         // キャスト情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
+        if (!empty($isArea)) {
+            $shopInfos = $shopInfos->find('all')
+            ->contain(['Shops'])
+            ->matching('Shops', function($q) use ($isArea){
+                    return $q->where(['Shops.area'=>$isArea]);
+                })
+            ->order(['shop_infos.created' => 'DESC'])
+            ->limit($rowNum)->all();
+        } else {
             $shopInfos = $shopInfos->find('all')
             ->contain(['Shops'])
             ->order(['shop_infos.created' => 'DESC'])
             ->limit($rowNum)->all();
+        }
         return $shopInfos->toArray();
     }
-
 
     /**
      * ファイルアップロードの処理

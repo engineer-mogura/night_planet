@@ -2,11 +2,7 @@
 namespace App\Controller;
 
 /**
-* Users Controller
-*
-* @property \App\Model\Table\UsersTable $Users
-*
-* @method \App\Model\Entity\User[]|\Cake\Datasource\ResultSetInterface paginate($object = null, array $settings = [])
+* Naha Controller
 */
 class NahaController extends \App\Controller\AreaController
 {

@@ -23,6 +23,28 @@ class AreaController extends AppController
         $this->Jobs = TableRegistry::get('Jobs');
         $this->MasterCodes = TableRegistry::get("master_codes");
 
+        $query = $this->request->getQuery();
+        $title = '';
+        // 店舗詳細ページの場合のタイトルを決める
+        if (!empty($query['area']) && !empty($query['genre']) && !empty($query['name'])) {
+            // コントローラでセットされたtitleを代入してセパレータを追加
+            $title .=  AREA[$query['area']]['label'] . 'エリアの'.
+                        GENRE[$query['genre']]['label'].' | '.$query['name'];
+        } else {
+            // 各エリアのトップ、または各エリアのジャンルのタイトルを決める
+            $urlSplit = explode(DS, rtrim($this->request->url, DS));
+            // 遷移先がエリアのトップ画面の場合
+            if (array_key_exists($urlSplit[0], AREA)) {
+                $title = AREA[$urlSplit[0]]['label'].'エリア';
+            }
+            if(!empty($query['genre'])) {
+                $title .= 'の' . GENRE[$query['genre']]['label'];
+            }
+
+        }
+
+        $this->set('title', $title);
+
         // コントローラ名からエリアタイトルをセット
         $areaTitle = AREA[mb_strtolower($this->request->getparam("controller"))]['label'];
         $this->set(compact('areaTitle'));
@@ -60,8 +82,8 @@ class AreaController extends AppController
             $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['isArea']]['path'];
             $genreCounts[$row['genre']]['count'] = $row['count'];
         }
-        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX']);
-        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea']);
+        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea']);
         $this->set(compact('genreCounts', 'selectList', 'diarys', 'notices'));
 
         $this->render();

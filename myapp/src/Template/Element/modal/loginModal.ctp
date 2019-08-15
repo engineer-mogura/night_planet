@@ -1,7 +1,7 @@
 <div id="modal-login" class="modal">
     <div class="modal-content">
-      <h4>login</h4>
-      <p>A bunch of text</p>
+      <h4>ログイン</h4>
+      <p>ユーザーはこちらからログイン</p>
       <div class="modal-box">
         <div class="row">
           <li class="search col s12 l12">

@@ -4,30 +4,30 @@
 * @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
 */
 ?>
-<?= $this->element('modal/viewDiaryModal'); ?>
+<?= $this->element('modal/viewNoticeModal'); ?>
 <div id="wrapper">
-    <div id="diary" class="container">
+    <div id="notice" class="container">
         <div style="display:none;">
-            <input type="hidden" name="cast_dir" value="<?=$shopInfo['diary_path']?>">
-            <input type="hidden" name="diary_id" value=''>
+            <input type="hidden" name="notice_dir" value="<?=$shopInfo['notice_path']?>">
+            <input type="hidden" name="notice_id" value=''>
         </div>
         <span id="dummy" style="display: hidden;"></span>
         <?= $this->Flash->render() ?>
         <?= $this->element('nav-breadcrumb'); ?>
             <div class="row">
-                <form id="view-archive-diary" name="view_archive_diary" method="get" style="display:none;" action="<?=DS.$shopInfo['area']['path'].DS.'view_diary'.DS?>">
+                <form id="view-archive-notice" name="view_archive_notice" method="get" style="display:none;" action="<?=DS.$shopInfo['area']['path'].DS.'view_notice'.DS?>">
                     <input type="hidden" name="_method" value="POST">
                     <input type="hidden" name="id" value="">
                 </form>
                 <div class="col s12 m12 l12 xl12">
-                <?php if(count($diarys) > 0) { ?>
+                <?php if(count($notices) > 0) { ?>
                     <ul class="collection z-depth-3">
                         <?php $count = 0; ?>
-                        <?php foreach ($diarys as $key => $rows): ?>
+                        <?php foreach ($notices as $key => $rows): ?>
                         <?php foreach ($rows as $key => $row): ?>
                         <li class="linkbox collection-item avatar archiveLink">
                             <input type="hidden" name="id" value=<?=$row->id?>>
-                        <?php !empty($row->image1)? $imgPath = $shopInfo['diary_path'].$row->dir.DS.$row->image1 : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                        <?php !empty($row->image1)? $imgPath = $shopInfo['notice_path'].$row->dir.DS.$row->image1 : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <img src="<?= $imgPath ?>" alt="" class="circle">
                             <span class="title color-blue"><?= $row['md_created'] ?></span>
                             <p><span class="truncate"><?= $row->title ?><br>
@@ -44,13 +44,13 @@
                         <?php endforeach; ?>
                     </ul>
                 <?php } ?>
-                <?php if(count($diarys) > 0) { ?>
+                <?php if(count($notices) > 0) { ?>
                     <ul class="collapsible popout" data-collapsible="accordion">
-                        <?php foreach ($diarys as $rows): ?>
+                        <?php foreach ($notices as $rows): ?>
                         <li class="collection-item">
                             <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                             <?php foreach ($rows as $row): ?>
-                            <?php !empty($row['image1'])? $imgPath = $shopInfo['diary_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                            <?php !empty($row['image1'])? $imgPath = $shopInfo['notice_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <div class="linkbox collapsible-body archiveLink">
                             <input type="hidden" name="id" value=<?=$row->id?>>
                             <span class="title color-blue"><?= $row['md_created'] ?></span>

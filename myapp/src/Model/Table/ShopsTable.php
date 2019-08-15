@@ -58,7 +58,7 @@ class ShopsTable extends Table
         $this->hasMany('Jobs', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->hasMany('ShopInfos', [
+        $this->hasMany('Shop_infos', [
             'foreignKey' => 'shop_id'
         ]);
     }

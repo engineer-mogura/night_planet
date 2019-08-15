@@ -48,11 +48,13 @@
 						<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 						</p>
 						<span class="like-count secondary-content center-align"><i class="tiny material-icons">thumb_up</i><?=count($value->likes)?></span>
-						<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->id."?area=".$value->shop->area."&genre=".$value->shop->genre.
+						<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->id."?area=".$value->shop->area."&genre=".$value->shop->genre.
 						"&shop=".$value->shop->id."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
 					</li>
 					<?php endforeach ?>
 				</ul>
+			<?php else:?>
+				<p class="col">まだお知らせがありません。</p>
 			<?php endif ?>
 		</div>
 		<div class="col s12 m6 l6">
@@ -81,6 +83,8 @@
 						</li>
 					<?php endforeach ?>
 				</ul>
+			<?php else:?>
+				<p class="col">まだ日記がありません。</p>
 			<?php endif ?>
 		</div>
 	</div>

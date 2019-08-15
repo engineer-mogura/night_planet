@@ -21,6 +21,7 @@ class AreaController extends AppController
         $this->Diarys = TableRegistry::get('Diarys');
         $this->Likes = TableRegistry::get('Likes');
         $this->Jobs = TableRegistry::get('Jobs');
+        $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->MasterCodes = TableRegistry::get("master_codes");
 
         $query = $this->request->getQuery();
@@ -110,9 +111,44 @@ class AreaController extends AppController
         $this->render();
     }
 
+    // public function shop($id = null)
+    // {
+    //    $sharer =  Router::reverse($this->request, true);
+    //     $shop = $this->Shops->find('all')
+    //         ->where(['Shops.id' => $id])
+    //         ->contain(['Owners','Casts' => function(Query $q) {
+    //             return $q
+    //                 ->where(['Casts.status'=>'1']);
+    //             }, 'Coupons' => function(Query $q) {
+    //             return $q
+    //                 ->where(['Coupons.status'=>'1']);
+    //             },'Jobs'])->first();
+    //     $shopInfo = $this->Util->getShopInfo($shop);
+    //     $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+    //     $imageList = array(); // 画面側でJSONとして使う画像リスト
+    //     // 画像リストを作成する
+    //     foreach ($imageCol as $key => $value) {
+    //         if (!empty($shop[$imageCol[$key]])) {
+    //             array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+    //         }
+    //     }
+    //     $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
+    //     //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
+    //     $this->set(compact('shop','shopInfo','sharer','imageList','credits','creditsHidden'));
+    //     $this->render();
+    // }
+
     public function shop($id = null)
     {
        $sharer =  Router::reverse($this->request, true);
+
+       $query = $this->ShopInfos->find();
+       $ymd = $query->func()->date_format([
+           'Shop_infos.created' => 'literal',
+           "'%Y年%c月%e日'" => 'literal']);
+       $columns = $this->ShopInfos->schema()->columns();
+       $columns = $columns + ['ymd_created'=>$ymd];
+
         $shop = $this->Shops->find('all')
             ->where(['Shops.id' => $id])
             ->contain(['Owners','Casts' => function(Query $q) {
@@ -121,7 +157,12 @@ class AreaController extends AppController
                 }, 'Coupons' => function(Query $q) {
                 return $q
                     ->where(['Coupons.status'=>'1']);
+                },'Shop_infos' => function(Query $q) use ($columns) {
+                    return $q
+                    ->select($columns)
+                    ->order(['Shop_infos.created'=>'DESC'])->limit(1);
                 },'Jobs'])->first();
+
         $shopInfo = $this->Util->getShopInfo($shop);
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
         $imageList = array(); // 画面側でJSONとして使う画像リスト
@@ -131,9 +172,20 @@ class AreaController extends AppController
                 array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
             }
         }
+        // お知らせのギャラリーリストを作成
+        $imageCol = array_values(preg_grep('/^image/', $this->ShopInfos->schema()->columns()));
+        $shopInfos = $shop->shop_infos[0];
+        $nImageList = array(); // お知らせの画像が存在するカラムリスト
+        if(count($shopInfos) > 0) {
+            foreach ($imageCol as $key => $value) {
+                if (!empty($shopInfos[$value])) {
+                    array_push($nImageList, ['key'=>$imageCol[$key],'name'=>$shopInfos[$imageCol[$key]]]);
+                }
+            }
+        }
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
-        $this->set(compact('shop','shopInfo','sharer','imageList','credits','creditsHidden'));
+        $this->set(compact('shop','shopInfo','sharer','imageList','nImageList', 'credits','creditsHidden'));
         $this->render();
     }
 
@@ -184,35 +236,15 @@ class AreaController extends AppController
 
     public function diary($id = null)
     {
-
-        if ($this->request->is('ajax')) {
-            $this->confReturnJson(); // json返却用の設定
-            $query = $this->Diarys->find();
-            $columns = $this->Diarys->schema()->columns();
-            $ymd = $query->func()->date_format([
-                'created' => 'literal',
-                "'%Y年%c月%e日'" => 'literal']);
-            $columns = $columns + ['ymd_created'=>$ymd];
-            // $diary = $query->select($columns)
-            //     ->where(['id' => $this->request->query["id"]])->first();
-
-            // キャスト情報、最新の日記情報とイイネの総数取得
-            $diary = $this->Diarys->find("all")
-                ->select($columns)
-                ->where(['id' => $this->request->query["id"]])
-                ->contain(['Likes'])->first();
-            // $diary = $this->Diarys->get($this->request->query["id"]);
-            $this->response->body(json_encode($diary));
-            return;
-        }
         $cast = $this->Casts->find('all')->where(['id' => $id])->first();
         $this->set('shopInfo', $this->Util->getShopInfo($this->Shops->get($cast->shop_id)->toArray()));
 
         // $diarys1 = $this->getDiarys($id);
         $diarys = $this->Util->getDiarys($id);
-        $dir = $this->viewVars['shopInfo']['cast_path'].DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
+        $this->viewVars['shopInfo']['diary_path'] = $this->viewVars['shopInfo']['cast_path']
+            .DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
 
-        $this->set(compact('cast','dir', 'diarys', 'ajax'));
+        $this->set(compact('cast','diarys'));
         $this->render();
     }
 
@@ -277,6 +309,44 @@ class AreaController extends AppController
         $archive = $this->Util->groupArray($archive, 'ym_created');
         $archive = array_values($archive);
         return $archive;
+    }
+
+    public function notice($id = null)
+    {
+        $shopInfos = $this->ShopInfos->get($id);
+        $this->set('shopInfo', $this->Util->getShopInfo($this->Shops->get($shopInfos->shop_id)->toArray()));
+
+        $notices = $this->Util->getNotices($shopInfos->shop_id);
+
+        $this->set(compact('notices'));
+        $this->render();
+    }
+
+    public function viewNotice($id = null)
+    {
+
+        if ($this->request->is('ajax')) {
+            $this->confReturnJson(); // json返却用の設定
+            $query = $this->ShopInfos->find();
+            $columns = $this->ShopInfos->schema()->columns();
+            $ymd = $query->func()->date_format([
+                'created' => 'literal',
+                "'%Y年%c月%e日'" => 'literal']);
+            $columns = $columns + ['ymd_created'=>$ymd];
+            // $notice = $query->select($columns)
+            //     ->where(['id' => $this->request->query["id"]])->first();
+
+            // キャスト情報、最新の日記情報とイイネの総数取得
+            $notice = $this->ShopInfos->find("all")
+                ->select($columns)
+                ->where(['id' => $this->request->query["id"]])
+                //->contain(['Likes'])
+                ->first();
+            // $notice = $this->ShopInfos->get($this->request->query["id"]);
+            $this->response->body(json_encode($notice));
+            return;
+        }
+
     }
 
     /**

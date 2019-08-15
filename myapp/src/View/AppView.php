@@ -123,6 +123,22 @@ class AppView extends View
                 '日記', "#!", ['class' => 'breadcrumbs-tail']
             );
         }
+        // 遷移先がエリア ⇒ 店舗 ⇒ お知らせ画面の場合
+        if ($breadcrumbList[1] == 'notice') {
+            // リストの最後に追加
+            $this->Breadcrumbs->add([
+                ['title' => GENRE[$this->request->query['genre']]['label'],
+                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'genre/',
+                    '?'=> ['genre' =>$this->request->query['genre']]]],
+                ['title' => $this->request->query['name'],
+                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'shop/'.$this->request->query['shop'],
+                    '?' => ['shop' => $this->request->query['shop'],'genre' => $this->request->query['genre'], 'name' => $this->request->query['name']]]],
+            ]);
+            // リストの最後に追加
+            $this->Breadcrumbs->add(
+                'お知らせ', "#!", ['class' => 'breadcrumbs-tail']
+            );
+        }
 
         // パンくず設定
         if ($this->template == 'top') {

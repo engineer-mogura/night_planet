@@ -365,10 +365,10 @@ span.or-header {
 .gallery-box {
   margin: 0 10px;
 }
-.card.diary-card, .card.gallery-card {
+.card.diary-card, .card.notice-card, .card.gallery-card {
   margin: 0 10px;
 }
-div.card.diary-card .col{
+div.card.diary-card .col, div.card.notice-card .col{
   padding: initial;
 }
 
@@ -529,11 +529,11 @@ div.my-gallery {
 /* .diary-card .my-gallery .col .imageOne{
   height: 250px;
 } */
-.diary-list p.title, #modal-diary p.title, #modal-notice p.title {
+.diary-list p.title, #modal-diary p.title, .notice-list p.title, #modal-notice p.title {
   border-bottom-style: groove;
   padding-bottom: 5px;
 }
-.diary-list p.content, #modal-diary p.content, #modal-notice p.content  {
+.diary-list p.content, #modal-diary p.content, .notice-list p.content, #modal-notice p.content  {
   margin-top: 10px;
 }
 /* 日記カード モジュール END */

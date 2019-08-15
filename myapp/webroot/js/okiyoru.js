@@ -673,6 +673,29 @@ function initializeUser() {
     }
     /* 日記画面 END */
 
+    /* お知らせ画面 START */
+    if($("#notice").length) {
+
+        // 検索ボタン押した時
+        commonSearch(false);
+
+        // アーカイブ日記をクリックした時
+        $(document).on('click', '.archiveLink', function() {
+
+            var $form =$('#view-archive-notice');
+            $($form).find("input[name='id']").val($(this).find("input[name='id']").val());
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            callModalNoticeWithAjax($form, 'user');
+            $('.materialboxed').materialbox();
+        })
+        // いいねボタン押した時
+        $(document).on('click', '.likeBtn', function() {
+           //$(document).find('.materialboxed').materialbox();
+        });
+    }
+    /* お知らせ画面 END */
+
 }
 
 /**
@@ -2035,7 +2058,7 @@ function initializeOwner() {
     }
 
     /**
-     * @description モーダルお知らせ表示 ユーザー、キャストのみで使用
+     * @description モーダルお知らせ表示 ユーザー、店舗お知らせのみで使用
      * @param  {} $form
      * @param  {} userType
      */
@@ -2112,9 +2135,9 @@ function initializeOwner() {
                             $(noticeCard).find('figure.hide').remove();
                             initPhotoSwipeFromDOM('.my-gallery');
                         }
-                        // キャストの場合JSONデータを保持する
+                        // 店舗お知らせ画面の場合JSONデータを保持する
                         if(userType == 'cast') {
-                            var dir = $("#notice").find("input[name='cast_dir']").val();
+                            var dir = $("#notice").find("input[name='notice_dir']").val();
                             $("#delete-notice").find("input[name='id']").val(response['id']);
                             $("#delete-notice").find("input[name='dir_path']").val(dir + response['dir']);
                             $("#modal-edit-notice").find("input[name='id']").val(response['id']);

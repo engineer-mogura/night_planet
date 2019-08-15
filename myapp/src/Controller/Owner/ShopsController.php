@@ -1456,7 +1456,7 @@ class ShopsController extends AppController
             $tmpDir->delete();// tmpフォルダ削除
         }
 
-        $notices = $this->Util->getNotices($id);
+        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
         $this->set(compact('notices'));
         $this->render('/owner/shops/notice');
         $response = array(
@@ -1550,7 +1550,7 @@ class ShopsController extends AppController
             $tmpDir->delete();
         }
 
-        $notices = $this->Util->getNotices($id);
+        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
         $this->set(compact('notices'));
         $this->render('/owner/shops/notice');
         $response = array(

@@ -146,21 +146,41 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col s12">
-        <div class="post_col post_col-2">
-          <table class="new-info-table bordered shop-table z-depth-2" border="1">
-            <tbody>
-              <tr>
-                <th class="table-header" colspan="2" align="center">新着情報</th>
-              </tr>
-              <tr>
-                <td>新着情報はありません。</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+    <div class="row notice-list">
+      <div class="or-header-wrap card-panel red lighten-3">
+        <span class="or-header">お知らせ</span>
       </div>
+      <?php if (count($shop->shop_infos) > 0) { ?>
+        <div class="card notice-card">
+      <?php foreach ($nImageList as $key => $value): ?>
+      <?= $value == reset($nImageList) ?'<div class="my-gallery">':""?>
+          <figure class="col <?=(count($nImageList)==1?'s12 m12 l12':(count($nImageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
+            <a href="<?=$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+          </figure>
+      <?= $value == end($nImageList) ?'</div>':""?>
+      <?php endforeach; ?>
+          <div class="card-content">
+          <p class="right-align"><?=$shop->shop_infos[0]->ymd_created?></p>
+          <p class="title">
+            <?=$shop->shop_infos[0]->title?>
+          </p>
+            <p class="content"><?=$this->Text->autoParagraph($shop->shop_infos[0]->content)?></p>
+          </div>
+          <div class="card-action like-field"><p>
+            <a class="btn-floating waves-effect waves-green btn-flat blue">
+                  <i class="material-icons">thumb_up</i></a><span class="like-field-span like-count"><?=count($shop->shop_infos[0]->likes)?></span>
+            <a class="btn-floating waves-effect waves-green btn-flat red">
+                  <i class="material-icons">thumb_up</i></a><span class="like-field-span">LIKE?</span>
+            <a href="<?=DS.$shopInfo['area']['path'].DS.PATH_ROOT['NOTICE'].DS.$shop->shop_infos[0]->id."?area=".$shop->area."&genre=".$shop->genre.
+                    "&shop=".$shop->id."&name=".$shop->name."&notice=".$shop->id?>"
+                    class="right waves-effect waves-light btn-large createBtn"><i class="material-icons right">chevron_right</i><?=COMMON_LB['052']?></a>
+            </p>
+          </div>
+        </div>
+          <?php
+          } else { ?>
+          <p class="col">お知らせはありません。</p>
+      <?php } ?>
     </div>
     <div class="row">
       <div class="or-header-wrap card-panel red lighten-3">

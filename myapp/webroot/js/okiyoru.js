@@ -558,6 +558,17 @@ function castImageDeleteBtn(form, obj){
             });
         });
 
+        // スマートフォン以外の電話タップを無効にする
+        $(function() {
+            var ua = navigator.userAgent.toLowerCase();
+            var isMobile = /iphone/.test(ua)||/android(.+)?mobile/.test(ua);
+            if (!isMobile) {
+                $('a[href^="tel:"]').on('click', function(e) {
+                    e.preventDefault();
+                });
+            }
+        });
+
         // TODO: ピッカー系がgoogle chomeブラウザで不具合が出てるっぽい。2019/03/28時点
         // 症状は、クリックしても一瞬表示されるだけ。現時点の解決策としては<label>タグを付与することで表示される
         /* 店舗編集のスクリプト クーポン materializecss Date Picker */

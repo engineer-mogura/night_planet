@@ -97,7 +97,10 @@
             </tr>
             <tr>
               <th align="center">連絡先</th>
-              <td><?= !empty($shop->tel) ? h($shop->tel) : h('-') ?></td>
+              <td><?php if(!empty($shop->tel)): ?>
+                <a href="tel:<?= $shop->tel?>"><?= $shop->tel?></a>
+                  <?php else: {h('-');} endif; ?>
+              </td>
             </tr>
             <tr>
               <th align="center">営業時間</th>
@@ -145,6 +148,11 @@
           </table>
         </div>
       </div>
+    </div>
+    <div Class="row">
+    <!-- InstaWidget -->
+<a href="https://instawidget.net/v/user/jkt48" id="link-9d7f571a5684ca23822e93bb675b77db4a77744388090a3590c5af949a7c607f">@jkt48</a>
+<script src="https://instawidget.net/js/instawidget.js?u=9d7f571a5684ca23822e93bb675b77db4a77744388090a3590c5af949a7c607f&width=300px"></script>
     </div>
     <div class="row notice-list">
       <div class="or-header-wrap card-panel red lighten-3">
@@ -294,16 +302,16 @@
           </tr>
           <tr>
             <th align="center">連絡先1</th>
-            <td><?php if(!empty($shop->jobs[0]->tel1)) {
-              echo ($shop->jobs[0]->tel1);
-            } else {echo ('-');} ?>
+            <td><?php if(!empty($shop->jobs[0]->tel1)): ?>
+              <a href="tel:<?= $shop->jobs[0]->tel1?>"><?= $shop->jobs[0]->tel1?></a>
+                <?php else: {echo ('-');} endif; ?>
             </td>
           </tr>
           <tr>
             <th align="center">連絡先2</th>
-            <td><?php if(!empty($shop->jobs[0]->tel2)) {
-              echo ($shop->jobs[0]->tel2);
-            } else {echo ('-');} ?>
+            <td><?php if(!empty($shop->jobs[0]->tel2)): ?>
+              <a href="tel:<?= $shop->jobs[0]->tel2?>"><?= $shop->jobs[0]->tel2?></a>
+                <?php else: {echo ('-');} endif; ?>
             </td>
           </tr>
           <tr>

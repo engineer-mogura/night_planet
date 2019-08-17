@@ -156,7 +156,10 @@
             </tr>
             <tr>
               <th align="center">連絡先</th>
-              <td><?= !empty($cast->shop->tel) ? h($cast->shop->tel) : h('-') ?></td>
+              <td><?php if(!empty($cast->shop->tel)): ?>
+                <a href="tel:<?= $cast->shop->tel?>"><?= $cast->shop->tel?></a>
+                  <?php else: {h('-');} endif; ?>
+              </td>
             </tr>
             <tr>
               <th align="center">営業時間</th>
@@ -198,22 +201,6 @@
                       </div>
                       <?php } ?>
                       <?php } else {echo ('-');} ?></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col s12">
-        <div class="post_col post_col-2">
-          <table class="new-info-table bordered shop-table z-depth-2" border="1">
-            <tbody>
-              <tr>
-                <th class="table-header" colspan="2" align="center">新着情報</th>
-              </tr>
-              <tr>
-                <td>新着情報はありません。</td>
               </tr>
             </tbody>
           </table>
@@ -317,16 +304,16 @@
           </tr>
           <tr>
             <th align="center">連絡先1</th>
-            <td><?php if(!empty($cast->shop->jobs[0]->tel1)) {
-              echo ($cast->shop->jobs[0]->tel1);
-            } else {echo ('-');} ?>
+            <td><?php if(!empty($cast->shop->jobs[0]->tel1)): ?>
+              <a href="tel:<?= $cast->shop->jobs[0]->tel1?>"><?= $cast->shop->jobs[0]->tel1?></a>
+                <?php else: {echo ('-');} endif; ?>
             </td>
           </tr>
           <tr>
             <th align="center">連絡先2</th>
-            <td><?php if(!empty($cast->shop->jobs[0]->tel2)) {
-              echo ($cast->shop->jobs[0]->tel2);
-            } else {echo ('-');} ?>
+            <td><?php if(!empty($cast->shop->jobs[0]->tel2)): ?>
+              <a href="tel:<?= $cast->shop->jobs[0]->tel2?>"><?= $cast->shop->jobs[0]->tel2?></a>
+                <?php else: {echo ('-');} endif; ?>
             </td>
           </tr>
           <tr>

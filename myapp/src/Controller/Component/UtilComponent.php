@@ -395,7 +395,7 @@ class UtilComponent extends Component
      * @return void
      */
     public function file_upload(array $file = null, array $files_befor = null,
-        string $dir = null, int $limitFileSize = 1024 * 1024)
+        string $dir = null, int $limitFileSize)
     {
         try {
             // ファイルを保存するフォルダ $dirの値のチェック
@@ -457,11 +457,12 @@ class UtilComponent extends Component
             if ($isFile !== false) {
                 return false;
             }
-
+            $exif1 = exif_read_data($file["tmp_name"]);
             // ファイルの移動
             if (!@move_uploaded_file($file["tmp_name"], $dir . DS . $uploadFile)) {
                 throw new RuntimeException('Failed to move uploaded file.');
             }
+            $exif2 = exif_read_data($dir . DS . $uploadFile);
 
             // 処理を抜けたら正常終了
 //            echo 'File is uploaded successfully.';

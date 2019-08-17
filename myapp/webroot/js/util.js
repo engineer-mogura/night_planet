@@ -53,8 +53,8 @@
     //加工後の横幅を800pxに設定
     var processingWidth = 800;
 
-    //加工後の容量を100KB以下に設定
-    var processingCapacity = 100000;
+    //加工後の容量を200KB以下に設定
+    var processingCapacity = 200000;
     var blob = [];
 
     $(imgList).each(function(index, element){
@@ -65,11 +65,10 @@
 
       var h;
       var w;
-
       //原寸横幅が加工後横幅より大きければ、縦横比を維持した縮小サイズを取得
       if(processingWidth < image.width) {
-          w = processingWidth;
-          h = image.height * (processingWidth / image.width);
+        w = processingWidth;
+        h = image.height * (processingWidth / image.width);
 
       //原寸横幅が加工後横幅以下なら、原寸サイズのまま
       } else {
@@ -83,7 +82,7 @@
       $(canvasArea).attr("width", w);
       $(canvasArea).attr("height", h);
       ctx.drawImage(image, 0, 0, w, h);
-
+      $(canvas).show();
       //canvasに描画したデータを取得
       var canvasImage = $(canvasArea).get(0);
 
@@ -103,7 +102,6 @@
       }
       blob.push(uploadBlob);
     });
-
     return blob;
 
   }

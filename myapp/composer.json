@@ -13,7 +13,8 @@
         "lcobucci/jwt": "^3.2",
         "mobiledetect/mobiledetectlib": "2.*",
         "mosaxiv/cakephp-token-verify": "^1.0",
-        "node-link/cakephp-remember-me": "^0.1.2"
+        "node-link/cakephp-remember-me": "^0.1.2",
+        "imagine/imagine":"*"
     },
     "require-dev": {
         "cakephp/bake": "~1.0",

@@ -9,7 +9,7 @@
 	</div>
 	<div class="card">
 		<div class="card-image">
-			<img class="materialboxed" width="100%" height="120" data-caption="" src="">
+			<img class="materialboxed" width="auto" height="auto" data-caption="" src="">
 			<a class="btn-floating halfway-fab waves-effect waves-light red tooltipped deleteBtn" data-delete="image" data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
 		</div>
 	</div>

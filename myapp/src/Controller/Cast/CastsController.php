@@ -352,7 +352,7 @@ class CastsController extends AppController
             foreach ($files as $key => $file) {
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
-                    $limitFileSize = 1024 * 1024;
+                    $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
 
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
@@ -598,7 +598,7 @@ class CastsController extends AppController
             foreach ($files as $key => $file) {
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
-                    $limitFileSize = 1024 * 1024;
+                    $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
 
@@ -769,7 +769,7 @@ class CastsController extends AppController
             foreach ($files as $key => $file) {
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
-                    $limitFileSize = 1024 * 1024;
+                    $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $image_befor, $dir->path, $limitFileSize);
 

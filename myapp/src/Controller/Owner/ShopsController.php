@@ -210,7 +210,7 @@ class ShopsController extends AppController
         $file = $this->request->getData('top_image_file');
         // ファイルが存在する、かつファイル名がblobの画像のとき
         if (!empty($file["name"]) && $file["name"] == 'blob') {
-            $limitFileSize = 1024 * 1024;
+            $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
             try {
                 if(file_exists($fileBefor->path) && !empty($shop->top_image)) {
                     // ロールバック用のファイルサイズチェック
@@ -982,7 +982,7 @@ class ShopsController extends AppController
             foreach ($files as $key => $file) {
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
-                    $limitFileSize = 1024 * 1024;
+                    $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
 
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
@@ -1229,7 +1229,7 @@ class ShopsController extends AppController
             foreach ($files as $key => $file) {
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
-                    $limitFileSize = 1024 * 1024;
+                    $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
 
@@ -1400,7 +1400,7 @@ class ShopsController extends AppController
             foreach ($files as $key => $file) {
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
-                    $limitFileSize = 1024 * 1024;
+                    $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $image_befor, $dir->path, $limitFileSize);
 

@@ -6,7 +6,7 @@ return [
 	// バイトサイズ関連
 	define('CAPACITY', array(
 		'MAX_NUM_BYTES_DIR'=> 10485760 , // ディレクトリ制限バイト数10MB
-		'MAX_NUM_BYTES_FILE'=> 1048576 , // ファイル制限バイト数1MB
+		'MAX_NUM_BYTES_FILE'=> 2097152 , // ファイル制限バイト数2MB
 	)),
 
 	// プロパティ設定

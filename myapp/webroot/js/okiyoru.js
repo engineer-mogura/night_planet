@@ -191,24 +191,50 @@ function birthdayPickerIni () {
 function fileload(file, obj, imgCount, path) {
 
     var fileReader = new FileReader();
+    var orientation;
     var $html;
-    fileReader.onloadend = function() {
+    loadImage.parseMetaData(file, (data) => {
+        var options = {
+          canvas: true
+        };
+        if (data.exif) {
+          options.orientation = data.exif.get('Orientation');
+        }
+        loadImage(file, (canvas) => {
+            var dataUri = canvas.toDataURL('image/jpeg');
+            // 画像を作成
+            var img = new Image();
+            img.src = dataUri; 
+                $.get(path, {}, function(html) {
 
-        $.get(path, {}, function(html) {
+                    var $dom = $(html);
+                    $($dom).addClass("image"+imgCount);
+                    $($dom).find(".deleteBtn").remove();
+                    $($dom).find("input[name='name']").val(file.name);
+                    $($dom).find('img').attr({src:dataUri});
+                    $(obj).append($dom);
+                    $('.materialboxed').materialbox();
+                    $('.tooltipped').tooltip({delay: 50});
+                });
+        }, options);
+      });
+    // fileReader.onloadend = function() {
 
-            var $dom = $(html);
-            $($dom).addClass("image"+imgCount);
-            $($dom).find(".deleteBtn").remove();
-            $($dom).find("input[name='name']").val(file.name);
-            $($dom).find('img').attr({src:fileReader.result});
-            $(obj).append($dom);
-            $('.materialboxed').materialbox();
-            $('.tooltipped').tooltip({delay: 50});
-        });
+    //     $.get(path, {}, function(html) {
 
-    }
+    //         var $dom = $(html);
+    //         $($dom).addClass("image"+imgCount);
+    //         $($dom).find(".deleteBtn").remove();
+    //         $($dom).find("input[name='name']").val(file.name);
+    //         $($dom).find('img').attr({src:fileReader.result});
+    //         $(obj).append($dom);
+    //         $('.materialboxed').materialbox();
+    //         $('.tooltipped').tooltip({delay: 50});
+    //     });
 
-    fileReader.readAsDataURL(file);
+    // }
+
+    // fileReader.readAsDataURL(file);
 }
 
 /**

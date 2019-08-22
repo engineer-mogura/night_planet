@@ -1,12 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <?= $this->element('analytics_key'); ?>
   <?= $this->Html->charset() ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
   <title>
     <?= $this->fetch('title') ?>
   </title>
+  <?= $this->Html->meta('apple-touch-icon-precomposed', '/favicon.ico', [
+    'type'=>'icon',
+    'size' => '144x144',
+    'rel'=>'apple-touch-icon-precomposed'
+])."\n";?>
+  <?= META['USER_NO_INDEX'] ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
+  <?= META['NO_FOLLOW'] ? $this->Html->meta('robots',['content'=> 'nofollow']): "";?>
   <?= $this->Html->meta('icon') ?>
   <?= $this->Html->script('jquery-3.1.0.min.js') ?>
   <!-- <?= $this->Html->script('materialize.js') ?> --><!-- 検証用 -->
@@ -20,7 +28,7 @@
   <?= $this->Html->script('moment.min.js') ?><!-- fullcalendar-3.9.0 -->
   <?= $this->Html->script('fullcalendar.js') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
   <?= $this->Html->script('fullcalendar_locale/ja.js') ?><!-- fullcalendar-3.9.0 -->
-  <?= $this->Html->script("https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4") ?>
+  <?= $this->Html->script(API['GOOGLE_MAP_APIS']) ?>
   <script src='/PhotoSwipe-master/dist/photoswipe.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->

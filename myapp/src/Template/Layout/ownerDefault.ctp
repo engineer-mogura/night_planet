@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <?= $this->element('analytics_key'); ?>
   <?= $this->Html->charset() ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
@@ -8,6 +9,13 @@
     <?= LT['004'] ?>:
     <?= $this->fetch('title') ?>
   </title>
+  <?= $this->Html->meta('apple-touch-icon-precomposed', '/favicon.ico', [
+    'type'=>'icon',
+    'size' => '144x144',
+    'rel'=>'apple-touch-icon-precomposed'
+])."\n";?>
+  <?= META['USER_NO_INDEX'] ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
+  <?= META['NO_FOLLOW'] ? $this->Html->meta('robots',['content'=> 'nofollow']): "";?>
   <?= $this->Html->meta('icon') ?>
   <?= $this->Html->script('jquery-3.1.0.min.js') ?>
   <?= $this->Html->script('materialize.min.js') ?>
@@ -16,7 +24,7 @@
   <?= $this->Html->script('ja_JP.js') ?>
   <?= $this->Html->script('jquery.notifyBar.js') ?>
   <?= $this->Html->script('ajaxzip3.js') ?>
-  <?= $this->Html->script("https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4") ?>
+  <?= $this->Html->script(API['GOOGLE_MAP_APIS']) ?>
   <?= $this->Html->script("load-image.all.min.js") ?><!-- 画像の縦横を自動調整してくれるプラグインExif情報関連 -->
   <script src='/PhotoSwipe-master/dist/photoswipe.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
@@ -32,7 +40,7 @@
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
 </head>
-  <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?>
+  <?php !empty($ownerInfo['main_image'])? $mainImage = $ownerInfo['image_path'].DS.$ownerInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?>
   <?php $id = $this->request->getSession()->read('Auth.Owner.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.Owner.role') ?>
 <body id="owner-default">
@@ -48,10 +56,8 @@
       </div>
     </li>
     <li><a href="/owner/owners/index/?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= OWNER_LM['001'] ?></a></li>
-    <li><a href="/owner/owners/index/?activeTab=catch" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['002'] ?></a></li>
+    <li><a href="/owner/owners/profile/?activeTab=profile" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['002'] ?></a></li>
     <li><a href="/owner/owners/index/?activeTab=coupon" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['003'] ?></a></li>
-    <li><a href="/owner/owners/index/?activeTab=cast" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['004'] ?></a></li>
-    <li><a href="/owner/owners/index/?activeTab=tenpo" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['005'] ?></a></li>
     <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="/entry/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="/entry/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

@@ -9,13 +9,21 @@ use Cake\Auth\DefaultPasswordHasher;
  * Owner Entity
  *
  * @property int $id
+ * @property string $name
+ * @property string|null $image
+ * @property string $role
+ * @property string $tel
  * @property string $email
  * @property string $password
+ * @property int $gender
+ * @property string $age
+ * @property string|null $dir
+ * @property string|null $remember_token
  * @property int|null $status
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
- * @property \App\Model\Entity\Shop $shop
+ * @property \App\Model\Entity\Shop[] $shops
  */
 class Owner extends Entity
 {
@@ -30,19 +38,20 @@ class Owner extends Entity
      * @var array
      */
     protected $_accessible = [
+        'name' => true,
+        'image' => true,
         'role' => true,
-        'role' => true,
+        'tel' => true,
         'email' => true,
         'password' => true,
-        'area' => true,
-        'genre' => true,
+        'gender' => true,
+        'age' => true,
         'dir' => true,
-        'tel' => true,
         'remember_token' => true,
         'status' => true,
         'created' => true,
         'modified' => true,
-        'shop' => true
+        'shops' => true
     ];
 
     /**

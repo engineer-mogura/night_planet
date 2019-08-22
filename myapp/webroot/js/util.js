@@ -82,7 +82,7 @@
       $(canvasArea).attr("width", w);
       $(canvasArea).attr("height", h);
       ctx.drawImage(image, 0, 0, w, h);
-      $(canvas).show();
+
       //canvasに描画したデータを取得
       var canvasImage = $(canvasArea).get(0);
 

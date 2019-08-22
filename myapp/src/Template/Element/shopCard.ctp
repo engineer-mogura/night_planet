@@ -1,6 +1,6 @@
 <div id="search-result">
 	<div class="col s12">
-	<h5 class="title"><?=h($title)?></h5>
+	<h5 class="title"><?=h($result)?></h5>
 	<h6 class="header"><?=h("検索結果 ".count($shops)."件")?></h6>
 	<p class="message"><?= count($shops) == 0 ? h("検索結果が０件でした。条件を変更し、もう一度検索してみてください。"):""?></p>
 	</div>

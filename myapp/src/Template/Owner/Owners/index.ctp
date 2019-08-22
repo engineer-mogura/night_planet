@@ -8,12 +8,13 @@
 	<div class="container">
 		<?= $this->Flash->render() ?>
 		<h5><?= __('オーナー画面') ?></h5>
-		<?php foreach ($shops  as $key => $shop): ?>
-			<div class="row">
+		<div class="row">
+			<?php foreach ($shops  as $key => $shop): ?>
+			<?php $shopPath = DS.PATH_ROOT['IMG'].DS.$shop->area.DS.$shop->genre.DS.$shop->dir; ?>
 				<div class="col s12 m6 l6">
 					<div class="card <?php if(count($shops) == $key + 1) { echo('targetScroll');}?>">
 						<div class="card-image">
-							<img src="<?=isset($shop->top_image) ? $shopInfo['shop_path']. DS .$shop->top_image:"/img/common/noimage.jpg" ?>" alt="">
+							<img src="<?=isset($shop->top_image) ? $shopPath. DS .$shop->top_image:"/img/common/noimage.jpg" ?>" alt="">
 						</div>
 						<div class="card-content">
 							<table class="highlight">
@@ -46,7 +47,11 @@
 						</div>
 					</div>
 				</div>
-			</div>
-		<?php endforeach; ?>
+			<?php endforeach; ?>
+		</div>
+		<div class="or-button">
+			<?= $this->Html->link('店舗を追加する','owner/owners/shop_add'
+				,['class'=>'waves-effect waves-light btn-large']);?>
+		</div>
 	</div>
 </div>

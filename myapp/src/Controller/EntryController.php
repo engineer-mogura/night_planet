@@ -173,8 +173,8 @@ class EntryController extends AppController
             $this->Flash->error(__('入力内容に誤りがあります。'));
         }
 
-        $masterCodesFind = array('area','genre');
-        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+        $masterCodesFind = array('age');
+        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, true);
         $this->set(compact('owner','selectList'));
         $this->render();
     }

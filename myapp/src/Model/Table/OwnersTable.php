@@ -42,7 +42,7 @@ class OwnersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->hasOne('Shops', [
+        $this->hasMany('Shops', [
             'foreignKey' => 'owner_id',
         ]);
 
@@ -62,6 +62,24 @@ class OwnersTable extends Table
         $validator
             ->integer('id')
             ->allowEmptyString('id', 'create');
+
+        $validator
+            ->scalar('name')
+            ->notEmpty('name','名前を入力してください。')
+            ->maxLength('name', 45, '名前が長すぎます。')
+            ->requirePresence('name', 'create')
+            ->allowEmptyString('name', false);
+
+        $validator
+            ->scalar('image')
+            ->maxLength('image', 100)
+            ->allowEmptyFile('image');
+
+        $validator
+            ->scalar('role')
+            ->maxLength('role', 10)
+            ->requirePresence('role', 'create')
+            ->allowEmptyString('role', false);
 
         $validator
             ->email('email',false, "メールアドレスの形式が不正です。")
@@ -90,14 +108,21 @@ class OwnersTable extends Table
             ]]);
 
         $validator
-            ->scalar('area')
-            ->notEmpty('area','エリアを選択してください。')
-            ->requirePresence('area', 'create');
+            ->integer('status')
+            ->allowEmptyString('status');
 
         $validator
-            ->scalar('genre')
-            ->notEmpty('genre','店舗のジャンルを選択してください。')
-            ->requirePresence('genre', 'create');
+            ->integer('gender')
+            ->requirePresence('gender', 'create')
+            ->notEmpty('gender','性別を選択してください。')
+            ->allowEmptyString('gender', false);
+
+        $validator
+            ->scalar('age')
+            ->maxLength('age', 5)
+            ->requirePresence('age', 'create')
+            ->notEmpty('age','年齢を選択してください。')
+            ->allowEmptyString('age', false);
 
         $validator
             ->integer('dir');
@@ -105,7 +130,7 @@ class OwnersTable extends Table
         $validator
             ->scalar('tel')
             ->requirePresence('tel', 'create')
-            ->notEmpty('tel','電話番号をしてください。')
+            ->notEmpty('tel','電話番号を入力してください。')
             ////電話番号形式のチェック ////
             ->add('tel', 'tel_check',[
                 'rule' =>'tel_check',

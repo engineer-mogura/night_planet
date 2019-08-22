@@ -61,13 +61,15 @@ class AppController extends Controller{
     // $this->set('title', $title);
   }
 
-/*    public function isAuthorized($user){
-      // デフォルトでは、アクセスを拒否します。
-      return false;
-    }
+    // public function isAuthorized($user){
+    //   // デフォルトでは、アクセスを拒否します。
+    //   return false;
+    // }
     public function beforeFilter(Event $event)
     {
-        $this->Auth->allow(['login', 'display']);
-    }*/
+
+      //$this->Auth->allow(['login', 'display']);
+
+    }
 
   }

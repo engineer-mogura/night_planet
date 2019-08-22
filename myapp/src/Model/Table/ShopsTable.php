@@ -76,18 +76,17 @@ class ShopsTable extends Table
 
         $validator
             ->integer('id')
-            ->requirePresence('id', 'create')
-            ->allowEmptyString('id', false);
+            ->allowEmptyString('id', 'create');
 
         $validator
             ->scalar('area')
-            ->maxLength('area', 255)
-            ->allowEmptyString('area');
+            ->notEmpty('area','エリアを選択してください。')
+            ->requirePresence('area', 'create');
 
         $validator
             ->scalar('genre')
-            ->maxLength('genre', 255)
-            ->allowEmptyString('genre');
+            ->notEmpty('genre','店舗のジャンルを選択してください。')
+            ->requirePresence('genre', 'create');
 
         $validator
             ->scalar('dir')

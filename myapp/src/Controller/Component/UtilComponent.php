@@ -73,6 +73,26 @@ class UtilComponent extends Component
     }
 
     /**
+     * オーナー情報を取得する。
+     *
+     * @return void
+     */
+    public function getOwnerInfo($owner)
+    {
+        // TODO: Authセッションからオーナー情報を取得せず、shopsテーブルから取る？
+        $ownerInfo = array();
+
+        $ownerInfo = $ownerInfo + array('id'=>$owner['id']
+            ,'dir'=>$owner['dir'],'main_image'=>$owner['image']);
+        $path = DS.PATH_ROOT['IMG'].DS.PATH_ROOT['OWNER'].DS.$owner['dir'];
+
+        $ownerInfo = $ownerInfo + array('owner_path'=> $path
+            ,'image_path'=> $path.DS.PATH_ROOT['IMAGE']);
+        return  $ownerInfo;
+
+    }
+
+    /**
      * 店舗情報を取得する。
      *
      * @return void
@@ -525,6 +545,22 @@ class UtilComponent extends Component
         }
         return $errors;
     }
+
+    /**
+     * 検索対象、置換対象を配列で順番通りに置換する処理
+     *
+     * @param [type] $search
+     * @param [type] $replace
+     * @param [type] $target
+     * @return void
+     */
+    public function strReplace($search, $replace, $target) {
+
+        $result = "";
+        $result = str_replace($search, $replace, $target);
+        return $result;
+    }
+
     /**
      * ログを加工してセットする
      *

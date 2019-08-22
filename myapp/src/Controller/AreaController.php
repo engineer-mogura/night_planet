@@ -24,44 +24,85 @@ class AreaController extends AppController
         $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->MasterCodes = TableRegistry::get("master_codes");
 
+    }
+
+    public function beforeFilter(Event $event)
+    {
+        // 常に現在エリアを取得
+        $isArea = mb_strtolower($this->request->getparam("controller"));
+        // 常にエリア、ジャンルセレクトリストを取得
+        $masterCodesFind = array('area','genre');
+        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+        $this->set(compact('selectList','isArea'));
+        parent::beforeFilter($event);
+        $this->viewBuilder()->layout('userDefault');
         $query = $this->request->getQuery();
-        $title = '';
-        // 店舗詳細ページの場合のタイトルを決める
-        if (!empty($query['area']) && !empty($query['genre']) && !empty($query['name'])) {
-            // コントローラでセットされたtitleを代入してセパレータを追加
-            $title .=  AREA[$query['area']]['label'] . 'エリアの'.
-                        GENRE[$query['genre']]['label'].' | '.$query['name'];
-        } else {
-            // 各エリアのトップ、または各エリアのジャンルのタイトルを決める
-            $urlSplit = explode(DS, rtrim($this->request->url, DS));
-            // 遷移先がエリアのトップ画面の場合
-            if (array_key_exists($urlSplit[0], AREA)) {
-                $title = AREA[$urlSplit[0]]['label'].'エリア';
-            }
-            if(!empty($query['genre'])) {
-                $title .= 'の' . GENRE[$query['genre']]['label'];
-            }
+        $url = explode(DS, rtrim($this->request->url, DS));
+        $title = ''; // SEO対策
+        $description = ''; // SEO対策
 
+        // キャストトップの場合
+        if (!empty($query['genre']) && !empty($query['name']) 
+            && !empty($query['nickname']) && in_array(PATH_ROOT['CAST'], $url)) {
+
+            $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
+            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
+                , $query['name'], $query['nickname'], LT['001']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['CAST_TITLE']);
+            $search = array('_cast_', '_service_name_');
+            $replace = array($query['nickname'], LT['001']);
+            $description = $this->Util->strReplace($search, $replace, META['CAST_DESCRIPTION']);
+
+        // キャストの日記トップの場合
+        } else if (!empty($query['genre']) && !empty($query['name']) 
+            && !empty($query['nickname']) && in_array(PATH_ROOT['DIARY'], $url)) {
+
+            $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
+            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
+                , $query['name'], $query['nickname'], LT['001']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['DIARY_TITLE']);
+            $search = array('_cast_', '_service_name_');
+            $replace = array($query['nickname'], LT['001']);
+            $description = $this->Util->strReplace($search, $replace, META['DIARY_DESCRIPTION']);
+
+        // 店舗のお知らせトップの場合
+        } else if (!empty($query['area']) && !empty($query['genre']) 
+            && !empty($query['name']) && in_array(PATH_ROOT['NOTICE'], $url)) {
+
+            $search = array('_area_', '_genre_', '_shop_', '_service_name_');
+            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
+                , $query['name'], LT['001']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['NOTICE_TITLE']);
+            $search = array('_shop_', '_service_name_');
+            $replace = array($query['name'], LT['001']);
+            $description = $this->Util->strReplace($search, $replace, META['NOTICE_DESCRIPTION']);
+
+        // 店舗トップページの場合
+        } else if (!empty($query['area']) && !empty($query['genre']) 
+            && !empty($query['name'])) {
+
+            $search = array('_area_', '_genre_', '_shop_', '_service_name_');
+            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
+                , $query['name'], LT['001']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['SHOP_TITLE']);
+            $search = array('_catch_copy_', '_service_name_');
+            $replace = array($this->Shops->get($url[2])->catch, LT['001']);
+            $description = $this->Util->strReplace($search, $replace, META['SHOP_DESCRIPTION']);
+
+        // エリアのトップ画面の場合
+        } else if(array_key_exists($url[0], AREA)) {
+
+            $search = array('_area_', '_service_name_');
+            $replace = array(AREA[$url[0]]['label'], LT['001']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['AREA_TITLE']);
+            $description = $this->Util->strReplace($search, $replace, META['AREA_DESCRIPTION']);
         }
-
-        $this->set('title', $title);
 
         // コントローラ名からエリアタイトルをセット
         $areaTitle = AREA[mb_strtolower($this->request->getparam("controller"))]['label'];
-        $this->set(compact('areaTitle'));
-
+        $this->set(compact('title','description','areaTitle'));
     }
 
-    // public function beforeFilter(Event $event)
-    // {
-    //     // AppController.beforeFilterをコールバック
-    //     parent::beforeFilter($event);
-    //     // キャストに関する情報をセット
-    //     if (!is_null($user = $this->Auth->user())) {
-    //         $cast = $this->Users->get($user['id']);
-    //         $this->set('userInfo', $this->Util->getCastItem($cast));
-    //     }
-    // }
     public function index()
     {
         if ($this->request->is('ajax')) {
@@ -110,33 +151,6 @@ class AreaController extends AppController
         $this->set(compact('shops'));
         $this->render();
     }
-
-    // public function shop($id = null)
-    // {
-    //    $sharer =  Router::reverse($this->request, true);
-    //     $shop = $this->Shops->find('all')
-    //         ->where(['Shops.id' => $id])
-    //         ->contain(['Owners','Casts' => function(Query $q) {
-    //             return $q
-    //                 ->where(['Casts.status'=>'1']);
-    //             }, 'Coupons' => function(Query $q) {
-    //             return $q
-    //                 ->where(['Coupons.status'=>'1']);
-    //             },'Jobs'])->first();
-    //     $shopInfo = $this->Util->getShopInfo($shop);
-    //     $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-    //     $imageList = array(); // 画面側でJSONとして使う画像リスト
-    //     // 画像リストを作成する
-    //     foreach ($imageCol as $key => $value) {
-    //         if (!empty($shop[$imageCol[$key]])) {
-    //             array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
-    //         }
-    //     }
-    //     $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-    //     //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
-    //     $this->set(compact('shop','shopInfo','sharer','imageList','credits','creditsHidden'));
-    //     $this->render();
-    // }
 
     public function shop($id = null)
     {
@@ -390,26 +404,6 @@ class AreaController extends AppController
         $this->autoRender = false;
         $this->response->charset('UTF-8');
         $this->response->type('json');
-    }
-
-    /**
-     * Actionが実行されるよりも前の共通処理
-     *
-     * @param Event $event
-     * @return void
-     */
-    public function beforeFilter(Event $event)
-    {
-        // 常に現在エリアを取得
-        $isArea = mb_strtolower($this->request->getparam("controller"));
-        // 常にエリア、ジャンルセレクトリストを取得
-        $masterCodesFind = array('area','genre');
-        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('selectList','isArea'));
-        // parent::beforeFilter($event);
-        // $this->Auth->allow(['signup','verify','logout']);
-        parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
-        $this->viewBuilder()->layout('userDefault');
     }
 
 }

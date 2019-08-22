@@ -67,11 +67,18 @@ class AppController extends \App\Controller\AppController
         //     return true;
         // }
 
-        // ログイン時に許可するアクション
-        $access = ['index','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
+        // ログイン時に許可するオーナー画面アクション
+        $ownerAccess = ['index','shopAdd','profile'];
+
+        // ログイン時に許可する店舗編集画面アクション
+        $shopAccess = ['index','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
             'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
             'deleteCast','saveTenpo','saveJob','saveGallery','deleteGallery','notice','viewNotice',
-            'saveNotice','updateNotice','deleteNotice'];
+            'saeNotice','updateNotice','deleteNotice'];
+
+        //TODO: 権限によって店舗管理者のみとオーナー兼店舗管理者を分ける？
+        // 今は、分けず各アクションは統合する
+        $access = array_merge($ownerAccess,$shopAccess);
         if (in_array($action, $access)) {
             return true;
         }
@@ -83,6 +90,20 @@ class AppController extends \App\Controller\AppController
         parent::beforeFilter($event);
         $this->Auth->allow(['signup','verify','logout']);
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
+    }
+
+    /**
+     * json返却用の設定
+     *
+     * @param array $validate
+     * @return void
+     */
+    public function confReturnJson()
+    {
+        $this->viewBuilder()->autoLayout(false);
+        $this->autoRender = false;
+        $this->response->charset('UTF-8');
+        $this->response->type('json');
     }
 
 }

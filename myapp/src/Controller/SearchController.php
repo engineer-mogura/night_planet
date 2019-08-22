@@ -29,20 +29,32 @@ class SearchController extends AppController
         $this->Jobs = TableRegistry::get('Jobs');
         $this->MasterCodes = TableRegistry::get("master_codes");
 
+    }
+
+    public function beforeFilter(Event $event)
+    {
+        // parent::beforeFilter($event);
+        // $this->Auth->allow(['signup','verify','logout']);
+        parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
+        $this->viewBuilder()->layout('userDefault');
+
         $query = $this->request->getQuery();
-        // 検索結果でタイトルで決める
-        $title = '';
+        // 検索結果でエリア、ジャンルで文言を決める
+        $result = '';
         if (!empty($query['area']) && !empty($query['genre'])) {
-            // コントローラでセットされたtitleを代入してセパレータを追加
-            $title .=  AREA[$query['area']]['label'] . 'の'.
+            // コントローラでセットされたresultを代入してセパレータを追加
+            $result .=  AREA[$query['area']]['label'] . 'の'.
                         GENRE[$query['genre']]['label'].'一覧';
         } else if(!empty($query['area'])) {
-            $title .=  AREA[$query['area']]['label'] . '一覧';
+            $result .=  AREA[$query['area']]['label'] . '一覧';
         } else if(!empty($query['genre'])) {
-            $title .=  GENRE[$query['genre']]['label'] . '一覧';
+            $result .=  GENRE[$query['genre']]['label'] . '一覧';
         }
-        $this->set('title', $title);
+        // SEO対策
+        $title = str_replace("_service_name_", LT['001'], TITLE['SEARCH_TITLE']);
+        $description = str_replace("_service_name_", LT['001'], META['SEARCH_DESCRIPTION']);
 
+        $this->set(compact("result", "title", "description"));
     }
 
     public function index()
@@ -123,14 +135,6 @@ class SearchController extends AppController
         $this->autoRender = false;
         $this->response->charset('UTF-8');
         $this->response->type('json');
-    }
-
-    public function beforeFilter(Event $event)
-    {
-        // parent::beforeFilter($event);
-        // $this->Auth->allow(['signup','verify','logout']);
-        parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
-        $this->viewBuilder()->layout('userDefault');
     }
 
 }

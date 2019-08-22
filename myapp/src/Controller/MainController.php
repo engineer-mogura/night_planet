@@ -28,7 +28,17 @@ class MainController extends AppController
         $this->Casts = TableRegistry::get('Casts');
         $this->Jobs = TableRegistry::get('Jobs');
         $this->MasterCodes = TableRegistry::get("master_codes");
+    }
 
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        $this->viewBuilder()->layout('userDefault');
+
+        // SEO対策
+        $title = str_replace("_service_name_", LT['001'], TITLE['TOP_TITLE']);
+        $description = str_replace("_service_name_", LT['001'], META['TOP_DESCRIPTION']);
+        $this->set(compact("title", "description"));
     }
 
     public function top()
@@ -108,14 +118,6 @@ class MainController extends AppController
         $this->autoRender = false;
         $this->response->charset('UTF-8');
         $this->response->type('json');
-    }
-
-    public function beforeFilter(Event $event)
-    {
-        // parent::beforeFilter($event);
-        // $this->Auth->allow(['signup','verify','logout']);
-        parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
-        $this->viewBuilder()->layout('userDefault');
     }
 
 }

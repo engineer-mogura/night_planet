@@ -18,6 +18,9 @@ function allInitialize() {
     if($('#owner-default').length) {
         initializeOwner();
     }
+    if($('#shop-default').length) {
+        initializeShop();
+    }
     if($('#cast-default').length) {
         initializeCast();
     }
@@ -36,6 +39,9 @@ function crearAllevents() {
     }
     if($('#owner-default').length) {
         crearOwnerEvents();
+    }
+    if($('#shop-default').length) {
+        crearShopEvents();
     }
     if($('#cast-default').length) {
         crearCastEvents();
@@ -56,6 +62,13 @@ function crearUserEvents() {
  */
 function crearOwnerEvents() {
 
+
+}
+
+/**
+ * ショップ画面のイベントクリア
+ */
+function crearShopEvents() {
     $(document).off('click', '.top-image-changeBtn');
     $(document).off('click', '.top-image-saveBtn');
     $(document).off('click', '.top-image-deleteBtn');
@@ -190,7 +203,6 @@ function birthdayPickerIni () {
  */
 function fileload(file, obj, imgCount, path) {
 
-    var fileReader = new FileReader();
     var orientation;
     var $html;
     loadImage.parseMetaData(file, (data) => {
@@ -218,23 +230,7 @@ function fileload(file, obj, imgCount, path) {
                 });
         }, options);
       });
-    // fileReader.onloadend = function() {
 
-    //     $.get(path, {}, function(html) {
-
-    //         var $dom = $(html);
-    //         $($dom).addClass("image"+imgCount);
-    //         $($dom).find(".deleteBtn").remove();
-    //         $($dom).find("input[name='name']").val(file.name);
-    //         $($dom).find('img').attr({src:fileReader.result});
-    //         $(obj).append($dom);
-    //         $('.materialboxed').materialbox();
-    //         $('.tooltipped').tooltip({delay: 50});
-    //     });
-
-    // }
-
-    // fileReader.readAsDataURL(file);
 }
 
 /**
@@ -761,11 +757,83 @@ function commonSearch(isAjax) {
 
     });
 }
-
 /**
- * TODO: オーナー？ショップ？画面の初期化処理
+ * オーナー画面の初期化処理
  */
 function initializeOwner() {
+
+    /* プロフィール 画面 START */
+    if($("#profile").length) {
+        var $profile = $("#profile");
+
+        // 画像を選択した時
+        $(document).on("change", "#image-file", function() {
+
+            var $form = $(this).closest('form');
+            var file = this.files[0];
+            var img = new Image();
+            loadImage.parseMetaData(file, (data) => {
+                var options = {
+                    canvas: true
+                };
+                if (data.exif) {
+                    options.orientation = data.exif.get('Orientation');
+                }
+                loadImage(file, (canvas) => {
+                    var dataUri = canvas.toDataURL('image/jpeg');
+
+                    img.src = dataUri;
+                    $(document).find('img').attr({src:dataUri});
+                }, options);
+                // 画像が読み込まれてから処理
+                img.onload = function() {
+                    // IMGのセレクタ取得
+                     var $selecter = $(document).find('img');
+                    // ファイル変換
+                    var blobList = fileConvert("#image-canvas", $selecter);
+
+                    // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                    // POSTでリクエスト内のデータが全部なくなるので。
+                    // TODO: 後で対策を考えよう
+                    $($form).find('#image-file, .file-path').val("");
+
+                    // アップロード用blobをformDataに設定
+                    var formData = new FormData($form.get()[0]);
+                    formData.append("image", blobList[0]);
+
+                    //通常のアクションをキャンセルする
+                    event.preventDefault();
+                    fileUpAjaxCommon($form, formData, $("#wrapper"));
+                }
+            });
+
+        });
+        // 入力フォームに変更があった時
+        $(document).find($profile).on("input", function() {
+            $($profile).find(".saveBtn").removeClass("disabled");
+        });
+        // リストボックスを変更した時
+        $(document).on("change","select", function() {
+            $($profile).find(".saveBtn").removeClass("disabled");
+        });
+        // 登録ボタン押した時
+        $($profile).find(".saveBtn").on("click", function() {
+            if (!confirm('こちらのプロフィール内容でよろしいですか？')) {
+                return false;
+            }
+            var $form =$('#save-profile');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#wrapper"));
+        });
+    }
+    // /* プロフィール 画面 END */
+}
+/**
+ * ショップ画面の初期化処理
+ */
+function initializeShop() {
 
     /* 店舗情報 画面 START */
     if($("#shop-edit").length) {
@@ -838,7 +906,9 @@ function initializeOwner() {
             // アップロード用blobをformDataに設定
             var formData = new FormData($form.get()[0]);
             formData.append("top_image_file", blobList[0]);
-
+                        for (item of formData) {
+              console.log(item);
+            }
             //通常のアクションをキャンセルする
             event.preventDefault();
             fileUpAjaxCommon($form, formData, $("#top-image"));
@@ -1345,7 +1415,7 @@ function initializeOwner() {
                 return false;
             }
             // 新しく追加された画像のみを対象にする
-            $selecter = $('.card-img.new').find('img');
+             var $selecter = $('.card-img.new').find('img');
 
             var $form = $('#save-gallery');
             // ファイル変換
@@ -1614,7 +1684,7 @@ function initializeOwner() {
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
                 // 新しく追加された画像のみを対象にする
-                $selecter = $('.card-img').find('img');
+                 var $selecter = $('.card-img').find('img');
 
                 // ファイル変換
                 var blobList = fileConvert("#image-canvas", $selecter);
@@ -1678,7 +1748,7 @@ function initializeOwner() {
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
                 // 新しく追加された画像のみを対象にする
-                $selecter = $('.card-img.new').find('img');
+                 var $selecter = $('.card-img.new').find('img');
 
                 // ファイル変換
                 var blobList = fileConvert("#image-canvas", $selecter);
@@ -2387,7 +2457,7 @@ function initializeCast() {
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
                 // 新しく追加された画像のみを対象にする
-                $selecter = $('.card-img').find('img');
+                 var $selecter = $('.card-img').find('img');
 
                 // ファイル変換
                 var blobList = fileConvert("#image-canvas", $selecter);
@@ -2450,7 +2520,7 @@ function initializeCast() {
             //ファイル選択済みの場合はajax処理を切り替える
             if (fileCheck > 0) {
                 // 新しく追加された画像のみを対象にする
-                $selecter = $('.card-img.new').find('img');
+                 var $selecter = $('.card-img.new').find('img');
 
                 // ファイル変換
                 var blobList = fileConvert("#image-canvas", $selecter);
@@ -2654,7 +2724,7 @@ function initializeCast() {
                 return false;
             }
             // 新しく追加された画像のみを対象にする
-            $selecter = $('.card-img.new').find('img');
+             var $selecter = $('.card-img.new').find('img');
 
             var $form = $('#save-gallery');
             // ファイル変換

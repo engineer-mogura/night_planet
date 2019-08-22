@@ -10,7 +10,6 @@ use Cake\TestSuite\TestCase;
  */
 class OwnersTableTest extends TestCase
 {
-
     /**
      * Test subject
      *

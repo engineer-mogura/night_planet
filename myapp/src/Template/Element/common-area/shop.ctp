@@ -150,9 +150,12 @@
       </div>
     </div>
     <div Class="row">
-    <!-- InstaWidget -->
-<a href="https://instawidget.net/v/user/jkt48" id="link-9d7f571a5684ca23822e93bb675b77db4a77744388090a3590c5af949a7c607f">@jkt48</a>
-<script src="https://instawidget.net/js/instawidget.js?u=9d7f571a5684ca23822e93bb675b77db4a77744388090a3590c5af949a7c607f&width=300px"></script>
+      <div class="col s12">
+        <p>下のインスタはサンプルで載せてます。</p>
+        <!-- InstaWidget -->
+        <a href="https://instawidget.net/v/user/jkt48" id="link-fd6a4c05101ff9b714c1ebacd9c9ef008eb5a3b78141603471fbfbca0a1d30f2">@jkt48</a>
+        <script src="https://instawidget.net/js/instawidget.js?u=fd6a4c05101ff9b714c1ebacd9c9ef008eb5a3b78141603471fbfbca0a1d30f2&width=350px"></script>
+      </div>
     </div>
     <div class="row notice-list">
       <div class="or-header-wrap card-panel red lighten-3">

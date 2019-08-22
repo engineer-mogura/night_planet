@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <?= $this->element('analytics_key'); ?>
   <?= $this->Html->charset() ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
@@ -8,6 +9,13 @@
     <?= LT['004'] ?>:
     <?= $this->fetch('title') ?>
   </title>
+  <?= $this->Html->meta('apple-touch-icon-precomposed', '/favicon.ico', [
+    'type'=>'icon',
+    'size' => '144x144',
+    'rel'=>'apple-touch-icon-precomposed'
+])."\n";?>
+  <?= META['USER_NO_INDEX'] ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
+  <?= META['NO_FOLLOW'] ? $this->Html->meta('robots',['content'=> 'nofollow']): "";?>
   <?= $this->Html->meta('icon') ?>
   <?= $this->Html->script('jquery-3.1.0.min.js') ?>
   <?= $this->Html->script('materialize.min.js') ?>
@@ -16,7 +24,7 @@
   <?= $this->Html->script('ja_JP.js') ?>
   <?= $this->Html->script('jquery.notifyBar.js') ?>
   <?= $this->Html->script('ajaxzip3.js') ?>
-  <?= $this->Html->script("https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4") ?>
+  <?= $this->Html->script(API['GOOGLE_MAP_APIS']) ?>
   <?= $this->Html->script("load-image.all.min.js") ?><!-- 画像の縦横を自動調整してくれるプラグインExif情報関連 -->
   <script src='/PhotoSwipe-master/dist/photoswipe.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
@@ -35,7 +43,7 @@
   <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?> 
   <?php $id = $this->request->getSession()->read('Auth.Owner.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.Owner.role') ?>
-<body id="owner-default"><!--TODO: 本来は、【shopDefault】のレイアウトなので、jsでの初期化処理が必要-->
+<body id="shop-default">
   <ul id="slide-out" class="side-nav fixed">
     <li>
       <div class="user-view">

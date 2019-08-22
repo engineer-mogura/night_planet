@@ -40,13 +40,13 @@ class AppView extends View
         'templates' => 'app_form',
       ]);
 
-        $title = '';
-        if (!empty($this->viewVars['title'])) {
-            // testtitleテスト
-            $title .=  $this->viewVars['title'] . ' | ';
-        }
-        $title .= LT['001'];
-        $this->assign('title', $title);
+        // $title = '';
+        // if (!empty($this->viewVars['title'])) {
+        //     // testtitleテスト
+        //     $title .=  $this->viewVars['title'] . ' | ';
+        // }
+        // $title .= LT['001'];
+        $this->assign('title', $this->viewVars['title']);
 
         // パンくずを設定する
         $this->setBreadcrumb(explode(DS, rtrim($this->request->url, DS)));
@@ -143,22 +143,22 @@ class AppView extends View
         // パンくず設定
         if ($this->template == 'top') {
             $this->Breadcrumbs->add(
-            '<i class="material-icons">home</i>',
-            DS
-        );
+                '<i class="material-icons">home</i>',
+                DS
+            );
         }
         // 検索画面のパンくず設定
         if ($breadcrumbList[0] == 'search') {
             $this->Breadcrumbs->add([
-          ['title' => '<i class="material-icons">home</i>', 'url' => DS],
-          // ['title' => '検索', 'url' => ['controller' => 'search', 'action' => 'index']]
-        ]);
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS],
+                // ['title' => '検索', 'url' => ['controller' => 'search', 'action' => 'index']]
+            ]);
             // リストの最後に追加
             $this->Breadcrumbs->add(
-            '検索',
-            ['controller' => 'search', 'action' => 'index'],
-            ['class' => 'breadcrumbs-tail']
-        );
+                '検索',
+                ['controller' => 'search', 'action' => 'index'],
+                ['class' => 'breadcrumbs-tail']
+            );
         }
     }
 }

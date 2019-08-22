@@ -1563,18 +1563,4 @@ class ShopsController extends AppController
         return;
     }
 
-    /**
-     * json返却用の設定
-     *
-     * @param array $validate
-     * @return void
-     */
-    public function confReturnJson()
-    {
-        $this->viewBuilder()->autoLayout(false);
-        $this->autoRender = false;
-        $this->response->charset('UTF-8');
-        $this->response->type('json');
-    }
-
 }

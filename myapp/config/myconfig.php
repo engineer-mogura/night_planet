@@ -58,9 +58,9 @@ return [
 
 	// ラベル定数 label title
 	define('LT', array(
-		'001'=>'(仮)OKIYORU Go',
+		'001'=>'フィンズ',
 		'002'=>'Copyright 2018',
-		'003'=>'(仮)OKIYORU Go All Rights Reserved.',
+		'003'=>'フィンズ All Rights Reserved.',
 		'004'=>'管理画面',
 		'005'=>'<span class="area-logo-tail">☽ナイト検索☽</span>',
 		'006'=>'オーナーログイン画面',
@@ -80,11 +80,10 @@ return [
 
 	// ラベル定数 owner.label menu
 	define('OWNER_LM', array(
-		'001'=>'オーナーメニュー１',
-		'002'=>'オーナーメニュー２',
-		'003'=>'オーナーメニュー３',
-		'004'=>'オーナーメニュー４',
-		'005'=>'オーナーメニュー５',
+		'001'=>'ダッシュボード',
+		'002'=>'オーナー情報',
+		'003'=>'契約内容・お支払い',
+		
 	)),
 	// ラベル定数 shop.label menu
 	define('SHOP_LM', array(
@@ -133,7 +132,7 @@ return [
 		'007'=>'ログアウト',
 	)),
 
-	define('CATCHCOPY','【(仮)OKIYORU Go】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。(\※ソープ、デリヘル等の風俗情報を除く)。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。更に店舗ごとに多彩なクーポン券などご用意しておりますのでお店に行く前に検索してクーポン券があるのかチェックしてみるのもいいでしょう。'),
+	define('CATCHCOPY','【フィンズ】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。(\※ソープ、デリヘル等の風俗情報を除く)。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。更に店舗ごとに多彩なクーポン券などご用意しておりますのでお店に行く前に検索してクーポン券があるのかチェックしてみるのもいいでしょう。'),
 
 	// 所属エリアリスト
 	define('AREA', array(
@@ -331,5 +330,52 @@ return [
 		'AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。メールを確認し認証を完了するようキャストへお伝えください。
 			</ br>今から〇〇時間以内に完了しないと、やり直しになりますのでご注意ください。',
 	)),
+	// SEO タイトル
+	define('TITLE', array(
+		'TOP_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。ポータルサイト『_service_name_』',
+		'AREA_TITLE'=>'_area_のキャバクラ|クラブ|ガールズバー|スナック|バーを探すなら、ポータルサイト『_service_name_』',
+		'SEARCH_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。ポータルサイト『_service_name_』',
+		'SHOP_TITLE'=>'_area_の_genre_ _shop_のトップページ。ポータルサイト『_service_name_』',
+		'NOTICE_TITLE'=>'_area_の_genre_ _shop_のお知らせページです。ポータルサイト『_service_name_』',
+		'CAST_TITLE'=>'_area_の_genre_ _shop_|_cast_のトップページ。ポータルサイト『_service_name_』',
+		'DIARY_TITLE'=>'_area_の_genre_ _shop_|_cast_の日記ページ。ポータルサイト『_service_name_』',
+	)),
+	// SEO メタ関連
+	define('META', array(
+		'TOP_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーのポータルサイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
+		'AREA_DESCRIPTION'=>'_area_のキャバクラ・クラブ・ガールズバー・スナック・バーをお探しなら『_service_name_』で！店舗毎にお得なクーポン情報もあります！まずは検索から！',
+		'SEARCH_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーのポータルサイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
+		'SHOP_DESCRIPTION'=>'_catch_copy_ お店探しは『_service_name_』で！',
+		'NOTICE_DESCRIPTION'=>'_shop_からのお知らせページです！お得な情報も発信しますのでお見逃しなく！お店探しは『_service_name_』で！',
+		'CAST_DESCRIPTION'=>'_cast_のトップページです！様々なキャストが在籍しています！新人キャストも随時紹介していきます！お店探しは『_service_name_』で！',
+		'DIARY_DESCRIPTION'=>'_cast_の日記ページです！日々の出来事などを日記に綴っていきますのでお見逃しなく！お店探しは『_service_name_』で！',
+		'USER_NO_INDEX'=>TRUE, // ステージング環境用 使用テンプレート「userDefault.ctp」検索エンジンにインデックスするかしないか
+		'OWNER_NO_INDEX'=>TRUE, // ステージング環境用 使用テンプレート「ownerDefault.ctp」検索エンジンにインデックスするかしないか
+		'SHOP_NO_INDEX'=>TRUE, // ステージング環境用 使用テンプレート「shopDefault.ctp」検索エンジンにインデックスするかしないか
+		'CAST_NO_INDEX'=>TRUE, // ステージング環境用 使用テンプレート「castDefault.ctp」検索エンジンにインデックスするかしないか
+		'SIMPLE_NO_INDEX'=>TRUE, // ステージング環境用 使用テンプレート「simpleDefault.ctp」検索エンジンにインデックスするかしないか
+		'NO_FOLLOW'=>TRUE, // ステージング環境用 ページ内のリンク先をフォローするかしないか
+		// 'USER_NO_INDEX'=>FALSE, // 本番環境用 使用テンプレート「userDefault.ctp」検索エンジンにインデックスするかしないか
+		// 'OWNER_NO_INDEX'=>TRUE, // 本番環境用 使用テンプレート「ownerDefault.ctp」検索エンジンにインデックスするかしないか
+		// 'SHOP_NO_INDEX'=>TRUE, // 本番環境用 使用テンプレート「shopDefault.ctp」検索エンジンにインデックスするかしないか
+		// 'CAST_NO_INDEX'=>TRUE, // 本番環境用 使用テンプレート「castDefault.ctp」検索エンジンにインデックスするかしないか
+		// 'SIMPLE_NO_INDEX'=>TRUE, // 本番環境用 使用テンプレート「simpleDefault.ctp」検索エンジンにインデックスするかしないか
+		// 'NO_FOLLOW'=>TRUE, // 本番環境用 ページ内のリンク先をフォローするかしないか
+	)),
+
+	// API関連プロパティ設定
+	define('API', array(
+		// 'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4', // 本番環境用 GoogleマップのAPIキー
+		// 'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-146237049-1', // 本番環境用 GoogleアナリティクスのAPIキー
+		// 'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // 本番環境用 GoogleアナリティクスのID
+		'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4', // ステージング環境用 GoogleマップのAPIキー
+		'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-146237049-1', // ステージング環境用 GoogleアナリティクスのAPIキー
+		'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // ステージング環境用 GoogleアナリティクスのID
+	)),
+
+	//変数展開用
+	$_ = function($s){
+        return $s;
+    }
 ]
 ?>

@@ -17,11 +17,17 @@
                             <div class="org-link">
                                 <a href="/naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83">Club琉球</a>
                             </div>
-                        <blockquote>
+                            <blockquote>
                             <p><?= __d('cake', '店舗掲載をご希望の方は、下のURLからユーザー登録をお願いします。')?></p>
                         </blockquote>
                         <div class="org-link">
                             <a href="/entry/signup">新規登録</a>
+                        </div>
+                        <blockquote>
+                            <p><?= __d('cake', '店舗掲載をご希望の方は、下のURLから申し込みをお願いします。')?></p>
+                        </blockquote>
+                        <div class="org-link">
+                            <a href="<?=API['GOOGLE_FORM_KEISAI_CONTACT']?>">掲載申し込みフォームへ</a>
                         </div>
                         <blockquote>
                             <p><?= __d('cake', '既に会員の方は下のURLからログインしてください。')?></p>

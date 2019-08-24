@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 8 月 15 日 22:07
+-- Generation Time: 2019 年 8 月 23 日 00:12
 -- サーバのバージョン： 5.6.42
--- PHP Version: 7.1.26
+-- PHP Version: 7.3.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -133,9 +133,9 @@ CREATE TABLE `casts` (
 --
 
 INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `holiday`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `remember_token`, `status`, `delete_flag`, `created`, `modified`) VALUES
-(1, 38, 'cast', '山田　敏子２', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '2000-02-14 00:00:00', NULL, 'blood_type1', 'constellation4', '22', 'メッセージメッセージメッセージメッセージメッセージメッセージメッセージメセージメッセー', NULL, '0ba3ed5e90b78afc0d5a901caa1c76d7e36c4ed9.jpg', '9355809fc1364bf5f28f3306c564aa27d62e0a0d.jpg', '85ed5122f6e95af18d455e0cc6b82b15a2293517.jpg', '5aca4cb44dd89079e8e5a943eefa7a0376c56168.jpg', 'f7ec8878f8b806ea30949de320f5833b5aa742d4.jpg', '015b84f204f727ec6cb23d7ed5e07e5b36fd21fa.jpg', '', '', '00002', NULL, 1, 0, '2019-03-23 16:51:25', '2019-08-03 23:59:49'),
+(1, 38, 'cast', '山田　敏子２', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '2000-02-14 00:00:00', NULL, 'blood_type1', 'constellation4', '22', 'メッセージメッセージメッセージメッセージメッセージメッセージメッセージメセージメッセー', NULL, '0ba3ed5e90b78afc0d5a901caa1c76d7e36c4ed9.jpg', 'aa58c6f495d90f42f7053a3fdeefe9d1508792d9.jpg', '58223027c4bfbf1f31839cb91519aeebee455f81.jpg', 'c49b4b37b6f6de03c7cd49119b379d6dbfee2551.jpg', '5b549191eae4ee3a10368ca69facdd331fb6ffce.jpg', '015b84f204f727ec6cb23d7ed5e07e5b36fd21fa.jpg', '', '', '00002', NULL, 1, 0, '2019-03-23 16:51:25', '2019-08-17 22:33:25'),
 (33, 38, 'cast', '鈴木　一郎', 'イチロー', 'okiyoru99@gmail.com', '$2y$10$CQjIhOficE9SZJ5lgggxVuq4cUSwZG0O9CX6WC2GWbQBdQvPBYyda', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a674a57e5e8e5a289a7ae1b294cef79b42e3d3ab.jpg', '79d52ab7a9b86eb47fef0200f1779bf72bc55719.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-07-31 19:22:54', '2019-07-31 23:30:57'),
-(35, 54, 'cast', 'なな', 'なな', 'okiyoru1@gmail.com', '$2y$10$Op0.Cgd9vufJu7f6azq53OjtUaeDXUBZJ6jsgQAq3AeywhRkPJ0j.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a3e108605eacb4c5bb871b6e4db8a7837d76be6d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-08 23:37:31', '2019-08-08 23:48:01'),
+(35, 54, 'cast', 'なな', 'なな', 'okiyoru1@gmail.com', '$2y$10$Op0.Cgd9vufJu7f6azq53OjtUaeDXUBZJ6jsgQAq3AeywhRkPJ0j.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a3e108605eacb4c5bb871b6e4db8a7837d76be6d.jpg', 'd401a3c19c54430f0639406d7859cf556a5db10d.jpg', '', '', NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-08 23:37:31', '2019-08-17 03:04:40'),
 (41, 54, 'cast', 'りおな', 'りおな', 'okiyoru99@gmail.com', '$2y$10$OeB2W0ufPZJpOKoZngWFpOrkNeFSETNOMPl/adL5DhpSrts0Cfrpe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c120ffc5a0456f7fc5ff6387110b2748a5d13e4d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-09 00:01:51', '2019-08-09 00:04:54'),
 (42, 54, 'cast', 'ゆいか', 'ゆいか', 'okiyoru99@gmail.com', '$2y$10$2ksjTbJZy//cLD.fK6rypeYmfSLPckgcNoxn.2pPLN4ovl9jIc5ae', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c2f848d69842167ee88896fc783d44ffdaf3d010.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-09 20:20:25', '2019-08-09 20:22:56'),
 (43, 54, 'cast', 'まみ', 'まみ', 'okiyoru99@gmail.com', '$2y$10$zMiLChXeQlZ1VGnNHfivTewm7eWrHxOmw24oOxd24eXzvEcshFf/C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'fa2855911bc0a7a8f5fdc76ac35a8e40d7ed3a84.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-09 20:23:37', '2019-08-09 20:25:11'),
@@ -355,7 +355,7 @@ INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `
 (2, 39, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (101, 54, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, '時間相談に応じます 1日2～3時間の勤務もOKです', '20', '30', '※初心者大歓迎', '土', '	勤務日数はおまかせします。', '体験入店あり,日払い可,レンタル衣装あり,ノルマなし,未経験者歓迎,各種バックあり,送迎あり,経験者優遇,ドレス・制服貸与あり', '浦添エリアの人気店!! 【体験保証時給3,000円】 未経験者大歓迎!在籍中キャストのほとんどが掛け持ちや週1～3出勤など 自分に合ったスタイルで働いております。貴女も是非「体験入店」でお試し下さい! 掛け持ちオッケー(掛け持ちの方も多数在籍してます) 即日体験入店OK、スタッフ専用駐車場完備(30台) お酒飲まなくてもOK(車で出勤して飲まずにお仕事する方も多いですよ!) 送迎もあります!', '09097874621', '0988786792', NULL, 'kaitok0502', '2019-08-07 23:56:04', '2019-08-10 14:50:33'),
 (102, 55, 'ガールズバー', 'カウンターレディ', '20:00:00', NULL, '※時間相談に応じます、３ｈ～の短時間でもOK', '18', '30', '※初心者・学生・主婦・シングルマザー大歓迎', NULL, '週１日～勤務ＯＫ、週末のみでもＯＫ', '日払い可,各種バックあり,ノルマなし,送迎あり,未経験者歓迎', '楽しく働くならここ！ まだまだオープンしたばかりのガールズバーです♪ 時給１,２００円～１,５００円以上！ 完全日払い制!! 送迎有り（中南部） お友達同士の応募、一日体験もオッケイです♪ 気軽にお問い合わせください♪＼(^o^)／', '09068653218', '', NULL, '', '2019-08-10 15:16:08', '2019-08-10 16:29:44'),
-(103, 56, NULL, NULL, NULL, NULL, '', '', '', '', NULL, '', '', '', '', '', NULL, '', '2019-08-10 16:58:23', '2019-08-12 13:54:35');
+(105, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-08-18 19:24:23', '2019-08-18 19:24:23');
 
 -- --------------------------------------------------------
 
@@ -577,11 +577,14 @@ INSERT INTO `master_role` (`id`, `role`, `role_name`, `created`, `modified`) VAL
 DROP TABLE IF EXISTS `owners`;
 CREATE TABLE `owners` (
   `id` int(11) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `image` varchar(100) DEFAULT NULL,
   `role` varchar(10) NOT NULL,
+  `tel` varchar(15) NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `area` varchar(255) DEFAULT NULL,
-  `genre` varchar(255) DEFAULT NULL,
+  `gender` int(1) NOT NULL,
+  `age` varchar(5) NOT NULL,
   `dir` varchar(255) DEFAULT NULL,
   `remember_token` varchar(64) DEFAULT NULL,
   `status` int(11) DEFAULT '0',
@@ -593,12 +596,13 @@ CREATE TABLE `owners` (
 -- テーブルのデータのダンプ `owners`
 --
 
-INSERT INTO `owners` (`id`, `role`, `email`, `password`, `area`, `genre`, `dir`, `remember_token`, `status`, `created`, `modified`) VALUES
-(1, 'owner', 't.takuma830@gmail.com', '$2y$10$IvHwLrvdmHfFQgw88nlOD.DD1jnVFy52vG.auT04dLts3W1c2xcxu', 'naha', 'cabacula', NULL, NULL, 0, '2019-03-23 10:38:14', '2019-03-23 10:38:14'),
-(57, 'owner', 'okiyoru99@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 'naha', 'snack', '00005', NULL, 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38'),
-(92, 'owner', 'okiyoru2@gmail.com', '$2y$10$K0knx7GKbgg8BIYt5sUZ7.1KSX2s2sL/GuNT5H.WalyeWiq09JF0O', 'urasoe', 'club', '00002', NULL, 1, '2019-08-07 23:50:33', '2019-08-07 23:55:25'),
-(93, 'owner', 'okiyoru3@gmail.com', '$2y$10$JQueljItW8sT42R1z2weG.Jc/z/ziO8AuoUrLXvAk9NjxQXw7hscG', 'urasoe', 'girlsbar', '00001', NULL, 1, '2019-08-10 15:10:55', '2019-08-10 15:16:07'),
-(94, 'owner', 'okiyoru1@gmail.com', '$2y$10$M68eGdvgIadmxzRw6.1EHu5gEN3fA7DShvvz1KjGTzBbR/giYsd6O', 'naha', 'cabacula', '00002', NULL, 1, '2019-08-10 16:55:43', '2019-08-10 16:58:22');
+INSERT INTO `owners` (`id`, `name`, `image`, `role`, `tel`, `email`, `password`, `gender`, `age`, `dir`, `remember_token`, `status`, `created`, `modified`) VALUES
+(1, '', NULL, 'owner', '', 't.takuma830@gmail.com', '$2y$10$IvHwLrvdmHfFQgw88nlOD.DD1jnVFy52vG.auT04dLts3W1c2xcxu', 0, '', NULL, NULL, 0, '2019-03-23 10:38:14', '2019-03-23 10:38:14'),
+(57, '', NULL, 'owner', '', 'okiyoru99@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 0, '', '00005', NULL, 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38'),
+(92, '', NULL, 'owner', '', 'okiyoru2@gmail.com', '$2y$10$K0knx7GKbgg8BIYt5sUZ7.1KSX2s2sL/GuNT5H.WalyeWiq09JF0O', 0, '', '00002', NULL, 1, '2019-08-07 23:50:33', '2019-08-07 23:55:25'),
+(93, '', NULL, 'owner', '', 'okiyoru3@gmail.com', '$2y$10$JQueljItW8sT42R1z2weG.Jc/z/ziO8AuoUrLXvAk9NjxQXw7hscG', 0, '', '00001', NULL, 1, '2019-08-10 15:10:55', '2019-08-10 15:16:07'),
+(94, '鈴木太郎', 'd42936d7112ea0ce41934e98cba8a8735bcf16c3.jpg', 'owner', '09012341234', 'okiyoru1@gmail.com', '$2y$10$M68eGdvgIadmxzRw6.1EHu5gEN3fA7DShvvz1KjGTzBbR/giYsd6O', 1, '36', '00002', NULL, 1, '2019-08-10 16:55:43', '2019-08-18 22:20:28'),
+(98, '鈴木次郎', 'e3babc50ddfc45ec880aaf82424bfa24839f92a4.jpg', 'owner', '09012341234', 'okiyoru99@gmail.com', '$2y$10$PojdyaiQojD22nYfrmObv.H3ARmAWV3PTZK.6qGkjOEE..1y7yCm6', 1, '33', '00001', NULL, 1, '2019-08-18 17:07:25', '2019-08-18 22:17:22');
 
 -- --------------------------------------------------------
 
@@ -659,7 +663,8 @@ INSERT INTO `shops` (`id`, `owner_id`, `area`, `genre`, `dir`, `name`, `top_imag
 (50, 69, 'miyakojima', 'snack', '00005', '宮古島店舗名６', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '宮古島のスナックをお探しなら宮古島店舗名６\r\n時間制・飲み放題で安心のスナックです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
 (54, 92, 'urasoe', 'club', '00001', 'ARENA -アリーナ-', 'fa897ef69c325e84d4a73e1d681e103d2de24f61.jpg', '91527b5da301b543245f4b929c8ad7d7887f12e9.jpg', 'd49f191774e3397fe75b26393f090fa3bd7b5341.jpg', '8010a4cdc60e90a6d90b33b6428624b2f49d6172.jpg', NULL, NULL, NULL, NULL, NULL, '沖縄県浦添市にある総在籍数70名を誇る県内最大級時間制クラブ。\r\nエリアNo.1クラスの実績と自信。接待向けのお店', '09097874621', '', '22:00:00', '04:00:00', '・(金・土・祝日前日)22:00～05:00 ・年中無休', '★SET料金★\r\n・御1人様	70分/10,000円\r\n・2名様以上	70分/5,000円\r\n・御延長	上記同額\r\n★指名★\r\n・本指名	1,000円\r\n・場内指名	1,000円\r\n★ドリンク★\r\n・ビール	1,000円(グラス1杯)\r\n・カクテル	各1,000円(グラス1杯)\r\n・ワイン	各1,000円(グラス1杯)\r\n★ボトル★\r\n・泡盛	3,000円～\r\n・焼酎	3,000円～\r\n・ワイン	8,000円～\r\n・ウィスキー	15,000円\r\n・シャンパン	8,000円～\r\n★VIP Room★\r\n室料	20,000円\r\n★その他★\r\n・団体	～100名まで可', 'VISA,JCB,MasterCard,AmericanExpress', NULL, '沖縄県', '浦添市', '城間3-5-1 MSシュタークビル2F', '2019-08-07 23:55:27', '2019-08-08 23:26:45'),
 (55, 93, 'urasoe', 'girlsbar', '00001', 'フェリス', '7676cf4feb6ceae2268ea8dcdb8e8b4f8df8d503.jpg', '692f892c1595fcb00f92f4e54045454af122a08a.jpg', '99f5cd8e2119337534464897a275d08f7eab2d6c.jpg', '1ff52888b3b1d3414df850e25dfd0ee95be2af55.jpg', '9563142cd343c4ddcea6787c4f2825207ee3f6ee.jpg', '582296c1dc294d3a1721f536337a5f706bf16355.jpg', NULL, NULL, NULL, 'カラオケもダーツも楽しめちゃうイベント盛りだくさんのガールズバー♡', '09068653218', '', '21:00:00', NULL, '不定休', '★ブロンズコース♡７０分♡	￥２,５００円★\r\n泡盛／かりゆし・瑞穂　酎ハイ／レモン・緑茶・ウーロン　カクテル／ピーチウーロン・カルアミルク・カシスオレンジ・カシスウーロン・カシスソーダ・モスコミュール・ジントニック・カシスミルク　ソフトドリンク/コーラ・オレンジ・ウーロン茶・緑茶\r\n★シルバーコース♡７０分♡	￥３,０００円★\r\nブロンズメニュー ＋ 泡盛／菊ブラ・久米仙・残波・残黒　ビール　焼酎／鏡月　カクテル／サングリア\r\n★ゴールドコース♡７０分♡	￥３,５００円★\r\nブロンズメニュー・シルバーメニュー ＋ 泡盛／ＶＩＰゴールド・北谷長老・琉球王朝　焼酎／二階堂・吉四六\r\n★ＳｔａｆＤｒｉｎｋ★\r\nＡＬＬ １,０００円\r\n★カラオケ１曲★\r\n２００円\r\n★歌い放題（時間内）★\r\n１,０００円\r\n★女性グールプのみ★\r\n１,０００円 ＯＦＦ\r\n★ダーツ投げ放題★\r\n５００円 \r\n★時間無制限 飲み放題★\r\n５,０００円 \r\n★単品メニュー５,０００円～有り★', 'MasterCard,VISA', NULL, '沖縄県', '浦添市', '経塚518 テナントビルてぃーだ 2F', '2019-08-10 15:16:07', '2019-08-10 15:52:53'),
-(56, 94, 'naha', 'cabacula', '00002', 'Club琉球', '103b6224731b3ad7d0247e58abee75e3424d6657.jpg', '70cf8ef198ee22f098d31c96a13b6db700085850.jpg', '5f8dc463c62d717694d2e07b5fa3254523f1bf5c.jpg', '99d384a724fb9aab1972772b18992f80b09d2c67.jpg', '3ba90b2743d559bc1c2623b85a4b4d43bd1741ec.jpg', '75d5ca39e15124b9802aab78b64bccc07fd387c1.jpg', '6ff046e9668601d80c548fb6edead4f6e0414964.jpg', NULL, NULL, '那覇市松山にGRANDOPEN!!\r\nKING of RESORT!! CLUB 琉球', '0989757973', '', '21:00:00', NULL, '月曜定休日', '★1time 60min★\r\n・保証	５，０００円\r\n・マンツーマン	８，０００円\r\n・ＶＩＰ	１，０００円\r\n・指名料	１，０００円\r\n・場内指名料	１，０００円\r\n・ＳＣ	１５％　（税込）\r\n・PRIVATE ROOM　１５，０００円（ＳＣ　２５％　税込）\r\n・SECRET ROOM　２０，０００円（ＳＣ　２５％　税込）\r\n★Free Drink★\r\n・MAIN Floor	ビール、泡盛、焼酎、ソフトドリンク各種\r\n・VIP Floor	ビール、ハイボール、泡盛(古酒)、焼酎、ソフトドリンク各種', 'MasterCard,VISA,JCB,AmericanExpress,Diners', NULL, '沖縄県', '那覇市', '松山2-9-17 カーニバルビル4F 5F', '2019-08-10 16:58:22', '2019-08-10 17:21:44');
+(56, 94, 'naha', 'cabacula', '00002', 'Club琉球', 'dca447d4540d4441ef6f0a7495ebea7d983f00e3.jpg', '70cf8ef198ee22f098d31c96a13b6db700085850.jpg', '5f8dc463c62d717694d2e07b5fa3254523f1bf5c.jpg', '99d384a724fb9aab1972772b18992f80b09d2c67.jpg', '3ba90b2743d559bc1c2623b85a4b4d43bd1741ec.jpg', '75d5ca39e15124b9802aab78b64bccc07fd387c1.jpg', '6ff046e9668601d80c548fb6edead4f6e0414964.jpg', '', '', '那覇市松山にGRANDOPEN!!\r\nKING of RESORT!! CLUB 琉球', '0989757973', '', '21:00:00', NULL, '月曜定休日', '★1time 60min★\r\n・保証	５，０００円\r\n・マンツーマン	８，０００円\r\n・ＶＩＰ	１，０００円\r\n・指名料	１，０００円\r\n・場内指名料	１，０００円\r\n・ＳＣ	１５％　（税込）\r\n・PRIVATE ROOM　１５，０００円（ＳＣ　２５％　税込）\r\n・SECRET ROOM　２０，０００円（ＳＣ　２５％　税込）\r\n★Free Drink★\r\n・MAIN Floor	ビール、泡盛、焼酎、ソフトドリンク各種\r\n・VIP Floor	ビール、ハイボール、泡盛(古酒)、焼酎、ソフトドリンク各種', 'MasterCard,VISA,JCB,AmericanExpress,Diners', NULL, '沖縄県', '那覇市', '松山2-9-17 カーニバルビル4F 5F', '2019-08-10 16:58:22', '2019-08-18 16:25:04'),
+(63, 98, 'ginowan', 'girlsbar', '00001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-08-18 19:24:23', '2019-08-18 19:24:23');
 
 -- --------------------------------------------------------
 
@@ -926,7 +931,7 @@ ALTER TABLE `event_types`
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
 
 --
 -- AUTO_INCREMENT for table `master_role`
@@ -938,13 +943,13 @@ ALTER TABLE `master_role`
 -- AUTO_INCREMENT for table `owners`
 --
 ALTER TABLE `owners`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `shops`
 --
 ALTER TABLE `shops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT for table `shop_infos`

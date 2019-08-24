@@ -371,6 +371,7 @@ return [
 		'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4', // ステージング環境用 GoogleマップのAPIキー
 		'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-146237049-1', // ステージング環境用 GoogleアナリティクスのAPIキー
 		'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // ステージング環境用 GoogleアナリティクスのID
+		'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/bZ3AQhHPZLH2Q7Dy6', // Googleフォーム 掲載申し込みフォーム
 	)),
 
 	//変数展開用

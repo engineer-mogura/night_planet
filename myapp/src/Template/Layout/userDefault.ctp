@@ -31,6 +31,7 @@
   <?= $this->Html->script('fullcalendar_locale/ja.js') ?><!-- fullcalendar-3.9.0 -->
   <?= $this->Html->script(API['GOOGLE_MAP_APIS']) ?>
   <?= $this->Html->script("load-image.all.min.js") ?><!-- 画像の縦横を自動調整してくれるプラグインExif情報関連 -->
+  <?= $this->Html->script("jquery.marquee.js") ?><!-- 縦方向スクロールしてくれるプラグイン -->
   <script src='/PhotoSwipe-master/dist/photoswipe.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
@@ -41,6 +42,7 @@
   <?= $this->Html->css('okiyoru.css') ?>
   <?= $this->Html->css('jquery.notifyBar.css') ?>
   <?= $this->Html->css('fullcalendar.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
+  <?= $this->Html->css('jquery.marquee.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
 
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
@@ -77,10 +79,10 @@
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
   <div class="nav-header-cron-dummy"></div>
-  <nav id="nav-header-menu" class="nav-header-menu">
+  <nav id="nav-header-menu" class="nav-header-menu nav-opacity">
     <div class="nav-wrapper">
       <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
-      <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001']." finds" ?><?=!empty($areaTitle)?'<span class="area-logo"> '.$areaTitle.'</span><span class="area-logo-tail">エリア</span>':"" ?></a>
+      <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'] ?><?=!empty($areaTitle)?'<span class="area-logo"> '.$areaTitle.'</span>':"" ?></a>
       <ul class="right">
         <li><a data-target="modal-search" class="modal-trigger"><i class="material-icons">search</i></a></li>
         <li><a data-target="modal-login" class="modal-trigger"><i class="material-icons">vpn_key</i></a></li>
@@ -94,41 +96,43 @@
   <?= $this->fetch('content') ?>
   <footer class="page-footer">
     <div class="row">
-      <div class="col s12 l6">
-        <h5 class="white-text">Links</h5>
-        <ul class="collection">
-          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
-          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">event_available</i><?= USER_LM['002'] ?></a></li>
-          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/"><i class="material-icons">home</i><?= USER_LM['004'] ?></a></li>
-        </ul>
-      </div>
-      <div class="col s12 l6">
-        <h5 class="white-text">Links</h5>
-        <ul class="collection">
-          <li><a class="footer-item collection-item" href="#!"><i class="material-icons">cloud</i><?= USER_LM['005'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/entry/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/entry/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/entry/privacy_policy"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/entry/terms"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/entry/member_ship"><i class="material-icons">star_half</i><?= USER_LM['006'] ?></a></li>
-          <li><a class="footer-item collection-item" href="/owner/owners/login"><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?></a></li>
-        </ul>
-      </div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><span><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></span><a class="" href="#!"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">event_available</i><?= USER_LM['002'] ?><a class="" href="#!"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">trending_up</i><?= USER_LM['003'] ?><a class="" href="#!"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">home</i><?= USER_LM['004'] ?><a class="" href="/"></a></div></div>
+    </div>
+    <div class="row">
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">cloud</i><?= USER_LM['005'] ?><a class="" href="#!"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?><a class="" href="/entry/faq"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?><a class="" href="/entry/contract"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?><a class="" href="/entry/privacy_policy"></a></div></div>
+    </div>
+    <div class="row">
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable"><i class="material-icons">description</i><?= COMMON_LM['005'] ?><a class="" href="/entry/terms"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable"><i class="material-icons">star_half</i><?= USER_LM['006'] ?><a class="" href="/entry/member_ship"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable"><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?><a class="" href="/owner/owners/login"></a></div></div>
+    </div>
+    <div class="row">
       <div class="col s12">
-        <span class="grey-text text-lighten-3"><?= CATCHCOPY ?></span>
-        <span><?= $this->Html->link(__('　　　　'), ['controller' => 'developer/Developers', 'action' => 'index']) ?></span>
+        <div class="card-panel">
+          <span class="grey-text"><?= CATCHCOPY ?></span>
+          <span><?= $this->Html->link(__('　　　　'), ['controller' => 'developer/Developers', 'action' => 'index']) ?></span>
+        </div>
       </div>
     </div>
     <div class="footer-copyright oki-footer-copyright">
       <?= LT['002']; ?>
       <?=(2018-date('Y'))?' - '.date('Y'):'';?> <?= LT['003'] ?>
     </div>
+    <!-- START #return_top -->
     <div id="return_top">
-      <a href="#body" class="red"><i class="medium material-icons return_top">keyboard_arrow_up</i></a>
-    </div><!-- END #return_top -->
+      <div class="fixed-action-btn">
+        <a class="btn-floating btn-large black">
+          <i class="large material-icons">keyboard_arrow_up</i>
+        </a>
+      </div>
+    </div>
+    <!-- END #return_top -->
   </footer>
-
-
 </body>
 </html>

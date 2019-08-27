@@ -3,12 +3,7 @@
 		<?= $this->element('top-slider'); ?>
 	</div>
 <div id="area" class="container">
-	<ul class="collection">
-		<li class="collection-item dismissable">
-			<div>【<?= LT['001']?>】の運営を開始しました！<a href="#!" class="secondary-content"><span class="notice">お知らせ一覧</span><i class="material-icons">chevron_right</i></a>
-			</div>
-		</li>
-	</ul>
+	<?= $this->element('infoOffice'); ?>
 	<div class="row">
 		<?= $this->element('genreCard'); ?>
 	</div>

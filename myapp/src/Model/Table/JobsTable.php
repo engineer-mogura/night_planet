@@ -137,7 +137,7 @@ class JobsTable extends Table
 
         $validator
             ->scalar('pr')
-            ->maxLength('pr', 200,'PR文は200文字以内にしてください。')
+            ->maxLength('pr', 400,'PR文は400文字以内にしてください。')
             ->allowEmptyString('pr');
 
         $validator

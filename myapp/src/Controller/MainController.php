@@ -47,7 +47,9 @@ class MainController extends AppController
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX']);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
-        $this->set(compact('selectList', 'diarys', 'notices'));
+        $insta_data = $this->Util->getInstagram(null, API['INSTAGRAM_USER_NAME']
+            , API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
+        $this->set(compact('selectList', 'diarys', 'notices', 'insta_data'));
     }
 
     public function search()

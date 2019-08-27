@@ -149,12 +149,19 @@
         </div>
       </div>
     </div>
-    <div Class="row">
-      <div class="col s12">
-        <p>下のインスタはサンプルで載せてます。</p>
-        <!-- InstaWidget -->
-        <a href="https://instawidget.net/v/user/jkt48" id="link-fd6a4c05101ff9b714c1ebacd9c9ef008eb5a3b78141603471fbfbca0a1d30f2">@jkt48</a>
-        <script src="https://instawidget.net/js/instawidget.js?u=fd6a4c05101ff9b714c1ebacd9c9ef008eb5a3b78141603471fbfbca0a1d30f2&width=350px"></script>
+    <div class="row">
+      <div class="or-header-wrap card-panel red lighten-3">
+        <span class="or-header">インスタ</span>
+      </div>
+      <?php $insta_data['media_count'] == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
+      <div class="gallery-box">
+        <div class="my-gallery">
+          <?php foreach ($insta_data['media']['data'] as $key => $value): ?>
+                <figure>
+                  <a href="<?=$value['media_url']?>" rel="group" data-size="800x1000"><img src="<?=$value['media_url']?>" alt="<?=$value['caption']?>" /></a>
+                </figure>
+          <?php endforeach; ?>
+        </div>
       </div>
     </div>
     <div class="row notice-list">
@@ -163,13 +170,15 @@
       </div>
       <?php if (count($shop->shop_infos) > 0) { ?>
         <div class="card notice-card">
-      <?php foreach ($nImageList as $key => $value): ?>
-      <?= $value == reset($nImageList) ?'<div class="my-gallery">':""?>
-          <figure class="col <?=(count($nImageList)==1?'s12 m12 l12':(count($nImageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-            <a href="<?=$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.$value['name']?>" alt="写真の説明でーす。" /></a>
-          </figure>
-      <?= $value == end($nImageList) ?'</div>':""?>
-      <?php endforeach; ?>
+          <div class="gallery-box">
+            <div class="my-gallery">
+              <?php foreach ($nImageList as $key => $value): ?>
+                <figure>
+                  <a href="<?=$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.$value['name']?>" data-size="800x1000"><img width="100%" src="<?=$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+                </figure>
+              <?php endforeach; ?>
+            </div>
+          </div>
           <div class="card-content">
           <p class="right-align"><?=$shop->shop_infos[0]->ymd_created?></p>
           <p class="title">
@@ -197,16 +206,16 @@
       <div class="or-header-wrap card-panel red lighten-3">
         <span class="or-header">ギャラリー</span>
       </div>
-      <?php $isGalleryExists = false; ?>
-        <?php foreach ($imageList as $key => $value): ?>
-          <?= $value == reset($imageList) ?'<div class="gallery-box"><div class="my-gallery">':""?>
-            <figure class="col <?=(count($imageList)==1?'s12 m12 l12':(count($imageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <a href="<?=$shopInfo['image_path'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['image_path'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
-            </figure>
-          <?= $value == end($imageList) ?'</div></div>':""?>
-          <?php $isGalleryExists = true; ?>
-        <?php endforeach; ?>
-        <?= $isGalleryExists ? "" : '<p class="col">ギャラリーの登録はありません。</p>';?>
+      <?= count($imageList) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
+      <div class="gallery-box">
+        <div class="my-gallery">
+          <?php foreach ($imageList as $key => $value): ?>
+              <figure>
+                <a href="<?=$shopInfo['image_path'].DS.$value['name']?>" data-size="800x1000"><img width="100%" src="<?=$shopInfo['image_path'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+              </figure>
+          <?php endforeach; ?>
+        </div>
+      </div>
     </div>
     <div class="row">
       <div class="col s12">
@@ -289,9 +298,9 @@
           </tr>
           <tr>
             <th align="center">PR</th>
-            <td><?php if(!empty($shop->jobs[0]->pr)) {
-              echo ($shop->jobs[0]->pr);
-            } else {echo ('-');}?>
+            <td>
+              <?= !empty($shop->jobs[0]->pr) ? 
+                $this->Text->autoParagraph($shop->jobs[0]->pr): h('-') ?>
             </td>
           </tr>
         </tbody>

@@ -91,17 +91,15 @@
         <div class="or-header-wrap card-panel red lighten-3">
           <span class="or-header"><?=$cast->nickname?>さんのギャラリー</span>
         </div>
+        <?php count($imageList) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
         <div class="card gallery-card">
-          <?php $isGalleryExists = false; ?>
-          <?php foreach ($imageList as $key => $value): ?>
-            <?= $value == reset($imageList) ?'<div class="my-gallery">':""?>
-              <figure class="col <?=(count($imageList)==1?'s12 m12 l12':(count($imageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-                <a href="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
-              </figure>
-            <?= $value == end($imageList) ?'</div>':""?>
-            <?php $isGalleryExists = true; ?>
-          <?php endforeach; ?>
-          <?= $isGalleryExists ? "" : '<p class="col">ギャラリーの登録はありません。</p>';?>
+          <div class="my-gallery">
+            <?php foreach ($imageList as $key => $value): ?>
+                <figure>
+                  <a href="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x1000"><img src="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+                </figure>
+            <?php endforeach; ?>
+          </div>
         </div>
       </div>
       <div class="row diary-list">
@@ -110,13 +108,13 @@
         </div>
         <?php if (count($cast->diarys) > 0) { ?>
           <div class="card diary-card">
-        <?php foreach ($dImageList as $key => $value): ?>
-        <?= $value == reset($dImageList) ?'<div class="my-gallery">':""?>
-            <figure class="col <?=(count($dImageList)==1?'s12 m12 l12':(count($dImageList)==2?'s6 m6 l6':'s4 m4 l4'))?>">
-              <a href="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$cast->diarys[0]->dir.DS.$value['name']?>" data-size="800x600"><img width="100%" src="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$cast->diarys[0]->dir.DS.$value['name']?>" alt="写真の説明でーす。" /></a>
-            </figure>
-        <?= $value == end($dImageList) ?'</div>':""?>
-        <?php endforeach; ?>
+            <div class="my-gallery">
+              <?php foreach ($dImageList as $key => $value): ?>
+                  <figure>
+                    <a href="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$cast->diarys[0]->dir.DS.$value['name']?>" data-size="800x1000"><img width="100%" src="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$cast->diarys[0]->dir.DS.$value['name']?>" alt="写真の説明でーす。" /></a>
+                  </figure>
+              <?php endforeach; ?>
+            </div>
             <div class="card-content">
             <p class="right-align"><?=$cast->diarys[0]->ymd_created?></p>
             <p class="title">

@@ -74,7 +74,7 @@
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
   <div class="nav-header-cron-dummy"></div>
-  <nav id="nav-header-menu" class="nav-header-menu">
+  <nav id="nav-header-menu" class="nav-header-menu nav-opacity">
     <div class="nav-wrapper">
       <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
       <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'] ?></a>
@@ -91,9 +91,15 @@
       <?= LT['002']; ?>
       <?=(2018-date('Y'))?' - '.date('Y'):'';?> <?= LT['003'] ?>
     </div>
+    <!-- START #return_top -->
     <div id="return_top">
-      <a href="#body" class="red"><i class="medium material-icons return_top">keyboard_arrow_up</i></a>
-    </div><!-- END #return_top -->
+      <div class="fixed-action-btn">
+        <a class="btn-floating btn-large black">
+          <i class="large material-icons">keyboard_arrow_up</i>
+        </a>
+      </div>
+    </div>
+    <!-- END #return_top -->
   </footer>
 </body>
 </html>

@@ -11,7 +11,7 @@ return [
 
 	// プロパティ設定
 	define('PROPERTY', array(
-		'NEW_INFO_MAX'=>'10', // 新着情報関連の表示数
+		'NEW_INFO_MAX'=>'5', // 新着情報関連の表示数
 		'FILE_MAX'=>'8', // アップロードファイル数
 	)),
 
@@ -58,9 +58,9 @@ return [
 
 	// ラベル定数 label title
 	define('LT', array(
-		'001'=>'フィンズ',
+		'001'=>'NightPlanet<span style="font-size: small"> ナイプラ</span>',
 		'002'=>'Copyright 2018',
-		'003'=>'フィンズ All Rights Reserved.',
+		'003'=>'NightPlanet ナイプラ All Rights Reserved.',
 		'004'=>'管理画面',
 		'005'=>'<span class="area-logo-tail">☽ナイト検索☽</span>',
 		'006'=>'オーナーログイン画面',
@@ -132,7 +132,7 @@ return [
 		'007'=>'ログアウト',
 	)),
 
-	define('CATCHCOPY','【フィンズ】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。(\※ソープ、デリヘル等の風俗情報を除く)。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。更に店舗ごとに多彩なクーポン券などご用意しておりますのでお店に行く前に検索してクーポン券があるのかチェックしてみるのもいいでしょう。'),
+	define('CATCHCOPY','【NightPlanet<span style="font-size: small"> ナイプラ</span>】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。(※ソープ、デリヘル等の風俗情報を除く)。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。更に店舗ごとに多彩なクーポン券などご用意しておりますのでお店に行く前に検索してクーポン券があるのかチェックしてみるのもいいでしょう。'),
 
 	// 所属エリアリスト
 	define('AREA', array(
@@ -372,6 +372,9 @@ return [
 		'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-146237049-1', // ステージング環境用 GoogleアナリティクスのAPIキー
 		'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // ステージング環境用 GoogleアナリティクスのID
 		'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/bZ3AQhHPZLH2Q7Dy6', // Googleフォーム 掲載申し込みフォーム
+		'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+		'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
+		'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
 	)),
 
 	//変数展開用

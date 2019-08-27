@@ -517,7 +517,11 @@ function castImageDeleteBtn(form, obj){
             console.log(this);
             //alert("chip.select");
         });
-
+        // nav {
+        //     background-color: rgba(0, 0, 0, 0.55);
+        //     color: #fff;
+        //     /* background-color: #3e3e3e; */
+        // }
         /** 下にスクロールでヘッダー非表示・上にスクロールでヘッダー表示 */
         $(function() {
             var $win = $(window),
@@ -528,9 +532,15 @@ function castImageDeleteBtn(form, obj){
             $($win).on('load scroll',function() {
                 var value = $(this).scrollTop();
                 if ( value > startPos && value > headerHeight ) {
-                $header.css('top', '-' + headerHeight + 'px');
+                    $header.css('top', '-' + headerHeight + 'px');
                 } else {
-                $header.css('top', '0');
+                    $header.css('top', '0');
+                }
+                // ヘッダーを半透明にするかしないか
+                if(value == 0) {
+                    $('nav').removeClass('nav-opacity');
+                } else {
+                    $('nav').addClass('nav-opacity');
                 }
                 startPos = value;
             });
@@ -620,6 +630,7 @@ function initializeUser() {
     }else{
         $('.search-result-card').addClass('horizontal');
     }
+
     $(window).resize(function(){
         //windowの幅をxに代入
         var x = $(window).width();
@@ -631,10 +642,57 @@ function initializeUser() {
             $('.search-result-card').addClass('horizontal');
         }
     });
+    $("#marquee").marquee({
+        loop: -1
+        // 初期時
+        // , init: function ($marquee, options){
+        //     if( $marquee.is("#marquee2") ) options.yScroll = "bottom";
+        // }
+        // メッセージ切替表示前
+        , beforeshow: function ($marquee, $li){
+            var $author = $li.find(".author");
+            if( $author.length ){
+                $("#marquee-author").html("<span style='display:none;'>" + $author.html() + "</span>").find("> span").fadeIn(850);
+            }
+        }
+        // メッセージ表示切替時（上から下にスライド表示された時）
+        , show: function (){
+        }
+        // メッセージスクロール完了後（スライド表示されたメッセージが左方向へすべてスクロールされた時）
+        , aftershow: function ($marquee, $li){
+            // find the author
+            var $author = $li.find(".author");
+            // hide the author
+            if( $author.length ) $("#marquee-author").find("> span").fadeOut(250);
+        }
+    });
     /* トップ画面 START */
     if($("#top").length) {
         // 検索ボタン押した時
         commonSearch(false);
+
+        var options = [
+            // {selector: '#staggered-test', offset: 50, callback: function(el) {
+            //   Materialize.toast("This is our ScrollFire Demo!", 1500 );
+            // } },
+            // {selector: '#staggered-test', offset: 205, callback: function(el) {
+            //   Materialize.toast("Please continue scrolling!", 1500 );
+            // } },
+            // {selector: '#slide-out', offset: 400, callback: function(el) {
+            //     Materialize.showStaggeredList($(el));
+            // } },
+            {selector: '#shop-new-notice', offset: 400, callback: function(el) {
+                Materialize.showStaggeredList($(el));
+            } },
+            {selector: '#cast-new-diary', offset: 400, callback: function(el) {
+            Materialize.showStaggeredList($(el));
+            } },
+                // {selector: '#staggered-test', offset: 500, callback: function(el) {
+            //   Materialize.fadeInImage($(el));
+            // } }
+          ];
+          Materialize.scrollFire(options);
+
     }
     /* トップ画面 END */
 
@@ -649,6 +707,24 @@ function initializeUser() {
     if($("#genre").length) {
         // 検索ボタン押した時
         commonSearch(false);
+        var options = [
+            // {selector: '#staggered-test', offset: 50, callback: function(el) {
+            //   Materialize.toast("This is our ScrollFire Demo!", 1500 );
+            // } },
+            // {selector: '#staggered-test', offset: 205, callback: function(el) {
+            //   Materialize.toast("Please continue scrolling!", 1500 );
+            // } },
+            {selector: '#slide-out', offset: 400, callback: function(el) {
+                Materialize.showStaggeredList($(el));
+            } },
+            {selector: '#search', offset: 400, callback: function(el) {
+                Materialize.showStaggeredList($(el));
+            } },
+            // {selector: '#staggered-test', offset: 500, callback: function(el) {
+            //   Materialize.fadeInImage($(el));
+            // } }
+          ];
+          Materialize.scrollFire(options);
     }
     /* ジャンル画面 END */
 
@@ -2100,14 +2176,10 @@ function initializeShop() {
                         })
                         // 画像表示するグリッドを決定する
                         if(images.length > 0) {
-                            // 画像表示するグリッド,高さを決定する
-                            var colClass = "";
-                            images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
-                            colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
                             var figure = $(diaryCard).find('figure');
                             var imgClass = "";
                             $.each(images, function(key, value) {
-                                var cloneFigure = $(figure).clone(true).removeClass().addClass(colClass).insertAfter(figure);
+                                var cloneFigure = $(figure).clone(true).removeClass().insertAfter(figure);
                                 $(cloneFigure).find('a').attr({'href': value['path']});
                                 $(cloneFigure).find('img').attr({'src': value['path']});
                             })
@@ -2228,14 +2300,10 @@ function initializeShop() {
                         })
                         // 画像表示するグリッドを決定する
                         if(images.length > 0) {
-                            // 画像表示するグリッド,高さを決定する
-                            var colClass = "";
-                            images.length == 1 ? colClass = 'col s12 m12 l12' : images.length == 2 ?
-                            colClass = 'col s6 m6 l6' : colClass = 'col s4 m4 l4';
                             var figure = $(noticeCard).find('figure');
                             var imgClass = "";
                             $.each(images, function(key, value) {
-                                var cloneFigure = $(figure).clone(true).removeClass().addClass(colClass).insertAfter(figure);
+                                var cloneFigure = $(figure).clone(true).removeClass().insertAfter(figure);
                                 $(cloneFigure).find('a').attr({'href': value['path']});
                                 $(cloneFigure).find('img').attr({'src': value['path']});
                             })

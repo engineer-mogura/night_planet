@@ -108,7 +108,7 @@
           <tr>
             <th align="center">PR</th>
             <td><?php if(!empty($job->pr)) {
-              echo ($job->pr);
+              echo ($this->Text->autoParagraph($job->pr));
             } else {echo ('登録されていません。');}?>
             </td>
           </tr>
@@ -123,6 +123,7 @@
   <form id="save-job" name="save_job" method="post" action="/owner/shops/save_job" style="display:none;">
     <div style="display:none;">
       <input type="hidden" name="_method" value="POST">
+      <input type="hidden" name="id" value="">
       <input type="hidden" name="treatment" value="">
     </div>
     <div class="row">
@@ -215,7 +216,7 @@
     </div>
     <div class="row">
       <div class="input-field col s12 m10 l12">
-        <textarea id="pr" class="materialize-textarea" name="pr" data-length="200"></textarea>
+        <textarea id="pr" class="materialize-textarea" name="pr" data-length="400"></textarea>
         <label for="pr">PR文</label>
       </div>
     </div>

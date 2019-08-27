@@ -199,7 +199,13 @@ class AreaController extends AppController
         }
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
-        $this->set(compact('shop','shopInfo','sharer','imageList','nImageList', 'credits','creditsHidden'));
+        $insta_user_name = 't.a.k.u.m.a_';
+        // インスタ情報を取得
+        $tmp_insta_data = $this->Util->getInstagram($insta_user_name, null
+        , API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
+        $insta_data = $tmp_insta_data['business_discovery'];
+        $this->set(compact('shop','shopInfo','sharer','imageList'
+            ,'nImageList', 'credits','creditsHidden','insta_data'));
         $this->render();
     }
 

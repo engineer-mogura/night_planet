@@ -561,6 +561,44 @@ class UtilComponent extends Component
         return $result;
     }
 
+   /**
+     * インスタAPIにアクセスし情報を取得する処理
+     *
+     * @param [type] $insta_user_name
+     * @param [type] $insta_business_name
+     * @param [type] $insta_business_id
+     * @param [type] $access_token
+     * @return $instagram_data
+     */
+    public function getInstagram($insta_user_name = null, $insta_business_name = null, $insta_business_id, $token) {
+
+        $instagram_business_id = $insta_business_id; //ここにInstagramビジネスアカウントIDを入力してください。
+        $access_token = $token; //ここに3段階目のアクセストークンを入力してください。
+        $target_user = $insta_user_name; //ここに取得したいInstagramビジネスアカウントのユーザー名を入力してください。https://www.instagram.com/nightplanet91/なので「nightplanet91」がユーザー名になります
+
+        //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
+        if(!empty($target_user)) {
+            $query = 'business_discovery.username('.$target_user.'){id,name,username,followers_count,media_count,ig_id,media{caption,media_url,media_type,like_count,comments_count,timestamp,id}}';
+        }
+        //自分のアカウントの画像が取得できればOKな場合は$queryを以下のようにしてください。
+        if(!empty($insta_business_name)) {
+            $query = 'name,media{caption,like_count,media_url,permalink,timestamp,username}&access_token='.$access_token;
+        }
+        $instagram_api_url = 'https://graph.facebook.com/v3.3/';
+        $target_url = $instagram_api_url.$instagram_business_id."?fields=".$query."&access_token=".$access_token;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $target_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $instagram_data = curl_exec($ch);
+        curl_close($ch);
+
+        $insta_data = json_decode($instagram_data, true);
+
+        return $insta_data;
+    }
+
     /**
      * ログを加工してセットする
      *

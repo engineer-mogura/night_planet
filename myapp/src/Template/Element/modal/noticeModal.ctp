@@ -70,7 +70,7 @@
 				<div class="notice-card hide">
 					<div class="my-gallery">
 						<figure class="col s4 m4 l3 hide">
-							<a href="" data-size="800x600"><img width="100%" src="" alt="写真の説明でーす。" /></a>
+							<a href="" data-size="800x1000"><img width="100%" src="" alt="写真の説明でーす。" /></a>
 						</figure>
 					</div>
 					<div class="card-content">

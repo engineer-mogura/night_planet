@@ -57,7 +57,15 @@ span.area-logo-tail {
 .breadcrumbs-tail {
   pointer-events: none;
 }
-footer ul.collection li{
+.page-footer {
+  padding-top: 20px;
+  color: initial;
+  background-color: #3e3e3e;
+}
+.page-footer .card-panel {
+  padding: 10px;
+}
+/* footer ul.collection li{
   border-style: solid;
   border-width: 1px;
 }
@@ -68,7 +76,7 @@ ul > li > a.footer-item.collection-item{
 footer i.material-icons{
   vertical-align: bottom;
     margin-right: 10px;
-}
+} */
 .footer-copyright.oki-footer-copyright{
   display: block;
   text-align: -webkit-center;
@@ -91,6 +99,41 @@ span.notice {
     vertical-align: super;
 }
 
+/* お知らせバー START */
+#info-office > .col {
+  padding: 0;
+}
+
+#info-office ul {
+  display: block;
+  margin: 0;
+  border: none;
+  list-style: none;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  width: 100%;
+  height: 50px;
+  -webkit-box-sizing: border-box;
+  background-color: initial;
+  box-sizing: border-box;
+}
+#info-office ul li {
+  /* required styles */
+  position: absolute;
+  top:-999em;
+  left:0;
+  display:table;
+  width:100%;
+  white-space:nowrap; /* keep all text on a single line */
+  /* optional styles for appearance */
+  padding:10px 0;
+  margin:0;
+  height:48px;
+  vertical-align:middle;
+}
+/* お知らせバー END */
+
 /* ヘッダー固定 START */
 nav#nav-header-menu {
   position: fixed;
@@ -103,6 +146,13 @@ nav#nav-header-menu {
 div.nav-header-cron-dummy {
   height: 64px;
   width: 100%;
+}
+nav.nav-opacity {
+  background-color: rgba(0, 0, 0, 0.55);
+}
+nav {
+  color: #fff;
+  background-color: #3e3e3e;
 }
 /* ヘッダー固定 END */
 
@@ -121,7 +171,7 @@ div.nav-header-cron-dummy {
     text-decoration: none;
     background: #b69e84;
     border-radius: 50%;
-    opacity: 0.6;
+    opacity: 0.3;
 }
 /* トップへスクロールボタン END */
 
@@ -279,8 +329,6 @@ form .error-message {
   }
 .my-gallery figure{
   margin:0;
-  width: 100% !important;
-  height: auto !important;
 }
 .my-gallery figure.col{
   padding:initial;
@@ -416,7 +464,7 @@ table th{
 table td{
   text-align: left;
   width: 70%;
-  text-align: center;
+  /*text-align: center;*/
   /*background-color: #eee;*/
   padding: 10px 5px;
 }
@@ -647,6 +695,12 @@ textarea::-webkit-scrollbar {
   table.tel-table {
     margin-top: 0px;
   }
+
+  .sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+  }
 }
 
 @media only screen and (min-width: 600px) and (max-width: 992px) {
@@ -672,6 +726,39 @@ textarea::-webkit-scrollbar {
 }
 
 @media only screen and (max-width: 600px) {
+
+  #info-office > .col {
+    padding: 0;
+  }
+
+  #info-office ul {
+    display: block;
+    margin: 0;
+    border: none;
+    list-style: none;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    width: 100%;
+    height: 50px;
+    -webkit-box-sizing: border-box;
+    background-color: initial;
+    box-sizing: border-box;
+  }
+  #info-office ul li {
+    /* required styles */
+    position: absolute;
+    top:-999em;
+    left:0;
+    display:table;
+    width:100%;
+    white-space:nowrap; /* keep all text on a single line */
+    /* optional styles for appearance */
+    padding:10px 0;
+    margin:0;
+    height:48px;
+    vertical-align:middle;
+  }
 
 }
 

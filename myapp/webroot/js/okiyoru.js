@@ -69,36 +69,54 @@ function crearOwnerEvents() {
  * ショップ画面のイベントクリア
  */
 function crearShopEvents() {
+    /** トップ画像タブ START */
     $(document).off('click', '.top-image-changeBtn');
     $(document).off('click', '.top-image-saveBtn');
     $(document).off('click', '.top-image-deleteBtn');
+    /** トップ画像タブ END */
+    /** キャッチコピータブ START */
     $(document).off('click', '.catch-changeBtn');
     $(document).off('click', '.catch-saveBtn');
     $(document).off('click', '.catch-deleteBtn');
+    /** キャッチコピータブ END */
+    /** クーポンタブ START */
     $(document).off('click', '.coupon-changeBtn');
     $(document).off('click', '.coupon-addBtn');
     $(document).off('click', '.coupon-saveBtn');
     $(document).off('click', '.check-coupon-group');
     $(document).off('change', '.coupon-switchBtn');
     $(document).off('click', '.coupon-deleteBtn');
+    /** クーポンタブ END */
+    /** キャストタブ START */
     $(document).off('click', '.cast-changeBtn');
     $(document).off('click', '.cast-addBtn');
     $(document).off('click', '.cast-saveBtn');
     $(document).off('click', '.check-cast-group');
     $(document).off('change', '.cast-switchBtn');
     $(document).off('click', '.cast-deleteBtn');
+    /** キャストタブ END */
+    /** 店舗情報タブ START */
     $(document).off('click', '.tenpo-changeBtn');
     $(document).off('click', '.tenpo-saveBtn');
+    /** 店舗情報タブ END */
+    /** 店舗ギャラリータブ START */
     $(document).off('click', '.gallery-deleteBtn');
     $(document).off('change', '#image-file');
     $(document).off('click', '.gallery-saveBtn');
     $(document).off('click', '.gallery-chancelBtn');
+    /** 店舗ギャラリータブ END */
+    /** 求人情報タブ START */
     $(document).off('click', '.jobModal-callBtn');
     $(document).off('click','.chip-credit');
     $(document).off('click', '.job-changeBtn');
     $(document).off('click', '.job-saveBtn');
     $(document).off('click','.chip-treatment');
-    /** お知らせ画面 */
+    /** 求人情報タブ END */
+    /** SNSタブ START */
+    $(document).off('click', '.sns-changeBtn');
+    $(document).off('click', '.sns-saveBtn');
+     /** SNSタブ END */
+   /** お知らせ画面 */
     $(document).off('change', '#title, #content, #image-file');
     $(document).off('change', '#modal-title, #modal-content, #modal-image-file');
     $(document).off('change', '#image-file');
@@ -1721,6 +1739,86 @@ function initializeShop() {
         });
 
     }
+    /* 店舗情報 画面 END */
+
+    /* SNS 関連処理 START */
+    // SNS 変更、やめるボタン押した時
+    $(document).on("click", ".sns-changeBtn",function() {
+        $("html,body").animate({scrollTop:0});
+
+        if ($('#save-sns').css('display') == 'block') {
+            $('#sns').find("#save-sns").hide();
+            $('#sns').find("#show-sns").show();
+        } else {
+            var sns = JSON.parse($('#sns').find('input[name="json_data"]').val());
+            if (sns != null) {
+                $('#sns').find('input[name="id"]').val(sns['id']);
+                $('#sns').find('input[name="facebook"]').val(sns['facebook']);
+                $('#sns').find('input[name="twitter"]').val(sns['twitter']);
+                $('#sns').find('input[name="instagram"]').val(sns['instagram']);
+                $('#sns').find('input[name="lineid"]').val(sns['line']);
+            }
+            $('#sns').find('#save-sns').show();
+            $('#sns').find("#show-sns").hide();
+
+            Materialize.updateTextFields(); // インプットフィールドの初期化
+
+        }
+    });
+    // TODO: snsのURLをリアルチェックするのは後で考える
+    // $(function() {
+    //     var facebook = $('form#save-sns').find("input[name='facebook']");
+    //     var twitter = $('form#save-sns').find("input[name='twitter']");
+    //     var instagram = $('form#save-sns').find("input[name='instagram']");
+    //     var line = $('form#save-sns').find("input[name='line']");
+    //     var url = "";
+    //     // facebookの入力フォームに変更があった時
+    //     $(facebook).on("input", function() {
+    //         console.log(this);
+    //         url = 'https://twitter.com/' + $(this).val();
+    //         urlCheck(url);
+    //     });
+    //     $(twitter).on("input", function() {
+    //         console.log(this);
+    //         url = 'https://twitter.com/' + $(this).val();
+    //         urlCheck(url);
+    //     });
+    //     $(instagram).on("input", function() {
+    //         console.log(this);
+    //         urlCheck(url);
+    //     });
+    //     $(line).on("input", function() {
+    //         console.log(this);
+    //         urlCheck(url);
+    //     });
+    //     function urlCheck(url) {
+    //         var jqxhr = $.ajax(url)
+    //         .done(function() {
+    //           alert( "success" );
+    //         })
+    //         .fail(function() {
+    //           alert( "error" );
+    //         })
+    //         .always(function() {
+    //           alert( "complete" );
+    //         });
+    //     }
+
+    // });
+
+    // SNS 登録ボタン押した時
+    $(document).on("click", ".sns-saveBtn",function() {
+
+        if (!confirm('こちらの内容でよろしいですか？')) {
+            return false;
+        }
+        var $form = $('form[name="save_sns"]');
+
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        ajaxCommon($form, $("#sns"));
+    });
+
     /* 店舗情報 画面 END */
 
     /* お知らせ 画面 START */

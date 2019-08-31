@@ -63,7 +63,7 @@ class ShopsController extends AppController
         if(!is_null($user = $this->Auth->user())){
             $shop = $this->Shops->find()
             ->where(['Shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
-            ->contain(['Coupons','Jobs','Casts' => function(Query $q) {
+            ->contain(['Coupons','Jobs','Snss','Casts' => function(Query $q) {
                 return $q->where(['Casts.delete_flag'=>'0']);
             }])->first();
         }
@@ -923,6 +923,73 @@ class ShopsController extends AppController
         return;
     }
 
+    /**
+     * sns 編集押下処理
+     *
+     * @return void
+     */
+    public function saveSns()
+    {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+        // レコードが存在するか
+        // レコードがない場合は、新規で登録を行う。
+        if(!$this->Snss->exists(['shop_id' =>$this->viewVars['shopInfo']['id']])) {
+            $sns = $this->Snss->newEntity($this->request->getData());
+            $sns->shop_id = $this->viewVars['shopInfo']['id'];
+        } else {
+            $sns = $this->Snss->patchEntity($this->Snss
+            ->get($this->request->getData('id')), $this->request->getData());
+        }
+
+        // バリデーションチェック
+        if ($sns->errors()) {
+            // 入力エラーがあれば、メッセージをセットして返す
+            $errors = $this->Util->setErrMessage($sns); // エラーメッセージをセット
+            $response = array('success'=>false,'message'=>$errors);
+            $this->response->body(json_encode($response));
+            return;
+        }
+        try {
+            // レコード更新実行
+            if (!$this->Snss->save($sns)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
+            }
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
+            $flg = false;
+            $message = RESULT_M['UPDATE_FAILED'];
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+
+        $shop = $this->Shops->find()
+            ->where(['id' => $this->viewVars['shopInfo']['id']])
+            ->contain(['Snss'])->first();
+
+        $this->set(compact('shop'));
+        $this->render('/Element/shopEdit/sns');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
+    }
     /**
      * ギャラリー 編集押下処理
      *

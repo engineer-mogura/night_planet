@@ -3,7 +3,7 @@
 		<?= $this->element('top-slider'); ?>
 	</div>
 <div id="area" class="container">
-	<?= $this->element('infoOffice'); ?>
+	<?= $this->element('info-marquee'); ?>
 	<div class="row">
 		<?= $this->element('genreCard'); ?>
 	</div>

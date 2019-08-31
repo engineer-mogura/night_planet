@@ -89,10 +89,21 @@
       </ul>
     </div>
   </nav>
-  <!-- 検索モーダル -->
+  <!-- 検索モーダル START -->
   <?= $this->element('modal/searchModal'); ?>
-  <!-- ログインモーダル -->
+  <!-- 検索モーダル END -->
+  <!-- ログインモーダル START -->
   <?= $this->element('modal/loginModal'); ?>
+  <!-- ログインモーダル END -->
+  <!-- クーポンモーダル START -->
+  <?= $this->element('modal/couponModal'); ?>
+  <!-- クーポンモーダル END -->
+  <!-- シェアモーダル START -->
+  <?= $this->element('modal/sharerModal'); ?>
+  <!-- シェアモーダル END -->
+  <!-- photoSwipe START -->
+  <?= $this->element('photoSwipe'); ?>
+  <!-- photoSwipe END -->
   <?= $this->fetch('content') ?>
   <footer class="page-footer">
     <div class="row">
@@ -125,7 +136,7 @@
       <?=(2018-date('Y'))?' - '.date('Y'):'';?> <?= LT['003'] ?>
     </div>
     <!-- START #return_top -->
-    <div id="return_top">
+    <div id="return_top" class="hide-on-med-and-down">
       <div class="fixed-action-btn">
         <a class="btn-floating btn-large black">
           <i class="large material-icons">keyboard_arrow_up</i>
@@ -134,5 +145,8 @@
     </div>
     <!-- END #return_top -->
   </footer>
+  <!-- ボトムナビゲーション START -->
+  <?= $this->element('bottom-navigation'); ?>
+  <!-- ボトムナビゲーション END -->
 </body>
 </html>

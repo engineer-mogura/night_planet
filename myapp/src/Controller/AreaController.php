@@ -175,7 +175,7 @@ class AreaController extends AppController
                     return $q
                     ->select($columns)
                     ->order(['Shop_infos.created'=>'DESC'])->limit(1);
-                },'Jobs'])->first();
+                },'Jobs','Snss'])->first();
 
         $shopInfo = $this->Util->getShopInfo($shop);
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
@@ -199,11 +199,17 @@ class AreaController extends AppController
         }
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
-        $insta_user_name = 't.a.k.u.m.a_';
+        $insta_user_name = $shop->snss[0]->instagram;
         // インスタ情報を取得
         $tmp_insta_data = $this->Util->getInstagram($insta_user_name, null
         , API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
         $insta_data = $tmp_insta_data['business_discovery'];
+        // インスタユーザーが存在しない場合
+        if(!empty($tmp_insta_data['error'])) {
+            // エラーメッセージをセットする
+            $insta_error = $tmp_insta_data['error']['error_user_title'];
+            $this->set(compact('insta_error'));
+        }
         $this->set(compact('shop','shopInfo','sharer','imageList'
             ,'nImageList', 'credits','creditsHidden','insta_data'));
         $this->render();

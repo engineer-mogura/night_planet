@@ -11,27 +11,34 @@
                     <li class="tab"><a href="#cast">キャスト</a></li>
                     <li class="tab"><a href="#tenpo">店舗情報</a></li>
                     <li class="tab"><a href="#gallery">店舗ギャラリー</a></li>
-                    <li class="tab"><a href="#map">マップ</a></li>
                     <li class="tab"><a href="#job">求人情報</a></li>
+                    <li class="tab"><a href="#sns">SNS</a></li>
                 </ul>
             </div>
-            <!-- トップ画像タブ -->
+            <!-- トップ画像タブ START-->
             <?= $this->element('shopEdit/top-image'); ?>
-            <!-- キャッチコピータブ -->
+            <!-- トップ画像タブ END-->
+            <!-- キャッチコピータブ START -->
             <?= $this->element('shopEdit/catch'); ?>
-            <!-- クーポンタブ -->
+            <!-- キャッチコピータブ END -->
+            <!-- クーポンタブ START -->
             <?= $this->element('shopEdit/coupon'); ?>
-            <!-- キャストタブ -->
+            <!-- クーポンタブ END -->
+            <!-- キャストタブ START -->
             <?= $this->element('shopEdit/cast'); ?>
-            <!-- 店舗情報タブ -->
+            <!-- キャストタブ END -->
+            <!-- 店舗情報タブ START -->
             <?= $this->element('shopEdit/tenpo'); ?>
-            <!-- ギャラリータブ -->
+            <!-- 店舗情報タブ END -->
+            <!-- ギャラリータブ START -->
             <?= $this->element('shopEdit/gallery'); ?>
-            <div id="map" class="col s12">
-            <h5>マップ</h5>
-            </div>
-            <!-- 求人情報タブ -->
+            <!-- ギャラリータブ END -->
+            <!-- 求人情報タブ START -->
             <?= $this->element('shopEdit/job'); ?>
+            <!-- 求人情報タブ END -->
+            <!-- SNSタブ START -->
+            <?= $this->element('shopEdit/sns'); ?>
+            <!-- SNSタブ END -->
         </div>
     </div>
 </div>

@@ -6,7 +6,7 @@
 <div id="top" class="container">
 	<div class="row">
 		<div class="col s12 m8 l8">
-			<?= $this->element('infoOffice'); ?>
+			<?= $this->element('info-marquee'); ?>
 			<?= $this->element('elmSearch'); ?>
 			<div class="row">
 				<?php foreach (AREA as $key => $value): ?>

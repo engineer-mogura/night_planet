@@ -17,6 +17,7 @@ class AppController extends \App\Controller\AppController
         $this->Coupons = TableRegistry::get('Coupons');
         $this->Casts = TableRegistry::get('Casts');
         $this->Jobs = TableRegistry::get('Jobs');
+        $this->Snss = TableRegistry::get('Snss');
         $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
@@ -73,7 +74,7 @@ class AppController extends \App\Controller\AppController
         // ログイン時に許可する店舗編集画面アクション
         $shopAccess = ['index','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
             'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
-            'deleteCast','saveTenpo','saveJob','saveGallery','deleteGallery','notice','viewNotice',
+            'deleteCast','saveTenpo','saveJob','saveSns','saveGallery','deleteGallery','notice','viewNotice',
             'saeNotice','updateNotice','deleteNotice'];
 
         //TODO: 権限によって店舗管理者のみとオーナー兼店舗管理者を分ける？

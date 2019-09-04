@@ -19,9 +19,11 @@ class AreaController extends AppController
         $this->Coupons = TableRegistry::get('Coupons');
         $this->Casts = TableRegistry::get('Casts');
         $this->Diarys = TableRegistry::get('Diarys');
-        $this->Likes = TableRegistry::get('Likes');
+        $this->ShopInfoLikes = TableRegistry::get('Shop_info_Likes');
+        $this->DiaryLikes = TableRegistry::get('Diary_Likes');
         $this->Jobs = TableRegistry::get('Jobs');
         $this->ShopInfos = TableRegistry::get("shop_infos");
+        $this->Updates = TableRegistry::get("updates");
         $this->MasterCodes = TableRegistry::get("master_codes");
 
     }
@@ -124,7 +126,7 @@ class AreaController extends AppController
             $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['isArea']]['path'];
             $genreCounts[$row['genre']]['count'] = $row['count'];
         }
-        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea']);
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea'], null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea']);
         $this->set(compact('genreCounts', 'selectList', 'diarys', 'notices'));
 
@@ -166,18 +168,35 @@ class AreaController extends AppController
         $shop = $this->Shops->find('all')
             ->where(['Shops.id' => $id])
             ->contain(['Owners','Casts' => function(Query $q) {
-                return $q
-                    ->where(['Casts.status'=>'1']);
+                    return $q
+                        ->where(['Casts.status'=>'1']);
                 }, 'Coupons' => function(Query $q) {
-                return $q
-                    ->where(['Coupons.status'=>'1']);
+                    return $q
+                        ->where(['Coupons.status'=>'1']);
                 },'Shop_infos' => function(Query $q) use ($columns) {
                     return $q
-                    ->select($columns)
-                    ->order(['Shop_infos.created'=>'DESC'])->limit(1);
+                        ->select($columns)
+                        ->order(['Shop_infos.created'=>'DESC'])
+                        ->limit(1);
                 },'Jobs','Snss'])->first();
 
         $shopInfo = $this->Util->getShopInfo($shop);
+        // 店舗の更新情報を取得する
+        $updateInfo = $this->Updates->find('all',array(
+            'conditions' => array('created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' DAY')
+            ))
+            ->distinct(['content'])
+            ->where(['shop_id'=>$shopInfo['id']])
+            ->order(['created'=>'DESC'])
+            ->toArray();
+            $update_icon = array();
+        // 画面の店舗メニューにnew-icon画像を付与するための配列をセットする
+        foreach ($updateInfo as $key => $value) {
+            $isNew = in_array($value->type, SHOP_MENU_NAME);
+            if ($isNew) {
+                $update_icon[] = $value->type;
+            }
+        }
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
         $imageList = array(); // 画面側でJSONとして使う画像リスト
         // 画像リストを作成する
@@ -186,6 +205,9 @@ class AreaController extends AppController
                 array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
             }
         }
+        // 店舗キャストの最新日記を取得する
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id);
+
         // お知らせのギャラリーリストを作成
         $imageCol = array_values(preg_grep('/^image/', $this->ShopInfos->schema()->columns()));
         $shopInfos = $shop->shop_infos[0];
@@ -210,8 +232,8 @@ class AreaController extends AppController
             $insta_error = $tmp_insta_data['error']['error_user_title'];
             $this->set(compact('insta_error'));
         }
-        $this->set(compact('shop','shopInfo','sharer','imageList'
-            ,'nImageList', 'credits','creditsHidden','insta_data'));
+        $this->set(compact('shop','shopInfo','update_icon','updateInfo','diarys','sharer','imageList'
+            ,'nImageList', 'credits','creditsHidden','insta_data','imageCol'));
         $this->render();
     }
 
@@ -230,7 +252,7 @@ class AreaController extends AppController
                 return $q
                     ->select($columns)
                     ->order(['Diarys.created'=>'DESC'])->limit(1);
-                }, 'Diarys.Likes', 'Shops.Coupons' => function(Query $q) {
+                }, 'Diarys.Diary_Likes', 'Shops.Coupons' => function(Query $q) {
                 return $q
                     ->where(['Coupons.status'=>'1']);
                 }, 'Shops.Jobs'
@@ -264,13 +286,13 @@ class AreaController extends AppController
     {
         $cast = $this->Casts->find('all')->where(['id' => $id])->first();
         $this->set('shopInfo', $this->Util->getShopInfo($this->Shops->get($cast->shop_id)->toArray()));
+        $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
 
-        // $diarys1 = $this->getDiarys($id);
         $diarys = $this->Util->getDiarys($id);
         $this->viewVars['shopInfo']['diary_path'] = $this->viewVars['shopInfo']['cast_path']
             .DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
 
-        $this->set(compact('cast','diarys'));
+        $this->set(compact('cast','diarys','imageCol'));
         $this->render();
     }
 
@@ -292,7 +314,7 @@ class AreaController extends AppController
             $diary = $this->Diarys->find("all")
                 ->select($columns)
                 ->where(['id' => $this->request->query["id"]])
-                ->contain(['Likes'])->first();
+                ->contain(['Diary_Likes'])->first();
             // $diary = $this->Diarys->get($this->request->query["id"]);
             $this->response->body(json_encode($diary));
             return;
@@ -314,7 +336,7 @@ class AreaController extends AppController
         $diarys = $this->Diarys->find("all")
             ->select($columns)
             ->where(['cast_id' => $id])
-            ->contain(['Likes'])
+            ->contain(['Diary_Likes'])
             ->order(['created'=>'DESC'])->limit(5);
         // 過去の日記をアーカイブ形式で取得する
         // TODO: 年月毎に取得する。月毎の投稿は、アコーディオンを開いたときに年月を条件にsql取得？
@@ -330,7 +352,7 @@ class AreaController extends AppController
             'ym_created' => $ym,
             'md_created' => $md])
             ->where(['cast_id' => $id])
-            ->contain(['Likes'])
+            ->contain(['Diary_Likes'])
             ->order(['created' => 'DESC'])->all();
         $archive = $this->Util->groupArray($archive, 'ym_created');
         $archive = array_values($archive);
@@ -341,10 +363,11 @@ class AreaController extends AppController
     {
         $shopInfos = $this->ShopInfos->get($id);
         $this->set('shopInfo', $this->Util->getShopInfo($this->Shops->get($shopInfos->shop_id)->toArray()));
+        $imageCol = array_values(preg_grep('/^image/', $this->ShopInfos->schema()->columns()));
 
         $notices = $this->Util->getNotices($shopInfos->shop_id);
 
-        $this->set(compact('notices'));
+        $this->set(compact('notices','imageCol'));
         $this->render();
     }
 
@@ -366,7 +389,7 @@ class AreaController extends AppController
             $notice = $this->ShopInfos->find("all")
                 ->select($columns)
                 ->where(['id' => $this->request->query["id"]])
-                //->contain(['Likes'])
+                ->contain(['Shop_info_Likes'])
                 ->first();
             // $notice = $this->ShopInfos->get($this->request->query["id"]);
             $this->response->body(json_encode($notice));

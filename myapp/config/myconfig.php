@@ -13,8 +13,20 @@ return [
 	define('PROPERTY', array(
 		'NEW_INFO_MAX'=>'5', // 新着情報関連の表示数
 		'FILE_MAX'=>'8', // アップロードファイル数
+		'UPDATE_INFO_DAY_MAX'=>'10', // アップロードファイル数
 	)),
 
+	// 店舗メニュー名
+	define('SHOP_MENU_NAME', array(
+		'COUPON'=>'COUPON', // クーポン
+		'WORK'=>'WORK', // 今日の出勤
+		'EVENT'=>'EVENT', // お知らせ
+		'CAST'=>'CAST', // キャスト
+		'DIARY'=>'DIARY', // 日記
+		'SHOP-GALLERY'=>'SHOP-GALLERY', // 店内ギャラリー
+		'SYSTEM'=>'SYSTEM', // 店舗情報
+		'RECRUIT'=>'RECRUIT', // 求人情報
+	)),
 	// 店舗編集画面のタブ制御設定
 	define('TAB_CONTROLE', array(
 		'notice', // 店舗お知らせ
@@ -303,12 +315,11 @@ return [
 		'LOGINED'=>'ログインしました。',
 		'LOGGED_OUT'=>'ログアウトしました。',
 	)),
+	// 確認メッセージ common.message
+	define('CONFIRM_M', array(
+		'TEL_ME'=>'【_shopname_】に電話を掛けますか？\n電話をする際は【ナイプラ】を見た！で話がスムーズになります。',
+	)),
 
-	// 確認メッセージ info.confirmation.message
-	'icm' => [
-		'001' => '',
-		'002' => '',
-	],
 	// 結果メッセージ info.result.message
 	define('RESULT_M', array(
 		'SIGNUP_SUCCESS'=>'登録しました。',

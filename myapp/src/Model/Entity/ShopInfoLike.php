@@ -4,22 +4,20 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Like Entity
+ * ShopInfoLike Entity
  *
  * @property int $id
- * @property int|null $shop_id
- * @property int|null $shop_info_id
- * @property int|null $cast_id
- * @property int|null $diary_id
+ * @property int $shop_info_id
+ * @property int $shop_id
  * @property int $user_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
- * @property \App\Model\Entity\Diary $diary
- * @property \App\Model\Entity\Cast $cast
+ * @property \App\Model\Entity\ShopInfo $shop_info
+ * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\User $user
  */
-class Like extends Entity
+class ShopInfoLike extends Entity
 {
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
@@ -31,15 +29,13 @@ class Like extends Entity
      * @var array
      */
     protected $_accessible = [
-        'shop_id' => true,
         'shop_info_id' => true,
-        'cast_id' => true,
-        'diary_id' => true,
+        'shop_id' => true,
         'user_id' => true,
         'created' => true,
         'modified' => true,
-        'diary' => true,
-        'cast' => true,
+        'shop_info' => true,
+        'shop' => true,
         'user' => true
     ];
 }

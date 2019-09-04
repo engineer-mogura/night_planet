@@ -246,6 +246,14 @@ class ShopsController extends AppController
                 if (!$this->Shops->save($shop)) {
                     throw new RuntimeException('レコードの更新ができませんでした。');
                 }
+                // 更新情報を追加する
+                $updates = $this->Updates->newEntity();
+                $updates->set('content','店舗画像を更新しました。');
+                $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+                // レコード更新実行
+                if (!$this->Updates->save($updates)) {
+                    throw new RuntimeException('レコードの登録ができませんでした。');
+                }
 
             } catch (RuntimeException $e) {
                 // ファイルを削除していた場合は復元する
@@ -529,6 +537,14 @@ class ShopsController extends AppController
                 } else {
                     throw new RuntimeException('レコードの更新ができませんでした。');
                 }
+            }
+            // 更新情報を追加する
+            $updates = $this->Updates->newEntity();
+            $updates->set('content','クーポン情報を更新しました。');
+            $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            // レコード更新実行
+            if (!$this->Updates->save($updates)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
             }
         } catch (RuntimeException $e) {
             $this->log($this->Util->setLog($auth, $e));
@@ -814,6 +830,15 @@ class ShopsController extends AppController
             if (!$this->Shops->save($shop)) {
                 throw new RuntimeException('レコードの更新ができませんでした。');
             }
+            // 更新情報を追加する
+            $updates = $this->Updates->newEntity();
+            $updates->set('content','店舗情報を更新しました。');
+            $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            // レコード更新実行
+            if (!$this->Updates->save($updates)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
+            }
+
         } catch (RuntimeException $e) {
             $this->log($this->Util->setLog($auth, $e));
             $flg = false;
@@ -1074,6 +1099,14 @@ class ShopsController extends AppController
             if (!$this->Shops->save($shop)) {
                 throw new RuntimeException('レコードの更新ができませんでした。');
             }
+            // 更新情報を追加する
+            $updates = $this->Updates->newEntity();
+            $updates->set('content','店内ギャラリーを更新しました。');
+            $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            // レコード更新実行
+            if (!$this->Updates->save($updates)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
+            }
 
         } catch (RuntimeException $e) {
             $this->log($this->Util->setLog($auth, $e));
@@ -1319,6 +1352,15 @@ class ShopsController extends AppController
             if (!$this->ShopInfos->save($notice)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
             }
+            // 更新情報を追加する
+            $updates = $this->Updates->newEntity();
+            $updates->set('content','店舗からのお知らせを追加しました。');
+            $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            // レコード更新実行
+            if (!$this->Updates->save($updates)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
+            }
+
         } catch (RuntimeException $e) {
             $this->log($this->Util->setLog($auth, $e));
             $flg = false;

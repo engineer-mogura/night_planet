@@ -51,6 +51,7 @@ class ShopInfo extends Entity
         'dir' => true,
         'created' => true,
         'modified' => true,
-        'shop' => true
+        'shop' => true,
+        'Shop_info_Likes' => true
     ];
 }

@@ -4,12 +4,10 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * LikesFixture
- *
+ * ShopInfoLikesFixture
  */
-class LikesFixture extends TestFixture
+class ShopInfoLikesFixture extends TestFixture
 {
-
     /**
      * Fields
      *
@@ -17,14 +15,14 @@ class LikesFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'diary_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'cast_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
+        'shop_info_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'shop_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'user_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null],
         '_indexes' => [
-            'diary_key' => ['type' => 'index', 'columns' => ['diary_id'], 'length' => []],
+            'shop_info_key' => ['type' => 'index', 'columns' => ['shop_info_id'], 'length' => []],
         ],
         '_constraints' => [
             'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
@@ -35,7 +33,6 @@ class LikesFixture extends TestFixture
         ],
     ];
     // @codingStandardsIgnoreEnd
-
     /**
      * Init method
      *
@@ -46,11 +43,11 @@ class LikesFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'diary_id' => 1,
-                'cast_id' => 1,
+                'shop_info_id' => 1,
+                'shop_id' => 1,
                 'user_id' => 1,
-                'created' => '2019-05-11 17:49:27',
-                'modified' => '2019-05-11 17:49:27'
+                'created' => '2019-09-02 19:05:47',
+                'modified' => '2019-09-02 19:05:47'
             ],
         ];
         parent::init();

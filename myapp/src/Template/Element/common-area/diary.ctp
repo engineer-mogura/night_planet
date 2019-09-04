@@ -25,17 +25,28 @@
                         <?php $count = 0; ?>
                         <?php foreach ($diarys as $key => $rows): ?>
                         <?php foreach ($rows as $key => $row): ?>
+                        <?php 
+                            $image_count = 0;
+                            foreach ($imageCol as $key => $col) {
+                                if(!empty($row->get($col))) {
+                                ++$image_count;
+                                }
+                            }
+                        ?>
                         <li class="linkbox collection-item avatar archiveLink">
                             <input type="hidden" name="id" value=<?=$row->id?>>
                         <?php !empty($row->image1)? $imgPath = $shopInfo['diary_path'].$row->dir.DS.$row->image1 : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <img src="<?= $imgPath ?>" alt="" class="circle">
-                            <span class="title color-blue"><?= $row['md_created'] ?></span>
+                            <span class="title color-blue"><?= $row->created->nice() ?></span>
+                            <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$image_count?></span>
+
                             <p><span class="truncate"><?= $row->title ?><br>
                                 <?= $row['content'] ?></span>
                             </p>
-                            <a class="waves-effect hoverable" href="#">
-                                <span class="like-count secondary-content center-align"><i class="tiny material-icons">thumb_up</i><?= count($row['likes']) ?></span>
-                            </a>
+                            <span class="like-count secondary-content icon-vertical-align color-blue">
+                                <i class="small material-icons">favorite_border</i><?=count($row['diary__likes']);?>
+                            </span>
+                            <a class="waves-effect hoverable" href="#"></a>
                         </li>
                         <?php $count = $count + 1;?>
                         <?php if ($count == 5) {break;} ?>
@@ -50,15 +61,24 @@
                         <li class="collection-item">
                             <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                             <?php foreach ($rows as $row): ?>
+                            <?php 
+                                $image_count = 0;
+                                foreach ($imageCol as $key => $col) {
+                                    if(!empty($row->get($col))) {
+                                    ++$image_count;
+                                    }
+                                }
+                            ?>
                             <?php !empty($row['image1'])? $imgPath = $shopInfo['diary_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <div class="linkbox collapsible-body archiveLink">
                             <input type="hidden" name="id" value=<?=$row->id?>>
-                            <span class="title color-blue"><?= $row['md_created'] ?></span>
-                            <span class="like-count secondary-content center-align"><i class="tiny material-icons">thumb_up</i><?= count($row['likes']) ?></span>
-                            <p><span class="truncate"><?= $row->title ?><br>
-                                <?= $row['content'] ?></span>
+                            <span class="title color-blue"><?= $row->created->nice() ?></span>
+                            <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$image_count?></span>
+                            <span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($row->diary__likes)?></span>
+							    <a class="waves-effect hoverable" href="#"></a><p><span class="truncate"><?= $row->title ?><br>
+                                <?= $row['content'] ?>
+                            </span>
                             </p>
-                            <a class="waves-effect hoverable" href="#"></a>
                             </div>
                             <?php endforeach; ?>
                         </li>
@@ -72,6 +92,8 @@
     </div>
 </div>
 <?= $this->element('photoSwipe'); ?>
-
+<!-- ショップ用ボトムナビゲーション START -->
+<?= $this->element('shop-bottom-navigation'); ?>
+<!-- ショップ用ボトムナビゲーション END -->
 
 

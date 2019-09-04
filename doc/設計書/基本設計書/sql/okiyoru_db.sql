@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 8 月 30 日 21:50
+-- Generation Time: 2019 年 9 月 04 日 20:52
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.3.8
 
@@ -95,19 +95,6 @@ INSERT INTO `articles_tags` (`article_id`, `tag_id`) VALUES
 --
 -- テーブルの構造 `casts`
 --
-DROP TABLE IF EXISTS `sns`;
-CREATE TABLE `sns` (
-  `id` int(11) NOT NULL,
-  `shop_id` int(11) DEFAULT NULL,
-  `cast_id` int(11) DEFAULT NULL,
-  `facebook` varchar(255) DEFAULT NULL,
-  `twitter` varchar(255) DEFAULT NULL,
-  `instagram` varchar(255) DEFAULT NULL,
-  `line` varchar(255) DEFAULT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `casts`;
 CREATE TABLE `casts` (
@@ -148,7 +135,7 @@ CREATE TABLE `casts` (
 INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `holiday`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `remember_token`, `status`, `delete_flag`, `created`, `modified`) VALUES
 (1, 38, 'cast', '山田　敏子２', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '2000-02-14 00:00:00', NULL, 'blood_type1', 'constellation4', '22', 'メッセージメッセージメッセージメッセージメッセージメッセージメッセージメセージメッセー', NULL, '0ba3ed5e90b78afc0d5a901caa1c76d7e36c4ed9.jpg', 'aa58c6f495d90f42f7053a3fdeefe9d1508792d9.jpg', '58223027c4bfbf1f31839cb91519aeebee455f81.jpg', 'c49b4b37b6f6de03c7cd49119b379d6dbfee2551.jpg', '5b549191eae4ee3a10368ca69facdd331fb6ffce.jpg', '015b84f204f727ec6cb23d7ed5e07e5b36fd21fa.jpg', '', '', '00002', NULL, 1, 0, '2019-03-23 16:51:25', '2019-08-17 22:33:25'),
 (33, 38, 'cast', '鈴木　一郎', 'イチロー', 'okiyoru99@gmail.com', '$2y$10$CQjIhOficE9SZJ5lgggxVuq4cUSwZG0O9CX6WC2GWbQBdQvPBYyda', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a674a57e5e8e5a289a7ae1b294cef79b42e3d3ab.jpg', '79d52ab7a9b86eb47fef0200f1779bf72bc55719.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-07-31 19:22:54', '2019-07-31 23:30:57'),
-(35, 54, 'cast', 'なな', 'なな', 'okiyoru1@gmail.com', '$2y$10$Op0.Cgd9vufJu7f6azq53OjtUaeDXUBZJ6jsgQAq3AeywhRkPJ0j.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a3e108605eacb4c5bb871b6e4db8a7837d76be6d.jpg', 'd401a3c19c54430f0639406d7859cf556a5db10d.jpg', '', '', NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-08 23:37:31', '2019-08-17 03:04:40'),
+(35, 54, 'cast', 'なな', 'なな', 'okiyoru99@gmail.com', '$2y$10$Op0.Cgd9vufJu7f6azq53OjtUaeDXUBZJ6jsgQAq3AeywhRkPJ0j.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a3e108605eacb4c5bb871b6e4db8a7837d76be6d.jpg', 'd401a3c19c54430f0639406d7859cf556a5db10d.jpg', '', '', NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-08 23:37:31', '2019-08-17 03:04:40'),
 (41, 54, 'cast', 'りおな', 'りおな', 'okiyoru99@gmail.com', '$2y$10$OeB2W0ufPZJpOKoZngWFpOrkNeFSETNOMPl/adL5DhpSrts0Cfrpe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c120ffc5a0456f7fc5ff6387110b2748a5d13e4d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-09 00:01:51', '2019-08-09 00:04:54'),
 (42, 54, 'cast', 'ゆいか', 'ゆいか', 'okiyoru99@gmail.com', '$2y$10$2ksjTbJZy//cLD.fK6rypeYmfSLPckgcNoxn.2pPLN4ovl9jIc5ae', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c2f848d69842167ee88896fc783d44ffdaf3d010.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-09 20:20:25', '2019-08-09 20:22:56'),
 (43, 54, 'cast', 'まみ', 'まみ', 'okiyoru99@gmail.com', '$2y$10$zMiLChXeQlZ1VGnNHfivTewm7eWrHxOmw24oOxd24eXzvEcshFf/C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'fa2855911bc0a7a8f5fdc76ac35a8e40d7ed3a84.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-09 20:23:37', '2019-08-09 20:25:11'),
@@ -161,7 +148,7 @@ INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `pass
 (50, 55, 'cast', 'あーす', 'あーす', 'okiyoru99@gmail.com', '$2y$10$nZe1EOBngjM3iDxMVLLPNuBXc8b.1DOWhNrdk3WGJ.qhPSbY4Qimi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'e4ab0de9584c92d4b0763b092e37992ba3717aca.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-10 16:18:42', '2019-08-10 16:19:36'),
 (51, 55, 'cast', 'みずき', 'みずき', 'okiyoru99@gmail.com', '$2y$10$/6K5phAfNciUFN.6lAh/0OftmW4kArVeGsekekfWjzJyIOV8WAetW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2946854fe5bf4f0a9541842605059a3fe4ea461d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-10 16:20:27', '2019-08-10 16:21:36'),
 (52, 55, 'cast', 'しの', 'しの', 'okiyoru99@gmail.com', '$2y$10$dzUNVjZvry8zpdHXf7Xr8O84YzhGfSG.MXsJm/uBNKz2yk.M5.zNm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'd51bc787af1247d4779e00edc7ba5ef0d3eb2393.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-10 16:21:58', '2019-08-10 16:22:51'),
-(53, 56, 'cast', 'なお', 'なお', 'okiyoru99@gmail.com', '$2y$10$QiCOJSSG9UQv9QOeOLTgZOJF6HfBw7BmtOCcu3xHx5XZwlRgsFNNG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2601bea1201c70056cc5a0f340823fea49fc6dfd.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-10 17:23:36', '2019-08-10 17:25:26'),
+(53, 56, 'cast', 'なお', 'なお', 'okiyoru1@gmail.com', '$2y$10$QiCOJSSG9UQv9QOeOLTgZOJF6HfBw7BmtOCcu3xHx5XZwlRgsFNNG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2601bea1201c70056cc5a0f340823fea49fc6dfd.jpg', '', NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-10 17:23:36', '2019-09-04 20:50:40'),
 (54, 56, 'cast', 'にーな', 'にーな', 'okiyoru2@gmail.com', '$2y$10$5bX0v1ycjzISzcMkWIHXYOa5Pgbiio0idh7NuPZMzddUse3YYWKT2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '4f2d3399eba5620b3663a96e4a3404f4275ab9ba.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-10 17:27:06', '2019-08-10 17:28:07');
 
 -- --------------------------------------------------------
@@ -205,7 +192,7 @@ INSERT INTO `coupons` (`id`, `shop_id`, `status`, `from_day`, `to_day`, `title`,
 (55, 38, 1, '2019-06-01 00:00:00', '2019-06-26 00:00:00', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４', '2019-06-30 21:45:20', '2019-07-30 00:16:59'),
 (56, 38, 1, '2019-07-05 00:00:00', '2019-07-23 00:00:00', 'クーポン 編集押下処理クーポン 編集押下処理', 'クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編', '2019-07-30 00:05:03', '2019-07-31 23:44:04'),
 (57, 54, 1, '2019-08-08 00:00:00', '2019-09-30 00:00:00', 'ウェルカムドリンク1杯サービス or 時間+10分サービス', '入店時にこちらのクーポンをお見せいただくと、ウェルカムドリンク1杯サービス、\r\nまたは時間＋１０分延長サービスになります。', '2019-08-08 23:31:00', '2019-08-08 23:31:18'),
-(58, 56, 1, '2019-08-10 00:00:00', '2020-08-10 00:00:00', '初回セット料金1000円OFF', '初回セット料金1000円OFFになります^_^ 是非ご利用ください!! スタッフ、キャスト一同心よりお待ちしております🙇‍♂️', '2019-08-10 17:31:09', '2019-08-12 17:46:36');
+(58, 56, 1, '2019-08-10 00:00:00', '2020-08-10 00:00:00', '初回セット料金1000円OFF', '初回セット料金1000円OFFになります。是非ご利用ください!! スタッフ、キャスト一同心よりお待ちしております🙇‍♂️', '2019-08-10 17:31:09', '2019-09-03 21:35:01');
 
 -- --------------------------------------------------------
 
@@ -277,7 +264,32 @@ INSERT INTO `diarys` (`id`, `cast_id`, `title`, `content`, `image1`, `image2`, `
 (160, 1, 'tet', 'tets', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/14/20190814_213009', '2019-08-14 21:30:09', '2019-08-14 21:30:09'),
 (161, 1, 'fd', 'fd', '099399482ff6b17222bff4cd1d1ec7ff022dda55.jpg', '7312b6518e65551a5517314fe358150e4417fb20.jpg', '163d8a810ff8ab5b3340a733816274c87f4739c5.jpg', '828d5ce2c318a1fe2bb17a194196056af98d2170.jpg', NULL, NULL, NULL, NULL, '/2019/08/14/20190814_213231', '2019-08-14 21:32:31', '2019-08-14 21:32:31'),
 (162, 1, 'fdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdf', 'DfESｄｆｄ', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/14/20190814_234916', '2019-08-14 23:49:16', '2019-08-14 23:49:16'),
-(163, 35, 'アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺', 'アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな', '21d40d047d9d90084fb29d69370fd29d23b776a9.jpg', '9355809fc1364bf5f28f3306c564aa27d62e0a0d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/15/20190815_035620', '2019-08-15 03:56:20', '2019-08-15 21:10:01');
+(163, 35, 'アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺', 'アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな', '21d40d047d9d90084fb29d69370fd29d23b776a9.jpg', '9355809fc1364bf5f28f3306c564aa27d62e0a0d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/15/20190815_035620', '2019-08-15 03:56:20', '2019-08-15 21:10:01'),
+(164, 53, '初投稿！', '初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！\r\n\r\n初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！初投稿！\r\n\r\n\r\n\r\n初投稿！初投稿！初投稿！初投稿！', 'e14d1188951cb045657ca5db338208105ad17124.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/09/01/20190901_160348', '2019-09-01 16:03:50', '2019-09-01 16:03:50'),
+(166, 53, '初投稿２！初投稿２！初投稿２！初投稿２！初投稿２！', '初投稿２！初投稿２！初投稿２！初投稿２！', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/09/03/20190903_211229', '2019-09-03 21:12:29', '2019-09-03 21:12:29');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `diary_likes`
+--
+
+DROP TABLE IF EXISTS `diary_likes`;
+CREATE TABLE `diary_likes` (
+  `id` int(11) NOT NULL,
+  `diary_id` int(11) NOT NULL,
+  `cast_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `diary_likes`
+--
+
+INSERT INTO `diary_likes` (`id`, `diary_id`, `cast_id`, `user_id`, `created`, `modified`) VALUES
+(1, 164, 53, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -314,7 +326,8 @@ INSERT INTO `events` (`id`, `event_type_id`, `cast_id`, `title`, `details`, `sta
 (287, NULL, 1, '仕事', NULL, '2019-07-04 00:00:00', '2019-07-04 00:00:00', '00:00', '00:00', '1', NULL, 1, '2019-07-27 17:17:47', '2019-07-27 17:17:47'),
 (288, NULL, 1, '休み', NULL, '2019-07-06 00:00:00', '2019-07-06 00:00:00', NULL, NULL, '1', NULL, 1, '2019-07-27 17:18:44', '2019-07-27 17:18:44'),
 (289, NULL, 1, '仕事', NULL, '2019-06-04 00:30:00', '2019-06-04 07:00:00', '00:30', '07:00', '1', NULL, 1, '2019-07-27 20:28:59', '2019-07-27 20:28:59'),
-(291, NULL, 1, '休み', NULL, '2019-07-04 00:00:00', '2019-07-04 00:00:00', NULL, NULL, '1', NULL, 1, '2019-07-29 01:02:53', '2019-07-29 01:02:53');
+(291, NULL, 1, '休み', NULL, '2019-07-04 00:00:00', '2019-07-04 00:00:00', NULL, NULL, '1', NULL, 1, '2019-07-29 01:02:53', '2019-07-29 01:02:53'),
+(292, NULL, 53, '仕事', NULL, '2019-09-04 13:00:00', '2019-09-04 00:00:00', '13:00', NULL, '1', NULL, 1, '2019-09-04 20:40:43', '2019-09-04 20:41:54');
 
 -- --------------------------------------------------------
 
@@ -370,37 +383,6 @@ INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `
 (102, 55, 'ガールズバー', 'カウンターレディ', '20:00:00', NULL, '※時間相談に応じます、３ｈ～の短時間でもOK', '18', '30', '※初心者・学生・主婦・シングルマザー大歓迎', NULL, '週１日～勤務ＯＫ、週末のみでもＯＫ', '日払い可,各種バックあり,ノルマなし,送迎あり,未経験者歓迎', '楽しく働くならここ！ まだまだオープンしたばかりのガールズバーです♪ 時給１,２００円～１,５００円以上！ 完全日払い制!! 送迎有り（中南部） お友達同士の応募、一日体験もオッケイです♪ 気軽にお問い合わせください♪＼(^o^)／', '09068653218', '', NULL, '', '2019-08-10 15:16:08', '2019-08-10 16:29:44'),
 (105, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-08-18 19:24:23', '2019-08-18 19:24:23'),
 (106, 56, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, '21:00～LASTまでの間でお好きな時間', '18', '35', '（高校生不可）', NULL, '', '体験入店あり,お友達と一緒に面接可,未経験者歓迎,週末のみ可,ノルマなし,レンタル衣装あり,週１から可,大型連休あり,モノレール駅からすぐ,日払い可,送迎あり,給与支給2回,ヘアメイクあり,各種バックあり,経験者優遇,ドレス・制服貸与あり,個人ロッカーあり,友達紹介料あり', '初めまして、店長の仁科です。\r\n求人を見ていただきありがとうございます(^^)\r\n少なからずこのホームページを開いたこの瞬間は期待と不安が入り混じっているかと思います！\r\nまた、未経験の方はさらに一歩が踏み出せない、なんてこともありますよね！\r\n僕自身も同じ経験がありますので一歩踏み出す勇気がどれほど大変なのかわかります！\r\nだからこそ一度勇気を出して電話を下さい！\r\nしっかりした対応、サポートをさせていただきますのでどんな小さなことでもお気軽に問い合わせのほうをしてきてください！\r\nお待ちしています(^_^)', '0120596307', '', NULL, '', '0000-00-00 00:00:00', '2019-08-25 16:30:11');
-
--- --------------------------------------------------------
-
---
--- テーブルの構造 `likes`
---
-
-DROP TABLE IF EXISTS `likes`;
-CREATE TABLE `likes` (
-  `id` int(11) NOT NULL,
-  `diary_id` int(11) NOT NULL,
-  `cast_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `likes`
---
-
-INSERT INTO `likes` (`id`, `diary_id`, `cast_id`, `user_id`, `created`, `modified`) VALUES
-(0, 144, 1, 5, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(1, 144, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(2, 111, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(5, 111, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(6, 111, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(7, 107, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(8, 121, 2, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(9, 144, 1, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(10, 130, 1, 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -677,7 +659,7 @@ INSERT INTO `shops` (`id`, `owner_id`, `area`, `genre`, `dir`, `name`, `top_imag
 (50, 69, 'miyakojima', 'snack', '00005', '宮古島店舗名６', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '宮古島のスナックをお探しなら宮古島店舗名６\r\n時間制・飲み放題で安心のスナックです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', NULL, '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
 (54, 92, 'urasoe', 'club', '00001', 'ARENA -アリーナ-', 'fa897ef69c325e84d4a73e1d681e103d2de24f61.jpg', '91527b5da301b543245f4b929c8ad7d7887f12e9.jpg', 'd49f191774e3397fe75b26393f090fa3bd7b5341.jpg', '8010a4cdc60e90a6d90b33b6428624b2f49d6172.jpg', NULL, NULL, NULL, NULL, NULL, '沖縄県浦添市にある総在籍数70名を誇る県内最大級時間制クラブ。\r\nエリアNo.1クラスの実績と自信。接待向けのお店', '09097874621', '', '22:00:00', '04:00:00', '・(金・土・祝日前日)22:00～05:00 ・年中無休', '★SET料金★\r\n・御1人様	70分/10,000円\r\n・2名様以上	70分/5,000円\r\n・御延長	上記同額\r\n★指名★\r\n・本指名	1,000円\r\n・場内指名	1,000円\r\n★ドリンク★\r\n・ビール	1,000円(グラス1杯)\r\n・カクテル	各1,000円(グラス1杯)\r\n・ワイン	各1,000円(グラス1杯)\r\n★ボトル★\r\n・泡盛	3,000円～\r\n・焼酎	3,000円～\r\n・ワイン	8,000円～\r\n・ウィスキー	15,000円\r\n・シャンパン	8,000円～\r\n★VIP Room★\r\n室料	20,000円\r\n★その他★\r\n・団体	～100名まで可', 'VISA,JCB,MasterCard,AmericanExpress', NULL, '沖縄県', '浦添市', '城間3-5-1 MSシュタークビル2F', '2019-08-07 23:55:27', '2019-08-08 23:26:45'),
 (55, 93, 'urasoe', 'girlsbar', '00001', 'フェリス', '7676cf4feb6ceae2268ea8dcdb8e8b4f8df8d503.jpg', '692f892c1595fcb00f92f4e54045454af122a08a.jpg', '99f5cd8e2119337534464897a275d08f7eab2d6c.jpg', '1ff52888b3b1d3414df850e25dfd0ee95be2af55.jpg', '9563142cd343c4ddcea6787c4f2825207ee3f6ee.jpg', '582296c1dc294d3a1721f536337a5f706bf16355.jpg', NULL, NULL, NULL, 'カラオケもダーツも楽しめちゃうイベント盛りだくさんのガールズバー♡', '09068653218', '', '21:00:00', NULL, '不定休', '★ブロンズコース♡７０分♡	￥２,５００円★\r\n泡盛／かりゆし・瑞穂　酎ハイ／レモン・緑茶・ウーロン　カクテル／ピーチウーロン・カルアミルク・カシスオレンジ・カシスウーロン・カシスソーダ・モスコミュール・ジントニック・カシスミルク　ソフトドリンク/コーラ・オレンジ・ウーロン茶・緑茶\r\n★シルバーコース♡７０分♡	￥３,０００円★\r\nブロンズメニュー ＋ 泡盛／菊ブラ・久米仙・残波・残黒　ビール　焼酎／鏡月　カクテル／サングリア\r\n★ゴールドコース♡７０分♡	￥３,５００円★\r\nブロンズメニュー・シルバーメニュー ＋ 泡盛／ＶＩＰゴールド・北谷長老・琉球王朝　焼酎／二階堂・吉四六\r\n★ＳｔａｆＤｒｉｎｋ★\r\nＡＬＬ １,０００円\r\n★カラオケ１曲★\r\n２００円\r\n★歌い放題（時間内）★\r\n１,０００円\r\n★女性グールプのみ★\r\n１,０００円 ＯＦＦ\r\n★ダーツ投げ放題★\r\n５００円 \r\n★時間無制限 飲み放題★\r\n５,０００円 \r\n★単品メニュー５,０００円～有り★', 'MasterCard,VISA', NULL, '沖縄県', '浦添市', '経塚518 テナントビルてぃーだ 2F', '2019-08-10 15:16:07', '2019-08-10 15:52:53'),
-(56, 94, 'naha', 'cabacula', '00002', 'Club琉球', 'dca447d4540d4441ef6f0a7495ebea7d983f00e3.jpg', '70cf8ef198ee22f098d31c96a13b6db700085850.jpg', '5f8dc463c62d717694d2e07b5fa3254523f1bf5c.jpg', '99d384a724fb9aab1972772b18992f80b09d2c67.jpg', '3ba90b2743d559bc1c2623b85a4b4d43bd1741ec.jpg', '75d5ca39e15124b9802aab78b64bccc07fd387c1.jpg', '6ff046e9668601d80c548fb6edead4f6e0414964.jpg', '', '', '那覇市松山にGRANDOPEN!!\r\nKING of RESORT!! CLUB 琉球', '0989757973', '', '21:00:00', NULL, '月曜定休日', '★1time 60min★\r\n・保証	５，０００円\r\n・マンツーマン	８，０００円\r\n・ＶＩＰ	１，０００円\r\n・指名料	１，０００円\r\n・場内指名料	１，０００円\r\n・ＳＣ	１５％　（税込）\r\n・PRIVATE ROOM　１５，０００円（ＳＣ　２５％　税込）\r\n・SECRET ROOM　２０，０００円（ＳＣ　２５％　税込）\r\n★Free Drink★\r\n・MAIN Floor	ビール、泡盛、焼酎、ソフトドリンク各種\r\n・VIP Floor	ビール、ハイボール、泡盛(古酒)、焼酎、ソフトドリンク各種', 'MasterCard,VISA,JCB,AmericanExpress,Diners', NULL, '沖縄県', '那覇市', '松山2-9-17 カーニバルビル4F 5F', '2019-08-10 16:58:22', '2019-08-18 16:25:04'),
+(56, 94, 'naha', 'cabacula', '00002', 'Club琉球', 'dca447d4540d4441ef6f0a7495ebea7d983f00e3.jpg', '70cf8ef198ee22f098d31c96a13b6db700085850.jpg', '5f8dc463c62d717694d2e07b5fa3254523f1bf5c.jpg', '99d384a724fb9aab1972772b18992f80b09d2c67.jpg', '3ba90b2743d559bc1c2623b85a4b4d43bd1741ec.jpg', '75d5ca39e15124b9802aab78b64bccc07fd387c1.jpg', '6ff046e9668601d80c548fb6edead4f6e0414964.jpg', '', '', '那覇市松山にGRANDOPEN!!\r\nKING of RESORT!! CLUB 琉球', '0989757973', '', '21:00:00', NULL, '月曜定休日', '★1time 60min★\r\n・保証	５，０００円\r\n・マンツーマン	８，０００円\r\n・ＶＩＰ	１，０００円\r\n・指名料	１，０００円\r\n・場内指名料	１，０００円\r\n・ＳＣ	１５％　（税込）\r\n・PRIVATE ROOM　１５，０００円（ＳＣ　２５％　税込）\r\n・SECRET ROOM　２０，０００円（ＳＣ　２５％　税込）\r\n★Free Drink★\r\n・MAIN Floor	ビール、泡盛、焼酎、ソフトドリンク各種\r\n・VIP Floor	ビール、ハイボール、泡盛(古酒)、焼酎、ソフトドリンク各種', 'MasterCard,VISA,JCB,AmericanExpress,Diners', NULL, '沖縄県', '那覇市', '松山2-9-17 カーニバルビル4F 5F', '2019-08-10 16:58:22', '2019-09-03 21:32:56'),
 (63, 98, 'ginowan', 'girlsbar', '00001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-08-18 19:24:23', '2019-08-18 19:24:23');
 
 -- --------------------------------------------------------
@@ -717,7 +699,57 @@ INSERT INTO `shop_infos` (`id`, `shop_id`, `title`, `content`, `image1`, `image2
 (5, 56, '店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎', '店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎', '21d40d047d9d90084fb29d69370fd29d23b776a9.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/14/20190814_215514', '2019-08-14 21:55:14', '2019-08-14 21:55:14'),
 (6, 56, '店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎', '店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎\r\n\r\n\r\n\r\n店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎\r\n店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎', '21d40d047d9d90084fb29d69370fd29d23b776a9.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/14/20190814_220035', '2019-08-14 22:00:35', '2019-08-14 22:00:35'),
 (7, 56, '店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎', '店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎', '5aca4cb44dd89079e8e5a943eefa7a0376c56168.jpg', '9355809fc1364bf5f28f3306c564aa27d62e0a0d.jpg', '7901c9530e1859aed224e88790820b581249afc4.jpg', '9ea987da0941b85733d31d17137da730deed392a.jpg', '82000f9dff198e6afd62698a25c49141129f140f.jpg', '6a77222419fc5c7e1dba7d035ba10c7347431cb5.jpg', NULL, NULL, '/2019/08/14/20190814_235405', '2019-08-14 23:54:05', '2019-08-28 23:38:47'),
-(8, 55, 'フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎', 'フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎', 'c9d451af222e1e9a50243d2946c78660f4ada2ba.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/15/20190815_160853', '2019-08-15 16:08:53', '2019-08-15 16:08:53');
+(8, 55, 'フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎', 'フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎', 'c9d451af222e1e9a50243d2946c78660f4ada2ba.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/15/20190815_160853', '2019-08-15 16:08:53', '2019-08-15 16:08:53'),
+(9, 56, '店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎', '店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎', '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/09/01/20190901_223334', '2019-09-01 22:33:34', '2019-09-02 22:13:35');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `shop_info_likes`
+--
+
+DROP TABLE IF EXISTS `shop_info_likes`;
+CREATE TABLE `shop_info_likes` (
+  `id` int(11) NOT NULL,
+  `shop_info_id` int(11) NOT NULL,
+  `shop_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `shop_info_likes`
+--
+
+INSERT INTO `shop_info_likes` (`id`, `shop_info_id`, `shop_id`, `user_id`, `created`, `modified`) VALUES
+(1, 9, 56, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `snss`
+--
+
+DROP TABLE IF EXISTS `snss`;
+CREATE TABLE `snss` (
+  `id` int(11) NOT NULL,
+  `shop_id` int(11) DEFAULT NULL,
+  `cast_id` int(11) DEFAULT NULL,
+  `facebook` varchar(255) DEFAULT NULL,
+  `twitter` varchar(255) DEFAULT NULL,
+  `instagram` varchar(255) DEFAULT NULL,
+  `line` varchar(255) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `snss`
+--
+
+INSERT INTO `snss` (`id`, `shop_id`, `cast_id`, `facebook`, `twitter`, `instagram`, `line`, `created`, `modified`) VALUES
+(2, 56, NULL, 'Night-Planet-101941477849319', 'OkinawaHack', 't.a.k.u.m.a_', '', '2019-08-31 01:09:16', '2019-08-31 12:19:41');
 
 -- --------------------------------------------------------
 
@@ -745,6 +777,39 @@ INSERT INTO `tags` (`id`, `title`, `created`, `modified`) VALUES
 (5, 'tag4', '2018-12-31 10:17:24', '2018-12-31 10:17:24'),
 (6, 'tag5', '2018-12-31 10:25:15', '2018-12-31 10:25:15'),
 (7, 'tag6', '2018-12-31 10:33:44', '2018-12-31 10:33:44');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `updates`
+--
+
+DROP TABLE IF EXISTS `updates`;
+CREATE TABLE `updates` (
+  `id` int(11) NOT NULL,
+  `shop_id` int(11) DEFAULT NULL,
+  `cast_id` int(11) DEFAULT NULL,
+  `type` varchar(30) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `updates`
+--
+
+INSERT INTO `updates` (`id`, `shop_id`, `cast_id`, `type`, `content`, `created`, `modified`) VALUES
+(1, 56, 1, 'EVENT', '店舗からのお知らせ1が追加されました。', '2019-09-01 23:04:16', '2019-09-01 23:04:16'),
+(2, 56, 1, 'EVENT', '店舗からのお知らせ2が追加されました。', '2019-09-01 23:27:17', '2019-09-01 23:27:17'),
+(3, 56, 1, 'EVENT', '店舗からのお知らせ3が追加されました。', '2019-08-15 23:27:17', '2019-09-01 23:27:17'),
+(4, NULL, NULL, 'SYSTEM', '店舗情報が更新されました。', '2019-09-03 00:43:23', '2019-09-03 00:43:23'),
+(5, 56, NULL, 'CAST', 'なおさんがギャラリーを追加しました。', '2019-09-03 00:46:07', '2019-09-03 00:46:07'),
+(7, 56, 53, 'DIARY', 'なおさんが日記を追加しました。', '2019-09-03 21:12:32', '2019-09-03 21:12:32'),
+(9, 56, NULL, '', '店舗画像が更新されました。', '2019-09-03 21:25:10', '2019-09-03 21:25:10'),
+(10, 56, NULL, '', '店舗画像が更新されました。', '2019-09-03 21:32:56', '2019-09-03 21:32:56'),
+(11, 56, NULL, 'SHOP-GALLERY', '店内ギャラリーが更新されました。', '2019-09-03 21:35:46', '2019-09-03 21:35:46'),
+(12, 56, 0, 'EVENT', '店舗からのお知らせ3が追加されました。', '2019-09-01 23:04:16', '2019-09-01 23:04:16');
 
 -- --------------------------------------------------------
 
@@ -824,6 +889,13 @@ ALTER TABLE `diarys`
   ADD KEY `cast_key` (`cast_id`);
 
 --
+-- Indexes for table `diary_likes`
+--
+ALTER TABLE `diary_likes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `diary_like_key` (`diary_id`);
+
+--
 -- Indexes for table `events`
 --
 ALTER TABLE `events`
@@ -842,13 +914,6 @@ ALTER TABLE `event_types`
 ALTER TABLE `jobs`
   ADD PRIMARY KEY (`id`),
   ADD KEY `owner_key` (`shop_id`);
-
---
--- Indexes for table `likes`
---
-ALTER TABLE `likes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `diary_key` (`diary_id`);
 
 --
 -- Indexes for table `master_role`
@@ -877,11 +942,34 @@ ALTER TABLE `shop_infos`
   ADD KEY `shop_key` (`shop_id`);
 
 --
+-- Indexes for table `shop_info_likes`
+--
+ALTER TABLE `shop_info_likes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `shop_info_key` (`shop_info_id`);
+
+--
+-- Indexes for table `snss`
+--
+ALTER TABLE `snss`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `shop_id` (`shop_id`),
+  ADD KEY `cast_id` (`cast_id`);
+
+--
 -- Indexes for table `tags`
 --
 ALTER TABLE `tags`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `title` (`title`);
+
+--
+-- Indexes for table `updates`
+--
+ALTER TABLE `updates`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `shop_id` (`shop_id`),
+  ADD KEY `cast_id` (`cast_id`);
 
 --
 -- Indexes for table `users`
@@ -927,13 +1015,19 @@ ALTER TABLE `developers`
 -- AUTO_INCREMENT for table `diarys`
 --
 ALTER TABLE `diarys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=167;
+
+--
+-- AUTO_INCREMENT for table `diary_likes`
+--
+ALTER TABLE `diary_likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=292;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=293;
 
 --
 -- AUTO_INCREMENT for table `event_types`
@@ -969,13 +1063,31 @@ ALTER TABLE `shops`
 -- AUTO_INCREMENT for table `shop_infos`
 --
 ALTER TABLE `shop_infos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `shop_info_likes`
+--
+ALTER TABLE `shop_info_likes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `snss`
+--
+ALTER TABLE `snss`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tags`
 --
 ALTER TABLE `tags`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `updates`
+--
+ALTER TABLE `updates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `users`

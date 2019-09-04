@@ -6,3 +6,6 @@
     <?= $this->element('shopCard'); ?>
   </div>
 </div>
+<!-- ショップ用ボトムナビゲーション START -->
+<?= $this->element('bottom-navigation'); ?>
+<!-- ショップ用ボトムナビゲーション END -->

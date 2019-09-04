@@ -124,9 +124,9 @@
             </div>
             <div class="card-action like-field"><p>
               <a class="btn-floating waves-effect waves-green btn-flat blue">
-                    <i class="material-icons">thumb_up</i></a><span class="like-field-span like-count"><?=count($cast->diarys[0]->likes)?></span>
+                    <i class="material-icons">favorite_border</i></a><span class="like-field-span like-count"><?=count($cast->diarys[0]->likes)?></span>
               <a class="btn-floating waves-effect waves-green btn-flat red">
-                    <i class="material-icons">thumb_up</i></a><span class="like-field-span">LIKE?</span>
+                    <i class="material-icons">favorite_border</i></a><span class="like-field-span">LIKE?</span>
               <a href="<?=DS.$shopInfo['area']['path'].DS.PATH_ROOT['DIARY'].DS.$cast->id."?area=".$cast->shop->area."&genre=".$cast->shop->genre.
                       "&shop=".$cast->shop->id."&name=".$cast->shop->name."&cast=".$cast->id."&nickname=".$cast->nickname?>"
                       class="right waves-effect waves-light btn-large createBtn"><i class="material-icons right">chevron_right</i><?=COMMON_LB['052']?></a>
@@ -360,3 +360,6 @@
   </div>
 </div>
 <?= $this->element('photoSwipe'); ?>
+<!-- ショップ用ボトムナビゲーション START -->
+<?= $this->element('shop-bottom-navigation'); ?>
+<!-- ショップ用ボトムナビゲーション END -->

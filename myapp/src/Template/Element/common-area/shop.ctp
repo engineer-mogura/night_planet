@@ -26,37 +26,42 @@
       <!-- 更新情報 END -->
       <!-- 店舗メニュー START -->
       <div id="shop-menu-section" class="row shop-menu section scrollspy">
-        <div class="cyan lighten-5 card-panel col s12 center-align">
+        <div class="orange darken-1 card-panel col s12 center-align">
           <p class="shop-menu-label section-label"><span> SHOP MENU </span></p>
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
+            <?= in_array(SHOP_MENU_NAME['COUPON'], $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label coupon"></br>クーポン</span>
             <a class="waves-effect waves-light modal-trigger" href="#coupons-modal"></a>
           </div>
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
+          <?= in_array(SHOP_MENU_NAME['WORK'], $update_icon) ? '<div class="new-info"></div>' : ''?>
           <span class="shop-menu-label work"></br>今日の出勤</span>
             <a class="waves-effect waves-light" href="#!"></a>
           </div>
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
+          <?= in_array(SHOP_MENU_NAME['EVENT'], $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label event"></br>お知らせ</span>
             <a class="waves-effect waves-light" href="#event-section"></a>
           </div>
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
+          <?= in_array(SHOP_MENU_NAME['CAST'], $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label cast"></br>キャスト</span>
             <a class="waves-effect waves-light" href="#cast-section"></a>
           </div>
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
+          <?= in_array(SHOP_MENU_NAME['DIARY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label diary"></br>日記</span>
-            <a class="waves-effect waves-light" href="#!"></a>
+            <a class="waves-effect waves-light" href="#diary-section"></a>
           </div>
         </div>
         <div class="col s4 m3 l3">
@@ -85,6 +90,7 @@
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
+          <?= in_array(SHOP_MENU_NAME['SHOP-GALLERY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label shop-gallery"></br>Shop Gallery</span>
             <a class="waves-effect waves-light" href="#shop-gallery-section"></a>
           </div>
@@ -97,12 +103,14 @@
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
+          <?= in_array(SHOP_MENU_NAME['SYSTEM'], $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label system"></br>店舗情報</span>
             <a class="waves-effect waves-light" href="#shop-info-section"></a>
           </div>
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
+          <?= in_array(SHOP_MENU_NAME['RECRUIT'], $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label recruit"></br>リクルート</span>
             <a class="waves-effect waves-light" href="#recruit-section"></a>
           </div>
@@ -111,7 +119,7 @@
       <!-- 店舗メニュー END -->
       <!-- キャストリスト START -->
       <div id="cast-section" class="row shop-menu section scrollspy">
-        <div class="cyan lighten-5 card-panel col s12 center-align">
+        <div class="orange darken-1 card-panel col s12 center-align">
           <p class="cast-label section-label"><span> CAST </span></p>
         </div>
         <?php if(count($shop->casts) > 0): ?>
@@ -132,28 +140,47 @@
       <!-- キャストリスト END -->
       <!-- 日記 START -->
       <div id="diary-section" class="row shop-menu section scrollspy">
-        <div class="cyan lighten-5 card-panel col s12 center-align">
+        <div class="orange darken-1 card-panel col s12 center-align">
           <p class="diary-label section-label"><span> 日記 </span></p>
         </div>
-        <?php if(count($shop->casts) > 0): ?>
-            <?php foreach($shop->casts as $cast): ?>
-            <div class="center-align col s3 m3 l3">
-              <div>
-                <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
-                  <img src="<?=isset($cast->image1) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1 : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
-                </a>
-                </div>
-              <h6><?=$cast->nickname?></h6>
-            </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p class="col">日記はありません。</p>
-        <?php endif; ?>
+        <?php if (count($diarys) > 0): ?>
+          <ul class="collection z-depth-3">
+            <?php foreach ($diarys as $key => $value): ?>
+              <?php 
+                $image_count = 0;
+                foreach ($imageCol as $key => $col) {
+                  if(!empty($value->get($col))) {
+                    ++$image_count;
+                  }
+                }
+                $path = DS.PATH_ROOT['IMG'].DS.$value->cast->shop['area']
+                  .DS.$value->cast->shop['genre'].DS.$value->cast->shop['dir'].DS.PATH_ROOT['CAST']
+                  .DS.$value->cast['dir'].DS.PATH_ROOT['IMAGE'];
+              ?>
+              <?php !empty($value->cast->image1)? $imgPath = $path.DS.$value->cast['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+              <li class="linkbox collection-item avatar">
+                <img src="<?= $imgPath ?>" alt="" class="circle">
+                <span class="title color-blue"><?= $value->created->nice()?></span>
+                <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$image_count?></span>
+                <p><span class="color-blue"><?=$value->cast['nickname']?></span><br>
+                  <span class="color-blue"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
+                  .' '.$value->cast->shop['name']?></span><br>
+                  <span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
+                </p>
+                <span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->diary__likes)?></span>
+                <a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
+                "&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
+              </li>
+            <?php endforeach ?>
+          </ul>
+        <?php else:?>
+          <p class="col">まだ日記がありません。</p>
+        <?php endif ?>
       </div>
       <!-- 日記 END -->
       <!-- 店舗情報 START -->
       <div id="shop-info-section" class="row shop-menu section scrollspy">
-        <div class="cyan lighten-5 card-panel col s12 center-align">
+        <div class="orange darken-1 card-panel col s12 center-align">
           <p class="shop-info-label section-label"><span> SHOP INFO </span></p>
         </div>
         <div class="col s12 m12 l12">
@@ -213,7 +240,7 @@
       <!-- instagram START -->
       <?php if(!empty($shop->snss[0]['instagram'])): ?>
         <div id="instagram-section" class="row shop-menu section scrollspy">
-          <div class="cyan lighten-5 card-panel col s12 center-align">
+          <div class="orange darken-1 card-panel col s12 center-align">
             <p class="instagram-label section-label"><span> instagram </span></p>
           </div>
           <?php if(!empty($insta_error)):
@@ -240,8 +267,8 @@
                   </a>
                 </span>
               </p>
-              <p><span class="icon-vertical-align"><i class="Small material-icons">person_add</i>フォロワー：<?=$insta_data['followers_count']?> </span><span class="icon-vertical-align"><i class="Small material-icons">people</i>フォロー：<?=$insta_data['follows_count']?></span><br>
-              <span class="icon-vertical-align"><i class="Small material-icons">file_upload</i>投稿：<?=$insta_data['media_count']?></span>
+              <p><span class="icon-vertical-align"><i class="small material-icons">person_add</i>フォロワー：<?=$insta_data['followers_count']?> </span><span class="icon-vertical-align"><i class="small material-icons">people</i>フォロー：<?=$insta_data['follows_count']?></span><br>
+              <span class="icon-vertical-align"><i class="small material-icons">file_upload</i>投稿：<?=$insta_data['media_count']?></span>
               </p>
             </li>
           </ul>
@@ -252,8 +279,8 @@
                   <img src="<?=$value['media_url']?>" itemprop="thumbnail" alt="<?=$value['caption']?>" />
                 </a>
                 <figcaption style="display:none;">
-                  <i class="Small material-icons">favorite_border</i><?=$value['like_count']?> 
-                  <i class="Small material-icons">comment</i><?=$value['comments_count']?></br>
+                  <i class="small material-icons">favorite_border</i><?=$value['like_count']?> 
+                  <i class="small material-icons">comment</i><?=$value['comments_count']?></br>
                   <?=$value['caption']?>
                 </figcaption>
               </figure>
@@ -266,7 +293,7 @@
       <!-- facebook START -->
       <?php if(!empty($shop->snss[0]['facebook'])): ?>
         <div id="facebook-section" class="row shop-menu section scrollspy">
-          <div class="cyan lighten-5 card-panel col s12 center-align">
+          <div class="orange darken-1 card-panel col s12 center-align">
             <p class="facebook-label section-label"><span> facebook </span></p>
           </div>
           <div id="fb-root"></div>
@@ -277,7 +304,7 @@
       <!-- twitter START -->
       <?php if(!empty($shop->snss[0]['twitter'])): ?>
         <div id="twitter-section" class="row shop-menu section scrollspy">
-          <div class="cyan lighten-5 card-panel col s12 center-align">
+          <div class="orange darken-1 card-panel col s12 center-align">
             <p class="twitter-label section-label"><span> twitter </span></p>
           </div>
           <a class="twitter-timeline" href="https://twitter.com/<?=$shop->snss[0]['twitter']?>?ref_src=twsrc%5Etfw" data-tweet-limit="3">Tweets by <?=$shop->snss[0]['twitter']?></a>
@@ -287,7 +314,7 @@
       <!-- twitter END -->
       <!-- お知らせ START -->
       <div id="event-section" class="row shop-menu section scrollspy">
-        <div class="cyan lighten-5 card-panel col s12 center-align">
+        <div class="orange darken-1 card-panel col s12 center-align">
           <p class="event-label section-label"><span> お知らせ </span></p>
         </div>
         <?php if (count($shop->shop_infos) > 0): ?>
@@ -305,10 +332,7 @@
             </p>
             <p class="content"><?=$this->Text->autoParagraph($shop->shop_infos[0]->content)?></p>
             <div class="card-action like-field"><p>
-            <a class="btn-floating waves-effect waves-green btn-flat blue">
-                  <i class="material-icons">thumb_up</i></a><span class="like-field-span like-count"><?=count($shop->shop_infos[0]->likes)?></span>
-            <a class="btn-floating waves-effect waves-green btn-flat red">
-                  <i class="material-icons">thumb_up</i></a><span class="like-field-span">LIKE?</span>
+              <span class="icon-vertical-align color-blue"><i class="material-icons">favorite_border</i><span class="like-field-span like-count"><?=count($shop->shop_infos[0]->likes)?></span></span>
             <a href="<?=DS.$shopInfo['area']['path'].DS.PATH_ROOT['NOTICE'].DS.$shop->shop_infos[0]->id."?area=".$shop->area."&genre=".$shop->genre.
                     "&shop=".$shop->id."&name=".$shop->name."&notice=".$shop->id?>"
                     class="right waves-effect waves-light btn-large createBtn"><i class="material-icons right">chevron_right</i><?=COMMON_LB['052']?></a>
@@ -322,7 +346,7 @@
       <!-- お知らせ END -->
       <!-- 店舗ギャラリー START -->
       <div id="shop-gallery-section" class="row shop-menu section scrollspy">
-        <div class="cyan lighten-5 card-panel col s12 center-align">
+        <div class="orange darken-1 card-panel col s12 center-align">
             <p class="shop-gallery-label section-label"><span> 店内ギャラリー </span></p>
         </div>
         <?= count($imageList) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
@@ -337,7 +361,7 @@
       <!-- 店舗ギャラリー END -->
       <!-- GOOGLE MAP START -->
       <div id="map-section" class="row shop-menu section scrollspy">
-        <div class="cyan lighten-5 card-panel col s12 center-align">
+        <div class="orange darken-1 card-panel col s12 center-align">
             <p class="map-label section-label"><span> MAP </span></p>
         </div>
         <div style="width:100%;height:300px;" id="google_map"></div>
@@ -345,7 +369,7 @@
       <!-- GOOGLE MAP END -->
       <!-- 求人情報 START -->
       <div id="recruit-section" class="row shop-menu section scrollspy">
-        <div class="cyan lighten-5 card-panel col s12 center-align">
+        <div class="orange darken-1 card-panel col s12 center-align">
             <p class="recruit-label section-label"><span> リクルート </span></p>
         </div>
         <div class="col s12 m12 l12">
@@ -471,25 +495,48 @@
         </div>
       </div>
       <!-- 求人情報 END -->
-      <!-- シェアボタン START -->
-      <div class="show-on-large hide-on-med-and-down">
-        <P class="center-align">SNSでお店をシェアしよう！</p>
+    </div>
+    <!--デスクトップ用 サイドバー START -->
+    <div class="hide-on-med-and-down sidebar col l4">
+			<div class="section">
+        <!-- シェアボタン START -->
+        <P class="center-align">SNSで<span class="color-blue"><?=$shop->name?></span>をシェアしよう！</p>
         <div class="row sharer-modal">
-          <div class="col l3">
+          <div class="col l6">
             <a class="facebook sharer-btn waves-effect waves-light btn-large"><span> Facebook</span></a>
           </div>
-          <div class="col l3">
+          <div class="col l6">
             <a class="twitter sharer-btn waves-effect waves-light btn-large"><span> Twitter</span></a>
           </div>
-          <div class="col l3">
+        </div>
+        <div class="row sharer-modal">
+          <div class="col l6">
             <a class="b_hatena sharer-btn waves-effect waves-light btn-large"><span> はてブ</span></a>
           </div>
-          <div class="col l3">
+          <div class="col l6">
             <a class="line sharer-btn waves-effect waves-light btn-large"><span> LINE</span></a>
           </div>
         </div>
+        <!-- シェアボタン END -->
+			</div>
+      <!-- バナー１ START -->
+			<div class="card hoverable section blue darken-2">
+				<div class="card-content white-text">
+					<p>バナー１</p>
+				</div>
+			</div>
+      <!-- バナー１ END -->
+      <!-- バナー２ START -->
+			<div class="card hoverable section purple darken-2">
+				<div class="card-content white-text">
+					<p>バナー２</p>
+				</div>
+			</div>
+      <!-- バナー２ END -->
       </div>
-      <!-- シェアボタン END -->
-      </div>
+    <!--デスクトップ用 サイドバー END -->
   </div>
 </div>
+<!-- ショップ用ボトムナビゲーション START -->
+<?= $this->element('shop-bottom-navigation'); ?>
+<!-- ショップ用ボトムナビゲーション END -->

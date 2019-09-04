@@ -44,15 +44,15 @@ class CastsController extends AppController
         $query = $this->Diarys->find();
         // キャストの記事といいね数を取得
         $diarys = $query->select(['id',
-            'diary_like_num'=> $query->func()->count('Likes.diary_id')])
-            ->contain('Likes')
-            ->leftJoinWith('Likes')
+            'diary_like_num'=> $query->func()->count('Diary_Likes.diary_id')])
+            ->contain('Diary_Likes')
+            ->leftJoinWith('Diary_Likes')
             ->where(['Diarys.cast_id'=>$id])
-            ->group(['Likes.diary_id'])
+            ->group(['Diary_Likes.diary_id'])
             ->order(['diary_like_num' => 'desc'])->toArray();
         $likeTotal = array_sum(array_column($diarys, 'diary_like_num'));
         //$like = $query->select(['total_like' => $query->func()->sum('cast_id')])
-        //$diaryLikes = $this->Diarys->find('all')->where(['cast_id'=>$id])->contain('Likes');
+        //$diaryDiary_Likes = $this->Diarys->find('all')->where(['cast_id'=>$id])->contain('Diary_Likes');
         $cast = $this->Casts->find('all')->contain(['Shops','Diarys'])->where(['Casts.id'=>$id])->first();
         $masterCodesFind = array('time','event');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, true);
@@ -230,6 +230,15 @@ class CastsController extends AppController
                 if (!$this->Casts->save($cast)) {
                     throw new RuntimeException('レコードの更新ができませんでした。');
                 }
+                // 更新情報を追加する
+                $updates = $this->Updates->newEntity();
+                $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールを更新しました。');
+                $updates->set('shop_id', $this->Auth->user('shop_id'));
+                $updates->set('cast_id', $this->Auth->user('id'));
+                // レコード更新実行
+                if (!$this->Updates->save($updates)) {
+                    throw new RuntimeException('レコードの登録ができませんでした。');
+                }
             } catch (RuntimeException $e) {
                 $this->log($this->Util->setLog($auth, $e));
                 $flg = false;
@@ -376,6 +385,15 @@ class CastsController extends AppController
             // レコード更新実行
             if (!$this->Casts->save($cast)) {
                 throw new RuntimeException('レコードの更新ができませんでした。');
+            }
+            // 更新情報を追加する
+            $updates = $this->Updates->newEntity();
+            $updates->set('content',$cast->nickname.'さんがギャラリーを追加しました。');
+            $updates->set('shop_id', $cast->shop_id);
+            $updates->set('cast_id', $cast->cast_id);
+            // レコード更新実行
+            if (!$this->Updates->save($updates)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
             }
 
         } catch (RuntimeException $e) {
@@ -619,6 +637,15 @@ class CastsController extends AppController
             }
             // レコード更新実行
             if (!$this->Diarys->save($diary)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
+            }
+            // 更新情報を追加する
+            $updates = $this->Updates->newEntity();
+            $updates->set('content', $this->Auth->user('nickname').'さんが日記を追加しました。');
+            $updates->set('shop_id', $this->Auth->user('shop_id'));
+            $updates->set('cast_id', $this->Auth->user('id'));
+            // レコード更新実行
+            if (!$this->Updates->save($updates)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
             }
         } catch (RuntimeException $e) {
@@ -1042,6 +1069,15 @@ class CastsController extends AppController
             if (!$this->Casts->save($cast)) {
 
                 throw new RuntimeException('レコードの更新に失敗しました。');
+            }
+            // 更新情報を追加する
+            $updates = $this->Updates->newEntity();
+            $updates->set('content', '新しいキャストを追加しました。');
+            $updates->set('shop_id', $this->Auth->user('shop_id'));
+            $updates->set('cast_id', $this->Auth->user('id'));
+            // レコード更新実行
+            if (!$this->Updates->save($updates)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
             }
 
             // ディレクトリを掘る

@@ -68,7 +68,7 @@
                                 <?= $row['content'] ?></span>
                             </p>
                             <a class="waves-effect hoverable" href="#">
-                                <span class="like-count secondary-content center-align"><i class="tiny material-icons">thumb_up</i><?= count($row['likes']) ?></span>
+                                <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row['likes']) ?></span>
                             </a>
                         </li>
                         <?php $count = $count + 1;?>
@@ -90,7 +90,7 @@
                             <div class="linkbox collapsible-body archiveLink">
                                 <input type="hidden" name="id" value=<?=$row->id?>>
                                 <span class="title color-blue"><?= $row['md_created'] ?></span>
-                                <span class="like-count secondary-content center-align"><i class="tiny material-icons">thumb_up</i><?= count($row['likes']) ?></span>
+                                <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row['likes']) ?></span>
                                 <p><span class="truncate"><?= $row->title ?><br>
                                     <?= $row['content'] ?></span>
                                 </p>

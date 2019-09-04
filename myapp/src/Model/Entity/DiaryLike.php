@@ -4,30 +4,21 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Diary Entity
+ * DiaryLike Entity
  *
  * @property int $id
+ * @property int $diary_id
  * @property int $cast_id
- * @property string $title
- * @property string $content
- * @property string|null $image1
- * @property string|null $image2
- * @property string|null $image3
- * @property string|null $image4
- * @property string|null $image5
- * @property string|null $image6
- * @property string|null $image7
- * @property string|null $image8
- * @property string|null $dir
+ * @property int $user_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
+ * @property \App\Model\Entity\Diary $diary
  * @property \App\Model\Entity\Cast $cast
- * @property \App\Model\Entity\Like[] $likes
+ * @property \App\Model\Entity\User $user
  */
-class Diary extends Entity
+class DiaryLike extends Entity
 {
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -38,21 +29,13 @@ class Diary extends Entity
      * @var array
      */
     protected $_accessible = [
+        'diary_id' => true,
         'cast_id' => true,
-        'title' => true,
-        'content' => true,
-        'image1' => true,
-        'image2' => true,
-        'image3' => true,
-        'image4' => true,
-        'image5' => true,
-        'image6' => true,
-        'image7' => true,
-        'image8' => true,
-        'dir' => true,
+        'user_id' => true,
         'created' => true,
         'modified' => true,
+        'diary' => true,
         'cast' => true,
-        'diary_likes' => true
+        'user' => true
     ];
 }

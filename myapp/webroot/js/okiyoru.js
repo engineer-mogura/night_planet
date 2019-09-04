@@ -213,6 +213,13 @@ function birthdayPickerIni () {
     $('.birthday-picker').pickadate('setDate', new Date());
 }
 
+function telme(message, tel) {
+    var result = confirm(message);
+    if (result == true){
+        location.href = "tel:"+tel;
+    }
+}
+
 /**
  * HTMLを生成する
  * @param  {} file
@@ -580,6 +587,11 @@ function castImageDeleteBtn(form, obj){
                 $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
                 return false;
             });
+            // ボトムナビゲーションのreturn top
+            $(document).on('click','li#bottom-nav-return_top a',function() {
+                $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
+                return false;
+            });
         });
 
         // スマートフォン以外の電話タップを無効にする
@@ -660,8 +672,15 @@ function initializeUser() {
             $('.search-result-card').addClass('horizontal');
         }
     });
-    $("#marquee").marquee({
-        loop: -1
+    $(".marquee").marquee({
+        yScroll: "top"                  // 初期位置(topかbottom)
+        , showSpeed: 250                  // ドロップダウンの速度
+        , scrollSpeed: 6                 // スクロールの速度
+        , pauseSpeed: 1000                // 次のメッセージに進むかスクロールに移るまでの時間
+        , pauseOnHover: true              // マウスオーバーで停止するかどうか
+        , loop: -1                        // 繰り返し回数(負の値にすると無限回)
+        , fxEasingShow: "swing"           // ドロップダウンのときのイージング
+        , fxEasingScroll: "linear"
         // 初期時
         // , init: function ($marquee, options){
         //     if( $marquee.is("#marquee2") ) options.yScroll = "bottom";
@@ -725,24 +744,6 @@ function initializeUser() {
     if($("#genre").length) {
         // 検索ボタン押した時
         commonSearch(false);
-        var options = [
-            // {selector: '#staggered-test', offset: 50, callback: function(el) {
-            //   Materialize.toast("This is our ScrollFire Demo!", 1500 );
-            // } },
-            // {selector: '#staggered-test', offset: 205, callback: function(el) {
-            //   Materialize.toast("Please continue scrolling!", 1500 );
-            // } },
-            {selector: '#slide-out', offset: 400, callback: function(el) {
-                Materialize.showStaggeredList($(el));
-            } },
-            {selector: '#search', offset: 400, callback: function(el) {
-                Materialize.showStaggeredList($(el));
-            } },
-            // {selector: '#staggered-test', offset: 500, callback: function(el) {
-            //   Materialize.fadeInImage($(el));
-            // } }
-          ];
-          Materialize.scrollFire(options);
     }
     /* ジャンル画面 END */
 
@@ -2259,7 +2260,7 @@ function initializeShop() {
                         $(diaryCard).find("p[name='created']").text(response['ymd_created']);
                         $(diaryCard).find("p[name='title']").text(response['title']);
                         $(diaryCard).find("p[name='content']").textWithLF(response['content']);
-                        $("#modal-diary").find(".like-count").text(response['likes'].length);
+                        $("#modal-diary").find(".like-count").text(response['diary__likes'].length);
                         var images = [];
                         $.each(response, function(key, value) {
 
@@ -2384,6 +2385,7 @@ function initializeShop() {
                         $(noticeCard).find("p[name='created']").text(response['ymd_created']);
                         $(noticeCard).find("p[name='title']").text(response['title']);
                         $(noticeCard).find("p[name='content']").textWithLF(response['content']);
+                        $('#modal-notice').find(".like-count").text(response['shop_info__likes'].length);
                         var images = [];
                         $.each(response, function(key, value) {
 

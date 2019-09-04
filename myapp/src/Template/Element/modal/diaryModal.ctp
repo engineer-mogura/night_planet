@@ -86,7 +86,7 @@
 		<div class="card-action like-field">
 			<div class="row">
 				<div class="col s3 m4 l4"><span class="btn-floating waves-effect waves-green btn-flat blue">
-					<i class="material-icons">thumb_up</i></span><span class="like-field-span like-count"></span>
+					<i class="material-icons">favorite_border</i></span><span class="like-field-span like-count"></span>
 				</div>
 				<div class="col s5 m4 l4">
 					<button class="modal-action waves-effect waves-light btn-large updateBtn disabled"><i class="material-icons right">update</i>更新</button>

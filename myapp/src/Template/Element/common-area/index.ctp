@@ -28,7 +28,7 @@
 							.' '.$value->shop['name']?></span><br>
 						<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 						</p>
-						<span class="like-count secondary-content center-align"><i class="tiny material-icons">thumb_up</i><?=count($value->likes)?></span>
+						<span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?=count($value->likes)?></span>
 						<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->id."?area=".$value->shop->area."&genre=".$value->shop->genre.
 						"&shop=".$value->shop->id."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
 					</li>
@@ -58,7 +58,7 @@
 								.' '.$value->cast->shop['name']?></span><br>
 								<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 							</p>
-							<span class="like-count secondary-content center-align"><i class="tiny material-icons">thumb_up</i><?=count($value->likes)?></span>
+							<span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?=count($value->likes)?></span>
 							<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
 							"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
 						</li>
@@ -70,3 +70,6 @@
 		</div>
 	</div>
 </div>
+<!-- ショップ用ボトムナビゲーション START -->
+<?= $this->element('bottom-navigation'); ?>
+<!-- ショップ用ボトムナビゲーション END -->

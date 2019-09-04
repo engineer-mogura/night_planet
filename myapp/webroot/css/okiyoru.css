@@ -410,6 +410,16 @@ div.description {
 .shop-menu .shop-menu-label {
   font-size: xx-small;
 }
+.new-info {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 40px;
+  height: 40px;
+  background-image: url(/img/common/new-icon.png);
+  background-size: contain;
+  vertical-align: middle;
+}
 .shop-menu .shop-menu-label.coupon:before {
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/
@@ -551,6 +561,16 @@ div.description {
   background-size: contain;
   vertical-align: middle;
 }
+#diary-section .diary-label span:before,
+#diary-section .diary-label span:after {
+  background-image: url(/img/common/diary-icon.jpg);
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
 #work-section .work-label span:before,
 #work-section .work-label span:after {
   background-image: url(/img/common/girl-working-icon.png);
@@ -584,6 +604,26 @@ div.description {
 #instagram-section .instagram-label span:before,
 #instagram-section .instagram-label span:after {
   background-image: url(/img/common/instagram-icon.jpg);
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+#facebook-section .facebook-label span:before,
+#facebook-section .facebook-label span:after {
+  background-image: url(/img/common/facebook-icon.jpg);
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+#twitter-section .twitter-label span:before,
+#twitter-section .twitter-label span:after {
+  background-image: url(/img/common/twitter-icon.png);
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
@@ -1327,3 +1367,29 @@ textarea::-webkit-scrollbar {
 
 }
 
+ul.marquee{
+  display:block;
+  padding:0;
+  margin:0;
+  list-style:none;
+  line-height:1;
+  position:relative;
+  overflow:hidden;
+ 
+  /* 以下はオプション */
+  width:300px;
+  height:20px;
+  border:1px solid #222;
+ }
+ 
+ ul.marquee li{
+  position:absolute;
+  top:-999em;
+  left:0;
+  display:block;
+  white-space:nowrap;
+ 
+  /* 以下はオプション */
+  padding:3px 5px;
+  color:white;
+ }

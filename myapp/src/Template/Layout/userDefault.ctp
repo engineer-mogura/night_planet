@@ -145,8 +145,5 @@
     </div>
     <!-- END #return_top -->
   </footer>
-  <!-- ボトムナビゲーション START -->
-  <?= $this->element('bottom-navigation'); ?>
-  <!-- ボトムナビゲーション END -->
 </body>
 </html>

@@ -46,7 +46,7 @@ class DiarysTable extends Table
             'foreignKey' => 'cast_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('Likes', [
+        $this->hasMany('Diary_Likes', [
             'foreignKey' => 'diary_id',
             'joinType' => 'INNER'
         ]);

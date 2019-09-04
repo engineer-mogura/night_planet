@@ -1,22 +1,21 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\LikesTable;
+use App\Model\Table\DiaryLikesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\LikesTable Test Case
+ * App\Model\Table\DiaryLikesTable Test Case
  */
-class LikesTableTest extends TestCase
+class DiaryLikesTableTest extends TestCase
 {
-
     /**
      * Test subject
      *
-     * @var \App\Model\Table\LikesTable
+     * @var \App\Model\Table\DiaryLikesTable
      */
-    public $Likes;
+    public $DiaryLikes;
 
     /**
      * Fixtures
@@ -24,8 +23,10 @@ class LikesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Likes',
-        'app.Diaries'
+        'app.DiaryLikes',
+        'app.Diaries',
+        'app.Casts',
+        'app.Users'
     ];
 
     /**
@@ -36,8 +37,8 @@ class LikesTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Likes') ? [] : ['className' => LikesTable::class];
-        $this->Likes = TableRegistry::getTableLocator()->get('Likes', $config);
+        $config = TableRegistry::getTableLocator()->exists('DiaryLikes') ? [] : ['className' => DiaryLikesTable::class];
+        $this->DiaryLikes = TableRegistry::getTableLocator()->get('DiaryLikes', $config);
     }
 
     /**
@@ -47,7 +48,7 @@ class LikesTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Likes);
+        unset($this->DiaryLikes);
 
         parent::tearDown();
     }

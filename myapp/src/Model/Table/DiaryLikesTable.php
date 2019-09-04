@@ -7,26 +7,25 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * Likes Model
+ * DiaryLikes Model
  *
  * @property \App\Model\Table\DiariesTable|\Cake\ORM\Association\BelongsTo $Diaries
- * @property |\Cake\ORM\Association\BelongsTo $Casts
- * @property |\Cake\ORM\Association\BelongsTo $Users
+ * @property \App\Model\Table\CastsTable|\Cake\ORM\Association\BelongsTo $Casts
+ * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  *
- * @method \App\Model\Entity\Like get($primaryKey, $options = [])
- * @method \App\Model\Entity\Like newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Like[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Like|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Like|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Like patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Like[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Like findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\DiaryLike get($primaryKey, $options = [])
+ * @method \App\Model\Entity\DiaryLike newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\DiaryLike[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\DiaryLike|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\DiaryLike saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\DiaryLike patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\DiaryLike[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\DiaryLike findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class LikesTable extends Table
+class DiaryLikesTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -37,7 +36,7 @@ class LikesTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('likes');
+        $this->setTable('diary_likes');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 

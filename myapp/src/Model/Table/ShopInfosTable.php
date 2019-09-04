@@ -45,6 +45,10 @@ class ShopInfosTable extends Table
             'foreignKey' => 'shop_id',
             'joinType' => 'INNER'
         ]);
+        $this->hasMany('Shop_info_Likes', [
+            'foreignKey' => 'shop_info_id',
+            'joinType' => 'INNER'
+        ]);
     }
 
     /**

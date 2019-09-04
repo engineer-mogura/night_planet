@@ -255,10 +255,9 @@ class UtilComponent extends Component
     public function getDiarys($id = null)
     {
         $diarys = TableRegistry::get('Diarys');
-        $columns = array('id','cast_id','title','content','image1','dir');
         // キャスト情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
-        $query = $diarys->find('all')->select($columns);
+        $query = $diarys->find('all')->select($diarys->Schema()->columns());
         $ym = $query->func()->date_format([
             'created' => 'identifier',
             "'%Y/%c'" => 'literal']);
@@ -269,7 +268,7 @@ class UtilComponent extends Component
             'ym_created' => $ym,
             'md_created' => $md])
             ->where(['cast_id' => $id])
-            ->contain(['Likes'])
+            ->contain(['Diary_Likes'])
             ->order(['created' => 'DESC'])->all();
         $archive = $this->groupArray($archive, 'ym_created');
         $archive = array_values($archive);
@@ -292,7 +291,7 @@ class UtilComponent extends Component
         $diary = $query->select([
             'ymd_created' => $ymd])
             ->where(['id' => $id])
-            ->contain(['Likes'])
+            ->contain(['Diary_Likes'])
             ->first();
         return $diary;
     }
@@ -303,25 +302,34 @@ class UtilComponent extends Component
      *
      * @param [type] $rowNum
      * @param [type] $isArea
+     * @param [type] $shop_id
      * @return array
      */
-    public function getNewDiarys($rowNum, $isArea = null)
+    public function getNewDiarys($rowNum, $isArea = null, $shop_id = null)
     {
         $diarys = TableRegistry::get('Diarys');
-        $columns = array('id','cast_id','title','content','image1','dir');
+
         if(!empty($isArea)) {
             $diarys = $diarys->find('all')
-            ->contain(['Likes','Casts','Casts.Shops'])
+            ->contain(['Diary_Likes','Casts','Casts.Shops'])
             ->matching('Casts.Shops', function($q) use ($isArea){
                 return $q->where(['Shops.area'=>$isArea]);
             })
             ->order(['Diarys.created' => 'DESC'])
             ->limit($rowNum)->all();
+        } else if(!empty($shop_id)) {
+            $diarys = $diarys->find('all')
+            ->contain(['Diary_Likes','Casts','Casts.Shops'])
+            ->matching('Casts.Shops', function($q) use ($shop_id){
+                return $q->where(['Shops.id'=>$shop_id]);
+            })
+            ->order(['Diarys.created' => 'DESC'])
+            ->limit($rowNum)->all();
         } else {
             $diarys = $diarys->find('all')
-                ->contain(['Likes','Casts','Casts.Shops'])
-                ->order(['Diarys.created' => 'DESC'])
-                ->limit($rowNum)->all();
+            ->contain(['Diary_Likes','Casts','Casts.Shops'])
+            ->order(['Diarys.created' => 'DESC'])
+            ->limit($rowNum)->all();
         }
 
         return $diarys->toArray();
@@ -336,7 +344,6 @@ class UtilComponent extends Component
     public function getNotices($id)
     {
         $shopInfos = TableRegistry::get('shop_infos');
-        $columns = array('id','shop_id','title','content','image1','dir');
         // キャスト情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
         $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
@@ -350,7 +357,10 @@ class UtilComponent extends Component
             'ym_created' => $ym,
             'md_created' => $md])
             ->where(['shop_id' => $id])
-            ->order(['created' => 'DESC'])->all();
+            ->contain(['Shop_info_Likes'])
+            ->order(['created' => 'DESC'])
+            ->all();
+
         $shopInfos = $this->groupArray($shopInfos, 'ym_created');
         $shopInfos = array_values($shopInfos);
         return $shopInfos;
@@ -372,6 +382,7 @@ class UtilComponent extends Component
         $shopInfo = $query->select([
             'ymd_created' => $ymd])
             ->where(['id' => $id])
+            ->contain(['Shop_info_Likes'])
             ->first();
         return $shopInfo;
     }
@@ -390,7 +401,7 @@ class UtilComponent extends Component
         // 過去の日記をアーカイブ形式で取得する
         if (!empty($isArea)) {
             $shopInfos = $shopInfos->find('all')
-            ->contain(['Shops'])
+            ->contain(['Shop_info_Likes','Shops'])
             ->matching('Shops', function($q) use ($isArea){
                     return $q->where(['Shops.area'=>$isArea]);
                 })
@@ -398,7 +409,7 @@ class UtilComponent extends Component
             ->limit($rowNum)->all();
         } else {
             $shopInfos = $shopInfos->find('all')
-            ->contain(['Shops'])
+            ->contain(['Shop_info_Likes','Shops'])
             ->order(['shop_infos.created' => 'DESC'])
             ->limit($rowNum)->all();
         }

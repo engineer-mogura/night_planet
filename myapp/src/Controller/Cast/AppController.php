@@ -17,6 +17,7 @@ class AppController extends \App\Controller\AppController
         $this->Diarys = TableRegistry::get('Diarys');
         $this->Likes = TableRegistry::get('Likes');
         $this->Events = TableRegistry::get('Events');
+        $this->Updates = TableRegistry::get('Updates');
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
             'authenticate' => [

@@ -27,6 +27,8 @@ class MainController extends AppController
         $this->Coupons = TableRegistry::get('Coupons');
         $this->Casts = TableRegistry::get('Casts');
         $this->Jobs = TableRegistry::get('Jobs');
+        $this->Shop_infos = TableRegistry::get('Shop_infos');
+        $this->Diarys = TableRegistry::get('Diarys');
         $this->MasterCodes = TableRegistry::get("master_codes");
     }
 
@@ -43,13 +45,14 @@ class MainController extends AppController
 
     public function top()
     {
+        $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX']);
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
         $insta_data = $this->Util->getInstagram(null, API['INSTAGRAM_USER_NAME']
             , API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
-        $this->set(compact('selectList', 'diarys', 'notices', 'insta_data'));
+        $this->set(compact('selectList', 'diarys', 'notices', 'insta_data','imageCol'));
     }
 
     public function search()

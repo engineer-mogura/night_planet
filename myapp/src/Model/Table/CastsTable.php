@@ -131,6 +131,16 @@ class CastsTable extends Table
             ->allowEmptyString('holiday');
 
         $validator
+            ->scalar('icon')
+            ->maxLength('icon', 255)
+            ->allowEmptyFile('icon');
+
+        $validator
+            ->scalar('top_image')
+            ->maxLength('top_image', 255)
+            ->allowEmptyFile('top_image');
+
+        $validator
             ->scalar('image1')
             ->maxLength('image1', 255)
             ->allowEmptyFile('image1');

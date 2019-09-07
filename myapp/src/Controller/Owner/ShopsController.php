@@ -1672,4 +1672,34 @@ class ShopsController extends AppController
         return;
     }
 
+    /**
+     * 出勤管理 画面表示処理
+     *
+     * @return void
+     */
+    public function work()
+    {
+        //$notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
+        //$this->set(compact('notices'));
+        $this->render();
+    }
+
+    /**
+     * お知らせアーカイブ表示画面の処理
+     *
+     * @return void
+     */
+    public function viewCalendar()
+    {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
+        $this->confReturnJson(); // json返却用の設定
+        $notice = $this->Util->getNotice($this->request->query["id"]);
+        $this->response->body(json_encode($notice));
+        return;
+    }
+
+
 }

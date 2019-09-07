@@ -20,6 +20,8 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string|null $age
  * @property string|null $message
  * @property string|null $holiday
+ * @property string|null $icon
+ * @property string|null $top_image
  * @property string|null $image1
  * @property string|null $image2
  * @property string|null $image3
@@ -62,6 +64,8 @@ class Cast extends Entity
         'age' => true,
         'message' => true,
         'holiday' => true,
+        'icon' => true,
+        'top_image' => true,
         'image1' => true,
         'image2' => true,
         'image3' => true,

@@ -2563,8 +2563,51 @@ function initializeCast() {
         $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
         $('select').material_select();
 
-        // 画像を変更した時
-        $(document).on("input", function() {
+
+                // 画像を選択した時
+        $(document).on("change", "#image-file", function() {
+
+            var $form = $(this).closest('form');
+            var file = this.files[0];
+            var img = new Image();
+            loadImage.parseMetaData(file, (data) => {
+                var options = {
+                    canvas: true
+                };
+                if (data.exif) {
+                    options.orientation = data.exif.get('Orientation');
+                }
+                loadImage(file, (canvas) => {
+                    var dataUri = canvas.toDataURL('image/jpeg');
+
+                    img.src = dataUri;
+                    $(document).find('img').attr({src:dataUri});
+                }, options);
+                // 画像が読み込まれてから処理
+                img.onload = function() {
+                    // IMGのセレクタ取得
+                     var $selecter = $(document).find('img');
+                    // ファイル変換
+                    var blobList = fileConvert("#image-canvas", $selecter);
+
+                    // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                    // POSTでリクエスト内のデータが全部なくなるので。
+                    // TODO: 後で対策を考えよう
+                    $($form).find('#image-file, .file-path').val("");
+
+                    // アップロード用blobをformDataに設定
+                    var formData = new FormData($form.get()[0]);
+                    formData.append("image", blobList[0]);
+
+                    //通常のアクションをキャンセルする
+                    event.preventDefault();
+                    fileUpAjaxCommon($form, formData, $("#wrapper"));
+                }
+            });
+
+        });
+        // 入力フォームに変更があった時
+        $(document).find($profile).on("input", function() {
             $($profile).find(".saveBtn").removeClass("disabled");
         });
         // リストボックスを変更した時
@@ -2583,7 +2626,76 @@ function initializeCast() {
             ajaxCommon($form, $("#wrapper"));
         });
     }
-    // /* プロフィール 画面 END */
+    /* プロフィール 画面 END */
+
+    /* トップ画像 関連処理 START */
+    if($("#top-image").length) {
+        // トップ画像 変更、やめるボタン押した時
+        $(document).on("click", ".top-image-changeBtn",function() {
+            // 画像をクリアする
+            $('#top-image').find('#top-image-show').attr({width:'',height:'',src:''});
+            $('#top-image').find('[name="top_image"]').val('');
+
+            // 編集フォームが表示されている場合
+            if ($('#save-top-image').css('display') == 'block') {
+                // ビュー表示
+                $('#top-image').find("#save-top-image").hide();
+                $('#top-image').find("#show-top-image").show();
+            } else {
+                // 編集表示
+                $('#top-image').find('#save-top-image').show();
+                $('#top-image').find("#show-top-image").hide();
+            }
+
+        });
+        // トップ画像 登録ボタン押した時
+        $(document).on("click", ".top-image-saveBtn",function() {
+
+            //ファイル選択済みかチェック
+            var fileCheck = $("#top-image-file").val().length;
+            if (fileCheck === 0) {
+                alert("画像ファイルを選択してください");
+                return false;
+            }
+            if(!confirm('こちらの画像に変更でよろしいですか？')) {
+                return false;
+            }
+
+            var $form = $('#save-top-image');
+
+            // blobファイル変換
+            var blobList = fileConvert("#top-image-canvas", '.top-image-preview');
+
+            // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+            // POSTでリクエスト内のデータが全部なくなるので。
+            // TODO: 後で対策を考えよう
+            $($form).find('input[name="top_image_file"]').val("");
+
+            // アップロード用blobをformDataに設定
+            var formData = new FormData($form.get()[0]);
+            formData.append("top_image_file", blobList[0]);
+                        for (item of formData) {
+                console.log(item);
+            }
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            fileUpAjaxCommon($form, formData, $("#top-image"));
+        });
+        // トップ画像 削除ボタン押した時
+        $(document).on("click", ".top-image-deleteBtn",function() {
+
+            if (!confirm('トップ画像を削除してもよろしいですか？')) {
+                return false;
+            }
+
+            var $form =$('#delete-top-image');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#top-image"));
+        });
+    }
+    /* トップ画像 関連処理 END */
     /* 日記 画面 START */
     if($("#diary").length) {
 

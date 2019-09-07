@@ -49,7 +49,10 @@ return [
 		'DIARY'=> 'diary',
 		'EVENT'=> 'event',
 		'TMP'=> 'tmp',
+		'TOP_IMAGE'=> 'top_image',
 		'IMAGE'=> 'image',
+		'PROFILE'=> 'profile',
+		'CACHE'=> 'cache',
 		'IMG'=> 'img', // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える
 		'COMMON'=> 'common',
 
@@ -109,15 +112,17 @@ return [
 		'008'=>'求人情報',
 		'009'=>'店舗お知らせ',
 		'010'=>'SNS',
+		'011'=>'出勤管理',
 	)),
 
 	// ラベル定数 cast.label menu
 	define('CAST_LM', array(
 		'001'=>'ダッシュボード',
 		'002'=>'プロフィール',
-		'003'=>'日記',
-		'004'=>'ギャラリー',
-		'005'=>'キャストのトップへ行く',
+		'003'=>'トップ画像',
+		'004'=>'日記',
+		'005'=>'ギャラリー',
+		'006'=>'キャストのトップへ行く',
 	)),
 
 	// ラベルボタン定数 common.label button
@@ -387,6 +392,10 @@ return [
 		'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
 		'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
 		'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
+		'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
+		'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
+		'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
+		'INSTAGRAM_CACHE_TIME'=> 360 // インスタグラムキャッシュタイム
 	)),
 
 	//変数展開用

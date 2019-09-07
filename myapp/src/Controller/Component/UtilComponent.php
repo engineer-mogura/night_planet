@@ -125,7 +125,7 @@ class UtilComponent extends Component
 
         $shopInfo = $shopInfo + array('shop_path'=> $path
             ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']
-            ,'notice_path'=>$path.DS.PATH_ROOT['NOTICE']);
+            ,'notice_path'=>$path.DS.PATH_ROOT['NOTICE'],'cache_path'=>$path.DS.PATH_ROOT['CACHE']);
         return  $shopInfo;
 
     }
@@ -157,13 +157,15 @@ class UtilComponent extends Component
             }
         }
         $castInfo = $castInfo + array('id'=>$cast['id'],'shop_id'=>$shop['id']
-            ,'dir'=>$cast['dir'], 'shop_dir'=> $shopDir,'main_image'=>$cast['image1']);
+            ,'dir'=>$cast['dir'], 'shop_dir'=> $shopDir,'icon_name'=>$cast['icon']);
         $path = DS.PATH_ROOT['IMG'].DS.$castInfo['area']['path']
                 .DS.$castInfo['genre']['path'].DS.$shop['dir']
                 .DS.PATH_ROOT['CAST'].DS.$cast['dir'];
 
-        $castInfo = $castInfo + array('cast_path'=> $path,'image_path'=> $path.DS.PATH_ROOT['IMAGE']
-        , 'diary_path'=> $path.DS.PATH_ROOT['DIARY'], 'event_path'=> $path.DS.PATH_ROOT['EVENT']);
+        $castInfo = $castInfo + array('cast_path'=> $path,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE']
+        , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
+        , 'diary_path'=> $path.DS.PATH_ROOT['DIARY']
+        , 'event_path'=> $path.DS.PATH_ROOT['EVENT']);
         return  $castInfo;
     }
 
@@ -581,33 +583,135 @@ class UtilComponent extends Component
      * @param [type] $access_token
      * @return $instagram_data
      */
-    public function getInstagram($insta_user_name = null, $insta_business_name = null, $insta_business_id, $token) {
+    public function getInstagram($insta_user_name = null
+        , $insta_business_name = null, $cache_path) {
 
-        $instagram_business_id = $insta_business_id; //ここにInstagramビジネスアカウントIDを入力してください。
-        $access_token = $token; //ここに3段階目のアクセストークンを入力してください。
-        $target_user = $insta_user_name; //ここに取得したいInstagramビジネスアカウントのユーザー名を入力してください。https://www.instagram.com/nightplanet91/なので「nightplanet91」がユーザー名になります
+        //////////////////////
+        /*     初期設定     */
+        //////////////////////
+
+        // 投稿の最大取得数
+        $max_posts      = API['INSTAGRAM_MAX_POSTS'];
+
+        // Graph API の URL
+        $graph_api      = API['INSTAGRAM_GRAPH_API'];
+
+        // ビジネスID
+        $ig_buisiness   = API['INSTAGRAM_BUSINESS_ID'];
+
+        // 無期限のページアクセストークン
+        $access_token   = API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN'];
+
+        //ここに取得したいInstagramビジネスアカウントのユーザー名を入力してください。
+        //https://www.instagram.com/nightplanet91/なので
+        //「nightplanet91」がユーザー名になります
+        $target_user    = $insta_user_name;
+
+        // キャッシュ時間の設定 (最短更新間隔 [sec])
+        // 更新頻度が高いと Graph API の時間当たりの利用制限に引っかかる可能性があるので、30sec以上を推奨
+        $cache_lifetime = API['INSTAGRAM_CACHE_TIME'];
+
+        // 表示形式の初期設定 (グリッド表示の時は 'grid'、一覧表示の時は 'list' を指定)
+        $show_mode      = API['INSTAGRAM_SHOW_MODE'];
 
         //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
         if(!empty($target_user)) {
-            $query = 'business_discovery.username('.$target_user.'){id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id,media{caption,media_url,media_type,like_count,comments_count,timestamp,id}}';
+            $fields      = 'business_discovery.username('.$target_user.'){id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id,media{caption,media_url,media_type,children,like_count,comments_count,timestamp,id}}';
         }
         //自分のアカウントの画像が取得できればOKな場合は$queryを以下のようにしてください。
         if(!empty($insta_business_name)) {
-            $query = 'name,media{caption,like_count,media_url,permalink,timestamp,username}&access_token='.$access_token;
+            $fields      = 'name,media{caption,like_count,media_url,permalink,timestamp,username}&access_token='.$access_token;
         }
-        $instagram_api_url = 'https://graph.facebook.com/v3.3/';
-        $target_url = $instagram_api_url.$instagram_business_id."?fields=".$query."&access_token=".$access_token;
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $target_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        //////////////////////
+        /* 初期設定ここまで */
+        //////////////////////
 
-        $instagram_data = curl_exec($ch);
-        curl_close($ch);
+        //////////////////////
+        /*     取得処理     */
+        //////////////////////
 
-        $insta_data = json_decode($instagram_data, true);
+        /*
+        キャッシュしておいたファイルが指定時間以内に更新されていたらキャッシュしたファイルのデータを使用する
+        指定時間以上経過していたら新たに Instagaram Graph API へリクエストする
+        */
 
-        return $insta_data;
+        // キャッシュ用のディレクトリが存在するか確認
+        // なければ作成する
+        if(!file_exists(dirname($cache_path). '/cache/')){
+            if(mkdir(dirname($cache_path). '/cache/', 0774)){
+                chmod(dirname($cache_path). '/cache/', 0774);
+            }
+        }
+
+        // キャッシュファイルの最終更新日時を取得
+        $cache_lastmodified = @filemtime(dirname($cache_path). '/cache/instagram_graph_api.dat');
+
+        // 更新日時の比較
+        if(!$cache_lastmodified){
+            // Graph API から JSON 形式でデータを取得
+            $ig_json = @file_get_contents($graph_api. $ig_buisiness. '?fields='. $fields. '&access_token='. $access_token);
+            // 取得したデータをキャッシュに保存する
+            file_put_contents(dirname($cache_path). '/cache/instagram_graph_api.dat', $ig_json, LOCK_EX);
+        } else{
+            if(time() - $cache_lastmodified > $cache_lifetime){
+                // キャッシュの最終更新日時がキャッシュ時間よりも古い場合は再取得する
+                $ig_json = @file_get_contents($graph_api. $ig_buisiness. '?fields='. $fields. '&access_token='. $access_token);
+                // 取得したデータをキャッシュに保存する
+                file_put_contents(dirname($cache_path). '/cache/instagram_graph_api.dat', $ig_json, LOCK_EX);
+            } else{
+                // キャッシュファイルが新しければキャッシュデータを使用する
+                $ig_json = @file_get_contents(dirname($cache_path). '/cache/instagram_graph_api.dat');
+            }
+        }
+
+        // 取得したJSON形式データを配列に展開する
+        if($ig_json){
+            $ig_data = json_decode($ig_json);
+            if(isset($ig_data->error)){
+                $ig_data = null;
+            }
+        }
+
+        // データ取得に失敗した場合
+        // サーバエラーを返す
+        if(!$ig_json || !$ig_data){
+        //	exit('データ取得に失敗しました');
+            // 500 Internal Server Error
+            header('HTTP', true, 500);
+            exit;
+        }
+
+        // 初期表示の設定確認
+        if($show_mode !== 'grid' && $show_mode !== 'list'){
+            $show_mode = 'grid';
+        }
+
+        // $instagram_business_id = $insta_business_id; //ここにInstagramビジネスアカウントIDを入力してください。
+        // $access_token = $token; //ここに3段階目のアクセストークンを入力してください。
+        // $target_user = $insta_user_name; //ここに取得したいInstagramビジネスアカウントのユーザー名を入力してください。https://www.instagram.com/nightplanet91/なので「nightplanet91」がユーザー名になります
+
+        // //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
+        // if(!empty($target_user)) {
+        //     $query = 'business_discovery.username('.$target_user.'){id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id,media{caption,media_url,media_type,children,like_count,comments_count,timestamp,id}}';
+        // }
+        // //自分のアカウントの画像が取得できればOKな場合は$queryを以下のようにしてください。
+        // if(!empty($insta_business_name)) {
+        //     $query = 'name,media{caption,like_count,media_url,permalink,timestamp,username}&access_token='.$access_token;
+        // }
+        // $instagram_api_url = 'https://graph.facebook.com/v4.0/';
+        // $target_url = $instagram_api_url.$instagram_business_id."?fields=".$query."&access_token=".$access_token;
+
+        // $ch = curl_init();
+        // curl_setopt($ch, CURLOPT_URL, $target_url);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // $instagram_data = curl_exec($ch);
+        // curl_close($ch);
+
+        // $insta_data = json_decode($instagram_data, true);
+
+        return $ig_data;
     }
 
     /**

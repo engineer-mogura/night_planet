@@ -540,7 +540,9 @@ div.description {
 /** SHOP MENU END */
 
 /** SECTION LABEL START */
-
+#instagram-section {
+  margin-bottom: initial;
+}
 #shop-menu-section .shop-menu-label span:before,
 #shop-menu-section .shop-menu-label span:after {
   background-image: url(/img/common/shop-icon.png);

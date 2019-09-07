@@ -53,7 +53,7 @@
 									.' '.$value->shop['name']?></span><br>
 								<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 								</p>
-								<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->likes)?></span>
+								<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->shop_info__likes)?></span>
 								<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->id."?area=".$value->shop->area."&genre=".$value->shop->genre.
 								"&shop=".$value->shop->id."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
 							</li>
@@ -79,9 +79,9 @@
 								}
 								$path = DS.PATH_ROOT['IMG'].DS.$value->cast->shop['area']
 									.DS.$value->cast->shop['genre'].DS.$value->cast->shop['dir'].DS.PATH_ROOT['CAST']
-									.DS.$value->cast['dir'].DS.PATH_ROOT['IMAGE'];
+									.DS.$value->cast['dir'].DS.PATH_ROOT['PROFILE'];
 							?>
-							<?php !empty($value->cast->image1)? $imgPath = $path.DS.$value->cast['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+							<?php !empty($value->cast->icon)? $imgPath = $path.DS.$value->cast['icon'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
 								<li class="linkbox collection-item avatar">
 									<img src="<?= $imgPath ?>" alt="" class="circle">
 									<span class="title color-blue"><?= $value->created->nice()?></span>
@@ -91,7 +91,7 @@
 										.' '.$value->cast->shop['name']?></span><br>
 										<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
-									<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->likes)?></span>
+									<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->diary__likes)?></span>
 									<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
 									"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
 								</li>

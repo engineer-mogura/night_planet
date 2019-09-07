@@ -19,7 +19,7 @@
 							.DS.$value->shop['genre'].DS.$value->shop['dir'].DS.PATH_ROOT['NOTICE']
 							.$value['dir'];
 						?>
-						<?php !empty($value->image1)? $imgPath = $path.DS.$value['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+						<?php !empty($value->icon)? $imgPath = $path.DS.$value['icon'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
 					<li class="linkbox collection-item avatar">
 						<img src="<?= $imgPath ?>" alt="" class="circle">
 						<span class="title color-blue"><?= $value->created->nice()?></span>
@@ -47,7 +47,7 @@
 					<?php foreach ($diarys as $key => $value): ?>
 					<?php $path = DS.PATH_ROOT['IMG'].DS.$value->cast->shop['area']
 						.DS.$value->cast->shop['genre'].DS.$value->cast->shop['dir'].DS.PATH_ROOT['CAST']
-						.DS.$value->cast['dir'].DS.PATH_ROOT['IMAGE'];
+						.DS.$value->cast['dir'].DS.PATH_ROOT['PROFILE'];
 					?>
 					<?php !empty($value->cast->image1)? $imgPath = $path.DS.$value->cast['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
 						<li class="linkbox collection-item avatar">

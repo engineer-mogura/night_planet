@@ -30,6 +30,12 @@
   <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
+  <link href='/fullcalendar-4.3.1/core/main.css' rel='stylesheet' /> <!-- fullcalendar-4.3.1 -->
+  <link href='/fullcalendar-4.3.1/daygrid/main.css' rel='stylesheet' /> <!-- fullcalendar-4.3.1 -->
+  <link href='/fullcalendar-4.3.1/timegrid/main.css' rel='stylesheet' /> <!-- fullcalendar-4.3.1 -->
+  <script src='/fullcalendar-4.3.1/core/main.js'></script> <!-- fullcalendar-4.3.1 -->
+  <script src='/fullcalendar-4.3.1/daygrid/main.js'></script> <!-- fullcalendar-4.3.1 -->
+  <script src='/fullcalendar-4.3.1/timegrid/main.js'></script> <!-- fullcalendar-4.3.1 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
   <?= $this->Html->css('materialize.css') ?>
@@ -65,6 +71,7 @@
     <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="job" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">business_center</i><?= SHOP_LM['008'] ?></a></li>
     <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="sns" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">business_center</i><?= SHOP_LM['010'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/owner/shops/notice"><i class="material-icons">notifications_active</i><?= SHOP_LM['009'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="/owner/shops/work"><i class="material-icons">event_note</i><?= SHOP_LM['011'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/owner/owners"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/entry/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/entry/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

@@ -393,7 +393,7 @@ class OwnersController extends AppController
             if (isset($this->request->data["action_type"])) {
 
                 $dirPath = preg_replace('/(\/\/)/', '/',
-                WWW_ROOT.$this->viewVars['ownerInfo']['image_path']);
+                    WWW_ROOT.$this->viewVars['ownerInfo']['image_path']);
                 $owner = $this->Owners->get($this->viewVars['ownerInfo']['id']);
                 // ディクレトリ取得
                 $dir = new Folder($dirPath, true, 0755);

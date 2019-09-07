@@ -209,46 +209,142 @@ class CastsController extends AppController
             $errors = ""; // 返却メッセージ
             $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
             $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+            // アイコン画像変更の場合
+            if (isset($this->request->data["action_type"])) {
 
-            // バリデーションはプロフィール変更用を使う。
-            $cast = $this->Casts->patchEntity($this->Casts
+                $dirPath = preg_replace('/(\/\/)/', '/',
+                    WWW_ROOT.$this->viewVars['userInfo']['profile_path']);
+                $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
+                // ディクレトリ取得
+                $dir = new Folder($dirPath, true, 0755);
+                // 前のファイル取得
+                $fileBefor = new File($dirPath . DS .$cast->icon, true, 0755);
+
+                $file = $this->request->data['image'];
+                // ファイルが存在する、かつファイル名がblobの画像のとき
+                if (!empty($file["name"]) && $file["name"] == 'blob') {
+                    $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
+                    try {
+                        if(file_exists($fileBefor->path) && !empty($cast->icon)) {
+                            // ロールバック用のファイルサイズチェック
+                            if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
+                                throw new RuntimeException('ファイルサイズが大きすぎます。');
+                            }
+                            // 一時ファイル作成
+                            if (!$fileBefor->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name)) {
+                                throw new RuntimeException('バックアップに失敗しました。');
+                            }
+                            // 一時ファイル取得
+                            $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name);
+                        }
+                        $cast->icon = $this->Util->file_upload($this->request->getData('image'),
+                            ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
+                        // ファイル更新の場合は古いファイルは削除
+                        if (!empty($fileBefor->name)) {
+                            // ファイル名が同じ場合は削除を実行しない
+                            if ($fileBefor->name != $cast->icon) {
+                                // ファイル削除処理実行
+                                if (!$fileBefor->delete()) {
+                                    throw new RuntimeException('ファイルの削除ができませんでした。');
+                                }
+                                // ファイル削除フラグを立てる
+                                $isRemoved = true;
+                            }
+                        }
+                        // レコード更新実行
+                        if (!$this->Casts->save($cast)) {
+                            throw new RuntimeException('レコードの更新ができませんでした。');
+                        }
+                        // 更新情報を追加する
+                        $updates = $this->Updates->newEntity();
+                        $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールアイコンを更新しました。');
+                        $updates->set('shop_id', $this->Auth->user('shop_id'));
+                        $updates->set('cast_id', $this->Auth->user('id'));
+                        // レコード更新実行
+                        if (!$this->Updates->save($updates)) {
+                            throw new RuntimeException('レコードの登録ができませんでした。');
+                        }
+
+                    } catch (RuntimeException $e) {
+                        // ファイルを削除していた場合は復元する
+                        if ($isRemoved) {
+                            $tmpFile->copy($file->path);
+                        }
+                        // ファイルがアップロードされていた場合は削除を行う
+                        if($owner->isDirty('image')) {
+                            $file = new File($dirPath . DS .$owner->image, true, 0755);
+                            // 一時ファイルがあれば削除する
+                            if (isset($file) && file_exists($file->path)) {
+                                $file->delete();// tmpファイル削除
+                            }
+                        }
+                        // 一時ファイルがあれば削除する
+                        if (isset($tmpFile) && file_exists($tmpFile->path)) {
+                            $tmpFile->delete();// tmpファイル削除
+                        }
+                        $this->log($this->Util->setLog($auth, $e));
+                        $flg = false;
+                    }
+
+                }
+                // 例外が発生している場合にメッセージをセットして返却する
+                    if (!$flg) {
+                    $message = RESULT_M['SIGNUP_FAILED'];
+                    $response = array(
+                        'success' => $flg,
+                        'message' => $message
+                    );
+                    $this->response->body(json_encode($response));
+                    return;
+                }
+
+                // 一時ファイル削除
+                if (file_exists($tmpFile->path)) {
+                    $tmpFile->delete();
+                }
+
+            } else {
+
+                // バリデーションはプロフィール変更用を使う。
+                $cast = $this->Casts->patchEntity($this->Casts
                 ->get($id), $this->request->getData(), ['validate' => 'profile']);
-            // バリデーションチェック
-            if ($cast->errors()) {
-                $flg = false;
-                // 入力エラーがあれば、メッセージをセットして返す
+                // バリデーションチェック
+                if ($cast->errors()) {
+                    $flg = false;
+                    // 入力エラーがあれば、メッセージをセットして返す
                 $message = $this->Util->setErrMessage($cast); // エラーメッセージをセット
                 $response = array(
                     'success' => $flg,
                     'message' => $message
                 );
-                $this->response->body(json_encode($response));
-                return;
-            }
-            try {
-                // レコード更新実行
-                if (!$this->Casts->save($cast)) {
-                    throw new RuntimeException('レコードの更新ができませんでした。');
+                    $this->response->body(json_encode($response));
+                    return;
                 }
-                // 更新情報を追加する
-                $updates = $this->Updates->newEntity();
-                $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールを更新しました。');
-                $updates->set('shop_id', $this->Auth->user('shop_id'));
-                $updates->set('cast_id', $this->Auth->user('id'));
-                // レコード更新実行
-                if (!$this->Updates->save($updates)) {
-                    throw new RuntimeException('レコードの登録ができませんでした。');
+                try {
+                    // レコード更新実行
+                    if (!$this->Casts->save($cast)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                    // 更新情報を追加する
+                    $updates = $this->Updates->newEntity();
+                    $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールを更新しました。');
+                    $updates->set('shop_id', $this->Auth->user('shop_id'));
+                    $updates->set('cast_id', $this->Auth->user('id'));
+                    // レコード更新実行
+                    if (!$this->Updates->save($updates)) {
+                        throw new RuntimeException('レコードの登録ができませんでした。');
+                    }
+                } catch (RuntimeException $e) {
+                    $this->log($this->Util->setLog($auth, $e));
+                    $flg = false;
+                    $message = RESULT_M['UPDATE_FAILED'];
+                    $response = array(
+                        'success' => $flg,
+                        'message' => $message
+                    );
+                    $this->response->body(json_encode($response));
+                    return;
                 }
-            } catch (RuntimeException $e) {
-                $this->log($this->Util->setLog($auth, $e));
-                $flg = false;
-                $message = RESULT_M['UPDATE_FAILED'];
-                $response = array(
-                    'success' => $flg,
-                    'message' => $message
-                );
-                $this->response->body(json_encode($response));
-                return;
             }
 
             $cast = $this->Casts->get($id);
@@ -257,7 +353,7 @@ class CastsController extends AppController
             // セレクトボックスを作成する
             $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
-            $this->set(compact('cast', 'selectList'));
+            $this->set(compact('cast','icon', 'selectList'));
             $this->render('/Cast/Casts/profile');
             $response = array(
                 'html' => $this->response->body(),
@@ -277,6 +373,145 @@ class CastsController extends AppController
 
         $this->set(compact('cast', 'selectList'));
         $this->render();
+    }
+
+    /**
+     * トップ画像 画面表示処理
+     *
+     * @return void
+     */
+    public function topImage()
+    {
+        $id = $this->request->getSession()->read('Auth.Cast.id');
+        $cast = $this->Casts->get($id);
+        $this->set(compact('cast'));
+        $this->render();
+    }
+
+    /**
+     * トップ画像 編集押下処理
+     *
+     * @return void
+     */
+    public function saveTopImage()
+    {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
+        $flg = true; // 返却フラグ
+        $isRemoved = false; // ディレクトリ削除フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Cast');
+        $id = $auth['id']; // ユーザーID
+        $dirPath = preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$this->viewVars['userInfo']['top_image_path']);
+
+        $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
+        // ディクレトリ取得
+        $dir = new Folder($dirPath, true, 0755);
+        // 前のファイル取得
+        $fileBefor = new File($dirPath . DS .$cast->top_image, true, 0755);
+
+        $file = $this->request->getData('top_image_file');
+        // ファイルが存在する、かつファイル名がblobの画像のとき
+        if (!empty($file["name"]) && $file["name"] == 'blob') {
+            $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
+            try {
+                if(file_exists($fileBefor->path) && !empty($cast->top_image)) {
+                    // ロールバック用のファイルサイズチェック
+                    if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
+                        throw new RuntimeException('ファイルサイズが大きすぎます。');
+                    }
+
+                    // 一時ファイル作成
+                    if (!$fileBefor->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name)) {
+                        throw new RuntimeException('バックアップに失敗しました。');
+                    }
+
+                    // 一時ファイル取得
+                    $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name);
+                }
+
+                $cast->top_image = $this->Util->file_upload($this->request->getData('top_image_file'),
+                    ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
+                // ファイル更新の場合は古いファイルは削除
+                if (!empty($fileBefor->name)) {
+                    // ファイル名が同じ場合は削除を実行しない
+                    if ($fileBefor->name != $cast->top_image) {
+                        // ファイル削除処理実行
+                        if (!$fileBefor->delete()) {
+                            throw new RuntimeException('ファイルの削除ができませんでした。');
+                        }
+                        // ファイル削除フラグを立てる
+                        $isRemoved = true;
+                    }
+                }
+
+                // レコード更新実行
+                if (!$this->Casts->save($cast)) {
+                    throw new RuntimeException('レコードの更新ができませんでした。');
+                }
+                // 更新情報を追加する
+                $updates = $this->Updates->newEntity();
+                $updates->set('content',$cast->nickname.'さんがトップ画像を変更しました。');
+                $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+                // レコード更新実行
+                if (!$this->Updates->save($updates)) {
+                    throw new RuntimeException('レコードの登録ができませんでした。');
+                }
+
+            } catch (RuntimeException $e) {
+                // ファイルを削除していた場合は復元する
+                if ($isRemoved) {
+                    $tmpFile->copy($file->path);
+                }
+                // ファイルがアップロードされていた場合は削除を行う
+                if($cast->isDirty('top_image')) {
+                    $file = new File($dirPath . DS .$cast->top_image, true, 0755);
+                    // 一時ファイルがあれば削除する
+                    if (isset($file) && file_exists($file->path)) {
+                        $file->delete();// tmpファイル削除
+                    }
+                }
+                // 一時ファイルがあれば削除する
+                if (isset($tmpFile) && file_exists($tmpFile->path)) {
+                    $tmpFile->delete();// tmpファイル削除
+                }
+                $this->log($this->Util->setLog($auth, $e));
+                $flg = false;
+            }
+
+        }
+        // 例外が発生している場合にメッセージをセットして返却する
+            if (!$flg) {
+            $message = RESULT_M['SIGNUP_FAILED'];
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+
+        // 一時ファイル削除
+        if (file_exists($tmpFile->path)) {
+            $tmpFile->delete();
+        }
+
+        $cast = $this->Casts->get(['id' => $this->viewVars['shopInfo']['id']]);
+        $this->set(compact('cast'));
+        $this->render('/Element/shopEdit/top-image');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
     }
 
     /**

@@ -127,7 +127,7 @@
             <div class="center-align col s3 m3 l3">
               <div>
                 <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
-                  <img src="<?=isset($cast->image1) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1 : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
+                  <img src="<?=isset($cast->icon) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
                 </a>
                 </div>
               <h6><?=$cast->nickname?></h6>
@@ -155,9 +155,9 @@
                 }
                 $path = DS.PATH_ROOT['IMG'].DS.$value->cast->shop['area']
                   .DS.$value->cast->shop['genre'].DS.$value->cast->shop['dir'].DS.PATH_ROOT['CAST']
-                  .DS.$value->cast['dir'].DS.PATH_ROOT['IMAGE'];
+                  .DS.$value->cast['dir'].DS.PATH_ROOT['PROFILE'];
               ?>
-              <?php !empty($value->cast->image1)? $imgPath = $path.DS.$value->cast['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+              <?php !empty($value->cast->icon)? $imgPath = $path.DS.$value->cast['icon'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
               <li class="linkbox collection-item avatar">
                 <img src="<?= $imgPath ?>" alt="" class="circle">
                 <span class="title color-blue"><?= $value->created->nice()?></span>
@@ -243,49 +243,15 @@
           <div class="orange darken-1 card-panel col s12 center-align">
             <p class="instagram-label section-label"><span> instagram </span></p>
           </div>
-          <?php if(!empty($insta_error)):
-                  echo('<p class="col">'.$insta_error.'</p>');
-                elseif($insta_data['media_count'] == 0):
+          <?php if(!empty($ig_error)):
+                  echo('<p class="col">'.$ig_error.'</p>');
+                elseif($ig_data->media_count == 0):
                   echo('<p class="col">まだ投稿がありません。</p>');
                 else:
           ?>
-          <ul class="collection">
-            <li class="collection-item avatar">
-              <!-- <img src="<?=$insta_data['profile_picture_url']?>" alt="" class="circle"> -->
-              <div class="my-gallery">
-                <figure>
-                      <a href="<?=$insta_data['profile_picture_url']?>" data-size="800x1000">
-                        <img src="<?=$insta_data['profile_picture_url']?>" class="circle" alt="<?=$value['caption']?>" />
-                      </a>
-                </figure>
-              </div>
-              <p>
-                <span class="title"><?=$insta_data['username']?></span>
-                <span class="icon-vertical-align right">
-                  <a href="https://www.instagram.com/<?=$insta_data['username']?>">
-                    Instagramで見る
-                  </a>
-                </span>
-              </p>
-              <p><span class="icon-vertical-align"><i class="small material-icons">person_add</i>フォロワー：<?=$insta_data['followers_count']?> </span><span class="icon-vertical-align"><i class="small material-icons">people</i>フォロー：<?=$insta_data['follows_count']?></span><br>
-              <span class="icon-vertical-align"><i class="small material-icons">file_upload</i>投稿：<?=$insta_data['media_count']?></span>
-              </p>
-            </li>
-          </ul>
-          <div class="my-gallery">
-            <?php foreach ($insta_data['media']['data'] as $key => $value): ?>
-              <figure>
-                <a href="<?=$value['media_url']?>" data-size="800x1000">
-                  <img src="<?=$value['media_url']?>" itemprop="thumbnail" alt="<?=$value['caption']?>" />
-                </a>
-                <figcaption style="display:none;">
-                  <i class="small material-icons">favorite_border</i><?=$value['like_count']?> 
-                  <i class="small material-icons">comment</i><?=$value['comments_count']?></br>
-                  <?=$value['caption']?>
-                </figcaption>
-              </figure>
-            <?php endforeach; ?>
-          </div>
+            <!-- photoSwipe START -->
+            <?= $this->element('Instagram'); ?>
+            <!-- photoSwipe END -->
           <?php endif;?>
         </div>
       <?php endif;?>

@@ -76,7 +76,7 @@ class AppController extends \App\Controller\AppController
         $shopAccess = ['index','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
             'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
             'deleteCast','saveTenpo','saveJob','saveSns','saveGallery','deleteGallery','notice','viewNotice',
-            'saveNotice','updateNotice','deleteNotice'];
+            'saveNotice','updateNotice','deleteNotice','work'];
 
         //TODO: 権限によって店舗管理者のみとオーナー兼店舗管理者を分ける？
         // 今は、分けず各アクションは統合する

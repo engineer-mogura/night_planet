@@ -84,10 +84,28 @@
                 </div>
             </div>
             <div class="col s12 m4 l4">
-                <div class="card-panel grey lighten-5">
-                    <img src="/img/common/noimage.jpg" alt="" class="circle left" width="80" height="80">
-                    <p>test<br>test<br>test<br>test<br>test<br>test<br>test<br></p>
-                </div>
+                <form id="save-image" name="save_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/cast/casts/profile">
+                    <div style="display:none;">
+                        <input type="hidden" name="action_type" value="image">
+                    </div>
+                    <div class="col s12 ">
+                        <div class="file-field card-panel grey lighten-5 input-field card-panel grey lighten-5 z-depth-1">
+                            <div class="row valign-wrapper">
+                                <div class="col s5">
+                                    <img class="responsive-img circle left" src="<?=isset($cast->icon) ? $userInfo['profile_path']. DS .$cast->icon:"/img/common/noimage.jpg" ?>"  alt="">
+                                    <input type="file" id="image-file" accept="image/jpeg,image/png" name="image">
+                                </div>
+                                <div class="file-path-wrapper hide">
+                                    <input class="file-path validate" name="file_path" type="text">
+                                </div>
+                                <div class="col s7">
+                                    <a class="">プロフィール写真を変更する</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <canvas id="image-canvas" style="display:none;"></canvas>
             </div>
         </div>
     </div>

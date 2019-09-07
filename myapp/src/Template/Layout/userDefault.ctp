@@ -40,6 +40,7 @@
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
   <?= $this->Html->css('materialize.css') ?>
   <?= $this->Html->css('okiyoru.css') ?>
+  <?= $this->Html->css('instagram.css') ?>
   <?= $this->Html->css('jquery.notifyBar.css') ?>
   <?= $this->Html->css('fullcalendar.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
   <?= $this->Html->css('jquery.marquee.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
@@ -100,6 +101,9 @@
   <!-- クーポンモーダル END -->
   <!-- シェアモーダル START -->
   <?= $this->element('modal/sharerModal'); ?>
+  <!-- シェアモーダル END -->
+  <!-- シェアモーダル START -->
+  <?= $this->element('modal/shopSharerModal'); ?>
   <!-- シェアモーダル END -->
   <!-- photoSwipe START -->
   <?= $this->element('photoSwipe'); ?>

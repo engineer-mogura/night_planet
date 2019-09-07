@@ -9,49 +9,35 @@
   <?= $this->element('nav-breadcrumb'); ?>
   <div class="row">
     <div id="cast-main" class="col s12 m12 l8">
-      <img class="responsive-img" width="100%" src=<?php if(!empty($cast->image1)) {
-        echo($shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$cast->image1);} else {
-        echo(PATH_ROOT['AREA01']);} ?> />
-      <div class="fixed-action-btn share horizontal click-to-toggle">
-        <a class="btn-floating btn-large red">
-          <i class="material-icons">share</i>
-        </a>
-        <ul>
-          <li>
-            <a class="btn-floating blue"><i class="icon-facebook-rect">icon-facebook-rect</i></a>
-          </li>
-          <li>
-            <a class="btn-floating blue darken-1"><i class="icon-twitter">icon-twitter</i></a>
-          </li>
-          <li>
-            <a class="btn-floating chocolate"><i class="icon-instagram">icon-instagram</i></a>
-          </li>
-          <li>
-            <a class="btn-floating green"><i class="icon-comment-alt">icon-comment-alt</i></a>
-          </li>
-        </ul>
-      </div>
-      <?= $this->element('shop-edit-form') ?>
-      <h5 class="left-align"><?php if($cast->nickname != '') {
-        echo($cast->nickname);} else {
-        echo("店舗名を決めてください。");} ?>
-      </h5>
-      <div class="header-area">
-        <div class="row share right-align">
-          <a class="btn-floating blue btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="facebookでシェア">
-            <i class="icon-facebook-rect">icon-facebook-rect</i>
-          </a>
-          <a class="btn-floating blue darken-1 btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="twitterでシェア">
-            <i class="icon-twitter">icon-twitter</i>
-          </a>
-          <a class="btn-floating chocolate btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="instagramでシェア">
-            <i class="icon-instagram">icon-instagram</i>
-          </a>
-          <a class="btn-floating green btn-large waves-effect waves-light tooltipped" data-position="bottom" data-delay="50" data-tooltip="lineでシェア">
-            <i class="icon-comment-alt">icon-comment-alt</i>
-          </a>
+      <?php !empty($cast->top_image) ? $top_image = $shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['TOP_IMAGE'].DS.$cast->top_image
+          : $top_image = PATH_ROOT['AREA01']?>
+      <?php !empty($cast->icon) ? $icon = $shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon
+          : $icon = PATH_ROOT['AREA01']?>
+      <!-- ヘッダー START -->
+      <div class="cast-header">
+        <img class="responsive-img" width="100%" src=<?=$top_image?> />
+        <div class="cast-header-icon" style="height:70px;">
+          <div class="col s4 m4" style="position:relative;bottom:45px;left:20px;">
+            <img src="<?=$icon?>" width="70px" height="70px" class="circle">
+          </div>
+          <div class="col s4 m4">
+            <span class="icon-vertical-align"><?= !empty($cast->nickname)? $cast->nickname: h("ー")?></span>
+          </div>
+          <div class="col s4 m4">
+            <span class=""><?= h("本日出勤")?></span>
+          </div>
         </div>
       </div>
+      <!-- ヘッダー END -->
+      <!-- メッセージ START -->
+      <div class="row section">
+        <div class="card-panel light-blue">
+          <?= !empty($shop->message) ? $this->Text->autoParagraph($shop->message) : 
+            $cast->nickname.'さんからのメッセージがありません。';
+          ?>
+        </div>
+      </div>
+      <!-- メッセージ END -->
       <div class="row">
         <div class="col s12">
           <a class="waves-effect waves-light btn-large modal-trigger" style="width:100%" href="#coupons-modal">クーポン一覧を見る<i class="material-icons right">keyboard_arrow_right</i></a>
@@ -333,31 +319,6 @@
     </div>
   </div>
 </div>
-</div>
-<!-- Modal Structure -->
-<div id="coupons-modal" class="modal modal-fixed-footer">
-  <div class="modal-content">
-  <?php if(count($cast->shop->coupons) > 0) {  ?>
-  <ul class="collection with-header">
-    <li class="collection-header"><h4>使いたいクーポン番号をお店の人に見せてね☆</h4></li>
-  <?php foreach($cast->shop->coupons as  $key => $coupon): ?>
-    <li class="collection-item">
-      <!-- <i class="material-icons circle">folder</i> -->
-      <span><?= "#".($key + 1)."　".$this->Time->format($coupon->from_day, 'Y/M/d') ?> ～ <?= $this->Time->format($coupon->to_day, 'Y/M/d') ?></span><br>
-      <span class="title blue-text text-darken-2"><?=$coupon->title ?></span>
-      <p><?=$this->Text->autoParagraph($coupon->content) ?></p>
-    </li>
-  <?php endforeach; ?>
-  </ul>
-  <?php } else { ?>
-    <div class="">
-      <p>クーポンの登録はありません。</p>
-    </div>
-  <?php } ?>
-  </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">とじる</a>
-  </div>
 </div>
 <?= $this->element('photoSwipe'); ?>
 <!-- ショップ用ボトムナビゲーション START -->

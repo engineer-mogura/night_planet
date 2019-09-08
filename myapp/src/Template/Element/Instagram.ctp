@@ -36,8 +36,8 @@
     <main>
 <?php
 	$days = array('日', '月', '火', '水', '木', '金', '土');
-	if(is_array($ig_data->media->data)){
-		foreach($ig_data->media->data as $key => $post){
+	if(is_array($ig_data->media->data)):
+		foreach($ig_data->media->data as $key => $post):
 			$caption = $post->caption;
 			$caption = mb_convert_encoding($caption, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
 			$caption = preg_replace('/\n/', '<BR>', $caption);
@@ -45,30 +45,30 @@
 			$caption = preg_replace('/#([^<>]+?)(\s|\n|\z|#|@)/', '<a href="https://www.instagram.com/explore/tags/$1/" target="new" rel="noopener">#$1</a>$2', $caption);
 			$caption = preg_replace('/@([^<>]+?)(\s|\n|\z|#|@)/', '<a href="https://www.instagram.com/$1/" target="new" rel="noopener">@$1</a>$2', $caption);
 			// 動画の場合は$post->media_urlが取得されないので$post->thumbnail_urlを使う (2019/08/27追記)
-			if($video = isset($post->thumbnail_url)){
+			if($video = isset($post->thumbnail_url)):
 				$media = $post->thumbnail_url;
-			} else{
+			else:
 				$media = $post->media_url;
-			}
+			endif;
 ?>
         <div>
 		<a onclick="click_figure(this)" id="call-figure<?=h($key)?>" class="instagram" title="likes:<?php echo $post->like_count; ?>">
 			<div style="background-image: url('<?php echo $media; ?>');"></div>
-			<?php
-				if(isset($post->children)){
-					if(count($post->children->data) > 1){
-					// 複数画像の場合
+				<?php
+				// 複数画像の場合
+				if(isset($post->children)):
+					if(count($post->children->data) > 1):
 				?>
 				<span class="ig-children icon-vertical-align"><?=count($post->children->data)?></span>
 				<?php
-					}
-				}
-				if(isset($post->thumbnail_url)){
+					endif;
+				endif;
 				// 動画の場合
+				if(isset($post->thumbnail_url)):
 				?>
 				<span class="ig-video"></span><!-- 追加要素 -->
-
-			<?php	}
+			<?php
+				endif;
 			?>
 				<span class="ig-comment icon-vertical-align"><i class="material-icons">comment</i><?=$post->comments_count;?></span>
 				<span class="ig-like icon-vertical-align"><i class="material-icons">favorite</i><?=$post->like_count;?></span>
@@ -79,8 +79,8 @@
           </p>
         </div>
 <?php
-		}
-	}
+		endforeach;
+	endif;
 ?>
 	</main>
 <?php

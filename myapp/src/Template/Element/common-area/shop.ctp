@@ -26,7 +26,7 @@
       <!-- 更新情報 END -->
       <!-- 店舗メニュー START -->
       <div id="shop-menu-section" class="row shop-menu section scrollspy">
-        <div class="orange darken-1 card-panel col s12 center-align">
+        <div class="light-blue accent-2 card-panel col s12 center-align">
           <p class="shop-menu-label section-label"><span> SHOP MENU </span></p>
         </div>
         <div class="col s4 m3 l3">
@@ -119,7 +119,7 @@
       <!-- 店舗メニュー END -->
       <!-- キャストリスト START -->
       <div id="cast-section" class="row shop-menu section scrollspy">
-        <div class="orange darken-1 card-panel col s12 center-align">
+        <div class="light-blue accent-2 card-panel col s12 center-align">
           <p class="cast-label section-label"><span> CAST </span></p>
         </div>
         <?php if(count($shop->casts) > 0): ?>
@@ -140,7 +140,7 @@
       <!-- キャストリスト END -->
       <!-- 日記 START -->
       <div id="diary-section" class="row shop-menu section scrollspy">
-        <div class="orange darken-1 card-panel col s12 center-align">
+        <div class="light-blue accent-2 card-panel col s12 center-align">
           <p class="diary-label section-label"><span> 日記 </span></p>
         </div>
         <?php if (count($diarys) > 0): ?>
@@ -180,7 +180,7 @@
       <!-- 日記 END -->
       <!-- 店舗情報 START -->
       <div id="shop-info-section" class="row shop-menu section scrollspy">
-        <div class="orange darken-1 card-panel col s12 center-align">
+        <div class="light-blue accent-2 card-panel col s12 center-align">
           <p class="shop-info-label section-label"><span> SHOP INFO </span></p>
         </div>
         <div class="col s12 m12 l12">
@@ -240,7 +240,7 @@
       <!-- instagram START -->
       <?php if(!empty($shop->snss[0]['instagram'])): ?>
         <div id="instagram-section" class="row shop-menu section scrollspy">
-          <div class="orange darken-1 card-panel col s12 center-align">
+          <div class="light-blue accent-2 card-panel col s12 center-align">
             <p class="instagram-label section-label"><span> instagram </span></p>
           </div>
           <?php if(!empty($ig_error)):
@@ -259,7 +259,7 @@
       <!-- facebook START -->
       <?php if(!empty($shop->snss[0]['facebook'])): ?>
         <div id="facebook-section" class="row shop-menu section scrollspy">
-          <div class="orange darken-1 card-panel col s12 center-align">
+          <div class="light-blue accent-2 card-panel col s12 center-align">
             <p class="facebook-label section-label"><span> facebook </span></p>
           </div>
           <div id="fb-root"></div>
@@ -270,7 +270,7 @@
       <!-- twitter START -->
       <?php if(!empty($shop->snss[0]['twitter'])): ?>
         <div id="twitter-section" class="row shop-menu section scrollspy">
-          <div class="orange darken-1 card-panel col s12 center-align">
+          <div class="light-blue accent-2 card-panel col s12 center-align">
             <p class="twitter-label section-label"><span> twitter </span></p>
           </div>
           <a class="twitter-timeline" href="https://twitter.com/<?=$shop->snss[0]['twitter']?>?ref_src=twsrc%5Etfw" data-tweet-limit="3">Tweets by <?=$shop->snss[0]['twitter']?></a>
@@ -280,7 +280,7 @@
       <!-- twitter END -->
       <!-- お知らせ START -->
       <div id="event-section" class="row shop-menu section scrollspy">
-        <div class="orange darken-1 card-panel col s12 center-align">
+        <div class="light-blue accent-2 card-panel col s12 center-align">
           <p class="event-label section-label"><span> お知らせ </span></p>
         </div>
         <?php if (count($shop->shop_infos) > 0): ?>
@@ -292,7 +292,7 @@
             <?php endforeach; ?>
           </div>
           <div class="col s12">
-            <p class="right-align"><?=$shop->shop_infos[0]->ymd_created?></p>
+            <p class="right-align"><?=$shop->shop_infos[0]->created->nice()?></p>
             <p class="title">
               <?=$shop->shop_infos[0]->title?>
             </p>
@@ -312,11 +312,11 @@
       <!-- お知らせ END -->
       <!-- 店舗ギャラリー START -->
       <div id="shop-gallery-section" class="row shop-menu section scrollspy">
-        <div class="orange darken-1 card-panel col s12 center-align">
+        <div class="light-blue accent-2 card-panel col s12 center-align">
             <p class="shop-gallery-label section-label"><span> 店内ギャラリー </span></p>
         </div>
         <?= count($imageList) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
-        <div class="my-gallery col s12">
+        <div class="my-gallery">
           <?php foreach ($imageList as $key => $value): ?>
               <figure>
                 <a href="<?=$shopInfo['image_path'].DS.$value['name']?>" data-size="800x1000"><img width="100%" src="<?=$shopInfo['image_path'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
@@ -327,7 +327,7 @@
       <!-- 店舗ギャラリー END -->
       <!-- GOOGLE MAP START -->
       <div id="map-section" class="row shop-menu section scrollspy">
-        <div class="orange darken-1 card-panel col s12 center-align">
+        <div class="light-blue accent-2 card-panel col s12 center-align">
             <p class="map-label section-label"><span> MAP </span></p>
         </div>
         <div style="width:100%;height:300px;" id="google_map"></div>
@@ -335,7 +335,7 @@
       <!-- GOOGLE MAP END -->
       <!-- 求人情報 START -->
       <div id="recruit-section" class="row shop-menu section scrollspy">
-        <div class="orange darken-1 card-panel col s12 center-align">
+        <div class="light-blue accent-2 card-panel col s12 center-align">
             <p class="recruit-label section-label"><span> リクルート </span></p>
         </div>
         <div class="col s12 m12 l12">
@@ -462,44 +462,9 @@
       </div>
       <!-- 求人情報 END -->
     </div>
+  </div>
     <!--デスクトップ用 サイドバー START -->
-    <div class="hide-on-med-and-down sidebar col l4">
-			<div class="section">
-        <!-- シェアボタン START -->
-        <P class="center-align">SNSで<span class="color-blue"><?=$shop->name?></span>をシェアしよう！</p>
-        <div class="row sharer-modal">
-          <div class="col l6">
-            <a class="facebook sharer-btn waves-effect waves-light btn-large"><span> Facebook</span></a>
-          </div>
-          <div class="col l6">
-            <a class="twitter sharer-btn waves-effect waves-light btn-large"><span> Twitter</span></a>
-          </div>
-        </div>
-        <div class="row sharer-modal">
-          <div class="col l6">
-            <a class="b_hatena sharer-btn waves-effect waves-light btn-large"><span> はてブ</span></a>
-          </div>
-          <div class="col l6">
-            <a class="line sharer-btn waves-effect waves-light btn-large"><span> LINE</span></a>
-          </div>
-        </div>
-        <!-- シェアボタン END -->
-			</div>
-      <!-- バナー１ START -->
-			<div class="card hoverable section blue darken-2">
-				<div class="card-content white-text">
-					<p>バナー１</p>
-				</div>
-			</div>
-      <!-- バナー１ END -->
-      <!-- バナー２ START -->
-			<div class="card hoverable section purple darken-2">
-				<div class="card-content white-text">
-					<p>バナー２</p>
-				</div>
-			</div>
-      <!-- バナー２ END -->
-      </div>
+    <?= $this->element('sidebar'); ?>
     <!--デスクトップ用 サイドバー END -->
   </div>
 </div>

@@ -429,6 +429,16 @@ div.description {
   background-size: contain;
   vertical-align: middle;
 }
+.shop-menu .shop-menu-label.casts:before {
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-image: url(/img/common/users-icon.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: middle;
+}
 .shop-menu .shop-menu-label.work:before {
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/
@@ -507,6 +517,7 @@ div.description {
   width: 30px;/*画像の幅*/
   height: 30px;/*画像の高さ*/
   background-image: url(/img/common/image-gallery-icon.jpg);
+  background-repeat: no-repeat;
   background-size: contain;
   vertical-align: middle;
 }
@@ -636,6 +647,7 @@ div.description {
 #shop-gallery-section .shop-gallery-label span:before,
 #shop-gallery-section .shop-gallery-label span:after {
   background-image: url(/img/common/image-gallery-icon.jpg);
+  background-repeat: no-repeat;
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
@@ -759,6 +771,65 @@ span.icon-vertical-align {
 
 
 /* 店舗ページ END */
+/* キャストページ START */
+.cast-header .cast-name-box {
+  position: relative;
+  top: -5px;
+}
+.cast-header span.header-diary:before {
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 20px;/*画像の幅*/
+  height: 20px;/*画像の高さ*/
+  background-image: url(/img/common/diary-icon.jpg);
+  background-size: contain;
+  vertical-align: middle;
+}
+.casts-header span.header-casts:before {
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 20px;/*画像の幅*/
+  height: 20px;/*画像の高さ*/
+  background-image: url(/img/common/users-icon.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: middle;
+}
+
+.cast-header span.header-gallery:before {
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 20px;/*画像の幅*/
+  height: 20px;/*画像の高さ*/
+  background-image: url(/img/common/image-gallery-icon.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: middle;
+}
+#casts-section .casts-label span:before,
+#casts-section .casts-label span:after {
+  background-image: url(/img/common/users-icon.png);
+  background-repeat: no-repeat;
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+.cast-header span.header-working {
+  font-weight: bolder;
+  color: crimson;
+}
+.bound{
+  animation: key1 .3s ease infinite alternate;
+}
+
+@keyframes key1{
+  0% {transform: translateY(0px);}
+  100% {transform: translateY(-10px);}
+}
+/* キャストページ END */
 
 /* 日記ページ START */
 .diary-card .my-gallery .col {

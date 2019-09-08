@@ -773,8 +773,6 @@ function initializeUser() {
         commonSearch(false);
         // 店舗住所取得
         var address = $("table td[name='address']").text();
-        // Googleマップ初期化処理
-        googlemap_init('google_map', address);
     }
     /* キャスト画面 END */
 

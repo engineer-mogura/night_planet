@@ -1,6 +1,6 @@
 <div id="shop-sharer-modal" class="modal sharer-modal">
   <div class="modal-content">
-    <h4>SNSで<span class="color-blue"><?=$shop->name?></span>をシェアしよう</h4>
+    <h4>SNSで<span class="color-blue"><?=isset($shop) ? $shop->name : $cast->shop->name?></span>をシェアしよう</h4>
     <div class="row">
       <div class="col s6 m6 l3">
         <a class="facebook sharer-btn waves-effect waves-light btn-large"><span> Facebook</span></a>

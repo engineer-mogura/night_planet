@@ -44,7 +44,7 @@
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
-  <?php !empty($userInfo['icon_name'])? $icon = $userInfo['profile_path'].DS.$userInfo['icon_name'] : $icon = "/img/common/noimage.jpg"; ?>
+  <?php !empty($userInfo['icon_name'])? $icon = $userInfo['profile_path'].DS.$userInfo['icon_name'] : $icon = PATH_ROOT['NO_IMAGE02']; ?>
   <?php $id = $this->request->getSession()->read('Auth.Cast.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.Cast.role') ?>
 </head>
@@ -65,6 +65,7 @@
     <li><a href="/cast/casts/top-image?activeTab=top-image" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">image</i><?= CAST_LM['003'] ?></a></li>
     <li><a href="/cast/casts/diary?activeTab=diary" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">note_add</i><?= CAST_LM['004'] ?></a></li>
     <li><a href="/cast/casts/gallery?activeTab=gallery" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">photo_library</i><?= CAST_LM['005'] ?></a></li>
+    <li><a href="/cast/casts/sns?activeTab=sns" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">chat_bubble_outline</i><?= CAST_LM['006'] ?></a></li>
     <li><a class="waves-effect" href="/cast/casts"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

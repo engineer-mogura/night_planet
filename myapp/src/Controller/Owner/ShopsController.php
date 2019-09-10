@@ -1015,6 +1015,7 @@ class ShopsController extends AppController
         $this->response->body(json_encode($response));
         return;
     }
+
     /**
      * ギャラリー 編集押下処理
      *

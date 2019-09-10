@@ -2934,7 +2934,7 @@ function initializeCast() {
 
     }
     /* 日記 画面 END */
-    /* 画像アップロード 画面 START */
+    /* ギャラリー 画面 START */
     if($("#gallery").length) {
         // ギャラリー 削除ボタン押した時
         $(document).on("click", ".gallery-deleteBtn",function() {
@@ -3033,10 +3033,33 @@ function initializeCast() {
             // フォーム入力も削除する
             $("#gallery").find("#image-file, .file-path").val("");
         });
-    /* ギャラリー 関連処理 END */
 
     }
-    /* 画像アップロード 画面 END */
+    /* ギャラリー 画面 END */
+    /* SNS 画面 START */
+    if($("#sns").length) {
+        var $sns = $("#sns");
+        $('textarea').trigger('autoresize'); // テキストエリアを入力文字の幅によりリサイズする
+
+        // 入力フォームに変更があった時
+        $(document).find($sns).on("input", function() {
+            $($sns).find(".saveBtn").removeClass("disabled");
+        });
+
+        // 登録ボタン押した時
+        $($sns).find(".saveBtn").on("click", function() {
+            if (!confirm('こちらの内容でよろしいですか？')) {
+                return false;
+            }
+            var $form =$('#save-sns');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#wrapper"));
+        });
+    }
+    /* SNS 画面 END */
+
 }
 
 

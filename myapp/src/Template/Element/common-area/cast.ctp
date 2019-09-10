@@ -10,9 +10,9 @@
   <div class="row">
     <div id="cast-main" class="col s12 m12 l8">
       <?php !empty($cast->top_image) ? $top_image = $shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['TOP_IMAGE'].DS.$cast->top_image
-          : $top_image = PATH_ROOT['AREA01']?>
+          : $top_image = PATH_ROOT['CAST_TOP_IMAGE']?>
       <?php !empty($cast->icon) ? $icon = $shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon
-          : $icon = PATH_ROOT['AREA01']?>
+          : $icon = PATH_ROOT['NO_IMAGE02']?>
       <!-- ヘッダー START -->
       <div class="cast-header">
         <img class="responsive-img" width="100%" src=<?=$top_image?> />
@@ -190,17 +190,58 @@
         <?php endif; ?>
       </div>
       <!-- 日記 END -->
+            <!-- instagram START -->
+            <?php if(!empty($cast->snss[0]['instagram'])): ?>
+        <div id="instagram-section" class="row shop-menu section scrollspy">
+          <div class="light-blue accent-2 card-panel col s12 center-align">
+            <p class="instagram-label section-label"><span> instagram </span></p>
+          </div>
+          <?php if(!empty($ig_error)):
+                  echo('<p class="col">'.$ig_error.'</p>');
+                elseif($ig_data->media_count == 0):
+                  echo('<p class="col">まだ投稿がありません。</p>');
+                else:
+          ?>
+            <!-- photoSwipe START -->
+            <?= $this->element('Instagram'); ?>
+            <!-- photoSwipe END -->
+          <?php endif;?>
+        </div>
+      <?php endif;?>
+      <!-- instagram END -->
+      <!-- facebook START -->
+      <?php if(!empty($cast->snss[0]['facebook'])): ?>
+        <div id="facebook-section" class="row shop-menu section scrollspy">
+          <div class="light-blue accent-2 card-panel col s12 center-align">
+            <p class="facebook-label section-label"><span> facebook </span></p>
+          </div>
+          <div id="fb-root"></div>
+          <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0&appId=2084171171889711&autoLogAppEvents=1"></script>        </div>
+          <div class="fb-page" data-href="https://www.facebook.com/<?=$cast->snss[0]['facebook']?>" data-tabs="timeline,messages" data-width="500" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/<?=$cast->snss[0]['facebook']?>/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/<?=$cast->snss[0]['facebook']?>/"></a></blockquote></div>
+      <?php endif;?>
+      <!-- facebook END -->
+      <!-- twitter START -->
+      <?php if(!empty($cast->snss[0]['twitter'])): ?>
+        <div id="twitter-section" class="row shop-menu section scrollspy">
+          <div class="light-blue accent-2 card-panel col s12 center-align">
+            <p class="twitter-label section-label"><span> twitter </span></p>
+          </div>
+          <a class="twitter-timeline" href="https://twitter.com/<?=$cast->snss[0]['twitter']?>?ref_src=twsrc%5Etfw" data-tweet-limit="3">Tweets by <?=$shop->snss[0]['twitter']?></a>
+          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </div>
+      <?php endif;?>
+      <!-- twitter END -->
       <!-- キャストリスト START -->
       <div id="casts-section" class="row shop-menu section scrollspy">
         <div class="light-blue accent-2 card-panel col s12 center-align">
           <p class="casts-label section-label"><span> CAST </span></p>
         </div>
-        <?php if(count($shop->casts) > 0): ?>
-            <?php foreach($shop->casts as $cast): ?>
+        <?php if(count($other_casts) > 0): ?>
+            <?php foreach($other_casts as $other_cast): ?>
             <div class="center-align col s3 m3 l3">
               <div>
-                <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
-                  <img src="<?=isset($cast->icon) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
+                <a href="<?=DS.$cast->shop['area'].DS.PATH_ROOT['CAST'].DS.$other_cast['id']."?genre=".$cast->shop['genre']."&name=".$cast->shop['name']."&shop=".$cast->shop['id']."&nickname=".$other_cast['nickname']?>">
+                  <img src="<?=isset($other_cast->icon) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$other_cast->dir.DS.PATH_ROOT['PROFILE'].DS.$other_cast->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
                 </a>
                 </div>
               <h6><?=$cast->nickname?></h6>

@@ -564,9 +564,10 @@ div.description {
   background-size: contain;
   vertical-align: middle;
 }
-#cast-section .cast-label span:before,
-#cast-section .cast-label span:after {
-  background-image: url(/img/common/user-icon.png);
+#casts-section .casts-label span:before,
+#casts-section .casts-label span:after {
+  background-image: url(/img/common/users-icon.png);
+  background-repeat: no-repeat;
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
@@ -973,14 +974,13 @@ li.daylist,li.eventlist {
 }
 
 div.my-gallery {
-  display: inline-block;
+ /* display: inline-block;*/
 }
 /* .diary-card .my-gallery .col .imageOne{
   height: 250px;
 } */
 .diary-list p.title, #modal-diary p.title, .notice-list p.title, #modal-notice p.title {
-  border-bottom-style: groove;
-  padding-bottom: 5px;
+
 }
 .diary-list p.content, #modal-diary p.content, .notice-list p.content, #modal-notice p.content  {
   margin-top: 10px;

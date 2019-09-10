@@ -49,6 +49,9 @@ class CastsTable extends Table
         $this->hasMany('Diarys', [
             'foreignKey' => 'cast_id'
         ]);
+        $this->hasMany('Snss', [
+            'foreignKey' => 'cast_id'
+        ]);
     }
 
     /**

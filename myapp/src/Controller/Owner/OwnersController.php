@@ -32,7 +32,7 @@ class OwnersController extends AppController
         // オーナーに関する情報をセット
         if(!is_null($user = $this->Auth->user())){
             $owner = $this->Owners->get($user['id']);
-            $this->set('ownerInfo', $this->Util->getOwnerInfo($owner));
+            $this->set('userInfo', $this->Util->getOwnerInfo($owner));
         }
     }
 
@@ -323,7 +323,7 @@ class OwnersController extends AppController
 
                     // 店舗情報セット
                     $shop = $this->Shops->newEntity();
-                    $shop->owner_id = $this->viewVars['ownerInfo']['id'];
+                    $shop->owner_id = $this->viewVars['userInfo']['id'];
                     $shop->area = $this->request->getData('area');
                     $shop->genre = $this->request->getData('genre');
                     $shop->dir = $nextDir;
@@ -393,18 +393,18 @@ class OwnersController extends AppController
             if (isset($this->request->data["action_type"])) {
 
                 $dirPath = preg_replace('/(\/\/)/', '/',
-                    WWW_ROOT.$this->viewVars['ownerInfo']['image_path']);
-                $owner = $this->Owners->get($this->viewVars['ownerInfo']['id']);
+                    WWW_ROOT.$this->viewVars['userInfo']['profile_path']);
+                $owner = $this->Owners->get($this->viewVars['userInfo']['id']);
                 // ディクレトリ取得
                 $dir = new Folder($dirPath, true, 0755);
                 // 前のファイル取得
-                $fileBefor = new File($dirPath . DS .$owner->image, true, 0755);
+                $fileBefor = new File($dirPath . DS .$owner->icon, true, 0755);
                 $file = $this->request->data['image'];
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
                     $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
                     try {
-                        if(file_exists($fileBefor->path) && !empty($owner->image)) {
+                        if(file_exists($fileBefor->path) && !empty($owner->icon)) {
                             // ロールバック用のファイルサイズチェック
                             if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
                                 throw new RuntimeException('ファイルサイズが大きすぎます。');
@@ -416,12 +416,12 @@ class OwnersController extends AppController
                             // 一時ファイル取得
                             $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name);
                         }
-                        $owner->image = $this->Util->file_upload($this->request->getData('image'),
+                        $owner->icon = $this->Util->file_upload($this->request->getData('image'),
                             ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
                         // ファイル更新の場合は古いファイルは削除
                         if (!empty($fileBefor->name)) {
                             // ファイル名が同じ場合は削除を実行しない
-                            if ($fileBefor->name != $owner->image) {
+                            if ($fileBefor->name != $owner->icon) {
                                 // ファイル削除処理実行
                                 if (!$fileBefor->delete()) {
                                     throw new RuntimeException('ファイルの削除ができませんでした。');
@@ -442,7 +442,7 @@ class OwnersController extends AppController
                         }
                         // ファイルがアップロードされていた場合は削除を行う
                         if($owner->isDirty('image')) {
-                            $file = new File($dirPath . DS .$owner->image, true, 0755);
+                            $file = new File($dirPath . DS .$owner->icon, true, 0755);
                             // 一時ファイルがあれば削除する
                             if (isset($file) && file_exists($file->path)) {
                                 $file->delete();// tmpファイル削除

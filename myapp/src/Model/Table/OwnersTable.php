@@ -71,9 +71,9 @@ class OwnersTable extends Table
             ->allowEmptyString('name', false);
 
         $validator
-            ->scalar('image')
-            ->maxLength('image', 100)
-            ->allowEmptyFile('image');
+            ->scalar('icon')
+            ->maxLength('icon', 255)
+            ->allowEmptyFile('icon');
 
         $validator
             ->scalar('role')

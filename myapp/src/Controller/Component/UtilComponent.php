@@ -83,11 +83,11 @@ class UtilComponent extends Component
         $ownerInfo = array();
 
         $ownerInfo = $ownerInfo + array('id'=>$owner['id']
-            ,'dir'=>$owner['dir'],'main_image'=>$owner['image']);
+            ,'dir'=>$owner['dir'],'icon_name'=>$owner['icon']);
         $path = DS.PATH_ROOT['IMG'].DS.PATH_ROOT['OWNER'].DS.$owner['dir'];
 
         $ownerInfo = $ownerInfo + array('owner_path'=> $path
-            ,'image_path'=> $path.DS.PATH_ROOT['IMAGE']);
+        ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'profile_path'=> $path.DS.PATH_ROOT['PROFILE']);
         return  $ownerInfo;
 
     }
@@ -163,9 +163,9 @@ class UtilComponent extends Component
                 .DS.PATH_ROOT['CAST'].DS.$cast['dir'];
 
         $castInfo = $castInfo + array('cast_path'=> $path,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE']
-        , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
-        , 'diary_path'=> $path.DS.PATH_ROOT['DIARY']
-        , 'event_path'=> $path.DS.PATH_ROOT['EVENT']);
+            , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
+            , 'diary_path'=> $path.DS.PATH_ROOT['DIARY'], 'event_path'=> $path.DS.PATH_ROOT['EVENT']
+            , 'cache_path'=>$path.DS.PATH_ROOT['CACHE']);
         return  $castInfo;
     }
 

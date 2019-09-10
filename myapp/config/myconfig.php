@@ -40,7 +40,7 @@ return [
 		'NO_IMAGE03'=> '/img/common/no-img150_150/no-img7.png',
 		'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
 		'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
-		'AREA01'=> '/img/common/top/top1.jpg',
+		'CAST_TOP_IMAGE'=> '/img/common/cast/top-image.jpg',
 		'CREDIT'=> '/img/common/credit/',
 		'OWNER'=> 'owner',
 		'USER'=> 'user',
@@ -122,7 +122,8 @@ return [
 		'003'=>'トップ画像',
 		'004'=>'日記',
 		'005'=>'ギャラリー',
-		'006'=>'キャストのトップへ行く',
+		'006'=>'SNS',
+		'007'=>'キャストのトップへ行く',
 	)),
 
 	// ラベルボタン定数 common.label button

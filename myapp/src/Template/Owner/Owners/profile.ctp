@@ -74,7 +74,7 @@
                         <div class="file-field card-panel grey lighten-5 input-field card-panel grey lighten-5 z-depth-1">
                             <div class="row valign-wrapper">
                                 <div class="col s5">
-                                    <img class="responsive-img circle left" src="<?=isset($owner->image) ? $ownerInfo['image_path']. DS .$owner->image:"/img/common/noimage.jpg" ?>"  alt="">
+                                    <img class="responsive-img circle left" src="<?=isset($owner->icon) ? $userInfo['profile_path']. DS .$owner->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="">
                                     <input type="file" id="image-file" accept="image/jpeg,image/png" name="image">
                                 </div>
                                 <div class="file-path-wrapper hide">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 9 月 04 日 20:52
+-- Generation Time: 2019 年 9 月 09 日 01:34
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.3.8
 
@@ -112,6 +112,8 @@ CREATE TABLE `casts` (
   `age` varchar(5) DEFAULT NULL,
   `message` varchar(50) DEFAULT NULL,
   `holiday` varchar(50) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `top_image` varchar(255) DEFAULT NULL,
   `image1` varchar(255) DEFAULT NULL,
   `image2` varchar(255) DEFAULT NULL,
   `image3` varchar(255) DEFAULT NULL,
@@ -132,24 +134,24 @@ CREATE TABLE `casts` (
 -- テーブルのデータのダンプ `casts`
 --
 
-INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `holiday`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `remember_token`, `status`, `delete_flag`, `created`, `modified`) VALUES
-(1, 38, 'cast', '山田　敏子２', 'ＨＡＮＡ', 'okiyoru3@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '2000-02-14 00:00:00', NULL, 'blood_type1', 'constellation4', '22', 'メッセージメッセージメッセージメッセージメッセージメッセージメッセージメセージメッセー', NULL, '0ba3ed5e90b78afc0d5a901caa1c76d7e36c4ed9.jpg', 'aa58c6f495d90f42f7053a3fdeefe9d1508792d9.jpg', '58223027c4bfbf1f31839cb91519aeebee455f81.jpg', 'c49b4b37b6f6de03c7cd49119b379d6dbfee2551.jpg', '5b549191eae4ee3a10368ca69facdd331fb6ffce.jpg', '015b84f204f727ec6cb23d7ed5e07e5b36fd21fa.jpg', '', '', '00002', NULL, 1, 0, '2019-03-23 16:51:25', '2019-08-17 22:33:25'),
-(33, 38, 'cast', '鈴木　一郎', 'イチロー', 'okiyoru99@gmail.com', '$2y$10$CQjIhOficE9SZJ5lgggxVuq4cUSwZG0O9CX6WC2GWbQBdQvPBYyda', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a674a57e5e8e5a289a7ae1b294cef79b42e3d3ab.jpg', '79d52ab7a9b86eb47fef0200f1779bf72bc55719.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-07-31 19:22:54', '2019-07-31 23:30:57'),
-(35, 54, 'cast', 'なな', 'なな', 'okiyoru99@gmail.com', '$2y$10$Op0.Cgd9vufJu7f6azq53OjtUaeDXUBZJ6jsgQAq3AeywhRkPJ0j.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a3e108605eacb4c5bb871b6e4db8a7837d76be6d.jpg', 'd401a3c19c54430f0639406d7859cf556a5db10d.jpg', '', '', NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-08 23:37:31', '2019-08-17 03:04:40'),
-(41, 54, 'cast', 'りおな', 'りおな', 'okiyoru99@gmail.com', '$2y$10$OeB2W0ufPZJpOKoZngWFpOrkNeFSETNOMPl/adL5DhpSrts0Cfrpe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c120ffc5a0456f7fc5ff6387110b2748a5d13e4d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-09 00:01:51', '2019-08-09 00:04:54'),
-(42, 54, 'cast', 'ゆいか', 'ゆいか', 'okiyoru99@gmail.com', '$2y$10$2ksjTbJZy//cLD.fK6rypeYmfSLPckgcNoxn.2pPLN4ovl9jIc5ae', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c2f848d69842167ee88896fc783d44ffdaf3d010.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-09 20:20:25', '2019-08-09 20:22:56'),
-(43, 54, 'cast', 'まみ', 'まみ', 'okiyoru99@gmail.com', '$2y$10$zMiLChXeQlZ1VGnNHfivTewm7eWrHxOmw24oOxd24eXzvEcshFf/C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'fa2855911bc0a7a8f5fdc76ac35a8e40d7ed3a84.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-09 20:23:37', '2019-08-09 20:25:11'),
-(44, 54, 'cast', 'あやの', 'あやの', 'okiyoru99@gmail.com', '$2y$10$yKV7WFDrJtjI/3bG.HKcIOHdKWcMGkAMkb0i78eigS2LMn7F8FV4O', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '9854e59f26988a7683e1e01ad3a2499acb38bb20.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-09 20:26:27', '2019-08-09 20:27:56'),
-(45, 54, 'cast', 'さくら', 'さくら', 'okiyoru99@gmail.com', '$2y$10$ZK7IpBPgr3ZQiwxFOn/ZpOGxodptM.mq5E45v3giYcPoNcjo57WU6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '7a47074961b6a86944148e149343fd62980f6ac0.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00006', NULL, 1, 0, '2019-08-09 20:33:22', '2019-08-09 20:34:59'),
-(46, 54, 'cast', 'あや', 'あや', 'okiyoru99@gmail.com', '$2y$10$hlJU3b8NhEM/O34sBLjRGu7MLqDx4/K5HEi/9nykdHgnUUeHfFAXa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'f4dc7a2bc75622f394ffffdc5d3f7a665af88c89.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00007', NULL, 1, 0, '2019-08-09 20:37:42', '2019-08-09 20:39:20'),
-(47, 54, 'cast', 'ひな', 'ひな', 'okiyoru99@gmail.com', '$2y$10$AyXZpXWXKYZfs.kZL3V8ueCyxgip9ipQLMhuSo6EawXFs4pY1Y1Ja', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '73c7542a0c03b7100b32a0f298e15d9d964f44ff.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00008', NULL, 1, 0, '2019-08-09 20:39:57', '2019-08-09 20:40:46'),
-(48, 55, 'cast', 'しほ', 'しほ', 'okiyoru99@gmail.com', '$2y$10$TXeMOwhsK/4vPQoJn.ZCN.PxboDRp8jSYurqQkuVwfqWKlKTWdiXy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '88b11d8760b460a4c10ca19abb7180331e7b88c5.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-10 16:11:29', '2019-08-10 16:15:43'),
-(49, 55, 'cast', 'るか', 'るか', 'okiyoru99@gmail.com', '$2y$10$AoA.bJqZuQC0SSjDCRvK4uiZQeIRtpM/U/6udQp/mes77GXgemtJK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '930d1d60205746c6e73a82f6bc32d1d19462433a.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-10 16:17:02', '2019-08-10 16:17:53'),
-(50, 55, 'cast', 'あーす', 'あーす', 'okiyoru99@gmail.com', '$2y$10$nZe1EOBngjM3iDxMVLLPNuBXc8b.1DOWhNrdk3WGJ.qhPSbY4Qimi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'e4ab0de9584c92d4b0763b092e37992ba3717aca.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-10 16:18:42', '2019-08-10 16:19:36'),
-(51, 55, 'cast', 'みずき', 'みずき', 'okiyoru99@gmail.com', '$2y$10$/6K5phAfNciUFN.6lAh/0OftmW4kArVeGsekekfWjzJyIOV8WAetW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2946854fe5bf4f0a9541842605059a3fe4ea461d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-10 16:20:27', '2019-08-10 16:21:36'),
-(52, 55, 'cast', 'しの', 'しの', 'okiyoru99@gmail.com', '$2y$10$dzUNVjZvry8zpdHXf7Xr8O84YzhGfSG.MXsJm/uBNKz2yk.M5.zNm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'd51bc787af1247d4779e00edc7ba5ef0d3eb2393.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-10 16:21:58', '2019-08-10 16:22:51'),
-(53, 56, 'cast', 'なお', 'なお', 'okiyoru1@gmail.com', '$2y$10$QiCOJSSG9UQv9QOeOLTgZOJF6HfBw7BmtOCcu3xHx5XZwlRgsFNNG', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2601bea1201c70056cc5a0f340823fea49fc6dfd.jpg', '', NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-10 17:23:36', '2019-09-04 20:50:40'),
-(54, 56, 'cast', 'にーな', 'にーな', 'okiyoru2@gmail.com', '$2y$10$5bX0v1ycjzISzcMkWIHXYOa5Pgbiio0idh7NuPZMzddUse3YYWKT2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '4f2d3399eba5620b3663a96e4a3404f4275ab9ba.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-10 17:27:06', '2019-08-10 17:28:07');
+INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `holiday`, `icon`, `top_image`, `image1`, `image2`, `image3`, `image4`, `image5`, `image6`, `image7`, `image8`, `dir`, `remember_token`, `status`, `delete_flag`, `created`, `modified`) VALUES
+(1, 38, 'cast', '山田　敏子２', 'ＨＡＮＡ', 'okiyoru99@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '2000-02-14 00:00:00', NULL, 'blood_type1', 'constellation4', '22', 'メッセージメッセージメッセージメッセージメッセージメッセージメッセージメセージメッセー', NULL, '87acb71458b5536fdfeec9e47e800ec40a632455.jpg', NULL, '0ba3ed5e90b78afc0d5a901caa1c76d7e36c4ed9.jpg', 'aa58c6f495d90f42f7053a3fdeefe9d1508792d9.jpg', '58223027c4bfbf1f31839cb91519aeebee455f81.jpg', 'c49b4b37b6f6de03c7cd49119b379d6dbfee2551.jpg', '5b549191eae4ee3a10368ca69facdd331fb6ffce.jpg', '015b84f204f727ec6cb23d7ed5e07e5b36fd21fa.jpg', '', '', '00002', NULL, 1, 0, '2019-03-23 16:51:25', '2019-09-05 23:33:01'),
+(33, 38, 'cast', '鈴木　一郎', 'イチロー', 'okiyoru99@gmail.com', '$2y$10$CQjIhOficE9SZJ5lgggxVuq4cUSwZG0O9CX6WC2GWbQBdQvPBYyda', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a674a57e5e8e5a289a7ae1b294cef79b42e3d3ab.jpg', '79d52ab7a9b86eb47fef0200f1779bf72bc55719.jpg', NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-07-31 19:22:54', '2019-07-31 23:30:57'),
+(35, 54, 'cast', 'なな', 'なな', 'okiyoru99@gmail.com', '$2y$10$Op0.Cgd9vufJu7f6azq53OjtUaeDXUBZJ6jsgQAq3AeywhRkPJ0j.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'd82a12628c2812d3141b7555f961a6f2b94edb57.jpg', NULL, 'a3e108605eacb4c5bb871b6e4db8a7837d76be6d.jpg', 'd401a3c19c54430f0639406d7859cf556a5db10d.jpg', '', '', NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-08 23:37:31', '2019-09-05 23:27:03'),
+(41, 54, 'cast', 'りおな', 'りおな', 'okiyoru99@gmail.com', '$2y$10$OeB2W0ufPZJpOKoZngWFpOrkNeFSETNOMPl/adL5DhpSrts0Cfrpe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'e7f7277686d06a949dcde7be182ddc1eaf55e76f.jpg', NULL, 'c120ffc5a0456f7fc5ff6387110b2748a5d13e4d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-09 00:01:51', '2019-09-05 23:28:00'),
+(42, 54, 'cast', 'ゆいか', 'ゆいか', 'okiyoru99@gmail.com', '$2y$10$2ksjTbJZy//cLD.fK6rypeYmfSLPckgcNoxn.2pPLN4ovl9jIc5ae', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c2f848d69842167ee88896fc783d44ffdaf3d010.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-09 20:20:25', '2019-08-09 20:22:56'),
+(43, 54, 'cast', 'まみ', 'まみ', 'okiyoru99@gmail.com', '$2y$10$zMiLChXeQlZ1VGnNHfivTewm7eWrHxOmw24oOxd24eXzvEcshFf/C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '777990b048e29b80061616d1d5c8488155606f2a.jpg', NULL, 'fa2855911bc0a7a8f5fdc76ac35a8e40d7ed3a84.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-09 20:23:37', '2019-09-05 23:29:37'),
+(44, 54, 'cast', 'あやの', 'あやの', 'okiyoru99@gmail.com', '$2y$10$yKV7WFDrJtjI/3bG.HKcIOHdKWcMGkAMkb0i78eigS2LMn7F8FV4O', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '08c25c32bdd087dfe5229f9e8a7954230ae65866.jpg', NULL, '9854e59f26988a7683e1e01ad3a2499acb38bb20.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-09 20:26:27', '2019-09-05 23:30:19'),
+(45, 54, 'cast', 'さくら', 'さくら', 'okiyoru99@gmail.com', '$2y$10$ZK7IpBPgr3ZQiwxFOn/ZpOGxodptM.mq5E45v3giYcPoNcjo57WU6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '66230f2e72bdf49a7463878b559da351189f12f5.jpg', NULL, '7a47074961b6a86944148e149343fd62980f6ac0.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00006', NULL, 1, 0, '2019-08-09 20:33:22', '2019-09-05 23:34:48'),
+(46, 54, 'cast', 'あや', 'あや', 'okiyoru99@gmail.com', '$2y$10$hlJU3b8NhEM/O34sBLjRGu7MLqDx4/K5HEi/9nykdHgnUUeHfFAXa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'a644952013d5748ab9f45b74613a61211ad68b84.jpg', NULL, 'f4dc7a2bc75622f394ffffdc5d3f7a665af88c89.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00007', NULL, 1, 0, '2019-08-09 20:37:42', '2019-09-05 23:35:57'),
+(47, 54, 'cast', 'ひな', 'ひな', 'okiyoru99@gmail.com', '$2y$10$AyXZpXWXKYZfs.kZL3V8ueCyxgip9ipQLMhuSo6EawXFs4pY1Y1Ja', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1fd0c362f52aacce13ab012df26e653822153c0e.jpg', NULL, '73c7542a0c03b7100b32a0f298e15d9d964f44ff.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00008', NULL, 1, 0, '2019-08-09 20:39:57', '2019-09-05 23:36:30'),
+(48, 55, 'cast', 'しほ', 'しほ', 'okiyoru99@gmail.com', '$2y$10$TXeMOwhsK/4vPQoJn.ZCN.PxboDRp8jSYurqQkuVwfqWKlKTWdiXy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'bf113d92c8ca13954af3172f0c434a863d07d3d3.jpg', NULL, '88b11d8760b460a4c10ca19abb7180331e7b88c5.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-10 16:11:29', '2019-09-05 23:38:32'),
+(49, 55, 'cast', 'るか', 'るか', 'okiyoru99@gmail.com', '$2y$10$AoA.bJqZuQC0SSjDCRvK4uiZQeIRtpM/U/6udQp/mes77GXgemtJK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '4f9d8c4f8d593c80f8bb26f47911a64a5bc03f48.jpg', NULL, '930d1d60205746c6e73a82f6bc32d1d19462433a.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-10 16:17:02', '2019-09-05 23:39:26'),
+(50, 55, 'cast', 'あーす', 'あーす', 'okiyoru99@gmail.com', '$2y$10$nZe1EOBngjM3iDxMVLLPNuBXc8b.1DOWhNrdk3WGJ.qhPSbY4Qimi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'f28cf293758e7f0daed3d6388268fffed0febd78.jpg', NULL, 'e4ab0de9584c92d4b0763b092e37992ba3717aca.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-10 16:18:42', '2019-09-05 23:39:47'),
+(51, 55, 'cast', 'みずき', 'みずき', 'okiyoru99@gmail.com', '$2y$10$/6K5phAfNciUFN.6lAh/0OftmW4kArVeGsekekfWjzJyIOV8WAetW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'fee86f53ca72575377cc1a003ad7d11f2910c091.jpg', NULL, '2946854fe5bf4f0a9541842605059a3fe4ea461d.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-10 16:20:27', '2019-09-05 23:40:10'),
+(52, 55, 'cast', 'しの', 'しの', 'okiyoru3@gmail.com', '$2y$10$dzUNVjZvry8zpdHXf7Xr8O84YzhGfSG.MXsJm/uBNKz2yk.M5.zNm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '52c39ac5f6a71b0c42d87833370136ac9302e68c.jpg', 'd366c2d329986ed7bb77e62b52aeec32cdabcae1.jpg', 'd51bc787af1247d4779e00edc7ba5ef0d3eb2393.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-10 16:21:58', '2019-09-09 00:41:32'),
+(53, 56, 'cast', 'なお', 'なお', 'okiyoru1@gmail.com', '$2y$10$QiCOJSSG9UQv9QOeOLTgZOJF6HfBw7BmtOCcu3xHx5XZwlRgsFNNG', NULL, NULL, 'blood_type1', 'constellation3', '22', '', NULL, '4c7912980db28ca28116520c7d6138f45b13e4bd.jpg', 'e62ab27335adb1a9d81819f5dfcbf2228a31045d.jpg', '74c13f66d574df5107f82572a3e60ff25226ba90.jpg', '', NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-10 17:23:36', '2019-09-08 02:25:19'),
+(54, 56, 'cast', 'にーな', 'にーな', 'okiyoru2@gmail.com', '$2y$10$5bX0v1ycjzISzcMkWIHXYOa5Pgbiio0idh7NuPZMzddUse3YYWKT2', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'aae046c4438706660de3e34c6ed9fc92c4db89a7.jpg', '469d23d11bae23ab2ad51af2027c77e09508d4f7.jpg', '4f2d3399eba5620b3663a96e4a3404f4275ab9ba.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-10 17:27:06', '2019-09-06 01:06:28');
 
 -- --------------------------------------------------------
 
@@ -254,7 +256,7 @@ INSERT INTO `diarys` (`id`, `cast_id`, `title`, `content`, `image1`, `image2`, `
 (149, 1, 'OKIYORU GoOKIYORU Go', 'OKIYORU ', '', '', '', '', '', NULL, NULL, NULL, '/2019/07/25/20190725_211740', '2019-07-25 21:17:41', '2019-07-27 20:30:29'),
 (151, 1, 'テスト投稿テスト投稿テスト投稿テスト投稿', 'テスト投稿テスト投稿テスト投稿テスト投稿テスト投稿😎😎😎😎😎\r\nテスト投稿テスト投稿😎😎😎😎😎😎😎😎😎😎😎\r\n😎😎\r\n😎テスト投稿テスト投稿テスト投稿テスト投稿テスト投稿テスト投稿😎😎😎😎😎\r\nテスト投稿テスト投稿😎😎😎😎😎😎😎😎😎😎😎\r\n😎😎\r\n😎テスト投稿', '3ba104a478ebba864b54afbff6b5805ae50fa886.jpg', 'be10f0392bcdf18c7561d92ad8ca8ff67d7101d4.jpg', '012a9371cc88777fb4dd52c592ad6aff4db2b9b0.jpg', 'ddad50142979ef1dd8962a53e18215adeb3f9240.jpg', '', NULL, NULL, NULL, '/2019/07/26/20190726_231704', '2019-07-26 23:17:04', '2019-08-11 22:40:38'),
 (152, 54, '初投稿でーす！', '初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎', 'e3c691e39afbeafd0b1e0239081f11a4a775661d.jpg', 'c3ea8c0d696599242bd81a3a99cbcfea994956e5.jpg', '16c1c6a16561329f97706c99044d2cfa5fc11b3b.jpg', '1fe9570a2933846042e23ec01dada580feea1ba7.jpg', '944f1549f6e6daa6c0defcaf026a9077a96d1bf7.jpg', 'e8869192005a49ef63caf51bfe604bdae8cbf181.jpg', '56dbd13a6f3ea70c5a32edd22e0656db40ab8f42.jpg', NULL, '/2019/08/11/20190811_165616', '2019-08-11 16:56:16', '2019-08-11 22:30:15'),
-(153, 54, '投稿２回目ー', '初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/11/20190811_225921', '2019-08-11 22:59:21', '2019-08-11 22:59:21'),
+(153, 54, '投稿２回目ー', '初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿', '1ed6755436e4e9248e39b4bf4718a1640ed64378.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/11/20190811_225921', '2019-08-11 22:59:21', '2019-09-08 21:25:34'),
 (154, 1, '久しぶりの投稿ー！', '久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥', '118388e959075dc80651da190750aa2c49857510.jpg', '828d5ce2c318a1fe2bb17a194196056af98d2170.jpg', '099399482ff6b17222bff4cd1d1ec7ff022dda55.jpg', NULL, NULL, NULL, NULL, NULL, '/2019/08/11/20190811_230316', '2019-08-11 23:03:16', '2019-08-14 00:32:34'),
 (155, 1, '日記😎日記😎日記😎日記😎日', '日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎', '099399482ff6b17222bff4cd1d1ec7ff022dda55.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/13/20190813_232147', '2019-08-13 23:21:48', '2019-08-13 23:21:48'),
 (156, 1, '銀次郎に行ってきた！', 'ハイボールの美味い店に行ってきたよー🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺😥🍺\r\n', '099399482ff6b17222bff4cd1d1ec7ff022dda55.jpg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '/2019/08/14/20190814_002817', '2019-08-14 00:28:17', '2019-08-14 15:57:25'),
@@ -327,7 +329,10 @@ INSERT INTO `events` (`id`, `event_type_id`, `cast_id`, `title`, `details`, `sta
 (288, NULL, 1, '休み', NULL, '2019-07-06 00:00:00', '2019-07-06 00:00:00', NULL, NULL, '1', NULL, 1, '2019-07-27 17:18:44', '2019-07-27 17:18:44'),
 (289, NULL, 1, '仕事', NULL, '2019-06-04 00:30:00', '2019-06-04 07:00:00', '00:30', '07:00', '1', NULL, 1, '2019-07-27 20:28:59', '2019-07-27 20:28:59'),
 (291, NULL, 1, '休み', NULL, '2019-07-04 00:00:00', '2019-07-04 00:00:00', NULL, NULL, '1', NULL, 1, '2019-07-29 01:02:53', '2019-07-29 01:02:53'),
-(292, NULL, 53, '仕事', NULL, '2019-09-04 13:00:00', '2019-09-04 00:00:00', '13:00', NULL, '1', NULL, 1, '2019-09-04 20:40:43', '2019-09-04 20:41:54');
+(292, NULL, 53, '仕事', NULL, '2019-09-04 13:00:00', '2019-09-04 06:30:00', '13:00', '06:30', '1', NULL, 1, '2019-09-04 20:40:43', '2019-09-05 00:14:20'),
+(293, NULL, 53, '休み', NULL, '2019-09-05 00:00:00', '2019-09-05 00:00:00', NULL, NULL, '1', NULL, 1, '2019-09-05 00:13:19', '2019-09-05 00:13:19'),
+(294, NULL, 53, '仕事', NULL, '2019-09-06 09:00:00', '2019-09-06 03:00:00', '09:00', '03:00', '1', NULL, 1, '2019-09-05 00:13:29', '2019-09-05 00:13:52'),
+(295, NULL, 53, '仕事', NULL, '2019-09-07 01:30:00', '2019-09-07 00:00:00', '01:30', NULL, '1', NULL, 1, '2019-09-06 23:02:04', '2019-09-06 23:02:04');
 
 -- --------------------------------------------------------
 
@@ -597,7 +602,7 @@ INSERT INTO `owners` (`id`, `name`, `image`, `role`, `tel`, `email`, `password`,
 (57, '', NULL, 'owner', '', 'okiyoru99@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 0, '', '00005', NULL, 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38'),
 (92, '', NULL, 'owner', '', 'okiyoru2@gmail.com', '$2y$10$K0knx7GKbgg8BIYt5sUZ7.1KSX2s2sL/GuNT5H.WalyeWiq09JF0O', 0, '', '00002', NULL, 1, '2019-08-07 23:50:33', '2019-08-07 23:55:25'),
 (93, '', NULL, 'owner', '', 'okiyoru3@gmail.com', '$2y$10$JQueljItW8sT42R1z2weG.Jc/z/ziO8AuoUrLXvAk9NjxQXw7hscG', 0, '', '00001', NULL, 1, '2019-08-10 15:10:55', '2019-08-10 15:16:07'),
-(94, '鈴木太郎', 'd42936d7112ea0ce41934e98cba8a8735bcf16c3.jpg', 'owner', '09012341234', 'okiyoru1@gmail.com', '$2y$10$M68eGdvgIadmxzRw6.1EHu5gEN3fA7DShvvz1KjGTzBbR/giYsd6O', 1, '36', '00002', NULL, 1, '2019-08-10 16:55:43', '2019-08-18 22:20:28'),
+(94, '鈴木太郎', '19d2f68ccc003c23a02fab351024960bf9ca9695.jpg', 'owner', '09012341234', 'okiyoru1@gmail.com', '$2y$10$M68eGdvgIadmxzRw6.1EHu5gEN3fA7DShvvz1KjGTzBbR/giYsd6O', 1, '36', '00002', NULL, 1, '2019-08-10 16:55:43', '2019-09-06 22:36:22'),
 (98, '鈴木次郎', 'e3babc50ddfc45ec880aaf82424bfa24839f92a4.jpg', 'owner', '09012341234', 'okiyoru99@gmail.com', '$2y$10$PojdyaiQojD22nYfrmObv.H3ARmAWV3PTZK.6qGkjOEE..1y7yCm6', 1, '33', '00001', NULL, 1, '2019-08-18 17:07:25', '2019-08-18 22:17:22');
 
 -- --------------------------------------------------------
@@ -809,7 +814,36 @@ INSERT INTO `updates` (`id`, `shop_id`, `cast_id`, `type`, `content`, `created`,
 (9, 56, NULL, '', '店舗画像が更新されました。', '2019-09-03 21:25:10', '2019-09-03 21:25:10'),
 (10, 56, NULL, '', '店舗画像が更新されました。', '2019-09-03 21:32:56', '2019-09-03 21:32:56'),
 (11, 56, NULL, 'SHOP-GALLERY', '店内ギャラリーが更新されました。', '2019-09-03 21:35:46', '2019-09-03 21:35:46'),
-(12, 56, 0, 'EVENT', '店舗からのお知らせ3が追加されました。', '2019-09-01 23:04:16', '2019-09-01 23:04:16');
+(12, 56, 0, 'EVENT', '店舗からのお知らせ3が追加されました。', '2019-09-01 23:04:16', '2019-09-01 23:04:16'),
+(13, 56, 53, NULL, 'なおさんがプロフィールを更新しました。', '2019-09-05 19:59:13', '2019-09-05 19:59:13'),
+(14, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 21:11:45', '2019-09-05 21:11:45'),
+(15, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 22:03:03', '2019-09-05 22:03:03'),
+(16, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 22:03:38', '2019-09-05 22:03:38'),
+(17, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 22:04:17', '2019-09-05 22:04:17'),
+(18, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 22:05:45', '2019-09-05 22:05:45'),
+(19, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 23:03:31', '2019-09-05 23:03:31'),
+(20, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 23:07:03', '2019-09-05 23:07:03'),
+(21, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 23:07:30', '2019-09-05 23:07:30'),
+(22, 56, 53, NULL, 'なおさんがプロフィールアイコンを更新しました。', '2019-09-05 23:07:54', '2019-09-05 23:07:54'),
+(23, 56, NULL, NULL, 'なおさんがギャラリーを追加しました。', '2019-09-05 23:09:15', '2019-09-05 23:09:15'),
+(24, 56, 53, NULL, 'なおさんがプロフィールを更新しました。', '2019-09-05 23:10:47', '2019-09-05 23:10:47'),
+(25, 56, 54, NULL, 'にーなさんがプロフィールアイコンを更新しました。', '2019-09-05 23:21:50', '2019-09-05 23:21:50'),
+(26, 54, 35, NULL, 'ななさんがプロフィールアイコンを更新しました。', '2019-09-05 23:27:03', '2019-09-05 23:27:03'),
+(27, 54, 41, NULL, 'りおなさんがプロフィールアイコンを更新しました。', '2019-09-05 23:28:01', '2019-09-05 23:28:01'),
+(28, 54, 43, NULL, 'まみさんがプロフィールアイコンを更新しました。', '2019-09-05 23:29:37', '2019-09-05 23:29:37'),
+(29, 54, 44, NULL, 'あやのさんがプロフィールアイコンを更新しました。', '2019-09-05 23:30:19', '2019-09-05 23:30:19'),
+(30, 38, 1, NULL, 'ＨＡＮＡさんがプロフィールアイコンを更新しました。', '2019-09-05 23:33:01', '2019-09-05 23:33:01'),
+(31, 54, 45, NULL, 'さくらさんがプロフィールアイコンを更新しました。', '2019-09-05 23:34:48', '2019-09-05 23:34:48'),
+(32, 54, 46, NULL, 'あやさんがプロフィールアイコンを更新しました。', '2019-09-05 23:35:57', '2019-09-05 23:35:57'),
+(33, 54, 47, NULL, 'ひなさんがプロフィールアイコンを更新しました。', '2019-09-05 23:36:31', '2019-09-05 23:36:31'),
+(34, 55, 48, NULL, 'しほさんがプロフィールアイコンを更新しました。', '2019-09-05 23:38:32', '2019-09-05 23:38:32'),
+(35, 55, 49, NULL, 'るかさんがプロフィールアイコンを更新しました。', '2019-09-05 23:39:26', '2019-09-05 23:39:26'),
+(36, 55, 50, NULL, 'あーすさんがプロフィールアイコンを更新しました。', '2019-09-05 23:39:47', '2019-09-05 23:39:47'),
+(37, 55, 51, NULL, 'みずきさんがプロフィールアイコンを更新しました。', '2019-09-05 23:40:10', '2019-09-05 23:40:10'),
+(38, 55, 52, NULL, 'しのさんがプロフィールアイコンを更新しました。', '2019-09-05 23:41:19', '2019-09-05 23:41:19'),
+(39, NULL, NULL, NULL, 'にーなさんがトップ画像を変更しました。', '2019-09-06 01:06:30', '2019-09-06 01:06:30'),
+(40, NULL, NULL, NULL, 'なおさんがトップ画像を変更しました。', '2019-09-08 02:25:20', '2019-09-08 02:25:20'),
+(41, NULL, NULL, NULL, 'しのさんがトップ画像を変更しました。', '2019-09-09 00:41:32', '2019-09-09 00:41:32');
 
 -- --------------------------------------------------------
 
@@ -1027,7 +1061,7 @@ ALTER TABLE `diary_likes`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=293;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=296;
 
 --
 -- AUTO_INCREMENT for table `event_types`
@@ -1087,7 +1121,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `users`

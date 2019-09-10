@@ -156,14 +156,8 @@ class AreaController extends AppController
 
     public function shop($id = null)
     {
-       $sharer =  Router::reverse($this->request, true);
-
-       $query = $this->ShopInfos->find();
-       $ymd = $query->func()->date_format([
-           'Shop_infos.created' => 'literal',
-           "'%Y年%c月%e日'" => 'literal']);
+       $sharer =  Router::reverse($this->request, true); 
        $columns = $this->ShopInfos->schema()->columns();
-       $columns = $columns + ['ymd_created'=>$ymd];
 
         $shop = $this->Shops->find('all')
             ->where(['Shops.id' => $id])
@@ -242,23 +236,23 @@ class AreaController extends AppController
     public function cast($id = null)
     {
         $query = $this->Diarys->find();
-        $ymd = $query->func()->date_format([
-            'Diarys.created' => 'literal',
-            "'%Y年%c月%e日'" => 'literal']);
+
         $columns = $this->Diarys->schema()->columns();
-        $columns = $columns + ['ymd_created'=>$ymd];
-        // $columns = $columns + ['ymd_created'=>$ymd,'like_count'=>$query->func()->count('Likes.diary_id')];
         // キャスト情報、最新の日記情報とイイネの総数取得
         $cast = $this->Casts->find("all")->where(['Casts.id' => $id])
             ->contain(['Shops', 'Diarys' => function(Query $q) use ($columns) {
                 return $q
                     ->select($columns)
                     ->order(['Diarys.created'=>'DESC'])->limit(1);
-                }, 'Diarys.Diary_Likes', 'Shops.Coupons' => function(Query $q) {
-                return $q
-                    ->where(['Coupons.status'=>'1']);
-                }, 'Shops.Jobs'
+                }, 'Diarys.Diary_Likes','Snss'
             ])->first();
+        // その他のキャストを取得する
+        $other_casts = $this->Casts->find("all")
+            ->where(['Casts.shop_id' => $this->request->getQuery('shop')
+                , 'Casts.id is not' => $id
+            ])
+            ->order(['created'=>'DESC'])
+            ->toArray();
         // キャストのギャラリーリストを作成
         $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
         $imageList = array(); // 画面側でjsonとして使う画像リスト
@@ -279,8 +273,23 @@ class AreaController extends AppController
                 }
             }
         }
+        $castInfo = $this->Util->getCastItem($cast, $cast->shop);
+
+        $insta_user_name = $cast->snss[0]->instagram;
+        // インスタのキャッシュパス
+        $cache_path = preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$castInfo['cache_path']);
+        // インスタ情報を取得
+        $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $cache_path);
+        $ig_data = $tmp_ig_data->business_discovery;
+        // インスタユーザーが存在しない場合
+        if(!empty($tmp_ig_data->error)) {
+            // エラーメッセージをセットする
+            $insta_error = $tmp_ig_data->error->error_user_title;
+            $this->set(compact('ig_error'));
+        }
         $this->set('shopInfo', $this->Util->getShopInfo($cast->shop));
-        $this->set(compact('cast','imageList','dImageList'));
+        $this->set(compact('cast','ig_data','other_casts','imageList','dImageList'));
         $this->render();
     }
 
@@ -307,10 +316,8 @@ class AreaController extends AppController
             $columns = $this->Diarys->schema()->columns();
             $ymd = $query->func()->date_format([
                 'created' => 'literal',
-                "'%Y年%c月%e日'" => 'literal']);
+                "'%Y/%c/%e %H:%i'" => 'literal']);
             $columns = $columns + ['ymd_created'=>$ymd];
-            // $diary = $query->select($columns)
-            //     ->where(['id' => $this->request->query["id"]])->first();
 
             // キャスト情報、最新の日記情報とイイネの総数取得
             $diary = $this->Diarys->find("all")
@@ -323,7 +330,6 @@ class AreaController extends AppController
         }
 
     }
-
     /**
      * キャストの全ての日記情報を取得する処理
      *
@@ -382,10 +388,8 @@ class AreaController extends AppController
             $columns = $this->ShopInfos->schema()->columns();
             $ymd = $query->func()->date_format([
                 'created' => 'literal',
-                "'%Y年%c月%e日'" => 'literal']);
+                "'%Y/%c/%e %H:%i'" => 'literal']);
             $columns = $columns + ['ymd_created'=>$ymd];
-            // $notice = $query->select($columns)
-            //     ->where(['id' => $this->request->query["id"]])->first();
 
             // キャスト情報、最新の日記情報とイイネの総数取得
             $notice = $this->ShopInfos->find("all")
@@ -393,7 +397,6 @@ class AreaController extends AppController
                 ->where(['id' => $this->request->query["id"]])
                 ->contain(['Shop_info_Likes'])
                 ->first();
-            // $notice = $this->ShopInfos->get($this->request->query["id"]);
             $this->response->body(json_encode($notice));
             return;
         }

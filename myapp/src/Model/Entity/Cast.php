@@ -80,7 +80,7 @@ class Cast extends Entity
         'delete_flag' => true,
         'created' => true,
         'modified' => true,
-        'shop' => true
+        'shops' => true
     ];
 
     /**

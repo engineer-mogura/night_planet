@@ -17,6 +17,7 @@ class AppController extends \App\Controller\AppController
         $this->Diarys = TableRegistry::get('Diarys');
         $this->Likes = TableRegistry::get('Likes');
         $this->Events = TableRegistry::get('Events');
+        $this->Snss = TableRegistry::get('Snss');
         $this->Updates = TableRegistry::get('Updates');
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
@@ -50,7 +51,7 @@ class AppController extends \App\Controller\AppController
 
         // ログイン時に許可するアクション
         $access = ['index','editCalendar','profile','topImage','saveTopImage'
-            ,'gallery','saveGallery','deleteGallery','diary','saveDiary'
+            ,'gallery','saveGallery','sns','deleteGallery','diary','saveDiary'
             ,'viewDiary','deleteDiary','updateDiary'];
         if (in_array($action, $access)) {
             return true;

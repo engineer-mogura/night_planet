@@ -40,17 +40,16 @@
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
 </head>
-  <?php !empty($ownerInfo['main_image'])? $mainImage = $ownerInfo['image_path'].DS.$ownerInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?>
-  <?php $id = $this->request->getSession()->read('Auth.Owner.id') ?>
-  <?php $role = $this->request->getSession()->read('Auth.Owner.role') ?>
+<?php !empty($userInfo['icon_name'])? $icon = $userInfo['profile_path'].DS.$userInfo['icon_name'] : $icon = PATH_ROOT['NO_IMAGE02']; ?>
+<?php $id = $this->request->getSession()->read('Auth.Owner.id') ?>
+<?php $role = $this->request->getSession()->read('Auth.Owner.role') ?>
 <body id="owner-default">
   <ul id="slide-out" class="side-nav fixed">
     <li>
       <div class="user-view">
         <div class="background" style="background-color: orange;">
-        <!-- <img src="/img/common/area/top1.jpg"> -->
         </div>
-        <a href="#!user"><img class="circle" src="<?=$mainImage?>"></a>
+        <a href="#!user"><img class="circle" src="<?=$icon?>"></a>
         <a href="#!name"><span class="white-text name"><?=$this->request->getSession()->read('Auth.Owner.name')?></span></a>
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>

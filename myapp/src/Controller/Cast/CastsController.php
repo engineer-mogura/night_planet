@@ -353,7 +353,7 @@ class CastsController extends AppController
             // セレクトボックスを作成する
             $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
-            $this->set(compact('cast','icon', 'selectList'));
+            $this->set(compact('cast','selectList'));
             $this->render('/Cast/Casts/profile');
             $response = array(
                 'html' => $this->response->body(),
@@ -533,6 +533,85 @@ class CastsController extends AppController
             }
         }
         $this->set(compact('imageList'));
+        $this->render();
+    }
+
+        /**
+     * sns 画面の処理
+     *
+     * @return void
+     */
+    public function sns()
+    {
+        $auth = $this->request->session()->read('Auth.Cast');
+        $id = $auth['id']; // キャストID
+
+        // AJAXのアクセス以外は不正とみなす。
+        if ($this->request->is('ajax')) {
+            $flg = true; // 返却フラグ
+            $errors = ""; // 返却メッセージ
+            $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+            $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+            // レコードが存在するか
+            // レコードがない場合は、新規で登録を行う。
+            if (!$this->Snss->exists(['cast_id' =>$this->viewVars['userInfo']['id']])) {
+                $sns = $this->Snss->newEntity($this->request->getData());
+                $sns->cast_id = $this->viewVars['userInfo']['id'];
+            } else {
+                // snsテーブルからidのみを取得する
+                $sns_id = $this->Snss->find()
+                    ->select('id')
+                    ->where(['cast_id' =>$id])->first()->id;
+
+                $sns = $this->Snss->patchEntity($this->Snss
+                ->get($sns_id), $this->request->getData());
+            }
+
+            // バリデーションチェック
+            if ($sns->errors()) {
+                // 入力エラーがあれば、メッセージをセットして返す
+                $errors = $this->Util->setErrMessage($sns); // エラーメッセージをセット
+                $response = array('success'=>false,'message'=>$errors);
+                $this->response->body(json_encode($response));
+                return;
+            }
+            try {
+                // レコード更新実行
+                if (!$this->Snss->save($sns)) {
+                    throw new RuntimeException('レコードの更新ができませんでした。');
+                }
+            } catch (RuntimeException $e) {
+                $this->log($this->Util->setLog($auth, $e));
+                $flg = false;
+                $message = RESULT_M['UPDATE_FAILED'];
+                $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+                $this->response->body(json_encode($response));
+                return;
+            }
+
+            $cast = $this->Casts->find()
+                ->where(['id' => $this->viewVars['userInfo']['id']])
+                ->contain(['Snss'])->first();
+
+            $this->set(compact('cast'));
+            $this->render('/Cast/Casts/sns');
+            $response = array(
+                'html' => $this->response->body(),
+                'error' => $errors,
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        $cast = $this->Casts->find()
+            ->where(['id' => $id])
+            ->contain(['Snss'])->first();
+ 
+        $this->set(compact('cast'));
         $this->render();
     }
 

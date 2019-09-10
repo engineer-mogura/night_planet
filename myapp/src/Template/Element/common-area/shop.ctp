@@ -53,8 +53,8 @@
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
           <?= in_array(SHOP_MENU_NAME['CAST'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-            <span class="shop-menu-label cast"></br>キャスト</span>
-            <a class="waves-effect waves-light" href="#cast-section"></a>
+            <span class="shop-menu-label casts"></br>キャスト</span>
+            <a class="waves-effect waves-light" href="#casts-section"></a>
           </div>
         </div>
         <div class="col s4 m3 l3">
@@ -118,9 +118,9 @@
       </div>
       <!-- 店舗メニュー END -->
       <!-- キャストリスト START -->
-      <div id="cast-section" class="row shop-menu section scrollspy">
+      <div id="casts-section" class="row shop-menu section scrollspy">
         <div class="light-blue accent-2 card-panel col s12 center-align">
-          <p class="cast-label section-label"><span> CAST </span></p>
+          <p class="casts-label section-label"><span> CAST </span></p>
         </div>
         <?php if(count($shop->casts) > 0): ?>
             <?php foreach($shop->casts as $cast): ?>

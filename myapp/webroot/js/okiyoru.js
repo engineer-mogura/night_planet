@@ -115,8 +115,8 @@ function crearShopEvents() {
     /** SNSタブ START */
     $(document).off('click', '.sns-changeBtn');
     $(document).off('click', '.sns-saveBtn');
-     /** SNSタブ END */
-   /** お知らせ画面 */
+    /** SNSタブ END */
+    /** お知らせ画面 */
     $(document).off('change', '#title, #content, #image-file');
     $(document).off('change', '#modal-title, #modal-content, #modal-image-file');
     $(document).off('change', '#image-file');
@@ -128,6 +128,10 @@ function crearShopEvents() {
     $(document).off('click', '.returnBtn');
     $(document).off('click', '.deleteBtn');
     /** お知らせ画面 */
+    /** 出勤管理画面 */
+    $(document).off('click', '.saveBtn');
+    $(document).off('click','.chip-cast');
+    /** 出勤管理画面 */
 }
 
 /**
@@ -2057,6 +2061,48 @@ function initializeShop() {
 
     }
     /* お知らせ 画面 END */
+    /* 出勤管理 画面 START */
+    if($("#work-schedule-management").length) {
+
+        fullcalendarSetting();
+
+        // 出勤管理 キャストタグを選択する
+        $(document).on('click','.chip-cast', function(event) {
+
+            if ($(this).hasClass('back-color')) {
+                $(this).removeClass('back-color');
+                $(this).attr('data-select', "");
+            } else {
+                $(this).addClass('back-color');
+                $(this).attr('data-select', $(this).data('cast_id'));
+            }
+        });
+
+        // 登録,更新,削除ボタン押した時
+        $(document).on("click",".saveBtn", function() {
+
+            if (!confirm('選択したキャストが本日のメンバーでよろしいですか？\nメンバーはいつでも変更できます。')) {
+                return false;
+            }
+            var csv = "";
+            var selected = $(".chip-box").find('.back-color');
+            $(selected).each(function(i, el) {
+                csv = csv += $(el).data('select') + ",";
+            });
+
+            csv = csv.slice(0, -1);
+
+            var $form =$('#save-work-schedule');
+            $($form).find('input[name="cast_ids"]').val(csv);
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#wrapper"));
+
+        });
+
+    }
+    /* 出勤管理 画面 END */
 }
 
     /**
@@ -2726,8 +2772,8 @@ function initializeCast() {
                 return false;
             }
 
-        if (!confirm('こちらの日記内容でよろしいですか？')) {
-                return false;
+            if (!confirm('こちらの日記内容でよろしいですか？')) {
+                    return false;
             }
 
             var fileCheck = $("#diary").find("#image-file").val().length;

@@ -58,7 +58,7 @@
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
           <?= in_array(SHOP_MENU_NAME['WORK'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-          <span class="shop-menu-label work"></br>出勤予定</span>
+          <span class="shop-menu-label work-schedule"></br>出勤予定</span>
             <a class="waves-effect waves-light" href="#!"></a>
           </div>
         </div>
@@ -143,7 +143,7 @@
             <p class="shop-gallery-label section-label"><span> ギャラリー </span></p>
         </div>
         <?= count($imageList) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
-        <div class="my-gallery">
+        <div class="my-gallery" style="display:inline-block;">
           <?php foreach ($imageList as $key => $value): ?>
               <figure>
                 <a href="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['IMAGE'].DS.$value['name']?>" data-size="800x1000">
@@ -154,14 +154,13 @@
         </div>
       </div>
       <!-- キャストギャラリー END -->
-
       <!-- 日記 START -->
       <div id="diary-section" class="row shop-menu section scrollspy">
         <div class="light-blue accent-2 card-panel col s12 center-align">
           <p class="diary-label section-label"><span> 日記 </span></p>
         </div>
         <?php if (count($cast->diarys) > 0): ?>
-          <div class="my-gallery col s12">
+          <div class="my-gallery" style="display:inline-block;">
             <?php foreach ($dImageList as $key => $value): ?>
               <figure>
                 <a href="<?=$shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['DIARY'].DS.$cast->diarys[0]->dir.DS.$value['name']?>" data-size="800x1000">
@@ -252,48 +251,6 @@
         <?php endif; ?>
       </div>
       <!-- キャストリスト END -->
-      <!-- instagram START -->
-      <?php if(!empty($shop->snss[0]['instagram'])): ?>
-        <div id="instagram-section" class="row shop-menu section scrollspy">
-          <div class="light-blue accent-2 card-panel col s12 center-align">
-            <p class="instagram-label section-label"><span> instagram </span></p>
-          </div>
-          <?php if(!empty($ig_error)):
-                  echo('<p class="col">'.$ig_error.'</p>');
-                elseif($ig_data->media_count == 0):
-                  echo('<p class="col">まだ投稿がありません。</p>');
-                else:
-          ?>
-            <!-- photoSwipe START -->
-            <?= $this->element('Instagram'); ?>
-            <!-- photoSwipe END -->
-          <?php endif;?>
-        </div>
-      <?php endif;?>
-      <!-- instagram END -->
-      <!-- facebook START -->
-      <?php if(!empty($shop->snss[0]['facebook'])): ?>
-        <div id="facebook-section" class="row shop-menu section scrollspy">
-          <div class="light-blue accent-2 card-panel col s12 center-align">
-            <p class="facebook-label section-label"><span> facebook </span></p>
-          </div>
-          <div id="fb-root"></div>
-          <script async defer crossorigin="anonymous" src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0&appId=2084171171889711&autoLogAppEvents=1"></script>
-        </div>
-        <div class="fb-page" data-href="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>" data-tabs="timeline,messages" data-width="500" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>/" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>/"></a></blockquote></div>
-      <?php endif;?>
-      <!-- facebook END -->
-      <!-- twitter START -->
-      <?php if(!empty($shop->snss[0]['twitter'])): ?>
-        <div id="twitter-section" class="row shop-menu section scrollspy">
-          <div class="light-blue accent-2 card-panel col s12 center-align">
-            <p class="twitter-label section-label"><span> twitter </span></p>
-          </div>
-          <a class="twitter-timeline" href="https://twitter.com/<?=$shop->snss[0]['twitter']?>?ref_src=twsrc%5Etfw" data-tweet-limit="3">Tweets by <?=$shop->snss[0]['twitter']?></a>
-          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-        </div>
-      <?php endif;?>
-      <!-- twitter END -->
     </div>
     <!--デスクトップ用 サイドバー START -->
     <?= $this->element('sidebar'); ?>

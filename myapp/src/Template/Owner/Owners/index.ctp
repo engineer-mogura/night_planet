@@ -14,7 +14,13 @@
 				<div class="col s12 m6 l6">
 					<div class="card <?php if(count($shops) == $key + 1) { echo('targetScroll');}?>">
 						<div class="card-image">
+<?php         				$shop_url = APP_PATH['APP'].$shop['area']
+								.DS.PATH_ROOT['SHOP'].DS.$shop['id']
+								.'?genre='.$shop['genre'].'&name='.$shop['name'];
+?>
+						<a href="<?=$shop_url?>" target=”_blank” rel="noopener noreferrer"><?=$cast->shop->name?>
 							<img src="<?=isset($shop->top_image) ? $shopPath. DS .$shop->top_image:"/img/common/noimage.jpg" ?>" alt="">
+						</a>
 						</div>
 						<div class="card-content">
 							<table class="highlight">

@@ -439,7 +439,7 @@ div.description {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.work:before {
+.shop-menu .shop-menu-label.work-schedule:before {
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
@@ -574,6 +574,42 @@ div.description {
   height: 30px;/*画像の高さ*/
   background-size: contain;
   vertical-align: middle;
+}
+#casts-section a {
+  display: grid;
+}
+#casts-section h6, #today-member-modal h6{
+  padding-top: 7px;
+  color: white;
+  background-color: #26a69a;
+  height: 30px;
+  border-radius: 32px;
+}
+/* #casts-section h6.new-cast-pop {
+  background-color: hotpink;
+} */
+#casts-section .cast-icon-list  {
+  position: relative;
+}
+#casts-section .add-cast-icon {
+  position: absolute;
+  top: -2px;
+  left: 10px;
+  height: 30px;
+  width: 30px;
+  background-color: red;
+  border-radius: 15px;
+  padding-top: 2px;
+}
+#casts-section .update-cast-icon {
+  position: absolute;
+  top: -2px;
+  right: 10px;
+  height: 30px;
+  width: 30px;
+  background-color: red;
+  border-radius: 15px;
+  padding-top: 2px;
 }
 #diary-section .diary-label span:before,
 #diary-section .diary-label span:after {
@@ -867,7 +903,7 @@ table th{
   background-color: #52c2d0;
   color: white;
   text-align: center;
-  padding: 10px 0 ;
+  /* padding: 10px 0 ; */
   font-weight: initial;
 }
 
@@ -1044,6 +1080,27 @@ textarea::-webkit-scrollbar {
   }
 
 }
+/** 出勤管理テーブル */
+#work-schedule-management .table-wrap {
+  overflow-y:scroll;
+  height:600px;
+}
+#work-schedule-management table tr.tr-header th {
+  /* 縦スクロール時に固定する */
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  /* tbody内のセルより手前に表示する */
+  z-index: 1;
+  width: initial;
+} 
+#work-schedule-management table tbody tr th {
+  /* 横スクロール時に固定する */
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+} 
+/** 出勤管理テーブル */
 
 @media only screen and (max-width: 992px) {
   .brand-logo.oki-brand-logo{
@@ -1121,9 +1178,32 @@ textarea::-webkit-scrollbar {
     font-size: 12px;
     line-height: 1.2;
   }
-  footer {
+  #user-default > footer {
     margin-bottom: 50px;
   }
+  /** 出勤管理テーブル */
+  #work-schedule-management table thead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  #work-schedule-management .table-wrap {
+    height:370px;
+  }
+  #work-schedule-management table tr.tr-header {
+    background-color: #52c2d0;
+    color: white;
+    padding: 0 10px;
+  }
+  #work-schedule-management table tr.tr-header th:first-of-type {
+    text-align: center;
+  }
+  #work-schedule-management table tr th span {
+    display: block;
+    font-size: x-small;
+    font-weight: bold;
+  }
+
 }
 
 @media only screen and (min-width: 601px) {
@@ -1201,7 +1281,9 @@ textarea::-webkit-scrollbar {
 }
 
 @media only screen and (min-width: 601px) {
-
+  #casts-section .cast-icon-list img.circle, #today-member-modal .cast-icon-list img.circle{
+    height:120px;
+  }
 }
 
 @media only screen and (max-width: 992px) {

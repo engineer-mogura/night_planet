@@ -2,7 +2,6 @@
  
 return [
 
-
 	// バイトサイズ関連
 	define('CAPACITY', array(
 		'MAX_NUM_BYTES_DIR'=> 10485760 , // ディレクトリ制限バイト数10MB
@@ -18,19 +17,24 @@ return [
 
 	// 店舗メニュー名
 	define('SHOP_MENU_NAME', array(
-		'COUPON'=>'COUPON', // クーポン
-		'WORK'=>'WORK', // 今日の出勤
-		'EVENT'=>'EVENT', // お知らせ
-		'CAST'=>'CAST', // キャスト
-		'DIARY'=>'DIARY', // 日記
-		'SHOP-GALLERY'=>'SHOP-GALLERY', // 店内ギャラリー
-		'SYSTEM'=>'SYSTEM', // 店舗情報
-		'RECRUIT'=>'RECRUIT', // 求人情報
+		'COUPON'=>'coupon', // クーポン
+		'WORK_SCHEDULE'=>'work_schedule', // 今日の出勤メンバー
+		'EVENT'=>'event', // お知らせ
+		'CAST'=>'cast', // キャスト
+		'DIARY'=>'diary', // 日記
+		'SHOP_TOP_IMAGE'=>'shop_top_image', // 店舗トップ画像
+		'SHOP_GALLERY'=>'shop_gallery', // 店内ギャラリー
+		'SYSTEM'=>'system', // 店舗情報
+		'RECRUIT'=>'recruit', // 求人情報
+		'PROFILE'=>'profile', // プロフィール
+		'CAST_TOP_IMAGE'=>'cast_top_image', // キャストトップ画像
+		'CAST_GALLERY'=>'cast_gallery', // キャストギャラリー
 	)),
+
 	// 店舗編集画面のタブ制御設定
 	define('TAB_CONTROLE', array(
-		'notice', // 店舗お知らせ
-		'', // 店舗お知らせ
+		'notice', // 店舗お知らせ 画面
+		'workSchedule', // 出勤管理 画面
 	)),
 
 	// パス設定 path.config
@@ -55,13 +59,21 @@ return [
 		'CACHE'=> 'cache',
 		'IMG'=> 'img', // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える
 		'COMMON'=> 'common',
-
+		'SHOP'=> 'shop',
 	)),
+
 	// SNSパス設定 path.config
 	define('SHARER', array(
 		'TWITTER'=> 'http://twitter.com/share?url=',
 		'FACEBOOK'=> 'https://www.facebook.com/sharer/sharer.php?u=',
 		'LINE'=> 'http://line.me/R/msg/text/?',
+	)),
+	// WEBアプリケーションパス設定 path.config
+	define('APP_PATH', array(
+		'APP'=> 'http://okiyoru.local/', /** テスト環境 */
+		'APP_ADMIN'=> 'http://okiyoru.local/', /** テスト環境 */
+		//'APP'=> 'http://okiyoru.local/', /** 本番環境 */
+		//'APP_ADMIN'=> 'http://okiyoru.local/', /** 本番環境 */
 	)),
 
 	// ラベル定数 developer.label menu
@@ -98,8 +110,8 @@ return [
 		'001'=>'ダッシュボード',
 		'002'=>'オーナー情報',
 		'003'=>'契約内容・お支払い',
-		
 	)),
+
 	// ラベル定数 shop.label menu
 	define('SHOP_LM', array(
 		'001'=>'トップ画像',
@@ -151,7 +163,7 @@ return [
 		'007'=>'ログアウト',
 	)),
 
-	define('CATCHCOPY','【NightPlanet<span style="font-size: small"> ナイプラ</span>】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。更に店舗ごとに多彩なクーポン券などご用意しておりますのでお店に行く前に検索してクーポン券があるのかチェックしてみるのもいいでしょう。'),
+	define('CATCHCOPY','【NightPlanet<span style="font-size: small"> ナイプラ</span>】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。店舗ごとに多彩なクーポン券もご用意しておりますので、お店に行く前にクーポン券をチェックしてみるのもいいでしょう。'),
 
 	// 所属エリアリスト
 	define('AREA', array(

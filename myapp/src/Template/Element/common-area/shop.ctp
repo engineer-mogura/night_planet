@@ -38,9 +38,9 @@
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
-          <?= in_array(SHOP_MENU_NAME['WORK'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-          <span class="shop-menu-label work"></br>今日の出勤</span>
-            <a class="waves-effect waves-light" href="#!"></a>
+          <?= in_array(SHOP_MENU_NAME['WORK_SCHEDULE'], $update_icon) ? '<div class="new-info"></div>' : ''?>
+          <span class="shop-menu-label work-schedule"></br>今日の出勤</span>
+            <a class="waves-effect waves-light modal-trigger" href="#today-member-modal"></a>
           </div>
         </div>
         <div class="col s4 m3 l3">
@@ -52,7 +52,7 @@
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
-          <?= in_array(SHOP_MENU_NAME['CAST'], $update_icon) ? '<div class="new-info"></div>' : ''?>
+          <?= preg_grep("/^".SHOP_MENU_NAME['CAST']."/", $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label casts"></br>キャスト</span>
             <a class="waves-effect waves-light" href="#casts-section"></a>
           </div>
@@ -123,14 +123,37 @@
           <p class="casts-label section-label"><span> CAST </span></p>
         </div>
         <?php if(count($shop->casts) > 0): ?>
+        <?php foreach($shop->casts as $cast): ?>
+            <div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
+              <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
+                <img src="<?=isset($cast->icon) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="100%" height="80">
+              </a>
+              <h6><?=$cast->nickname?>
+                <?=isset($cast->new_cast) ? '<i class="material-icons add-cast-icon">group_add</i>':''?>
+                <?=isset($cast->update_cast) ? '<i class="material-icons update-cast-icon">update</i>':''?>
+              </h6>
+            </div>
+            <?php endforeach; ?>
             <?php foreach($shop->casts as $cast): ?>
-            <div class="center-align col s3 m3 l3">
-              <div>
-                <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
-                  <img src="<?=isset($cast->icon) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="80" height="80">
-                </a>
-                </div>
-              <h6><?=$cast->nickname?></h6>
+            <div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
+              <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
+                <img src="<?=isset($cast->icon) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="100%" height="80">
+              </a>
+              <h6><?=$cast->nickname?>
+                <?=isset($cast->new_cast) ? '<i class="material-icons add-cast-icon">group_add</i>':''?>
+                <?=isset($cast->update_cast) ? '<i class="material-icons update-cast-icon">update</i>':''?>
+              </h6>
+            </div>
+            <?php endforeach; ?>
+            <?php foreach($shop->casts as $cast): ?>
+            <div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
+              <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
+                <img src="<?=isset($cast->icon) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="100%" height="80">
+              </a>
+              <h6><?=$cast->nickname?>
+                <?=isset($cast->new_cast) ? '<i class="material-icons add-cast-icon">group_add</i>':''?>
+                <?=isset($cast->update_cast) ? '<i class="material-icons update-cast-icon">update</i>':''?>
+              </h6>
             </div>
             <?php endforeach; ?>
         <?php else: ?>
@@ -316,7 +339,7 @@
             <p class="shop-gallery-label section-label"><span> 店内ギャラリー </span></p>
         </div>
         <?= count($imageList) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
-        <div class="my-gallery">
+        <div class="my-gallery" style="display:inline-block;">
           <?php foreach ($imageList as $key => $value): ?>
               <figure>
                 <a href="<?=$shopInfo['image_path'].DS.$value['name']?>" data-size="800x1000"><img width="100%" src="<?=$shopInfo['image_path'].DS.$value['name']?>" alt="写真の説明でーす。" /></a>
@@ -462,7 +485,6 @@
       </div>
       <!-- 求人情報 END -->
     </div>
-  </div>
     <!--デスクトップ用 サイドバー START -->
     <?= $this->element('sidebar'); ?>
     <!--デスクトップ用 サイドバー END -->

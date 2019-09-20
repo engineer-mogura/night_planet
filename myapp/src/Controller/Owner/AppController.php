@@ -20,6 +20,7 @@ class AppController extends \App\Controller\AppController
         $this->Snss = TableRegistry::get('Snss');
         $this->Updates = TableRegistry::get('Updates');
         $this->ShopInfos = TableRegistry::get("shop_infos");
+        $this->WorkSchedules = TableRegistry::get("work_schedules");
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
             'authenticate' => [
@@ -76,7 +77,7 @@ class AppController extends \App\Controller\AppController
         $shopAccess = ['index','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
             'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
             'deleteCast','saveTenpo','saveJob','saveSns','saveGallery','deleteGallery','notice','viewNotice',
-            'saveNotice','updateNotice','deleteNotice','work'];
+            'saveNotice','updateNotice','deleteNotice','workSchedule','saveWorkSchedule'];
 
         //TODO: 権限によって店舗管理者のみとオーナー兼店舗管理者を分ける？
         // 今は、分けず各アクションは統合する

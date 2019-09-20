@@ -24,29 +24,27 @@
   <?= $this->Html->script('ja_JP.js') ?>
   <?= $this->Html->script('jquery.notifyBar.js') ?>
   <?= $this->Html->script('ajaxzip3.js') ?>
+  <?= $this->Html->script('moment.min.js') ?><!-- fullcalendar-3.9.0 -->
+  <?= $this->Html->script('fullcalendar.js') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
+  <?= $this->Html->script('fullcalendar_locale/ja.js') ?><!-- fullcalendar-3.9.0 -->
   <?= $this->Html->script(API['GOOGLE_MAP_APIS']) ?>
   <?= $this->Html->script("load-image.all.min.js") ?><!-- 画像の縦横を自動調整してくれるプラグインExif情報関連 -->
   <script src='/PhotoSwipe-master/dist/photoswipe.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
-  <link href='/fullcalendar-4.3.1/core/main.css' rel='stylesheet' /> <!-- fullcalendar-4.3.1 -->
-  <link href='/fullcalendar-4.3.1/daygrid/main.css' rel='stylesheet' /> <!-- fullcalendar-4.3.1 -->
-  <link href='/fullcalendar-4.3.1/timegrid/main.css' rel='stylesheet' /> <!-- fullcalendar-4.3.1 -->
-  <script src='/fullcalendar-4.3.1/core/main.js'></script> <!-- fullcalendar-4.3.1 -->
-  <script src='/fullcalendar-4.3.1/daygrid/main.js'></script> <!-- fullcalendar-4.3.1 -->
-  <script src='/fullcalendar-4.3.1/timegrid/main.js'></script> <!-- fullcalendar-4.3.1 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
   <?= $this->Html->css('materialize.css') ?>
   <?= $this->Html->css('okiyoru.css') ?>
   <?= $this->Html->css('jquery.notifyBar.css') ?>
+  <?= $this->Html->css('fullcalendar.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
 
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
 </head>
-  <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?> 
+  <?php !empty($userInfo['icon_name'])? $icon = $userInfo['profile_path'].DS.$userInfo['icon_name'] : $icon = PATH_ROOT['NO_IMAGE02']; ?>
   <?php $id = $this->request->getSession()->read('Auth.Owner.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.Owner.role') ?>
 <body id="shop-default">
@@ -54,9 +52,8 @@
     <li>
       <div class="user-view">
       <div class="background" style="background-color: orange;">
-        <!-- <img src="/img/common/area/top1.jpg"> -->
         </div>
-        <a href="#!user"><img class="circle" src="<?=$mainImage?>"></a>
+        <a href="#!user"><img class="circle" src="<?=$icon?>"></a>
         <a href="#!name"><span class="white-text name"><?=$this->request->getSession()->read('Auth.Owner.name')?></span></a>
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>
@@ -71,7 +68,7 @@
     <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="job" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">business_center</i><?= SHOP_LM['008'] ?></a></li>
     <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="sns" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">chat_bubble_outline</i><?= SHOP_LM['010'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/owner/shops/notice"><i class="material-icons">notifications_active</i><?= SHOP_LM['009'] ?></a></li>
-    <li><a class="waves-effect hoverable" href="/owner/shops/work"><i class="material-icons">event_note</i><?= SHOP_LM['011'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="/owner/shops/work_schedule"><i class="material-icons">event_note</i><?= SHOP_LM['011'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/owner/owners"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/entry/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/entry/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

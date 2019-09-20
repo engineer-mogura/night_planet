@@ -99,6 +99,9 @@
   <!-- クーポンモーダル START -->
   <?= $this->element('modal/couponModal'); ?>
   <!-- クーポンモーダル END -->
+  <!-- 今日のメンバーモーダル START -->
+  <?= $this->element('modal/todayMemberModal'); ?>
+  <!-- 今日のメンバーモーダル END -->
   <!-- シェアモーダル START -->
   <?= $this->element('modal/sharerModal'); ?>
   <!-- シェアモーダル END -->

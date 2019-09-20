@@ -33,11 +33,16 @@ class ShopsController extends AppController
             if ($this->request->session()->check('shop_id')) {
                 $shopId = $this->request->session()->read('shop_id');
             }
+
+            // オーナーに関する情報をセット
+            $owner = $this->Owners->get($user['id']);
+            $this->set('userInfo', $this->Util->getOwnerInfo($owner));
+
             // 店舗情報取得
             $shop = $this->Shops->find('all')
                 ->where(['id' => $shopId , 'owner_id' => $user['id']])
                 ->first();
-            $this->set('shopInfo', $this->Util->getShopInfo($shop));
+                $this->set('shopInfo', $this->Util->getShopInfo($shop));
         }
     }
 
@@ -248,8 +253,9 @@ class ShopsController extends AppController
                 }
                 // 更新情報を追加する
                 $updates = $this->Updates->newEntity();
-                $updates->set('content','店舗画像を更新しました。');
+                $updates->set('content','トップ画像を更新しました。');
                 $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+                $updates->set('type', SHOP_MENU_NAME['SHOP_TOP_IMAGE']);
                 // レコード更新実行
                 if (!$this->Updates->save($updates)) {
                     throw new RuntimeException('レコードの登録ができませんでした。');
@@ -278,7 +284,7 @@ class ShopsController extends AppController
 
         }
         // 例外が発生している場合にメッセージをセットして返却する
-            if (!$flg) {
+        if (!$flg) {
             $message = RESULT_M['SIGNUP_FAILED'];
             $response = array(
                 'success' => $flg,
@@ -542,6 +548,7 @@ class ShopsController extends AppController
             $updates = $this->Updates->newEntity();
             $updates->set('content','クーポン情報を更新しました。');
             $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            $updates->set('type', SHOP_MENU_NAME['COUPON']);
             // レコード更新実行
             if (!$this->Updates->save($updates)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
@@ -834,6 +841,7 @@ class ShopsController extends AppController
             $updates = $this->Updates->newEntity();
             $updates->set('content','店舗情報を更新しました。');
             $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            $updates->set('type', SHOP_MENU_NAME['SYSTEM']);
             // レコード更新実行
             if (!$this->Updates->save($updates)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
@@ -1104,6 +1112,7 @@ class ShopsController extends AppController
             $updates = $this->Updates->newEntity();
             $updates->set('content','店内ギャラリーを更新しました。');
             $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            $updates->set('type', SHOP_MENU_NAME['SHOP_GALLERY']);
             // レコード更新実行
             if (!$this->Updates->save($updates)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
@@ -1357,6 +1366,7 @@ class ShopsController extends AppController
             $updates = $this->Updates->newEntity();
             $updates->set('content','店舗からのお知らせを追加しました。');
             $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            $updates->set('type', SHOP_MENU_NAME['EVENT']);
             // レコード更新実行
             if (!$this->Updates->save($updates)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
@@ -1678,12 +1688,132 @@ class ShopsController extends AppController
      *
      * @return void
      */
-    public function work()
+    public function workSchedule()
     {
-        //$notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
-        //$this->set(compact('notices'));
+        // 店舗に所属する全てのキャストを取得する
+        $casts = $this->Casts->find('all')
+            ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
+            ->contain(['Shops'])
+            ->order(['Casts.created'=>'DESC'])->toArray();
+        $WorkSchedule = $this->WorkSchedules->find('all')
+            ->where(['shop_id', $this->viewVars['shopInfo']['id']])
+            ->first();
+        // キャスト配列リスト
+        $castList = array();
+        $tempList = array();
+
+        // キャスト情報を配列にセット
+        foreach ($casts as $key => $cast) {
+            array_push($tempList, $this->Util->getCastItem($cast, $cast->shop));
+            array_push($tempList[$key], $cast);
+        }
+        $castList = array_merge($castList, $tempList);
+
+        $dateList = $this->Util->getPeriodDate();
+        $this->set(compact('castList', 'dateList', 'WorkSchedule'));
         $this->render();
     }
+
+        /**
+     * 出勤スケジュール 登録処理
+     * @return void
+     */
+    public function saveWorkSchedule()
+    {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ログインユーザID
+
+        // レコードが存在するか
+        // レコードがない場合は、新規で登録を行う。
+        if (!$this->WorkSchedules->exists(['shop_id' =>$this->viewVars['shopInfo']['id']])) {
+
+            $Work_schedule = $this->WorkSchedules->newEntity($this->request->getData());
+            $Work_schedule->shop_id = $this->viewVars['shopInfo']['id'];
+        } else {
+            // スケジュールテーブルからidのみを取得する
+            $old_Work_schedule = $this->WorkSchedules->find('all')
+                ->where(['shop_id', $this->viewVars['shopInfo']['id']])
+                ->first();
+            $Work_schedule = $this->WorkSchedules
+                ->patchEntity($old_Work_schedule, $this->request->getData());
+        }
+
+        try {
+
+            // レコード更新実行
+            if (!$this->WorkSchedules->save($Work_schedule)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
+            }
+            // 更新情報を追加する
+            $updates = $this->Updates->newEntity();
+            $updates->set('content','本日のメンバーを更新しました。');
+            $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+            $updates->set('type', SHOP_MENU_NAME['WORK_SCHEDULE']);
+            // レコード更新実行
+            if (!$this->Updates->save($updates)) {
+                throw new RuntimeException('レコードの登録ができませんでした。');
+            }
+
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
+            $flg = false;
+        }
+
+        // 例外が発生している場合にメッセージをセットして返却する
+        if (!$flg) {
+
+            $message = RESULT_M['SIGNUP_FAILED'];
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+
+        // 店舗に所属する全てのキャストを取得する
+        $casts = $this->Casts->find('all')
+            ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
+            ->contain(['Shops'])
+            ->order(['Casts.created'=>'DESC'])->toArray();
+
+        $WorkSchedule = $this->WorkSchedules->find('all')
+            ->where(['shop_id', $this->viewVars['shopInfo']['id']])
+            ->first();
+
+        // キャスト配列リスト
+        $castList = array();
+        $tempList = array();
+
+        // キャスト情報を配列にセット
+        foreach ($casts as $key => $cast) {
+            array_push($tempList, $this->Util->getCastItem($cast, $cast->shop));
+            array_push($tempList[$key], $cast);
+        }
+        $castList = array_merge($castList, $tempList);
+        $dateList = $this->Util->getPeriodDate();
+
+        $this->set(compact('castList', 'dateList', 'WorkSchedule'));
+
+        $this->render('/owner/shops/work_schedule');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
+    }
+
 
     /**
      * お知らせアーカイブ表示画面の処理

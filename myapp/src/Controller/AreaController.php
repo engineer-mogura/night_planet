@@ -25,6 +25,7 @@ class AreaController extends AppController
         $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->Updates = TableRegistry::get("updates");
         $this->MasterCodes = TableRegistry::get("master_codes");
+        $this->WorkSchedule = TableRegistry::get("Work_schedules");
 
     }
 
@@ -172,24 +173,62 @@ class AreaController extends AppController
                         ->select($columns)
                         ->order(['Shop_infos.created'=>'DESC'])
                         ->limit(1);
+                },'Work_schedules' => function(Query $q) {
+                    $end_date = date("Y-m-d H:i:s");
+                    //$start_ts = strtotime($start_date);
+                    $start_date = date("Y-m-d H:i:s",strtotime($end_date . "-24 hour"));
+                    $test = "'".$start_date."'and'";
+                    $range = "'".$start_date."' and '".$end_date."'";
+                    //$range = "'.$start_date.'"' and '"'. $end_date ."'";
+                    //$start_ts = strtotime($start_date);
+                    //$end_date = date($start_date, strtotime("-1 day"));
+                    return $q
+                        ->where(["Work_schedules.modified BETWEEN".$range]);
+                    // return $q
+                    //     ->where(['Work_schedules.modified = NOW()']);
                 },'Jobs','Snss'])->first();
 
         $shopInfo = $this->Util->getShopInfo($shop);
+        $query = $this->Updates->find();
+        $columns = $this->Updates->schema()->columns();
+        $columns = array_merge($columns, ['created_max' => $query->func()->max('created')]);
         // 店舗の更新情報を取得する
         $updateInfo = $this->Updates->find('all',array(
-            'conditions' => array('created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' DAY')
+                'conditions' => array('created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' DAY')
             ))
+            ->select($columns)
             ->distinct(['content'])
             ->where(['shop_id'=>$shopInfo['id']])
             ->order(['created'=>'DESC'])
             ->toArray();
-            $update_icon = array();
+
+        $update_icon = array();
         // 画面の店舗メニューにnew-icon画像を付与するための配列をセットする
         foreach ($updateInfo as $key => $value) {
             $isNew = in_array($value->type, SHOP_MENU_NAME);
             if ($isNew) {
                 $update_icon[] = $value->type;
             }
+        }
+        // 今日の日付から1ヶ月前
+        $end_date = date('Y-m-d', strtotime("-1 month"));
+        // キャストの登録日付をチェックする
+        foreach ($shop->casts as $key => $cast) {
+            $user_created = $cast->created->format('Y-m-d');
+            $end_ts = strtotime($end_date);
+            $user_ts = strtotime($user_created);
+            // 新しいキャストの場合フラグセット
+            if($user_ts >= $end_ts) {
+                $cast->set('new_cast',true);
+            }
+            // キャストの更新があればフラグをセット
+            foreach ($updateInfo as $key => $value) {
+                if(!empty($value->cast_id) && $value->cast_id == $cast->id) {
+                    $cast->set('update_cast',true);
+                }
+            }
+
+
         }
         $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
         $imageList = array(); // 画面側でJSONとして使う画像リスト

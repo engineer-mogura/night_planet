@@ -256,14 +256,15 @@ class CastsController extends AppController
                             throw new RuntimeException('レコードの更新ができませんでした。');
                         }
                         // 更新情報を追加する
-                        $updates = $this->Updates->newEntity();
-                        $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールアイコンを更新しました。');
-                        $updates->set('shop_id', $this->Auth->user('shop_id'));
-                        $updates->set('cast_id', $this->Auth->user('id'));
-                        // レコード更新実行
-                        if (!$this->Updates->save($updates)) {
-                            throw new RuntimeException('レコードの登録ができませんでした。');
-                        }
+                        // $updates = $this->Updates->newEntity();
+                        // $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールアイコンを更新しました。');
+                        // $updates->set('shop_id', $this->Auth->user('shop_id'));
+                        // $updates->set('cast_id', $this->Auth->user('id'));
+                        // $updates->set('type', SHOP_MENU_NAME['WORK_SCHEDULE']);
+                        // // レコード更新実行
+                        // if (!$this->Updates->save($updates)) {
+                        //     throw new RuntimeException('レコードの登録ができませんでした。');
+                        // }
 
                     } catch (RuntimeException $e) {
                         // ファイルを削除していた場合は復元する
@@ -330,6 +331,7 @@ class CastsController extends AppController
                     $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールを更新しました。');
                     $updates->set('shop_id', $this->Auth->user('shop_id'));
                     $updates->set('cast_id', $this->Auth->user('id'));
+                    $updates->set('type', SHOP_MENU_NAME['PROFILE']);
                     // レコード更新実行
                     if (!$this->Updates->save($updates)) {
                         throw new RuntimeException('レコードの登録ができませんでした。');
@@ -456,8 +458,10 @@ class CastsController extends AppController
                 }
                 // 更新情報を追加する
                 $updates = $this->Updates->newEntity();
-                $updates->set('content',$cast->nickname.'さんがトップ画像を変更しました。');
-                $updates->set('shop_id', $this->viewVars['shopInfo']['id']);
+                $updates->set('content', $this->Auth->user('nickname').'さんがトップ画像を変更しました。');
+                $updates->set('shop_id', $this->Auth->user('shop_id'));
+                $updates->set('cast_id', $this->Auth->user('id'));
+                $updates->set('type', SHOP_MENU_NAME['CAST_TOP_IMAGE']);
                 // レコード更新実行
                 if (!$this->Updates->save($updates)) {
                     throw new RuntimeException('レコードの登録ができませんでした。');
@@ -702,9 +706,10 @@ class CastsController extends AppController
             }
             // 更新情報を追加する
             $updates = $this->Updates->newEntity();
-            $updates->set('content',$cast->nickname.'さんがギャラリーを追加しました。');
-            $updates->set('shop_id', $cast->shop_id);
-            $updates->set('cast_id', $cast->cast_id);
+            $updates->set('content', $this->Auth->user('nickname').'さんがギャラリーを追加しました。');
+            $updates->set('shop_id', $this->Auth->user('shop_id'));
+            $updates->set('cast_id', $this->Auth->user('id'));
+            $updates->set('type', SHOP_MENU_NAME['CAST_GALLERY']);
             // レコード更新実行
             if (!$this->Updates->save($updates)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
@@ -958,6 +963,7 @@ class CastsController extends AppController
             $updates->set('content', $this->Auth->user('nickname').'さんが日記を追加しました。');
             $updates->set('shop_id', $this->Auth->user('shop_id'));
             $updates->set('cast_id', $this->Auth->user('id'));
+            $updates->set('type', SHOP_MENU_NAME['DIARY']);
             // レコード更新実行
             if (!$this->Updates->save($updates)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
@@ -1389,6 +1395,7 @@ class CastsController extends AppController
             $updates->set('content', '新しいキャストを追加しました。');
             $updates->set('shop_id', $this->Auth->user('shop_id'));
             $updates->set('cast_id', $this->Auth->user('id'));
+            $updates->set('type', SHOP_MENU_NAME['DIARY']);
             // レコード更新実行
             if (!$this->Updates->save($updates)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');

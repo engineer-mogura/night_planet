@@ -1,4 +1,4 @@
-<div id="top-image" class="col s12 m8 l6">
+<div id="top-image" class="col s12">
   <?php echo $this->Flash->render(); ?>
   <h5>トップ画像</h5>
   <div id="show-top-image" style="text-align:center">

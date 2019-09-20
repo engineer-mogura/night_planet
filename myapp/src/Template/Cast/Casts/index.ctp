@@ -5,7 +5,7 @@
             <div id="dashboard" class="col">
                 <span id="dummy" style="display: hidden;"></span>
                 <?= $this->Flash->render() ?>
-                <h5><?= $cast->name.'　所属：'.$cast->shop->name ?></h5>
+                <h5><?= $cast->name.'　所属：'?><a href="<?=$userInfo['shop_url']?>" target=”_blank” rel="noopener noreferrer"><?=$cast->shop->name?></a></h5>
                 <div id="cast" class="row">
                     <div class="col s12 m4 l4">
                         <div class="card">
@@ -69,6 +69,7 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m12 l12">
+                        <p style="text-align: center;color: chocolate;">出勤希望日</p>
                         <div id="calendar"></div>
                     </div>
                 </div>

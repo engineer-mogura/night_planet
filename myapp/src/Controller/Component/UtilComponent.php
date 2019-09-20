@@ -123,9 +123,14 @@ class UtilComponent extends Component
         $path = DS.PATH_ROOT['IMG'].DS.$shopInfo['area']['path']
                 .DS.$shopInfo['genre']['path'].DS.$shop['dir'];
 
+        $shop_url = APP_PATH['APP'].$shopInfo['area']['path']
+            .DS.PATH_ROOT['SHOP'].DS.$shop['id']
+            .'?genre='.$shop['genre'].'&name='.$shop['name'];
+
         $shopInfo = $shopInfo + array('shop_path'=> $path
             ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']
-            ,'notice_path'=>$path.DS.PATH_ROOT['NOTICE'],'cache_path'=>$path.DS.PATH_ROOT['CACHE']);
+            ,'notice_path'=>$path.DS.PATH_ROOT['NOTICE'],'cache_path'=>$path.DS.PATH_ROOT['CACHE']
+            ,'shop_url'=>$shop_url);
         return  $shopInfo;
 
     }
@@ -161,11 +166,14 @@ class UtilComponent extends Component
         $path = DS.PATH_ROOT['IMG'].DS.$castInfo['area']['path']
                 .DS.$castInfo['genre']['path'].DS.$shop['dir']
                 .DS.PATH_ROOT['CAST'].DS.$cast['dir'];
+        $shop_url = APP_PATH['APP'].$castInfo['area']['path']
+            .DS.PATH_ROOT['SHOP'].DS.$shop['id']
+            .'?genre='.$shop['genre'].'&name='.$shop['name'];
 
         $castInfo = $castInfo + array('cast_path'=> $path,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE']
             , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
             , 'diary_path'=> $path.DS.PATH_ROOT['DIARY'], 'event_path'=> $path.DS.PATH_ROOT['EVENT']
-            , 'cache_path'=>$path.DS.PATH_ROOT['CACHE']);
+            , 'cache_path'=>$path.DS.PATH_ROOT['CACHE'], 'shop_url'=>$shop_url);
         return  $castInfo;
     }
 
@@ -572,6 +580,68 @@ class UtilComponent extends Component
         $result = "";
         $result = str_replace($search, $replace, $target);
         return $result;
+    }
+
+    /**
+     * 日付けで取得(yyyy-mm-dd (day)))
+     *
+     * @return void
+     */
+    function getPeriodDate() {
+
+        $week = [
+            '日', //0
+            '月', //1
+            '火', //2
+            '水', //3
+            '木', //4
+            '金', //5
+            '土', //6
+          ];
+        $date = date('Y-m');
+        $startDate = date('Y-m-d', strtotime('first day of '. $date));
+        $endDate = date('Y-m-d', strtotime(date('Y-m-t', strtotime($startDate . '+' . 1 . 'month'))));
+        $diff = (strtotime($endDate) - strtotime($startDate)) / ( 60 * 60 * 24);
+        for($i = 0; $i <= $diff; $i++) {
+            $dateFormat = date('m/d w', strtotime($startDate . '+' . $i . 'days'));
+            $period[] = substr_replace($dateFormat, '('.$week[substr($dateFormat, -1)].')', -1);
+        }
+        return $period;
+    }
+
+    /**
+     * 月(yyyy-mm)で取得
+     *
+     * @return void
+     */
+    function getPeriodMonth() {
+
+        $startDate = date('Y-m-d', strtotime('2017-01-06'));
+        $endDate = date('Y-m-d', strtotime("2018-01-09"));
+        $diff = (strtotime($endDate) - strtotime($startDate)) / ( 60 * 60 * 24 * 30);
+        for($i = 0; $i <= $diff; $i++) {
+            $period[] = date('Y-m', strtotime($startDate . '+' . $i . 'month'));
+        }
+        return $period;
+    }
+
+    /**
+     * 指定範囲内の日付かチェック
+     *
+     * @param [type] $start_date
+     * @param [type] $end_date
+     * @param [type] $date_from_user
+     * @return void
+     */
+    function check_in_range($start_date, $end_date, $date_from_user)
+    {
+        // Convert to timestamp
+        $start_ts = strtotime($start_date);
+        $end_ts = strtotime($end_date);
+        $user_ts = strtotime($date_from_user);
+
+        // Check that user date is between start & end
+        return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
     }
 
    /**

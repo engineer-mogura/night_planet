@@ -64,6 +64,9 @@ class ShopsTable extends Table
         $this->hasMany('Snss', [
             'foreignKey' => 'shop_id'
         ]);
+        $this->hasMany('Work_schedules', [
+            'foreignKey' => 'shop_id'
+        ]);
     }
 
     /**

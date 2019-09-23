@@ -172,8 +172,8 @@ class UtilComponent extends Component
 
         $castInfo = $castInfo + array('cast_path'=> $path,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE']
             , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
-            , 'diary_path'=> $path.DS.PATH_ROOT['DIARY'], 'event_path'=> $path.DS.PATH_ROOT['EVENT']
-            , 'cache_path'=>$path.DS.PATH_ROOT['CACHE'], 'shop_url'=>$shop_url);
+            , 'schedule_path'=> $path.DS.PATH_ROOT['SCHEDULE'], 'diary_path'=> $path.DS.PATH_ROOT['DIARY']
+            , 'tmp_path'=> $path.DS.PATH_ROOT['TMP'], 'cache_path'=>$path.DS.PATH_ROOT['CACHE'], 'shop_url'=>$shop_url);
         return  $castInfo;
     }
 

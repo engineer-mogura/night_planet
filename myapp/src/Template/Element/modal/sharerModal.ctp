@@ -1,6 +1,6 @@
 <div id="sharer-modal" class="modal sharer-modal">
   <div class="modal-content">
-    <h4>SNSで<span class="color-blue"><?=LT['001']?></span>をシェアしよう</h4>
+    <h5>友達に<span class="color-blue"><?=LT['001']?></span>をシェアしよう</h5>
     <div class="row">
       <div class="col s6 m6 l3">
         <a class="facebook sharer-btn waves-effect waves-light btn-large"><span> Facebook</span></a>

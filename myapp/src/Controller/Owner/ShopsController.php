@@ -1690,31 +1690,75 @@ class ShopsController extends AppController
      */
     public function workSchedule()
     {
+        $start_date = new Time(date('Y-m-d 00:00:00'));
+        $start_date->day(1);
+        $end_date = new Time(date('Y-m-d 00:00:00'));
+        $last_month = $end_date->modify('last day of next month');
+        $end_date = new Time($last_month->format('Y-m-d') .' 23:59:59');
+
         // 店舗に所属する全てのキャストを取得する
         $casts = $this->Casts->find('all')
             ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
-            ->contain(['Shops'])
-            ->order(['Casts.created'=>'DESC'])->toArray();
-        $WorkSchedule = $this->WorkSchedules->find('all')
+            ->contain(['Shops'
+                , 'Cast_Schedules' => function (Query $q) use ($start_date, $end_date)  {
+                    return $q
+                    ->where(['Cast_Schedules.start >='=> $start_date
+                            , 'Cast_Schedules.start <='=> $end_date])
+                    ->order(['Cast_Schedules.start'=>'ASC']);
+            }])->order(['Casts.created'=>'DESC']);
+
+        $workSchedule = $this->WorkSchedules->find('all')
             ->where(['shop_id', $this->viewVars['shopInfo']['id']])
             ->first();
+
         // キャスト配列リスト
-        $castList = array();
+        // $castList = array();
         $tempList = array();
 
-        // キャスト情報を配列にセット
-        foreach ($casts as $key => $cast) {
-            array_push($tempList, $this->Util->getCastItem($cast, $cast->shop));
-            array_push($tempList[$key], $cast);
-        }
-        $castList = array_merge($castList, $tempList);
-
         $dateList = $this->Util->getPeriodDate();
-        $this->set(compact('castList', 'dateList', 'WorkSchedule'));
+        $workPlanList = array();
+        // 未入力値で初期化する
+        for ($i=0; $i < count($dateList); $i++) {
+            $workPlanList[] = 'ー';
+        }
+
+        // キャスト情報を配列にセット
+        foreach ($casts as $key1 => $cast) {
+
+            $tempList = array('castInfo'=>$this->Util->getCastItem($cast, $cast->shop));
+            //$tempList = array_merge($tempList, array('cast'=>$cast));
+            $cloneList = $workPlanList;
+
+            // 予定期間２ヵ月分をループする
+            foreach ($cast->cast__schedules as $key2 => $schedule) {
+                $sDate = $schedule->start->format('m-d'); // 比較用にフォーマット
+                // 予定期間２ヵ月分をループする
+                foreach ($dateList as $key3 => $date) {
+                    $array = explode(' ', $date); // 比較用に配列化
+                    // 日付が一致した場合
+                    if(str_replace('/','-', $array[0]) == $sDate) {
+                        // 仕事なら予定リストに〇をセット
+                        if($schedule->title == '仕事') {
+                            $cloneList[$key3] = '〇';
+                        } else if($schedule->title == '休み') {
+                            // 休みなら予定リストに✕をセット
+                            $cloneList[$key3] = '✕';
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            $tempList = array_merge($tempList, array('work_plan'=>$cloneList));
+            $cast->set('schedule_info', $tempList);
+        }
+
+        $this->set(compact('casts', 'dateList', 'workSchedule'));
         $this->render();
     }
 
-        /**
+    /**
      * 出勤スケジュール 登録処理
      * @return void
      */
@@ -1779,29 +1823,95 @@ class ShopsController extends AppController
             return;
         }
 
+        $start_date = new Time(date('Y-m-d 00:00:00'));
+        $start_date->day(1);
+        $end_date = new Time(date('Y-m-d 00:00:00'));
+        $last_month = $end_date->modify('last day of next month');
+        $end_date = new Time($last_month->format('Y-m-d') .' 23:59:59');
+
         // 店舗に所属する全てのキャストを取得する
         $casts = $this->Casts->find('all')
             ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
-            ->contain(['Shops'])
-            ->order(['Casts.created'=>'DESC'])->toArray();
+            ->contain(['Shops'
+                , 'Cast_Schedules' => function (Query $q) use ($start_date, $end_date)  {
+                    return $q
+                    ->where(['Cast_Schedules.start >='=> $start_date
+                            , 'Cast_Schedules.start <='=> $end_date])
+                    ->order(['Cast_Schedules.start'=>'ASC']);
+            }])->order(['Casts.created'=>'DESC']);
 
-        $WorkSchedule = $this->WorkSchedules->find('all')
+        $workSchedule = $this->WorkSchedules->find('all')
             ->where(['shop_id', $this->viewVars['shopInfo']['id']])
             ->first();
 
         // キャスト配列リスト
-        $castList = array();
+        // $castList = array();
         $tempList = array();
 
-        // キャスト情報を配列にセット
-        foreach ($casts as $key => $cast) {
-            array_push($tempList, $this->Util->getCastItem($cast, $cast->shop));
-            array_push($tempList[$key], $cast);
-        }
-        $castList = array_merge($castList, $tempList);
         $dateList = $this->Util->getPeriodDate();
+        $workPlanList = array();
+        // 未入力値で初期化する
+        for ($i=0; $i < count($dateList); $i++) {
+            $workPlanList[] = 'ー';
+        }
 
-        $this->set(compact('castList', 'dateList', 'WorkSchedule'));
+        // キャスト情報を配列にセット
+        foreach ($casts as $key1 => $cast) {
+
+            $tempList = array('castInfo'=>$this->Util->getCastItem($cast, $cast->shop));
+            //$tempList = array_merge($tempList, array('cast'=>$cast));
+            $cloneList = $workPlanList;
+
+            // 予定期間２ヵ月分をループする
+            foreach ($cast->cast__schedules as $key2 => $schedule) {
+                $sDate = $schedule->start->format('m-d'); // 比較用にフォーマット
+                // 予定期間２ヵ月分をループする
+                foreach ($dateList as $key3 => $date) {
+                    $array = explode(' ', $date); // 比較用に配列化
+                    // 日付が一致した場合
+                    if(str_replace('/','-', $array[0]) == $sDate) {
+                        // 仕事なら予定リストに〇をセット
+                        if($schedule->title == '仕事') {
+                            $cloneList[$key3] = '〇';
+                        } else if($schedule->title == '休み') {
+                            // 休みなら予定リストに✕をセット
+                            $cloneList[$key3] = '✕';
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            $tempList = array_merge($tempList, array('work_plan'=>$cloneList));
+            $cast->set('schedule_info', $tempList);
+        }
+
+        // // 店舗に所属する全てのキャストを取得する
+        // $casts = $this->Casts->find('all')
+        //     ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
+        //     ->contain(['Shops'])
+        //     ->order(['Casts.created'=>'DESC'])->toArray();
+
+        // $WorkSchedule = $this->WorkSchedules->find('all')
+        //     ->where(['shop_id', $this->viewVars['shopInfo']['id']])
+        //     ->first();
+
+        // // キャスト配列リスト
+        // $castList = array();
+        // $tempList = array();
+
+        // // キャスト情報を配列にセット
+        // foreach ($casts as $key => $cast) {
+        //     array_push($tempList, $this->Util->getCastItem($cast, $cast->shop));
+        //     array_push($tempList[$key], $cast);
+        // }
+        // $castList = array_merge($castList, $tempList);
+        // $dateList = $this->Util->getPeriodDate();
+
+
+        // $this->set(compact('castList', 'dateList', 'WorkSchedule'));
+        $this->set(compact('casts', 'dateList', 'workSchedule'));
 
         $this->render('/owner/shops/work_schedule');
         $response = array(

@@ -114,26 +114,26 @@
   <?= $this->fetch('content') ?>
   <footer class="page-footer">
     <div class="row">
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><span><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></span><a class="" href="#!"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">event_available</i><?= USER_LM['002'] ?><a class="" href="#!"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">trending_up</i><?= USER_LM['003'] ?><a class="" href="#!"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">home</i><?= USER_LM['004'] ?><a class="" href="/"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></span><a class="" href="#!"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">event_available</i><?= USER_LM['002'] ?></span><a class="" href="#!"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></span><a class="" href="#!"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">home</i><?= USER_LM['004'] ?></span><a class="" href="/"></a></div></div>
     </div>
     <div class="row">
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">cloud</i><?= USER_LM['005'] ?><a class="" href="#!"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?><a class="" href="/entry/faq"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?><a class="" href="/entry/contract"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?><a class="" href="/entry/privacy_policy"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">cloud</i><?= USER_LM['005'] ?></span><a class="" href="#!"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></span><a class="" href="/entry/faq"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></span><a class="" href="/entry/contract"></a></div></div>
+      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></span><a class="" href="/entry/privacy_policy"></a></div></div>
     </div>
     <div class="row">
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable"><i class="material-icons">description</i><?= COMMON_LM['005'] ?><a class="" href="/entry/terms"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable"><i class="material-icons">star_half</i><?= USER_LM['006'] ?><a class="" href="/entry/member_ship"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable"><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?><a class="" href="/owner/owners/login"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">description</i><?= COMMON_LM['005'] ?></span><a class="" href="/entry/terms"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">star_half</i><?= USER_LM['006'] ?></span><a class="" href="/entry/member_ship"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">vpn_key</i><?= USER_LM['007'] ?></span><a class="" href="/owner/owners/login"></a></div></div>
     </div>
     <div class="row">
       <div class="col s12">
-        <div class="card-panel">
-          <span class="grey-text"><?= CATCHCOPY ?></span>
+        <div class="card-panel footer-description">
+          <span><?= CATCHCOPY ?></span>
           <span><?= $this->Html->link(__('　　　　'), ['controller' => 'developer/Developers', 'action' => 'index']) ?></span>
         </div>
       </div>

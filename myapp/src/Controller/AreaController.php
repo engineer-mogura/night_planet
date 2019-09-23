@@ -4,6 +4,7 @@ namespace App\Controller;
 use \Cake\ORM\Query;
 use Cake\Event\Event;
 use Cake\Routing\Router;
+use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
 
@@ -25,7 +26,7 @@ class AreaController extends AppController
         $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->Updates = TableRegistry::get("updates");
         $this->MasterCodes = TableRegistry::get("master_codes");
-        $this->WorkSchedule = TableRegistry::get("Work_schedules");
+        $this->WorkSchedules = TableRegistry::get("Work_schedules");
 
     }
 
@@ -58,7 +59,7 @@ class AreaController extends AppController
 
         // キャストの日記トップの場合
         } else if (!empty($query['genre']) && !empty($query['name']) 
-            && !empty($query['nickname']) && in_array(PATH_ROOT['DIARY'], $url)) {
+        && !empty($query['nickname']) && in_array(PATH_ROOT['DIARY'], $url)) {
 
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
             $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
@@ -67,6 +68,18 @@ class AreaController extends AppController
             $search = array('_cast_', '_service_name_');
             $replace = array($query['nickname'], LT['001']);
             $description = $this->Util->strReplace($search, $replace, META['DIARY_DESCRIPTION']);
+
+        // キャストのギャラリートップの場合
+        } else if (!empty($query['genre']) && !empty($query['name']) 
+        && !empty($query['nickname']) && in_array(PATH_ROOT['GALLERY'], $url)) {
+
+            $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
+            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
+                , $query['name'], $query['nickname'], LT['001']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['GALLERY_TITLE']);
+            $search = array('_cast_', '_service_name_');
+            $replace = array($query['nickname'], LT['001']);
+            $description = $this->Util->strReplace($search, $replace, META['GALLERY_DESCRIPTION']);
 
         // 店舗のお知らせトップの場合
         } else if (!empty($query['area']) && !empty($query['genre']) 
@@ -175,17 +188,10 @@ class AreaController extends AppController
                         ->limit(1);
                 },'Work_schedules' => function(Query $q) {
                     $end_date = date("Y-m-d H:i:s");
-                    //$start_ts = strtotime($start_date);
                     $start_date = date("Y-m-d H:i:s",strtotime($end_date . "-24 hour"));
-                    $test = "'".$start_date."'and'";
                     $range = "'".$start_date."' and '".$end_date."'";
-                    //$range = "'.$start_date.'"' and '"'. $end_date ."'";
-                    //$start_ts = strtotime($start_date);
-                    //$end_date = date($start_date, strtotime("-1 day"));
                     return $q
                         ->where(["Work_schedules.modified BETWEEN".$range]);
-                    // return $q
-                    //     ->where(['Work_schedules.modified = NOW()']);
                 },'Jobs','Snss'])->first();
 
         $shopInfo = $this->Util->getShopInfo($shop);
@@ -282,7 +288,7 @@ class AreaController extends AppController
             ->contain(['Shops', 'Diarys' => function(Query $q) use ($columns) {
                 return $q
                     ->select($columns)
-                    ->order(['Diarys.created'=>'DESC'])->limit(1);
+                    ->order(['Diarys.created'=>'DESC']);
                 }, 'Diarys.Diary_Likes','Snss'
             ])->first();
         // その他のキャストを取得する
@@ -292,15 +298,41 @@ class AreaController extends AppController
             ])
             ->order(['created'=>'DESC'])
             ->toArray();
-        // キャストのギャラリーリストを作成
-        $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
-        $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // 画像リストを作成する
-        foreach ($imageCol as $key => $value) {
-            if (!empty($cast[$imageCol[$key]])) {
-                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$cast[$imageCol[$key]]]);
-            }
+
+        $end_date = date("Y-m-d H:i:s");
+        $start_date = date("Y-m-d H:i:s",strtotime($end_date . "-24 hour"));
+        $range = "'".$start_date."' and '".$end_date."'";
+
+        $isWorkDay = $this->WorkSchedules->find('all')
+                ->where(['shop_id'=>$cast->shop_id
+                    , "modified BETWEEN".$range
+                    , 'FIND_IN_SET(\''. $cast->id .'\', cast_ids)'])
+                ->count();
+
+        // キャスト情報取得
+        $castInfo = $this->Util->getCastItem($cast, $cast->shop);
+        // ギャラリーリストを作成
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$castInfo['cast_path'].DS.PATH_ROOT['IMAGE'])
+            , true, 0755);
+
+        $gallery = array();
+
+        /// 更新日時順で並び替える関数
+        $sort_by_lastmod = function($a, $b) {
+            return filemtime($b) - filemtime($a);
+        };
+        /// 並び替えして出力
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $sort_by_lastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$castInfo['cast_path'].DS.PATH_ROOT['IMAGE'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
         }
+
         // 日記のギャラリーリストを作成
         $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
         $diary = $cast->diarys[0];
@@ -312,7 +344,6 @@ class AreaController extends AppController
                 }
             }
         }
-        $castInfo = $this->Util->getCastItem($cast, $cast->shop);
 
         $insta_user_name = $cast->snss[0]->instagram;
         // インスタのキャッシュパス
@@ -328,13 +359,49 @@ class AreaController extends AppController
             $this->set(compact('ig_error'));
         }
         $this->set('shopInfo', $this->Util->getShopInfo($cast->shop));
-        $this->set(compact('cast','ig_data','other_casts','imageList','dImageList'));
+        $this->set(compact('cast','isWorkDay','ig_data','other_casts','gallery','dImageList'));
+        $this->render();
+    }
+
+    public function gallery($id = null)
+    {
+        $cast = $this->Casts->find('all')
+            ->where(['Casts.id' => $id])
+            ->contain(['Shops'])
+            ->first();
+
+        // キャスト情報取得
+        $castInfo = $this->Util->getCastItem($cast, $cast->shop);
+        // ギャラリーリストを作成
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$castInfo['cast_path'].DS.PATH_ROOT['IMAGE'])
+            , true, 0755);
+        //$files = $dir->find('.*\.*');
+        $gallery = array();
+        /// 更新日時順で並び替える関数
+        $sort_by_lastmod = function($a, $b) {
+            return filemtime($b) - filemtime($a);
+        };
+        /// 並び替えして出力
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $sort_by_lastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$castInfo['cast_path'].DS.PATH_ROOT['IMAGE'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
+        }
+
+        $this->set(compact('cast','gallery'));
         $this->render();
     }
 
     public function diary($id = null)
     {
-        $cast = $this->Casts->find('all')->where(['id' => $id])->first();
+        $cast = $this->Casts->find('all')->where(['Casts.id' => $id])
+            ->contain(['Shops'])
+            ->first();
         $this->set('shopInfo', $this->Util->getShopInfo($this->Shops->get($cast->shop_id)->toArray()));
         $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
 

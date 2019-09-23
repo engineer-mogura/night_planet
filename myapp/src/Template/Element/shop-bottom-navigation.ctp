@@ -1,3 +1,4 @@
+<?php isset($shop) ? $shop = $shop : $shop = $cast->shop ?>
 <div class="bottom-sticky-nav z-depth-5">
     <ul>
         <li><a onClick="telme('<?=str_replace('_shopname_', $shop->name, CONFIRM_M['TEL_ME'])?>','<?=$shop->tel?>')"><i class="material-icons">local_phone</i><span>TEL</span></a></li>

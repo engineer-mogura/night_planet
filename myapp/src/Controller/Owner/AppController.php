@@ -21,6 +21,7 @@ class AppController extends \App\Controller\AppController
         $this->Updates = TableRegistry::get('Updates');
         $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
+        $this->CastSchedules = TableRegistry::get("cast_schedules");
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
             'authenticate' => [

@@ -53,11 +53,25 @@ class CastsController extends AppController
         $likeTotal = array_sum(array_column($diarys, 'diary_like_num'));
         //$like = $query->select(['total_like' => $query->func()->sum('cast_id')])
         //$diaryDiary_Likes = $this->Diarys->find('all')->where(['cast_id'=>$id])->contain('Diary_Likes');
-        $cast = $this->Casts->find('all')->contain(['Shops','Diarys'])->where(['Casts.id'=>$id])->first();
+        $cast = $this->Casts->find('all')
+            ->contain(['Shops','Diarys'])->where(['Casts.id'=>$id])->first();
+
+        // JSONファイルをDB内容にて、更新する
+        // JSONファイルに書き込むカラム情報
+        $Columns = array('id','title','start','end'
+            ,'time_start', 'time_end','all_day');
+
+        $cast_schedule = $this->CastSchedules->find('all', array('fields' => $Columns))
+            ->where(['id'=>$userInfo['id'], 'shop_id'=> $userInfo['shop_id']]);
+        $cast_schedule = json_encode($cast_schedule);
+        // JSONファイルに書き込む
+        $tmp_path = preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$this->viewVars['userInfo']['tmp_path']);
+
         $masterCodesFind = array('time','event');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, true);
 
-        $this->set(compact('cast', 'likeTotal', 'selectList'));
+        $this->set(compact('cast', 'likeTotal', 'selectList', 'cast_schedule'));
         $this->render();
     }
 
@@ -74,23 +88,50 @@ class CastsController extends AppController
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
         $flg = true; // 返却フラグ
-        $isWrited = false; // ファイル書き込み済フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = ""; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Cast');
         $id = $auth['id']; // キャストID
-        $tmpDir = null; // バックアップ用
-        // JSONファイルに書き込むカラム情報
-        $Columns = array('Events.id','Events.title','Events.start','Events.end'
-            ,'Events.time_start', 'Events.time_end','Events.all_day');
-        $event = $this->Events->find('all', array('fields' => $Columns))->where(['cast_id' => $id]);
-        // JSONファイルに書き込む
-        $event_path = preg_replace('/(\/\/)/', '/',
-            WWW_ROOT.$this->viewVars['userInfo']['event_path']);
+
         try {
+
+            // イベント削除の場合
+            if ($this->request->data["crud_type"] == "delete") {
+                $message = RESULT_M['DELETE_SUCCESS'];
+                $cast_schedules = $this->CastSchedules->get($this->request->data["id"]);
+                if (!$this->CastSchedules->delete($cast_schedules)) {
+                    throw new RuntimeException('レコードの削除ができませんでした。');
+                    $message = RESULT_M['DELETE_FAILED'];
+                }
+
+            } elseif ($this->request->data["crud_type"] == "update") {
+                // イベント編集の場合
+                $message = RESULT_M['UPDATE_SUCCESS'];
+                $cast_schedules = $this->CastSchedules->patchEntity(
+                    $this->CastSchedules->get($this->request->getData('id')), $this->request->getData());
+                if (!$this->CastSchedules->save($cast_schedules)) {
+                    throw new RuntimeException('レコードの更新ができませんでした。');
+                    $message = RESULT_M['UPDATE_FAILED'];
+                }
+
+            } elseif ($this->request->data["crud_type"] == "create") {
+                // イベント追加の場合
+                $message = RESULT_M['SIGNUP_SUCCESS'];
+                $cast_schedules = $this->CastSchedules->newEntity($this->request->getData());
+                if (!$this->CastSchedules->save($cast_schedules)) {
+                    throw new RuntimeException('レコードの登録ができませんでした。');
+                    $message = RESULT_M['SIGNUP_FAILED'];
+                }
+
+            }
+
+            // JSONファイルをDB内容にて、更新する
+            $schedule_path = preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$this->viewVars['userInfo']['schedule_path']);
+
             // 対象ディレクトリパス取得
-            $dir = new Folder($event_path, true, 0755);
+            $dir = new Folder($schedule_path, true, 0755);
 
             // 削除対象ディレクトリパス存在チェック
             if (!file_exists($dir->path)) {
@@ -102,88 +143,45 @@ class CastsController extends AppController
                 throw new RuntimeException('ディレクトリサイズが大きすぎます。');
             }
 
-            // 一時ディレクトリ作成
-            $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+            // 一時ディレクトリ作成※なければ作成
+            $tmpDir = new Folder(WWW_ROOT.$this->viewVars['userInfo']['tmp_path'] . DS . time(), true, 0777);
             // 一時ディレクトリにバックアップ実行
             if (!$dir->copy($tmpDir->path)) {
                 throw new RuntimeException('バックアップに失敗しました。');
             }
-            // JSONファイルを取得
+            // JSONファイルを取得※なければ作成
             $file = new File($dir->path.DS."calendar.json", true);
+            // JSONファイルに書き込むカラム情報
+            $Columns = array('id','title','start','end'
+                ,'time_start', 'time_end','all_day');
 
-            // イベント削除の場合
-            if ($this->request->data["crud_type"] == "delete") {
-                $message = RESULT_M['DELETE_SUCCESS'];
-                $event = $this->Events->get($this->request->data["id"]);
-                if (!$this->Events->delete($event)) {
-                    throw new RuntimeException('レコードの削除ができませんでした。');
-                    $message = RESULT_M['DELETE_FAILED'];
-                }
-                $event = $this->Events->find('all', array('fields' => $Columns))
-                ->where(['cast_id' => $id]);
-                // イベント情報全てJSONファイルに上書きする
-                $file->write(json_encode($event));
-                $isWrited = true; // 書き込み済フラグを立てる
+            $cast_schedule = $this->CastSchedules->find('all', array('fields' => $Columns))
+                ->where(['shop_id' => $this->viewVars['userInfo']['shop_id']
+                    , 'cast_id' => $this->viewVars['userInfo']['id']]);
 
-            } elseif ($this->request->data["crud_type"] == "update") {
-                // イベント編集の場合
-                $message = RESULT_M['UPDATE_SUCCESS'];
-                $event = $this->Events->patchEntity(
-                    $this->Events->get($this->request->getData('id')), $this->request->getData());
-                if (!$this->Events->save($event)) {
-                    throw new RuntimeException('レコードの更新ができませんでした。');
-                    $message = RESULT_M['UPDATE_FAILED'];
-                }
-                $event = $this->Events->find('all', array('fields' => $Columns))
-                    ->where(['cast_id' => $id]);
-                // イベント情報全てJSONファイルに上書きする
-                $file->write(json_encode($event));
-                $isWrited = true; // 書き込み済フラグを立てる
-
-            } elseif ($this->request->data["crud_type"] == "create") {
-                // イベント追加の場合
-                $message = RESULT_M['SIGNUP_SUCCESS'];
-                $event = $this->Events->newEntity($this->request->getData());
-                if (!$this->Events->save($event)) {
-                    throw new RuntimeException('レコードの登録ができませんでした。');
-                    $message = RESULT_M['SIGNUP_FAILED'];
-                }
-                $event = $this->Events->find('all', array('fields' => $Columns))
-                ->where(['cast_id' => $id]);
-                // イベント情報全てJSONファイルに上書きする
-                $file->write(json_encode($event));
-                $isWrited = true; // 書き込み済フラグを立てる
-
-            }
+            // イベント情報全てJSONファイルに上書きする
+            $file->write(json_encode($cast_schedule));
+            $isWrited = true; // 書き込み済フラグを立てる
 
         } catch (RuntimeException $e) {
-            $this->log($this->Util->setLog($auth, $e));
-            $flg = false;
-        } finally {
-            $file->close();
-        }
-        // 例外が発生している場合にメッセージをセットして返却する
-        if (!$flg) {
+
             // ファイル書き込み済の場合は復元する
             if ($isWrited) {
                 $tmpDir->copy($dir->path);
             }
-            // 一時ディレクトリがあれば削除する
-            if (isset($tmpDir) && file_exists($tmpDir->path)) {
-                $tmpDir->delete();// tmpディレクトリ削除
-            }
 
-            $response = array(
-                'success' => $flg,
-                'message' => $message
-            );
-            $this->response->body(json_encode($response));
-            return;
+            $this->log($this->Util->setLog($auth, $e));
+            $flg = false;
+            $message = RESULT_M['UPDATE_FAILED'];
         }
 
-        // 一時ディレクトリ削除
-        if (file_exists($tmpDir->path)) {
-            $tmpDir->delete();
+        //ファイルを閉じる
+        if(isset($file)) {
+            $file->close();
+        }
+        // 一時ディレクトリがあれば削除する
+        if (isset($tmpDir) && file_exists($tmpDir->path)) {
+            $tmpDir->delete();// tmpディレクトリ削除
         }
 
         $response = array(

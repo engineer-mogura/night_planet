@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "takuma-1277",
+  "private_key_id": "b1c128a33af76f6177f4a9abe540c24aa4648deb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCNo3BkmZQpC+Sx\n/5Ar+5fMGBTRkKi7OnlhXc/7c1UrCQbL4a/Hi5LgBa3OzbujDY1HQTQ0lpISTlLA\nZhO3n2p6FxbAl35DGTgcIeL/gXPDeEcpqIVjlX2dMBeBRCJs8rZoLevHA6pKPm5h\noV8I4PJXZvjFQVcrlZVZ4npvO0AmTBaVm+gc4yYAccTO2KWFPZDy28JqNatj+UpG\nCFxTaIfHRUBESPYR4gS1vxHzxsIyzsy01aqCdICAsHASYihwD6J6ShUa6c6etguI\n75ZOAmHzF3D9O7y5lvPBO3e53YopjkW8Afj8GHd+jWwMNPn7l4sat3TkKkDOE6Zp\norBoUCeRAgMBAAECggEACAWw/cqu0AsZ2DzWTa5vquY1hifeTbH2emW/zCE8en41\ns8Yn8Ip6znxV24XurfHcXdP/LOgXFIk6AcaaUOr7IviEL/L4qlxfH6VJ9BCxBcoO\nBkmSqgj3WxgEacx6Em+GFjUdIsnV6yP5eKdFIKWshjepaRM+CKR9l8BmkL6jb9PH\negK/wjgRQ2zTdH84Diu+V4SHo1sjKQwO/V1Npu74JeRCisTyIs+Z5U0tvwWKTNUh\nhOI/ftexdAzGiH03sn7yEfngfums5iqwHELY0HxgweM0+M1NXHZYbbYJI2cuHYc3\ngWdo7fuZ3ilqa5kC9HXmxnMGBRzagcmMPSgwErFkAQKBgQDEp63gecSFZGXaJU4x\n1owC3sCCZVAwP/d//Hf6dAUZUCsq+SkBuaShtGszsPdOYWpf6QAY2jY06rlZfQ0Y\nN2iQ+jNqnlAvvL33iCmawnbAVl7tUL7sUmigX3b9wp6jVVUwhZLb1Djvpwy0usTE\n9axtAXSHRR0ObFJUks8rk0nrkQKBgQC4YYc70SZPTGEq8EEQPFkG2fI64nnZSOFl\nFYV3mjKlF5XHjHrur0ScE9gm0T3ErnhADZanYThzlA2Fw+XNjfnhPfQA5047Qh6u\nLES3cp4yXRI/7Anngpxzk6rW/1lQjJY4VHQMQN3+VZSHnAfNBfZ7FseTJjADLWj0\nTmTG6ix8AQKBgA6FLwJ/GzKaOicEUCS/6bCgj+hQ4L3fS0AI/Tbh8CpxT+6pXQzC\nj1RdRPkZHPmNmdQhGR+8pPn9RthDsn7SQIdL4hYCQHt13TT0udWyfCAxgGrXZnF+\nmDkXM2sDPsFioJqnkjNnFRkk5XxGuhas6SFXVSpTwRR6jQ2vlVprUq7xAoGAUf5M\n/TTNLIZyz3138Zhknr9dEQKV3SKj2Sfw6ncP/oq2eL7oDCy0/hN1FA4IweY0Y4en\nb1e0mvFD8jBjiT2R2bCLSbuS9pc4vYvCIzI9V3g8HWECJonWuS750hJLzZ43T2V/\nFdPi5K96FbQ1Y9869RH0PmPFBiSzf7E875hDoAECgYBpNuEjBHRgnh3IGzfwZmew\nw1Ct4w4IGDoSfGrtOxaR0/S5Js7j70RU6HwXierWFcMIQnkggKb23dGiK76FQEGZ\nZdKJJPIkT0MS5KJMVqmwgXPlEOkWVcDzjJTigW3GzK3IGInVbsJZISuySCXJezbg\n4SE9BoJcLi25Rx2wRT91GQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "night-planet@takuma-1277.iam.gserviceaccount.com",
+  "client_id": "115148253859185525528",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/night-planet%40takuma-1277.iam.gserviceaccount.com"
+}

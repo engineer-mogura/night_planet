@@ -10,9 +10,10 @@ return [
 
 	// プロパティ設定
 	define('PROPERTY', array(
-		'NEW_INFO_MAX'=>'5', // 新着情報関連の表示数
+		'NEW_INFO_MAX'=>'4', // 新着情報関連の表示数
 		'FILE_MAX'=>'8', // アップロードファイル数
 		'UPDATE_INFO_DAY_MAX'=>'10', // アップロードファイル数
+		'SHOW_GALLERY_MAX'=>'2', // キャストのギャラリー最大表示数
 	)),
 
 	// 店舗メニュー名
@@ -51,7 +52,8 @@ return [
 		'CAST'=> 'cast',
 		'NOTICE'=> 'notice',
 		'DIARY'=> 'diary',
-		'EVENT'=> 'event',
+		'GALLERY'=> 'gallery',
+		'SCHEDULE'=> 'schedule',
 		'TMP'=> 'tmp',
 		'TOP_IMAGE'=> 'top_image',
 		'IMAGE'=> 'image',
@@ -125,6 +127,7 @@ return [
 		'009'=>'店舗お知らせ',
 		'010'=>'SNS',
 		'011'=>'出勤管理',
+		'012'=>'ダッシュボード',
 	)),
 
 	// ラベル定数 cast.label menu
@@ -369,6 +372,7 @@ return [
 		'NOTICE_TITLE'=>'_area_の_genre_ _shop_のお知らせページです。ポータルサイト『_service_name_』',
 		'CAST_TITLE'=>'_area_の_genre_ _shop_|_cast_のトップページ。ポータルサイト『_service_name_』',
 		'DIARY_TITLE'=>'_area_の_genre_ _shop_|_cast_の日記ページ。ポータルサイト『_service_name_』',
+		'GALLERY_TITLE'=>'_area_の_genre_ _shop_|_cast_のギャラリーページ。ポータルサイト『_service_name_』',
 	)),
 	// SEO メタ関連
 	define('META', array(
@@ -379,6 +383,7 @@ return [
 		'NOTICE_DESCRIPTION'=>'_shop_からのお知らせページです！お得な情報も発信しますのでお見逃しなく！お店探しは『_service_name_』で！',
 		'CAST_DESCRIPTION'=>'_cast_のトップページです！様々なキャストが在籍しています！新人キャストも随時紹介していきます！お店探しは『_service_name_』で！',
 		'DIARY_DESCRIPTION'=>'_cast_の日記ページです！日々の出来事などを日記に綴っていきますのでお見逃しなく！お店探しは『_service_name_』で！',
+		'GALLERY_DESCRIPTION'=>'_cast_のギャラリーページです！毎日更新していきますのでお見逃しなく！お店探しは『_service_name_』で！',
 		'USER_NO_INDEX'=>TRUE, // ステージング環境用 使用テンプレート「userDefault.ctp」検索エンジンにインデックスするかしないか
 		'OWNER_NO_INDEX'=>TRUE, // ステージング環境用 使用テンプレート「ownerDefault.ctp」検索エンジンにインデックスするかしないか
 		'SHOP_NO_INDEX'=>TRUE, // ステージング環境用 使用テンプレート「shopDefault.ctp」検索エンジンにインデックスするかしないか

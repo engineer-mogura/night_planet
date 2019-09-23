@@ -9,12 +9,13 @@
 						<input type="hidden" name="_method" value="POST">
 						<input type="hidden" name="crud_type" value="">
 						<input type="hidden" name="id" value="">
+						<input type="hidden" name="shop_id" value="<?= $userInfo['shop_id'] ?>">
 						<input type="hidden" name="cast_id" value="<?= $userInfo['id'] ?>">
 						<input type="hidden" name="start" value="">
 						<input type="hidden" name="end" value="">
 						<input type="hidden" name="all_day" value="">
 						<input type="hidden" name="active" value="">
-						<input type="hidden" name="calendar_path" value="<?=$userInfo['event_path'].DS.'calendar.json' ?>">
+						<input type="hidden" name="calendar_path" value="<?=$userInfo['schedule_path'].DS.'calendar.json' ?>">
 					</div>
 					<div class="row">
 						<div class="col">

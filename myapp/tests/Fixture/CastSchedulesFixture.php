@@ -4,12 +4,10 @@ namespace App\Test\Fixture;
 use Cake\TestSuite\Fixture\TestFixture;
 
 /**
- * EventsFixture
- *
+ * CastSchedulesFixture
  */
-class EventsFixture extends TestFixture
+class CastSchedulesFixture extends TestFixture
 {
-
     /**
      * Fields
      *
@@ -17,10 +15,11 @@ class EventsFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
-        'event_type_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'shop_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'cast_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
-        'event' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
+        'event_type_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
+        'title' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'details' => ['type' => 'string', 'length' => 255, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'start' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'end' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
@@ -31,19 +30,12 @@ class EventsFixture extends TestFixture
         'active' => ['type' => 'integer', 'length' => 1, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        '_indexes' => [
-            'cast_key' => ['type' => 'index', 'columns' => ['cast_id'], 'length' => []],
-        ],
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-        ],
         '_options' => [
             'engine' => 'InnoDB',
             'collation' => 'utf8_general_ci'
         ],
     ];
     // @codingStandardsIgnoreEnd
-
     /**
      * Init method
      *
@@ -54,19 +46,20 @@ class EventsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'event_type_id' => 1,
+                'shop_id' => 1,
                 'cast_id' => 1,
-                'event' => 'Lorem ipsum dolor sit amet',
+                'event_type_id' => 1,
+                'title' => 'Lorem ipsum dolor sit amet',
                 'details' => 'Lorem ipsum dolor sit amet',
-                'start' => '2019-03-30 16:38:12',
-                'end' => '2019-03-30 16:38:12',
+                'start' => '2019-09-21 13:43:23',
+                'end' => '2019-09-21 13:43:23',
                 'time_start' => 'Lorem ipsum dolor ',
                 'time_end' => 'Lorem ipsum dolor ',
                 'all_day' => 'L',
                 'status' => 'Lorem ipsum dolor ',
                 'active' => 1,
-                'created' => '2019-03-30 16:38:12',
-                'modified' => '2019-03-30 16:38:12'
+                'created' => '2019-09-21 13:43:23',
+                'modified' => '2019-09-21 13:43:23'
             ],
         ];
         parent::init();

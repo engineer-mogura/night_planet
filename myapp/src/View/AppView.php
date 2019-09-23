@@ -123,6 +123,26 @@ class AppView extends View
                 '日記', "#!", ['class' => 'breadcrumbs-tail']
             );
         }
+        // 遷移先がエリア ⇒ キャスト ⇒ ギャラリー画面の場合
+        if ($breadcrumbList[1] == 'gallery') {
+            // リストの最後に追加
+            $this->Breadcrumbs->add([
+                ['title' => GENRE[$this->request->query['genre']]['label'],
+                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'genre/',
+                    '?'=> ['genre' =>$this->request->query['genre']]]],
+                ['title' => $this->request->query['name'],
+                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'shop/'.$this->request->query['shop'],
+                    '?' => ['shop' => $this->request->query['shop'],'genre' => $this->request->query['genre'], 'name' => $this->request->query['name']]]],
+                ['title' => $this->request->query['nickname'],
+                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'cast/'.$this->request->query['cast'],
+                    '?' => ['shop' => $this->request->query['shop'], 'cast' => $this->request->query['cast'], 'genre' => $this->request->query['genre'] , 'name' => $this->request->query['name'],
+                    'nickname' => $this->request->query['nickname']]]],
+            ]);
+            // リストの最後に追加
+            $this->Breadcrumbs->add(
+                'ギャラリー', "#!", ['class' => 'breadcrumbs-tail']
+            );
+        }
         // 遷移先がエリア ⇒ 店舗 ⇒ お知らせ画面の場合
         if ($breadcrumbList[1] == 'notice') {
             // リストの最後に追加

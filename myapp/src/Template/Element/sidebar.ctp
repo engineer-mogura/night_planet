@@ -1,7 +1,7 @@
 <div class="hide-on-med-and-down sidebar col l4">
 	<div class="section">
 		<!-- シェアボタン START -->
-		<P class="center-align">SNSで<span class="color-blue"><?=$cast->shop->name?></span>をシェアしよう！</p>
+		<P class="center-align"><span class="color-blue"><?=isset($shop) ? $shop->name : $cast->shop->name?></span>をシェアしよう！</p>
 		<div class="row sharer-modal">
 			<div class="col l6">
 				<a class="facebook sharer-btn waves-effect waves-light btn-large"><span> Facebook</span></a>

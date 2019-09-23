@@ -14,7 +14,6 @@
  */
 namespace App\Controller;
 
-use Cake\ORM\TableRegistry;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -28,7 +27,7 @@ use Cake\Event\Event;
  */
 class AppController extends Controller{
 
-  public $components = array('Util');
+  public $components = array('Util','Analytics');
 
   /**
    * Initialization hook method.

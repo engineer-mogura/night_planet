@@ -90,7 +90,7 @@
         </div>
         <div class="col s4 m3 l3">
           <div class="cyan linkbox card-panel hoverable center-align">
-          <?= in_array(SHOP_MENU_NAME['SHOP-GALLERY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
+          <?= in_array(SHOP_MENU_NAME['SHOP_GALLERY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
             <span class="shop-menu-label shop-gallery"></br>Shop Gallery</span>
             <a class="waves-effect waves-light" href="#shop-gallery-section"></a>
           </div>

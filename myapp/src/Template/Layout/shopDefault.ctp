@@ -58,7 +58,7 @@
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>
     </li>
-    <!-- <li><a href="#" data-tab="top-image" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">image</i><?= SHOP_LM['001'] ?></a></li> -->
+    <li><a class="waves-effect hoverable" href="/owner/shops/index"><i class="material-icons">dashboard</i><?= SHOP_LM['012'] ?></a></li>
     <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="top-image" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">image</i><?= SHOP_LM['001'] ?></a></li>
     <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="catch" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">mode_edit</i><?= SHOP_LM['002'] ?></a></li>
     <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops":"#";?>" data-tab="coupon" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">stars</i><?= SHOP_LM['003'] ?></a></li>

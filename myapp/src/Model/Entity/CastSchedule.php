@@ -4,12 +4,13 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Event Entity
+ * CastSchedule Entity
  *
  * @property int $id
- * @property int|null $event_type_id
+ * @property int $shop_id
  * @property int $cast_id
- * @property string|null $event
+ * @property int|null $event_type_id
+ * @property string|null $title
  * @property string|null $details
  * @property \Cake\I18n\FrozenTime|null $start
  * @property \Cake\I18n\FrozenTime|null $end
@@ -21,12 +22,12 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
- * @property \App\Model\Entity\EventType $event_type
+ * @property \App\Model\Entity\Shop $shop
  * @property \App\Model\Entity\Cast $cast
+ * @property \App\Model\Entity\EventType $event_type
  */
-class Event extends Entity
+class CastSchedule extends Entity
 {
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -37,8 +38,10 @@ class Event extends Entity
      * @var array
      */
     protected $_accessible = [
-        'event_type_id' => true,
+        'id' => true,
+        'shop_id' => true,
         'cast_id' => true,
+        'event_type_id' => true,
         'title' => true,
         'details' => true,
         'start' => true,
@@ -50,7 +53,8 @@ class Event extends Entity
         'active' => true,
         'created' => true,
         'modified' => true,
-        'event_type' => true,
-        'cast' => true
+        'shop' => true,
+        'cast' => true,
+        'event_type' => true
     ];
 }

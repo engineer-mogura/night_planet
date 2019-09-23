@@ -1,15 +1,11 @@
 <?php
 namespace App\Controller\Owner;
 
-use Cake\ORM\Query;
 use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Mailer\Email;
-use Cake\Core\Configure;
-use Cake\Error\Debugger;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
-use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Datasource\ConnectionManager;
 
@@ -271,6 +267,7 @@ class OwnersController extends AppController
             // オーナーに所属する全ての店舗を取得する
             $shops = $this->Shops->find('all')->where(['owner_id' => $user['id']]);
         }
+        //$val = $this->Analytics->getAnalytics();
         $this->set('shops', $shops);
         $this->render();
     }

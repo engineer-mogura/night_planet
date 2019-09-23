@@ -16,7 +16,7 @@ class AppController extends \App\Controller\AppController
         $this->Casts = TableRegistry::get('Casts');
         $this->Diarys = TableRegistry::get('Diarys');
         $this->Likes = TableRegistry::get('Likes');
-        $this->Events = TableRegistry::get('Events');
+        $this->CastSchedules = TableRegistry::get('Cast_schedules');
         $this->Snss = TableRegistry::get('Snss');
         $this->Updates = TableRegistry::get('Updates');
         $this->MasterCodes = TableRegistry::get("master_codes");

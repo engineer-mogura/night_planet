@@ -1,22 +1,21 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\EventsTable;
+use App\Model\Table\CastSchedulesTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\EventsTable Test Case
+ * App\Model\Table\CastSchedulesTable Test Case
  */
-class EventsTableTest extends TestCase
+class CastSchedulesTableTest extends TestCase
 {
-
     /**
      * Test subject
      *
-     * @var \App\Model\Table\EventsTable
+     * @var \App\Model\Table\CastSchedulesTable
      */
-    public $Events;
+    public $CastSchedules;
 
     /**
      * Fixtures
@@ -24,9 +23,10 @@ class EventsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.Events',
-        'app.EventTypes',
-        'app.Casts'
+        'app.CastSchedules',
+        'app.Shops',
+        'app.Casts',
+        'app.EventTypes'
     ];
 
     /**
@@ -37,8 +37,8 @@ class EventsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::getTableLocator()->exists('Events') ? [] : ['className' => EventsTable::class];
-        $this->Events = TableRegistry::getTableLocator()->get('Events', $config);
+        $config = TableRegistry::getTableLocator()->exists('CastSchedules') ? [] : ['className' => CastSchedulesTable::class];
+        $this->CastSchedules = TableRegistry::getTableLocator()->get('CastSchedules', $config);
     }
 
     /**
@@ -48,7 +48,7 @@ class EventsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Events);
+        unset($this->CastSchedules);
 
         parent::tearDown();
     }

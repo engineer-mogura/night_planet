@@ -712,27 +712,13 @@ function initializeUser() {
         // 検索ボタン押した時
         commonSearch(false);
 
-        var options = [
-            // {selector: '#staggered-test', offset: 50, callback: function(el) {
-            //   Materialize.toast("This is our ScrollFire Demo!", 1500 );
-            // } },
-            // {selector: '#staggered-test', offset: 205, callback: function(el) {
-            //   Materialize.toast("Please continue scrolling!", 1500 );
-            // } },
-            // {selector: '#slide-out', offset: 400, callback: function(el) {
-            //     Materialize.showStaggeredList($(el));
-            // } },
-            {selector: '#shop-new-notice', offset: 400, callback: function(el) {
-                Materialize.showStaggeredList($(el));
-            } },
-            {selector: '#cast-new-diary', offset: 400, callback: function(el) {
-            Materialize.showStaggeredList($(el));
-            } },
-                // {selector: '#staggered-test', offset: 500, callback: function(el) {
-            //   Materialize.fadeInImage($(el));
-            // } }
-          ];
-          Materialize.scrollFire(options);
+        var options = {
+                //'swipeable':true, // モバイル時のスワイプでタブ切り替え
+                //'responsiveThreshold':991,
+                'onShow': function() {   // タブ切り替え時のコールバック
+                }
+            }
+        $('ul.tabs').tabs(options);
 
     }
     /* トップ画面 END */
@@ -779,6 +765,13 @@ function initializeUser() {
         var address = $("table td[name='address']").text();
     }
     /* キャスト画面 END */
+
+    /* ギャラリー画面 START */
+    if($("#gallery").length) {
+        // 検索ボタン押した時
+        commonSearch(false);
+    }
+    /* ギャラリー画面 END */
 
     /* 日記画面 START */
     if($("#diary").length) {
@@ -839,7 +832,7 @@ function commonSearch(isAjax) {
         if((form.find("input[name='key_word']").val() == "") &&
             (form.find("[name='area']").val() == "") &&
             (form.find("[name='genre']").val() == "")) {
-                alert("なにかしら条件を入れてね");
+                alert("条件を入力してください。");
                 return false;
         }
         // AJAX送信

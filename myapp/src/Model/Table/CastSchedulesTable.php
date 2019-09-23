@@ -2,33 +2,31 @@
 namespace App\Model\Table;
 
 use ArrayObject;
-use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\I18n\Time;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
-
 /**
- * Events Model
+ * CastSchedules Model
  *
- * @property \App\Model\Table\EventTypesTable|\Cake\ORM\Association\BelongsTo $EventTypes
+ * @property \App\Model\Table\ShopsTable|\Cake\ORM\Association\BelongsTo $Shops
  * @property \App\Model\Table\CastsTable|\Cake\ORM\Association\BelongsTo $Casts
+ * @property \App\Model\Table\EventTypesTable|\Cake\ORM\Association\BelongsTo $EventTypes
  *
- * @method \App\Model\Entity\Event get($primaryKey, $options = [])
- * @method \App\Model\Entity\Event newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\Event[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\Event|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Event|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Event patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\Event[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\Event findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\CastSchedule get($primaryKey, $options = [])
+ * @method \App\Model\Entity\CastSchedule newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\CastSchedule[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\CastSchedule|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\CastSchedule saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\CastSchedule patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\CastSchedule[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\CastSchedule findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class EventsTable extends Table
+class CastSchedulesTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -39,18 +37,22 @@ class EventsTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('events');
+        $this->setTable('cast_schedules');
         $this->setDisplayField('title');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('EventTypes', [
-            'foreignKey' => 'event_type_id'
+        $this->belongsTo('Shops', [
+            'foreignKey' => 'shop_id',
+            'joinType' => 'INNER'
         ]);
         $this->belongsTo('Casts', [
             'foreignKey' => 'cast_id',
             'joinType' => 'INNER'
+        ]);
+        $this->belongsTo('EventTypes', [
+            'foreignKey' => 'event_type_id'
         ]);
     }
 
@@ -120,8 +122,9 @@ class EventsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['event_type_id'], 'EventTypes'));
+        $rules->add($rules->existsIn(['shop_id'], 'Shops'));
         $rules->add($rules->existsIn(['cast_id'], 'Casts'));
+        $rules->add($rules->existsIn(['event_type_id'], 'EventTypes'));
 
         return $rules;
     }

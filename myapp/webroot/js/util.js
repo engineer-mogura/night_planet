@@ -118,59 +118,59 @@
     var d = date.getDate();
     var m = date.getMonth();
     var y = date.getFullYear();
-    var array = [{
-      title: 'All Day Event',
-      start: new Date(y, m, 1),
-      time_start: '13:00',
-      time_end: '14:00',
-      active: '1'
-    }, {
-      id: 1,
-      cast_id: '0',
-      title: 'Long Event',
-      start: new Date(y, m, d - 5),
-      end: new Date(y, m, d - 2),
-      time_start: '13:00',
-      time_end: '14:00',
-      active: '1'
-    }, {
-        id: 2,
-        cast_id: '0',
-        title: 'Repeating Event',
-        start: new Date(y, m, d - 3, 16, 0),
-        time_start: '13:00',
-        time_end: '14:00',
-        allDay: false,
-        active: '1'
-    }, {
-        id: 3,
-        cast_id: '0',
-        title: 'Repeating Event',
-        start: new Date(y, m, d + 4, 16, 0),
-        time_start: '13:00',
-        time_end: '14:00',
-        allDay: false,
-        active: '1'
-    }, {
-        id: 4,
-        cast_id: '0',
-        title: 'travel',
-        start: new Date(y, m, d + 1, 19, 0),
-        end: new Date(y, m, d + 1, 22, 30),
-        time_start: '13:00',
-        time_end: '14:00',
-        allDay: false,
-        active: '1'
-    }, {
-        id: 5,
-        cast_id: '0',
-        title: 'Click for Google',
-        start: new Date(y, m, 28),
-        end: new Date(y, m, 29),
-        time_start: '13:00',
-        time_end: '14:00',
-        active: '1'
-    }];
+    // var array = [{
+    //   title: 'All Day Event',
+    //   start: new Date(y, m, 1),
+    //   time_start: '13:00',
+    //   time_end: '14:00',
+    //   active: '1'
+    // }, {
+    //   id: 1,
+    //   cast_id: '0',
+    //   title: 'Long Event',
+    //   start: new Date(y, m, d - 5),
+    //   end: new Date(y, m, d - 2),
+    //   time_start: '13:00',
+    //   time_end: '14:00',
+    //   active: '1'
+    // }, {
+    //     id: 2,
+    //     cast_id: '0',
+    //     title: 'Repeating Event',
+    //     start: new Date(y, m, d - 3, 16, 0),
+    //     time_start: '13:00',
+    //     time_end: '14:00',
+    //     allDay: false,
+    //     active: '1'
+    // }, {
+    //     id: 3,
+    //     cast_id: '0',
+    //     title: 'Repeating Event',
+    //     start: new Date(y, m, d + 4, 16, 0),
+    //     time_start: '13:00',
+    //     time_end: '14:00',
+    //     allDay: false,
+    //     active: '1'
+    // }, {
+    //     id: 4,
+    //     cast_id: '0',
+    //     title: 'travel',
+    //     start: new Date(y, m, d + 1, 19, 0),
+    //     end: new Date(y, m, d + 1, 22, 30),
+    //     time_start: '13:00',
+    //     time_end: '14:00',
+    //     allDay: false,
+    //     active: '1'
+    // }, {
+    //     id: 5,
+    //     cast_id: '0',
+    //     title: 'Click for Google',
+    //     start: new Date(y, m, 28),
+    //     end: new Date(y, m, 29),
+    //     time_start: '13:00',
+    //     time_end: '14:00',
+    //     active: '1'
+    // }];
 
       // 初期処理
       $('#calendar').fullCalendar({
@@ -193,10 +193,26 @@
       select: function(start, end, allDay) {
           //日の枠内を選択したときの処理
       },
-      dayClick: function(date, jsEvent, view, resourceObj) {
+      dayClick: function(date, jsEvent, view) {
 
-          $($calendar).find(".event-name").text('イベント追加');
-          $($calendar).find(".description").text('イベント追加を行います。');
+        // 日付クリックですでにイベントがある場合は、モーダルを表示させない
+        var isEvent = false;
+        $('#calendar').fullCalendar('clientEvents', function(event, result) {
+
+          if(event.start.format('Y-MM-DD') == date.format() && event.title.length > 0) {
+
+            isEvent = true;
+            return true;
+          } else {
+
+            return false;
+          }
+
+        });
+        if(!isEvent) {
+
+          $($calendar).find(".event-name").text('予定追加');
+          $($calendar).find(".description").text('出勤予定の追加を行います。');
           $($calendar).find(".createBtn").show(); //登録ボタン表示
           $($calendar).find(".updateBtn").hide(); //更新ボタン非表示
           $($calendar).find(".deleteBtn").hide(); //削除ボタン非表示
@@ -212,11 +228,13 @@
           $($form).find(".target-day").text(date.format());
           //クリックした日付が取れるよ
           $($calendar).modal('open');
+
+        }
       },
       eventClick: function(calEvent, jsEvent, view) {
 
-          $($calendar).find(".event-name").text('イベント編集');
-          $($calendar).find(".description").text('イベント編集を行います。');
+          $($calendar).find(".event-name").text('予定編集');
+          $($calendar).find(".description").text('出勤予定の編集を行います。');
           $($calendar).find(".createBtn").hide(); //登録ボタン非表示
           $($calendar).find(".updateBtn").show(); //更新ボタン表示
           $($calendar).find(".deleteBtn").show(); //削除ボタン表示

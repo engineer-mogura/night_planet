@@ -9,10 +9,10 @@
     <div class="container">
         <span id="dummy" style="display: hidden;"></span>
         <?= $this->Flash->render() ?>
-        <h5><?=h('出勤管理') ?></h5>
+        <h5><?=h('出勤管理') ?></h5><span>〇：出勤可能 ✕：出勤不可 ー：未定</span>
             <div id="work-schedule-management" class="row">
                 <!-- 出勤希望リスト START -->
-                <?php if(!empty($castList)) : ?>
+                <?php if(!empty($casts)) : ?>
                 <div class="col s12 table-wrap">
                     <table class="striped centered" border="1">
                         <thead>
@@ -30,24 +30,24 @@
                         <tbody>
                             <tr>
                                 <?php 
-                                    for($x = 0; $x < 5; $x++):
-                                    foreach ($castList as $key => $cast):
+                                    foreach ($casts as $key => $cast):
                                 ?>
                                 <th align="center">
-                                    <img src="<?=isset($cast['icon_name']) ? $cast['profile_path'].DS.$cast['icon_name'] : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="50" height="50">
-                                    </br><span class="center-align"><?=$cast['0']['name']?></span>
+                                    <img src="<?=isset($cast->schedule_info['castInfo']['icon_name'])
+                                         ? $cast->schedule_info['castInfo']['profile_path'].DS.$cast->schedule_info['castInfo']['icon_name']
+                                         : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="50" height="50">
+                                    </br><span class="center-align"><?=$cast['name']?></span>
                                 </th>
                                 <?php 
-                                    for ($i = 0; $i < count($dateList); $i++):
+                                    foreach ($cast->schedule_info['work_plan'] as $key => $value):
                                 ?>
-                                <td align="center">〇</td>
+                                        <td align="center"><?=$value?></td>
                                 <?php
-                                    endfor;
+                                    endforeach;
                                 ?>
                             </tr>
                                 <?php
                                     endforeach;
-                                    endfor;
                                 ?>
                         </tbody>
                     </table>

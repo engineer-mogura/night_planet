@@ -27,6 +27,17 @@ a.button-collapse.oki-button-collapse{
 .nav-wrapper,.container,footer{
   padding-left: 300px;
 }
+footer.page-footer .footer-item, footer.page-footer .footer-description {
+  background-color: darkgray;
+  color: white;
+}
+footer.page-footer .footer-item span {
+  vertical-align: middle;
+  display: inline-flex;
+}
+footer.page-footer .footer-item span i{
+  margin-right: 10px;
+}
 nav.nav-breadcrumb {
   margin: 10px 0;
   display: table;
@@ -360,6 +371,12 @@ form .error-message {
   border:solid #fff 1px;
   }
 /* PhotoSwipe END */
+
+/* トップページ画面 START */
+#top .section.tabs-section {
+  height:600px;
+}
+/* トップページ画面 END */
 
 /* 新規・ログイン画面 START */
 .or-form-wrap {
@@ -765,43 +782,42 @@ div.card.diary-card .col, div.card.notice-card .col{
 .sharer-modal .line.sharer-btn {
   background-color: #08ca08;
 }
-.sharer-modal .facebook.sharer-btn span:before {
+/* .sharer-modal .facebook.sharer-btn span:before {
   background-image: url(/img/common/sns/facebook-icon.png);
-  content: '';/*何も入れない*/
-  display: inline-block;/*忘れずに！*/
-  width: 30px;/*画像の幅*/
-  height: 30px;/*画像の高さ*/
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 30px;
   background-size: contain;
-  vertical-align: middle; 
+  vertical-align: middle;
 }
 .sharer-modal .twitter.sharer-btn span:before {
   background-image: url(/img/common/sns/twitter-icon.png);
-  content: '';/*何も入れない*/
-  display: inline-block;/*忘れずに！*/
-  width: 30px;/*画像の幅*/
-  height: 30px;/*画像の高さ*/
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 30px;
   background-size: contain;
   vertical-align: middle;
 }
 .sharer-modal .b_hatena.sharer-btn span:before {
   background-image: url(/img/common/sns/b_hatena-icon.png);
-  content: '';/*何も入れない*/
-  display: inline-block;/*忘れずに！*/
-  width: 30px;/*画像の幅*/
-  height: 30px;/*画像の高さ*/
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 30px;
   background-size: contain;
-  vertical-align: middle; 
+  vertical-align: middle;
 }
 .sharer-modal .line.sharer-btn span:before {
-  /* background-image: url(/img/common/sns/line-icon.png); */
   background-image: url(/img/common/sns/line-icon.png);
-  content: '';/*何も入れない*/
-  display: inline-block;/*忘れずに！*/
-  width: 30px;/*画像の幅*/
-  height: 30px;/*画像の高さ*/
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 30px;
   background-size: contain;
-  vertical-align: middle; 
-}
+  vertical-align: middle;
+} */
 span.icon-vertical-align {
   display: inline-flex;
 }
@@ -810,8 +826,15 @@ span.icon-vertical-align {
 /* 店舗ページ END */
 /* キャストページ START */
 .cast-header .cast-name-box {
-  position: relative;
-  top: -5px;
+  color: #26a69a;
+  font-weight: 600;
+}
+.cast-header .count-box {
+  padding-top: 6px;
+  color: white;
+  background-color: #26a69a;
+  height: 30px;
+  border-radius: 32px;
 }
 .cast-header span.header-diary:before {
   content: '';/*何も入れない*/

@@ -34,6 +34,7 @@ return [
 
 	// 店舗編集画面のタブ制御設定
 	define('TAB_CONTROLE', array(
+		'index', // 店舗ダッシュボード 画面
 		'notice', // 店舗お知らせ 画面
 		'workSchedule', // 出勤管理 画面
 	)),

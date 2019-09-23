@@ -75,7 +75,7 @@ class AppController extends \App\Controller\AppController
         $ownerAccess = ['index','shopAdd','profile'];
 
         // ログイン時に許可する店舗編集画面アクション
-        $shopAccess = ['index','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
+        $shopAccess = ['index','shopEdit','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
             'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
             'deleteCast','saveTenpo','saveJob','saveSns','saveGallery','deleteGallery','notice','viewNotice',
             'saveNotice','updateNotice','deleteNotice','workSchedule','saveWorkSchedule'];

@@ -65,6 +65,38 @@ class ShopsController extends AppController
             $selectedTab = $this->request->session()->consume('selected_tab');
         }
 
+        $this->redirect('/ApiGoogles/index');
+
+        // if(!is_null($user = $this->Auth->user())){
+        //     $shop = $this->Shops->find()
+        //         ->where(['Shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
+        //         ->contain(['Coupons','Jobs','Snss','Casts' => function(Query $q) {
+        //         return $q->where(['Casts.delete_flag'=>'0']);
+        //     }])->first();
+        // }
+
+        $this->set(compact('shop'));
+        $this->render();
+    }
+    /**
+     * 編集画面遷移の処理
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function shopEdit()
+    {
+        // アクティブタブ
+        $selected_tab = "";
+        // サイドバーメニューのパラメータがあればセッションにセットする
+        if (isset($this->request->data["selected_tab"])) {
+            $this->request->session()->write('selected_tab', $this->request->getData("selected_tab"));
+        }
+        // セッションにアクティブタブがセットされていればセットする
+        if ($this->request->session()->check('selected_tab')) {
+            $selectedTab = $this->request->session()->consume('selected_tab');
+        }
+
         if(!is_null($user = $this->Auth->user())){
             $shop = $this->Shops->find()
             ->where(['Shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])

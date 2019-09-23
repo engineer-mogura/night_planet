@@ -26,7 +26,8 @@ class ApiGooglesController extends AppController
 		session_start();
  
 		$client = new Google_Client();
-		$client->setAuthConfig(__DIR__ . '/client_secrets.json');
+		// $client->setAuthConfig(__DIR__ . '/client_secrets.json');
+		$client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
 		$client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
  
 		// If the user has already authorized this app then get an access token
@@ -134,7 +135,8 @@ class ApiGooglesController extends AppController
 		// Create the client object and set the authorization configuration
 		// from the client_secrets.json you downloaded from the Developers Console.
 		$client = new Google_Client();
-		$client->setAuthConfig(__DIR__ . '/client_secrets.json');
+		//$client->setAuthConfig(__DIR__ . '/client_secrets.json');
+		$client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
 //		$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
 		$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback');
 		$client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);

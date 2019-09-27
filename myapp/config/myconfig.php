@@ -71,12 +71,15 @@ return [
 		'FACEBOOK'=> 'https://www.facebook.com/sharer/sharer.php?u=',
 		'LINE'=> 'http://line.me/R/msg/text/?',
 	)),
+	// TODO: リリース前には、パスを本番へ変更する。
 	// WEBアプリケーションパス設定 path.config
 	define('APP_PATH', array(
-		'APP'=> 'http://okiyoru.local/', /** テスト環境 */
-		'APP_ADMIN'=> 'http://okiyoru.local/', /** テスト環境 */
-		//'APP'=> 'http://okiyoru.local/', /** 本番環境 */
-		//'APP_ADMIN'=> 'http://okiyoru.local/', /** 本番環境 */
+		'APP'=> 'https://'. $_SERVER['HTTP_HOST']."/", /** ローカル環境 */
+		'APP_ADMIN'=> 'https://"'. $_SERVER['HTTP_HOST']."/'", /** ローカル環境 */
+		//'APP'=> 'https://devokiyorugo.work/', /** テスト環境 */
+		//'APP_ADMIN'=> 'https://devokiyorugo.work/', /** テスト環境 */
+		//'APP'=> 'https://night-planet.com/', /** 本番環境 */
+		//'APP_ADMIN'=> 'https://night-planet.com/', /** 本番環境 */
 	)),
 
 	// ラベル定数 developer.label menu
@@ -407,6 +410,7 @@ return [
 		'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyDgd-t3Wa40gScJKC3ZH3ithzuUUapElu4', // ステージング環境用 GoogleマップのAPIキー
 		'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-146237049-1', // ステージング環境用 GoogleアナリティクスのAPIキー
 		'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // ステージング環境用 GoogleアナリティクスのID
+		'GOOGLE_ANALYTICS_VIEW_ID'=>'200669565', // ステージング環境用 Analytics Reporting API V4 view_id
 		'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/bZ3AQhHPZLH2Q7Dy6', // Googleフォーム 掲載申し込みフォーム
 		'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
 		'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID

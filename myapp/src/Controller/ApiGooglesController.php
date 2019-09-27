@@ -1,17 +1,19 @@
 <?php
 namespace App\Controller;
  
-use App\Controller\AppController;
- 
 use Google_Client;
+ 
 use Google_Service_Analytics;
+use App\Controller\AppController;
 use Google_Service_AnalyticsReporting;
-use Google_Service_AnalyticsReporting_DateRange;
 use Google_Service_AnalyticsReporting_Metric;
+use Google_Service_AnalyticsReporting_OrderBy;
+use Google_Service_AnalyticsReporting_DateRange;
+use Google_Service_AnalyticsReporting_Dimension;
 use Google_Service_AnalyticsReporting_ReportRequest;
 use Google_Service_AnalyticsReporting_GetReportsRequest;
- 
- 
+use Cake\Error\Debugger;
+
 class ApiGooglesController extends AppController
 {
  
@@ -38,17 +40,20 @@ class ApiGooglesController extends AppController
  
 		  // Create an authorized analytics service object.
 		  $analytics = new Google_Service_AnalyticsReporting($client);
- 
+		  $this->log('$_SESSION[access_token]1:'.$_SESSION['access_token'],'debug');
+
 		  // Call the Analytics Reporting API V4.
 		  $response = $this->getReport($analytics);
- 
+		  $this->log('$_SESSION[access_token]2:'.$_SESSION['access_token'],'debug');
+
 		  // Print the response.
 		  $this->printResults($response);
  
 		} else {
  
 //		  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
-		  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback';
+		  $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback';
+		  $this->log($redirect_uri,'debug');
 //		  header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
 		  $this->redirect(filter_var($redirect_uri, FILTER_SANITIZE_URL));
  
@@ -65,23 +70,47 @@ class ApiGooglesController extends AppController
 	public function getReport($analytics) {
  
 	  // Replace with your view ID, for example XXXX.
-	  $VIEW_ID = "200669565";
+	  $VIEW_ID = API['GOOGLE_ANALYTICS_VIEW_ID'];
+ 
+	  // ディメンション(データの属性)の設定
+	  $landingPagePath = new Google_Service_AnalyticsReporting_Dimension();
+	  $landingPagePath->setName("ga:landingPagePath");
  
 	  // Create the DateRange object.
 	  $dateRange = new Google_Service_AnalyticsReporting_DateRange();
 	  $dateRange->setStartDate("7daysAgo");
-	  $dateRange->setEndDate("today");
+	  $dateRange->setEndDate("yesterday");
  
 	  // Create the Metrics object.
 	  $sessions = new Google_Service_AnalyticsReporting_Metric();
 	  $sessions->setExpression("ga:sessions");
 	  $sessions->setAlias("sessions");
  
+	  // Create the Metrics object.（取得する項目を追加する場合は、オブジェクトごと追加する）
+	  $pageviews = new Google_Service_AnalyticsReporting_Metric();
+	  $pageviews->setExpression("ga:pageviews");
+	  $pageviews->setAlias("pageviews");
+ 
+	  // Create the Metrics object.（取得する項目を追加する場合は、オブジェクトごと追加する）
+	  $users = new Google_Service_AnalyticsReporting_Metric();
+	  $users->setExpression("ga:users");
+	  $users->setAlias("users");
+ 
+	  //表示する順番の制御（Metricで指定した値を使う）
+	  $ordering = new Google_Service_AnalyticsReporting_OrderBy();
+	  $ordering->setFieldName("ga:sessions");
+	  $ordering->setOrderType("VALUE");
+	  $ordering->setSortOrder("DESCENDING");
+ 
 	  // Create the ReportRequest object.
 	  $request = new Google_Service_AnalyticsReporting_ReportRequest();
 	  $request->setViewId($VIEW_ID);
 	  $request->setDateRanges($dateRange);
-	  $request->setMetrics(array($sessions));
+	  $request->setMetrics(array($sessions,$pageviews,$users));   // 項目のオブジェクトはここに追加する
+ 
+	  $request->setDimensions(array($landingPagePath));   // Dimensions
+	  $request->setOrderBys($ordering);                   // 表示順
+	  $request->setPageSize(10);   //ページサイズの設定（取得件数）
  
 	  $body = new Google_Service_AnalyticsReporting_GetReportsRequest();
 	  $body->setReportRequests( array( $request) );
@@ -107,17 +136,22 @@ class ApiGooglesController extends AppController
 	      $dimensions = $row->getDimensions();
 	      $metrics = $row->getMetrics();
 	      for ($i = 0; $i < count($dimensionHeaders) && $i < count($dimensions); $i++) {
-	        print($dimensionHeaders[$i] . ": " . $dimensions[$i] . "\n");
+	        print($dimensionHeaders[$i] . ": " . $dimensions[$i] . "</br>");
 	      }
- 
+		  $this->log($metrics,'debug');
+
 	      for ($j = 0; $j < count($metrics); $j++) {
 	        $values = $metrics[$j]->getValues();
 	        for ($k = 0; $k < count($values); $k++) {
 	          $entry = $metricHeaders[$k];
-	          print($entry->getName() . ": " . $values[$k] . "\n");
-	        }
+	          print($entry->getName() . ": " . $values[$k] . "</br>");
+			}
+			$this->log($values,'debug');
 	      }
-	    }
+		}
+		print('</br></br></br></br>');
+		//$this->log($rows,'debug');
+		var_dump('"$report:"'.$rows);
 	  }
 	}
  
@@ -138,7 +172,7 @@ class ApiGooglesController extends AppController
 		//$client->setAuthConfig(__DIR__ . '/client_secrets.json');
 		$client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
 //		$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
-		$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback');
+		$client->setRedirectUri('https://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback');
 		$client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
  
 		// Handle authorization flow from the server.
@@ -151,7 +185,7 @@ class ApiGooglesController extends AppController
 		  $client->authenticate($_GET['code']);
 		  $_SESSION['access_token'] = $client->getAccessToken();
 //		  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/';
-		  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/api-googles/';
+		  $redirect_uri = 'https://' . $_SERVER['HTTP_HOST'] . '/api-googles/';
 //		  header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
 		  $this->redirect(filter_var($redirect_uri, FILTER_SANITIZE_URL));
 		}

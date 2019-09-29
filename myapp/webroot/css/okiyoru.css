@@ -1024,33 +1024,32 @@ li.daylist,li.eventlist {
 }
 /* キャスト編集ページ END */
 
-/* 日記カード モジュール START */
+/* モーダル日記 お知らせ START */
 #modal-diary {
   word-break: break-all;
+}
+#modal-diary .modal-footer > span{
+  float: left;
+}
+#modal-diary .modal-footer :nth-child(2){
+  margin-right: 30px;
+}
+#modal-diary .modal-footer :nth-child(3){
+  margin-right: 10px;
 }
 #view-diary .my-gallery {
   margin-top: 1rem;
 }
-
-div.my-gallery {
- /* display: inline-block;*/
-}
-/* .diary-card .my-gallery .col .imageOne{
-  height: 250px;
-} */
-.diary-list p.title, #modal-diary p.title, .notice-list p.title, #modal-notice p.title {
-
-}
 .diary-list p.content, #modal-diary p.content, .notice-list p.content, #modal-notice p.content  {
   margin-top: 10px;
 }
-/* 日記カード モジュール END */
-
-/* モーダルメニュー START */
-.fixed-action-btn.modal-more-horiz {
-  position: initial;
+#modal-diary .fixed-action-btn.modal-more-horiz {
+  position: relative;
 }
-/* モーダルメニュー END */
+#modal-diary .fixed-action-btn.modal-more-horiz > a {
+  top: 15px;
+}
+/* モーダル日記 お知らせ END */
 
 /* カラー共通 START */
 .color-blue {

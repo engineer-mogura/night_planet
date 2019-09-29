@@ -6,16 +6,16 @@
                 <?php echo $this->Flash->render(); ?>
                 <h5><?=('トップ画像') ?></h5>
                 <div id="show-top-image" style="text-align:center">
-                    <?php if(!empty($cast->top_image)): ?>
-                        <img width="100%" height="300" src="<?= $userInfo['top_image_path'].DS.$cast->top_image ?>" />
-                        <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">変更</button>
+                    <?php if(count($gallery) > 0): ?>
+                        <img width="100%" height="300" src="<?= $gallery[0]['file_path'] ?>" />
+                        <button type="button" class="waves-effect waves-light btn-large changeBtn">変更</button>
                         <form id="delete-top-image" name="delete_top_image" method="post" style="display:none;" action="/cast/casts/delete_top_image">
                             <input type="hidden" name="_method" value="POST">
                         </form>
-                        <button type="button" class="waves-effect waves-light btn-large top-image-deleteBtn">削除</button>
+                        <button type="button" class="waves-effect waves-light btn-large deleteBtn">削除</button>
                     <?php else: ?>
                         <p>まだ登録されていません。</p>
-                        <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">登録</button>
+                        <button type="button" class="waves-effect waves-light btn-large changeBtn">登録</button>
                     <?php endif; ?>
                 </div>
                 <form id="save-top-image" name="save_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/cast/casts/save_top_image" style="display:none;">
@@ -35,8 +35,8 @@
                     <img src="" id="top-image-preview" class="top-image-preview" style="display:none;" />
                     <canvas id="top-image-canvas" style="display:none;"></canvas>
                     <div class="card-content" style="text-align:center;">
-                        <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">やめる</button>
-                        <button type="button" class="waves-effect waves-light btn-large top-image-saveBtn">更新</button>
+                        <button type="button" class="waves-effect waves-light btn-large changeBtn">やめる</button>
+                        <button type="button" class="waves-effect waves-light btn-large saveBtn">更新</button>
                     </div>
                 </form>
             </div>

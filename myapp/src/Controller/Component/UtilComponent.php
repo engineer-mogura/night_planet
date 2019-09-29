@@ -2,11 +2,11 @@
 
 namespace App\Controller\Component;
 
+use Cake\Log\Log;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Controller\Component;
-
 class UtilComponent extends Component
 {
 
@@ -83,11 +83,20 @@ class UtilComponent extends Component
         $ownerInfo = array();
 
         $ownerInfo = $ownerInfo + array('id'=>$owner['id']
-            ,'dir'=>$owner['dir'],'icon_name'=>$owner['icon']);
+            ,'dir'=>$owner['dir']);
         $path = DS.PATH_ROOT['IMG'].DS.PATH_ROOT['OWNER'].DS.$owner['dir'];
 
         $ownerInfo = $ownerInfo + array('owner_path'=> $path
         ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'profile_path'=> $path.DS.PATH_ROOT['PROFILE']);
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$ownerInfo['profile_path']), true, 0755);
+
+        // ファイルは１つのみだけど配列で取得する
+        $files = glob($dir->path.DS.'*.*');
+        $ownerInfo = $ownerInfo + array('icon_name'=>basename($files[0]));
+
         return  $ownerInfo;
 
     }
@@ -162,7 +171,7 @@ class UtilComponent extends Component
             }
         }
         $castInfo = $castInfo + array('id'=>$cast['id'],'shop_id'=>$shop['id']
-            ,'dir'=>$cast['dir'], 'shop_dir'=> $shopDir,'icon_name'=>$cast['icon']);
+            ,'dir'=>$cast['dir'], 'shop_dir'=> $shopDir);
         $path = DS.PATH_ROOT['IMG'].DS.$castInfo['area']['path']
                 .DS.$castInfo['genre']['path'].DS.$shop['dir']
                 .DS.PATH_ROOT['CAST'].DS.$cast['dir'];
@@ -174,9 +183,17 @@ class UtilComponent extends Component
             , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
             , 'schedule_path'=> $path.DS.PATH_ROOT['SCHEDULE'], 'diary_path'=> $path.DS.PATH_ROOT['DIARY']
             , 'tmp_path'=> $path.DS.PATH_ROOT['TMP'], 'cache_path'=>$path.DS.PATH_ROOT['CACHE'], 'shop_url'=>$shop_url);
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$castInfo['profile_path']), true, 0755);
+
+        // ファイルは１つのみだけど配列で取得する
+        $files = glob($dir->path.DS.'*.*');
+        $castInfo = $castInfo + array('icon_name'=>basename($files[0]));
+
         return  $castInfo;
     }
-
 
     /**
      * クレジットリストを作成する
@@ -260,9 +277,10 @@ class UtilComponent extends Component
      * キャストの全ての日記情報を取得する処理
      *
      * @param [type] $id
+     * @param [type] $diaryPath
      * @return array
      */
-    public function getDiarys($id = null)
+    public function getDiarys($id, $diaryPath)
     {
         $diarys = TableRegistry::get('Diarys');
         // キャスト情報、最新の日記情報とイイネの総数取得
@@ -274,24 +292,56 @@ class UtilComponent extends Component
         $md = $query->func()->date_format([
             'created' => 'identifier',
             "'%c/%e'" => 'literal']);
-        $archive = $query->select([
+        $archives = $query->select([
             'ym_created' => $ym,
             'md_created' => $md])
             ->where(['cast_id' => $id])
-            ->contain(['Diary_Likes'])
+            ->contain(['DiaryLikes'])
             ->order(['created' => 'DESC'])->all();
-        $archive = $this->groupArray($archive, 'ym_created');
-        $archive = array_values($archive);
-        return $archive;
+        $archives = $this->groupArray($archives, 'ym_created');
+        $archives = array_values($archives);
+
+        // 更新日時順で並び替える関数
+        $sort_by_lastmod = function ($a, $b) {
+            return filemtime($b) - filemtime($a);
+        };
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$diaryPath), true, 0755);
+
+        foreach ($archives as $key => $archive) {
+
+            foreach ($archive as $key => $value) {
+
+                $gallery = array();
+
+                /// 並び替えして出力
+                $files = glob($dir->path.$value['dir'].DS.'*.*');
+                usort($files, $sort_by_lastmod);
+                foreach ($files as $file) {
+                    $timestamp = date('Y/m/d H:i', filemtime($file));
+                    array_push($gallery, array(
+                    "file_path"=>$diaryPath.$value->dir.DS.(basename($file))
+                    ,"date"=>$timestamp));
+                    continue; // １件のみ取得できればよい
+                }
+                $value->set('gallery', $gallery);
+            }
+        }
+
+
+        return $archives;
     }
 
     /**
      * 指定した１件の日記情報を取得する処理
      *
      * @param [type] $id
+     * @param [type] $diaryPath
      * @return array
      */
-    public function getDiary($id = null)
+    public function getDiary($id, $diaryPath)
     {
         $diary = TableRegistry::get('Diarys');
         $query = $diary->find('all')->select($diary->Schema()->columns());
@@ -301,8 +351,31 @@ class UtilComponent extends Component
         $diary = $query->select([
             'ymd_created' => $ymd])
             ->where(['id' => $id])
-            ->contain(['Diary_Likes'])
+            ->contain(['DiaryLikes'])
             ->first();
+
+        // 更新日時順で並び替える関数
+        $sort_by_lastmod = function ($a, $b) {
+            return filemtime($b) - filemtime($a);
+        };
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$diaryPath), true, 0755);
+
+        $gallery = array();
+
+        /// 並び替えして出力
+        $files = glob($dir->path.$diary['dir'].DS.'*.*');
+        usort($files, $sort_by_lastmod);
+        foreach ($files as $file) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+            "file_path"=>$diaryPath.$diary->dir.DS.(basename($file))
+            ,"date"=>$timestamp));
+        }
+        $diary->set('gallery', $gallery);
+
         return $diary;
     }
 
@@ -321,7 +394,7 @@ class UtilComponent extends Component
 
         if(!empty($isArea)) {
             $diarys = $diarys->find('all')
-            ->contain(['Diary_Likes','Casts','Casts.Shops'])
+            ->contain(['DiaryLikes','Casts','Casts.Shops'])
             ->matching('Casts.Shops', function($q) use ($isArea){
                 return $q->where(['Shops.area'=>$isArea]);
             })
@@ -329,7 +402,7 @@ class UtilComponent extends Component
             ->limit($rowNum)->all();
         } else if(!empty($shop_id)) {
             $diarys = $diarys->find('all')
-            ->contain(['Diary_Likes','Casts','Casts.Shops'])
+            ->contain(['DiaryLikes','Casts','Casts.Shops'])
             ->matching('Casts.Shops', function($q) use ($shop_id){
                 return $q->where(['Shops.id'=>$shop_id]);
             })
@@ -337,10 +410,48 @@ class UtilComponent extends Component
             ->limit($rowNum)->all();
         } else {
             $diarys = $diarys->find('all')
-            ->contain(['Diary_Likes','Casts','Casts.Shops'])
+            ->contain(['DiaryLikes','Casts','Casts.Shops'])
             ->order(['Diarys.created' => 'DESC'])
             ->limit($rowNum)->all();
         }
+        foreach ($diarys as $key => $diary) {
+            $diaryPath = WWW_ROOT . PATH_ROOT['IMG']
+                . DS . AREA[$diary->cast->shop->area]['path']
+                . DS . GENRE[$diary->cast->shop->genre]['path']
+                . DS . $diary->cast->shop->dir
+                . DS . PATH_ROOT['CAST']
+                . DS . $diary->cast->dir
+                . DS . PATH_ROOT['DIARY'] . $diary->dir;
+            // ディクレトリ取得
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , $diaryPath), true, 0755);
+            // 画像数をセット
+            $diary->set('gallery_count', count(glob($diaryPath . DS . '*.*')));
+
+            $profileFullPath = WWW_ROOT . PATH_ROOT['IMG']
+                . DS . AREA[$diary->cast->shop->area]['path']
+                . DS . GENRE[$diary->cast->shop->genre]['path']
+                . DS . $diary->cast->shop->dir
+                . DS . PATH_ROOT['CAST']
+                . DS . $diary->cast->dir
+                . DS . PATH_ROOT['PROFILE'];
+
+            $profilePath = DS . PATH_ROOT['IMG']
+                . DS . AREA[$diary->cast->shop->area]['path']
+                . DS . GENRE[$diary->cast->shop->genre]['path']
+                . DS . $diary->cast->shop->dir
+                . DS . PATH_ROOT['CAST']
+                . DS . $diary->cast->dir
+                . DS . PATH_ROOT['PROFILE'];
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , $profileFullPath), true, 0755);
+            $files = glob($dir->path.DS.'*.*');
+            count($files) > 0 ? $icon = $profilePath. DS. basename($files[0])
+                 : $icon = PATH_ROOT['NO_IMAGE01'];
+            // アイコン画像をセット
+            $diary->set('icon', $icon);
+        }
+
 
         return $diarys->toArray();
     }
@@ -794,8 +905,23 @@ class UtilComponent extends Component
     public function setLog($user, $e)
     {
         $log = ""; // 例外内容格納用
-        $log = "ロールユーザー：【".$user['role']."】, アドレス：【".$user['email']."】\n";
+        $log = "ID：【".$user['id']."】, ロールユーザー：【".$user['role']."】, アドレス：【".$user['email']."】\n";
         $log = $log.$e;
+        return $log;
+    }
+
+    /**
+     * アクセスログを加工してセットする
+     *
+     * @param Array $user
+     * @param Array $e
+     * @return String $log
+     */
+    public function setAccessLog($user, $action)
+    {
+        $log = "";
+        $log = "ID：【".$user['id']."】, ロールユーザー：【".$user['role']."】, アドレス：【".$user['email']."】";
+        $action == 'login' ? $log .= "ログイン" : $log .= "ログアウト";
         return $log;
     }
 

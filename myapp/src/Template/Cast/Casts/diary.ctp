@@ -61,7 +61,7 @@
                         <?php foreach ($rows as $key => $row): ?>
                         <li class="linkbox collection-item avatar archiveLink">
                             <input type="hidden" name="id" value=<?=$row['id']?>>
-                        <?php !empty($row['image1'])? $imgPath = $userInfo['diary_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                        <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <img src="<?= $imgPath ?>" alt="" class="circle">
                             <span class="title color-blue"><?= $row['md_created'] ?></span>
                             <p><span class="truncate"><?= $row->title ?><br>
@@ -86,7 +86,7 @@
                         <li class="collection-item">
                             <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                             <?php foreach ($rows as $row): ?>
-                            <?php !empty($row['image1'])? $imgPath = $userInfo['diary_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                            <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <div class="linkbox collapsible-body archiveLink">
                                 <input type="hidden" name="id" value=<?=$row->id?>>
                                 <span class="title color-blue"><?= $row['md_created'] ?></span>

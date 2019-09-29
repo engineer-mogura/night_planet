@@ -150,11 +150,11 @@ function crearCastEvents() {
     $(document).off('click', '.archiveLink');
     $(document).off('click', '.updateModeBtn');
     $(document).off('click', '.returnBtn');
+    $(document).off('click', '.saveBtn');
     $(document).off('click', '.deleteBtn');
-    $(document).off('click', '.gallery-deleteBtn');
+    $(document).off('click', '.chancelBtn');
+    $(document).off('click', '.changeBtn');
     $(document).off('change', '#image-file');
-    $(document).off('click', '.gallery-saveBtn');
-    $(document).off('click', '.gallery-chancelBtn');
 }
 
 /**
@@ -2297,33 +2297,32 @@ function initializeShop() {
                         $(diaryCard).find("p[name='created']").text(response['ymd_created']);
                         $(diaryCard).find("p[name='title']").text(response['title']);
                         $(diaryCard).find("p[name='content']").textWithLF(response['content']);
-                        $("#modal-diary").find(".like-count").text(response['diary__likes'].length);
-                        var images = [];
-                        $.each(response, function(key, value) {
+                        $("#modal-diary").find(".like-count").text(response['diary_likes'].length);
 
-                            if(key.match(/image[0-9]*/) && value) {
-                                // 値が空じゃない、かつnullじゃない時プッシュする
-                                value !== '' && value !== null ?
-                                images.push({"id":response['id'],
-                                                "path":diaryDir + '/'+ value,
-                                                "key":key,
-                                                "name":value}) :'';
-                            }
-                        })
                         // 画像表示するグリッドを決定する
-                        if(images.length > 0) {
+                        if(response['gallery'].length > 0) {
                             var figure = $(diaryCard).find('figure');
                             var imgClass = "";
-                            $.each(images, function(key, value) {
+                            $.each(response['gallery'], function(key, value) {
                                 var cloneFigure = $(figure).clone(true).removeClass().insertAfter(figure);
-                                $(cloneFigure).find('a').attr({'href': value['path']});
-                                $(cloneFigure).find('img').attr({'src': value['path']});
+                                $(cloneFigure).find('a').attr({'href': value['file_path']});
+                                $(cloneFigure).find('img').attr({'src': value['file_path']});
                             })
                             $(diaryCard).find('figure.hide').remove();
                             initPhotoSwipeFromDOM('.my-gallery');
                         }
                         // キャストの場合JSONデータを保持する
                         if(userType == 'cast') {
+                            var images = [];
+                            $.each(response['gallery'], function(key, value) {
+
+                                // プッシュする
+                                images.push({"id":response['id'],
+                                    "path": value['file_path'],
+                                    "key": key,
+                                    "name": value
+                                });
+                            })
                             var dir = $("#diary").find("input[name='cast_dir']").val();
                             $("#delete-diary").find("input[name='id']").val(response['id']);
                             $("#delete-diary").find("input[name='dir_path']").val(dir + response['dir']);
@@ -2668,7 +2667,7 @@ function initializeCast() {
     /* トップ画像 関連処理 START */
     if($("#top-image").length) {
         // トップ画像 変更、やめるボタン押した時
-        $(document).on("click", ".top-image-changeBtn",function() {
+        $(document).on("click", ".changeBtn",function() {
             // 画像をクリアする
             $('#top-image').find('#top-image-show').attr({width:'',height:'',src:''});
             $('#top-image').find('[name="top_image"]').val('');
@@ -2686,7 +2685,7 @@ function initializeCast() {
 
         });
         // トップ画像 登録ボタン押した時
-        $(document).on("click", ".top-image-saveBtn",function() {
+        $(document).on("click", ".saveBtn",function() {
 
             //ファイル選択済みかチェック
             var fileCheck = $("#top-image-file").val().length;
@@ -2716,10 +2715,10 @@ function initializeCast() {
             }
             //通常のアクションをキャンセルする
             event.preventDefault();
-            fileUpAjaxCommon($form, formData, $("#top-image"));
+            fileUpAjaxCommon($form, formData, $("#wrapper"));
         });
         // トップ画像 削除ボタン押した時
-        $(document).on("click", ".top-image-deleteBtn",function() {
+        $(document).on("click", ".deleteBtn",function() {
 
             if (!confirm('トップ画像を削除してもよろしいですか？')) {
                 return false;
@@ -2729,7 +2728,7 @@ function initializeCast() {
 
             //通常のアクションをキャンセルする
             event.preventDefault();
-            ajaxCommon($form, $("#top-image"));
+            ajaxCommon($form, $("#wrapper"));
         });
     }
     /* トップ画像 関連処理 END */
@@ -2976,16 +2975,15 @@ function initializeCast() {
     /* ギャラリー 画面 START */
     if($("#gallery").length) {
         // ギャラリー 削除ボタン押した時
-        $(document).on("click", ".gallery-deleteBtn",function() {
+        $(document).on("click", ".deleteBtn",function() {
 
-            var json = $(this).data('delete');
+            var filePath = $(this).data('delete');
 
             if (!confirm('選択したギャラリーを削除してもよろしいですか？')) {
                 return false;
             }
             var $form = $('form[id="delete-gallery"]');
-            $($form).find("input[name='key']").val(json.key);
-            $($form).find("input[name='name']").val(json.name);
+            $($form).find("input[name='file_path']").val(filePath);
 
             //通常のアクションをキャンセルする
             event.preventDefault();
@@ -3029,7 +3027,7 @@ function initializeCast() {
 
         });
         // ギャラリー 登録ボタン押した時
-        $(document).on("click", ".gallery-saveBtn",function() {
+        $(document).on("click", ".saveBtn",function() {
 
             //ファイル選択済みかチェック
             var fileCheck = $("#image-file").val().length;
@@ -3066,7 +3064,7 @@ function initializeCast() {
 
         });
         // ギャラリー やめるボタン押した時
-        $(document).on("click", ".gallery-chancelBtn",function() {
+        $(document).on("click", ".chancelBtn",function() {
             // newタグが付いたファイルを表示エリアから削除する
             $('#gallery').find('.card-img.new').remove();
             // フォーム入力も削除する

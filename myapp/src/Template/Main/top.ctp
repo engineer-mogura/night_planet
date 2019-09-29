@@ -67,28 +67,16 @@
 					<?php if (count($diarys) > 0): ?>
 						<ul id="cast-new-diary" class="collection z-depth-3">
 							<?php foreach ($diarys as $key => $value): ?>
-							<?php 
-								$image_count = 0;
-								foreach ($imageCol as $key => $col) {
-									if(!empty($value->get($col))) {
-									++$image_count;
-									}
-								}
-								$path = DS.PATH_ROOT['IMG'].DS.$value->cast->shop['area']
-									.DS.$value->cast->shop['genre'].DS.$value->cast->shop['dir'].DS.PATH_ROOT['CAST']
-									.DS.$value->cast['dir'].DS.PATH_ROOT['PROFILE'];
-							?>
-							<?php !empty($value->cast->icon)? $imgPath = $path.DS.$value->cast['icon'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
 								<li class="linkbox collection-item avatar">
-									<img src="<?= $imgPath ?>" alt="" class="circle">
+									<img src="<?= $value->icon ?>" alt="" class="circle">
 									<span class="title color-blue"><?= $value->created->nice()?></span>
-									<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$image_count?></span>
+									<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$value->gallery_count?></span>
 									<p><span class="color-blue"><?=$value->cast['nickname']?> </span>
 										<span class="color-blue"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
 										.' '.$value->cast->shop['name']?></span><br>
 										<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
-									<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->diary__likes)?></span>
+									<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->diary_likes)?></span>
 									<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
 									"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
 								</li>
@@ -111,28 +99,16 @@
 					<?php if (count($diarys) > 0): ?>
 					<ul class="collection z-depth-3">
 						<?php foreach ($diarys as $key => $value): ?>
-						<?php 
-							$image_count = 0;
-							foreach ($imageCol as $key => $col) {
-								if(!empty($value->get($col))) {
-								++$image_count;
-								}
-							}
-							$path = DS.PATH_ROOT['IMG'].DS.$value->cast->shop['area']
-								.DS.$value->cast->shop['genre'].DS.$value->cast->shop['dir'].DS.PATH_ROOT['CAST']
-								.DS.$value->cast['dir'].DS.PATH_ROOT['PROFILE'];
-						?>
-						<?php !empty($value->cast->icon)? $imgPath = $path.DS.$value->cast['icon'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
 							<li class="linkbox collection-item avatar">
-								<img src="<?= $imgPath ?>" alt="" class="circle">
+								<img src="<?= $value->icon ?>" alt="" class="circle">
 								<span class="title color-blue"><?= $value->created->nice()?></span>
-								<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$image_count?></span>
+								<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$gallery_count?></span>
 								<p><span class="color-blue"><?=$value->cast['nickname']?> </span>
 									<span class="color-blue"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
 									.' '.$value->cast->shop['name']?></span><br>
 									<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 								</p>
-								<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->diary__likes)?></span>
+								<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->diary_likes)?></span>
 								<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
 								"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
 							</li>

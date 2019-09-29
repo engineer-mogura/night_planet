@@ -60,6 +60,7 @@ return [
 		'IMAGE'=> 'image',
 		'PROFILE'=> 'profile',
 		'CACHE'=> 'cache',
+		'BACKUP'=> 'backup',
 		'IMG'=> 'img', // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える
 		'COMMON'=> 'common',
 		'SHOP'=> 'shop',

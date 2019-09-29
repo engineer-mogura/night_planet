@@ -114,6 +114,10 @@ class OwnersController extends AppController
                 if ($owner) {
                     // セッションにユーザー情報を保存する
                     $this->Auth->setUser($owner);
+                    $this->Auth->setUser($cast);
+                    Log::info($this->Util->setAccessLog(
+                        $owner, $this->request->params['action']), 'access');
+
                 // TODO: 本来ログイン後は、元々のURLに飛ばしたい所だけど、固定でオーナーのトップ画面にする。
                 // AuthComponent.loginRedirectでURLの固定が難しい。
                 // 何かいい方法があれば...。
@@ -139,6 +143,11 @@ class OwnersController extends AppController
 
     public function logout()
     {
+        $auth = $this->request->session()->read('Auth.Owner');
+
+        Log::info($this->Util->setAccessLog(
+            $auth, $this->request->params['action']), 'access');
+
         // レイアウトを使用しない
         $this->viewBuilder()->autoLayout(false);
         $this->Flash->success(COMMON_M['LOGGED_OUT']);

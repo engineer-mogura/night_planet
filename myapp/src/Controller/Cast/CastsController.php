@@ -1,10 +1,11 @@
 <?php
 namespace App\Controller\Cast;
 
+use Cake\Log\Log;
+use PDOException;
 use Cake\I18n\Time;
 use Cake\Event\Event;
 use RuntimeException;
-use PDOException;
 use Token\Util\Token;
 use Cake\Mailer\Email;
 use Cake\Core\Configure;
@@ -215,32 +216,38 @@ class CastsController extends AppController
                 $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
                 // ディクレトリ取得
                 $dir = new Folder($dirPath, true, 0755);
+
+                // ファイルは１つのみだけど配列で取得する
+                $files = glob($dir->path.DS.'*.*');
+
                 // 前のファイル取得
-                $fileBefor = new File($dirPath . DS .$cast->icon, true, 0755);
+                $fileBefor = new File($files[0], true, 0755);
 
                 $file = $this->request->data['image'];
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
                     $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
                     try {
-                        if(file_exists($fileBefor->path) && !empty($cast->icon)) {
+                        if(file_exists($fileBefor->path) && count($files) > 0) {
                             // ロールバック用のファイルサイズチェック
                             if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
                                 throw new RuntimeException('ファイルサイズが大きすぎます。');
                             }
                             // 一時ファイル作成
-                            if (!$fileBefor->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name)) {
+                            if (!$fileBefor->copy(preg_replace('/(\/\/)/', '/',
+                                WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name))) {
                                 throw new RuntimeException('バックアップに失敗しました。');
                             }
                             // 一時ファイル取得
-                            $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name);
+                            $tmpFile = new File(preg_replace('/(\/\/)/', '/',
+                                WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name));
                         }
-                        $cast->icon = $this->Util->file_upload($this->request->getData('image'),
+                        $newImageName = $this->Util->file_upload($this->request->getData('image'),
                             ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
                         // ファイル更新の場合は古いファイルは削除
                         if (!empty($fileBefor->name)) {
                             // ファイル名が同じ場合は削除を実行しない
-                            if ($fileBefor->name != $cast->icon) {
+                            if ($fileBefor->name != $newImageName) {
                                 // ファイル削除処理実行
                                 if (!$fileBefor->delete()) {
                                     throw new RuntimeException('ファイルの削除ができませんでした。');
@@ -249,34 +256,24 @@ class CastsController extends AppController
                                 $isRemoved = true;
                             }
                         }
-                        // レコード更新実行
-                        if (!$this->Casts->save($cast)) {
-                            throw new RuntimeException('レコードの更新ができませんでした。');
-                        }
+
                         // 更新情報を追加する
-                        // $updates = $this->Updates->newEntity();
-                        // $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールアイコンを更新しました。');
-                        // $updates->set('shop_id', $this->Auth->user('shop_id'));
-                        // $updates->set('cast_id', $this->Auth->user('id'));
-                        // $updates->set('type', SHOP_MENU_NAME['WORK_SCHEDULE']);
-                        // // レコード更新実行
-                        // if (!$this->Updates->save($updates)) {
-                        //     throw new RuntimeException('レコードの登録ができませんでした。');
-                        // }
+                        $updates = $this->Updates->newEntity();
+                        $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールアイコンを更新しました。');
+                        $updates->set('shop_id', $this->Auth->user('shop_id'));
+                        $updates->set('cast_id', $this->Auth->user('id'));
+                        $updates->set('type', SHOP_MENU_NAME['WORK_SCHEDULE']);
+                        // レコード更新実行
+                        if (!$this->Updates->save($updates)) {
+                            throw new RuntimeException('レコードの登録ができませんでした。');
+                        }
 
                     } catch (RuntimeException $e) {
                         // ファイルを削除していた場合は復元する
                         if ($isRemoved) {
                             $tmpFile->copy($file->path);
                         }
-                        // ファイルがアップロードされていた場合は削除を行う
-                        if($owner->isDirty('image')) {
-                            $file = new File($dirPath . DS .$owner->image, true, 0755);
-                            // 一時ファイルがあれば削除する
-                            if (isset($file) && file_exists($file->path)) {
-                                $file->delete();// tmpファイル削除
-                            }
-                        }
+
                         // 一時ファイルがあれば削除する
                         if (isset($tmpFile) && file_exists($tmpFile->path)) {
                             $tmpFile->delete();// tmpファイル削除
@@ -347,13 +344,30 @@ class CastsController extends AppController
                 }
             }
 
+            $icons = array();
+            $dirPath = preg_replace('/(\/\/)/', '/',
+                WWW_ROOT.$this->viewVars['userInfo']['profile_path']);
+
+            // ディクレトリ取得
+            $dir = new Folder($dirPath, true, 0755);
+
+            // ファイルは１つのみだけど配列で取得する
+            $files = glob($dir->path.DS.'*.*');
+
+            foreach( $files as $file ) {
+                $timestamp = date('Y/m/d H:i', filemtime($file));
+                array_push($icons, array(
+                    "file_path"=>$this->viewVars['userInfo']['profile_path'].DS.(basename( $file ))
+                    ,"date"=>$timestamp));
+            }
+
             $cast = $this->Casts->get($id);
             // 作成するセレクトボックスを指定する
             $masCodeFind = array('time','constellation','blood_type','age');
             // セレクトボックスを作成する
             $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
-            $this->set(compact('cast','selectList'));
+            $this->set(compact('cast','selectList', 'icons'));
             $this->render('/Cast/Casts/profile');
             $response = array(
                 'html' => $this->response->body(),
@@ -365,13 +379,30 @@ class CastsController extends AppController
             return;
         }
 
+        $icons = array();
+        $dirPath = preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$this->viewVars['userInfo']['profile_path']);
+
+        // ディクレトリ取得
+        $dir = new Folder($dirPath, true, 0755);
+
+        // ファイルは１つのみだけど配列で取得する
+        $files = glob($dir->path.DS.'*.*');
+
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($icons, array(
+                "file_path"=>$this->viewVars['userInfo']['profile_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
+        }
+
         $cast = $this->Casts->get($id);
         // 作成するセレクトボックスを指定する
         $masCodeFind = array('time','constellation','blood_type','age');
         // セレクトボックスを作成する
         $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
-        $this->set(compact('cast', 'selectList'));
+        $this->set(compact('cast', 'selectList', 'icons'));
         $this->render();
     }
 
@@ -382,9 +413,23 @@ class CastsController extends AppController
      */
     public function topImage()
     {
-        $id = $this->request->getSession()->read('Auth.Cast.id');
-        $cast = $this->Casts->get($id);
-        $this->set(compact('cast'));
+
+        $gallery = array();
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['userInfo']['top_image_path'])
+            , true, 0755);
+
+        // ファイルは１つのみだけど配列で取得する
+        $files = glob($dir->path.DS.'*.*');
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$this->viewVars['userInfo']['top_image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
+        }
+        $this->set(compact('gallery'));
         $this->render();
     }
 
@@ -405,42 +450,44 @@ class CastsController extends AppController
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // ユーザーID
-        $dirPath = preg_replace('/(\/\/)/', '/',
+        $dir = preg_replace('/(\/\/)/', '/',
             WWW_ROOT.$this->viewVars['userInfo']['top_image_path']);
 
-        $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
         // ディクレトリ取得
-        $dir = new Folder($dirPath, true, 0755);
+        $dir = new Folder($dir, true, 0755);
+
+        // ファイルは１つのみだけど配列で取得する
+        $files = glob($dir->path.DS.'*.*');
+
         // 前のファイル取得
-        $fileBefor = new File($dirPath . DS .$cast->top_image, true, 0755);
+        $fileBefor = new File($files[0], true, 0755);
 
         $file = $this->request->getData('top_image_file');
         // ファイルが存在する、かつファイル名がblobの画像のとき
         if (!empty($file["name"]) && $file["name"] == 'blob') {
             $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
             try {
-                if(file_exists($fileBefor->path) && !empty($cast->top_image)) {
+                if(file_exists($fileBefor->path) && count($files) > 0) {
                     // ロールバック用のファイルサイズチェック
                     if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
                         throw new RuntimeException('ファイルサイズが大きすぎます。');
                     }
-
                     // 一時ファイル作成
-                    if (!$fileBefor->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name)) {
+                    if (!$fileBefor->copy(preg_replace('/(\/\/)/', '/',
+                        WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name))) {
                         throw new RuntimeException('バックアップに失敗しました。');
                     }
-
                     // 一時ファイル取得
-                    $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name);
+                    $tmpFile = new File(preg_replace('/(\/\/)/', '/',
+                        WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name));
                 }
 
-                $cast->top_image = $this->Util->file_upload($this->request->getData('top_image_file'),
+                $newImageName = $this->Util->file_upload($this->request->getData('top_image_file'),
                     ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
                 // ファイル更新の場合は古いファイルは削除
                 if (!empty($fileBefor->name)) {
                     // ファイル名が同じ場合は削除を実行しない
-                    if ($fileBefor->name != $cast->top_image) {
+                    if ($fileBefor->name != $newImageName) {
                         // ファイル削除処理実行
                         if (!$fileBefor->delete()) {
                             throw new RuntimeException('ファイルの削除ができませんでした。');
@@ -449,35 +496,27 @@ class CastsController extends AppController
                         $isRemoved = true;
                     }
                 }
-
-                // レコード更新実行
-                if (!$this->Casts->save($cast)) {
-                    throw new RuntimeException('レコードの更新ができませんでした。');
-                }
-                // 更新情報を追加する
-                $updates = $this->Updates->newEntity();
-                $updates->set('content', $this->Auth->user('nickname').'さんがトップ画像を変更しました。');
-                $updates->set('shop_id', $this->Auth->user('shop_id'));
-                $updates->set('cast_id', $this->Auth->user('id'));
-                $updates->set('type', SHOP_MENU_NAME['CAST_TOP_IMAGE']);
-                // レコード更新実行
-                if (!$this->Updates->save($updates)) {
-                    throw new RuntimeException('レコードの登録ができませんでした。');
+                // 更新した場合
+                if($isRemoved) {
+                    // 更新情報を追加する
+                    $updates = $this->Updates->newEntity();
+                    $updates->set('content', $this->Auth->user('nickname').'さんがトップ画像を変更しました。');
+                    $updates->set('shop_id', $this->Auth->user('shop_id'));
+                    $updates->set('cast_id', $this->Auth->user('id'));
+                    $updates->set('type', SHOP_MENU_NAME['CAST_TOP_IMAGE']);
+                    // レコード更新実行
+                    if (!$this->Updates->save($updates)) {
+                        throw new RuntimeException('レコードの登録ができませんでした。');
+                    }
                 }
 
             } catch (RuntimeException $e) {
+
                 // ファイルを削除していた場合は復元する
                 if ($isRemoved) {
                     $tmpFile->copy($file->path);
                 }
-                // ファイルがアップロードされていた場合は削除を行う
-                if($cast->isDirty('top_image')) {
-                    $file = new File($dirPath . DS .$cast->top_image, true, 0755);
-                    // 一時ファイルがあれば削除する
-                    if (isset($file) && file_exists($file->path)) {
-                        $file->delete();// tmpファイル削除
-                    }
-                }
+
                 // 一時ファイルがあれば削除する
                 if (isset($tmpFile) && file_exists($tmpFile->path)) {
                     $tmpFile->delete();// tmpファイル削除
@@ -503,9 +542,83 @@ class CastsController extends AppController
             $tmpFile->delete();
         }
 
-        $cast = $this->Casts->get(['id' => $this->viewVars['shopInfo']['id']]);
-        $this->set(compact('cast'));
-        $this->render('/Element/shopEdit/top-image');
+        $gallery = array();
+
+        // ファイルは１つのみだけど配列で取得する
+        $files = glob($dir->path.DS.'*.*');
+
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$this->viewVars['userInfo']['top_image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
+        }
+        $this->set(compact('gallery'));
+        $this->render('/Cast/Casts/top_image');
+        $response = array(
+            'html' => $this->response->body(),
+            'error' => $errors,
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+        return;
+    }
+
+    /**
+     * トップ画像 削除押下処理
+     *
+     * @return void
+     */
+    public function deleteTopImage()
+    {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
+        $flg = true; // 返却フラグ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.Cast');
+
+        try {
+
+            // ディクレトリ取得
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$this->viewVars['userInfo']['top_image_path'])
+               , true, 0755);
+
+            $files = glob($dir->path.DS.'*.*');
+            // 削除対象ファイルを取得
+            $file = new File(preg_replace('/(\/\/)/', '/', 
+                $files[0]));
+
+            // 日記ファイル削除処理実行
+            if (!$file->delete()) {
+                throw new RuntimeException('ファイルの削除ができませんでした。');
+            }
+
+        } catch (RuntimeException $e) {
+
+            $this->log($this->Util->setLog($auth, $e));
+            $flg = false;
+        }
+        // 例外が発生している場合にメッセージをセットして返却する
+        if (!$flg) {
+            $message = RESULT_M['DELETE_FAILED'];
+            $response = array(
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        // 空の配列
+        $gallery = array();
+
+        $this->set(compact('gallery'));
+        $this->render('/Cast/Casts/top_image');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -523,18 +636,30 @@ class CastsController extends AppController
      */
     public function gallery()
     {
-        $id = $this->request->getSession()->read('Auth.Cast.id');
-        $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
 
-        $cast = $this->Casts->find('all')->select($imageCol)->where(['id' => $id])->first();
-        $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // 画像リストを作成する
-        for ($i = 0; $i < count($imageCol); $i++) {
-            if (!empty($cast[$imageCol[$i]])) {
-                array_push($imageList, ['key'=>$imageCol[$i],'name'=>$cast[$imageCol[$i]]]);
-            }
+        $gallery = array();
+
+        /// 更新日時順で並び替える関数
+        $sort_by_lastmod = function($a, $b) {
+            return filemtime($b) - filemtime($a);
+        };
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['userInfo']['image_path'])
+            , true, 0755);
+
+        /// 並び替えして出力
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $sort_by_lastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$this->viewVars['userInfo']['image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
         }
-        $this->set(compact('imageList'));
+
+        $this->set(compact('gallery'));
         $this->render();
     }
 
@@ -635,21 +760,15 @@ class CastsController extends AppController
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
-        $tmpDir = null; // バックアップ用
         $dirPath = preg_replace('/(\/\/)/', '/',
             WWW_ROOT.$this->viewVars['userInfo']['image_path']);
         $files = array();
         // 対象ディレクトリパス取得
         $dir = new Folder($dirPath, true, 0755);
-        // キャスト情報取得
-        $cast = $this->Casts->get($id);
 
         // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
         ($files_befor = json_decode($this->request->getData("gallery_befor"), true)) > 0 ? : $files_befor = array();
         $fileMax = PROPERTY['FILE_MAX'];
-        // カラム「image*」を格納する
-        $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
 
         try {
 
@@ -663,17 +782,11 @@ class CastsController extends AppController
                 throw new RuntimeException('ディレクトリサイズが大きすぎます。');
             }
 
-            // 一時ディレクトリ作成
-            $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
-            // 一時ディレクトリにバックアップ実行
-            if (!$dir->copy($tmpDir->path)) {
-                throw new RuntimeException('バックアップに失敗しました。');
-            }
-
             // 追加画像がある場合
             if (isset($this->request->data["image"])) {
                 $files = $this->request->data['image'];
             }
+
             foreach ($files as $key => $file) {
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
@@ -682,26 +795,14 @@ class CastsController extends AppController
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
 
-                    // ファイル名が同じ場合は処理をスキップする
+                    // ファイル名が同じ場合は重複フラグをセットする
                     if ($convertFile === false) {
                         $isDuplicate = true;
-                        continue;
                     }
 
-                    // カラムimage1～image8の空いてる場所に入れる
-                    for ($i = 0; $i < $fileMax; $i++) {
-                        if (empty($cast->get($imageCol[$i]))) {
-                            $cast->set($imageCol[$i], $convertFile);
-                            break;
-                        }
-                    }
                 }
             }
 
-            // レコード更新実行
-            if (!$this->Casts->save($cast)) {
-                throw new RuntimeException('レコードの更新ができませんでした。');
-            }
             // 更新情報を追加する
             $updates = $this->Updates->newEntity();
             $updates->set('content', $this->Auth->user('nickname').'さんがギャラリーを追加しました。');
@@ -720,16 +821,7 @@ class CastsController extends AppController
 
         // 例外が発生している場合にメッセージをセットして返却する
         if (!$flg) {
-            if (file_exists($tmpDir->path)) {
-                // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
-                $files = $dir->find('.*\.*');
-                foreach ($files as $file) {
-                    $file = new File($dir->path . DS . $file);
-                    $file->delete(); // このファイルを削除します
-                }
-                $tmpDir->copy($dir->path);
-                $tmpDir->delete();// tmpフォルダ削除
-            }
+
             $message = RESULT_M['UPDATE_FAILED'];
             $response = array(
                 'success' => $flg,
@@ -738,20 +830,30 @@ class CastsController extends AppController
             $this->response->body(json_encode($response));
             return;
         }
-        // フォルダを削除
-        if (file_exists($tmpDir->path)) {
-            $tmpDir->delete();
+
+        $gallery = array();
+
+        /// 更新日時順で並び替える関数
+        $sort_by_lastmod = function($a, $b) {
+            return filemtime($b) - filemtime($a);
+        };
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['userInfo']['image_path'])
+            , true, 0755);
+
+        /// 並び替えして出力
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $sort_by_lastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$this->viewVars['userInfo']['image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
         }
-        $cast = $this->Casts->get($id);
-        $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
-        $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // 画像リストを作成する
-        foreach ($imageCol as $key => $value) {
-            if (!empty($cast[$imageCol[$key]])) {
-                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$cast[$imageCol[$key]]]);
-            }
-        }
-        $this->set(compact('imageList'));
+
+        $this->set(compact('gallery'));
         $this->render('/Cast/Casts/gallery');
         $response = array(
             'html' => $this->response->body(),
@@ -775,59 +877,29 @@ class CastsController extends AppController
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
         $flg = true; // 返却フラグ
-        $isRemoved = false; // ファイル削除フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
-        $tmpFile = null; // バックアップ用
 
         try {
-            $del_path = preg_replace('/(^\/)/', '', $this->viewVars['userInfo']['image_path']);
+
             // 削除対象ファイルを取得
-            $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
+            $file = new File(preg_replace('/(\/\/)/', '/', 
+                WWW_ROOT. $this->request->getData('file_path')));
 
             // 削除対象ファイルパス存在チェック
             if (!file_exists($file->path)) {
                 throw new RuntimeException('ファイルが存在しません。');
             }
 
-            // ロールバック用のファイルサイズチェック
-            if ($file->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
-                throw new RuntimeException('ファイルサイズが大きすぎます。');
-            }
-
-            // 一時ファイル作成
-            if (!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
-                throw new RuntimeException('画像のバックアップに失敗しました。');
-            }
-
-            // 一時ファイル取得
-            $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name);
-
             // 日記ファイル削除処理実行
             if (!$file->delete()) {
                 throw new RuntimeException('ファイルの削除ができませんでした。');
             }
-            // ファイル削除フラグを立てる
-            $isRemoved = true;
-            // 更新対象レコード取得
-            $cast = $this->Casts->get($id);
-            $cast->set($this->request->getData('key'), "");
-            // レコード更新実行
-            if (!$this->Casts->save($cast)) {
-                throw new RuntimeException('レコードの更新ができませんでした。');
-            }
+
         } catch (RuntimeException $e) {
-            // ファイルを削除していた場合は復元する
-            if ($isRemoved) {
-                $tmpFile->copy($file->path);
-            }
-            // 一時ファイルがあれば削除する
-            if (isset($tmpFile) && file_exists($tmpFile->path)) {
-                $tmpFile->delete();// tmpファイル削除
-            }
+
             $this->log($this->Util->setLog($auth, $e));
             $flg = false;
         }
@@ -842,21 +914,29 @@ class CastsController extends AppController
             return;
         }
 
-        // 一時ファイル削除
-        if (file_exists($tmpFile->path)) {
-            $tmpFile->delete();
+        $gallery = array();
+
+        /// 更新日時順で並び替える関数
+        $sort_by_lastmod = function($a, $b) {
+            return filemtime($b) - filemtime($a);
+        };
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['userInfo']['image_path'])
+            , true, 0755);
+
+        /// 並び替えして出力
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $sort_by_lastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$this->viewVars['userInfo']['image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
         }
 
-        $cast = $this->Casts->get($id);
-        $imageCol = array_values(preg_grep('/^image/', $this->Casts->schema()->columns()));
-        $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // 画像リストを作成する
-        foreach ($imageCol as $key => $value) {
-            if (!empty($cast[$imageCol[$key]])) {
-                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$cast[$imageCol[$key]]]);
-            }
-        }
-        $this->set(compact('imageList'));
+        $this->set(compact('gallery'));
         $this->render('/Cast/Casts/gallery');
         $response = array(
             'html' => $this->response->body(),
@@ -876,7 +956,10 @@ class CastsController extends AppController
     public function diary()
     {
         $id = $this->request->getSession()->read('Auth.Cast.id');
-        $diarys = $this->Util->getDiarys($id);
+
+        $diarys = $this->Util->getDiarys($id
+            , $this->viewVars['userInfo']['diary_path']);
+
         $this->set(compact('diarys'));
         $this->render();
     }
@@ -902,7 +985,7 @@ class CastsController extends AppController
 
         $fileMax = PROPERTY['FILE_MAX']; // ファイルアップの制限数
         $files_befor = array(); // 新規なので空の配列
-        $imageCol = array_values(preg_grep("/^image/", $this->Diarys->schema()->columns()));
+        //$imageCol = array_values(preg_grep("/^image/", $this->Diarys->schema()->columns()));
 
         // エンティティにマッピングする
 
@@ -943,13 +1026,6 @@ class CastsController extends AppController
                         continue;
                     }
 
-                    // カラムimage1～image8の空いてる場所に入れる
-                    for ($i = 0; $i < $fileMax; $i++) {
-                        if (empty($diary->get($imageCol[$i]))) {
-                            $diary->set($imageCol[$i], $convertFile);
-                            break;
-                        }
-                    }
                 }
             }
             // レコード更新実行
@@ -986,7 +1062,9 @@ class CastsController extends AppController
             return;
         }
 
-        $diarys = $this->Util->getDiarys($id);
+        $diarys = $this->Util->getDiarys($id
+            , $this->viewVars['userInfo']['diary_path']);
+
         $this->set(compact('cast', 'diarys'));
         $this->render('/Cast/Casts/diary');
         $response = array(
@@ -1011,7 +1089,10 @@ class CastsController extends AppController
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
         $this->confReturnJson(); // json返却用の設定
-        $diary = $this->Util->getDiary($this->request->query["id"]);
+
+        $diary = $this->Util->getDiary($this->request->query["id"]
+            , $this->viewVars['userInfo']['diary_path']);
+
         $this->response->body(json_encode($diary));
         return;
     }
@@ -1076,8 +1157,9 @@ class CastsController extends AppController
 
             // 既に登録された画像がある場合は、ファイルのバックアップを取得
             if (count($image_befor) > 0) {
+
                 // 一時ディレクトリ作成
-                $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+                $tmpDir = new Folder(WWW_ROOT.$this->viewVars['userInfo']['tmp_path'] . DS . time(), true, 0777);
                 // 一時ディレクトリにバックアップ実行
                 if (!$dir->copy($tmpDir->path)) {
                     throw new RuntimeException('バックアップに失敗しました。');
@@ -1085,27 +1167,13 @@ class CastsController extends AppController
             }
             // 削除する画像分処理する
             foreach ($delFiles as $key => $file) {
-                $delFile = new File($dir->path . DS .$file['name']);
+                $delFile = new File(WWW_ROOT . DS .$file['path']);
                 // ファイル削除処理実行
                 if (!$delFile->delete()) {
                     throw new RuntimeException('画像の削除に失敗しました。');
                 }
-                $diary->set($file['key'], "");
             }
-            $moveImageList = array(); // 移動対象リスト
-            // 削除したカラムの空きを詰める。
-            for ($i = 0; $i < $fileMax; $i++) {
-                if (!empty($diary->get($imageCol[$i]))) {
-                    array_push($moveImageList, $diary->get($imageCol[$i]));
-                    $diary->set($imageCol[$i], '');
-                }
-            }
-            // カラムimage1から詰めてセットする
-            for ($i = 0; $i < count($moveImageList); $i++) {
-                if (empty($diary->get($imageCol[$i]))) {
-                    $diary->set($imageCol[$i], $moveImageList[$i]);
-                }
-            }
+
             // 追加画像がある場合
             if (isset($this->request->data["image"])) {
                 $files = $this->request->data['image'];
@@ -1123,16 +1191,9 @@ class CastsController extends AppController
                         $isDuplicate = true;
                         continue;
                     }
-
-                    // カラムimage1～image8の空いてる場所に入れる
-                    for ($i = 0; $i < $fileMax; $i++) {
-                        if (empty($diary->get($imageCol[$i]))) {
-                            $diary->set($imageCol[$i], $convertFile);
-                            break;
-                        }
-                    }
                 }
             }
+
             // レコード更新実行
             if (!$this->Diarys->save($diary)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
@@ -1169,8 +1230,9 @@ class CastsController extends AppController
         if (file_exists($tmpDir->path)) {
             $tmpDir->delete();// tmpフォルダ削除
         }
+        $diarys = $this->Util->getDiarys($id
+            , $this->viewVars['userInfo']['diary_path']);
 
-        $diarys = $this->Util->getDiarys($id);
         $this->set(compact('diarys'));
         $this->render('/Cast/Casts/diary');
         $response = array(
@@ -1219,11 +1281,13 @@ class CastsController extends AppController
             }
 
             // 一時ディレクトリ作成
-            $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+            $tmpDir = new Folder(
+                WWW_ROOT.$this->viewVars['userInfo']['tmp_path'] . DS . time(), true, 0777);
             // 一時ディレクトリにバックアップ実行
             if (!$dir->copy($tmpDir->path)) {
                 throw new RuntimeException('バックアップに失敗しました。');
             }
+
             // 日記ディレクトリ削除処理実行
             if (!$dir->delete()) {
                 throw new RuntimeException('ディレクトリの削除ができませんでした。');
@@ -1263,10 +1327,10 @@ class CastsController extends AppController
         if (file_exists($tmpDir->path)) {
             $tmpDir->delete();
         }
+        $diarys = $this->Util->getDiarys($id
+            , $this->viewVars['userInfo']['diary_path']);
 
-        $diarys = $this->Util->getDiarys($id);
-        $cast = $this->Casts->find('all')->where(['id' => $id])->first();
-        $this->set(compact('cast', 'diarys'));
+        $this->set(compact('diarys'));
         $this->render('/Cast/Casts/diary');
         $response = array(
             'html' => $this->response->body(),
@@ -1293,6 +1357,8 @@ class CastsController extends AppController
                 $cast = $this->Auth->identify();
                 if ($cast) {
                     $this->Auth->setUser($cast);
+                    Log::info($this->Util->setAccessLog(
+                        $cast, $this->request->params['action']), 'access');
 
                     return $this->redirect($this->Auth->redirectUrl());
                 }
@@ -1315,6 +1381,11 @@ class CastsController extends AppController
 
     public function logout()
     {
+        $auth = $this->request->session()->read('Auth.Cast');
+
+        Log::info($this->Util->setAccessLog(
+            $auth, $this->request->params['action']), 'access');
+
         // レイアウトを使用しない
         $this->viewBuilder()->autoLayout(false);
         $this->Flash->success(COMMON_M['LOGGED_OUT']);

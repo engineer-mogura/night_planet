@@ -15,7 +15,7 @@ class AppController extends \App\Controller\AppController
         $this->Shops = TableRegistry::get('Shops');
         $this->Casts = TableRegistry::get('Casts');
         $this->Diarys = TableRegistry::get('Diarys');
-        $this->Likes = TableRegistry::get('Likes');
+        $this->DiaryLikes = TableRegistry::get('Diary_Likes');
         $this->CastSchedules = TableRegistry::get('Cast_schedules');
         $this->Snss = TableRegistry::get('Snss');
         $this->Updates = TableRegistry::get('Updates');
@@ -51,8 +51,8 @@ class AppController extends \App\Controller\AppController
 
         // ログイン時に許可するアクション
         $access = ['index','editCalendar','profile','topImage','saveTopImage'
-            ,'gallery','saveGallery','sns','deleteGallery','diary','saveDiary'
-            ,'viewDiary','deleteDiary','updateDiary'];
+            ,'deleteTopImage','gallery','saveGallery','sns','deleteGallery','diary'
+            ,'saveDiary','viewDiary','deleteDiary','updateDiary'];
         if (in_array($action, $access)) {
             return true;
         }

@@ -183,6 +183,12 @@ return [
         'skipLog' => [],
         'log' => true,
         'trace' => true,
+        // 2019/09/28 スキップログ追加
+        'skipLog' => ['Cake\Network\Exception\NotFoundException',
+            'Cake\Routing\Exception\MissingControllerException',
+            'Cake\Controller\Exception\MissingActionException',
+            'Cake\Datasource\Exception\RecordNotFoundException',
+        ],
     ],
 
     /**
@@ -348,6 +354,14 @@ return [
             'file' => 'queries',
             'url' => env('LOG_QUERIES_URL', null),
             'scopes' => ['queriesLog'],
+        ],
+        // アクセスログ定義
+        'access' => [
+            'className' => 'Cake\Log\Engine\FileLog',
+            'path' => LOGS,
+            'file' => 'access',
+            'scopes' => 'access',
+            'levels' => [],
         ],
     ],
 

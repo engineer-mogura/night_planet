@@ -10,13 +10,13 @@ use Cake\Validation\Validator;
 /**
  * Owners Model
  *
- * @property \App\Model\Table\ShopsTable|\Cake\ORM\Association\HasMany $Shops
+ * @property |\Cake\ORM\Association\HasMany $Shops
  *
  * @method \App\Model\Entity\Owner get($primaryKey, $options = [])
  * @method \App\Model\Entity\Owner newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Owner[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\Owner|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Owner|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Owner saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Owner patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Owner[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Owner findOrCreate($search, callable $callback = null, $options = [])
@@ -25,7 +25,6 @@ use Cake\Validation\Validator;
  */
 class OwnersTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -43,9 +42,8 @@ class OwnersTable extends Table
         $this->addBehavior('Timestamp');
 
         $this->hasMany('shops', [
-            'foreignKey' => 'owner_id',
+            'foreignKey' => 'owner_id'
         ]);
-
     }
 
     /**
@@ -69,11 +67,6 @@ class OwnersTable extends Table
             ->maxLength('name', 45, '名前が長すぎます。')
             ->requirePresence('name', 'create')
             ->allowEmptyString('name', false);
-
-        $validator
-            ->scalar('icon')
-            ->maxLength('icon', 255)
-            ->allowEmptyFile('icon');
 
         $validator
             ->scalar('role')

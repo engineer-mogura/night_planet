@@ -1190,34 +1190,6 @@ class ShopsController extends AppController
 
                 }
             }
-            // foreach ($files as $key => $file) {
-            //     // ファイルが存在する、かつファイル名がblobの画像のとき
-            //     if (!empty($file["name"]) && $file["name"] == 'blob') {
-            //         $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
-
-            //         // ファイル名を取得する
-            //         $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
-
-            //         // ファイル名が同じ場合は処理をスキップする
-            //         if ($convertFile === false) {
-            //             $isDuplicate = true;
-            //             continue;
-            //         }
-
-            //         // カラムimage1～image8の空いてる場所に入れる
-            //         for ($i = 0; $i < $fileMax; $i++) {
-            //             if (empty($shop->get($imageCol[$i]))) {
-            //                 $shop->set($imageCol[$i], $convertFile);
-            //                 break;
-            //             }
-            //         }
-            //     }
-            // }
-
-            // // レコード更新実行
-            // if (!$this->Shops->save($shop)) {
-            //     throw new RuntimeException('レコードの更新ができませんでした。');
-            // }
 
             // 更新情報を追加する
             $updates = $this->Updates->newEntity();

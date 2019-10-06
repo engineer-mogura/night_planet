@@ -9,6 +9,7 @@ use Cake\Auth\DefaultPasswordHasher;
  *
  * @property int $id
  * @property int $shop_id
+ * @property string $role
  * @property string $name
  * @property string $nickname
  * @property string $email
@@ -20,16 +21,7 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string|null $age
  * @property string|null $message
  * @property string|null $holiday
- * @property string|null $icon
- * @property string|null $top_image
- * @property string|null $image1
- * @property string|null $image2
- * @property string|null $image3
- * @property string|null $image4
- * @property string|null $image5
- * @property string|null $image6
- * @property string|null $image7
- * @property string|null $image8
+ * @property string|null $dir
  * @property string|null $remember_token
  * @property int $status
  * @property int|null $delete_flag
@@ -37,6 +29,9 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \App\Model\Entity\Shop $shop
+ * @property \App\Model\Entity\Diary[] $diarys
+ * @property \App\Model\Entity\CastSchedule[] $cast_schedules
+ * @property \App\Model\Entity\Sns[] $snss
  */
 class Cast extends Entity
 {
@@ -64,23 +59,16 @@ class Cast extends Entity
         'age' => true,
         'message' => true,
         'holiday' => true,
-        'icon' => true,
-        'top_image' => true,
-        'image1' => true,
-        'image2' => true,
-        'image3' => true,
-        'image4' => true,
-        'image5' => true,
-        'image6' => true,
-        'image7' => true,
-        'image8' => true,
         'dir' => true,
         'remember_token' => true,
         'status' => true,
         'delete_flag' => true,
         'created' => true,
         'modified' => true,
-        'shops' => true
+        'shop' => true,
+        'diarys' => true,
+        'cast_schedules' => true,
+        'snss' => true
     ];
 
     /**
@@ -96,7 +84,7 @@ class Cast extends Entity
     protected function _setPassword($value){
         if (strlen($value)) {
             $hasher = new DefaultPasswordHasher();
-    
+
             return $hasher->hash($value);
         }
     }

@@ -10,7 +10,6 @@ use Cake\Auth\DefaultPasswordHasher;
  *
  * @property int $id
  * @property string $name
- * @property string|null $image
  * @property string $role
  * @property string $tel
  * @property string $email
@@ -39,7 +38,6 @@ class Owner extends Entity
      */
     protected $_accessible = [
         'name' => true,
-        'icon' => true,
         'role' => true,
         'tel' => true,
         'email' => true,

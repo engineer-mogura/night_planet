@@ -9,13 +9,14 @@ use Cake\Validation\Validator;
 /**
  * ShopInfos Model
  *
- * @property \App\Model\Table\ShopsTable|\Cake\ORM\Association\BelongsTo $Shops
+ * @property |\Cake\ORM\Association\BelongsTo $Shops
+ * @property |\Cake\ORM\Association\HasMany $ShopInfoLikes
  *
  * @method \App\Model\Entity\ShopInfo get($primaryKey, $options = [])
  * @method \App\Model\Entity\ShopInfo newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\ShopInfo[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\ShopInfo|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\ShopInfo|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\ShopInfo saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\ShopInfo patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\ShopInfo[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\ShopInfo findOrCreate($search, callable $callback = null, $options = [])
@@ -24,7 +25,6 @@ use Cake\Validation\Validator;
  */
 class ShopInfosTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -76,46 +76,6 @@ class ShopInfosTable extends Table
             ->notEmpty('content','内容を入力してください。')
             ->requirePresence('content', 'create')
             ->allowEmptyString('content', false);
-
-        $validator
-            ->scalar('image1')
-            ->maxLength('image1', 100)
-            ->allowEmptyFile('image1');
-
-        $validator
-            ->scalar('image2')
-            ->maxLength('image2', 100)
-            ->allowEmptyFile('image2');
-
-        $validator
-            ->scalar('image3')
-            ->maxLength('image3', 100)
-            ->allowEmptyFile('image3');
-
-        $validator
-            ->scalar('image4')
-            ->maxLength('image4', 100)
-            ->allowEmptyFile('image4');
-
-        $validator
-            ->scalar('image5')
-            ->maxLength('image5', 100)
-            ->allowEmptyFile('image5');
-
-        $validator
-            ->scalar('image6')
-            ->maxLength('image6', 100)
-            ->allowEmptyFile('image6');
-
-        $validator
-            ->scalar('image7')
-            ->maxLength('image7', 100)
-            ->allowEmptyFile('image7');
-
-        $validator
-            ->scalar('image8')
-            ->maxLength('image8', 100)
-            ->allowEmptyFile('image8');
 
         $validator
             ->scalar('dir')

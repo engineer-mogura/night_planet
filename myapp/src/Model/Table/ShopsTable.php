@@ -10,16 +10,21 @@ use Cake\Validation\Validator;
  * Shops Model
  *
  * @property \App\Model\Table\OwnersTable|\Cake\ORM\Association\BelongsTo $Owners
+ * @property \App\Model\Table\CastSchedulesTable|\Cake\ORM\Association\HasMany $CastSchedules
  * @property \App\Model\Table\CastsTable|\Cake\ORM\Association\HasMany $Casts
  * @property \App\Model\Table\CouponsTable|\Cake\ORM\Association\HasMany $Coupons
  * @property \App\Model\Table\JobsTable|\Cake\ORM\Association\HasMany $Jobs
+ * @property \App\Model\Table\ShopInfoLikesTable|\Cake\ORM\Association\HasMany $ShopInfoLikes
  * @property \App\Model\Table\ShopInfosTable|\Cake\ORM\Association\HasMany $ShopInfos
+ * @property \App\Model\Table\SnssTable|\Cake\ORM\Association\HasMany $Snss
+ * @property \App\Model\Table\UpdatesTable|\Cake\ORM\Association\HasMany $Updates
+ * @property \App\Model\Table\WorkSchedulesTable|\Cake\ORM\Association\HasMany $WorkSchedules
  *
  * @method \App\Model\Entity\Shop get($primaryKey, $options = [])
  * @method \App\Model\Entity\Shop newEntity($data = null, array $options = [])
  * @method \App\Model\Entity\Shop[] newEntities(array $data, array $options = [])
  * @method \App\Model\Entity\Shop|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\Shop|bool saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\Shop saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
  * @method \App\Model\Entity\Shop patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
  * @method \App\Model\Entity\Shop[] patchEntities($entities, array $data, array $options = [])
  * @method \App\Model\Entity\Shop findOrCreate($search, callable $callback = null, $options = [])
@@ -28,7 +33,6 @@ use Cake\Validation\Validator;
  */
 class ShopsTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -58,10 +62,16 @@ class ShopsTable extends Table
         $this->hasMany('jobs', [
             'foreignKey' => 'shop_id'
         ]);
+        $this->hasMany('shop_info_likes', [
+            'foreignKey' => 'shop_id'
+        ]);
         $this->hasMany('shop_infos', [
             'foreignKey' => 'shop_id'
         ]);
         $this->hasMany('snss', [
+            'foreignKey' => 'shop_id'
+        ]);
+        $this->hasMany('updates', [
             'foreignKey' => 'shop_id'
         ]);
         $this->hasMany('work_schedules', [
@@ -105,54 +115,9 @@ class ShopsTable extends Table
             ->allowEmptyString('name');
 
         $validator
-            ->scalar('top_image')
-            ->maxLength('top_image', 100)
-            ->allowEmptyFile('top_image');
-
-        $validator
-            ->scalar('image1')
-            ->maxLength('image1', 100)
-            ->allowEmptyFile('image1');
-
-        $validator
-            ->scalar('image2')
-            ->maxLength('image2', 100)
-            ->allowEmptyFile('image2');
-
-        $validator
-            ->scalar('image3')
-            ->maxLength('image3', 100)
-            ->allowEmptyFile('image3');
-
-        $validator
-            ->scalar('image4')
-            ->maxLength('image4', 100)
-            ->allowEmptyFile('image4');
-
-        $validator
-            ->scalar('image5')
-            ->maxLength('image5', 100)
-            ->allowEmptyFile('image5');
-
-        $validator
-            ->scalar('image6')
-            ->maxLength('image6', 100)
-            ->allowEmptyFile('image6');
-
-        $validator
-            ->scalar('image7')
-            ->maxLength('image7', 100)
-            ->allowEmptyFile('image7');
-
-        $validator
-            ->scalar('image8')
-            ->maxLength('image8', 100)
-            ->allowEmptyFile('image8');
-
-        $validator
             ->scalar('catch')
             ->minLength('catch', 5,"キャッチコピーが短すぎます。")
-            ->maxLength('catch', 100,"キャッチコピーは120文字以内にしてください。")
+            ->maxLength('catch', 100,"キャッチコピーは100文字以内にしてください。")
             ->allowEmptyString('catch');
 
         $validator
@@ -168,7 +133,7 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('staff')
-            ->maxLength('staff', 255,"スタッフは120文字以内にしてください。")
+            ->maxLength('staff', 255,"スタッフは255文字以内にしてください。")
             ->allowEmptyString('staff');
 
         $validator
@@ -193,11 +158,6 @@ class ShopsTable extends Table
             ->scalar('credit')
             ->maxLength('credit', 255)
             ->allowEmptyString('credit');
-
-        $validator
-            ->scalar('cast')
-            ->maxLength('cast', 255,"キャストは255文字以内にしてください。")
-            ->allowEmptyString('cast');
 
         $validator
             ->scalar('pref21')

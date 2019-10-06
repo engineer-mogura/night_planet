@@ -10,7 +10,6 @@ use Cake\TestSuite\TestCase;
  */
 class CastsTableTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -25,7 +24,10 @@ class CastsTableTest extends TestCase
      */
     public $fixtures = [
         'app.Casts',
-        'app.Shops'
+        'app.Shops',
+        'app.Diarys',
+        'app.CastSchedules',
+        'app.Snss'
     ];
 
     /**
@@ -68,6 +70,26 @@ class CastsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test validationCastLogin method
+     *
+     * @return void
+     */
+    public function testValidationCastLogin()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test validationProfile method
+     *
+     * @return void
+     */
+    public function testValidationProfile()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

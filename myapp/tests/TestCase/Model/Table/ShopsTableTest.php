@@ -10,7 +10,6 @@ use Cake\TestSuite\TestCase;
  */
 class ShopsTableTest extends TestCase
 {
-
     /**
      * Test subject
      *
@@ -26,10 +25,15 @@ class ShopsTableTest extends TestCase
     public $fixtures = [
         'app.Shops',
         'app.Owners',
+        'app.CastSchedules',
         'app.Casts',
         'app.Coupons',
         'app.Jobs',
-        'app.ShopInfos'
+        'app.ShopInfoLikes',
+        'app.ShopInfos',
+        'app.Snss',
+        'app.Updates',
+        'app.WorkSchedules'
     ];
 
     /**
@@ -82,16 +86,6 @@ class ShopsTableTest extends TestCase
      * @return void
      */
     public function testBuildRules()
-    {
-        $this->markTestIncomplete('Not implemented yet.');
-    }
-
-    /**
-     * Test beforeMarshal method
-     *
-     * @return void
-     */
-    public function testBeforeMarshal()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

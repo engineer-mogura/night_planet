@@ -17,7 +17,6 @@ class OwnersFixture extends TestFixture
     public $fields = [
         'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
         'name' => ['type' => 'string', 'length' => 45, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
-        'image' => ['type' => 'string', 'length' => 100, 'null' => true, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'role' => ['type' => 'string', 'length' => 10, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'tel' => ['type' => 'string', 'length' => 15, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
         'email' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
@@ -49,7 +48,6 @@ class OwnersFixture extends TestFixture
             [
                 'id' => 1,
                 'name' => 'Lorem ipsum dolor sit amet',
-                'image' => 'Lorem ipsum dolor sit amet',
                 'role' => 'Lorem ip',
                 'tel' => 'Lorem ipsum d',
                 'email' => 'Lorem ipsum dolor sit amet',
@@ -59,8 +57,8 @@ class OwnersFixture extends TestFixture
                 'dir' => 'Lorem ipsum dolor sit amet',
                 'remember_token' => 'Lorem ipsum dolor sit amet',
                 'status' => 1,
-                'created' => '2019-08-18 16:13:34',
-                'modified' => '2019-08-18 16:13:34'
+                'created' => '2019-10-06 17:25:57',
+                'modified' => '2019-10-06 17:25:57'
             ],
         ];
         parent::init();

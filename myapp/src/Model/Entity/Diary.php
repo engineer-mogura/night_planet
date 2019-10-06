@@ -36,6 +36,6 @@ class Diary extends Entity
         'created' => true,
         'modified' => true,
         'cast' => true,
-        'diary__likes' => true
+        'diary_likes' => true
     ];
 }

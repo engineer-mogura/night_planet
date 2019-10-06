@@ -62,11 +62,21 @@ class OwnersTableTest extends TestCase
     }
 
     /**
-     * Test validationDefault method
+     * Test validationOwnerRegistration method
      *
      * @return void
      */
-    public function testValidationDefault()
+    public function testValidationOwnerRegistration()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test validationOwnerLogin method
+     *
+     * @return void
+     */
+    public function testValidationOwnerLogin()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

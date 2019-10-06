@@ -12,15 +12,6 @@ use Cake\ORM\Entity;
  * @property string|null $genre
  * @property string|null $dir
  * @property string|null $name
- * @property string|null $top_image
- * @property string|null $image1
- * @property string|null $image2
- * @property string|null $image3
- * @property string|null $image4
- * @property string|null $image5
- * @property string|null $image6
- * @property string|null $image7
- * @property string|null $image8
  * @property string|null $catch
  * @property string|null $tel
  * @property string|null $staff
@@ -29,7 +20,6 @@ use Cake\ORM\Entity;
  * @property string|null $bus_hosoku
  * @property string|null $system
  * @property string|null $credit
- * @property string|null $cast
  * @property string|null $pref21
  * @property string|null $addr21
  * @property string|null $strt21
@@ -37,14 +27,18 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\FrozenTime $modified
  *
  * @property \App\Model\Entity\Owner $owner
+ * @property \App\Model\Entity\CastSchedule[] $cast_schedules
  * @property \App\Model\Entity\Cast[] $casts
  * @property \App\Model\Entity\Coupon[] $coupons
  * @property \App\Model\Entity\Job[] $jobs
+ * @property \App\Model\Entity\ShopInfoLike[] $shop_info_likes
  * @property \App\Model\Entity\ShopInfo[] $shop_infos
+ * @property \App\Model\Entity\Sns[] $snss
+ * @property \App\Model\Entity\Update[] $updates
+ * @property \App\Model\Entity\WorkSchedule[] $work_schedules
  */
 class Shop extends Entity
 {
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -55,21 +49,11 @@ class Shop extends Entity
      * @var array
      */
     protected $_accessible = [
-        'id' => true,
         'owner_id' => true,
         'area' => true,
         'genre' => true,
         'dir' => true,
         'name' => true,
-        'top_image' => true,
-        'image1' => true,
-        'image2' => true,
-        'image3' => true,
-        'image4' => true,
-        'image5' => true,
-        'image6' => true,
-        'image7' => true,
-        'image8' => true,
         'catch' => true,
         'tel' => true,
         'staff' => true,
@@ -78,17 +62,21 @@ class Shop extends Entity
         'bus_hosoku' => true,
         'system' => true,
         'credit' => true,
-        //'cast' => true,
         'pref21' => true,
         'addr21' => true,
         'strt21' => true,
         'created' => true,
         'modified' => true,
         'owner' => true,
+        'cast_schedules' => true,
         'casts' => true,
         'coupons' => true,
         'jobs' => true,
-        'shop_infos' => true
+        'shop_info_likes' => true,
+        'shop_infos' => true,
+        'snss' => true,
+        'updates' => true,
+        'work_schedules' => true
     ];
 
     /**

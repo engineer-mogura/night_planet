@@ -2,17 +2,8 @@
   <?php echo $this->Flash->render(); ?>
   <h5>トップ画像</h5>
   <div id="show-top-image" style="text-align:center">
-    <?php if(!$shop->top_image == "") { ?>
-      <img width="100%" height="300" src="<?= $shopInfo['shop_path'].DS.$shop->top_image ?>" />
-      <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">変更</button>
-      <form id="delete-top-image" name="delete_top_image" method="post" style="display:none;" action="/owner/shops/delete_top_image">
-        <input type="hidden" name="_method" value="POST">
-      </form>
-      <button type="button" class="waves-effect waves-light btn-large top-image-deleteBtn">削除</button>
-    <?php } else { ?>
-      <p>まだ登録されていません。</p>
-      <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">登録</button>
-    <?php } ?>
+    <img width="100%" height="300" src="<?= $shop->top_image ?>" />
+    <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">変更</button>
   </div>
   <form id="save-top-image" name="save_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/save_top_image" style="display:none;">
     <div style="display:none;">

@@ -78,7 +78,7 @@
 						<p class="title" name="title"></p>
 						<p class="content" name="content"></p>
 					</div>
-				</div>s
+				</div>
 			</div>
 		</div>
 	</div>

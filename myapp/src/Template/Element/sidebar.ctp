@@ -1,5 +1,5 @@
-<div class="hide-on-med-and-down sidebar col l4">
-	<div class="section">
+<div class="sidebar col s12 l4">
+	<div class="section hide-on-med-and-down">
 		<!-- シェアボタン START -->
 		<P class="center-align"><span class="color-blue"><?=isset($shop) ? $shop->name : $cast->shop->name?></span>をシェアしよう！</p>
 		<div class="row sharer-modal">
@@ -20,18 +20,7 @@
 		</div>
 		<!-- シェアボタン END -->
 	</div>
-	<!-- バナー１ START -->
-	<div class="card hoverable section blue darken-2">
-		<div class="card-content white-text">
-			<p>バナー１</p>
-		</div>
-	</div>
-	<!-- バナー１ END -->
-	<!-- バナー２ START -->
-	<div class="card hoverable section purple darken-2">
-		<div class="card-content white-text">
-			<p>バナー２</p>
-		</div>
-	</div>
-	<!-- バナー２ END -->
+	<!-- 広告枠 START -->
+	<?= $this->element('banner'); ?>
+	<!-- 広告枠 END -->
 </div>

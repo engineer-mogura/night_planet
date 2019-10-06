@@ -22,13 +22,13 @@ class MainController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users = TableRegistry::get('Users');
-        $this->Shops = TableRegistry::get('Shops');
-        $this->Coupons = TableRegistry::get('Coupons');
-        $this->Casts = TableRegistry::get('Casts');
-        $this->Jobs = TableRegistry::get('Jobs');
-        $this->Shop_infos = TableRegistry::get('Shop_infos');
-        $this->Diarys = TableRegistry::get('Diarys');
+        $this->Users = TableRegistry::get('users');
+        $this->Shops = TableRegistry::get('shops');
+        $this->Coupons = TableRegistry::get('coupons');
+        $this->Casts = TableRegistry::get('casts');
+        $this->Jobs = TableRegistry::get('jobs');
+        $this->Shop_infos = TableRegistry::get('shop_infos');
+        $this->Diarys = TableRegistry::get('diarys');
         $this->MasterCodes = TableRegistry::get("master_codes");
     }
 
@@ -45,7 +45,6 @@ class MainController extends AppController
 
     public function top()
     {
-        $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);

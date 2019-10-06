@@ -4,24 +4,24 @@
     <div class="row">
         <form id="delete-gallery" name="delete_gallery" method="post" style="display:none;" action="/owner/shops/delete_gallery">
             <input type="hidden" name="_method" value="POST">
-            <input type="hidden" name="key" value="">
-            <input type="hidden" name="name" value="">
+            <input type="hidden" name="id" value="">
+            <input type="hidden" name="file_path" value="">
         </form>
         <input type="hidden" name="file_max" value=<?=PROPERTY['FILE_MAX']?>>
-        <?php foreach ($imageList as $key => $image) : ?>
-        <div class="col s6 m4 l3 card-img">
-            <div class="card">
-                <div class="card-image">
-                    <img class="materialboxed" data-caption="" height="auto" width="auto" src="<?=$shopInfo['image_path'].DS.$image['name']?>">
-                    <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped gallery-deleteBtn" data-delete=<?=JSON_ENCODE(['key'=>$image['key'],'name'=>$image['name']])?> data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
+        <?php foreach ($gallery as $key => $image) : ?>
+            <div class="col s6 m4 l3 card-img">
+                <div class="card">
+                    <div class="card-image">
+                        <img class="materialboxed" data-caption="" height="auto" width="auto" src="<?= $image['file_path'] ?>">
+                        <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped gallery-deleteBtn" data-delete=<?=$image['file_path']?> data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
+                    </div>
                 </div>
             </div>
-        </div>
         <?php endforeach; ?>
     </div>
     <form id="save-gallery" name="save_gallery" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/shops/save_gallery">
         <div style="display:none;">
-            <input type="hidden" name="gallery_befor" value='<?=json_encode($imageList); ?>'>
+            <input type="hidden" name="gallery_befor" value='<?=json_encode($gallery); ?>'>
             <input type="hidden" name="_method" value="POST">
         </div>
         <div class="file-field input-field col s12 m6 l6">

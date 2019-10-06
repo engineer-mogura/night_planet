@@ -1,9 +1,3 @@
-<?php
-/**
-* @var \App\View\AppView $this
-* @var \App\Model\Entity\Owner[]|\Cake\Collection\CollectionInterface $owners
-*/
-?>
 <div id="wrapper">
 	<div class="container">
 		<?= $this->Flash->render() ?>
@@ -19,7 +13,7 @@
 								.'?genre='.$shop['genre'].'&name='.$shop['name'];
 ?>
 						<a href="<?=$shop_url?>" target=”_blank” rel="noopener noreferrer"><?=$cast->shop->name?>
-							<img src="<?=isset($shop->top_image) ? $shopPath. DS .$shop->top_image:"/img/common/noimage.jpg" ?>" alt="">
+							<img src="<?=$shop->top_image?>" alt="">
 						</a>
 						</div>
 						<div class="card-content">
@@ -57,7 +51,7 @@
 		</div>
 		<div class="or-button">
 			<?= $this->Html->link('店舗を追加する','owner/owners/shop_add'
-				,['class'=>'waves-effect waves-light btn-large']);?>
+				,['class'=>'waves-effect waves-light btn-large disabled']);?>
 		</div>
 	</div>
 </div>

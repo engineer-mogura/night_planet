@@ -50,7 +50,7 @@
 							<label for="title">タイトル</label>
 						</div>
 						<div class="input-field col s12 m12 l12" style="margin-bottom: 20px;">
-							<textarea id="modal-content" class="validate materialize-textarea" name="content" data-length="250"></textarea>
+							<textarea id="modal-content" class="validate materialize-textarea" name="content" data-length="600"></textarea>
 							<label for="content">内容</label>
 						</div>
 					</div>
@@ -83,18 +83,13 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<div class="card-action like-field">
-			<div class="row">
-				<div class="col s3 m4 l4"><span class="btn-floating waves-effect waves-green btn-flat blue">
-					<i class="material-icons">favorite_border</i></span><span class="like-field-span like-count"></span>
-				</div>
-				<div class="col s5 m4 l4">
-					<button class="modal-action waves-effect waves-light btn-large updateBtn disabled"><i class="material-icons right">update</i>更新</button>
-				</div>
-				<div class="col s4 m4 l4">
-					<button href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</button>
-				</div>
-			</div>
-		</div>
+		<span>
+			<span class="btn-floating waves-effect waves-green btn-flat blue">
+				<i class="material-icons">favorite_border</i>
+			</span>
+			<span class="like-field-span like-count"></span>
+		</span>
+		<a class="modal-action waves-effect waves-light btn updateBtn disabled"><i class="material-icons right">update</i>更新</a>
+		<a href="#!" class="modal-action modal-close waves-effect waves-green btn">閉じる</a>
 	</div>
 </div>

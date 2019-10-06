@@ -13,7 +13,7 @@ return [
 		'NEW_INFO_MAX'=>'4', // 新着情報関連の表示数
 		'FILE_MAX'=>'8', // アップロードファイル数
 		'UPDATE_INFO_DAY_MAX'=>'10', // アップロードファイル数
-		'SHOW_GALLERY_MAX'=>'2', // キャストのギャラリー最大表示数
+		'SHOW_GALLERY_MAX'=>'10', // キャストのギャラリー最大表示数
 	)),
 
 	// 店舗メニュー名
@@ -47,6 +47,7 @@ return [
 		'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
 		'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
 		'CAST_TOP_IMAGE'=> '/img/common/cast/top-image.jpg',
+		'SHOP_TOP_IMAGE'=> '/img/common/shop/top-image.png',
 		'CREDIT'=> '/img/common/credit/',
 		'OWNER'=> 'owner',
 		'USER'=> 'user',
@@ -75,8 +76,8 @@ return [
 	// TODO: リリース前には、パスを本番へ変更する。
 	// WEBアプリケーションパス設定 path.config
 	define('APP_PATH', array(
-		'APP'=> 'https://'. $_SERVER['HTTP_HOST']."/", /** ローカル環境 */
-		'APP_ADMIN'=> 'https://"'. $_SERVER['HTTP_HOST']."/'", /** ローカル環境 */
+		'APP'=> $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['HTTP_HOST']."/", /** ローカル環境 */
+		'APP_ADMIN'=> $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['HTTP_HOST']."/'", /** ローカル環境 */
 		//'APP'=> 'https://devokiyorugo.work/', /** テスト環境 */
 		//'APP_ADMIN'=> 'https://devokiyorugo.work/', /** テスト環境 */
 		//'APP'=> 'https://night-planet.com/', /** 本番環境 */

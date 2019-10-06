@@ -42,15 +42,15 @@ class ShopInfoLikesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('ShopInfos', [
+        $this->belongsTo('shop_infos', [
             'foreignKey' => 'shop_info_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Shops', [
+        $this->belongsTo('shops', [
             'foreignKey' => 'shop_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Users', [
+        $this->belongsTo('users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
@@ -80,9 +80,9 @@ class ShopInfoLikesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['shop_info_id'], 'ShopInfos'));
-        $rules->add($rules->existsIn(['shop_id'], 'Shops'));
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->existsIn(['shop_info_id'], 'shop_infos'));
+        $rules->add($rules->existsIn(['shop_id'], 'shops'));
+        $rules->add($rules->existsIn(['user_id'], 'users'));
 
         return $rules;
     }

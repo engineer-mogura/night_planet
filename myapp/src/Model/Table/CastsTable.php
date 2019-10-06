@@ -42,17 +42,17 @@ class CastsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Shops', [
+        $this->belongsTo('shops', [
             'foreignKey' => 'shop_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('Diarys', [
+        $this->hasMany('diarys', [
             'foreignKey' => 'cast_id'
         ]);
-        $this->hasMany('Cast_Schedules', [
+        $this->hasMany('cast_schedules', [
             'foreignKey' => 'cast_id'
         ]);
-        $this->hasMany('Snss', [
+        $this->hasMany('snss', [
             'foreignKey' => 'cast_id'
         ]);
     }
@@ -91,7 +91,7 @@ class CastsTable extends Table
             ->add('email', [
                 'exists' => [
                     'rule' => function($value, $context) {
-                        return !TableRegistry::get('Casts')->exists(['email' => $value]);
+                        return !TableRegistry::get('casts')->exists(['email' => $value]);
                     },
                     'message' => 'そのメールアドレスは既に登録されています。'
                 ],
@@ -298,7 +298,7 @@ class CastsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
-        $rules->add($rules->existsIn(['shop_id'], 'Shops'));
+        $rules->add($rules->existsIn(['shop_id'], 'shops'));
 
         return $rules;
     }

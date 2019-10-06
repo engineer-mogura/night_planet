@@ -41,11 +41,11 @@ class DiarysTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Casts', [
+        $this->belongsTo('casts', [
             'foreignKey' => 'cast_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('DiaryLikes', [
+        $this->hasMany('diary_likes', [
             'foreignKey' => 'diary_id',
             'joinType' => 'INNER'
         ]);

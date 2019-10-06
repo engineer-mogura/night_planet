@@ -12,13 +12,13 @@ class AppController extends \App\Controller\AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Owners = TableRegistry::get('Owners');
-        $this->Shops = TableRegistry::get('Shops');
-        $this->Coupons = TableRegistry::get('Coupons');
-        $this->Casts = TableRegistry::get('Casts');
-        $this->Jobs = TableRegistry::get('Jobs');
-        $this->Snss = TableRegistry::get('Snss');
-        $this->Updates = TableRegistry::get('Updates');
+        $this->Owners = TableRegistry::get('owners');
+        $this->Shops = TableRegistry::get('shops');
+        $this->Coupons = TableRegistry::get('coupons');
+        $this->Casts = TableRegistry::get('casts');
+        $this->Jobs = TableRegistry::get('jobs');
+        $this->Snss = TableRegistry::get('snss');
+        $this->Updates = TableRegistry::get('updates');
         $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
         $this->CastSchedules = TableRegistry::get("cast_schedules");
@@ -75,7 +75,7 @@ class AppController extends \App\Controller\AppController
         $ownerAccess = ['index','shopAdd','profile'];
 
         // ログイン時に許可する店舗編集画面アクション
-        $shopAccess = ['index','shopEdit','saveTopImage','deleteTopImage','saveCatch','deleteCatch',
+        $shopAccess = ['index','shopEdit','saveTopImage','saveCatch','deleteCatch',
             'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
             'deleteCast','saveTenpo','saveJob','saveSns','saveGallery','deleteGallery','notice','viewNotice',
             'saveNotice','updateNotice','deleteNotice','workSchedule','saveWorkSchedule'];

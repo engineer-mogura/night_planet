@@ -49,7 +49,7 @@
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
 </head>
-  <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = "/img/common/noimage.jpg"; ?>
+  <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = PATH_ROOT['NO_IMAGE02']; ?>
   <?php $id = $this->request->getSession()->read('Auth.User.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.User.role') ?>
 <body id="user-default">

@@ -54,7 +54,7 @@ class UsersController extends AppController
 
     public function login()
     {
-        $CastsTable = TableRegistry::get('Casts');
+        $CastsTable = TableRegistry::get('casts');
 
         if ($this->request->is('post')) {
 

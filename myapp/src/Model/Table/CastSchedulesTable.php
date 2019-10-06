@@ -43,15 +43,15 @@ class CastSchedulesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Shops', [
+        $this->belongsTo('shops', [
             'foreignKey' => 'shop_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Casts', [
+        $this->belongsTo('casts', [
             'foreignKey' => 'cast_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('EventTypes', [
+        $this->belongsTo('event_types', [
             'foreignKey' => 'event_type_id'
         ]);
     }
@@ -122,9 +122,9 @@ class CastSchedulesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['shop_id'], 'Shops'));
-        $rules->add($rules->existsIn(['cast_id'], 'Casts'));
-        $rules->add($rules->existsIn(['event_type_id'], 'EventTypes'));
+        $rules->add($rules->existsIn(['shop_id'], 'shops'));
+        $rules->add($rules->existsIn(['cast_id'], 'casts'));
+        $rules->add($rules->existsIn(['event_type_id'], 'event_types'));
 
         return $rules;
     }

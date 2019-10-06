@@ -45,26 +45,26 @@ class ShopsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Owners', [
+        $this->belongsTo('owners', [
             'foreignKey' => 'owner_id',
             'joinType' => 'INNER'
         ]);
-        $this->hasMany('Casts', [
+        $this->hasMany('casts', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->hasMany('Coupons', [
+        $this->hasMany('coupons', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->hasMany('Jobs', [
+        $this->hasMany('jobs', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->hasMany('Shop_infos', [
+        $this->hasMany('shop_infos', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->hasMany('Snss', [
+        $this->hasMany('snss', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->hasMany('Work_schedules', [
+        $this->hasMany('work_schedules', [
             'foreignKey' => 'shop_id'
         ]);
     }

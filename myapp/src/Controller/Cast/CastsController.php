@@ -2,18 +2,13 @@
 namespace App\Controller\Cast;
 
 use Cake\Log\Log;
-use PDOException;
 use Cake\I18n\Time;
 use Cake\Event\Event;
 use RuntimeException;
 use Token\Util\Token;
-use Cake\Mailer\Email;
-use Cake\Core\Configure;
-use Cake\Error\Debugger;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Collection\Collection;
-use Cake\Mailer\MailerAwareTrait;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -45,17 +40,17 @@ class CastsController extends AppController
         $query = $this->Diarys->find();
         // キャストの記事といいね数を取得
         $diarys = $query->select(['id',
-            'diary_like_num'=> $query->func()->count('Diary_Likes.diary_id')])
-            ->contain('Diary_Likes')
-            ->leftJoinWith('Diary_Likes')
-            ->where(['Diarys.cast_id'=>$id])
-            ->group(['Diary_Likes.diary_id'])
+            'diary_like_num'=> $query->func()->count('diary_likes.diary_id')])
+            ->contain('diary_likes')
+            ->leftJoinWith('diary_likes')
+            ->where(['diarys.cast_id'=>$id])
+            ->group(['diary_likes.diary_id'])
             ->order(['diary_like_num' => 'desc'])->toArray();
         $likeTotal = array_sum(array_column($diarys, 'diary_like_num'));
         //$like = $query->select(['total_like' => $query->func()->sum('cast_id')])
-        //$diaryDiary_Likes = $this->Diarys->find('all')->where(['cast_id'=>$id])->contain('Diary_Likes');
+        //$diarydiary_likes = $this->Diarys->find('all')->where(['cast_id'=>$id])->contain('diary_likes');
         $cast = $this->Casts->find('all')
-            ->contain(['Shops','Diarys'])->where(['Casts.id'=>$id])->first();
+            ->contain(['shops','diarys'])->where(['casts.id'=>$id])->first();
 
         // JSONファイルをDB内容にて、更新する
         // JSONファイルに書き込むカラム情報
@@ -201,19 +196,23 @@ class CastsController extends AppController
     public function profile()
     {
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
+        $id = $auth['id']; // ユーザーID
 
         if ($this->request->is('ajax')) {
+
             $flg = true; // 返却フラグ
             $errors = ""; // 返却メッセージ
             $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
             $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+
             // アイコン画像変更の場合
             if (isset($this->request->data["action_type"])) {
 
                 $dirPath = preg_replace('/(\/\/)/', '/',
                     WWW_ROOT.$this->viewVars['userInfo']['profile_path']);
+
                 $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
+
                 // ディクレトリ取得
                 $dir = new Folder($dirPath, true, 0755);
 
@@ -224,10 +223,12 @@ class CastsController extends AppController
                 $fileBefor = new File($files[0], true, 0755);
 
                 $file = $this->request->data['image'];
+
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
                     $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
                     try {
+                        // 前のファイルがある場合
                         if(file_exists($fileBefor->path) && count($files) > 0) {
                             // ロールバック用のファイルサイズチェック
                             if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
@@ -242,6 +243,7 @@ class CastsController extends AppController
                             $tmpFile = new File(preg_replace('/(\/\/)/', '/',
                                 WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name));
                         }
+
                         $newImageName = $this->Util->file_upload($this->request->getData('image'),
                             ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
                         // ファイル更新の場合は古いファイルは削除
@@ -368,7 +370,7 @@ class CastsController extends AppController
             $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
             $this->set(compact('cast','selectList', 'icons'));
-            $this->render('/Cast/Casts/profile');
+            $this->render('/cast/casts/profile');
             $response = array(
                 'html' => $this->response->body(),
                 'error' => $errors,
@@ -554,7 +556,7 @@ class CastsController extends AppController
                 ,"date"=>$timestamp));
         }
         $this->set(compact('gallery'));
-        $this->render('/Cast/Casts/top_image');
+        $this->render('/cast/casts/top_image');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -618,7 +620,7 @@ class CastsController extends AppController
         $gallery = array();
 
         $this->set(compact('gallery'));
-        $this->render('/Cast/Casts/top_image');
+        $this->render('/cast/casts/top_image');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -639,11 +641,6 @@ class CastsController extends AppController
 
         $gallery = array();
 
-        /// 更新日時順で並び替える関数
-        $sort_by_lastmod = function($a, $b) {
-            return filemtime($b) - filemtime($a);
-        };
-
         // ディクレトリ取得
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
             , WWW_ROOT.$this->viewVars['userInfo']['image_path'])
@@ -651,7 +648,7 @@ class CastsController extends AppController
 
         /// 並び替えして出力
         $files = glob($dir->path.DS.'*.*');
-        usort( $files, $sort_by_lastmod );
+        usort( $files, $this->Util->sortByLastmod );
         foreach( $files as $file ) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
@@ -724,7 +721,7 @@ class CastsController extends AppController
                 ->contain(['Snss'])->first();
 
             $this->set(compact('cast'));
-            $this->render('/Cast/Casts/sns');
+            $this->render('/cast/casts/sns');
             $response = array(
                 'html' => $this->response->body(),
                 'error' => $errors,
@@ -767,8 +764,10 @@ class CastsController extends AppController
         $dir = new Folder($dirPath, true, 0755);
 
         // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
-        ($files_befor = json_decode($this->request->getData("gallery_befor"), true)) > 0 ? : $files_befor = array();
-        $fileMax = PROPERTY['FILE_MAX'];
+        ($files_befor = json_decode($this->request->getData("gallery_befor")
+            , true)) > 0 ? : $files_befor = array();
+
+        $fileMax = PROPERTY['FILE_MAX']; // ファイル格納最大数
 
         try {
 
@@ -777,7 +776,7 @@ class CastsController extends AppController
                 throw new RuntimeException('ディレクトリが存在しません。');
             }
 
-            // ロールバック用のディレクトリサイズチェック
+            // ディレクトリサイズチェック
             if ($dir->dirsize() > CAPACITY['MAX_NUM_BYTES_DIR']) {
                 throw new RuntimeException('ディレクトリサイズが大きすぎます。');
             }
@@ -833,11 +832,6 @@ class CastsController extends AppController
 
         $gallery = array();
 
-        /// 更新日時順で並び替える関数
-        $sort_by_lastmod = function($a, $b) {
-            return filemtime($b) - filemtime($a);
-        };
-
         // ディクレトリ取得
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
             , WWW_ROOT.$this->viewVars['userInfo']['image_path'])
@@ -845,7 +839,7 @@ class CastsController extends AppController
 
         /// 並び替えして出力
         $files = glob($dir->path.DS.'*.*');
-        usort( $files, $sort_by_lastmod );
+        usort( $files, $this->Util->sortByLastmod );
         foreach( $files as $file ) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
@@ -854,7 +848,7 @@ class CastsController extends AppController
         }
 
         $this->set(compact('gallery'));
-        $this->render('/Cast/Casts/gallery');
+        $this->render('/cast/casts/gallery');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -916,11 +910,6 @@ class CastsController extends AppController
 
         $gallery = array();
 
-        /// 更新日時順で並び替える関数
-        $sort_by_lastmod = function($a, $b) {
-            return filemtime($b) - filemtime($a);
-        };
-
         // ディクレトリ取得
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
             , WWW_ROOT.$this->viewVars['userInfo']['image_path'])
@@ -928,7 +917,7 @@ class CastsController extends AppController
 
         /// 並び替えして出力
         $files = glob($dir->path.DS.'*.*');
-        usort( $files, $sort_by_lastmod );
+        usort( $files, $this->Util->sortByLastmod );
         foreach( $files as $file ) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
@@ -937,7 +926,7 @@ class CastsController extends AppController
         }
 
         $this->set(compact('gallery'));
-        $this->render('/Cast/Casts/gallery');
+        $this->render('/cast/casts/gallery');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -985,10 +974,8 @@ class CastsController extends AppController
 
         $fileMax = PROPERTY['FILE_MAX']; // ファイルアップの制限数
         $files_befor = array(); // 新規なので空の配列
-        //$imageCol = array_values(preg_grep("/^image/", $this->Diarys->schema()->columns()));
 
         // エンティティにマッピングする
-
         $diary = $this->Diarys->newEntity($this->request->getData());
         // バリデーションチェック
         if ($diary->errors()) {
@@ -1065,8 +1052,8 @@ class CastsController extends AppController
         $diarys = $this->Util->getDiarys($id
             , $this->viewVars['userInfo']['diary_path']);
 
-        $this->set(compact('cast', 'diarys'));
-        $this->render('/Cast/Casts/diary');
+        $this->set(compact('diarys'));
+        $this->render('/cast/casts/diary');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -1139,9 +1126,8 @@ class CastsController extends AppController
 
         $delFiles = json_decode($this->request->data["del_list"], true);
         // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
-        ($image_befor = json_decode($this->request->data["json_data"], true)) > 0 ? : $image_befor = array();
-        // カラム「image*」を格納する
-        $imageCol = array_values(preg_grep("/^image/", $this->Diarys->schema()->columns()));
+        ($image_befor = json_decode($this->request->data["json_data"], true)) > 0
+            ? : $image_befor = array();
 
         try {
 
@@ -1159,12 +1145,14 @@ class CastsController extends AppController
             if (count($image_befor) > 0) {
 
                 // 一時ディレクトリ作成
-                $tmpDir = new Folder(WWW_ROOT.$this->viewVars['userInfo']['tmp_path'] . DS . time(), true, 0777);
+                $tmpDir = new Folder(WWW_ROOT.$this->viewVars['userInfo']['tmp_path']
+                     . DS . time(), true, 0777);
                 // 一時ディレクトリにバックアップ実行
                 if (!$dir->copy($tmpDir->path)) {
                     throw new RuntimeException('バックアップに失敗しました。');
                 }
             }
+
             // 削除する画像分処理する
             foreach ($delFiles as $key => $file) {
                 $delFile = new File(WWW_ROOT . DS .$file['path']);
@@ -1234,7 +1222,7 @@ class CastsController extends AppController
             , $this->viewVars['userInfo']['diary_path']);
 
         $this->set(compact('diarys'));
-        $this->render('/Cast/Casts/diary');
+        $this->render('/cast/casts/diary');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -1331,7 +1319,7 @@ class CastsController extends AppController
             , $this->viewVars['userInfo']['diary_path']);
 
         $this->set(compact('diarys'));
-        $this->render('/Cast/Casts/diary');
+        $this->render('/cast/casts/diary');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,

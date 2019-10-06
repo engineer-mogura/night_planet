@@ -33,7 +33,15 @@ class UtilComponent extends Component
 
         return $retval;
     }
-
+    /**
+     * 更新日時順で並び替える関数
+     * @param mixed
+     * @param mixed
+     * @return mixed
+     */
+    function sortByLastmod($a, $b) {
+        return filemtime($b) - filemtime($a);
+    }
 
     /**
      * null値の時にデフォルト値を返却する
@@ -128,7 +136,7 @@ class UtilComponent extends Component
             }
         }
         $shopInfo = $shopInfo + array('id'=>$shop['id']
-            ,'dir'=>$shop['dir'],'main_image'=>$shop['top_image']);
+            ,'dir'=>$shop['dir']);
         $path = DS.PATH_ROOT['IMG'].DS.$shopInfo['area']['path']
                 .DS.$shopInfo['genre']['path'].DS.$shop['dir'];
 
@@ -137,9 +145,10 @@ class UtilComponent extends Component
             .'?genre='.$shop['genre'].'&name='.$shop['name'];
 
         $shopInfo = $shopInfo + array('shop_path'=> $path
-            ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']
-            ,'notice_path'=>$path.DS.PATH_ROOT['NOTICE'],'cache_path'=>$path.DS.PATH_ROOT['CACHE']
-            ,'shop_url'=>$shop_url);
+        ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']
+        ,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE'],'notice_path'=>$path.DS.PATH_ROOT['NOTICE']
+        ,'cache_path'=>$path.DS.PATH_ROOT['CACHE'],'tmp_path'=>$path.DS.PATH_ROOT['TMP']
+        ,'shop_url'=>$shop_url);
         return  $shopInfo;
 
     }
@@ -282,7 +291,7 @@ class UtilComponent extends Component
      */
     public function getDiarys($id, $diaryPath)
     {
-        $diarys = TableRegistry::get('Diarys');
+        $diarys = TableRegistry::get('diarys');
         // キャスト情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
         $query = $diarys->find('all')->select($diarys->Schema()->columns());
@@ -296,15 +305,10 @@ class UtilComponent extends Component
             'ym_created' => $ym,
             'md_created' => $md])
             ->where(['cast_id' => $id])
-            ->contain(['DiaryLikes'])
+            ->contain(['diary_likes'])
             ->order(['created' => 'DESC'])->all();
         $archives = $this->groupArray($archives, 'ym_created');
         $archives = array_values($archives);
-
-        // 更新日時順で並び替える関数
-        $sort_by_lastmod = function ($a, $b) {
-            return filemtime($b) - filemtime($a);
-        };
 
         // ディクレトリ取得
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
@@ -318,7 +322,8 @@ class UtilComponent extends Component
 
                 /// 並び替えして出力
                 $files = glob($dir->path.$value['dir'].DS.'*.*');
-                usort($files, $sort_by_lastmod);
+                usort( $files, $this->sortByLastmod );
+
                 foreach ($files as $file) {
                     $timestamp = date('Y/m/d H:i', filemtime($file));
                     array_push($gallery, array(
@@ -327,6 +332,8 @@ class UtilComponent extends Component
                     continue; // １件のみ取得できればよい
                 }
                 $value->set('gallery', $gallery);
+                // 画像数をセット
+                $value->set('gallery_count', count($files));
             }
         }
 
@@ -343,7 +350,7 @@ class UtilComponent extends Component
      */
     public function getDiary($id, $diaryPath)
     {
-        $diary = TableRegistry::get('Diarys');
+        $diary = TableRegistry::get('diarys');
         $query = $diary->find('all')->select($diary->Schema()->columns());
         $ymd = $query->func()->date_format([
             'created' => 'identifier',
@@ -351,13 +358,8 @@ class UtilComponent extends Component
         $diary = $query->select([
             'ymd_created' => $ymd])
             ->where(['id' => $id])
-            ->contain(['DiaryLikes'])
+            ->contain(['diary_likes'])
             ->first();
-
-        // 更新日時順で並び替える関数
-        $sort_by_lastmod = function ($a, $b) {
-            return filemtime($b) - filemtime($a);
-        };
 
         // ディクレトリ取得
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
@@ -367,7 +369,7 @@ class UtilComponent extends Component
 
         /// 並び替えして出力
         $files = glob($dir->path.$diary['dir'].DS.'*.*');
-        usort($files, $sort_by_lastmod);
+        usort( $files, $this->sortByLastmod );
         foreach ($files as $file) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
@@ -390,29 +392,29 @@ class UtilComponent extends Component
      */
     public function getNewDiarys($rowNum, $isArea = null, $shop_id = null)
     {
-        $diarys = TableRegistry::get('Diarys');
+        $diarys = TableRegistry::get('diarys');
 
         if(!empty($isArea)) {
             $diarys = $diarys->find('all')
-            ->contain(['DiaryLikes','Casts','Casts.Shops'])
-            ->matching('Casts.Shops', function($q) use ($isArea){
-                return $q->where(['Shops.area'=>$isArea]);
+            ->contain(['diary_likes','casts','casts.shops'])
+            ->matching('casts.shops', function($q) use ($isArea){
+                return $q->where(['shops.area'=>$isArea]);
             })
-            ->order(['Diarys.created' => 'DESC'])
+            ->order(['diarys.created' => 'DESC'])
             ->limit($rowNum)->all();
         } else if(!empty($shop_id)) {
             $diarys = $diarys->find('all')
-            ->contain(['DiaryLikes','Casts','Casts.Shops'])
-            ->matching('Casts.Shops', function($q) use ($shop_id){
-                return $q->where(['Shops.id'=>$shop_id]);
-            })
-            ->order(['Diarys.created' => 'DESC'])
-            ->limit($rowNum)->all();
+                ->contain(['diary_likes','casts','casts.shops'])
+                ->matching('casts.shops', function($q) use ($shop_id){
+                    return $q->where(['shops.id'=>$shop_id]);
+                })
+                ->order(['diarys.created' => 'DESC'])
+                ->limit($rowNum)->all();
         } else {
             $diarys = $diarys->find('all')
-            ->contain(['DiaryLikes','Casts','Casts.Shops'])
-            ->order(['Diarys.created' => 'DESC'])
-            ->limit($rowNum)->all();
+                ->contain(['diary_likes','casts','casts.shops'])
+                ->order(['diarys.created' => 'DESC'])
+                ->limit($rowNum)->all();
         }
         foreach ($diarys as $key => $diary) {
             $diaryPath = WWW_ROOT . PATH_ROOT['IMG']
@@ -460,9 +462,10 @@ class UtilComponent extends Component
      * 店舗の全てのお知らせ情報を取得する処理
      *
      * @param [type] $id
+     * @param [type] $noticePath
      * @return array
      */
-    public function getNotices($id)
+    public function getNotices($id, $noticePath)
     {
         $shopInfos = TableRegistry::get('shop_infos');
         // キャスト情報、最新の日記情報とイイネの総数取得
@@ -474,26 +477,55 @@ class UtilComponent extends Component
         $md = $query->func()->date_format([
             'created' => 'identifier',
             "'%c/%e'" => 'literal']);
-        $shopInfos = $query->select([
+        $archives = $query->select([
             'ym_created' => $ym,
             'md_created' => $md])
             ->where(['shop_id' => $id])
-            ->contain(['Shop_info_Likes'])
+            ->contain(['shop_info_likes'])
             ->order(['created' => 'DESC'])
             ->all();
 
-        $shopInfos = $this->groupArray($shopInfos, 'ym_created');
-        $shopInfos = array_values($shopInfos);
-        return $shopInfos;
+        $archives = $this->groupArray($archives, 'ym_created');
+        $archives = array_values($archives);
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$noticePath), true, 0755);
+
+        foreach ($archives as $key => $archive) {
+
+            foreach ($archive as $key => $value) {
+
+                $gallery = array();
+
+                /// 並び替えして出力
+                $files = glob($dir->path.$value['dir'].DS.'*.*');
+                usort( $files, $this->sortByLastmod );
+
+                foreach ($files as $file) {
+                    $timestamp = date('Y/m/d H:i', filemtime($file));
+                    array_push($gallery, array(
+                    "file_path"=>$noticePath.$value->dir.DS.(basename($file))
+                    ,"date"=>$timestamp));
+                    continue; // １件のみ取得できればよい
+                }
+                $value->set('gallery', $gallery);
+                // 画像数をセット
+                $value->set('gallery_count', count($files));
+            }
+        }
+
+        return $archives;
     }
 
      /**
      * 指定した１件のお知らせ情報を取得する処理
      *
      * @param [type] $id
+     * @param [type] $noticePath
      * @return array
      */
-    public function getNotice($id = null)
+    public function getNotice($id, $noticePath)
     {
         $shopInfos = TableRegistry::get('shop_infos');
         $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
@@ -503,8 +535,26 @@ class UtilComponent extends Component
         $shopInfo = $query->select([
             'ymd_created' => $ymd])
             ->where(['id' => $id])
-            ->contain(['Shop_info_Likes'])
+            ->contain(['shop_info_likes'])
             ->first();
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$noticePath), true, 0755);
+
+        $gallery = array();
+
+        /// 並び替えして出力
+        $files = glob($dir->path.$shopInfo['dir'].DS.'*.*');
+        usort( $files, $this->sortByLastmod );
+        foreach ($files as $file) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+            "file_path"=>$noticePath.$shopInfo->dir.DS.(basename($file))
+            ,"date"=>$timestamp));
+        }
+        $shopInfo->set('gallery', $gallery);
+
         return $shopInfo;
     }
 
@@ -522,17 +572,49 @@ class UtilComponent extends Component
         // 過去の日記をアーカイブ形式で取得する
         if (!empty($isArea)) {
             $shopInfos = $shopInfos->find('all')
-            ->contain(['Shop_info_Likes','Shops'])
-            ->matching('Shops', function($q) use ($isArea){
-                    return $q->where(['Shops.area'=>$isArea]);
+                ->contain(['shop_info_likes','shops'])
+                ->matching('shops', function($q) use ($isArea){
+                    return $q->where(['shops.area'=>$isArea]);
                 })
-            ->order(['shop_infos.created' => 'DESC'])
-            ->limit($rowNum)->all();
+                ->order(['shop_infos.created' => 'DESC'])
+                ->limit($rowNum)->all();
         } else {
             $shopInfos = $shopInfos->find('all')
-            ->contain(['Shop_info_Likes','Shops'])
-            ->order(['shop_infos.created' => 'DESC'])
-            ->limit($rowNum)->all();
+                ->contain(['shop_info_likes','shops'])
+                ->order(['shop_infos.created' => 'DESC'])
+                ->limit($rowNum)->all();
+        }
+
+        foreach ($shopInfos as $key => $shopInfo) {
+            $noticePath = WWW_ROOT . PATH_ROOT['IMG']
+                . DS . AREA[$shopInfo->shop->area]['path']
+                . DS . GENRE[$shopInfo->shop->genre]['path']
+                . DS . $shopInfo->shop->dir
+                . DS . PATH_ROOT['NOTICE'] . $shopInfo->dir;
+
+            // ディクレトリ取得
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', $noticePath), true, 0755);
+            // 画像数をセット
+            $shopInfo->set('gallery_count', count(glob($noticePath . DS . '*.*')));
+
+            $topImageFullPath = WWW_ROOT . PATH_ROOT['IMG']
+                . DS . AREA[$shopInfo->shop->area]['path']
+                . DS . GENRE[$shopInfo->shop->genre]['path']
+                . DS . $shopInfo->shop->dir
+                . DS . PATH_ROOT['TOP_IMAGE'];
+
+            $topImagePath = DS . PATH_ROOT['IMG']
+                . DS . AREA[$shopInfo->shop->area]['path']
+                . DS . GENRE[$shopInfo->shop->genre]['path']
+                . DS . $shopInfo->shop->dir
+                . DS . PATH_ROOT['TOP_IMAGE'];
+
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', $topImageFullPath), true, 0755);
+            $files = glob($dir->path.DS.'*.*');
+            count($files) > 0 ? $icon = $topImagePath. DS. basename($files[0])
+                 : $icon = PATH_ROOT['NO_IMAGE01'];
+            // アイコン画像をセット
+            $shopInfo->set('icon', $icon);
         }
         return $shopInfos->toArray();
     }
@@ -639,21 +721,6 @@ class UtilComponent extends Component
         $dir->copy($tmpDir->path);
         return $tmpDir;
     }
-
-    /**
-     * 一時ディレクトリにファイルのバックアップを作成する
-     *
-     * @param String $tmpPath
-     * @param File $dir
-     * @return void
-     */
-    // public function createFileTmpDirectoy(string $tmpPath, File $file)
-    // {
-    //     // "/$tmpPath/{現在の時間}"というディレクトリをパーミッション777で作ります
-    //     $tmpDir = new File($tmpPath . DS . time(), true, 0777);
-    //     $file->copy($tmpDir->path);
-    //     return $tmpDir;
-    // }
 
     /**
      * エラーメッセージをセットする
@@ -867,30 +934,6 @@ class UtilComponent extends Component
         if($show_mode !== 'grid' && $show_mode !== 'list'){
             $show_mode = 'grid';
         }
-
-        // $instagram_business_id = $insta_business_id; //ここにInstagramビジネスアカウントIDを入力してください。
-        // $access_token = $token; //ここに3段階目のアクセストークンを入力してください。
-        // $target_user = $insta_user_name; //ここに取得したいInstagramビジネスアカウントのユーザー名を入力してください。https://www.instagram.com/nightplanet91/なので「nightplanet91」がユーザー名になります
-
-        // //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
-        // if(!empty($target_user)) {
-        //     $query = 'business_discovery.username('.$target_user.'){id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id,media{caption,media_url,media_type,children,like_count,comments_count,timestamp,id}}';
-        // }
-        // //自分のアカウントの画像が取得できればOKな場合は$queryを以下のようにしてください。
-        // if(!empty($insta_business_name)) {
-        //     $query = 'name,media{caption,like_count,media_url,permalink,timestamp,username}&access_token='.$access_token;
-        // }
-        // $instagram_api_url = 'https://graph.facebook.com/v4.0/';
-        // $target_url = $instagram_api_url.$instagram_business_id."?fields=".$query."&access_token=".$access_token;
-
-        // $ch = curl_init();
-        // curl_setopt($ch, CURLOPT_URL, $target_url);
-        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // $instagram_data = curl_exec($ch);
-        // curl_close($ch);
-
-        // $insta_data = json_decode($instagram_data, true);
 
         return $ig_data;
     }

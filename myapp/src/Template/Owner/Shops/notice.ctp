@@ -1,9 +1,3 @@
-<?php
-/**
-* @var \App\View\AppView $this
-* @var \App\Model\Entity\Cast[]|\Cake\Collection\CollectionInterface $shops
-*/
-?>
 <div id="wrapper">
 <?= $this->element('modal/noticeModal'); ?>
     <div class="container">
@@ -11,8 +5,8 @@
         <?= $this->Flash->render() ?>
         <h5><?=h('店舗お知らせ') ?></h5>
             <div id="notice" class="row">
-            <input type="hidden" name="file_max" value=<?=PROPERTY['FILE_MAX']?>>
-            <input type="hidden" name="notice_dir" value=<?=$shopInfo['notice_path'] ?>>
+                <input type="hidden" name="file_max" value=<?=PROPERTY['FILE_MAX']?>>
+                <input type="hidden" name="notice_dir" value=<?=$shopInfo['notice_path'] ?>>
                 <div class="col s12 m12 l12 xl8">
                     <div class="card-panel grey lighten-5">
                         <form id="edit-notice" name="edit_notice" method="post" action="/owner/shops/save_notice/">
@@ -61,7 +55,7 @@
                         <?php foreach ($rows as $key => $row): ?>
                         <li class="linkbox collection-item avatar archiveLink">
                             <input type="hidden" name="id" value=<?=$row['id']?>>
-                        <?php !empty($row['image1'])? $imgPath = $shopInfo['notice_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                        <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                             <img src="<?= $imgPath ?>" alt="" class="circle">
                             <span class="title color-blue"><?= $row['md_created'] ?></span>
                             <p><span class="truncate"><?= $row->title ?><br>
@@ -86,16 +80,16 @@
                         <li class="collection-item">
                             <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                             <?php foreach ($rows as $row): ?>
-                            <?php !empty($row['image1'])? $imgPath = $shopInfo['notice_path'].$row['dir'].DS.$row['image1'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
-                            <div class="linkbox collapsible-body archiveLink">
-                                <input type="hidden" name="id" value=<?=$row->id?>>
-                                <span class="title color-blue"><?= $row['md_created'] ?></span>
-                                <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row['likes']) ?></span>
-                                <p><span class="truncate"><?= $row->title ?><br>
-                                    <?= $row['content'] ?></span>
-                                </p>
-                                <a class="waves-effect hoverable" href="#"></a>
-                            </div>
+                                <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                                <div class="linkbox collapsible-body archiveLink">
+                                    <input type="hidden" name="id" value=<?=$row->id?>>
+                                    <span class="title color-blue"><?= $row['md_created'] ?></span>
+                                    <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row['likes']) ?></span>
+                                    <p><span class="truncate"><?= $row->title ?><br>
+                                        <?= $row['content'] ?></span>
+                                    </p>
+                                    <a class="waves-effect hoverable" href="#"></a>
+                                </div>
                             <?php endforeach; ?>
                         </li>
                         <?php endforeach; ?>

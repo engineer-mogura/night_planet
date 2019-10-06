@@ -13,7 +13,7 @@ class AppController extends \App\Controller\AppController
     {
         parent::initialize();
         $this->Users = TableRegistry::get('Users');
-        $this->Shops = TableRegistry::get('Shops');
+        $this->Shops = TableRegistry::get('shops');
         $this->Coupons = TableRegistry::get('Coupons');
         $this->Casts = TableRegistry::get('Casts');
         $this->Jobs = TableRegistry::get('Jobs');

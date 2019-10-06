@@ -65,15 +65,15 @@ class ShopsController extends AppController
             $selectedTab = $this->request->session()->consume('selected_tab');
         }
 
-        $this->redirect('/ApiGoogles/index');
+        //$this->redirect('/ApiGoogles/index');
 
-        // if(!is_null($user = $this->Auth->user())){
-        //     $shop = $this->Shops->find()
-        //         ->where(['Shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
-        //         ->contain(['Coupons','Jobs','Snss','Casts' => function(Query $q) {
-        //         return $q->where(['Casts.delete_flag'=>'0']);
-        //     }])->first();
-        // }
+        if(!is_null($user = $this->Auth->user())){
+            $shop = $this->Shops->find()
+                ->where(['shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
+                ->contain(['coupons','Jobs','snss','casts' => function(Query $q) {
+                return $q->where(['casts.delete_flag'=>'0']);
+            }])->first();
+        }
 
         $this->set(compact('shop'));
         $this->render();
@@ -99,19 +99,72 @@ class ShopsController extends AppController
 
         if(!is_null($user = $this->Auth->user())){
             $shop = $this->Shops->find()
-            ->where(['Shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
-            ->contain(['Coupons','Jobs','Snss','Casts' => function(Query $q) {
-                return $q->where(['Casts.delete_flag'=>'0']);
+            ->where(['shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
+            ->contain(['coupons','jobs','snss','casts' => function(Query $q) {
+                return $q->where(['casts.delete_flag'=>'0']);
             }])->first();
         }
-        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-        $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // 画像リストを作成する
-        foreach ($imageCol as $key => $value) {
-            if (!empty($shop[$imageCol[$key]])) {
-                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['shopInfo']['top_image_path'])
+            , true, 0755);
+
+        $files = glob($dir->path.DS.'*.*');
+
+        // ファイルが存在したら、画像をセット
+        if(count($files) > 0) {
+            foreach( $files as $file ) {
+                $shop->set('top_image', $this->viewVars['shopInfo']['top_image_path']
+                .DS.(basename($file)));
+            }
+        } else {
+            // 共通トップ画像をセット
+            $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+        }
+
+        // 店舗ギャラリーを設定する
+        $gallery = array();
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['shopInfo']['image_path'])
+            , true, 0755);
+
+        /// 並び替えして出力
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $this->Util->sortByLastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$this->viewVars['shopInfo']['image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
+        }
+
+        // キャストのアイコンを設定する
+        foreach ($shop->casts as $key => $cast) {
+            $path = $this->viewVars['shopInfo']['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'];
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$path), true, 0755);
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if(count($files) > 0) {
+                foreach( $files as $file ) {
+                    $cast->set('icon', $path.DS.(basename($file)));
+                }
+            } else {
+                // 共通トップ画像をセット
+                $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
             }
         }
+        // $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+        // $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // // 画像リストを作成する
+        // foreach ($imageCol as $key => $value) {
+        //     if (!empty($shop[$imageCol[$key]])) {
+        //         array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+        //     }
+        // }
 
         // 作成するセレクトボックスを指定する
         $masCodeFind = array('industry','job_type','treatment','day');
@@ -128,7 +181,7 @@ class ShopsController extends AppController
         // クレジット、待遇リストをセット
         $masData = array('credit'=>json_encode($shopCredits),'treatment'=>json_encode($jobTreatments));
 
-        $this->set(compact('shop','imageList','masCredit','masData','selectList','selectedTab'));
+        $this->set(compact('shop','gallery','masCredit','masData','selectList','selectedTab'));
         $this->render();
     }
 
@@ -235,41 +288,59 @@ class ShopsController extends AppController
         $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Owner');
         $id = $auth['id']; // ユーザーID
-        $dirPath = preg_replace('/(\/\/)/', '/',
-            WWW_ROOT.$this->viewVars['shopInfo']['shop_path']);
+        // $dirPath = preg_replace('/(\/\/)/', '/',
+        //     WWW_ROOT.$this->viewVars['shopInfo']['top_image_path']);
 
         $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
+        // // ディクレトリ取得
+        // $dir = new Folder($dirPath, true, 0755);
         // ディクレトリ取得
-        $dir = new Folder($dirPath, true, 0755);
-        // 前のファイル取得
-        $fileBefor = new File($dirPath . DS .$shop->top_image, true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['shopInfo']['top_image_path'])
+            , true, 0755);
 
+        // 以前のファイル
+        $file = null;
+
+        // 画像を取得
+        $files = glob($dir->path.DS.'*.*');
+        foreach ($files as $file) {
+            $file = $this->viewVars['shopInfo']['image_path']
+                .DS.(basename($file));
+        }
+        // 前のファイル取得
+        $fileBefor = new File($dir->path . DS .basename($file), true, 0755);
+        // 新しいファイルを取得
         $file = $this->request->getData('top_image_file');
         // ファイルが存在する、かつファイル名がblobの画像のとき
         if (!empty($file["name"]) && $file["name"] == 'blob') {
             $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
             try {
-                if(file_exists($fileBefor->path) && !empty($shop->top_image)) {
+                if(file_exists($fileBefor->path) && !empty($fileBefor->name)) {
                     // ロールバック用のファイルサイズチェック
                     if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
                         throw new RuntimeException('ファイルサイズが大きすぎます。');
                     }
+                    // 一時ディレクトリ取得
+                    $tmpDir = new Folder(preg_replace('/(\/\/)/', '/'
+                        , WWW_ROOT.$this->viewVars['shopInfo']['tmp_path'])
+                        , true, 0755);
 
                     // 一時ファイル作成
-                    if (!$fileBefor->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name)) {
+                    if (!$fileBefor->copy($tmpDir->path.DS.$fileBefor->name)) {
                         throw new RuntimeException('バックアップに失敗しました。');
                     }
 
                     // 一時ファイル取得
-                    $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name);
+                    $tmpFile = new File($tmpDir->path.DS.$fileBefor->name);
                 }
 
-                $shop->top_image = $this->Util->file_upload($this->request->getData('top_image_file'),
+                $top_image = $this->Util->file_upload($this->request->getData('top_image_file'),
                     ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
                 // ファイル更新の場合は古いファイルは削除
                 if (!empty($fileBefor->name)) {
                     // ファイル名が同じ場合は削除を実行しない
-                    if ($fileBefor->name != $shop->top_image) {
+                    if ($fileBefor->name != $top_image) {
                         // ファイル削除処理実行
                         if (!$fileBefor->delete()) {
                             throw new RuntimeException('ファイルの削除ができませんでした。');
@@ -279,10 +350,6 @@ class ShopsController extends AppController
                     }
                 }
 
-                // レコード更新実行
-                if (!$this->Shops->save($shop)) {
-                    throw new RuntimeException('レコードの更新ができませんでした。');
-                }
                 // 更新情報を追加する
                 $updates = $this->Updates->newEntity();
                 $updates->set('content','トップ画像を更新しました。');
@@ -299,13 +366,14 @@ class ShopsController extends AppController
                     $tmpFile->copy($file->path);
                 }
                 // ファイルがアップロードされていた場合は削除を行う
-                if($shop->isDirty('top_image')) {
-                    $file = new File($dirPath . DS .$shop->top_image, true, 0755);
+                if(!empty($top_image)) {
+                    $file = new File($dir->path . DS .$top_image, true, 0755);
                     // 一時ファイルがあれば削除する
                     if (isset($file) && file_exists($file->path)) {
                         $file->delete();// tmpファイル削除
                     }
                 }
+
                 // 一時ファイルがあれば削除する
                 if (isset($tmpFile) && file_exists($tmpFile->path)) {
                     $tmpFile->delete();// tmpファイル削除
@@ -332,6 +400,9 @@ class ShopsController extends AppController
         }
 
         $shop = $this->Shops->get(['id' => $this->viewVars['shopInfo']['id']]);
+        // 新しい画像をセット
+        $shop->set('top_image', $this->viewVars['shopInfo']['top_image_path']
+            .DS.$top_image);
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/top-image');
         $response = array(
@@ -515,7 +586,7 @@ class ShopsController extends AppController
 
         $shop = $this->Shops->find()
             ->where(['id' => $this->viewVars['shopInfo']['id']])
-            ->contain(['Coupons'])->first();
+            ->contain(['coupons'])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/coupon');
         $response = array(
@@ -602,7 +673,7 @@ class ShopsController extends AppController
 
         $shop = $this->Shops->find()
             ->where(['id' => $this->viewVars['shopInfo']['id']])
-            ->contain(['Coupons'])->first();
+            ->contain(['coupons'])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/coupon');
         $response = array(
@@ -739,8 +810,8 @@ class ShopsController extends AppController
 
         $shop = $this->Shops->find()
             ->where(['id' => $this->viewVars['shopInfo']['id']])
-            ->contain(['Casts' => function(Query $q) {
-                    return $q->where(['Casts.delete_flag'=>'0']);
+            ->contain(['casts' => function(Query $q) {
+                    return $q->where(['casts.delete_flag'=>'0']);
                 }])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/cast');
@@ -820,8 +891,8 @@ class ShopsController extends AppController
         }
         $shop = $this->Shops->find()
             ->where(['id' => $this->viewVars['shopInfo']['id']])
-            ->contain(['Casts' => function(Query $q) {
-                return $q->where(['Casts.delete_flag'=>'0']);
+            ->contain(['casts' => function(Query $q) {
+                return $q->where(['casts.delete_flag'=>'0']);
             }])->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/cast');
@@ -893,8 +964,8 @@ class ShopsController extends AppController
 
         $shop = $this->Shops->find()
             ->where(['id' => $this->viewVars['shopInfo']['id']])
-            ->contain(['Casts' => function(Query $q) {
-                return $q->where(['Casts.delete_flag'=>'0']);
+            ->contain(['casts' => function(Query $q) {
+                return $q->where(['casts.delete_flag'=>'0']);
             }])->first();
 
         // マスタコードのクレジットリスト取得
@@ -1075,20 +1146,17 @@ class ShopsController extends AppController
         $auth = $this->request->session()->read('Auth.Owner');
         $id = $auth['id']; // ユーザーID
         $tmpDir = null; // バックアップ用設定
-
         $dirPath = preg_replace('/(\/\/)/', '/',
             WWW_ROOT.$this->viewVars['shopInfo']['image_path']);
         $files = array();
         // 対象ディレクトリパス取得
         $dir = new Folder($dirPath, true, 0755);
-        // ショップ取得
-        $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
 
         // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
-        ($files_befor = json_decode($this->request->getData("gallery_befor"), true)) > 0 ? : $files_befor = array();
-        $fileMax = PROPERTY['FILE_MAX'];
-        // カラム「image*」を格納する
-        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+        ($files_befor = json_decode($this->request->getData("gallery_befor")
+            , true)) > 0 ? : $files_befor = array();
+
+        $fileMax = PROPERTY['FILE_MAX']; // ファイル格納最大数
 
         try{
 
@@ -1097,21 +1165,16 @@ class ShopsController extends AppController
                 throw new RuntimeException('ディレクトリが存在しません。');
             }
 
-            // ロールバック用のディレクトリサイズチェック
+            // ディレクトリサイズチェック
             if ($dir->dirsize() > CAPACITY['MAX_NUM_BYTES_DIR']) {
                 throw new RuntimeException('ディレクトリサイズが大きすぎます。');
             }
 
-            // 一時ディレクトリ作成
-            $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
-            // 一時ディレクトリにバックアップ実行
-            if (!$dir->copy($tmpDir->path)) {
-                throw new RuntimeException('バックアップに失敗しました。');
-            }
             // 追加画像がある場合
             if (isset($this->request->data["image"])) {
                 $files = $this->request->data['image'];
             }
+
             foreach ($files as $key => $file) {
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
@@ -1120,26 +1183,42 @@ class ShopsController extends AppController
                     // ファイル名を取得する
                     $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
 
-                    // ファイル名が同じ場合は処理をスキップする
+                    // ファイル名が同じ場合は重複フラグをセットする
                     if ($convertFile === false) {
                         $isDuplicate = true;
-                        continue;
                     }
 
-                    // カラムimage1～image8の空いてる場所に入れる
-                    for ($i = 0; $i < $fileMax; $i++) {
-                        if (empty($shop->get($imageCol[$i]))) {
-                            $shop->set($imageCol[$i], $convertFile);
-                            break;
-                        }
-                    }
                 }
             }
+            // foreach ($files as $key => $file) {
+            //     // ファイルが存在する、かつファイル名がblobの画像のとき
+            //     if (!empty($file["name"]) && $file["name"] == 'blob') {
+            //         $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
 
-            // レコード更新実行
-            if (!$this->Shops->save($shop)) {
-                throw new RuntimeException('レコードの更新ができませんでした。');
-            }
+            //         // ファイル名を取得する
+            //         $convertFile = $this->Util->file_upload($file, $files_befor, $dir->path, $limitFileSize);
+
+            //         // ファイル名が同じ場合は処理をスキップする
+            //         if ($convertFile === false) {
+            //             $isDuplicate = true;
+            //             continue;
+            //         }
+
+            //         // カラムimage1～image8の空いてる場所に入れる
+            //         for ($i = 0; $i < $fileMax; $i++) {
+            //             if (empty($shop->get($imageCol[$i]))) {
+            //                 $shop->set($imageCol[$i], $convertFile);
+            //                 break;
+            //             }
+            //         }
+            //     }
+            // }
+
+            // // レコード更新実行
+            // if (!$this->Shops->save($shop)) {
+            //     throw new RuntimeException('レコードの更新ができませんでした。');
+            // }
+
             // 更新情報を追加する
             $updates = $this->Updates->newEntity();
             $updates->set('content','店内ギャラリーを更新しました。');
@@ -1157,16 +1236,7 @@ class ShopsController extends AppController
 
         // 例外が発生している場合にメッセージをセットして返却する
         if (!$flg) {
-            if (file_exists($tmpDir->path)) {
-                // ファイルを戻す前にアップロードされたファイルがある場合があるため、空にしておく
-                $files = $dir->find('.*\.*');
-                foreach ($files as $file) {
-                    $file = new File($dir->path . DS . $file);
-                    $file->delete(); // このファイルを削除します
-                }
-                $tmpDir->copy($dir->path);
-                $tmpDir->delete();// tmpフォルダ削除
-            }
+
             $message = RESULT_M['UPDATE_FAILED'];
             $response = array(
                 'success' => $flg,
@@ -1175,21 +1245,25 @@ class ShopsController extends AppController
             $this->response->body(json_encode($response));
             return;
         }
-        // フォルダを削除
-        if (file_exists($tmpDir->path)) {
-            $tmpDir->delete();
+
+        $gallery = array();
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['shopInfo']['image_path'])
+            , true, 0755);
+
+        /// 並び替えして出力
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $this->Util->sortByLastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$this->viewVars['shopInfo']['image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
         }
 
-        $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
-        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-        $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // 画像リストを作成する
-        foreach ($imageCol as $key => $value) {
-            if (!empty($shop[$imageCol[$key]])) {
-                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
-            }
-        }
-        $this->set(compact('shop','imageList'));
+        $this->set(compact('gallery'));
         $this->render('/Element/shopEdit/gallery');
         $response = array(
             'html' => $this->response->body(),
@@ -1213,60 +1287,114 @@ class ShopsController extends AppController
         if (!$this->request->is('ajax')) {
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
+        // $flg = true; // 返却フラグ
+        // $isRemoved = false; // ファイル削除フラグ
+        // $errors = ""; // 返却メッセージ
+        // $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        // $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
+        // $auth = $this->request->session()->read('Auth.Owner');
+        // $id = $auth['id']; // ユーザーID
+        // $tmpFile = null; // バックアップ用
+
+        // try {
+        //     $del_path = preg_replace('/(^\/)/', '', $this->viewVars['shopInfo']['image_path']);
+        //     // 削除対象ファイルを取得
+        //     $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
+
+        //     // 削除対象ファイルパス存在チェック
+        //     if (!file_exists($file->path)) {
+        //         throw new RuntimeException('ファイルが存在しません。');
+        //     }
+
+        //     // ロールバック用のファイルサイズチェック
+        //     if ($file->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
+        //         throw new RuntimeException('ファイルサイズが大きすぎます。');
+        //     }
+
+        //     // 一時ファイル作成
+        //     if (!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
+        //         throw new RuntimeException('画像のバックアップに失敗しました。');
+        //     }
+
+        //     // 一時ファイル取得
+        //     $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name);
+
+        //     // 日記ファイル削除処理実行
+        //     if (!$file->delete()) {
+        //         throw new RuntimeException('ファイルの削除ができませんでした。');
+        //     }
+        //     // ファイル削除フラグを立てる
+        //     $isRemoved = true;
+        //     // 更新対象レコード取得
+        //     $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
+        //     $shop->set($this->request->getData('key'), "");
+        //     // レコード更新実行
+        //     if (!$this->Shops->save($shop)) {
+        //         throw new RuntimeException('レコードの更新ができませんでした。');
+        //     }
+        // } catch (RuntimeException $e) {
+        //     // ファイルを削除していた場合は復元する
+        //     if ($isRemoved) {
+        //         $tmpFile->copy($file->path);
+        //     }
+        //     // 一時ファイルがあれば削除する
+        //     if (isset($tmpFile) && file_exists($tmpFile->path)) {
+        //         $tmpFile->delete();// tmpファイル削除
+        //     }
+        //     $this->log($this->Util->setLog($auth, $e));
+        //     $flg = false;
+        // }
+        // // 例外が発生している場合にメッセージをセットして返却する
+        // if (!$flg) {
+        //     $message = RESULT_M['DELETE_FAILED'];
+        //     $response = array(
+        //         'success' => $flg,
+        //         'message' => $message
+        //     );
+        //     $this->response->body(json_encode($response));
+        //     return;
+        // }
+
+        // // 一時ファイル削除
+        // if (file_exists($tmpFile->path)) {
+        //     $tmpFile->delete();
+        // }
+
+        // $shop = $this->Shops->find()
+        //     ->where(['id' => $this->viewVars['shopInfo']['id']])->first();
+        // $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+        // $imageList = array(); // 画面側でjsonとして使う画像リスト
+        // // 画像リストを作成する
+        // foreach ($imageCol as $key => $value) {
+        //     if (!empty($shop[$imageCol[$key]])) {
+        //         array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+        //     }
+        // }
+
         $flg = true; // 返却フラグ
-        $isRemoved = false; // ファイル削除フラグ
         $errors = ""; // 返却メッセージ
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Owner');
-        $id = $auth['id']; // ユーザーID
-        $tmpFile = null; // バックアップ用
 
         try {
-            $del_path = preg_replace('/(^\/)/', '', $this->viewVars['shopInfo']['image_path']);
+
             // 削除対象ファイルを取得
-            $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
+            $file = new File(preg_replace('/(\/\/)/', '/', 
+                WWW_ROOT. $this->request->getData('file_path')));
 
             // 削除対象ファイルパス存在チェック
             if (!file_exists($file->path)) {
                 throw new RuntimeException('ファイルが存在しません。');
             }
 
-            // ロールバック用のファイルサイズチェック
-            if ($file->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
-                throw new RuntimeException('ファイルサイズが大きすぎます。');
-            }
-
-            // 一時ファイル作成
-            if (!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
-                throw new RuntimeException('画像のバックアップに失敗しました。');
-            }
-
-            // 一時ファイル取得
-            $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name);
-
             // 日記ファイル削除処理実行
             if (!$file->delete()) {
                 throw new RuntimeException('ファイルの削除ができませんでした。');
             }
-            // ファイル削除フラグを立てる
-            $isRemoved = true;
-            // 更新対象レコード取得
-            $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
-            $shop->set($this->request->getData('key'), "");
-            // レコード更新実行
-            if (!$this->Shops->save($shop)) {
-                throw new RuntimeException('レコードの更新ができませんでした。');
-            }
+
         } catch (RuntimeException $e) {
-            // ファイルを削除していた場合は復元する
-            if ($isRemoved) {
-                $tmpFile->copy($file->path);
-            }
-            // 一時ファイルがあれば削除する
-            if (isset($tmpFile) && file_exists($tmpFile->path)) {
-                $tmpFile->delete();// tmpファイル削除
-            }
+
             $this->log($this->Util->setLog($auth, $e));
             $flg = false;
         }
@@ -1281,22 +1409,24 @@ class ShopsController extends AppController
             return;
         }
 
-        // 一時ファイル削除
-        if (file_exists($tmpFile->path)) {
-            $tmpFile->delete();
+        $gallery = array();
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$this->viewVars['shopInfo']['image_path'])
+            , true, 0755);
+
+        /// 並び替えして出力
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $this->Util->sortByLastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$this->viewVars['shopInfo']['image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
         }
 
-        $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['id']])->first();
-        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-        $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // 画像リストを作成する
-        foreach ($imageCol as $key => $value) {
-            if (!empty($shop[$imageCol[$key]])) {
-                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
-            }
-        }
-        $this->set(compact('shop','imageList'));
+        $this->set(compact('gallery'));
         $this->render('/Element/shopEdit/gallery');
         $response = array(
             'html' => $this->response->body(),
@@ -1315,7 +1445,9 @@ class ShopsController extends AppController
      */
     public function notice()
     {
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
+        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path']);
+
         $this->set(compact('notices'));
         $this->render();
     }
@@ -1341,7 +1473,6 @@ class ShopsController extends AppController
 
         $fileMax = PROPERTY['FILE_MAX']; // ファイルアップの制限数
         $files_befor = array(); // 新規なので空の配列
-        $imageCol = array_values(preg_grep("/^image/", $this->ShopInfos->schema()->columns()));
 
         // エンティティにマッピングする
         $notice = $this->ShopInfos->newEntity($this->request->getData());
@@ -1381,13 +1512,6 @@ class ShopsController extends AppController
                         continue;
                     }
 
-                    // カラムimage1～image8の空いてる場所に入れる
-                    for ($i = 0; $i < $fileMax; $i++) {
-                        if (empty($notice->get($imageCol[$i]))) {
-                            $notice->set($imageCol[$i], $convertFile);
-                            break;
-                        }
-                    }
                 }
             }
             // レコード更新実行
@@ -1424,7 +1548,9 @@ class ShopsController extends AppController
             return;
         }
 
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
+        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path']);
+
         $this->set(compact('notices'));
         $this->render('/owner/shops/notice');
         $response = array(
@@ -1449,7 +1575,10 @@ class ShopsController extends AppController
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
         $this->confReturnJson(); // json返却用の設定
-        $notice = $this->Util->getNotice($this->request->query["id"]);
+
+        $notice = $this->Util->getNotice($this->request->query["id"]
+            , $this->viewVars['shopInfo']['notice_path']);
+
         $this->response->body(json_encode($notice));
         return;
     }
@@ -1496,9 +1625,8 @@ class ShopsController extends AppController
 
         $delFiles = json_decode($this->request->data["del_list"], true);
         // 既に登録された画像があればデコードし格納、無ければ空の配列を格納する
-        ($image_befor = json_decode($this->request->data["json_data"], true)) > 0 ? : $image_befor = array();
-        // カラム「image*」を格納する
-        $imageCol = array_values(preg_grep("/^image/", $this->ShopInfos->schema()->columns()));
+        ($image_befor = json_decode($this->request->data["json_data"], true)) > 0
+            ? : $image_befor = array();
 
         try {
 
@@ -1515,33 +1643,20 @@ class ShopsController extends AppController
             // 既に登録された画像がある場合は、ファイルのバックアップを取得
             if (count($image_befor) > 0) {
                 // 一時ディレクトリ作成
-                $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+                $tmpDir = new Folder(WWW_ROOT.$this->viewVars['shopInfo']['tmp_path']
+                    . DS . time(), true, 0777);
                 // 一時ディレクトリにバックアップ実行
                 if (!$dir->copy($tmpDir->path)) {
                     throw new RuntimeException('バックアップに失敗しました。');
                 }
             }
+
             // 削除する画像分処理する
             foreach ($delFiles as $key => $file) {
-                $delFile = new File($dir->path . DS .$file['name']);
+                $delFile = new File(WWW_ROOT . DS .$file['path']);
                 // ファイル削除処理実行
                 if (!$delFile->delete()) {
                     throw new RuntimeException('画像の削除に失敗しました。');
-                }
-                $notice->set($file['key'], "");
-            }
-            $moveImageList = array(); // 移動対象リスト
-            // 削除したカラムの空きを詰める。
-            for ($i = 0; $i < $fileMax; $i++) {
-                if (!empty($notice->get($imageCol[$i]))) {
-                    array_push($moveImageList, $notice->get($imageCol[$i]));
-                    $notice->set($imageCol[$i], '');
-                }
-            }
-            // カラムimage1から詰めてセットする
-            for ($i = 0; $i < count($moveImageList); $i++) {
-                if (empty($notice->get($imageCol[$i]))) {
-                    $notice->set($imageCol[$i], $moveImageList[$i]);
                 }
             }
             // 追加画像がある場合
@@ -1561,16 +1676,9 @@ class ShopsController extends AppController
                         $isDuplicate = true;
                         continue;
                     }
-
-                    // カラムimage1～image8の空いてる場所に入れる
-                    for ($i = 0; $i < $fileMax; $i++) {
-                        if (empty($notice->get($imageCol[$i]))) {
-                            $notice->set($imageCol[$i], $convertFile);
-                            break;
-                        }
-                    }
                 }
             }
+
             // レコード更新実行
             if (!$this->ShopInfos->save($notice)) {
                 throw new RuntimeException('レコードの登録ができませんでした。');
@@ -1608,7 +1716,8 @@ class ShopsController extends AppController
             $tmpDir->delete();// tmpフォルダ削除
         }
 
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
+        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path']);
         $this->set(compact('notices'));
         $this->render('/owner/shops/notice');
         $response = array(
@@ -1655,9 +1764,9 @@ class ShopsController extends AppController
             if ($dir->dirsize() > CAPACITY['MAX_NUM_BYTES_DIR']) {
                 throw new RuntimeException('ディレクトリサイズが大きすぎます。');
             }
-
             // 一時ディレクトリ作成
-            $tmpDir = new Folder(WWW_ROOT.PATH_ROOT['TMP'] . DS . time(), true, 0777);
+            $tmpDir = new Folder(WWW_ROOT.$this->viewVars['shopInfo']['tmp_path']
+                . DS . time(), true, 0777);
             // 一時ディレクトリにバックアップ実行
             if (!$dir->copy($tmpDir->path)) {
                 throw new RuntimeException('バックアップに失敗しました。');
@@ -1701,8 +1810,8 @@ class ShopsController extends AppController
         if (file_exists($tmpDir->path)) {
             $tmpDir->delete();
         }
-
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']);
+        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path']);
         $this->set(compact('notices'));
         $this->render('/owner/shops/notice');
         $response = array(
@@ -1722,22 +1831,23 @@ class ShopsController extends AppController
      */
     public function workSchedule()
     {
-        $start_date = new Time(date('Y-m-d 00:00:00'));
-        $start_date->day(1);
-        $end_date = new Time(date('Y-m-d 00:00:00'));
-        $last_month = $end_date->modify('last day of next month');
-        $end_date = new Time($last_month->format('Y-m-d') .' 23:59:59');
+        $start_date = new Time(date('Y-m-d 00:00:00')); // システム日時を取得
+        $start_date->day(1); // システム月の月初を取得
+        $end_date = new Time(date('Y-m-d 00:00:00')); // システム日時を取得
+        $last_month = $end_date->modify('last day of next month'); // 翌日の月末を取得
+        $end_date = new Time($last_month->format('Y-m-d') .' 23:59:59'); // 翌日の月末の日付変わる直前を取得
 
-        // 店舗に所属する全てのキャストを取得する
+        // 店舗に所属するキャストの
+        // 当月の月初から翌日の月末の日付変わる直前までのキャストのスケジュールを取得する
         $casts = $this->Casts->find('all')
             ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
-            ->contain(['Shops'
-                , 'Cast_Schedules' => function (Query $q) use ($start_date, $end_date)  {
+            ->contain(['shops'
+                , 'cast_schedules' => function (Query $q) use ($start_date, $end_date)  {
                     return $q
-                    ->where(['Cast_Schedules.start >='=> $start_date
-                            , 'Cast_Schedules.start <='=> $end_date])
-                    ->order(['Cast_Schedules.start'=>'ASC']);
-            }])->order(['Casts.created'=>'DESC']);
+                    ->where(['cast_schedules.start >='=> $start_date
+                            , 'cast_schedules.start <='=> $end_date])
+                    ->order(['cast_schedules.start'=>'ASC']);
+            }])->order(['casts.created'=>'DESC']);
 
         $workSchedule = $this->WorkSchedules->find('all')
             ->where(['shop_id', $this->viewVars['shopInfo']['id']])
@@ -1762,7 +1872,7 @@ class ShopsController extends AppController
             $cloneList = $workPlanList;
 
             // 予定期間２ヵ月分をループする
-            foreach ($cast->cast__schedules as $key2 => $schedule) {
+            foreach ($cast->cast_schedules as $key2 => $schedule) {
                 $sDate = $schedule->start->format('m-d'); // 比較用にフォーマット
                 // 予定期間２ヵ月分をループする
                 foreach ($dateList as $key3 => $date) {
@@ -1864,13 +1974,13 @@ class ShopsController extends AppController
         // 店舗に所属する全てのキャストを取得する
         $casts = $this->Casts->find('all')
             ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
-            ->contain(['Shops'
-                , 'Cast_Schedules' => function (Query $q) use ($start_date, $end_date)  {
+            ->contain(['shops'
+                , 'cast_schedules' => function (Query $q) use ($start_date, $end_date)  {
                     return $q
-                    ->where(['Cast_Schedules.start >='=> $start_date
-                            , 'Cast_Schedules.start <='=> $end_date])
-                    ->order(['Cast_Schedules.start'=>'ASC']);
-            }])->order(['Casts.created'=>'DESC']);
+                    ->where(['cast_schedules.start >='=> $start_date
+                            , 'cast_schedules.start <='=> $end_date])
+                    ->order(['cast_schedules.start'=>'ASC']);
+            }])->order(['casts.created'=>'DESC']);
 
         $workSchedule = $this->WorkSchedules->find('all')
             ->where(['shop_id', $this->viewVars['shopInfo']['id']])
@@ -1922,8 +2032,8 @@ class ShopsController extends AppController
         // // 店舗に所属する全てのキャストを取得する
         // $casts = $this->Casts->find('all')
         //     ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
-        //     ->contain(['Shops'])
-        //     ->order(['Casts.created'=>'DESC'])->toArray();
+        //     ->contain(['shops'])
+        //     ->order(['casts.created'=>'DESC'])->toArray();
 
         // $WorkSchedule = $this->WorkSchedules->find('all')
         //     ->where(['shop_id', $this->viewVars['shopInfo']['id']])

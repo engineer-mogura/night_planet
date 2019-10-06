@@ -19,10 +19,13 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<div class="card-action like-field">
-				<span class="icon-vertical-align color-blue"><i class="material-icons">favorite_border</i><span class="like-field-span like-count"></span></span>
-				<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
-			</div>
+			<span>
+				<span class="btn-floating waves-effect waves-green btn-flat blue">
+					<i class="material-icons">favorite_border</i>
+				</span>
+				<span class="like-field-span like-count"></span>
+			</span>
+			<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
 		</div>
 	</div>
 </div>

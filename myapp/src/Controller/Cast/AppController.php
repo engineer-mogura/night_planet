@@ -12,13 +12,13 @@ class AppController extends \App\Controller\AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Shops = TableRegistry::get('Shops');
-        $this->Casts = TableRegistry::get('Casts');
-        $this->Diarys = TableRegistry::get('Diarys');
-        $this->DiaryLikes = TableRegistry::get('Diary_Likes');
-        $this->CastSchedules = TableRegistry::get('Cast_schedules');
-        $this->Snss = TableRegistry::get('Snss');
-        $this->Updates = TableRegistry::get('Updates');
+        $this->Shops = TableRegistry::get('shops');
+        $this->Casts = TableRegistry::get('casts');
+        $this->Diarys = TableRegistry::get('diarys');
+        $this->DiaryLikes = TableRegistry::get('diary_likes');
+        $this->CastSchedules = TableRegistry::get('cast_schedules');
+        $this->Snss = TableRegistry::get('snss');
+        $this->Updates = TableRegistry::get('updates');
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
             'authenticate' => [
@@ -51,7 +51,7 @@ class AppController extends \App\Controller\AppController
 
         // ログイン時に許可するアクション
         $access = ['index','editCalendar','profile','topImage','saveTopImage'
-            ,'deleteTopImage','gallery','saveGallery','sns','deleteGallery','diary'
+            ,'gallery','saveGallery','sns','deleteGallery','diary'
             ,'saveDiary','viewDiary','deleteDiary','updateDiary'];
         if (in_array($action, $access)) {
             return true;

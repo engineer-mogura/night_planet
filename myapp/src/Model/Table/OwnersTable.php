@@ -42,7 +42,7 @@ class OwnersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->hasMany('Shops', [
+        $this->hasMany('shops', [
             'foreignKey' => 'owner_id',
         ]);
 
@@ -89,7 +89,7 @@ class OwnersTable extends Table
             ->add('email', [
                 'exists' => [
                     'rule' => function($value, $context) {
-                        return !TableRegistry::get('Owners')->exists(['email' => $value]);
+                        return !TableRegistry::get('owners')->exists(['email' => $value]);
                     },
                     'message' => 'そのメールアドレスは既に登録されています。'
                 ],

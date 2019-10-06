@@ -72,7 +72,6 @@ function crearShopEvents() {
     /** トップ画像タブ START */
     $(document).off('click', '.top-image-changeBtn');
     $(document).off('click', '.top-image-saveBtn');
-    $(document).off('click', '.top-image-deleteBtn');
     /** トップ画像タブ END */
     /** キャッチコピータブ START */
     $(document).off('click', '.catch-changeBtn');
@@ -783,7 +782,7 @@ function initializeUser() {
         $(document).on('click', '.archiveLink', function() {
 
             var $form =$('#view-archive-diary');
-            $($form).find("input[name='id']").val($(this).find("input[name='id']").val());
+            $($form).find("input[name='diary_id']").val($(this).find("input[name='diary_id']").val());
             //通常のアクションをキャンセルする
             event.preventDefault();
             callModalDiaryWithAjax($form, 'user');
@@ -802,11 +801,12 @@ function initializeUser() {
         // 検索ボタン押した時
         commonSearch(false);
 
-        // アーカイブ日記をクリックした時
+        // アーカイブお知らせをクリックした時
         $(document).on('click', '.archiveLink', function() {
 
             var $form =$('#view-archive-notice');
-            $($form).find("input[name='id']").val($(this).find("input[name='id']").val());
+            $($form).find("input[name='notice_id']").val($(this).find("input[name='notice_id']").val());
+            //$($form).find("input[name='id']").val($(this).find("input[name='id']").val());
             //通常のアクションをキャンセルする
             event.preventDefault();
             callModalNoticeWithAjax($form, 'user');
@@ -1003,19 +1003,7 @@ function initializeShop() {
             event.preventDefault();
             fileUpAjaxCommon($form, formData, $("#top-image"));
         });
-        // トップ画像 削除ボタン押した時
-        $(document).on("click", ".top-image-deleteBtn",function() {
 
-            if (!confirm('トップ画像を削除してもよろしいですか？')) {
-                return false;
-            }
-
-            var $form =$('#delete-top-image');
-
-            //通常のアクションをキャンセルする
-            event.preventDefault();
-            ajaxCommon($form, $("#top-image"));
-        });
         /* トップ画像 関連処理 END */
 
         /* キャッチコピー 関連処理 START */
@@ -1442,14 +1430,13 @@ function initializeShop() {
         // ギャラリー 削除ボタン押した時
         $(document).on("click", ".gallery-deleteBtn",function() {
 
-            var json = $(this).data('delete');
+            var filePath = $(this).data('delete');
 
             if (!confirm('選択したギャラリーを削除してもよろしいですか？')) {
                 return false;
             }
             var $form = $('form[id="delete-gallery"]');
-            $($form).find("input[name='key']").val(json.key);
-            $($form).find("input[name='name']").val(json.name);
+            $($form).find("input[name='file_path']").val(filePath);
 
             //通常のアクションをキャンセルする
             event.preventDefault();
@@ -1901,17 +1888,16 @@ function initializeShop() {
             // 既に登録した画像リストを元に削除対象を絞る
             $(oldImgList).each(function(i, elm1) {
                 $.each(delList, function(i, elm2) {
-                    if($(elm1).find("input[name='name']").val() == elm2.name) {
+                    if($(elm1).find("input[name='path']").val() == elm2.path) {
                         delList.splice(i, 1);
                         return false;
                     }
                 })
             })
-            var form = $('#modal-edit-notice').clone();
+            var form = $('#modal-edit-notice');
             $(form).find("input[name='del_list']").val(JSON.stringify(delList));
             $(form).find("input[name='notice_id']").val($('#delete-notice').find("input[name='id']").val());
             $(form).find("input[name='dir_path']").val($('#delete-notice').find("input[name='dir_path']").val());
-            $(form).find('.card-img').remove();
             $(form).find('.card-img input').remove();
 
             var fileCheck = $(form).find("#modal-image-file").val().length;
@@ -1967,7 +1953,7 @@ function initializeShop() {
             $($form).find("input[name='id']").val($(this).find("input[name='id']").val());
             //通常のアクションをキャンセルする
             event.preventDefault();
-            callModalNoticeWithAjax($form, 'cast');
+            callModalNoticeWithAjax($form, 'admin');
             $('.materialboxed').materialbox();
         });
         // モーダルお知らせの更新モードボタン押した時
@@ -1993,7 +1979,7 @@ function initializeShop() {
                     $.each(images, function(index, image) {
                         var material = $(materialTmp).clone();
                         $(material).find("input[name='id']").val(image['id']);
-                        $(material).find("input[name='name']").val(image['name']);
+                        //$(material).find("input[name='name']").val(image['name']);
                         $(material).find("input[name='key']").val(image['key']);
                         $(material).find("input[name='path']").val(image['path']);
                         $(material).find('img').attr("src",image['path']);
@@ -2311,18 +2297,18 @@ function initializeShop() {
                             $(diaryCard).find('figure.hide').remove();
                             initPhotoSwipeFromDOM('.my-gallery');
                         }
-                        // キャストの場合JSONデータを保持する
-                        if(userType == 'cast') {
+                        // 管理者の場合JSONデータを保持する
+                        if(userType == 'admin') {
                             var images = [];
                             $.each(response['gallery'], function(key, value) {
 
                                 // プッシュする
                                 images.push({"id":response['id'],
                                     "path": value['file_path'],
-                                    "key": key,
-                                    "name": value
+                                    "key": key
                                 });
                             })
+
                             var dir = $("#diary").find("input[name='cast_dir']").val();
                             $("#delete-diary").find("input[name='id']").val(response['id']);
                             $("#delete-diary").find("input[name='dir_path']").val(dir + response['dir']);
@@ -2340,7 +2326,7 @@ function initializeShop() {
                             window.scrollTo( 0 , scrollPosition );
                             $($(this)[0]["$el"]).find('.clone').remove();
 
-                        } else if(userType == 'cast') {
+                        } else if(userType == 'admin') {
                             //キャストの場合
                             // モーダルフォームをクリアする
                             $("#modal-edit-diary").find(".card-img").remove();
@@ -2421,33 +2407,32 @@ function initializeShop() {
                         $(noticeCard).find("p[name='created']").text(response['ymd_created']);
                         $(noticeCard).find("p[name='title']").text(response['title']);
                         $(noticeCard).find("p[name='content']").textWithLF(response['content']);
-                        $('#modal-notice').find(".like-count").text(response['shop_info__likes'].length);
-                        var images = [];
-                        $.each(response, function(key, value) {
+                        $('#modal-notice').find(".like-count").text(response['shop_info_likes'].length);
 
-                            if(key.match(/image[0-9]*/) && value) {
-                                // 値が空じゃない、かつnullじゃない時プッシュする
-                                value !== '' && value !== null ?
-                                images.push({"id":response['id'],
-                                                "path":noticeDir + '/'+ value,
-                                                "key":key,
-                                                "name":value}) :'';
-                            }
-                        })
                         // 画像表示するグリッドを決定する
-                        if(images.length > 0) {
+                        if(response['gallery'].length > 0) {
                             var figure = $(noticeCard).find('figure');
                             var imgClass = "";
-                            $.each(images, function(key, value) {
+                            $.each(response['gallery'], function(key, value) {
                                 var cloneFigure = $(figure).clone(true).removeClass().insertAfter(figure);
-                                $(cloneFigure).find('a').attr({'href': value['path']});
-                                $(cloneFigure).find('img').attr({'src': value['path']});
+                                $(cloneFigure).find('a').attr({'href': value['file_path']});
+                                $(cloneFigure).find('img').attr({'src': value['file_path']});
                             })
                             $(noticeCard).find('figure.hide').remove();
                             initPhotoSwipeFromDOM('.my-gallery');
                         }
-                        // 店舗お知らせ画面の場合JSONデータを保持する
-                        if(userType == 'cast') {
+                        // 管理者の場合JSONデータを保持する
+                        if(userType == 'admin') {
+                            var images = [];
+                            $.each(response['gallery'], function(key, value) {
+
+                                // プッシュする
+                                images.push({"id":response['id'],
+                                    "path": value['file_path'],
+                                    "key": key
+                                });
+                            })
+
                             var dir = $("#notice").find("input[name='notice_dir']").val();
                             $("#delete-notice").find("input[name='id']").val(response['id']);
                             $("#delete-notice").find("input[name='dir_path']").val(dir + response['dir']);
@@ -2465,7 +2450,7 @@ function initializeShop() {
                             window.scrollTo( 0 , scrollPosition );
                             $($(this)[0]["$el"]).find('.clone').remove();
 
-                        } else if(userType == 'cast') {
+                        } else if(userType == 'admin') {
                             //キャストの場合
                             // モーダルフォームをクリアする
                             $("#modal-edit-notice").find(".card-img").remove();
@@ -2600,7 +2585,7 @@ function initializeCast() {
         $('select').material_select();
 
 
-                // 画像を選択した時
+        // 画像を選択した時
         $(document).on("change", "#image-file", function() {
 
             var $form = $(this).closest('form');
@@ -2717,19 +2702,7 @@ function initializeCast() {
             event.preventDefault();
             fileUpAjaxCommon($form, formData, $("#wrapper"));
         });
-        // トップ画像 削除ボタン押した時
-        $(document).on("click", ".deleteBtn",function() {
 
-            if (!confirm('トップ画像を削除してもよろしいですか？')) {
-                return false;
-            }
-
-            var $form =$('#delete-top-image');
-
-            //通常のアクションをキャンセルする
-            event.preventDefault();
-            ajaxCommon($form, $("#wrapper"));
-        });
     }
     /* トップ画像 関連処理 END */
     /* 日記 画面 START */
@@ -2819,7 +2792,7 @@ function initializeCast() {
             // 既に登録した画像リストを元に削除対象を絞る
             $(oldImgList).each(function(i, elm1) {
                 $.each(delList, function(i, elm2) {
-                    if($(elm1).find("input[name='name']").val() == elm2.name) {
+                    if($(elm1).find("input[name='path']").val() == elm2.path) {
                         delList.splice(i, 1);
                         return false;
                     }
@@ -2829,7 +2802,6 @@ function initializeCast() {
             $(form).find("input[name='del_list']").val(JSON.stringify(delList));
             $(form).find("input[name='diary_id']").val($('#delete-diary').find("input[name='id']").val());
             $(form).find("input[name='dir_path']").val($('#delete-diary').find("input[name='dir_path']").val());
-            //$(form).find('.card-img').not('.new').remove();
             $(form).find('.card-img input').remove();
 
             var fileCheck = $(form).find("#modal-image-file").val().length;
@@ -2885,7 +2857,7 @@ function initializeCast() {
             $($form).find("input[name='id']").val($(this).find("input[name='id']").val());
             //通常のアクションをキャンセルする
             event.preventDefault();
-            callModalDiaryWithAjax($form, 'cast');
+            callModalDiaryWithAjax($form, 'admin');
             $('.materialboxed').materialbox();
         });
         // モーダル日記の更新モードボタン押した時
@@ -2911,7 +2883,7 @@ function initializeCast() {
                     $.each(images, function(index, image) {
                         var material = $(materialTmp).clone();
                         $(material).find("input[name='id']").val(image['id']);
-                        $(material).find("input[name='name']").val(image['name']);
+                        //$(material).find("input[name='name']").val(image['name']);
                         $(material).find("input[name='key']").val(image['key']);
                         $(material).find("input[name='path']").val(image['path']);
                         $(material).find('img').attr("src",image['path']);

@@ -24,7 +24,7 @@
                   </tr>
                   <tr>
                     <td colspan="2">
-                      <img src="<?=isset($cast->icon) ? $shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon: PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle left" width="80" height="80">
+                      <img src="<?=$cast->icon?>" alt="" class="circle left" width="80" height="80">
                       <input type="checkbox" class="check-cast-group" name="check_cast" id="check-cast<?=$key?>" />
                       <label for="check-cast<?=$key?>">編集する</label>
                       <div style="display:none;">

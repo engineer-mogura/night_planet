@@ -5,14 +5,11 @@
 		<p class="message"><?= count($shops) == 0 ? h("検索結果が０件でした。条件を変更し、もう一度検索してみてください。"):""?></p>
 	</div>
 	<?php if(count($shops) > 0) { ?>
-	<ul id="search">
+	<ul>
 		<?php foreach ($shops as $key => $rows): ?>
-			<?php !empty($rows['top_image']) ? $main_image = DS.PATH_ROOT['IMG']
-				.DS.AREA[$rows['area']]['path'].DS.GENRE[$rows['genre']]['path']
-				.DS.$rows['dir'].DS.$rows['top_image']: $main_image = GENRE[$rows['genre']]['image']?>
 			<li class="linkbox col card horizontal waves-effect hoverable search-result-card">
 				<div class="card-image">
-					<img src="<?= $main_image ?>" height="200">
+					<img src="<?= $rows->top_image ?>" height="200">
 				</div>
 				<div class="card-stacked">
 					<div class="card-content">

@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller\Owner;
 
+use Cake\Log\Log;
 use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Mailer\Email;
@@ -114,7 +115,6 @@ class OwnersController extends AppController
                 if ($owner) {
                     // セッションにユーザー情報を保存する
                     $this->Auth->setUser($owner);
-                    $this->Auth->setUser($cast);
                     Log::info($this->Util->setAccessLog(
                         $owner, $this->request->params['action']), 'access');
 
@@ -275,6 +275,24 @@ class OwnersController extends AppController
         if(!is_null($user = $this->Auth->user())){
             // オーナーに所属する全ての店舗を取得する
             $shops = $this->Shops->find('all')->where(['owner_id' => $user['id']]);
+            // 店舗トップ画像を設定する
+            foreach ($shops as $key => $shop) {
+                $path = PATH_ROOT['IMG'].DS.$shop->area.DS.$shop->genre
+                    .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
+                $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                    , WWW_ROOT.$path), true, 0755);
+                $files = array();
+                $files = glob($dir->path.DS.'*.*');
+                // ファイルが存在したら、画像をセット
+                if(count($files) > 0) {
+                    foreach( $files as $file ) {
+                        $shop->set('top_image', DS.$path.DS.(basename($file)));
+                    }
+                } else {
+                    // 共通トップ画像をセット
+                    $shop->set('top_image', PATH_ROOT['NO_IMAGE02']);
+                }
+            }
         }
         //$val = $this->Analytics->getAnalytics();
         $this->set('shops', $shops);
@@ -391,43 +409,58 @@ class OwnersController extends AppController
         $id = $auth['id']; // ユーザーID
 
         if ($this->request->is('ajax')) {
+
             $flg = true; // 返却フラグ
             $errors = ""; // 返却メッセージ
             $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
             $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+
             // アイコン画像変更の場合
             if (isset($this->request->data["action_type"])) {
 
                 $dirPath = preg_replace('/(\/\/)/', '/',
                     WWW_ROOT.$this->viewVars['userInfo']['profile_path']);
+
                 $owner = $this->Owners->get($this->viewVars['userInfo']['id']);
+
                 // ディクレトリ取得
                 $dir = new Folder($dirPath, true, 0755);
+
+                // ファイルは１つのみだけど配列で取得する
+                $files = glob($dir->path.DS.'*.*');
+
                 // 前のファイル取得
-                $fileBefor = new File($dirPath . DS .$owner->icon, true, 0755);
+                $fileBefor = new File($files[0], true, 0755);
+
                 $file = $this->request->data['image'];
+
                 // ファイルが存在する、かつファイル名がblobの画像のとき
                 if (!empty($file["name"]) && $file["name"] == 'blob') {
                     $limitFileSize = CAPACITY['MAX_NUM_BYTES_FILE'];
                     try {
-                        if(file_exists($fileBefor->path) && !empty($owner->icon)) {
+                        // 前のファイルがある場合
+                        if(file_exists($fileBefor->path) && count($files) > 0) {
                             // ロールバック用のファイルサイズチェック
                             if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
                                 throw new RuntimeException('ファイルサイズが大きすぎます。');
                             }
                             // 一時ファイル作成
-                            if (!$fileBefor->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name)) {
+                            if (!$fileBefor->copy(preg_replace('/(\/\/)/', '/',
+                                WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name))) {
                                 throw new RuntimeException('バックアップに失敗しました。');
                             }
                             // 一時ファイル取得
-                            $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$fileBefor->name);
+                            $tmpFile = new File(preg_replace('/(\/\/)/', '/',
+                                WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name));
                         }
-                        $owner->icon = $this->Util->file_upload($this->request->getData('image'),
+
+                        $newImageName = $this->Util->file_upload($this->request->getData('image'),
                             ['name'=> $fileBefor->name ], $dir->path, $limitFileSize);
+
                         // ファイル更新の場合は古いファイルは削除
                         if (!empty($fileBefor->name)) {
                             // ファイル名が同じ場合は削除を実行しない
-                            if ($fileBefor->name != $owner->icon) {
+                            if ($fileBefor->name != $newImageName) {
                                 // ファイル削除処理実行
                                 if (!$fileBefor->delete()) {
                                     throw new RuntimeException('ファイルの削除ができませんでした。');
@@ -436,24 +469,13 @@ class OwnersController extends AppController
                                 $isRemoved = true;
                             }
                         }
-                        // レコード更新実行
-                        if (!$this->Owners->save($owner)) {
-                            throw new RuntimeException('レコードの更新ができませんでした。');
-                        }
 
                     } catch (RuntimeException $e) {
                         // ファイルを削除していた場合は復元する
                         if ($isRemoved) {
                             $tmpFile->copy($file->path);
                         }
-                        // ファイルがアップロードされていた場合は削除を行う
-                        if($owner->isDirty('image')) {
-                            $file = new File($dirPath . DS .$owner->icon, true, 0755);
-                            // 一時ファイルがあれば削除する
-                            if (isset($file) && file_exists($file->path)) {
-                                $file->delete();// tmpファイル削除
-                            }
-                        }
+
                         // 一時ファイルがあれば削除する
                         if (isset($tmpFile) && file_exists($tmpFile->path)) {
                             $tmpFile->delete();// tmpファイル削除
@@ -513,13 +535,30 @@ class OwnersController extends AppController
                 }
             }
 
+            $icons = array();
+            $dirPath = preg_replace('/(\/\/)/', '/',
+                WWW_ROOT.$this->viewVars['userInfo']['profile_path']);
+
+            // ディクレトリ取得
+            $dir = new Folder($dirPath, true, 0755);
+
+            // ファイルは１つのみだけど配列で取得する
+            $files = glob($dir->path.DS.'*.*');
+
+            foreach( $files as $file ) {
+                $timestamp = date('Y/m/d H:i', filemtime($file));
+                array_push($icons, array(
+                    "file_path"=>$this->viewVars['userInfo']['profile_path'].DS.(basename( $file ))
+                    ,"date"=>$timestamp));
+            }
+
             $owner = $this->Owners->get($id);
             // 作成するセレクトボックスを指定する
             $masCodeFind = array('age');
             // セレクトボックスを作成する
             $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
-            $this->set(compact('owner', 'selectList'));
+            $this->set(compact('owner', 'selectList', 'icons'));
             $this->render('/Owner/Owners/profile');
             $response = array(
                 'html' => $this->response->body(),
@@ -531,13 +570,30 @@ class OwnersController extends AppController
             return;
         }
 
+        $icons = array();
+        $dirPath = preg_replace('/(\/\/)/', '/',
+            WWW_ROOT.$this->viewVars['userInfo']['profile_path']);
+
+        // ディクレトリ取得
+        $dir = new Folder($dirPath, true, 0755);
+
+        // ファイルは１つのみだけど配列で取得する
+        $files = glob($dir->path.DS.'*.*');
+
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($icons, array(
+                "file_path"=>$this->viewVars['userInfo']['profile_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
+        }
+
         $owner = $this->Owners->get($id);
         // 作成するセレクトボックスを指定する
         $masCodeFind = array('age');
         // セレクトボックスを作成する
         $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
-        $this->set(compact('owner', 'selectList'));
+        $this->set(compact('owner', 'selectList', 'icons'));
         $this->render();
     }
 

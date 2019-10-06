@@ -32,7 +32,7 @@
 </div>
 <?= $this->element('photoSwipe'); ?>
 <!-- ショップ用ボトムナビゲーション START -->
-<?= $this->element('shop-bottom-navigation'); ?>
+<?= $this->element('cast-bottom-navigation'); ?>
 <!-- ショップ用ボトムナビゲーション END -->
 
 

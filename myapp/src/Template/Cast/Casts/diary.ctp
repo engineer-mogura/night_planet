@@ -1,9 +1,3 @@
-<?php
-/**
-* @var \App\View\AppView $this
-* @var \App\Model\Entity\Cast[]|\Cake\Collection\CollectionInterface $casts
-*/
-?>
 <div id="wrapper">
 <?= $this->element('modal/diaryModal'); ?>
     <div class="container">
@@ -86,16 +80,16 @@
                         <li class="collection-item">
                             <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                             <?php foreach ($rows as $row): ?>
-                            <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
-                            <div class="linkbox collapsible-body archiveLink">
-                                <input type="hidden" name="id" value=<?=$row->id?>>
-                                <span class="title color-blue"><?= $row['md_created'] ?></span>
-                                <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row['likes']) ?></span>
-                                <p><span class="truncate"><?= $row->title ?><br>
-                                    <?= $row['content'] ?></span>
-                                </p>
-                                <a class="waves-effect hoverable" href="#"></a>
-                            </div>
+                                <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                                <div class="linkbox collapsible-body archiveLink">
+                                    <input type="hidden" name="id" value=<?=$row->id?>>
+                                    <span class="title color-blue"><?= $row['md_created'] ?></span>
+                                    <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row['likes']) ?></span>
+                                    <p><span class="truncate"><?= $row->title ?><br>
+                                        <?= $row['content'] ?></span>
+                                    </p>
+                                    <a class="waves-effect hoverable" href="#"></a>
+                                </div>
                             <?php endforeach; ?>
                         </li>
                         <?php endforeach; ?>

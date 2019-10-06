@@ -15,18 +15,18 @@ class AreaController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users = TableRegistry::get('Users');
-        $this->Shops = TableRegistry::get('Shops');
-        $this->Coupons = TableRegistry::get('Coupons');
-        $this->Casts = TableRegistry::get('Casts');
-        $this->Diarys = TableRegistry::get('Diarys');
-        $this->ShopInfoLikes = TableRegistry::get('Shop_info_Likes');
-        $this->DiaryLikes = TableRegistry::get('Diary_Likes');
-        $this->Jobs = TableRegistry::get('Jobs');
+        $this->Users = TableRegistry::get('users');
+        $this->Shops = TableRegistry::get('shops');
+        $this->Coupons = TableRegistry::get('coupons');
+        $this->Casts = TableRegistry::get('casts');
+        $this->Diarys = TableRegistry::get('diarys');
+        $this->ShopInfoLikes = TableRegistry::get('shop_info_likes');
+        $this->DiaryLikes = TableRegistry::get('diary_likes');
+        $this->Jobs = TableRegistry::get('jobs');
         $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->Updates = TableRegistry::get("updates");
         $this->MasterCodes = TableRegistry::get("master_codes");
-        $this->WorkSchedules = TableRegistry::get("Work_schedules");
+        $this->WorkSchedules = TableRegistry::get("work_schedules");
 
     }
 
@@ -151,7 +151,7 @@ class AreaController extends AppController
     {
         if ($this->request->is('ajax')) {
 
-            $columns = array('Shops.name', 'Shops.catch'); // like条件用
+            $columns = array('shops.name', 'shops.catch'); // like条件用
             $shops = $this->getShopList($this->request->getQuery(), $columns);
             // 検索ページからの場合は、結果のみを返却する
             $this->confReturnJson(); // json返却用の設定
@@ -160,10 +160,32 @@ class AreaController extends AppController
 
         }
         $shops = array(); // 店舗情報格納用
-        $columns = array('Shops.name', 'Shops.catch'); // like条件用
+        $columns = array('shops.name', 'shops.catch'); // like条件用
         $shops = $this->Shops->find('all')
                     ->where(['area'=>$this->viewVars['isArea'],
                         'genre' => $this->request->getQuery("genre")])->toArray();
+
+        // トップ画像を設定する
+        foreach ($shops as $key => $shop) {
+            $path = PATH_ROOT['IMG'].DS.AREA[$shop->area]['path']
+            .DS.GENRE[$shop->genre]['path']
+            .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$path), true, 0755);
+
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if(count($files) > 0) {
+                foreach( $files as $file ) {
+                    $shop->set('top_image', DS.$path.DS.(basename($file)));
+                }
+            } else {
+                // 共通トップ画像をセット
+                $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+            }
+        }
+
         $this->set(compact('shops'));
         $this->render();
     }
@@ -174,25 +196,25 @@ class AreaController extends AppController
        $columns = $this->ShopInfos->schema()->columns();
 
         $shop = $this->Shops->find('all')
-            ->where(['Shops.id' => $id])
-            ->contain(['Owners','Casts' => function(Query $q) {
+            ->where(['shops.id' => $id])
+            ->contain(['owners','casts' => function(Query $q) {
                     return $q
-                        ->where(['Casts.status'=>'1']);
-                }, 'Coupons' => function(Query $q) {
+                        ->where(['casts.status'=>'1']);
+                }, 'coupons' => function(Query $q) {
                     return $q
-                        ->where(['Coupons.status'=>'1']);
-                },'Shop_infos' => function(Query $q) use ($columns) {
+                        ->where(['coupons.status'=>'1']);
+                },'shop_infos' => function(Query $q) use ($columns) {
                     return $q
                         ->select($columns)
-                        ->order(['Shop_infos.created'=>'DESC'])
+                        ->order(['shop_infos.created'=>'DESC'])
                         ->limit(1);
-                },'Work_schedules' => function(Query $q) {
+                },'work_schedules' => function(Query $q) {
                     $end_date = date("Y-m-d H:i:s");
                     $start_date = date("Y-m-d H:i:s",strtotime($end_date . "-24 hour"));
                     $range = "'".$start_date."' and '".$end_date."'";
                     return $q
-                        ->where(["Work_schedules.modified BETWEEN".$range]);
-                },'Jobs','Snss'])->first();
+                        ->where(["work_schedules.modified BETWEEN".$range]);
+                },'jobs','snss'])->first();
 
         $shopInfo = $this->Util->getShopInfo($shop);
         $query = $this->Updates->find();
@@ -234,30 +256,103 @@ class AreaController extends AppController
                 }
             }
 
-
         }
-        $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-        $imageList = array(); // 画面側でJSONとして使う画像リスト
-        // 画像リストを作成する
-        foreach ($imageCol as $key => $value) {
-            if (!empty($shop[$imageCol[$key]])) {
-                array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+
+        // トップ画像を設定する
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$shopInfo['top_image_path'])
+            , true, 0755);
+
+        $files = array();
+        $files = glob($dir->path.DS.'*.*');
+        // ファイルが存在したら、画像をセット
+        if(count($files) > 0) {
+            foreach( $files as $file ) {
+                $shop->set('top_image', $shopInfo['top_image_path'].DS.(basename($file)));
+            }
+        } else {
+            // 共通トップ画像をセット
+            $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+        }
+
+        // ギャラリーリストを作成
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$shopInfo['image_path'])
+            , true, 0755);
+        $gallery = array();
+
+        /// 並び替えして出力
+        $files = array();
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $this->Util->sortByLastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$shopInfo['image_path'].DS.(basename( $file ))
+                ,"date"=>$timestamp));
+        }
+        $shop->set('gallery', $gallery);
+
+        // 日記のギャラリーリストを作成
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$shopInfo['notice_path'].$shop->shop_infos[0]->dir)
+            , true, 0755);
+        $gallery = array();
+        /// 並び替えして出力
+        $files = array();
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $this->Util->sortByLastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.(basename($file))
+                ,"date"=>$timestamp));
+        }
+        $shop->shop_infos[0]->set('gallery',$gallery);
+
+        // キャストのアイコンを設定する
+        foreach ($shop->casts as $key => $cast) {
+            $path = $shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'];
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$path), true, 0755);
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if(count($files) > 0) {
+                foreach( $files as $file ) {
+                    $cast->set('icon', $path.DS.(basename($file)));
+                }
+            } else {
+                // 共通トップ画像をセット
+                $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
             }
         }
         // 店舗キャストの最新日記を取得する
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id);
+        // $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
+        // $imageList = array(); // 画面側でJSONとして使う画像リスト
+        // // 画像リストを作成する
+        // foreach ($imageCol as $key => $value) {
+        //     if (!empty($shop[$imageCol[$key]])) {
+        //         array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
+        //     }
+        // }
+        // // 店舗キャストの最新日記を取得する
+        // $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id);
 
-        // お知らせのギャラリーリストを作成
-        $imageCol = array_values(preg_grep('/^image/', $this->ShopInfos->schema()->columns()));
-        $shopInfos = $shop->shop_infos[0];
-        $nImageList = array(); // お知らせの画像が存在するカラムリスト
-        if(count($shopInfos) > 0) {
-            foreach ($imageCol as $key => $value) {
-                if (!empty($shopInfos[$value])) {
-                    array_push($nImageList, ['key'=>$imageCol[$key],'name'=>$shopInfos[$imageCol[$key]]]);
-                }
-            }
-        }
+        // // お知らせのギャラリーリストを作成
+        // $imageCol = array_values(preg_grep('/^image/', $this->ShopInfos->schema()->columns()));
+        // $shopInfos = $shop->shop_infos[0];
+        // $nImageList = array(); // お知らせの画像が存在するカラムリスト
+        // if(count($shopInfos) > 0) {
+        //     foreach ($imageCol as $key => $value) {
+        //         if (!empty($shopInfos[$value])) {
+        //             array_push($nImageList, ['key'=>$imageCol[$key],'name'=>$shopInfos[$imageCol[$key]]]);
+        //         }
+        //     }
+        // }
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
         $insta_user_name = $shop->snss[0]->instagram;
@@ -273,32 +368,30 @@ class AreaController extends AppController
             $insta_error = $tmp_ig_data->error->error_user_title;
             $this->set(compact('ig_error'));
         }
-        $this->set(compact('shop','shopInfo','update_icon','updateInfo','diarys','sharer','imageList'
-            ,'nImageList', 'credits','creditsHidden','ig_data','imageCol'));
+        $this->set(compact('shop','shopInfo','update_icon','updateInfo','diarys','sharer'
+            , 'credits','creditsHidden','ig_data'));
         $this->render();
     }
 
     public function cast($id = null)
     {
-        $query = $this->Diarys->find();
-
-        $columns = $this->Diarys->schema()->columns();
         // キャスト情報、最新の日記情報とイイネの総数取得
-        $cast = $this->Casts->find("all")->where(['Casts.id' => $id])
-            ->contain(['Shops', 'Diarys' => function(Query $q) use ($columns) {
+        $cast = $this->Casts->find("all")->where(['casts.id' => $id])
+            ->contain(['shops', 'diarys' => function(Query $q) {
                 return $q
-                    ->select($columns)
-                    ->order(['Diarys.created'=>'DESC']);
-                }, 'Diarys.Diary_Likes','Snss'
+                    ->order(['diarys.created'=>'DESC']);
+                }
+                , 'diarys.diary_likes','Snss'
             ])->first();
         // その他のキャストを取得する
         $other_casts = $this->Casts->find("all")
-            ->where(['Casts.shop_id' => $this->request->getQuery('shop')
-                , 'Casts.id is not' => $id
+            ->where(['casts.shop_id' => $this->request->getQuery('shop')
+                , 'casts.id is not' => $id
             ])
             ->order(['created'=>'DESC'])
             ->toArray();
 
+        // 本日のキャストの出勤有無を取得する
         $end_date = date("Y-m-d H:i:s");
         $start_date = date("Y-m-d H:i:s",strtotime($end_date . "-24 hour"));
         $range = "'".$start_date."' and '".$end_date."'";
@@ -311,39 +404,97 @@ class AreaController extends AppController
 
         // キャスト情報取得
         $castInfo = $this->Util->getCastItem($cast, $cast->shop);
+
+        // トップ画像を設定する
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$castInfo['top_image_path'])
+            , true, 0755);
+
+        $files = array();
+        $files = glob($dir->path.DS.'*.*');
+        // ファイルが存在したら、画像をセット
+        if(count($files) > 0) {
+            foreach( $files as $file ) {
+                $cast->set('top_image', $castInfo['top_image_path'].DS.(basename($file)));
+            }
+        } else {
+            // 共通トップ画像をセット
+            $cast->set('top_image', PATH_ROOT['CAST_TOP_IMAGE']);
+        }
+        // アイコンを設定する
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$castInfo['profile_path'])
+            , true, 0755);
+
+        $files = array();
+        $files = glob($dir->path.DS.'*.*');
+        // ファイルが存在したら、画像をセット
+        if(count($files) > 0) {
+            foreach( $files as $file ) {
+                $cast->set('icon', $castInfo['profile_path'].DS.(basename($file)));
+            }
+        } else {
+            // 共通トップ画像をセット
+            $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
+        }
+
         // ギャラリーリストを作成
         // ディクレトリ取得
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
-            , WWW_ROOT.$castInfo['cast_path'].DS.PATH_ROOT['IMAGE'])
+            , WWW_ROOT.$castInfo['image_path'])
             , true, 0755);
-
         $gallery = array();
 
-        /// 更新日時順で並び替える関数
-        $sort_by_lastmod = function($a, $b) {
-            return filemtime($b) - filemtime($a);
-        };
         /// 並び替えして出力
+        $files = array();
         $files = glob($dir->path.DS.'*.*');
-        usort( $files, $sort_by_lastmod );
+        usort( $files, $this->Util->sortByLastmod );
         foreach( $files as $file ) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
-                "file_path"=>$castInfo['cast_path'].DS.PATH_ROOT['IMAGE'].DS.(basename( $file ))
+                "file_path"=>$castInfo['image_path'].DS.(basename( $file ))
                 ,"date"=>$timestamp));
         }
+        $cast->set('gallery', $gallery);
 
         // 日記のギャラリーリストを作成
-        $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
-        $diary = $cast->diarys[0];
-        $dImageList = array(); // 日記の画像が存在するカラムリスト
-        if(count($diary) > 0) {
-            foreach ($imageCol as $key => $value) {
-                if (!empty($diary[$value])) {
-                    array_push($dImageList, ['key'=>$imageCol[$key],'name'=>$diary[$imageCol[$key]]]);
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+            , WWW_ROOT.$castInfo['diary_path'].$cast->diarys[0]->dir)
+            , true, 0755);
+        $gallery = array();
+        /// 並び替えして出力
+        $files = array();
+        $files = glob($dir->path.DS.'*.*');
+        usort( $files, $this->Util->sortByLastmod );
+        foreach( $files as $file ) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+                "file_path"=>$castInfo['diary_path'].$cast->diarys[0]->dir.DS.(basename($file))
+                ,"date"=>$timestamp));
+        }
+        $cast->diarys[0]->set('gallery',$gallery);
+
+        $shopInfo = $this->Util->getShopInfo($cast->shop);
+
+        // その他キャストのアイコンを設定する
+        foreach ($other_casts as $key => $otherCast) {
+            $path = $shopInfo['cast_path'].DS.$otherCast->dir.DS.PATH_ROOT['PROFILE'];
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$path), true, 0755);
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if(count($files) > 0) {
+                foreach( $files as $file ) {
+                    $otherCast->set('icon', $path.DS.(basename($file)));
                 }
+            } else {
+                // 共通トップ画像をセット
+                $otherCast->set('icon', PATH_ROOT['NO_IMAGE02']);
             }
         }
+
 
         $insta_user_name = $cast->snss[0]->instagram;
         // インスタのキャッシュパス
@@ -358,16 +509,16 @@ class AreaController extends AppController
             $insta_error = $tmp_ig_data->error->error_user_title;
             $this->set(compact('ig_error'));
         }
-        $this->set('shopInfo', $this->Util->getShopInfo($cast->shop));
-        $this->set(compact('cast','isWorkDay','ig_data','other_casts','gallery','dImageList'));
+
+        $this->set(compact('cast','isWorkDay','ig_data','other_casts', 'shopInfo', 'castInfo'));
         $this->render();
     }
 
     public function gallery($id = null)
     {
         $cast = $this->Casts->find('all')
-            ->where(['Casts.id' => $id])
-            ->contain(['Shops'])
+            ->where(['casts.id' => $id])
+            ->contain(['shops'])
             ->first();
 
         // キャスト情報取得
@@ -377,15 +528,12 @@ class AreaController extends AppController
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
             , WWW_ROOT.$castInfo['cast_path'].DS.PATH_ROOT['IMAGE'])
             , true, 0755);
-        //$files = $dir->find('.*\.*');
+
         $gallery = array();
-        /// 更新日時順で並び替える関数
-        $sort_by_lastmod = function($a, $b) {
-            return filemtime($b) - filemtime($a);
-        };
-        /// 並び替えして出力
+
+        // 並び替えして出力
         $files = glob($dir->path.DS.'*.*');
-        usort( $files, $sort_by_lastmod );
+        usort( $files, $this->Util->sortByLastmod );
         foreach( $files as $file ) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
@@ -399,42 +547,37 @@ class AreaController extends AppController
 
     public function diary($id = null)
     {
-        $cast = $this->Casts->find('all')->where(['Casts.id' => $id])
-            ->contain(['Shops'])
+        $cast = $this->Casts->find('all')->where(['casts.id' => $id])
+            ->contain(['shops'])
             ->first();
-        $this->set('shopInfo', $this->Util->getShopInfo($this->Shops->get($cast->shop_id)->toArray()));
-        $imageCol = array_values(preg_grep('/^image/', $this->Diarys->schema()->columns()));
 
-        $diarys = $this->Util->getDiarys($id);
-        $this->viewVars['shopInfo']['diary_path'] = $this->viewVars['shopInfo']['cast_path']
-            .DS.$cast["dir"].DS.PATH_ROOT['DIARY'];
+        $this->set('userInfo', $this->Util->getCastItem($cast, $cast->shop));
+        $this->set('shopInfo', $this->Util->getShopInfo($cast->shop));
 
-        $this->set(compact('cast','diarys','imageCol'));
+        // キャストの全ての日記を取得
+        $diarys = $this->Util->getDiarys($id, $this->viewVars['userInfo']['diary_path']);
+
+        $this->set(compact('cast','diarys'));
         $this->render();
     }
 
-    public function viewDiary($id = null)
+    public function viewDiary()
     {
-
-        if ($this->request->is('ajax')) {
-            $this->confReturnJson(); // json返却用の設定
-            $query = $this->Diarys->find();
-            $columns = $this->Diarys->schema()->columns();
-            $ymd = $query->func()->date_format([
-                'created' => 'literal',
-                "'%Y/%c/%e %H:%i'" => 'literal']);
-            $columns = $columns + ['ymd_created'=>$ymd];
-
-            // キャスト情報、最新の日記情報とイイネの総数取得
-            $diary = $this->Diarys->find("all")
-                ->select($columns)
-                ->where(['id' => $this->request->query["id"]])
-                ->contain(['Diary_Likes'])->first();
-            // $diary = $this->Diarys->get($this->request->query["id"]);
-            $this->response->body(json_encode($diary));
-            return;
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
+        $this->confReturnJson(); // json返却用の設定
+        $cast = $this->Casts->find('all')
+            ->where(['casts.id' => $this->request->query["id"]])
+            ->contain(['shops'])
+            ->first();
 
+        $this->set('userInfo', $this->Util->getCastItem($cast, $cast->shop));
+        $diary = $this->Util->getDiary($this->request->getQuery('diary_id')
+            , $this->viewVars['userInfo']['diary_path']);
+        $this->response->body(json_encode($diary));
+        return;
     }
     /**
      * キャストの全ての日記情報を取得する処理
@@ -445,7 +588,7 @@ class AreaController extends AppController
     public function getDiarys($id = null)
     {
 
-        $columns = array('id','cast_id','title','content','image1','dir');
+        $columns = array('id','cast_id','title','content','dir');
         // キャスト情報、最新の日記情報とイイネの総数取得
         $diarys = $this->Diarys->find("all")
             ->select($columns)
@@ -475,37 +618,49 @@ class AreaController extends AppController
 
     public function notice($id = null)
     {
-        $shopInfos = $this->ShopInfos->get($id);
-        $this->set('shopInfo', $this->Util->getShopInfo($this->Shops->get($shopInfos->shop_id)->toArray()));
-        $imageCol = array_values(preg_grep('/^image/', $this->ShopInfos->schema()->columns()));
+        $shop = $this->Shops->get($id);
+        $shopInfo = $this->Util->getShopInfo($shop);
+        $notices = $this->Util->getNotices($shop->id
+            , $shopInfo['notice_path']);
 
-        $notices = $this->Util->getNotices($shopInfos->shop_id);
-
-        $this->set(compact('notices','imageCol'));
+        $this->set(compact('shop', 'notices','shopInfo'));
         $this->render();
     }
 
-    public function viewNotice($id = null)
+    public function viewNotice()
     {
 
-        if ($this->request->is('ajax')) {
-            $this->confReturnJson(); // json返却用の設定
-            $query = $this->ShopInfos->find();
-            $columns = $this->ShopInfos->schema()->columns();
-            $ymd = $query->func()->date_format([
-                'created' => 'literal',
-                "'%Y/%c/%e %H:%i'" => 'literal']);
-            $columns = $columns + ['ymd_created'=>$ymd];
-
-            // キャスト情報、最新の日記情報とイイネの総数取得
-            $notice = $this->ShopInfos->find("all")
-                ->select($columns)
-                ->where(['id' => $this->request->query["id"]])
-                ->contain(['Shop_info_Likes'])
-                ->first();
-            $this->response->body(json_encode($notice));
-            return;
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
+        $this->confReturnJson(); // json返却用の設定
+        $shop = $this->Shops->get($this->request->query["id"]);
+
+        $this->set('shopInfo', $this->Util->getShopInfo($shop));
+        $notice = $this->Util->getNotice($this->request->getQuery('notice_id')
+            , $this->viewVars['shopInfo']['notice_path']);
+        $this->response->body(json_encode($notice));
+        return;
+
+        // if ($this->request->is('ajax')) {
+        //     $this->confReturnJson(); // json返却用の設定
+        //     $query = $this->ShopInfos->find();
+        //     $columns = $this->ShopInfos->schema()->columns();
+        //     $ymd = $query->func()->date_format([
+        //         'created' => 'literal',
+        //         "'%Y/%c/%e %H:%i'" => 'literal']);
+        //     $columns = $columns + ['ymd_created'=>$ymd];
+
+        //     // キャスト情報、最新の日記情報とイイネの総数取得
+        //     $notice = $this->ShopInfos->find("all")
+        //         ->select($columns)
+        //         ->where(['id' => $this->request->query["id"]])
+        //         ->contain(['Shop_info_Likes'])
+        //         ->first();
+        //     $this->response->body(json_encode($notice));
+        //     return;
+        // }
 
     }
 
@@ -530,10 +685,13 @@ class AreaController extends AppController
                 }
             } else {
                 if($findData !== "") {
-                    //$findArray[] = ['Shops.'.$key => $findData];
-                    $query->where(['Shops.'.$key => $findData]);
+                    //$findArray[] = ['shops.'.$key => $findData];
+                    $query->where(['shops.'.$key => $findData]);
                 }
             }
+        }
+        foreach ($query as $key => $value) {
+            $value;
         }
         return $query->toArray();
     }

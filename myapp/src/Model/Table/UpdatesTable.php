@@ -41,10 +41,10 @@ class UpdatesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Shops', [
+        $this->belongsTo('shops', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->belongsTo('Casts', [
+        $this->belongsTo('casts', [
             'foreignKey' => 'cast_id'
         ]);
     }

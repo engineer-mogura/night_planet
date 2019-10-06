@@ -8,7 +8,7 @@
 						<?php if(!in_array($cast->id, $idsArr)) { continue; } ?>
 						<div class="cast-icon-list center-align col s3 m3 l3">
 							<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
-								<img src="<?=isset($cast->icon) ? $shopInfo['shop_path'].DS.PATH_ROOT['CAST'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'].DS.$cast->icon : PATH_ROOT['NO_IMAGE02'] ?>" alt="" class="circle" width="100%" height="80">
+								<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="80">
 							</a>
 							<h6><?=$cast->nickname?></h6>
 						</div>

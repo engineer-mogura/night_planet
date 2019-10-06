@@ -43,7 +43,7 @@ class CouponsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Shops', [
+        $this->belongsTo('shops', [
             'foreignKey' => 'shop_id',
             'joinType' => 'OUTER'
         ]);
@@ -120,7 +120,7 @@ class CouponsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['owner_id'], 'Shops'));
+        $rules->add($rules->existsIn(['owner_id'], 'shops'));
 
         return $rules;
     }

@@ -78,7 +78,7 @@ class Shop extends Entity
         'bus_hosoku' => true,
         'system' => true,
         'credit' => true,
-        'cast' => true,
+        //'cast' => true,
         'pref21' => true,
         'addr21' => true,
         'strt21' => true,

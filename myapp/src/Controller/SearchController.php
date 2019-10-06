@@ -1,12 +1,11 @@
 <?php
 namespace App\Controller;
 
-use Token\Util\Token;
-use Cake\Mailer\MailerAwareTrait;
-use Cake\Error\Debugger;
-use Cake\Mailer\Email;
-use Cake\ORM\TableRegistry;
 use Cake\Event\Event;
+use Token\Util\Token;
+use Cake\Filesystem\Folder;
+use Cake\ORM\TableRegistry;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
 * Users Controller
@@ -22,11 +21,11 @@ class SearchController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users = TableRegistry::get('Users');
-        $this->Shops = TableRegistry::get('Shops');
-        $this->Coupons = TableRegistry::get('Coupons');
-        $this->Casts = TableRegistry::get('Casts');
-        $this->Jobs = TableRegistry::get('Jobs');
+        $this->Users = TableRegistry::get('users');
+        $this->Shops = TableRegistry::get('shops');
+        $this->Coupons = TableRegistry::get('coupons');
+        $this->Casts = TableRegistry::get('casts');
+        $this->Jobs = TableRegistry::get('jobs');
         $this->MasterCodes = TableRegistry::get("master_codes");
 
     }
@@ -63,10 +62,30 @@ class SearchController extends AppController
 
             $this->confReturnJson(); // json返却用の設定
 
-            $columns = array('Shops.name', 'Shops.catch'); // like条件用
+            $columns = array('shops.name', 'shops.catch'); // like条件用
             $shops = $this->getShopList($this->request->getQuery(), $columns);
-            // 検索ページからの場合は、結果のみを返却する
+            // トップ画像を設定する
+            foreach ($shops as $key => $shop) {
+                $path = DS.PATH_ROOT['IMG'].DS.AREA[$shop->area]['path']
+                    .DS.GENRE[$shop->genre]['path']
+                    .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
+                $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                    , WWW_ROOT.$path), true, 0755);
 
+                $files = array();
+                $files = glob($dir->path.DS.'*.*');
+                // ファイルが存在したら、画像をセット
+                if(count($files) > 0) {
+                    foreach( $files as $file ) {
+                        $shop->set('top_image', $path.DS.(basename($file)));
+                    }
+                } else {
+                    // 共通トップ画像をセット
+                    $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+                }
+            }
+
+            // 検索ページからの場合は、結果のみを返却する
             $this->set(compact('shops'));
             $this->render('/Element/shopCard');
             $response = array(
@@ -79,14 +98,33 @@ class SearchController extends AppController
             return;
         }
         $shops = array(); // 店舗情報格納用
-        // // トップページからの遷移の場合
-        // if ($referer = (($this->referer()) == "http://okiyoru.local/") ||
-        //     /** ローカル環境スマホ用 */(($this->referer()) == "http://192.168.33.10/")) {
-            $columns = array('Shops.name', 'Shops.catch'); // like条件用
-            $shops = $this->getShopList($this->request->getQuery(), $columns);
-            // 検索条件を取得し、画面側でselectedする
-            $selected = $this->request->getQuery();
-        // }
+
+        $columns = array('shops.name', 'shops.catch'); // like条件用
+        $shops = $this->getShopList($this->request->getQuery(), $columns);
+
+        // トップ画像を設定する
+        foreach ($shops as $key => $shop) {
+            $path = DS.PATH_ROOT['IMG'].DS.AREA[$shop->area]['path']
+                .DS.GENRE[$shop->genre]['path']
+                .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$path), true, 0755);
+
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if(count($files) > 0) {
+                foreach( $files as $file ) {
+                    $shop->set('top_image', $path.DS.(basename($file)));
+                }
+            } else {
+                // 共通トップ画像をセット
+                $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+            }
+        }
+
+        // 検索条件を取得し、画面側でselectedする
+        $selected = $this->request->getQuery();
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
         $this->set(compact('shops', 'selectList','selected'));
@@ -115,8 +153,8 @@ class SearchController extends AppController
                 }
             } else {
                 if($findData !== "") {
-                    //$findArray[] = ['Shops.'.$key => $findData];
-                    $query->where(['Shops.'.$key => $findData]);
+                    //$findArray[] = ['shops.'.$key => $findData];
+                    $query->where(['shops.'.$key => $findData]);
                 }
             }
         }

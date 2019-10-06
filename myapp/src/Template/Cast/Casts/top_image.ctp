@@ -6,17 +6,8 @@
                 <?php echo $this->Flash->render(); ?>
                 <h5><?=('トップ画像') ?></h5>
                 <div id="show-top-image" style="text-align:center">
-                    <?php if(count($gallery) > 0): ?>
-                        <img width="100%" height="300" src="<?= $gallery[0]['file_path'] ?>" />
-                        <button type="button" class="waves-effect waves-light btn-large changeBtn">変更</button>
-                        <form id="delete-top-image" name="delete_top_image" method="post" style="display:none;" action="/cast/casts/delete_top_image">
-                            <input type="hidden" name="_method" value="POST">
-                        </form>
-                        <button type="button" class="waves-effect waves-light btn-large deleteBtn">削除</button>
-                    <?php else: ?>
-                        <p>まだ登録されていません。</p>
-                        <button type="button" class="waves-effect waves-light btn-large changeBtn">登録</button>
-                    <?php endif; ?>
+                    <img width="100%" height="300" src="<?= $gallery[0]['file_path'] ?>" />
+                    <button type="button" class="waves-effect waves-light btn-large changeBtn">変更</button>
                 </div>
                 <form id="save-top-image" name="save_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/cast/casts/save_top_image" style="display:none;">
                     <div style="display:none;">

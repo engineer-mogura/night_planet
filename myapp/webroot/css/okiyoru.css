@@ -1025,28 +1025,28 @@ li.daylist,li.eventlist {
 /* キャスト編集ページ END */
 
 /* モーダル日記 お知らせ START */
-#modal-diary {
+#modal-diary, #modal-notice {
   word-break: break-all;
 }
-#modal-diary .modal-footer > span{
+#modal-diary .modal-footer > span, #modal-notice .modal-footer > span{
   float: left;
 }
-#modal-diary .modal-footer :nth-child(2){
+#modal-diary .modal-footer :nth-child(2), #modal-notice .modal-footer :nth-child(2){
   margin-right: 30px;
 }
-#modal-diary .modal-footer :nth-child(3){
+#modal-diary .modal-footer :nth-child(3), #modal-notice .modal-footer :nth-child(3){
   margin-right: 10px;
 }
-#view-diary .my-gallery {
+#view-diary .my-gallery, #view-notice .my-gallery {
   margin-top: 1rem;
 }
 .diary-list p.content, #modal-diary p.content, .notice-list p.content, #modal-notice p.content  {
   margin-top: 10px;
 }
-#modal-diary .fixed-action-btn.modal-more-horiz {
+#modal-diary .fixed-action-btn.modal-more-horiz, #modal-notice .fixed-action-btn.modal-more-horiz {
   position: relative;
 }
-#modal-diary .fixed-action-btn.modal-more-horiz > a {
+#modal-diary .fixed-action-btn.modal-more-horiz > a, #modal-notice .fixed-action-btn.modal-more-horiz > a  {
   top: 15px;
 }
 /* モーダル日記 お知らせ END */

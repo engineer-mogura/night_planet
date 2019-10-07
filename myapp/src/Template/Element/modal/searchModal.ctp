@@ -1,9 +1,8 @@
 <div id="modal-search" class="modal">
   <div class="modal-content">
-    <h4>検索</h4>
-    <p>店舗名でも検索できます</p>
+    <h5>検索</h5><span>選択してキーワードを入力してください</span>
     <div class="modal-box">
-      <?= $this->element('elmSearch'); ?>
+      <?= $this->element('elmSearchModal'); ?>
     </div>
   </div>
   <div class="modal-footer">

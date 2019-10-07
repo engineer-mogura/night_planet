@@ -3,8 +3,6 @@ namespace App\Controller;
 
 use Token\Util\Token;
 use Cake\Mailer\MailerAwareTrait;
-use Cake\Error\Debugger;
-use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 use Cake\Event\Event;
 
@@ -52,62 +50,6 @@ class MainController extends AppController
         $insta_data = $this->Util->getInstagram(null, API['INSTAGRAM_USER_NAME']
             , API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
         $this->set(compact('selectList', 'diarys', 'notices', 'insta_data'));
-    }
-
-    public function search()
-    {
-        if ($this->request->is('ajax')) {
-
-            $columns = array('Shops.name', 'Shops.catch'); // like条件用
-            $shops = $this->getShopList($this->request->getQuery(), $columns);
-            // 検索ページからの場合は、結果のみを返却する
-            $this->confReturnJson(); // json返却用の設定
-            $this->response->body(json_encode($shops));
-            return;
-
-        }
-        $shops = array(); // 店舗情報格納用
-        // トップページからの遷移の場合
-        if ($referer = (($this->referer()) == "http://okiyoru.local/") ||
-            /** ローカル環境スマホ用 */(($this->referer()) == "http://192.168.33.10/")) {
-            $columns = array('Shops.name', 'Shops.catch'); // like条件用
-            $shops = $this->getShopList($this->request->getQuery(), $columns);
-            // 検索条件を取得し、画面側でselectedする
-            $selected = $this->request->getQuery();
-        }
-        $masterCodesFind = array('area','genre');
-        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('shops', 'selectList','selected'));
-        $this->render();
-    }
-
-    /**
-     * ショップテーブルから検索条件による店舗情報を取得する
-     *
-     * @param array $validate
-     * @return void
-     */
-    public function getShopList($requestData, $columns)
-    {
-        $query = $this->Shops->find();
-        $findArray = array(); // 検索条件セット用
-        foreach($requestData as $key => $findData) {
-            // リクエストデータが[key_word]かつ値が空じゃない場合
-            if (($key == 'key_word') && ($findData !== "")) {
-                foreach ($columns as $key => $value) {
-                    $query->orWhere(function ($exp, $q) use ($value, $findData) {
-                        $exp->like($value, '%'.$findData.'%');
-                        return $exp;
-                    });
-                }
-            } else {
-                if($findData !== "") {
-                    //$findArray[] = ['Shops.'.$key => $findData];
-                    $query->where(['Shops.'.$key => $findData]);
-                }
-            }
-        }
-        return $query->toArray();
     }
 
     /**

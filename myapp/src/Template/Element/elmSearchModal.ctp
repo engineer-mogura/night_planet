@@ -2,15 +2,15 @@
 	<form method="GET" class="search-form" name="search_form" action="/search/">
 		<div class="col s6 m6 l6">
 			<p>
-				<input type="radio" name="search-choice" id="shop-search" value="shop" <?=($selected['search-choice'] == 'shop')
+				<input type="radio" name="search-choice" id="modal-shop-search" value="shop" <?=($selected['search-choice'] == 'shop')
 					 || (empty($selected['search-choice'])) ? 'checked':''?> />
-				<label for="shop-search">店舗</label>
+				<label for="modal-shop-search">店舗</label>
 			</p>
 		</div>
 		<div class="col s6 m6 l6">
 			<p>
-				<input type="radio" name="search-choice" id="cast-search" value="cast" <?=$selected['search-choice'] == 'cast' ? 'checked':''?> />
-				<label for="cast-search">キャスト</label>
+				<input type="radio" name="search-choice" id="modal-cast-search" value="cast" <?=$selected['search-choice'] == 'cast' ? 'checked':''?> />
+				<label for="modal-cast-search">キャスト</label>
 			</p>
 		</div>
 		<li class="search col s12 m12 l12">

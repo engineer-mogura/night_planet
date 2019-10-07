@@ -6,7 +6,7 @@
         <?= $this->request->getParam('action') == PATH_ROOT['CAST'] ? 
             '<li><a href="#shop-menu-section"><i class="material-icons">arrow_upward</i><span>CAST MENU</span></a></li>'
             :
-            '<li id="bottom-nav-return_top"><a><i class="material-icons">arrow_upward</i><span>上に行く</span></a></li>'
+            '<li><a href="#html-header"><i class="material-icons">arrow_upward</i><span>上に行く</span></a></li>'
         ?>
     </ul>
 </div>

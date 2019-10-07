@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use \Cake\ORM\Query;
 use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Filesystem\Folder;
@@ -62,32 +63,18 @@ class SearchController extends AppController
 
             $this->confReturnJson(); // json返却用の設定
 
-            $columns = array('shops.name', 'shops.catch'); // like条件用
-            $shops = $this->getShopList($this->request->getQuery(), $columns);
-            // トップ画像を設定する
-            foreach ($shops as $key => $shop) {
-                $path = DS.PATH_ROOT['IMG'].DS.AREA[$shop->area]['path']
-                    .DS.GENRE[$shop->genre]['path']
-                    .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
-                $dir = new Folder(preg_replace('/(\/\/)/', '/'
-                    , WWW_ROOT.$path), true, 0755);
-
-                $files = array();
-                $files = glob($dir->path.DS.'*.*');
-                // ファイルが存在したら、画像をセット
-                if(count($files) > 0) {
-                    foreach( $files as $file ) {
-                        $shop->set('top_image', $path.DS.(basename($file)));
-                    }
-                } else {
-                    // 共通トップ画像をセット
-                    $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
-                }
-            }
+            $search = $this->getSearch($this->request->getQuery());
 
             // 検索ページからの場合は、結果のみを返却する
-            $this->set(compact('shops'));
-            $this->render('/Element/shopCard');
+            $this->set(compact('search'));
+            // 店舗検索の場合に店舗用カードをレンダリング
+            if ($this->request->getQuery('search-choice') == 'shop') {
+                $this->render('/Element/shopCard');
+            } else if ($this->request->getQuery('search-choice') == 'cast') {
+                // キャスト検索の場合にキャスト用カードをレンダリング
+                $this->render('/Element/castCard');
+            }
+
             $response = array(
                 'html' => $this->response->body(),
                 'error' => "",
@@ -97,68 +84,139 @@ class SearchController extends AppController
             $this->response->body(json_encode($response));
             return;
         }
-        $shops = array(); // 店舗情報格納用
 
-        $columns = array('shops.name', 'shops.catch'); // like条件用
-        $shops = $this->getShopList($this->request->getQuery(), $columns);
+        // 検索ページ以外からの場合は新しくレンダリングする
+        $search = $this->getSearch($this->request->getQuery());
 
-        // トップ画像を設定する
-        foreach ($shops as $key => $shop) {
-            $path = DS.PATH_ROOT['IMG'].DS.AREA[$shop->area]['path']
-                .DS.GENRE[$shop->genre]['path']
-                .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
-            $dir = new Folder(preg_replace('/(\/\/)/', '/'
-                , WWW_ROOT.$path), true, 0755);
-
-            $files = array();
-            $files = glob($dir->path.DS.'*.*');
-            // ファイルが存在したら、画像をセット
-            if(count($files) > 0) {
-                foreach( $files as $file ) {
-                    $shop->set('top_image', $path.DS.(basename($file)));
-                }
-            } else {
-                // 共通トップ画像をセット
-                $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
-            }
+        // 店舗検索の場合に店舗用カードをレンダリング
+        if ($this->request->getQuery('search-choice') == 'shop') {
+            // 使用するテンプレートに店舗用カードを使用
+            $this->set('useTemplate','shop');
+        } else if ($this->request->getQuery('search-choice') == 'cast') {
+            // 使用するテンプレートにキャスト用カードを使用
+            $this->set('useTemplate','cast');
         }
 
         // 検索条件を取得し、画面側でselectedする
         $selected = $this->request->getQuery();
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('shops', 'selectList','selected'));
+        $this->set(compact('search', 'selectList', 'selected'));
         $this->render();
     }
 
     /**
-     * ショップテーブルから検索条件による店舗情報を取得する
+     * 店舗または、キャストを検索取得する
      *
      * @param [type] $requestData
      * @param [type] $columns
      * @return void
      */
-    public function getShopList($requestData, $columns)
+    public function getSearch($requestData)
     {
-        $query = $this->Shops->find();
-        $findArray = array(); // 検索条件セット用
-        foreach($requestData as $key => $findData) {
-            // リクエストデータが[key_word]かつ値が空じゃない場合
-            if (($key == 'key_word') && ($findData !== "")) {
-                foreach ($columns as $key => $value) {
-                    $query->orWhere(function ($exp, $q) use ($value, $findData) {
-                        $exp->like($value, '%'.$findData.'%');
+        // 店舗検索の場合
+        if($requestData['search-choice'] == 'shop') {
+
+            $query = $this->Shops->find();
+
+            foreach($requestData as $key => $findData) {
+                // ラジオボタンの場合コンティニュー
+                if($key == 'search-choice') {
+                    continue;
+                }
+                // リクエストデータが[key_word]かつ値が空じゃない場合
+                if (($key == 'key_word') && ($findData !== "")) {
+
+                        $query->orWhere(function ($exp, $q) use ($findData) {
+                            $exp->like('name', '%'.$findData.'%');
+                            return $exp;
+                        });
+
+                } else {
+                    if($findData !== "") {
+                        $query->where(['shops.'.$key => $findData]);
+                    }
+                }
+            }
+            // 検索結果を配列で取得
+            $search = $query->toArray();
+            // 画像を設定する
+            foreach ($search as $key => $value) {
+                $path = DS.PATH_ROOT['IMG'].DS.AREA[$value->area]['path']
+                    .DS.GENRE[$value->genre]['path']
+                    .DS.$value->dir.DS.PATH_ROOT['TOP_IMAGE'];
+                $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                    , WWW_ROOT.$path), true, 0755);
+
+                $files = array();
+                $files = glob($dir->path.DS.'*.*');
+                // ファイルが存在したら、画像をセット
+                if(count($files) > 0) {
+                    foreach( $files as $file ) {
+                        $value->set('top_image', $path.DS.(basename($file)));
+                    }
+                } else {
+                    // 共通画像をセット
+                    $value->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+                }
+            }
+
+        } else if($requestData['search-choice'] == 'cast') {
+            // キャスト検索の場合
+            $query = $this->Casts->find()->contain('shops');
+
+            foreach($requestData as $key => $findData) {
+                // ラジオボタンの場合コンティニュー
+                if($key == 'search-choice') {
+                    continue;
+                }
+                // リクエストデータが[key_word]かつ値が空じゃない場合
+                if (($key == 'key_word') && ($findData !== "")) {
+
+                    $query->orWhere(function ($exp, $q) use ($findData) {
+                        $exp->like('nickname', '%'.$findData.'%');
                         return $exp;
                     });
+
+                } else if(($key == 'area') || ($key == 'genre')) {
+                    // エリアかジャンルにパラメタがある場合は、店舗で更に絞る
+                    if($findData !== "") {
+                        $query
+                            ->contain('shops')
+                            ->matching('shops', function(Query $q) use ($key, $findData) {
+                                return $q->where(['shops.'.$key => $findData]);
+                            });
+                    }
+
                 }
-            } else {
-                if($findData !== "") {
-                    //$findArray[] = ['shops.'.$key => $findData];
-                    $query->where(['shops.'.$key => $findData]);
+            }
+            // 検索結果を配列で取得
+            $search = $query->toArray();
+            // 画像を設定する
+            foreach ($search as $key => $value) {
+                $path = DS.PATH_ROOT['IMG'].DS.AREA[$value->shop->area]['path']
+                    .DS.GENRE[$value->shop->genre]['path']
+                    .DS.$value->shop->dir.DS.PATH_ROOT['CAST']
+                    .DS.$value->dir.DS.PATH_ROOT['PROFILE'];
+                $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                    , WWW_ROOT.$path), true, 0755);
+
+                $files = array();
+                $files = glob($dir->path.DS.'*.*');
+                // ファイルが存在したら、画像をセット
+                if(count($files) > 0) {
+                    foreach( $files as $file ) {
+                        $value->set('icon', $path.DS.(basename($file)));
+                    }
+                } else {
+                    // 共通画像をセット
+                    $value->set('icon', PATH_ROOT['NO_IMAGE02']);
                 }
             }
         }
-        return $query->toArray();
+
+        return $search;
+
     }
 
     /**

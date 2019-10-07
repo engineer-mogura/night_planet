@@ -262,53 +262,6 @@ function fileload(file, obj, imgCount, path) {
 }
 
 /**
- * ショップカードHTMLを生成する
- * @param  {} file
- * @param  {} obj
- * @param  {} imgCount
- */
-function createShopCard(form, response, path) {
-
-    var $html;
-
-    $.get(path, {}, function(html) {
-        var dom = $(html); // html部品をdomに変換
-        var resultDom = $(document).find('.resultSearch');
-        var cardTmp = dom.clone(); // ショップカードの部品を複製しておく
-        var area = JSON.parse($(document).find("input[name='area_define']").val());
-        var genre = JSON.parse($(document).find("input[name='genre_define']").val());
-        $(resultDom).find(".card").remove(); // ショップカードの部品を削除しておく ※複製した部品を都度生成して使う
-        $(resultDom).find(".message").addClass('hide'); // メッセージ非表示
-        $title = '';
-        if (($(form).find("[name='area']").val()) !== '' && ($(form).find("[name='genre']").val()) !== '') {
-            // コントローラでセットされたtitleを代入してセパレータを追加
-            $title +=  area[$(form).find("[name='area']").val()]['label'] + 'の' +
-                        genre[$(form).find("[name='genre']").val()]['label'] + '一覧';
-        } else if($(form).find("[name='area']").val() !== '') {
-            $title +=  area[$(form).find("[name='area']").val()]['label'] + '一覧';
-        } else if($(form).find("[name='genre']").val() !== '') {
-            $title +=  genre[$(form).find("[name='genre']").val()]['label'] + '一覧';
-        }
-        $(resultDom).find(".title").text($title);
-        $(resultDom).find(".header").text('検索結果 ' + response.length + '件');
-        $.each(response, function(index, row) {
-            var shopCard = $(cardTmp).clone();
-            // 属性などを追加する
-            $(shopCard).find('.title').text(row['name'] + '|' + area[row['area']]['label'] + '|' + genre[row['genre']]['label']);
-            $(shopCard).find('.catch').text(row['catch']);
-
-            $(resultDom).append($(shopCard));
-        })
-        // メッセージ表示
-        if(!response.length > 0) {
-            $(resultDom).find(".message").removeClass('hide');
-            $(resultDom).find(".message").text("検索結果が０件でした。条件を変更し、もう一度検索してみてください。");
-        }
-
-    });
-}
-
-/**
  * 日記アーカイブの画像をカルーセルに描画する
  * @param  {} obj 対象のセレクター
  * @param  {} selectFiles 選択した画像リスト
@@ -591,10 +544,10 @@ function castImageDeleteBtn(form, obj){
                 return false;
             });
             // ボトムナビゲーションのreturn top
-            $(document).on('click','li#bottom-nav-return_top a',function() {
-                $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
-                return false;
-            });
+            // $(document).on('click','#bottom-nav-return_top a',function() {
+            //     $('html,body').animate({scrollTop : 0}, 1000, 'easeOutExpo');
+            //     return false;
+            // });
         });
 
         // スマートフォン以外の電話タップを無効にする

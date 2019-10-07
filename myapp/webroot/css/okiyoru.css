@@ -398,10 +398,22 @@ form .error-message {
 
 /* ユーザー START */
 
-.search-result-card:hover {
-  background-color: #fbe9e7;
-  cursor : pointer;
-}
+  /* 検索画面 START */
+
+  #search-result .linkbox.search-result-card {
+    width: 100%;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .search-result-card:hover {
+    background-color: #fbe9e7;
+    cursor : pointer;
+  }
+  .search-result-card .card-image img.card-image-img {
+    width: 200px;
+    object-fit: cover;
+  }
+  /* 検索画面 END */
 
 /* ユーザー END */
 
@@ -1089,6 +1101,18 @@ textarea::-webkit-scrollbar {
   /* 日記ページ START */
  
   /* 日記ページ END */
+
+  
+  /* ユーザー START */
+
+    /* 検索画面 START */
+    .search-result-card .card-image img.card-image-img {
+      width: 100%;
+      height: 250px;
+    }
+    /* 検索画面 END */
+
+  /* ユーザー END */
 
 }
 

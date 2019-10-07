@@ -10,7 +10,13 @@
 						<div class="hide-on-med-and-down">
 							<?= $this->element('elmSearch'); ?>
 						</div>
-						<?= $this->element('shopCard'); ?>
+						<?php
+							if($useTemplate == 'shop'): 
+						 		echo ($this->element('shopCard'));
+							elseif($useTemplate == 'cast'):
+								echo ($this->element('castCard'));
+							endif;
+						 ?>
 					</div>
 				</div>
 			</div>

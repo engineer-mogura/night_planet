@@ -5,12 +5,13 @@
 <?php $insta_convert = json_decode($insta_data);?>
 <div id="top" class="container">
 	<div class="row">
-		<div class="col s12 m8 l8">
+		<div class="col s12 m12 l8">
 			<?= $this->element('info-marquee'); ?>
+			<span>選択してキーワードを入力してください</span>
 			<?= $this->element('elmSearch'); ?>
 			<div class="row section area-section">
 				<?php foreach (AREA as $key => $value): ?>
-				<div class="col s12 m4 l3">
+				<div class="col s12 m4 l6">
 					<div class="linkbox card waves-effect hoverable">
 						<div class="card-image">
 							<img src="<?=$value['image']?>" style="width: 100%;height: 200px;object-fit: cover; background-color: lightsalmon;">
@@ -134,7 +135,7 @@
 		<?= $this->element('sidebar'); ?>
 		<!--デスクトップ用 サイドバー END -->
 	</div>
+	<!-- 共通ボトムナビゲーション START -->
+	<?= $this->element('bottom-navigation'); ?>
+	<!-- 共通ボトムナビゲーション END -->
 </div>
-<!-- 共通ボトムナビゲーション START -->
-<?= $this->element('bottom-navigation'); ?>
-<!-- 共通ボトムナビゲーション END -->

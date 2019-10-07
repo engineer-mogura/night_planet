@@ -294,23 +294,27 @@ class AreaController extends AppController
         }
         $shop->set('gallery', $gallery);
 
-        // 日記のギャラリーリストを作成
-        // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/'
-            , WWW_ROOT.$shopInfo['notice_path'].$shop->shop_infos[0]->dir)
-            , true, 0755);
-        $gallery = array();
-        /// 並び替えして出力
-        $files = array();
-        $files = glob($dir->path.DS.'*.*');
-        usort( $files, $this->Util->sortByLastmod );
-        foreach( $files as $file ) {
-            $timestamp = date('Y/m/d H:i', filemtime($file));
-            array_push($gallery, array(
-                "file_path"=>$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.(basename($file))
-                ,"date"=>$timestamp));
+        // お知らせが１つでもある場合
+        if(count($cast->diarys) > 0) {
+
+            // お知らせのギャラリーリストを作成
+            // ディクレトリ取得
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$shopInfo['notice_path'].$shop->shop_infos[0]->dir)
+                , true, 0755);
+            $gallery = array();
+            /// 並び替えして出力
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            usort( $files, $this->Util->sortByLastmod );
+            foreach( $files as $file ) {
+                $timestamp = date('Y/m/d H:i', filemtime($file));
+                array_push($gallery, array(
+                    "file_path"=>$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.(basename($file))
+                    ,"date"=>$timestamp));
+            }
+            $shop->shop_infos[0]->set('gallery',$gallery);
         }
-        $shop->shop_infos[0]->set('gallery',$gallery);
 
         // キャストのアイコンを設定する
         foreach ($shop->casts as $key => $cast) {
@@ -457,23 +461,27 @@ class AreaController extends AppController
         }
         $cast->set('gallery', $gallery);
 
-        // 日記のギャラリーリストを作成
-        // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/'
-            , WWW_ROOT.$castInfo['diary_path'].$cast->diarys[0]->dir)
-            , true, 0755);
-        $gallery = array();
-        /// 並び替えして出力
-        $files = array();
-        $files = glob($dir->path.DS.'*.*');
-        usort( $files, $this->Util->sortByLastmod );
-        foreach( $files as $file ) {
-            $timestamp = date('Y/m/d H:i', filemtime($file));
-            array_push($gallery, array(
-                "file_path"=>$castInfo['diary_path'].$cast->diarys[0]->dir.DS.(basename($file))
-                ,"date"=>$timestamp));
+        // 日記が１つでもある場合
+        if(count($cast->diarys) > 0) {
+
+            // 日記のギャラリーリストを作成
+            // ディクレトリ取得
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$castInfo['diary_path'].$cast->diarys[0]->dir)
+                , true, 0755);
+            $gallery = array();
+            /// 並び替えして出力
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            usort( $files, $this->Util->sortByLastmod );
+            foreach( $files as $file ) {
+                $timestamp = date('Y/m/d H:i', filemtime($file));
+                array_push($gallery, array(
+                    "file_path"=>$castInfo['diary_path'].$cast->diarys[0]->dir.DS.(basename($file))
+                    ,"date"=>$timestamp));
+            }
+            $cast->diarys[0]->set('gallery',$gallery);
         }
-        $cast->diarys[0]->set('gallery',$gallery);
 
         $shopInfo = $this->Util->getShopInfo($cast->shop);
 

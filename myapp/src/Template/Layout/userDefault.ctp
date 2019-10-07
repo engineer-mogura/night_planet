@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html id="html-header" class="scrollspy">
 <head>
   <?= $this->element('analytics_key'); ?>
   <?= $this->Html->charset() ?>

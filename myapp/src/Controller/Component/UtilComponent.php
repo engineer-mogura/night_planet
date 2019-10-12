@@ -142,7 +142,7 @@ class UtilComponent extends Component
 
         $shop_url = APP_PATH['APP'].$shopInfo['area']['path']
             .DS.PATH_ROOT['SHOP'].DS.$shop['id']
-            .'?genre='.$shop['genre'].'&name='.$shop['name'];
+            .'?area='.$shop['area'].'genre='.$shop['genre'].'&name='.$shop['name'];
 
         $shopInfo = $shopInfo + array('shop_path'=> $path
         ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']

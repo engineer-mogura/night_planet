@@ -51,8 +51,8 @@ class SearchController extends AppController
             $result .=  GENRE[$query['genre']]['label'] . '一覧';
         }
         // SEO対策
-        $title = str_replace("_service_name_", LT['001'], TITLE['SEARCH_TITLE']);
-        $description = str_replace("_service_name_", LT['001'], META['SEARCH_DESCRIPTION']);
+        $title = str_replace("_service_name_", LT['000'], TITLE['SEARCH_TITLE']);
+        $description = str_replace("_service_name_", LT['000'], META['SEARCH_DESCRIPTION']);
 
         $this->set(compact("result", "title", "description"));
     }

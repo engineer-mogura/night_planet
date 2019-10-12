@@ -286,7 +286,7 @@ class AreaController extends AppController
         $shop->set('gallery', $gallery);
 
         // お知らせが１つでもある場合
-        if(count($cast->diarys) > 0) {
+        if(count($shop->shop_infos) > 0) {
 
             // お知らせのギャラリーリストを作成
             // ディクレトリ取得
@@ -326,30 +326,8 @@ class AreaController extends AppController
         }
         // 店舗キャストの最新日記を取得する
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id);
-        // $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-        // $imageList = array(); // 画面側でJSONとして使う画像リスト
-        // // 画像リストを作成する
-        // foreach ($imageCol as $key => $value) {
-        //     if (!empty($shop[$imageCol[$key]])) {
-        //         array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
-        //     }
-        // }
-        // // 店舗キャストの最新日記を取得する
-        // $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id);
 
-        // // お知らせのギャラリーリストを作成
-        // $imageCol = array_values(preg_grep('/^image/', $this->ShopInfos->schema()->columns()));
-        // $shopInfos = $shop->shop_infos[0];
-        // $nImageList = array(); // お知らせの画像が存在するカラムリスト
-        // if(count($shopInfos) > 0) {
-        //     foreach ($imageCol as $key => $value) {
-        //         if (!empty($shopInfos[$value])) {
-        //             array_push($nImageList, ['key'=>$imageCol[$key],'name'=>$shopInfos[$imageCol[$key]]]);
-        //         }
-        //     }
-        // }
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-        //$creditsHidden = json_encode($this->Util->getCredit($shop->owner,$credits));
         $insta_user_name = $shop->snss[0]->instagram;
         // インスタのキャッシュパス
         $cache_path = preg_replace('/(\/\/)/', '/',

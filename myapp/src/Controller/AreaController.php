@@ -109,7 +109,7 @@ class AreaController extends AppController
         } else if(array_key_exists($url[0], AREA)) {
 
             $search = array('_area_', '_service_name_');
-            $replace = array(AREA[$url[0]]['label'], LT['001']);
+            $replace = array(AREA[$url[0]]['label'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['AREA_TITLE']);
             $description = $this->Util->strReplace($search, $replace, META['AREA_DESCRIPTION']);
         }
@@ -149,18 +149,9 @@ class AreaController extends AppController
 
     public function genre()
     {
-        if ($this->request->is('ajax')) {
-
-            $columns = array('shops.name', 'shops.catch'); // like条件用
-            $shops = $this->getShopList($this->request->getQuery(), $columns);
-            // 検索ページからの場合は、結果のみを返却する
-            $this->confReturnJson(); // json返却用の設定
-            $this->response->body(json_encode($shops));
-            return;
-
-        }
+        $area_genre = ['area'=>AREA[$this->viewVars['isArea']]['label']
+            ,'genre'=>GENRE[$this->request->getQuery("genre")]['label']];
         $shops = array(); // 店舗情報格納用
-        $columns = array('shops.name', 'shops.catch'); // like条件用
         $shops = $this->Shops->find('all')
                     ->where(['area'=>$this->viewVars['isArea'],
                         'genre' => $this->request->getQuery("genre")])->toArray();
@@ -168,8 +159,8 @@ class AreaController extends AppController
         // トップ画像を設定する
         foreach ($shops as $key => $shop) {
             $path = PATH_ROOT['IMG'].DS.AREA[$shop->area]['path']
-            .DS.GENRE[$shop->genre]['path']
-            .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
+                .DS.GENRE[$shop->genre]['path']
+                .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
             $dir = new Folder(preg_replace('/(\/\/)/', '/'
                 , WWW_ROOT.$path), true, 0755);
 
@@ -186,7 +177,7 @@ class AreaController extends AppController
             }
         }
 
-        $this->set(compact('shops'));
+        $this->set(compact('shops','area_genre'));
         $this->render();
     }
 

@@ -30,7 +30,7 @@
             </div>
             <!-- ヘッダー END -->
             <!-- メッセージ START -->
-            <div class="row section">
+            <div class="row section header-discription-message">
                 <div class="card-panel light-blue">
                     <?= !empty($cast->message) ? $this->Text->autoParagraph($cast->message) : 
             $cast->nickname.'さんからのメッセージがありません。';

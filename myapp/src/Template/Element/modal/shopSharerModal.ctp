@@ -1,18 +1,24 @@
 <div id="shop-sharer-modal" class="modal sharer-modal">
   <div class="modal-content">
-    <h5>友達に<span class="color-blue"><?=isset($shop) ? $shop->name : $cast->shop->name?></span>をシェアしよう</h5>
+    <h5><span class="color-blue"><?=isset($shop) ? $shop->name : $cast->shop->name?></span>をシェアしよう</h5>
     <div class="row">
       <div class="col s6 m6 l3">
-        <a class="facebook sharer-btn waves-effect waves-light btn-large"><span> Facebook</span></a>
+        <a class="facebook sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['FACEBOOK'].$shopInfo['shop_url']?>">
+					<span> Facebook</span>
+				</a>
       </div>
       <div class="col s6 m6 l3">
-        <a class="twitter sharer-btn waves-effect waves-light btn-large"><span> Twitter</span></a>
+        <a class="twitter sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['TWITTER'].$shopInfo['shop_url']?>">
+          <span> Twitter</span>
+        </a>
       </div>
       <div class="col s6 m6 l3">
-        <a class="b_hatena sharer-btn waves-effect waves-light btn-large"><span> はてブ</span></a>
+        <a class="b_hatena sharer-btn waves-effect waves-light btn-large disabled"><span> はてブ</span></a>
       </div>
       <div class="col s6 m6 l3">
-        <a class="line sharer-btn waves-effect waves-light btn-large"><span> LINE</span></a>
+        <a class="line sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['LINE'].$shopInfo['shop_url']?>">
+					<span> LINE</span>
+				</a>
       </div>
     </div>
   </div>

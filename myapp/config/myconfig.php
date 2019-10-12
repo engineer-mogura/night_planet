@@ -46,6 +46,7 @@ return [
 		'NO_IMAGE03'=> '/img/common/no-img150_150/no-img7.png',
 		'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
 		'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
+		'NIGHT_PLANET_IMAGE'=> '/img/night_planet_top.png',
 		'CAST_TOP_IMAGE'=> '/img/common/cast/top-image.jpg',
 		'SHOP_TOP_IMAGE'=> '/img/common/shop/top-image.png',
 		'CREDIT'=> '/img/common/credit/',
@@ -72,6 +73,9 @@ return [
 		'TWITTER'=> 'http://twitter.com/share?url=',
 		'FACEBOOK'=> 'https://www.facebook.com/sharer/sharer.php?u=',
 		'LINE'=> 'http://line.me/R/msg/text/?',
+		'FACEBOOK_APP_ID'=> '2084171171889711', // FACEBOOK アプリID
+		'TWITTER_ACCOUNT'=> '@OkinawaHack', // TWITTERアカウント
+
 	)),
 	// TODO: リリース前には、パスを本番へ変更する。
 	// WEBアプリケーションパス設定 path.config
@@ -93,6 +97,7 @@ return [
 
 	// ラベル定数 label title
 	define('LT', array(
+		'000'=>'NightPlanet ナイプラ',
 		'001'=>'NightPlanet<span style="font-size: small"> ナイプラ</span>',
 		'002'=>'Copyright 2018',
 		'003'=>'NightPlanet ナイプラ All Rights Reserved.',
@@ -179,17 +184,17 @@ return [
 		'miyakojima'=> [
 			'label' => "宮古島",
 			'path' => "miyakojima",
-			'image' => "/img/common/area/area_1.png"
+			'image' => "/img/common/area/area_miyako_S.png"
 		],
 		'ishigakijima'=> [
 			'label' => "石垣島",
 			'path' => "ishigakijima",
-			'image' => "/img/common/area/area_2.png"
+			'image' => "/img/common/area/area_ishigaki_L.png"
 		],
 		'naha'=> [
 			'label' => "那覇",
 			'path' => "naha",
-			'image' => "/img/common/area/area_3.png"
+			'image' => "/img/common/area/area_naha_S.png"
 		],
 		'nanjo'=> [
 			'label' => "南城",
@@ -209,7 +214,7 @@ return [
 		'ginowan'=> [
 			'label' => "宜野湾",
 			'path' => "ginowan",
-			'image' => "/img/common/area/area_7.png"
+			'image' => "/img/common/area/area_ginowan_S.png"
 		],
 		'okinawashi'=> [
 			'label' => "沖縄市",
@@ -420,7 +425,7 @@ return [
 		'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
 		'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
 		'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
-		'INSTAGRAM_CACHE_TIME'=> 360 // インスタグラムキャッシュタイム
+		'INSTAGRAM_CACHE_TIME'=> 360, // インスタグラムキャッシュタイム
 	)),
 
 	//変数展開用

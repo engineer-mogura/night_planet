@@ -2,20 +2,20 @@
 	<?= $this->Flash->render() ?>
 	<?= $this->element('nav-breadcrumb'); ?>
 	<div class="row">
-		<div id="shop-main" class="col s12 m12 l8">
+		<div id="shop-main" class="col s12 m8 l8">
 			<img class="responsive-img" width="100%" src=<?= $shop->top_image ?> />
 			<h5 class="left-align">
 				<?= !empty($shop->name) ? h($shop->name) : h('-') ?>
 			</h5>
 			<!-- キャッチコピー START -->
-			<div class="row section">
+			<div class="row section header-discription-message">
 				<div class="card-panel light-blue">
 					<?php if($shop->catch != ''):
-					echo ($this->Text->autoParagraph($shop->catch));
-				else:
-					echo ('キャッチコピーがありません。');
-				endif;
-			?>
+						echo ($this->Text->autoParagraph($shop->catch));
+					else:
+						echo ('キャッチコピーがありません。');
+					endif;
+					?>
 				</div>
 			</div>
 			<!-- キャッチコピー END -->
@@ -491,6 +491,7 @@
 				</table>
 			</div>
 			<!-- 求人情報 END -->
+			</div>
 		</div>
 		<!--デスクトップ用 サイドバー START -->
 		<?= $this->element('sidebar'); ?>

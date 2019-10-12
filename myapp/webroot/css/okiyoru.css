@@ -425,6 +425,9 @@ form .error-message {
 #shop-main, #cast-main {
   margin-top: 0.5rem;
 }
+div.header-discription-message {
+  color: antiquewhite;
+}
 div.description {
   display: -webkit-box;
   margin: 2em 0 2.5em;
@@ -1150,7 +1153,7 @@ textarea::-webkit-scrollbar {
 
 @media only screen and (max-width: 992px) {
   .brand-logo.oki-brand-logo{
-    margin-left: initial;
+    /*margin-left: initial;*/
   }
   .button-collapse {
     display: block;

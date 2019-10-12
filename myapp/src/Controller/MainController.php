@@ -36,8 +36,8 @@ class MainController extends AppController
         $this->viewBuilder()->layout('userDefault');
 
         // SEO対策
-        $title = str_replace("_service_name_", LT['001'], TITLE['TOP_TITLE']);
-        $description = str_replace("_service_name_", LT['001'], META['TOP_DESCRIPTION']);
+        $title = str_replace("_service_name_", LT['000'], TITLE['TOP_TITLE']);
+        $description = str_replace("_service_name_", LT['000'], META['TOP_DESCRIPTION']);
         $this->set(compact("title", "description"));
     }
 

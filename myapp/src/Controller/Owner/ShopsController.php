@@ -1977,7 +1977,7 @@ class ShopsController extends AppController
             $cloneList = $workPlanList;
 
             // 予定期間２ヵ月分をループする
-            foreach ($cast->cast__schedules as $key2 => $schedule) {
+            foreach ($cast->cast_schedules as $key2 => $schedule) {
                 $sDate = $schedule->start->format('m-d'); // 比較用にフォーマット
                 // 予定期間２ヵ月分をループする
                 foreach ($dateList as $key3 => $date) {

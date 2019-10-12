@@ -30,7 +30,8 @@
   <?= $this->Html->script(API['GOOGLE_MAP_APIS']) ?>
   <?= $this->Html->script("load-image.all.min.js") ?><!-- 画像の縦横を自動調整してくれるプラグインExif情報関連 -->
   <script src='/PhotoSwipe-master/dist/photoswipe.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
-  <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
+  <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- chart.js@2.8.0 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script><!-- fullcalendar-3.9.0 -->
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />

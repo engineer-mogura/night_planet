@@ -1,6 +1,6 @@
 <div id="search-result">
 	<div class="col s12">
-		<h5 class="title"><?=h($result)?></h5>
+		<h5 class="title"><?=h("キャストの検索結果")?></h5>
 		<h6 class="header"><?=h("キャストの検索結果 ".count($search)."件")?></h6>
 		<p class="message"><?= count($search) == 0 ? h("検索結果が０件でした。条件を変更し、もう一度検索してみてください。"):""?></p>
 	</div>
@@ -26,4 +26,3 @@
 	</ul>
 	<?php }  ?>
 </div>
-<!-- /naha/cast/54?genre=cabacula&name=Club琉球&shop=56&nickname=にーな -->

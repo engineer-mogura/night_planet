@@ -1,14 +1,35 @@
 <!DOCTYPE html>
 <html id="html-header" class="scrollspy">
-<head>
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
   <?= $this->element('analytics_key'); ?>
   <?= $this->Html->charset() ?>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <?php 
+    if(isset($shop) || isset($cast)):
+  ?>
+    <meta property="og:site_name" content="<?=LT['000']?>" />
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<?=$shopInfo['shop_url']?>" />
+    <meta property="og:title" content="<?=isset($shop)?$shop->name:$cast->shop->name?>" />
+    <meta property="og:description" content="<?=isset($shop)?h($shop->catch):h($cast->shop->catch)?>" />
+    <meta property="og:image" content="<?=APP_PATH['APP'].$shop->top_image?>" />
+  <?php 
+    else:
+  ?>
+    <meta property="og:site_name" content="<?=LT['000']?>" />
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<?=APP_PATH['APP']?>" />
+    <meta property="og:title" content="<?=$title?>" />
+    <meta property="og:description" content="<?=$description?>" />
+    <meta property="og:image" content="<?=APP_PATH['APP'].PATH_ROOT['NIGHT_PLANET_IMAGE']?>" />
+  <?php
+    endif;
+  ?>
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
   <title>
     <?= $this->fetch('title') ?>
   </title>
-  <?= $this->Html->meta('apple-touch-icon-precomposed', '/favicon.ico', [
+  <?= $this->Html->meta('apple-touch-icon-precomposed', '/night_planet_top_favicon.png', [
       'type'=>'icon',
       'size' => '144x144',
       'rel'=>'apple-touch-icon-precomposed'

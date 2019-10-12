@@ -370,7 +370,7 @@ class CastsController extends AppController
             $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
             $this->set(compact('cast','selectList', 'icons'));
-            $this->render('/cast/casts/profile');
+            $this->render('/Cast/Casts/profile');
             $response = array(
                 'html' => $this->response->body(),
                 'error' => $errors,
@@ -556,7 +556,7 @@ class CastsController extends AppController
                 ,"date"=>$timestamp));
         }
         $this->set(compact('gallery'));
-        $this->render('/cast/casts/top_image');
+        $this->render('/Cast/Casts/top_image');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -620,7 +620,7 @@ class CastsController extends AppController
         $gallery = array();
 
         $this->set(compact('gallery'));
-        $this->render('/cast/casts/top_image');
+        $this->render('/Cast/Casts/top_image');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -721,7 +721,7 @@ class CastsController extends AppController
                 ->contain(['Snss'])->first();
 
             $this->set(compact('cast'));
-            $this->render('/cast/casts/sns');
+            $this->render('/Cast/Casts/sns');
             $response = array(
                 'html' => $this->response->body(),
                 'error' => $errors,
@@ -848,7 +848,7 @@ class CastsController extends AppController
         }
 
         $this->set(compact('gallery'));
-        $this->render('/cast/casts/gallery');
+        $this->render('/Cast/Casts/gallery');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -926,7 +926,7 @@ class CastsController extends AppController
         }
 
         $this->set(compact('gallery'));
-        $this->render('/cast/casts/gallery');
+        $this->render('/Cast/Casts/gallery');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -1053,7 +1053,7 @@ class CastsController extends AppController
             , $this->viewVars['userInfo']['diary_path']);
 
         $this->set(compact('diarys'));
-        $this->render('/cast/casts/diary');
+        $this->render('/Cast/Casts/diary');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -1222,7 +1222,7 @@ class CastsController extends AppController
             , $this->viewVars['userInfo']['diary_path']);
 
         $this->set(compact('diarys'));
-        $this->render('/cast/casts/diary');
+        $this->render('/Cast/Casts/diary');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,
@@ -1319,7 +1319,7 @@ class CastsController extends AppController
             , $this->viewVars['userInfo']['diary_path']);
 
         $this->set(compact('diarys'));
-        $this->render('/cast/casts/diary');
+        $this->render('/Cast/Casts/diary');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,

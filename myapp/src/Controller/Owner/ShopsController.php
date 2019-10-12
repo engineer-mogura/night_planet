@@ -2027,7 +2027,7 @@ class ShopsController extends AppController
         // $this->set(compact('castList', 'dateList', 'WorkSchedule'));
         $this->set(compact('casts', 'dateList', 'workSchedule'));
 
-        $this->render('/owner/shops/work_schedule');
+        $this->render('/Owner/Shops/work_schedule');
         $response = array(
             'html' => $this->response->body(),
             'error' => $errors,

@@ -482,6 +482,18 @@ function castImageDeleteBtn(form, obj){
                 window.scrollTo( 0 , scrollPosition );
             }
         });
+        // TODO: ユーザーのログイン機能実装時に解除する
+        $('#modal-login').modal({
+
+            ready: function() {
+                alert("現在ログイン機能は利用できません。");
+            },
+            // モーダル非表示完了コールバック
+            complete: function() {
+
+            }
+        });
+
         // materializecss Chips
         $(document).find('.chips').material_chip();
         // materializecss Chips 追加イベント

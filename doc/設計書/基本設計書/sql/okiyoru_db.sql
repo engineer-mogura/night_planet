@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 10 月 12 日 18:12
+-- Generation Time: 2019 年 10 月 13 日 17:15
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.3.8
 
@@ -855,7 +855,12 @@ INSERT INTO `updates` (`id`, `shop_id`, `cast_id`, `type`, `content`, `created`,
 (145, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:44:01', '2019-10-11 00:44:01'),
 (146, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:48:15', '2019-10-11 00:48:15'),
 (147, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:48:36', '2019-10-11 00:48:36'),
-(148, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 01:34:20', '2019-10-12 01:34:20');
+(148, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 01:34:20', '2019-10-12 01:34:20'),
+(149, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:51:03', '2019-10-12 22:51:03'),
+(150, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:54:01', '2019-10-12 22:54:01'),
+(151, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:56:48', '2019-10-12 22:56:48'),
+(152, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:57:11', '2019-10-12 22:57:11'),
+(153, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:58:24', '2019-10-12 22:58:24');
 
 -- --------------------------------------------------------
 
@@ -903,7 +908,7 @@ CREATE TABLE `work_schedules` (
 
 INSERT INTO `work_schedules` (`id`, `shop_id`, `cast_ids`, `created`, `modified`) VALUES
 (1, 0, '54,53', '2019-09-17 22:20:02', '2019-09-17 22:20:02'),
-(2, 56, '53,54', '2019-09-17 22:21:36', '2019-10-12 01:34:20');
+(2, 56, '53', '2019-09-17 22:21:36', '2019-10-12 22:51:03');
 
 --
 -- Indexes for dumped tables
@@ -1162,7 +1167,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
 
 --
 -- AUTO_INCREMENT for table `users`

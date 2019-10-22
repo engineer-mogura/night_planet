@@ -1,7 +1,8 @@
+/myapp_admin/
 /phpmyadmin/
 /myapp/webroot/tmp/
-# /myapp/webroot/img/**/*.jpg
-# /myapp/webroot/img/**/*.png
+/myapp/webroot/img/**/*.jpg
+/myapp/webroot/img/**/*.png
 /myapp/webroot/img/**/calendar.json
 /myapp/webroot/img/**/*.dat
 /myapp/webroot/img/**/**/**/**/*.dat

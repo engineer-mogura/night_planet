@@ -11,6 +11,7 @@
 			"admin": true,
 			"myapp/webroot/img": true,
 			"phpmyadmin": true
-		}
+		},
+		"git.ignoreLimitWarning": true
 	}
 }

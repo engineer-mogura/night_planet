@@ -288,12 +288,9 @@ class ShopsController extends AppController
         $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Owner');
         $id = $auth['id']; // ユーザーID
-        // $dirPath = preg_replace('/(\/\/)/', '/',
-        //     WWW_ROOT.$this->viewVars['shopInfo']['top_image_path']);
 
         $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
-        // // ディクレトリ取得
-        // $dir = new Folder($dirPath, true, 0755);
+
         // ディクレトリ取得
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
             , WWW_ROOT.$this->viewVars['shopInfo']['top_image_path'])

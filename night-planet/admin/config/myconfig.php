@@ -3,17 +3,22 @@
     $_ = function ($s) {
         return $s;
     };
-    // 環境による画像ドメイン判定
+    // 環境によるドメイン判定
     if(strpos($_SERVER['HTTP_HOST'],'local') !== false){
         // ローカル環境の場合
+        define("PUBLIC_DOMAIN",'http://night-planet.local');
+        define("ADMIN_DOMAIN",'http://admin.night-planet.local');
         define("IMG_DOMAIN",'http://img.night-planet.local');
 
     } else if(strpos($_SERVER['HTTP_HOST'],'dev') !== false){
         // ステージング環境の場合
+        define("PUBLIC_DOMAIN",'https://devokiyorugo.work');
+        define("ADMIN_DOMAIN",'https://admin.devokiyorugo.work');
         define("IMG_DOMAIN",'https://img.devokiyorugo.work');
-
     } else {
         // 本番環境の場合
+        define("PUBLIC_DOMAIN",'https://night-planet.com');
+        define("ADMIN_DOMAIN",'https://admin.night-planet.com');
         define("IMG_DOMAIN",'https://img.night-planet.com');
     }
 

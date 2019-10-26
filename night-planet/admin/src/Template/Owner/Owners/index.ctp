@@ -8,7 +8,7 @@
 				<div class="col s12 m6 l6">
 					<div class="card <?php if(count($shops) == $key + 1) { echo('targetScroll');}?>">
 						<div class="card-image">
-<?php         				$shop_url = APP_PATH['APP'].$shop['area']
+<?php         				$shop_url = PUBLIC_DOMAIN.DS.$shop['area']
 								.DS.PATH_ROOT['SHOP'].DS.$shop['id']
 								.'?genre='.$shop['genre'].'&name='.$shop['name'];
 ?>

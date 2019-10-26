@@ -45,3 +45,7 @@ nbproject/*
 .vscode
 # Sass preprocessor
 .sass-cache/
+night-planet/admin/tmp/**/**/**
+night-planet/public/tmp/**/**/**
+night-planet/admin/logs/*.*
+night-planet/public/webroot/cache/instagram_graph_api.dat

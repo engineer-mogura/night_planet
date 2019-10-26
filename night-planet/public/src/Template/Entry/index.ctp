@@ -220,7 +220,7 @@
             <div class="col-md-4">
                     <article class="blog-post">
                         <figure>
-                            <a href="<?=APP_PATH['APP']?>naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
+                            <a href="<?=PUBLIC_DOMAIN.DS?>naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
                                 <div class="blog-img-wrap">
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>
@@ -237,7 +237,7 @@
                 <div class="col-md-4">
                     <article class="blog-post">
                         <figure>
-                            <a href="<?=APP_PATH['APP']?>naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
+                            <a href="<?=PUBLIC_DOMAIN.DS?>naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
                                 <div class="blog-img-wrap">
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>
@@ -254,7 +254,7 @@
                 <div class="col-md-4">
                     <article class="blog-post">
                         <figure>
-                            <a href="<?=APP_PATH['APP']?>naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
+                            <a href="<?=PUBLIC_DOMAIN.DS?>naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
                                 <div class="blog-img-wrap">
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>

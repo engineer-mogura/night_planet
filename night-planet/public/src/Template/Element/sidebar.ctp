@@ -31,12 +31,12 @@
 		<h5><span class="color-blue"><?=LT['001']?></span>をシェアしよう</h5>
 		<div class="row sharer-modal">
 			<div class="col l6">
-				<a class="facebook sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['FACEBOOK'].APP_PATH['APP']?>">
+				<a class="facebook sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['FACEBOOK'].urlencode($shopInfo['shop_url'])?>">
 					<span> Facebook</span>
 				</a>
 			</div>
 			<div class="col l6">
-				<a class="twitter sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['TWITTER'].APP_PATH['APP']?>">
+				<a class="twitter sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['TWITTER'].urlencode($shopInfo['shop_url'])?>">
 					<span> Twitter</span>
 				</a>
 			</div>
@@ -48,7 +48,7 @@
 				</a>
 			</div>
 			<div class="col l6">
-				<a class="line sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['LINE'].APP_PATH['APP']?>">
+				<a class="line sharer-btn waves-effect waves-light btn-large" href="<?=SHARER['LINE'].urlencode($shopInfo['shop_url'])?>">
 					<span> LINE</span>
 				</a>
 			</div>

@@ -12,16 +12,16 @@
     <meta property="og:url" content="<?=$shopInfo['shop_url']?>" />
     <meta property="og:title" content="<?=isset($shop)?$shop->name:$cast->shop->name?>" />
     <meta property="og:description" content="<?=isset($shop)?h($shop->catch):h($cast->shop->catch)?>" />
-    <meta property="og:image" content="<?=APP_PATH['APP'].$shop->top_image?>" />
+    <meta property="og:image" content="<?=PUBLIC_DOMAIN.$shop->top_image?>" />
   <?php 
     else:
   ?>
     <meta property="og:site_name" content="<?=LT['000']?>" />
     <meta property="og:type" content="article">
-    <meta property="og:url" content="<?=APP_PATH['APP']?>" />
+    <meta property="og:url" content="<?=PUBLIC_DOMAIN.DS?>" />
     <meta property="og:title" content="<?=$title?>" />
     <meta property="og:description" content="<?=$description?>" />
-    <meta property="og:image" content="<?=APP_PATH['APP'].PATH_ROOT['NIGHT_PLANET_IMAGE']?>" />
+    <meta property="og:image" content="<?=PUBLIC_DOMAIN.PATH_ROOT['NIGHT_PLANET_IMAGE']?>" />
   <?php
     endif;
   ?>

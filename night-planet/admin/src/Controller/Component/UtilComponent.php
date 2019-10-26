@@ -7,6 +7,7 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Controller\Component;
+
 class UtilComponent extends Component
 {
 
@@ -39,7 +40,8 @@ class UtilComponent extends Component
      * @param mixed
      * @return mixed
      */
-    function sortByLastmod($a, $b) {
+    public function sortByLastmod($a, $b)
+    {
         return filemtime($b) - filemtime($a);
     }
 
@@ -98,15 +100,17 @@ class UtilComponent extends Component
         ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'profile_path'=> $path.DS.PATH_ROOT['PROFILE']);
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/',
-            WWW_ROOT.$ownerInfo['profile_path']), true, 0755);
+        $dir = new Folder(preg_replace(
+            '/(\/\/)/',
+            '/',
+            WWW_ROOT.$ownerInfo['profile_path']
+        ), true, 0755);
 
         // ファイルは１つのみだけど配列で取得する
         $files = glob($dir->path.DS.'*.*');
         $ownerInfo = $ownerInfo + array('icon_name'=>basename($files[0]));
 
         return  $ownerInfo;
-
     }
 
     /**
@@ -140,7 +144,7 @@ class UtilComponent extends Component
         $path = DS.PATH_ROOT['IMG'].DS.$shopInfo['area']['path']
                 .DS.$shopInfo['genre']['path'].DS.$shop['dir'];
 
-        $shop_url = APP_PATH['APP'].$shopInfo['area']['path']
+        $shop_url = PUBLIC_DOMAIN.DS.$shopInfo['area']['path']
             .DS.PATH_ROOT['SHOP'].DS.$shop['id']
             .'?area='.$shop['area'].'&genre='.$shop['genre'].'&name='.$shop['name'];
 
@@ -150,7 +154,6 @@ class UtilComponent extends Component
         ,'cache_path'=>$path.DS.PATH_ROOT['CACHE'],'tmp_path'=>$path.DS.PATH_ROOT['TMP']
         ,'shop_url'=>$shop_url);
         return  $shopInfo;
-
     }
 
     /**
@@ -184,7 +187,7 @@ class UtilComponent extends Component
         $path = DS.PATH_ROOT['IMG'].DS.$castInfo['area']['path']
                 .DS.$castInfo['genre']['path'].DS.$shop['dir']
                 .DS.PATH_ROOT['CAST'].DS.$cast['dir'];
-        $shop_url = APP_PATH['APP'].$castInfo['area']['path']
+        $shop_url = PUBLIC_DOMAIN.DS.$castInfo['area']['path']
             .DS.PATH_ROOT['SHOP'].DS.$shop['id']
             .'?genre='.$shop['genre'].'&name='.$shop['name'];
 
@@ -194,8 +197,11 @@ class UtilComponent extends Component
             , 'tmp_path'=> $path.DS.PATH_ROOT['TMP'], 'cache_path'=>$path.DS.PATH_ROOT['CACHE'], 'shop_url'=>$shop_url);
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/',
-            WWW_ROOT.$castInfo['profile_path']), true, 0755);
+        $dir = new Folder(preg_replace(
+            '/(\/\/)/',
+            '/',
+            WWW_ROOT.$castInfo['profile_path']
+        ), true, 0755);
 
         // ファイルは１つのみだけど配列で取得する
         $files = glob($dir->path.DS.'*.*');
@@ -311,18 +317,15 @@ class UtilComponent extends Component
         $archives = array_values($archives);
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/'
-            , WWW_ROOT.$diaryPath), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$diaryPath), true, 0755);
 
         foreach ($archives as $key => $archive) {
-
             foreach ($archive as $key => $value) {
-
                 $gallery = array();
 
                 /// 並び替えして出力
                 $files = glob($dir->path.$value['dir'].DS.'*.*');
-                usort( $files, $this->sortByLastmod );
+                usort($files, $this->sortByLastmod);
 
                 foreach ($files as $file) {
                     $timestamp = date('Y/m/d H:i', filemtime($file));
@@ -362,14 +365,13 @@ class UtilComponent extends Component
             ->first();
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/'
-            , WWW_ROOT.$diaryPath), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$diaryPath), true, 0755);
 
         $gallery = array();
 
         /// 並び替えして出力
         $files = glob($dir->path.$diary['dir'].DS.'*.*');
-        usort( $files, $this->sortByLastmod );
+        usort($files, $this->sortByLastmod);
         foreach ($files as $file) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
@@ -394,18 +396,18 @@ class UtilComponent extends Component
     {
         $diarys = TableRegistry::get('diarys');
 
-        if(!empty($isArea)) {
+        if (!empty($isArea)) {
             $diarys = $diarys->find('all')
             ->contain(['diary_likes','casts','casts.shops'])
-            ->matching('casts.shops', function($q) use ($isArea){
+            ->matching('casts.shops', function ($q) use ($isArea) {
                 return $q->where(['shops.area'=>$isArea]);
             })
             ->order(['diarys.created' => 'DESC'])
             ->limit($rowNum)->all();
-        } else if(!empty($shop_id)) {
+        } elseif (!empty($shop_id)) {
             $diarys = $diarys->find('all')
                 ->contain(['diary_likes','casts','casts.shops'])
-                ->matching('casts.shops', function($q) use ($shop_id){
+                ->matching('casts.shops', function ($q) use ($shop_id) {
                     return $q->where(['shops.id'=>$shop_id]);
                 })
                 ->order(['diarys.created' => 'DESC'])
@@ -425,8 +427,7 @@ class UtilComponent extends Component
                 . DS . $diary->cast->dir
                 . DS . PATH_ROOT['DIARY'] . $diary->dir;
             // ディクレトリ取得
-            $dir = new Folder(preg_replace('/(\/\/)/', '/'
-            , $diaryPath), true, 0755);
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', $diaryPath), true, 0755);
             // 画像数をセット
             $diary->set('gallery_count', count(glob($diaryPath . DS . '*.*')));
 
@@ -445,8 +446,7 @@ class UtilComponent extends Component
                 . DS . PATH_ROOT['CAST']
                 . DS . $diary->cast->dir
                 . DS . PATH_ROOT['PROFILE'];
-            $dir = new Folder(preg_replace('/(\/\/)/', '/'
-                , $profileFullPath), true, 0755);
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', $profileFullPath), true, 0755);
             $files = glob($dir->path.DS.'*.*');
             count($files) > 0 ? $icon = $profilePath. DS. basename($files[0])
                  : $icon = PATH_ROOT['NO_IMAGE01'];
@@ -489,18 +489,15 @@ class UtilComponent extends Component
         $archives = array_values($archives);
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/'
-            , WWW_ROOT.$noticePath), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$noticePath), true, 0755);
 
         foreach ($archives as $key => $archive) {
-
             foreach ($archive as $key => $value) {
-
                 $gallery = array();
 
                 /// 並び替えして出力
                 $files = glob($dir->path.$value['dir'].DS.'*.*');
-                usort( $files, $this->sortByLastmod );
+                usort($files, $this->sortByLastmod);
 
                 foreach ($files as $file) {
                     $timestamp = date('Y/m/d H:i', filemtime($file));
@@ -518,13 +515,13 @@ class UtilComponent extends Component
         return $archives;
     }
 
-     /**
-     * 指定した１件のお知らせ情報を取得する処理
-     *
-     * @param [type] $id
-     * @param [type] $noticePath
-     * @return array
-     */
+    /**
+    * 指定した１件のお知らせ情報を取得する処理
+    *
+    * @param [type] $id
+    * @param [type] $noticePath
+    * @return array
+    */
     public function getNotice($id, $noticePath)
     {
         $shopInfos = TableRegistry::get('shop_infos');
@@ -539,14 +536,13 @@ class UtilComponent extends Component
             ->first();
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/'
-            , WWW_ROOT.$noticePath), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$noticePath), true, 0755);
 
         $gallery = array();
 
         /// 並び替えして出力
         $files = glob($dir->path.$shopInfo['dir'].DS.'*.*');
-        usort( $files, $this->sortByLastmod );
+        usort($files, $this->sortByLastmod);
         foreach ($files as $file) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
@@ -573,7 +569,7 @@ class UtilComponent extends Component
         if (!empty($isArea)) {
             $shopInfos = $shopInfos->find('all')
                 ->contain(['shop_info_likes','shops'])
-                ->matching('shops', function($q) use ($isArea){
+                ->matching('shops', function ($q) use ($isArea) {
                     return $q->where(['shops.area'=>$isArea]);
                 })
                 ->order(['shop_infos.created' => 'DESC'])
@@ -628,9 +624,12 @@ class UtilComponent extends Component
      * @param integer $limitFileSize
      * @return void
      */
-    public function file_upload(array $file = null, array $files_befor = null,
-        string $dir = null, int $limitFileSize)
-    {
+    public function file_upload(
+        array $file = null,
+        array $files_befor = null,
+        string $dir = null,
+        int $limitFileSize
+    ) {
         try {
             // ファイルを保存するフォルダ $dirの値のチェック
             if ($dir) {
@@ -753,8 +752,8 @@ class UtilComponent extends Component
      * @param [type] $target
      * @return void
      */
-    public function strReplace($search, $replace, $target) {
-
+    public function strReplace($search, $replace, $target)
+    {
         $result = "";
         $result = str_replace($search, $replace, $target);
         return $result;
@@ -765,8 +764,8 @@ class UtilComponent extends Component
      *
      * @return void
      */
-    function getPeriodDate() {
-
+    public function getPeriodDate()
+    {
         $week = [
             '日', //0
             '月', //1
@@ -779,8 +778,8 @@ class UtilComponent extends Component
         $date = date('Y-m');
         $startDate = date('Y-m-d', strtotime('first day of '. $date));
         $endDate = date('Y-m-d', strtotime(date('Y-m-t', strtotime($startDate . '+' . 1 . 'month'))));
-        $diff = (strtotime($endDate) - strtotime($startDate)) / ( 60 * 60 * 24);
-        for($i = 0; $i <= $diff; $i++) {
+        $diff = (strtotime($endDate) - strtotime($startDate)) / (60 * 60 * 24);
+        for ($i = 0; $i <= $diff; $i++) {
             $dateFormat = date('m/d w', strtotime($startDate . '+' . $i . 'days'));
             $period[] = substr_replace($dateFormat, '('.$week[substr($dateFormat, -1)].')', -1);
         }
@@ -792,12 +791,12 @@ class UtilComponent extends Component
      *
      * @return void
      */
-    function getPeriodMonth() {
-
+    public function getPeriodMonth()
+    {
         $startDate = date('Y-m-d', strtotime('2017-01-06'));
         $endDate = date('Y-m-d', strtotime("2018-01-09"));
-        $diff = (strtotime($endDate) - strtotime($startDate)) / ( 60 * 60 * 24 * 30);
-        for($i = 0; $i <= $diff; $i++) {
+        $diff = (strtotime($endDate) - strtotime($startDate)) / (60 * 60 * 24 * 30);
+        for ($i = 0; $i <= $diff; $i++) {
             $period[] = date('Y-m', strtotime($startDate . '+' . $i . 'month'));
         }
         return $period;
@@ -811,7 +810,7 @@ class UtilComponent extends Component
      * @param [type] $date_from_user
      * @return void
      */
-    function check_in_range($start_date, $end_date, $date_from_user)
+    public function check_in_range($start_date, $end_date, $date_from_user)
     {
         // Convert to timestamp
         $start_ts = strtotime($start_date);
@@ -822,17 +821,17 @@ class UtilComponent extends Component
         return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
     }
 
-   /**
-     * インスタAPIにアクセスし情報を取得する処理
-     *
-     * @param [type] $insta_user_name
-     * @param [type] $insta_business_name
-     * @param [type] $insta_business_id
-     * @param [type] $access_token
-     * @return $instagram_data
-     */
-    public function getInstagram($insta_user_name = null
-        , $insta_business_name = null, $cache_path) {
+    /**
+      * インスタAPIにアクセスし情報を取得する処理
+      *
+      * @param [type] $insta_user_name
+      * @param [type] $insta_business_name
+      * @param [type] $insta_business_id
+      * @param [type] $access_token
+      * @return $instagram_data
+      */
+    public function getInstagram($insta_user_name = null, $insta_business_name = null, $cache_path)
+    {
 
         //////////////////////
         /*     初期設定     */
@@ -863,11 +862,11 @@ class UtilComponent extends Component
         $show_mode      = API['INSTAGRAM_SHOW_MODE'];
 
         //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
-        if(!empty($target_user)) {
+        if (!empty($target_user)) {
             $fields      = 'business_discovery.username('.$target_user.'){id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id,media{caption,media_url,media_type,children,like_count,comments_count,timestamp,id}}';
         }
         //自分のアカウントの画像が取得できればOKな場合は$queryを以下のようにしてください。
-        if(!empty($insta_business_name)) {
+        if (!empty($insta_business_name)) {
             $fields      = 'name,media{caption,like_count,media_url,permalink,timestamp,username}&access_token='.$access_token;
         }
 
@@ -886,8 +885,8 @@ class UtilComponent extends Component
 
         // キャッシュ用のディレクトリが存在するか確認
         // なければ作成する
-        if(!file_exists(dirname($cache_path). '/cache/')){
-            if(mkdir(dirname($cache_path). '/cache/', 0774)){
+        if (!file_exists(dirname($cache_path). '/cache/')) {
+            if (mkdir(dirname($cache_path). '/cache/', 0774)) {
                 chmod(dirname($cache_path). '/cache/', 0774);
             }
         }
@@ -896,42 +895,42 @@ class UtilComponent extends Component
         $cache_lastmodified = @filemtime(dirname($cache_path). '/cache/instagram_graph_api.dat');
 
         // 更新日時の比較
-        if(!$cache_lastmodified){
+        if (!$cache_lastmodified) {
             // Graph API から JSON 形式でデータを取得
             $ig_json = @file_get_contents($graph_api. $ig_buisiness. '?fields='. $fields. '&access_token='. $access_token);
             // 取得したデータをキャッシュに保存する
             file_put_contents(dirname($cache_path). '/cache/instagram_graph_api.dat', $ig_json, LOCK_EX);
-        } else{
-            if(time() - $cache_lastmodified > $cache_lifetime){
+        } else {
+            if (time() - $cache_lastmodified > $cache_lifetime) {
                 // キャッシュの最終更新日時がキャッシュ時間よりも古い場合は再取得する
                 $ig_json = @file_get_contents($graph_api. $ig_buisiness. '?fields='. $fields. '&access_token='. $access_token);
                 // 取得したデータをキャッシュに保存する
                 file_put_contents(dirname($cache_path). '/cache/instagram_graph_api.dat', $ig_json, LOCK_EX);
-            } else{
+            } else {
                 // キャッシュファイルが新しければキャッシュデータを使用する
                 $ig_json = @file_get_contents(dirname($cache_path). '/cache/instagram_graph_api.dat');
             }
         }
 
         // 取得したJSON形式データを配列に展開する
-        if($ig_json){
+        if ($ig_json) {
             $ig_data = json_decode($ig_json);
-            if(isset($ig_data->error)){
+            if (isset($ig_data->error)) {
                 $ig_data = null;
             }
         }
 
         // データ取得に失敗した場合
         // サーバエラーを返す
-        if(!$ig_json || !$ig_data){
-        //	exit('データ取得に失敗しました');
+        if (!$ig_json || !$ig_data) {
+            //	exit('データ取得に失敗しました');
             // 500 Internal Server Error
             header('HTTP', true, 500);
             exit;
         }
 
         // 初期表示の設定確認
-        if($show_mode !== 'grid' && $show_mode !== 'list'){
+        if ($show_mode !== 'grid' && $show_mode !== 'list') {
             $show_mode = 'grid';
         }
 
@@ -967,5 +966,4 @@ class UtilComponent extends Component
         $action == 'login' ? $log .= "ログイン" : $log .= "ログアウト";
         return $log;
     }
-
 }

@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
   # using a specific IP.
   config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.hostname = "localhost"
-  config.hostsupdater.aliases = ["night-planet.local","admin.night-planet.local","night-planet-db.local"]
+  config.hostsupdater.aliases = ["night-planet.local","admin.night-planet.local","img.night-planet.local","night-planet-db.local"]
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -51,13 +51,15 @@ Vagrant.configure("2") do |config|
   # backing providers for Vagrant. These expose provider-specific options.
   # Example for VirtualBox:
   #
-  # config.vm.provider "virtualbox" do |vb|
+  config.vm.provider "virtualbox" do |vb|
   #   # Display the VirtualBox GUI when booting the machine
   #   vb.gui = true
   #
   #   # Customize the amount of memory on the VM:
   #   vb.memory = "1024"
-  # end
+    # 以下、vagrant上でシンポリックリンクを作成するための記述
+    vb.customize ["setextradata", :id, "VBoxInternal2/SharedFoldersEnableSymlinksCreate/vagrant", "1"]
+  end
   #
   # View the documentation for the provider you are using for more
   # information on available options.

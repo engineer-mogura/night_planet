@@ -7,7 +7,7 @@
             "request": "launch",
             "port": 9000,
             "pathMappings": {
-                "/vagrant/myapp": "c:/vm/01_okiyoru/myapp"
+                "/vagrant/night-planet": "c:/vm/01_okiyoru/night-planet"
             },
             "log": true,
         },

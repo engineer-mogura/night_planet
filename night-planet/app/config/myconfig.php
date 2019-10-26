@@ -1,5 +1,22 @@
 <?php
- 
+    //変数展開用
+    $_ = function ($s) {
+        return $s;
+    };
+    // 環境による画像ドメイン判定
+    if(strpos($_SERVER['HTTP_HOST'],'local') !== false){
+        // ローカル環境の場合
+        define("IMG_DOMAIN",'http://img.night-planet.local');
+
+    } else if(strpos($_SERVER['HTTP_HOST'],'dev') !== false){
+        // ステージング環境の場合
+        define("IMG_DOMAIN",'https://img.devokiyorugo.work');
+
+    } else {
+        // 本番環境の場合
+        define("IMG_DOMAIN",'https://img.night-planet.com');
+    }
+
 return [
 
     // バイトサイズ関連
@@ -427,9 +444,4 @@ return [
         'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
         'INSTAGRAM_CACHE_TIME'=> 360, // インスタグラムキャッシュタイム
     )),
-
-    //変数展開用
-    $_ = function ($s) {
-        return $s;
-    }
 ];

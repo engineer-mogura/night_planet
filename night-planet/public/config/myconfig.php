@@ -58,15 +58,15 @@ return [
 
     // パス設定 path.config
     define('PATH_ROOT', array(
-        'NO_IMAGE01'=> '/common/no-img16.png',
-        'NO_IMAGE02'=> '/common/noimage.jpg',
-        'NO_IMAGE03'=> '/common/no-img150_150/no-img7.png',
-        'NO_IMAGE04'=> '/common/no-img150_150/no-img8.png',
-        'NO_IMAGE05'=> '/common/no-img150_150/no-img9.png',
-        'NIGHT_PLANET_IMAGE'=> '/night_planet_top.png',
-        'CAST_TOP_IMAGE'=> '/common/cast/top-image.jpg',
-        'SHOP_TOP_IMAGE'=> '/common/shop/top-image.png',
-        'CREDIT'=> '/common/credit/',
+        'NO_IMAGE01'=> '/img/common/no-img16.png',
+        'NO_IMAGE02'=> '/img/common/noimage.jpg',
+        'NO_IMAGE03'=> '/img/common/no-img150_150/no-img7.png',
+        'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
+        'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
+        'NIGHT_PLANET_IMAGE'=> '/img/night_planet_top.png',
+        'CAST_TOP_IMAGE'=> '/img/common/cast/top-image.jpg',
+        'SHOP_TOP_IMAGE'=> '/img/common/shop/top-image.png',
+        'CREDIT'=> '/img/common/credit/',
         'OWNER'=> 'owner',
         'USER'=> 'user',
         'CAST'=> 'cast',
@@ -80,7 +80,7 @@ return [
         'PROFILE'=> 'profile',
         'CACHE'=> 'cache',
         'BACKUP'=> 'backup',
-        'IMG'=> $_(IMG_DOMAIN), // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える
+        'IMG'=> 'img', // TODO: こいつは、ルートディレクトリに使ってる。imgってディレクトリ名は不適切だから後で変える
         'COMMON'=> 'common',
         'SHOP'=> 'shop',
     )),

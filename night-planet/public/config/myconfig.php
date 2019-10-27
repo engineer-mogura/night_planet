@@ -259,37 +259,37 @@ return [
         'cabacula'=> [
             'label' => "キャバクラ",
             'path' => "cabacula",
-            'image' => "/img/common/genre/genre_1.png"
+            'image' => "/img/common/genre/cabacura.jpg"
         ],
         'snack'=> [
             'label' => "スナック",
             'path' => "snack",
-            'image' => "/img/common/genre/genre_2.png"
+            'image' => "/img/common/genre/cabacura.jpg"
         ],
         'girlsbar'=> [
             'label' => "ガールズバー",
             'path' => "girlsbar",
-            'image' => "/img/common/genre/genre_3.png"
+            'image' => "/img/common/genre/girsbar.jpg"
         ],
         'club'=> [
             'label' => "クラブ",
             'path' => "club",
-            'image' => "/img/common/genre/genre_4.png"
+            'image' => "/img/common/genre/club.jpg"
         ],
         'lounge'=> [
             'label' => "ラウンジ",
             'path' => "lounge",
-            'image' => "/img/common/genre/genre_5.png"
+            'image' => "/img/common/genre/lounge.jpg"
         ],
         'pub'=> [
             'label' => "パブ",
             'path' => "pub",
-            'image' => "/img/common/genre/genre_6.png"
+            'image' => "/img/common/genre/cabacura.jpg"
         ],
         'bar'=> [
             'label' => "バー",
             'path' => "bar",
-            'image' => "/img/common/genre/genre_7.png"
+            'image' => "/img/common/genre/bar.jpg"
         ],
     )),
     // 星座リスト
@@ -440,7 +440,7 @@ return [
         'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-146237049-1', // ステージング環境用 GoogleアナリティクスのAPIキー
         'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // ステージング環境用 GoogleアナリティクスのID
         'GOOGLE_ANALYTICS_VIEW_ID'=>'200669565', // ステージング環境用 Analytics Reporting API V4 view_id
-        'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/bZ3AQhHPZLH2Q7Dy6', // Googleフォーム 掲載申し込みフォーム
+        'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
         'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
         'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
         'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン

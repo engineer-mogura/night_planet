@@ -440,7 +440,7 @@ return [
         'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-146237049-1', // ステージング環境用 GoogleアナリティクスのAPIキー
         'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // ステージング環境用 GoogleアナリティクスのID
         'GOOGLE_ANALYTICS_VIEW_ID'=>'200669565', // ステージング環境用 Analytics Reporting API V4 view_id
-        'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/bZ3AQhHPZLH2Q7Dy6', // Googleフォーム 掲載申し込みフォーム
+        'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
         'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
         'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
         'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン

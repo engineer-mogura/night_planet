@@ -713,6 +713,15 @@ div.description {
   background-size: contain;
   vertical-align: middle;
 }
+/* メイン表示部のスクロール設定 */
+#twitter-section .twitter-box{
+  width               : 100%;
+  height              : 350px;
+  display             : block;
+  overflow-x          : hidden;
+  overflow-y          : auto;
+}
+
 #shop-gallery-section .shop-gallery-label span:before,
 #shop-gallery-section .shop-gallery-label span:after {
   background-image: url(/img/common/image-gallery-icon.jpg);
@@ -1281,7 +1290,12 @@ textarea::-webkit-scrollbar {
   table.tel-table {
     margin-top: 10px;
    }
-
+  /** SECTION TWITTER START */
+  /* TWITTERメイン表示部の高さ設定 */
+  #twitter-section .twitter-box{
+    height              : 500px;
+  }
+  /** SECTION TWITTER START */
 }
 
 @media only screen and (min-width: 993px) {

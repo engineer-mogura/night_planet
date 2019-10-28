@@ -780,44 +780,58 @@ footer {
     color: #ff415c;
     font-size: 15px;
     margin: 0 2px; }
-  footer .social-share {
+  footer .social-share.desktop {
+    background-color: #373D4A;
+    right: 0;
+    width: 40%;
+    padding: 142px 0 0 70px; }
+  footer .social-share.desktop {
     position: absolute;
     background-color: #373D4A;
     right: 0;
     width: 40%;
     height: 100%;
     padding: 142px 0 0 70px; }
-    footer .social-share p {
-      color: #fff;
-      text-transform: uppercase;
-      padding-bottom: 10px; }
-    footer .social-share a.twitter-share {
-      height: 60px;
-      width: 60px;
-      background-color: #1AB4EF;
-      border-radius: 3px;
-      font-size: 22px;
-      display: inline-block;
-      text-align: center;
-      margin-right: 20px; }
-    footer .social-share a.twitter-share:hover, footer .social-share a.twitter-share:focus {
-      background-color: #1590BF; }
-    footer .social-share a.facebook-share:hover, footer .social-share a.facebook-share:focus {
-      background-color: #324C85; }
-    footer .social-share a.facebook-share {
-      height: 60px;
-      width: 60px;
-      background-color: #3B5898;
-      border-radius: 3px;
-      font-size: 22px;
-      display: inline-block;
-      text-align: center; }
-    footer .social-share a {
-      color: #fff; }
-    footer .social-share a:hover {
-      color: #fff; }
-    footer .social-share a i {
-      margin-top: 20px; }
+  footer .social-share p {
+    color: #fff;
+    text-transform: uppercase;
+    padding-bottom: 10px; }
+  footer .social-share.mobile a.twitter-share {
+    height: 60px;
+    width: 60px;
+    background-color: #1AB4EF;
+    border-radius: 3px;
+    font-size: 22px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 20px; }
+  footer .social-share.desktop a.twitter-share {
+    height: 60px;
+    width: 60px;
+    background-color: #1AB4EF;
+    border-radius: 3px;
+    font-size: 22px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 20px; }
+  footer .social-share a.twitter-share:hover, footer .social-share a.twitter-share:focus {
+    background-color: #1590BF; }
+  footer .social-share a.facebook-share:hover, footer .social-share a.facebook-share:focus {
+    background-color: #324C85; }
+  footer .social-share a.facebook-share {
+    height: 60px;
+    width: 60px;
+    background-color: #3B5898;
+    border-radius: 3px;
+    font-size: 22px;
+    display: inline-block;
+    text-align: center; }
+  footer .social-share a {
+    color: #fff; }
+  footer .social-share a:hover {
+    color: #fff; }
+  footer .social-share a i {
+    margin-top: 20px; }
   footer .footer-links {
     margin: 120px 0 120px 0; }
 

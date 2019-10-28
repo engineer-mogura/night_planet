@@ -17,6 +17,11 @@
 
 @media screen and (max-width:1024px) {
 }
+@media screen and (min-width:992px) {
+	footer .social-share.mobile{
+		display: none;
+	}
+}
 
 /* Responsive nav kicks in */
 @media screen and (max-width:991px) {
@@ -227,7 +232,7 @@
 		padding: 0 20px;
 	}
 
-	footer .social-share {
+	footer .social-share.desktop{
 		display: none;
 	}
 

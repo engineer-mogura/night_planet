@@ -202,16 +202,20 @@ class AreaController extends AppController
         $shopInfo = $this->Util->getShopInfo($shop);
         $query = $this->Updates->find();
         $columns = $this->Updates->schema()->columns();
-        $columns = array_merge($columns, ['created_max' => $query->func()->max('created')]);
         // 店舗の更新情報を取得する
         $updateInfo = $this->Updates->find('all', array(
-                'conditions' => array('created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' DAY')
-            ))
-            ->select($columns)
-            ->distinct(['content'])
-            ->where(['shop_id'=>$shopInfo['id']])
-            ->order(['created'=>'DESC'])
-            ->toArray();
+            'conditions' => array('updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' DAY')
+        ))
+        ->join([
+            'table' => 'updates',
+            'alias' => 'u',
+            'type' => 'LEFT',
+            'conditions' => 'u.content = updates.content and u.created > updates.created'
+        ])
+        ->select($columns)
+        ->where(['updates.shop_id'=>$shopInfo['id'],'u.created IS NULL'])
+        ->order(['updates.created'=>'DESC'])
+        ->toArray();
 
         $update_icon = array();
         // 画面の店舗メニューにnew-icon画像を付与するための配列をセットする

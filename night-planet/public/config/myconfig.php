@@ -10,11 +10,18 @@
         define("ADMIN_DOMAIN",'http://admin.night-planet.local');
         define("IMG_DOMAIN",'http://img.night-planet.local');
 
+    } else if(strpos($_SERVER['HTTP_HOST'],'192.168.33.10') !== false){
+        // スマホのローカル環境の場合
+        define("PUBLIC_DOMAIN",'192.168.33.10');
+        define("ADMIN_DOMAIN",'192.168.33.10');
+        define("IMG_DOMAIN",'192.168.33.10');
+
     } else if(strpos($_SERVER['HTTP_HOST'],'dev') !== false){
         // ステージング環境の場合
         define("PUBLIC_DOMAIN",'https://devokiyorugo.work');
         define("ADMIN_DOMAIN",'https://admin.devokiyorugo.work');
         define("IMG_DOMAIN",'https://img.devokiyorugo.work');
+
     } else {
         // 本番環境の場合
         define("PUBLIC_DOMAIN",'https://night-planet.com');
@@ -96,7 +103,12 @@ return [
         'FACEBOOK'=> 'https://www.facebook.com/sharer/sharer.php?u=',
         'LINE'=> 'http://line.me/R/msg/text/?',
         'FACEBOOK_APP_ID'=> '2084171171889711', // FACEBOOK アプリID
-        'TWITTER_ACCOUNT'=> '@OkinawaHack', // TWITTERアカウント
+    )),
+    // SNSリンク設定 path.config
+    define('SNS', array(
+        'INSTAGRAM'=> 'https://www.instagram.com/nightplanet91/', // FACEBOOK アプリID
+        'FACEBOOK'=> 'https://www.facebook.com/Night-Planet-101941477849319/', // FACEBOOK アプリID
+        'TWITTER'=> 'https://twitter.com/night_planet910', // TWITTERアカウント
 
     )),
     // TODO: リリース前には、パスを本番へ変更する。
@@ -135,9 +147,11 @@ return [
         '002'=>'特集',
         '003'=>'ランキング',
         '004'=>'トップページ',
-        '005'=>'facebook',
-        '006'=>'店舗の掲載をご希望の方',
-        '007'=>'店舗ログイン',
+        '005'=>'Instagram',
+        '006'=>'FaceBook',
+        '007'=>'Twitter',
+        '008'=>'店舗の掲載をご希望の方',
+        '009'=>'ログイン',
     )),
 
     // ラベル定数 owner.label menu
@@ -274,7 +288,7 @@ return [
         'club'=> [
             'label' => "クラブ",
             'path' => "club",
-            'image' => "/img/common/genre/club.jpg"
+            'image' => "/img/common/genre/lounge.jpg"
         ],
         'lounge'=> [
             'label' => "ラウンジ",
@@ -284,7 +298,7 @@ return [
         'pub'=> [
             'label' => "パブ",
             'path' => "pub",
-            'image' => "/img/common/genre/cabacura.jpg"
+            'image' => "/img/common/genre/bar.jpg"
         ],
         'bar'=> [
             'label' => "バー",
@@ -441,6 +455,7 @@ return [
         'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // ステージング環境用 GoogleアナリティクスのID
         'GOOGLE_ANALYTICS_VIEW_ID'=>'200669565', // ステージング環境用 Analytics Reporting API V4 view_id
         'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
+        'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
         'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
         'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
         'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン

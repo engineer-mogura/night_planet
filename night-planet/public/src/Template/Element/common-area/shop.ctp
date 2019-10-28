@@ -281,10 +281,12 @@
 				<div class="light-blue accent-2 card-panel col s12 center-align">
 					<p class="twitter-label section-label"><span> twitter </span></p>
 				</div>
-				<a class="twitter-timeline"
-					href="https://twitter.com/<?=$shop->snss[0]['twitter']?>?ref_src=twsrc%5Etfw"
-					data-tweet-limit="3">Tweets by <?=$shop->snss[0]['twitter']?></a>
-				<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+				<div class="twitter-box col">
+					<a class="twitter-timeline"
+						href="https://twitter.com/<?=$shop->snss[0]['twitter']?>?ref_src=twsrc%5Etfw"
+						data-tweet-limit="3">Tweets by <?=$shop->snss[0]['twitter']?></a>
+					<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+				</div>
 			</div>
 			<?php endif;?>
 			<!-- twitter END -->

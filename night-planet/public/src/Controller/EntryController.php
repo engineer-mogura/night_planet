@@ -104,6 +104,16 @@ class EntryController extends AppController
         $this->layout = false;
         $this->render();
     }
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function detail()
+    {
+        $this->layout = false;
+        $this->render();
+    }
 
     /**
      * Undocumented function

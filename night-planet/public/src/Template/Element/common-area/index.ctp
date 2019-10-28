@@ -27,8 +27,8 @@
 									<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
 									<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->shop_info_likes)?></span>
-									<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->id."?area=".$value->shop->area."&genre=".$value->shop->genre.
-									"&shop=".$value->shop->id."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
+									<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->shop->id."?area=".$value->shop->area."&genre=".$value->shop->genre
+										."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
 								</li>
 							<?php endforeach ?>
 						</ul>
@@ -106,18 +106,6 @@
 								<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->shop_info_likes)?></span>
 								<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->shop->id."?area=".$value->shop->area."&genre=".$value->shop->genre
 									."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
-							</li>
-							<li class="linkbox collection-item avatar">
-								<img src="<?= $value->icon ?>" alt="" class="circle">
-								<span class="title color-blue"><?= $value->created->nice()?></span>
-								<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$value->gallery_count?></span>
-								<p><span class="color-blue"><?= AREA[$value->shop['area']]['label'].' '.GENRE[$value->shop['genre']]['label']
-									.' '.$value->shop['name']?></span><br>
-								<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
-								</p>
-								<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->shop_info_likes)?></span>
-								<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->id."?area=".$value->shop->area."&genre=".$value->shop->genre.
-								"&shop=".$value->shop->id."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
 							</li>
 						<?php endforeach ?>
 					</ul>

@@ -56,7 +56,7 @@ class ShopsController extends AppController
     public function index()
     {
         //$ApiGooglesController = new ApiGooglesController();
-        $this->redirect("http://admin.night-planet.local/api-googles");
+        //$this->redirect("http://admin.night-planet.local/api-googles");
         //$ApiGooglesController->index();
         // アクティブタブ
         $selected_tab = "";
@@ -1260,89 +1260,6 @@ class ShopsController extends AppController
         if (!$this->request->is('ajax')) {
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
         }
-        // $flg = true; // 返却フラグ
-        // $isRemoved = false; // ファイル削除フラグ
-        // $errors = ""; // 返却メッセージ
-        // $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
-        // $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
-        // $auth = $this->request->session()->read('Auth.Owner');
-        // $id = $auth['id']; // ユーザーID
-        // $tmpFile = null; // バックアップ用
-
-        // try {
-        //     $del_path = preg_replace('/(^\/)/', '', $this->viewVars['shopInfo']['image_path']);
-        //     // 削除対象ファイルを取得
-        //     $file = new File(WWW_ROOT.$del_path . DS .$this->request->getData('name'));
-
-        //     // 削除対象ファイルパス存在チェック
-        //     if (!file_exists($file->path)) {
-        //         throw new RuntimeException('ファイルが存在しません。');
-        //     }
-
-        //     // ロールバック用のファイルサイズチェック
-        //     if ($file->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
-        //         throw new RuntimeException('ファイルサイズが大きすぎます。');
-        //     }
-
-        //     // 一時ファイル作成
-        //     if (!$file->copy(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name)) {
-        //         throw new RuntimeException('画像のバックアップに失敗しました。');
-        //     }
-
-        //     // 一時ファイル取得
-        //     $tmpFile = new File(WWW_ROOT.PATH_ROOT['TMP'].DS.$file->name);
-
-        //     // 日記ファイル削除処理実行
-        //     if (!$file->delete()) {
-        //         throw new RuntimeException('ファイルの削除ができませんでした。');
-        //     }
-        //     // ファイル削除フラグを立てる
-        //     $isRemoved = true;
-        //     // 更新対象レコード取得
-        //     $shop = $this->Shops->get($this->viewVars['shopInfo']['id']);
-        //     $shop->set($this->request->getData('key'), "");
-        //     // レコード更新実行
-        //     if (!$this->Shops->save($shop)) {
-        //         throw new RuntimeException('レコードの更新ができませんでした。');
-        //     }
-        // } catch (RuntimeException $e) {
-        //     // ファイルを削除していた場合は復元する
-        //     if ($isRemoved) {
-        //         $tmpFile->copy($file->path);
-        //     }
-        //     // 一時ファイルがあれば削除する
-        //     if (isset($tmpFile) && file_exists($tmpFile->path)) {
-        //         $tmpFile->delete();// tmpファイル削除
-        //     }
-        //     $this->log($this->Util->setLog($auth, $e));
-        //     $flg = false;
-        // }
-        // // 例外が発生している場合にメッセージをセットして返却する
-        // if (!$flg) {
-        //     $message = RESULT_M['DELETE_FAILED'];
-        //     $response = array(
-        //         'success' => $flg,
-        //         'message' => $message
-        //     );
-        //     $this->response->body(json_encode($response));
-        //     return;
-        // }
-
-        // // 一時ファイル削除
-        // if (file_exists($tmpFile->path)) {
-        //     $tmpFile->delete();
-        // }
-
-        // $shop = $this->Shops->find()
-        //     ->where(['id' => $this->viewVars['shopInfo']['id']])->first();
-        // $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-        // $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // // 画像リストを作成する
-        // foreach ($imageCol as $key => $value) {
-        //     if (!empty($shop[$imageCol[$key]])) {
-        //         array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
-        //     }
-        // }
 
         $flg = true; // 返却フラグ
         $errors = ""; // 返却メッセージ

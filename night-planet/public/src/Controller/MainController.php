@@ -43,6 +43,7 @@ class MainController extends AppController
 
     public function top()
     {
+        //$this->redirect("http://localhost:8080/api-googles");
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);

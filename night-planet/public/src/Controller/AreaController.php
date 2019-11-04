@@ -49,10 +49,10 @@ class AreaController extends AppController
             && !empty($query['nickname']) && in_array(PATH_ROOT['CAST'], $url)) {
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
             $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], $query['nickname'], LT['001']);
+                , $query['name'], $query['nickname'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['CAST_TITLE']);
             $search = array('_cast_', '_service_name_');
-            $replace = array($query['nickname'], LT['001']);
+            $replace = array($query['nickname'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['CAST_DESCRIPTION']);
 
         // キャストの日記トップの場合
@@ -60,10 +60,10 @@ class AreaController extends AppController
         && !empty($query['nickname']) && in_array(PATH_ROOT['DIARY'], $url)) {
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
             $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], $query['nickname'], LT['001']);
+                , $query['name'], $query['nickname'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['DIARY_TITLE']);
             $search = array('_cast_', '_service_name_');
-            $replace = array($query['nickname'], LT['001']);
+            $replace = array($query['nickname'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['DIARY_DESCRIPTION']);
 
         // キャストのギャラリートップの場合
@@ -71,10 +71,10 @@ class AreaController extends AppController
         && !empty($query['nickname']) && in_array(PATH_ROOT['GALLERY'], $url)) {
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
             $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], $query['nickname'], LT['001']);
+                , $query['name'], $query['nickname'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['GALLERY_TITLE']);
             $search = array('_cast_', '_service_name_');
-            $replace = array($query['nickname'], LT['001']);
+            $replace = array($query['nickname'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['GALLERY_DESCRIPTION']);
 
         // 店舗のお知らせトップの場合
@@ -82,10 +82,10 @@ class AreaController extends AppController
             && !empty($query['name']) && in_array(PATH_ROOT['NOTICE'], $url)) {
             $search = array('_area_', '_genre_', '_shop_', '_service_name_');
             $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], LT['001']);
+                , $query['name'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['NOTICE_TITLE']);
             $search = array('_shop_', '_service_name_');
-            $replace = array($query['name'], LT['001']);
+            $replace = array($query['name'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['NOTICE_DESCRIPTION']);
 
         // 店舗トップページの場合
@@ -93,10 +93,10 @@ class AreaController extends AppController
             && !empty($query['name'])) {
             $search = array('_area_', '_genre_', '_shop_', '_service_name_');
             $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], LT['001']);
+                , $query['name'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['SHOP_TITLE']);
             $search = array('_catch_copy_', '_service_name_');
-            $replace = array($this->Shops->get($url[2])->catch, LT['001']);
+            $replace = array($this->Shops->get($url[2])->catch, LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['SHOP_DESCRIPTION']);
 
         // エリアのトップ画面の場合

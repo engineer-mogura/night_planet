@@ -39,8 +39,10 @@
 				</select>
 			</div>
 		</li>
-		<li class="search col s12 m12 l12">
-			<a class="waves-effect waves-light btn-large searchBtn"><i class="material-icons right">search</i>検索</a>
-		</li>
+		<div class="modal-footer">
+			<a class="col s8 m8 l8 modal-action waves-effect waves-light btn searchBtn"><i class="material-icons right">search</i>検索</a>
+			<a href="#!" class="col s3 m3 l3 modal-action modal-close waves-effect waves-green btn">閉じる</a>
+		</div>
+
 	</form>
 </div>

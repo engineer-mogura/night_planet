@@ -9,6 +9,7 @@ use Token\Util\Token;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
+use App\Controller\ApiGooglesController;
 
 /**
  * Controls the data flow into shops object and updates the view whenever data changes.
@@ -54,6 +55,9 @@ class ShopsController extends AppController
      */
     public function index()
     {
+        //$ApiGooglesController = new ApiGooglesController();
+        $this->redirect("http://admin.night-planet.local/api-googles");
+        //$ApiGooglesController->index();
         // アクティブタブ
         $selected_tab = "";
         // サイドバーメニューのパラメータがあればセッションにセットする

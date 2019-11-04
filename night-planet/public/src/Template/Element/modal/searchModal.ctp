@@ -5,7 +5,4 @@
       <?= $this->element('elmSearchModal'); ?>
     </div>
   </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-close waves-effect waves-green btn-flat">閉じる</a>
-  </div>
 </div>

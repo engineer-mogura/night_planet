@@ -2,11 +2,35 @@
     <div class="container">
         <div class="row">
             <h5><?=('オーナー情報') ?></h5>
+            <div class="col s12 m4 l4">
+                <form id="save-image" name="save_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/owners/profile">
+                    <div style="display:none;">
+                        <input type="hidden" name="action_type" value="image">
+                    </div>
+                    <div class="col s12 ">
+                        <div class="file-field card-panel grey lighten-5 input-field card-panel grey lighten-5 z-depth-1">
+                            <div class="row valign-wrapper">
+                                <div class="col s5">
+                                    <img class="responsive-img circle left" src="<?=count($icons) > 0 ? $icons[0]['file_path'] : PATH_ROOT['NO_IMAGE02'] ?>" alt="">
+                                    <input type="file" id="image-file" accept="image/jpeg,image/png" name="image">
+                                </div>
+                                <div class="file-path-wrapper hide">
+                                    <input class="file-path validate" name="file_path" type="text">
+                                </div>
+                                <div class="col s7">
+                                    <a class="">プロフィール写真を変更する</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <canvas id="image-canvas" style="display:none;"></canvas>
+            </div>
             <div id="profile" class="col s12 m8 l8">
                 <span id="dummy" style="display: hidden;"></span>
                 <?= $this->Flash->render() ?>
                 <div class="card-panel grey lighten-5">
-                    <form id="save-profile" name="save_profile" method="post" action="/owner/profile/">
+                    <form id="save-profile" name="save_profile" method="post" action="/owner/owners/profile/">
                         <div style="display:none;">
                             <input type="hidden" name="_method" value="POST">
                         </div>
@@ -64,30 +88,6 @@
                         </div>
                     </form>
                 </div>
-            </div>
-            <div class="col s12 m4 l4">
-                <form id="save-image" name="save_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/owner/profile">
-                    <div style="display:none;">
-                        <input type="hidden" name="action_type" value="image">
-                    </div>
-                    <div class="col s12 ">
-                        <div class="file-field card-panel grey lighten-5 input-field card-panel grey lighten-5 z-depth-1">
-                            <div class="row valign-wrapper">
-                                <div class="col s5">
-                                    <img class="responsive-img circle left" src="<?=count($icons) > 0 ? $icons[0]['file_path'] : PATH_ROOT['NO_IMAGE02'] ?>" alt="">
-                                    <input type="file" id="image-file" accept="image/jpeg,image/png" name="image">
-                                </div>
-                                <div class="file-path-wrapper hide">
-                                    <input class="file-path validate" name="file_path" type="text">
-                                </div>
-                                <div class="col s7">
-                                    <a class="">プロフィール写真を変更する</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <canvas id="image-canvas" style="display:none;"></canvas>
             </div>
         </div>
     </div>

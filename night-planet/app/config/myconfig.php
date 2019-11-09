@@ -405,11 +405,16 @@ return [
         'FRAUD_INPUT_FAILED'=>'ユーザー名またはパスワードが不正です。',
         'CHANGE_FAILED'=>'切り替えに失敗しました。もう一度お試しください。',
     )),
-    // メールメッセージ info.result.message
+
+    // メール設定
     define('MAIL', array(
         'AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。メールを確認し認証を完了するようキャストへお伝えください。
-			</ br>今から〇〇時間以内に完了しないと、やり直しになりますのでご注意ください。',
+            </ br>今から〇〇時間以内に完了しないと、やり直しになりますのでご注意ください。',
+        'FROM_INFO_GMAIL'=>'info.night.planet@gmail.com',
+        'FROM_SUBSCRIPTION'=>'subscription@night-planet.com',
+        'FROM_NAME'=>'NightPlanet事務局',
     )),
+
     // SEO タイトル
     define('TITLE', array(
         'TOP_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。ポータルサイト『_service_name_』',
@@ -464,4 +469,24 @@ return [
         'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
         'INSTAGRAM_CACHE_TIME'=> 360, // インスタグラムキャッシュタイム
     )),
+    // サービスプラン
+    define('SERVECE_PLAN', array(
+        'light'=> [
+            'label' => "ライトプラン",
+            'charge' => "0"
+        ],
+        'basic'=> [
+            'label' => "ベーシックプラン",
+            'charge' => "5000"
+        ],
+        'premium'=> [
+            'label' => "プレミアムプラン",
+            'charge' => "20000"
+        ],
+        'premium_s'=> [
+            'label' => "プレミアムSプラン",
+            'charge' => "50000"
+        ],
+    )),
+
 ];

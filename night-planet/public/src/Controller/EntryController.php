@@ -173,21 +173,23 @@ class EntryController extends AppController
             $owner = $this->Owners->newEntity($this->request->getData(), ['validate' => 'ownerRegistration']);
 
             if (!$owner->errors()) {
+
                 if ($this->Owners->save($owner)) {
 
-                    /*$this->log('save','debug');
-                    $this->log($this,'debug');
+                    $this->log($email,'debug');
                     $email = new Email('default');
-                    $email->from(['okiyoru1@gmail.com' => 'My Site'])
-                        ->to('8---30@ezweb.ne.jp')
-                        ->cc('8---30@ezweb.ne.jp')
-                        ->subject('About')
-                        ->send('My message');
-                    $this->log($email,'debug');*/
-                    $this->getMailer('Owner')->send('ownerRegistration', [$owner]);
+                    $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                        ->setTo($owner->email)
+                        ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                        ->setTemplate("owner_registration")
+                        ->setLayout("layout")
+                        ->emailFormat("html")
+                        ->viewVars(['owner' => $owner])
+                        ->send();
                     $this->Flash->success('認証を完了してください。');
                     return $this->render('send_auth_email');
                 }
+
             }
             // 入力エラーがあれば、メッセージをセットして返す
             $this->Flash->error(__('入力内容に誤りがあります。'));

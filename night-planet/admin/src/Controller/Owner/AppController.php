@@ -45,31 +45,12 @@ class AppController extends \App\Controller\AppController
                 // 未認証の場合、直前のページに戻します
             'unauthorizedRedirectedRedirect' => $this->referer()
         ]);
-        // TODO: この自動ログインのコメントは削除予定。\node-link\cakephp-remember-meプラグインで対応できてる
-        // ユーザー自動ログイン(未ログイン時かつ自動ログインCookie有効な場合)
-        // $user = $this->Auth->user(); // ユーザーのログイン情報の取得
-        // $auto_login_key = $this->request->getCookie('AUTO_LOGIN'); // 自動ログインCookie取得
-        // if (empty($user) && !empty($auto_login_key)) {
-
-        //     // Cookieから取得したkey一致かつ有効期限内(1ヶ月)
-        //     $owner = $this->Owners->find()
-        //         ->where(['id'=>$usre['id'],'remember_token' => $auto_login_key])->first();
-
-        //     if ($owner) {
-        //         $this->Auth->setUser($owner); // オーナーログイン
-        //     }
-        // }
 
     }
 
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
-        // ログイン時に許可するアクション
-        // if (in_array($action, ['index', 'view', 'add', 'delete', 'edit',
-        //                         'editTopImage', 'editCatch', 'editCoupon', 'editCast', 'editTenpo', 'editJob'])) {
-        //     return true;
-        // }
 
         // ログイン時に許可するオーナー画面アクション
         $ownerAccess = ['index','shopAdd','profile'];

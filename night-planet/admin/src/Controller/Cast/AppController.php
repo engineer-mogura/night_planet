@@ -57,13 +57,6 @@ class AppController extends \App\Controller\AppController
             return true;
         }
         return false;
-
-        // // ログイン時に許可するアクション
-        // if (in_array($action, ['index', 'view', 'add', 'delete', 'edit','editCast',
-        //     'editCalendar','profile','image','diary','diaryView','diaryUpdate','diaryDelete'])) {
-        //     return true;
-        // }
-        // return false;
     }
 
     public function beforeFilter(Event $event)

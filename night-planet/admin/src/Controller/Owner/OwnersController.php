@@ -290,7 +290,7 @@ class OwnersController extends AppController
                     }
                 } else {
                     // 共通トップ画像をセット
-                    $shop->set('top_image', PATH_ROOT['NO_IMAGE02']);
+                    $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
                 }
             }
         }

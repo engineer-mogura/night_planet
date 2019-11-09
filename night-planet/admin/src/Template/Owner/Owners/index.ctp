@@ -50,8 +50,7 @@
 			<?php endforeach; ?>
 		</div>
 		<div class="or-button">
-			<?= $this->Html->link('店舗を追加する','Owner/shop_add'
-				,['class'=>'waves-effect waves-light btn-large disabled']);?>
+			<a href="/owner/owners/shop_add" class="waves-effect waves-light btn-large<?=!empty($shop)?" disabled":""?>">店舗を追加する</a>
 		</div>
 	</div>
 </div>

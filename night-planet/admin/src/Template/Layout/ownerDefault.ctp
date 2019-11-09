@@ -54,16 +54,16 @@
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Owner.email')?></span></a>
       </div>
     </li>
-    <li><a href="/owner/index/?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= OWNER_LM['001'] ?></a></li>
-    <li><a href="/owner/profile/?activeTab=profile" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['002'] ?></a></li>
-    <li><a href="/owner/index/?activeTab=coupon" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['003'] ?></a></li>
+    <li><a href="/owner/owners/index/?activeTab=topImage" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= OWNER_LM['001'] ?></a></li>
+    <li><a href="/owner/owners/profile/?activeTab=profile" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['002'] ?></a></li>
+    <li><a href="/owner/owners/index/?activeTab=coupon" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['003'] ?></a></li>
     <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="/entry/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="/entry/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
     <li><a class="waves-effect" href="/entry/privacy_policy"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
     <li><a class="waves-effect" href="/entry/terms"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
     <li><div class="divider"></div></li>
-    <li><a href="/owner/logout" class="waves-effect"><i class="material-icons" href="">keyboard_backspace</i><?= COMMON_LM['007'] ?></a></li>
+    <li><a href="/owner/owners/logout" class="waves-effect"><i class="material-icons" href="">keyboard_backspace</i><?= COMMON_LM['007'] ?></a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
   <div class="nav-header-cron-dummy"></div>

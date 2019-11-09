@@ -793,7 +793,11 @@ function initializeUser() {
 function commonSearch(isAjax) {
 
     $(document).on('click', '.searchBtn', function() {
-        form = $(this).closest($(".search-form"));
+        form = $(this).closest($("#modal-search")).find(".search-form");
+        // トップか検索画面からの検索は下のセレクタで取得
+        if(form.length == 0) {
+            form = $(this).closest($(".search-form"))
+        }
         if((form.find("input[name='key_word']").val() == "") &&
             (form.find("[name='area']").val() == "") &&
             (form.find("[name='genre']").val() == "")) {

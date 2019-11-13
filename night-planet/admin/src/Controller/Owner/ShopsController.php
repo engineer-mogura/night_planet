@@ -6,6 +6,7 @@ use \Cake\ORM\Query;
 use Cake\Event\Event;
 use RuntimeException;
 use Token\Util\Token;
+use Cake\Mailer\Email;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
@@ -43,7 +44,7 @@ class ShopsController extends AppController
             $shop = $this->Shops->find('all')
                 ->where(['id' => $shopId , 'owner_id' => $user['id']])
                 ->first();
-                $this->set('shopInfo', $this->Util->getShopInfo($shop));
+            $this->set('shopInfo', $this->Util->getShopInfo($shop));
         }
     }
 
@@ -846,9 +847,9 @@ class ShopsController extends AppController
             $cast = $this->Casts->newEntity(array_merge(
                 ['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => 0 , 'delete_flag' => 1]
                     ,$this->request->getData()));
-            $message = MAIL['AUTH_CONFIRMATION']; // 返却メッセージ
+            $message = MAIL['CAST_AUTH_CONFIRMATION']; // 返却メッセージ
         } else if($this->request->getData('crud_type') == 'update') {
-        // 更新
+            // 更新
             $cast = $this->Casts->patchEntity($this->Casts
                 ->get($this->request->getData('id')), $this->request->getData());
             $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
@@ -888,7 +889,20 @@ class ShopsController extends AppController
 
         // 新規登録(仮登録)できた場合、登録したメールアドレスに認証メールを送る
         if ($this->request->getData('crud_type') == 'insert') {
-            $this->getMailer('Cast')->send('castRegistration', [$cast]);
+
+            $email = new Email('default');
+            $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                ->setSubject($cast->name."様、【".$this->viewVars['shopInfo']['name']."】様よりスタッフ登録のご案内があります。")
+                ->setTo($cast->email)
+                ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                ->setTemplate("cast_registration")
+                ->setLayout("cast_layout")
+                ->emailFormat("html")
+                ->viewVars(['cast' => $cast
+                    ,'shop_name' => $this->viewVars['shopInfo']['name']])
+                ->send();
+            $this->log($email,'debug');
+            $this->Flash->success($message);
         }
         $shop = $this->Shops->find()
             ->where(['id' => $this->viewVars['shopInfo']['id']])

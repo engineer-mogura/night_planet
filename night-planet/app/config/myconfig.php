@@ -402,14 +402,15 @@ return [
         'DELETE_FAILED'=>'削除に失敗しました。もう一度削除しなおしてください。',
         'AUTH_FAILED'=>'認証に失敗しました。もう一度登録しなおしてください。',
         'REGISTERED_FAILED'=>'すでに登録されてます。ログインしてください。',
-        'FRAUD_INPUT_FAILED'=>'ユーザー名またはパスワードが不正です。',
+        'FRAUD_INPUT_FAILED'=>'メールアドレスまたはパスワードが不正です。',
         'CHANGE_FAILED'=>'切り替えに失敗しました。もう一度お試しください。',
+        'SHOP_ADD_FAILED'=>'店舗を追加するには、プラン【_service_plan_】の変更が必要です。',
     )),
 
     // メール設定
     define('MAIL', array(
-        'AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。メールを確認し認証を完了するようキャストへお伝えください。
-            </ br>今から〇〇時間以内に完了しないと、やり直しになりますのでご注意ください。',
+        'CAST_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。メールを確認し認証を完了するようキャストへお伝えください。２４時間以内に完了しないと、やり直しになりますのでご注意ください。',
+        'OWNER_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。２４時間以内に完了しないと、やり直しになりますのでご注意ください。',
         'FROM_INFO_GMAIL'=>'info.night.planet@gmail.com',
         'FROM_SUBSCRIPTION'=>'subscription@night-planet.com',
         'FROM_NAME'=>'NightPlanet事務局',
@@ -472,20 +473,24 @@ return [
     // サービスプラン
     define('SERVECE_PLAN', array(
         'light'=> [
-            'label' => "ライトプラン",
+            'name' => "ライトプラン",
+            'label' => "light",
             'charge' => "0"
         ],
         'basic'=> [
-            'label' => "ベーシックプラン",
+            'name' => "ベーシックプラン",
+            'label' => "basic",
             'charge' => "5000"
         ],
         'premium'=> [
-            'label' => "プレミアムプラン",
-            'charge' => "20000"
+            'name' => "プレミアムプラン",
+            'label' => "premium",
+            'charge' => "10000"
         ],
         'premium_s'=> [
-            'label' => "プレミアムSプラン",
-            'charge' => "50000"
+            'name' => "プレミアムSプラン",
+            'label' => "premium_s",
+            'charge' => "20000"
         ],
     )),
 

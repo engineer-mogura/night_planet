@@ -140,7 +140,7 @@ class UtilComponent extends Component
             }
         }
         $shopInfo = $shopInfo + array('id'=>$shop['id']
-            ,'dir'=>$shop['dir']);
+            ,'dir'=>$shop['dir'], 'name'=>$shop['name']);
         $path = DS.PATH_ROOT['IMG'].DS.$shopInfo['area']['path']
                 .DS.$shopInfo['genre']['path'].DS.$shop['dir'];
 

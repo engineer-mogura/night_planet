@@ -176,9 +176,9 @@ class EntryController extends AppController
 
                 if ($this->Owners->save($owner)) {
 
-                    $this->log($email,'debug');
                     $email = new Email('default');
                     $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                        ->setSubject($owner->name."様、メールアドレスの認証を完了してください。")
                         ->setTo($owner->email)
                         ->setBcc(MAIL['FROM_INFO_GMAIL'])
                         ->setTemplate("owner_registration")
@@ -186,7 +186,8 @@ class EntryController extends AppController
                         ->emailFormat("html")
                         ->viewVars(['owner' => $owner])
                         ->send();
-                    $this->Flash->success('認証を完了してください。');
+                    $this->log($email,'debug');
+                    $this->Flash->success('ご指定のメールアドレスに認証メールを送りました。認証を完了してください。');
                     return $this->render('send_auth_email');
                 }
 

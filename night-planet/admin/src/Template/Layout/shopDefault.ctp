@@ -76,7 +76,7 @@
     <li><a class="waves-effect hoverable" href="/entry/privacy_policy"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/entry/terms"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
     <li><div class="divider"></div></li>
-    <li><a href="/owner/logout" class="waves-effect"><i class="material-icons" href="">keyboard_backspace</i><?= COMMON_LM['007'] ?></a></li>
+    <li><a href="/owner/owners/logout" class="waves-effect"><i class="material-icons" href="">keyboard_backspace</i><?= COMMON_LM['007'] ?></a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
   <div class="nav-header-cron-dummy"></div>

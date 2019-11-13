@@ -90,7 +90,8 @@ class OwnersTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255,'パスワードが長すぎます。')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
             ->notEmpty('password','パスワードを入力してください。')
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false)

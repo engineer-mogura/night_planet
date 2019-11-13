@@ -13,6 +13,7 @@
                 <?= $this->Form->create($owner) ?>
                 <?= $this->Form->control('name', array('label'=>'名前')) ?>
                 <?= $this->Form->control('email', array('label'=>'メールアドレス')) ?>
+                <div class="message-label">パスワードは大文字小文字を混在させた8文字以上、32文字以内で入力してください。</div>
                 <?= $this->Form->control('password', array('label'=>'パスワード')) ?>
                 <?= $this->Form->control('password_check', array('type'=>'password','label' => 'パスワード再入力')) ?>
                 <?= $this->Form->control('tel', array('label'=>'電話番号')) ?>

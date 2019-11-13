@@ -54,6 +54,7 @@ class OwnersTable extends Table
      */
     public function validationOwnerRegistration(Validator $validator)
     {
+
         $validator->setProvider('custom', 'App\Model\Validation\CustomValidation');
 
         $validator
@@ -62,7 +63,7 @@ class OwnersTable extends Table
 
         $validator
             ->scalar('name')
-            ->notEmpty('name', '名前を入力してください。')
+            ->notEmpty('name','名前を入力してください。')
             ->maxLength('name', 45, '名前が長すぎます。')
             ->requirePresence('name', 'create')
             ->allowEmptyString('name', false);
@@ -74,13 +75,13 @@ class OwnersTable extends Table
             ->allowEmptyString('role', false);
 
         $validator
-            ->email('email', false, "メールアドレスの形式が不正です。")
+            ->email('email',false, "メールアドレスの形式が不正です。")
             ->requirePresence('email', 'create')
-            ->notEmpty('email', 'メールアドレスを入力してください。')
+            ->notEmpty('email','メールアドレスを入力してください。')
             ->allowEmptyString('email', false)
             ->add('email', [
                 'exists' => [
-                    'rule' => function ($value, $context) {
+                    'rule' => function($value, $context) {
                         return !TableRegistry::get('owners')->exists(['email' => $value]);
                     },
                     'message' => 'そのメールアドレスは既に登録されています。'
@@ -89,11 +90,12 @@ class OwnersTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255, 'パスワードが長すぎます。')
-            ->notEmpty('password', 'パスワードを入力してください。')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false)
-            ->add('password', [  //←バリデーション対象カラム
+            ->add('password',[  //←バリデーション対象カラム
                     'comWith' => [  //←任意のバリデーション名
                         'rule' => ['compareWith','password_check'],  //←バリデーションのルール
                         'message' => '確認用のパスワードと一致しません。'  //←エラー時のメッセージ
@@ -106,14 +108,14 @@ class OwnersTable extends Table
         $validator
             ->integer('gender')
             ->requirePresence('gender', 'create')
-            ->notEmpty('gender', '性別を選択してください。')
+            ->notEmpty('gender','性別を選択してください。')
             ->allowEmptyString('gender', false);
 
         $validator
             ->scalar('age')
             ->maxLength('age', 5)
             ->requirePresence('age', 'create')
-            ->notEmpty('age', '年齢を選択してください。')
+            ->notEmpty('age','年齢を選択してください。')
             ->allowEmptyString('age', false);
 
         $validator
@@ -122,9 +124,9 @@ class OwnersTable extends Table
         $validator
             ->scalar('tel')
             ->requirePresence('tel', 'create')
-            ->notEmpty('tel', '電話番号を入力してください。')
+            ->notEmpty('tel','電話番号を入力してください。')
             ////電話番号形式のチェック ////
-            ->add('tel', 'tel_check', [
+            ->add('tel', 'tel_check',[
                 'rule' =>'tel_check',
                 'provider' => 'custom',
                 'message' => '無効な電話番号です。'
@@ -144,7 +146,7 @@ class OwnersTable extends Table
      * @return \Cake\Validation\Validator
      */
     public function validationOwnerLogin(Validator $validator)
-    {
+{
         $validator
             ->integer('id')
             ->allowEmptyString('id', 'create');
@@ -152,13 +154,13 @@ class OwnersTable extends Table
         $validator
             ->email('email')
             ->requirePresence('email', 'create')
-            ->notEmpty('email', 'メールアドレスを入力してください。')
+            ->notEmpty('email','メールアドレスを入力してください。')
             ->allowEmptyString('email', false);
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255, 'パスワードが長すぎます。')
-            ->notEmpty('password', 'パスワードを入力してください。')
+            ->maxLength('password', 255,'パスワードが長すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false);
 
@@ -183,4 +185,5 @@ class OwnersTable extends Table
 
         return $rules;
     }
+
 }

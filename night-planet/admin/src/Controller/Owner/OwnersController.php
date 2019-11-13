@@ -49,17 +49,8 @@ class OwnersController extends AppController
 
                 if ($this->Owners->save($owner)) {
 
-    /*                    $this->log('save','debug');
-                    $this->log($this,'debug');
-                    $email = new Email('default');
-                    $email->from(['okiyoru1@gmail.com' => 'My Site'])
-                        ->to('8---30@ezweb.ne.jp')
-                        ->cc('8---30@ezweb.ne.jp')
-                        ->subject('About')
-                        ->send('My message');
-                    $this->log($email,'debug');*/
                     $this->getMailer('Owner')->send('ownerRegistration', [$owner]);
-                    $this->Flash->success('入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。今から１０分以内に完了しないと、やり直しになりますのでご注意ください。');
+                    $this->Flash->success(MAIL['OWNER_AUTH_CONFIRMATION']);
                     return $this->redirect(['action' => 'login']);
                 }
             } else {
@@ -220,23 +211,31 @@ class OwnersController extends AppController
 
                 throw new RuntimeException('レコードの更新に失敗しました。');
             }
-
-            // // 店舗情報セット
-            // $shop = $this->Shops->newEntity();
-            // $shop->owner_id = $owner->id;
-            // $shop->area = $owner->area;
-            // $shop->genre = $owner->genre;
-            // $shop->dir = $owner->dir;
-            // // 店舗登録
-            // if(!$this->Shops->save($shop)) {
-
-            //     throw new RuntimeException('レコードの登録に失敗しました。');
-            // }
-
+            // プラン情報セット
+            $servecePlans = $this->ServecePlans->newEntity();
+            $servecePlans->owner_id = $owner->id;
+            $servecePlans->current_plan = SERVECE_PLAN['light']['label'];
+            $servecePlans->previous_plan = SERVECE_PLAN['light']['label'];
+            // プラン登録
+            if (!$this->ServecePlans->save($servecePlans)) {
+                throw new RuntimeException('レコードの登録に失敗しました。');
+            }
             // ディレクトリを掘る
             $dir = new Folder($dir->path.$nextDir, true, 0755);
             // コミット
             $connection->commit();
+            // 認証完了したら、メール送信
+            $email = new Email('default');
+            $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                ->setSubject($owner->name."様、メールアドレスの認証が完了しました。")
+                ->setTo($owner->email)
+                ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                ->setTemplate("owner_auth_success")
+                ->setLayout("owner_layout")
+                ->emailFormat("html")
+                ->viewVars(['owner' => $owner])
+                ->send();
+            $this->log($email,'debug');
 
         } catch(RuntimeException $e) {
             // ロールバック
@@ -247,22 +246,7 @@ class OwnersController extends AppController
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
             return $this->redirect('/entry/siginup');
         }
-        // try {
-        //     // ショップ情報を取得
-        //     $shop = $this->Shops->find()
-        //         ->where(['owner_id' => $owner->id])->first();
-        //     // 求人情報セット
-        //     $job = $this->Jobs->newEntity();
-        //     $job->shop_id = $shop->id;
-        //     // 求人登録
-        //     if(!$this->Jobs->save($job)) {
 
-        //         throw new RuntimeException('レコードの登録に失敗しました。');
-        //     }
-        // } catch(RuntimeException $e) {
-
-        //     $this->log($this->Util->setLog($owner, $e));
-        // }
         // 認証完了でログインページへ
         $this->Flash->success(RESULT_M['AUTH_SUCCESS']);
         return $this->redirect(['action' => 'login']);
@@ -301,7 +285,23 @@ class OwnersController extends AppController
 
     public function shopAdd()
     {
-
+        // オーナーに所属する店舗をカウント
+        $shop_count = $this->Shops->find('all')
+            ->where(['owner_id' => $this->viewVars['userInfo']['id']])
+            ->count();
+        $plan = $this->ServecePlans->find('all')
+            ->where(['owner_id'=>$this->viewVars['userInfo']['id']])
+            ->first();
+        // プレミアムSプラン以外 かつ 店舗が１件登録されている場合
+        if ($plan->current_plan != SERVECE_PLAN['premium_s']['label']
+            && $shop_count >= 1) {
+            // オーナートップページへ
+            $search = array('_service_plan_');
+            $replace = array(SERVECE_PLAN['premium_s']['name']);
+            $message = $this->Util->strReplace($search, $replace, RESULT_M['SHOP_ADD_FAILED']);
+            $this->Flash->error($message);
+            return $this->redirect(['action' => 'index']);
+        }
         // 登録ボタン押下時
         if ($this->request->is('post')) {
             // バリデーションは新規登録用を使う。
@@ -348,6 +348,7 @@ class OwnersController extends AppController
                     // 店舗情報セット
                     $shop = $this->Shops->newEntity();
                     $shop->owner_id = $this->viewVars['userInfo']['id'];
+                    $shop->name = $this->request->getData('name');
                     $shop->area = $this->request->getData('area');
                     $shop->genre = $this->request->getData('genre');
                     $shop->dir = $nextDir;

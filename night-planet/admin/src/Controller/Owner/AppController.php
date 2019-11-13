@@ -18,6 +18,7 @@ class AppController extends \App\Controller\AppController
         $this->Casts = TableRegistry::get('casts');
         $this->Jobs = TableRegistry::get('jobs');
         $this->Snss = TableRegistry::get('snss');
+        $this->ServecePlans = TableRegistry::get('servece_plans');
         $this->Updates = TableRegistry::get('updates');
         $this->ShopInfos = TableRegistry::get("shop_infos");
         $this->WorkSchedules = TableRegistry::get("work_schedules");

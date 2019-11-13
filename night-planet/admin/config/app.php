@@ -210,24 +210,34 @@ return [
      * appropriate file to src/Mailer/Transport. Transports should be named
      * 'YourTransport.php', where 'Your' is the name of the transport.
      */
+    // 'EmailTransport' => [
+    //     'default' => [
+    //         'className' => 'Smtp',
+    //         'host'      => 'ssl://smtp.lolipop.jp',
+    //         'port'      => 465,
+    //         'timeout'   => 30,
+    //         'username'  => 'subscription@night-planet.com',
+    //         'password'  => 'Night-planet_0309',
+    //         'transport' => 'Smtp',
+    //         'client'    => null,
+    //         'tls'       => null,
+    //         'url'       => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+    //     ],
+    // ],
     'EmailTransport' => [
         'default' => [
             'className' => 'Smtp',
-            /*
-             * The following keys are used in SMTP transports:
-             */
-            'host' => 'ssl://smtp.gmail.com',
-                'port' => 465,
-            'timeout' => 30,
-            'username' => 'okiyoru1@gmail.com',
-            'password' => 'okiyoruPass001',
+            'host'      => 'ssl://smtp.gmail.com',
+            'port'      => 465,
+            'timeout'   => 30,
+            'username'  => 'info.night.planet@gmail.com',
+            'password'  => 'night-planet910',
             'transport' => 'Smtp',
-            'client' => null,
-            'tls' => null,
-            'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+            'client'    => null,
+            'tls'       => null,
+            'url'       => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
         ],
     ],
-
     /**
      * Email delivery profiles
      *

@@ -12,6 +12,8 @@
                 <div class="or-form-wrap">
                     <h3><?= __('店舗追加') ?></h3>
                     <?= $this->Form->create($shop) ?>
+                    <span>店舗名はいつでも変更可能です。</span>
+                    <?= $this->Form->control('name', array('label'=>'店舗名')) ?>
                     <?= $this->Form->input('area', array('type' => 'select',
                                                         'options' => $selectList['area'],
                                                         'empty' => 'エリアを選択してください。',

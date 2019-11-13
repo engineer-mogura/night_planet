@@ -6,9 +6,11 @@ use Cake\I18n\Time;
 use Cake\Event\Event;
 use RuntimeException;
 use Token\Util\Token;
+use Cake\Mailer\Email;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Collection\Collection;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -16,6 +18,8 @@ use Cake\Datasource\ConnectionManager;
  */
 class CastsController extends AppController
 {
+    use MailerAwareTrait;
+
     public function beforeFilter(Event $event)
     {
         // AppController.beforeFilterをコールバック
@@ -1396,6 +1400,7 @@ class CastsController extends AppController
                 , 'トークンの有効期限が切れたか、改ざんが行われた可能性があります。'));
             // 仮登録してるレコードを削除する
             $this->Casts->delete($cast);
+
             $this->Flash->success(RESULT_M['AUTH_FAILED']);
             return $this->redirect(['action' => 'signup']);
         }
@@ -1462,6 +1467,19 @@ class CastsController extends AppController
             $dir = new Folder($dir->path.$nextDir, true, 0755);
             // コミット
             $connection->commit();
+
+            // 認証完了したら、メール送信
+            $email = new Email('default');
+            $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                ->setSubject($cast->name."様、メールアドレスの認証が完了しました。")
+                ->setTo($cast->email)
+                ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                ->setTemplate("cast_auth_success")
+                ->setLayout("cast_layout")
+                ->emailFormat("html")
+                ->viewVars(['cast' => $cast])
+                ->send();
+            $this->log($email,'debug');
 
         } catch(RuntimeException $e) {
             // ロールバック

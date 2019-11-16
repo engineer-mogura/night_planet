@@ -174,7 +174,7 @@ class OwnersTable extends Table
 
     /**
      * バリデーション パスワードリセット.その１
-     *
+     * パスワードリセットで使用
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
@@ -194,9 +194,10 @@ class OwnersTable extends Table
 
         return $validator;
     }
+
     /**
      * バリデーション パスワードリセット.その２
-     *
+     * パスワードリセットで使用
      * @param \Cake\Validation\Validator $validator Validator instance.
      * @return \Cake\Validation\Validator
      */
@@ -209,6 +210,33 @@ class OwnersTable extends Table
             ->notEmpty('password','パスワードを入力してください。')
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false);
+
+        return $validator;
+    }
+
+    /**
+     * バリデーション パスワードリセット.その３
+     * パスワード変更で使用
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationOwnerPassReset3(Validator $validator)
+    {
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
+            ->requirePresence('password', 'create')
+            ->allowEmptyString('password', false);
+
+        $validator
+            ->scalar('password_new')
+            ->maxLength('password_new', 32,'パスワードが長すぎます。')
+            ->minLength('password_new', 8,'パスワードが短すぎます。')
+            ->notEmpty('password_new','パスワードを入力してください。')
+            ->requirePresence('password_new', 'create')
+            ->allowEmptyString('password_new', false);
 
         return $validator;
     }

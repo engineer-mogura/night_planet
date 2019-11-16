@@ -54,7 +54,7 @@ class AppController extends \App\Controller\AppController
         $action = $this->request->getParam('action');
 
         // ログイン時に許可するオーナー画面アクション
-        $ownerAccess = ['index','shopAdd','profile'];
+        $ownerAccess = ['index','shopAdd','profile','passChange'];
 
         // ログイン時に許可する店舗編集画面アクション
         $shopAccess = ['index','shopEdit','saveTopImage','saveCatch','deleteCatch',

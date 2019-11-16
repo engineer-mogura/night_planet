@@ -9,6 +9,7 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Datasource\ConnectionManager;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
 * Owners Controller
@@ -244,7 +245,7 @@ class OwnersController extends AppController
             // 仮登録してるレコードを削除する
             $this->Owners->delete($owner);
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
-            return $this->redirect('/entry/siginup');
+            return $this->redirect('/entry/signup');
         }
 
         // 認証完了でログインページへ
@@ -368,7 +369,7 @@ class OwnersController extends AppController
                     // 仮登録してるレコードを削除する
                     $this->Owners->delete($shop);
                     $this->Flash->error(RESULT_M['SIGNUP_FAILED']);
-                    return $this->redirect('/Owner/Owners/shop_add');
+                    return $this->redirect('/owner/owners/shop_add');
                 }
                 try {
 
@@ -560,7 +561,7 @@ class OwnersController extends AppController
             $selectList = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, true);
 
             $this->set(compact('owner', 'selectList', 'icons'));
-            $this->render('/Owner/Owners/profile');
+            $this->render('/owner/owners/profile');
             $response = array(
                 'html' => $this->response->body(),
                 'error' => $errors,
@@ -759,4 +760,65 @@ class OwnersController extends AppController
             return $this->render('/common/pass_reset_form');
         }
     }
+
+    public function passChange()
+    {
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+        $new_pass = "";
+        if ($this->request->is('post')) {
+
+            $isValidate = false; // エラー有無
+            // バリデーションはパスワードリセットその３を使う。
+            $validate = $this->Owners->newEntity( $this->request->getData()
+                , ['validate' => 'OwnerPassReset3']);
+
+            if(!$validate->errors()) {
+
+                $hasher = new DefaultPasswordHasher();
+                $owner = $this->Owners->get($this->viewVars['userInfo']['id']);
+                $equal_check = $hasher->check($this->request->getData('password')
+                    , $owner->password);
+                // 入力した現在のパスワードとデータベースのパスワードを比較する
+                if (!$equal_check) {
+                    $this->Flash->error('現在のパスワードが間違っています。');
+                    return $this->render();
+                }
+                // 新しいバスワードを設定する
+                $owner->password = $this->request->getData('password_new');
+
+                // 一応ちゃんと変更されたかチェックする
+                if (!$owner->isDirty('password')) {
+
+                    Log::info("ID：【".$owner->id."】"."アドレス：【".$owner->email."】".
+                    "エラー：【パスワードの変更に失敗しました。】アクション：【"
+                        . $this->request->params['action']. "】", "pass_reset");
+
+                    $this->Flash->error('パスワードの変更に失敗しました。');
+                    return $this->render();
+                }
+
+                try {
+                    // レコード更新実行
+                    if (!$this->Owners->save($owner)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                    $this->Flash->success('パスワードの変更をしました。');
+                    return $this->redirect('/owner/owners/profile');
+
+                } catch (RuntimeException $e) {
+                    $this->log($this->Util->setLog($auth, $e));
+                    $this->Flash->error('パスワードの変更に失敗しました。');
+                }
+
+            } else {
+                $owner = $validate;
+            }
+        } else {
+            $owner = $this->Owners->newEntity();
+        }
+        $this->set('owner', $owner);
+        return $this->render();
+    }
+
 }

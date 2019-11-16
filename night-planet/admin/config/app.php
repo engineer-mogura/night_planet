@@ -373,6 +373,14 @@ return [
             'scopes' => 'access',
             'levels' => [],
         ],
+        // パスリセットログ定義
+        'pass_reset' => [
+            'className' => 'Cake\Log\Engine\FileLog',
+            'path' => LOGS,
+            'file' => 'pass_reset',
+            'scopes' => 'pass_reset',
+            'levels' => [],
+        ],
     ],
 
     /**

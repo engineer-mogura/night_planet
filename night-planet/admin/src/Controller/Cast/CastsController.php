@@ -1474,11 +1474,12 @@ class CastsController extends AppController
                 ->setSubject($cast->name."様、メールアドレスの認証が完了しました。")
                 ->setTo($cast->email)
                 ->setBcc(MAIL['FROM_INFO_GMAIL'])
-                ->setTemplate("cast_auth_success")
-                ->setLayout("cast_layout")
+                ->setTemplate("auth_success")
+                ->setLayout("auth_success_layout")
                 ->emailFormat("html")
                 ->viewVars(['cast' => $cast])
                 ->send();
+            $this->set('cast', $cast);
             $this->log($email,'debug');
 
         } catch(RuntimeException $e) {

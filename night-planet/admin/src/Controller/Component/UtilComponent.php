@@ -966,4 +966,5 @@ class UtilComponent extends Component
         $action == 'login' ? $log .= "ログイン" : $log .= "ログアウト";
         return $log;
     }
+
 }

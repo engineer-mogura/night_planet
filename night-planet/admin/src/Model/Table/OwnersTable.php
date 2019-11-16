@@ -159,7 +159,8 @@ class OwnersTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255,'パスワードが長すぎます。')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
             ->notEmpty('password','パスワードを入力してください。')
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false);
@@ -167,6 +168,47 @@ class OwnersTable extends Table
         $validator
             ->integer('status')
             ->allowEmptyString('status');
+
+        return $validator;
+    }
+
+    /**
+     * バリデーション パスワードリセット.その１
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationOwnerPassReset1(Validator $validator)
+    {
+        $validator
+            ->email('email',false, "メールアドレスの形式が不正です。")
+            ->notEmpty('email','メールアドレスを入力してください。')
+            ->add('email', [
+                'exists' => [
+                    'rule' => function($value, $context) {
+                        return TableRegistry::get('owners')->exists(['email' => $value]);
+                    },
+                    'message' => 'そのメールアドレスは登録されてません。'
+                ],
+            ]);
+
+        return $validator;
+    }
+    /**
+     * バリデーション パスワードリセット.その２
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationOwnerPassReset2(Validator $validator)
+    {
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
+            ->requirePresence('password', 'create')
+            ->allowEmptyString('password', false);
 
         return $validator;
     }

@@ -396,11 +396,13 @@ return [
         'DISPLAY_SUCCESS'=>'を表示にしました',
         'HIDDEN_SUCCESS'=>'を非表示にしました',
         'AUTH_SUCCESS'=>'認証完了しました。ログインしてください。',
+        'PASS_RESET_SUCCESS'=>'パスワード変更完了しました。ログインしてください。',
         'DUPLICATE'=>'同じ画像はアップできませんでした。',
         'SIGNUP_FAILED'=>'登録に失敗しました。もう一度登録しなおしてください。',
         'UPDATE_FAILED'=>'編集に失敗しました。もう一度編集しなおしてください。',
         'DELETE_FAILED'=>'削除に失敗しました。もう一度削除しなおしてください。',
         'AUTH_FAILED'=>'認証に失敗しました。もう一度登録しなおしてください。',
+        'PASS_RESET_FAILED'=>'一定時間が過ぎました。もう一度やり直してください。',
         'REGISTERED_FAILED'=>'すでに登録されてます。ログインしてください。',
         'FRAUD_INPUT_FAILED'=>'メールアドレスまたはパスワードが不正です。',
         'CHANGE_FAILED'=>'切り替えに失敗しました。もう一度お試しください。',
@@ -414,6 +416,7 @@ return [
         'FROM_INFO_GMAIL'=>'info.night.planet@gmail.com',
         'FROM_SUBSCRIPTION'=>'subscription@night-planet.com',
         'FROM_NAME'=>'NightPlanet事務局',
+        'FROM_NAME_PASS_RESET'=>'【NightPlanet ﾅｲﾌﾟﾗ】パスワード再設定',
     )),
 
     // SEO タイトル

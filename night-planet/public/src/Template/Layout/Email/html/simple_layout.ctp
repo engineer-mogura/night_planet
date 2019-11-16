@@ -1673,7 +1673,7 @@
             <td class="center" align="center" valign="top">
                 <center data-parsed="">
 
-                    <table class="container text-center">
+                    <table class="container">
                         <tbody>
                             <tr>
                                 <td>
@@ -1699,20 +1699,13 @@
                         </tbody>
                     </table>
 
-                    <table class="container text-center">
+                    <table class="container">
                         <tbody>
                             <tr>
                                 <td>
                                     <!-- Start main email content -->
                                     <table class="row">
                                         <tbody>
-                                            <tr>
-                                                <td style="font-size:20px;">
-                                                    <center data-parsed="">
-                                                        <?php echo $this->fetch('content'); ?>
-                                                    </center>
-                                                </td>
-                                            </tr>
                                             <tr>
                                                 <!-- Logo -->
                                                 <th class="small-12 large-12 columns first last">
@@ -1729,82 +1722,16 @@
                                                     </table>
                                                 </th>
                                             </tr>
-                                        </tbody>
-                                    </table>
-                                    <table class="row masthead">
-                                        <tbody>
                                             <tr>
-                                                <!-- Masthead -->
-                                                <th class="small-12 large-12 columns first last">
-                                                    <table>
-                                                        <tr>
-                                                            <th>
-                                                                <h1 class="text-center">これからお店を盛り上げていきましょう！</h1>
-                                                                <center data-parsed="">
-                                                                    <img src="https://drive.google.com/uc?id=1r8RWV-2Y2iHRJ1d3U2HeDurfGHkzn2Yy"
-                                                                        valign="bottom" alt="Masthead Image"
-                                                                        align="center" class="text-center">
-                                                                </center>
-                                                            </th>
-                                                            <th class="expander"></th>
-                                                        </tr>
-                                                    </table>
-                                                </th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <table class="row">
-                                        <tbody>
-                                            <tr>
-                                                <!--This row adds the gap between masthead and digest content -->
-                                                <th class="small-12 large-12 columns first last">
-                                                    <table>
-                                                        <tr>
-                                                            <th>
-                                                                &#xA0;
-                                                            </th>
-                                                            <th class="expander"></th>
-                                                        </tr>
-                                                    </table>
-                                                </th>
+                                                <td style="font-size:25px;">
+                                                    <p data-parsed="">
+                                                        <?php echo $this->fetch('content'); ?>
+                                                    </p>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                     <hr>
-                                    <table class="row">
-                                        <tbody>
-                                            <tr>
-                                                <!-- Call to Action -->
-                                                <th class="small-12 large-12 columns first last">
-                                                    <table>
-                                                        <tr>
-                                                            <th>
-                                                                <center data-parsed="">
-                                                                    <br align="center" class="text-center"><br
-                                                                        align="center" class="text-center">
-                                                                    <div class="button">
-                                                                        <!--[if mso]>
-                          <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="#" style="height:40px;v-text-anchor:middle;width:150px;" arcsize="8%" strokecolor="#f7931d" fillcolor="#f7931d">
-                            <w:anchorlock/>
-                            <center style="color:#ffffff;font-family:sans-serif;font-size:16px;font-weight:bold;">Centered CTA!</center>
-                          </v:roundrect>
-                      <![endif]-->
-                                                                        <a href="#"
-                                                                            style="background-color:#f7931d;border:0px solid #f7931d;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;font-weight:bold;line-height:40px;text-align:center;text-decoration:none;width:150px;-webkit-text-size-adjust:none;mso-hide:all;">
-                                                                            <a href="<?=API['GOOGLE_FORM_CONTACT']?>"
-                                                                                class="btn btn-fill btn-large btn-margin-right">お問い合わせ</a>
-                                                                        </a>
-                                                                    </div>
-                                                                    <br align="center" class="text-center">
-                                                                </center>
-                                                            </th>
-                                                            <th class="expander"></th>
-                                                        </tr>
-                                                    </table>
-                                                </th>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                                 </td>
                             </tr>
                         </tbody>

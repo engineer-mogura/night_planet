@@ -100,7 +100,6 @@ class OwnersController extends AppController
 
             if(!$owner->errors()) {
 
-                $this->log($this->request->getData("remember_me"),"debug");
                 // 現在リクエスト中のユーザーを識別する
                 $owner = $this->Auth->identify();
                 if ($owner) {
@@ -119,7 +118,8 @@ class OwnersController extends AppController
                 // ログイン失敗
                 $this->Flash->error(RESULT_M['FRAUD_INPUT_FAILED']);
             } else {
-                debug($this->request->getData());
+                Log::error($this->Util->setAccessLog(
+                    $owner, $this->request->params['action']).'　失敗', 'access');
                 foreach ($owner->errors() as $key1 => $value1) {
                     foreach ($value1 as $key2 => $value2) {
                         $this->Flash->error($value2);
@@ -230,12 +230,12 @@ class OwnersController extends AppController
                 ->setSubject($owner->name."様、メールアドレスの認証が完了しました。")
                 ->setTo($owner->email)
                 ->setBcc(MAIL['FROM_INFO_GMAIL'])
-                ->setTemplate("owner_auth_success")
-                ->setLayout("owner_layout")
+                ->setTemplate("auth_success")
+                ->setLayout("auth_success_layout")
                 ->emailFormat("html")
                 ->viewVars(['owner' => $owner])
                 ->send();
-            $this->log($email,'debug');
+            $this->set('owner', $owner);
 
         } catch(RuntimeException $e) {
             // ロールバック
@@ -615,5 +615,148 @@ class OwnersController extends AppController
         }
     }
 
+    public function passReset()
+    {
+        // シンプルレイアウトを使用
+        $this->viewBuilder()->layout('simpleDefault');
 
+        if ($this->request->is('post')) {
+
+            // バリデーションはパスワードリセットその１を使う。
+            $owner = $this->Owners->newEntity( $this->request->getData()
+                , ['validate' => 'OwnerPassReset1']);
+
+            if(!$owner->errors()) {
+                // メールアドレスで取得
+                $owner = $this->Owners->find()
+                    ->where(['email' => $owner->email])->first();
+
+                $email = new Email('default');
+                $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                    ->setSubject(MAIL['FROM_NAME_PASS_RESET'])
+                    ->setTo($owner->email)
+                    ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                    ->setTemplate("pass_reset_email")
+                    ->setLayout("simple_layout")
+                    ->emailFormat("html")
+                    ->viewVars(['owner' => $owner])
+                    ->send();
+                $this->set('owner', $owner);
+
+                $this->Flash->success('パスワード再設定用メールを送信しました。');
+                Log::info("ID：【".$owner['id']."】アドレス：【".$owner->email
+                    ."】パスワード再設定用メールを送信しました。", 'pass_reset');
+
+                return $this->render('/common/pass_reset_send');
+
+            } else {
+                // 送信失敗
+                foreach ($owner->errors() as $key1 => $value1) {
+                    foreach ($value1 as $key2 => $value2) {
+                        $this->Flash->error($value2);
+                        Log::error("ID：【".$owner['id']."】アドレス：【".$owner->email
+                            ."】エラー：【".$value2."】", 'pass_reset');
+                    }
+                }
+            }
+        } else {
+            $owner = $this->Owners->newEntity();
+        }
+        $this->set('owner', $owner);
+        return $this->render('/common/pass_reset_form');
+    }
+
+    /**
+     * トークンをチェックして不整合が無ければ
+     * パスワードの変更をする
+     *
+     * @param [type] $token
+     * @return void
+     */
+    public function resetVerify($token)
+    {
+
+        // シンプルレイアウトを使用
+        $this->viewBuilder()->layout('simpleDefault');
+        $owner = $this->Auth->identify();
+
+        $owner = $this->Owners->get(Token::getId($token));
+
+        // 以下でトークンの有効期限や改ざんを検証することが出来る
+        if (!$owner->tokenVerify($token)) {
+            Log::info("ID：【".$owner->id."】"."アドレス：【".$owner->email."】".
+                "エラー：【".RESULT_M['PASS_RESET_FAILED']."】アクション：【"
+                . $this->request->params['action']. "】", "pass_reset");
+
+            $this->Flash->error(RESULT_M['PASS_RESET_FAILED']);
+            return $this->redirect(['action' => 'login']);
+        }
+
+        if ($this->request->is('post')) {
+
+            // パスワードリセットフォームの表示フラグ
+            $is_reset_form = false;
+
+            // バリデーションはパスワードリセットその２を使う。
+            $validate = $this->Owners->newEntity( $this->request->getData()
+                , ['validate' => 'OwnerPassReset2']);
+
+           if (!$validate->errors()) {
+
+                // 再設定したバスワードを設定する
+                $owner->password = $this->request->getData('password');
+                // 自動ログインフラグを下げる
+                $owner->remember_token = 0;
+
+                // 一応ちゃんと変更されたかチェックする
+                if (!$owner->isDirty('password')) {
+
+                    Log::info("ID：【".$owner->id."】"."アドレス：【".$owner->email."】".
+                    "エラー：【パスワードの変更に失敗しました。】アクション：【"
+                        . $this->request->params['action']. "】", "pass_reset");
+
+                    $this->Flash->error('パスワードの変更に失敗しました。');
+                    return $this->redirect(['action' => 'login']);
+                }
+
+               if ($this->Owners->save($owner)) {
+
+                    // 変更完了したら、メール送信
+                    $email = new Email('default');
+                    $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                        ->setSubject($owner->name."様、メールアドレスの変更が完了しました。")
+                        ->setTo($owner->email)
+                        ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                        ->setTemplate("pass_reset_success")
+                        ->setLayout("simple_layout")
+                        ->emailFormat("html")
+                        ->viewVars(['owner' => $owner])
+                        ->send();
+                    $this->set('owner', $owner);
+
+                    // 変更完了でログインページへ
+                    $this->Flash->success(RESULT_M['PASS_RESET_SUCCESS']);
+                    Log::info("ID：【".$owner['id']."】アドレス：【".$owner->email
+                        ."】". RESULT_M['PASS_RESET_SUCCESS'], 'pass_reset');
+                    return $this->redirect(['action' => 'login']);
+               }
+
+           } else {
+
+                // パスワードリセットフォームの表示フラグ
+                $is_reset_form = true;
+                $this->set(compact('is_reset_form'));
+               // 入力エラーがあれば、メッセージをセットして返す
+               $this->Flash->error(__('入力内容に誤りがあります。'));
+               return $this->render('/common/pass_reset_form');
+            }
+
+        } else {
+
+            // パスワードリセットフォームの表示フラグ
+            $is_reset_form = true;
+            $this->set(compact('is_reset_form','owner'));
+            return $this->render('/common/pass_reset_form');
+        }
+    }
 }

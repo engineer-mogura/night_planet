@@ -40,7 +40,7 @@
                     <p>SNSからでもログインできます。</p>
                     <p><a href="#" class="waves-effect waves-light btn-large disabled">facebook</a>　<a href="#" class="waves-effect waves-light btn-large disabled">twitter</a></p>
                     <br />
-                    <p><a href="#">パスワードをお忘れですか？</a></p>
+                    <p><a href="/owner/owners/pass_reset">パスワードをお忘れですか？</a></p>
                 </div>
             </div>
         </div>

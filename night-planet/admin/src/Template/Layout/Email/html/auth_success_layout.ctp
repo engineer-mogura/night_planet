@@ -1707,13 +1707,6 @@
                                     <table class="row">
                                         <tbody>
                                             <tr>
-                                                <td style="font-size:20px;">
-                                                    <center data-parsed="">
-                                                        <?php echo $this->fetch('content'); ?>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                            <tr>
                                                 <!-- Logo -->
                                                 <th class="small-12 large-12 columns first last">
                                                     <table>
@@ -1729,6 +1722,13 @@
                                                     </table>
                                                 </th>
                                             </tr>
+                                            <tr>
+                                                <td style="font-size:25px;">
+                                                    <p data-parsed="">
+                                                        <?php echo $this->fetch('content'); ?>
+                                                    </p>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                     <table class="row masthead">
@@ -1739,7 +1739,7 @@
                                                     <table>
                                                         <tr>
                                                             <th>
-                                                                <h1 class="text-center">これから集客UPしていきましょう！</h1>
+                                                                <h1 class="text-center">これからお店を盛り上げていきましょう！</h1>
                                                                 <center data-parsed="">
                                                                     <img src="https://drive.google.com/uc?id=1r8RWV-2Y2iHRJ1d3U2HeDurfGHkzn2Yy"
                                                                         valign="bottom" alt="Masthead Image"

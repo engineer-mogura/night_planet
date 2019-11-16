@@ -9,5 +9,5 @@ $url = ADMIN_DOMAIN.'/cast/casts/verify/'.$cast->tokenGenerate();
 メールアドレスの認証をするために以下のURLにアクセスしてください。<br>
 認証後のログインは、【Email】入力欄に<?= $cast->name ?>様のメールアドレス、
 【Password】入力欄には、初回ログイン用で【<span style="color:red;font-weight: bold;">pass</span>】でログインください。<br>
-<span style="color:red;font-weight: bold;">ログイン後は、パスワードの変更を強くお勧めします。</span><br>
+<span style="color:red;font-weight: bold;">ログイン後は、パスワードの変更を強くお勧めします。</span><br><br>
 <?= $url ?>

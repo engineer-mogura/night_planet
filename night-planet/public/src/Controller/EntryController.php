@@ -181,8 +181,8 @@ class EntryController extends AppController
                         ->setSubject($owner->name."様、メールアドレスの認証を完了してください。")
                         ->setTo($owner->email)
                         ->setBcc(MAIL['FROM_INFO_GMAIL'])
-                        ->setTemplate("owner_registration")
-                        ->setLayout("layout")
+                        ->setTemplate("auth_send")
+                        ->setLayout("simple_layout")
                         ->emailFormat("html")
                         ->viewVars(['owner' => $owner])
                         ->send();

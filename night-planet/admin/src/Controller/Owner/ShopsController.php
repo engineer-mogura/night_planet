@@ -895,8 +895,8 @@ class ShopsController extends AppController
                 ->setSubject($cast->name."様、【".$this->viewVars['shopInfo']['name']."】様よりスタッフ登録のご案内があります。")
                 ->setTo($cast->email)
                 ->setBcc(MAIL['FROM_INFO_GMAIL'])
-                ->setTemplate("cast_registration")
-                ->setLayout("cast_layout")
+                ->setTemplate("auth_send")
+                ->setLayout("simple_layout")
                 ->emailFormat("html")
                 ->viewVars(['cast' => $cast
                     ,'shop_name' => $this->viewVars['shopInfo']['name']])

@@ -106,8 +106,11 @@ class CastsTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255)
-            ->allowEmptyString('password');
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
+            ->requirePresence('password', 'create')
+            ->allowEmptyString('password', false);
 
         $validator
             ->date('birthday')
@@ -184,7 +187,8 @@ class CastsTable extends Table
 
         $validator
             ->scalar('password')
-            ->maxLength('password', 255,'パスワードが長すぎます。')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
             ->notEmpty('password','パスワードを入力してください。')
             ->requirePresence('password', 'create')
             ->allowEmptyString('password', false);
@@ -249,6 +253,74 @@ class CastsTable extends Table
         return $validator;
     }
 
+    /**
+     * バリデーション パスワードリセット.その１
+     * パスワードリセットで使用
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationCastPassReset1(Validator $validator)
+    {
+        $validator
+            ->email('email',false, "メールアドレスの形式が不正です。")
+            ->notEmpty('email','メールアドレスを入力してください。')
+            ->add('email', [
+                'exists' => [
+                    'rule' => function($value, $context) {
+                        return TableRegistry::get('casts')->exists(['email' => $value]);
+                    },
+                    'message' => 'そのメールアドレスは登録されてません。'
+                ],
+            ]);
+
+        return $validator;
+    }
+
+    /**
+     * バリデーション パスワードリセット.その２
+     * パスワードリセットで使用
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationCastPassReset2(Validator $validator)
+    {
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
+            ->requirePresence('password', 'create')
+            ->allowEmptyString('password', false);
+
+        return $validator;
+    }
+
+    /**
+     * バリデーション パスワードリセット.その３
+     * パスワード変更で使用
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationCastPassReset3(Validator $validator)
+    {
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
+            ->requirePresence('password', 'create')
+            ->allowEmptyString('password', false);
+
+        $validator
+            ->scalar('password_new')
+            ->maxLength('password_new', 32,'パスワードが長すぎます。')
+            ->minLength('password_new', 8,'パスワードが短すぎます。')
+            ->notEmpty('password_new','パスワードを入力してください。')
+            ->requirePresence('password_new', 'create')
+            ->allowEmptyString('password_new', false);
+
+        return $validator;
+    }
 
     /**
      * Returns a rules checker object that will be used for validating

@@ -11,6 +11,7 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Collection\Collection;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\Datasource\ConnectionManager;
 
 /**
@@ -1495,6 +1496,211 @@ class CastsController extends AppController
         $this->Flash->success(RESULT_M['AUTH_SUCCESS']);
         return $this->redirect(['action' => 'login']);
 
+    }
+
+    public function passReset()
+    {
+        // シンプルレイアウトを使用
+        $this->viewBuilder()->layout('simpleDefault');
+
+        if ($this->request->is('post')) {
+
+            // バリデーションはパスワードリセットその１を使う。
+            $cast = $this->Casts->newEntity( $this->request->getData()
+                , ['validate' => 'CastPassReset1']);
+
+            if(!$cast->errors()) {
+                // メールアドレスで取得
+                $cast = $this->Casts->find()
+                    ->where(['email' => $cast->email])->first();
+
+                $email = new Email('default');
+                $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                    ->setSubject(MAIL['FROM_NAME_PASS_RESET'])
+                    ->setTo($cast->email)
+                    ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                    ->setTemplate("pass_reset_email")
+                    ->setLayout("simple_layout")
+                    ->emailFormat("html")
+                    ->viewVars(['cast' => $cast])
+                    ->send();
+                $this->set('cast', $cast);
+
+                $this->Flash->success('パスワード再設定用メールを送信しました。');
+                Log::info("ID：【".$cast['id']."】アドレス：【".$cast->email
+                    ."】パスワード再設定用メールを送信しました。", 'pass_reset');
+
+                return $this->render('/common/pass_reset_send');
+
+            } else {
+                // 送信失敗
+                foreach ($cast->errors() as $key1 => $value1) {
+                    foreach ($value1 as $key2 => $value2) {
+                        $this->Flash->error($value2);
+                        Log::error("ID：【".$cast['id']."】アドレス：【".$cast->email
+                            ."】エラー：【".$value2."】", 'pass_reset');
+                    }
+                }
+            }
+        } else {
+            $cast = $this->Casts->newEntity();
+        }
+        $this->set('cast', $cast);
+        return $this->render('/common/pass_reset_form');
+    }
+
+    /**
+     * トークンをチェックして不整合が無ければ
+     * パスワードの変更をする
+     *
+     * @param [type] $token
+     * @return void
+     */
+    public function resetVerify($token)
+    {
+
+        // シンプルレイアウトを使用
+        $this->viewBuilder()->layout('simpleDefault');
+        $cast = $this->Auth->identify();
+
+        $cast = $this->Casts->get(Token::getId($token));
+
+        // 以下でトークンの有効期限や改ざんを検証することが出来る
+        if (!$cast->tokenVerify($token)) {
+            Log::info("ID：【".$cast->id."】"."アドレス：【".$cast->email."】".
+                "エラー：【".RESULT_M['PASS_RESET_FAILED']."】アクション：【"
+                . $this->request->params['action']. "】", "pass_reset");
+
+            $this->Flash->error(RESULT_M['PASS_RESET_FAILED']);
+            return $this->redirect(['action' => 'login']);
+        }
+
+        if ($this->request->is('post')) {
+
+            // パスワードリセットフォームの表示フラグ
+            $is_reset_form = false;
+
+            // バリデーションはパスワードリセットその２を使う。
+            $validate = $this->Casts->newEntity( $this->request->getData()
+                , ['validate' => 'CastPassReset2']);
+
+           if (!$validate->errors()) {
+
+                // 再設定したバスワードを設定する
+                $cast->password = $this->request->getData('password');
+                // 自動ログインフラグを下げる
+                $cast->remember_token = 0;
+
+                // 一応ちゃんと変更されたかチェックする
+                if (!$cast->isDirty('password')) {
+
+                    Log::info("ID：【".$cast->id."】"."アドレス：【".$cast->email."】".
+                    "エラー：【パスワードの変更に失敗しました。】アクション：【"
+                        . $this->request->params['action']. "】", "pass_reset");
+
+                    $this->Flash->error('パスワードの変更に失敗しました。');
+                    return $this->redirect(['action' => 'login']);
+                }
+
+               if ($this->Casts->save($cast)) {
+
+                    // 変更完了したら、メール送信
+                    $email = new Email('default');
+                    $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
+                        ->setSubject($cast->name."様、メールアドレスの変更が完了しました。")
+                        ->setTo($cast->email)
+                        ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                        ->setTemplate("pass_reset_success")
+                        ->setLayout("simple_layout")
+                        ->emailFormat("html")
+                        ->viewVars(['cast' => $cast])
+                        ->send();
+                    $this->set('cast', $cast);
+
+                    // 変更完了でログインページへ
+                    $this->Flash->success(RESULT_M['PASS_RESET_SUCCESS']);
+                    Log::info("ID：【".$cast['id']."】アドレス：【".$cast->email
+                        ."】". RESULT_M['PASS_RESET_SUCCESS'], 'pass_reset');
+                    return $this->redirect(['action' => 'login']);
+               }
+
+           } else {
+
+                // パスワードリセットフォームの表示フラグ
+                $is_reset_form = true;
+                $this->set(compact('is_reset_form'));
+               // 入力エラーがあれば、メッセージをセットして返す
+               $this->Flash->error(__('入力内容に誤りがあります。'));
+               return $this->render('/common/pass_reset_form');
+            }
+
+        } else {
+
+            // パスワードリセットフォームの表示フラグ
+            $is_reset_form = true;
+            $this->set(compact('is_reset_form','cast'));
+            return $this->render('/common/pass_reset_form');
+        }
+    }
+
+    public function passChange()
+    {
+        $auth = $this->request->session()->read('Auth.Cast');
+        $id = $auth['id']; // ユーザーID
+        $new_pass = "";
+        if ($this->request->is('post')) {
+
+            $isValidate = false; // エラー有無
+            // バリデーションはパスワードリセットその３を使う。
+            $validate = $this->Casts->newEntity( $this->request->getData()
+                , ['validate' => 'CastPassReset3']);
+
+            if(!$validate->errors()) {
+
+                $hasher = new DefaultPasswordHasher();
+                $cast = $this->Casts->get($this->viewVars['userInfo']['id']);
+                $equal_check = $hasher->check($this->request->getData('password')
+                    , $cast->password);
+                // 入力した現在のパスワードとデータベースのパスワードを比較する
+                if (!$equal_check) {
+                    $this->Flash->error('現在のパスワードが間違っています。');
+                    return $this->render();
+                }
+                // 新しいバスワードを設定する
+                $cast->password = $this->request->getData('password_new');
+
+                // 一応ちゃんと変更されたかチェックする
+                if (!$cast->isDirty('password')) {
+
+                    Log::info("ID：【".$cast->id."】"."アドレス：【".$cast->email."】".
+                    "エラー：【パスワードの変更に失敗しました。】アクション：【"
+                        . $this->request->params['action']. "】", "pass_reset");
+
+                    $this->Flash->error('パスワードの変更に失敗しました。');
+                    return $this->render();
+                }
+
+                try {
+                    // レコード更新実行
+                    if (!$this->Casts->save($cast)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                    $this->Flash->success('パスワードの変更をしました。');
+                    return $this->redirect('/cast/casts/profile');
+
+                } catch (RuntimeException $e) {
+                    $this->log($this->Util->setLog($auth, $e));
+                    $this->Flash->error('パスワードの変更に失敗しました。');
+                }
+
+            } else {
+                $cast = $validate;
+            }
+        } else {
+            $cast = $this->Casts->newEntity();
+        }
+        $this->set('cast', $cast);
+        return $this->render();
     }
 
     /**

@@ -52,7 +52,7 @@ class AppController extends \App\Controller\AppController
         // ログイン時に許可するアクション
         $access = ['index','editCalendar','profile','topImage','saveTopImage'
             ,'gallery','saveGallery','sns','deleteGallery','diary'
-            ,'saveDiary','viewDiary','deleteDiary','updateDiary'];
+            ,'saveDiary','viewDiary','deleteDiary','updateDiary','passChange'];
         if (in_array($action, $access)) {
             return true;
         }
@@ -62,7 +62,7 @@ class AppController extends \App\Controller\AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['signup','verify','logout']);
+        $this->Auth->allow(['signup','verify','resetVerify','logout','passReset']);
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
         $this->viewBuilder()->layout('castDefault');
     }

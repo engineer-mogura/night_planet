@@ -269,7 +269,7 @@ class CastsController extends AppController
                         $updates->set('content', $this->Auth->user('nickname').'さんがプロフィールアイコンを更新しました。');
                         $updates->set('shop_id', $this->Auth->user('shop_id'));
                         $updates->set('cast_id', $this->Auth->user('id'));
-                        $updates->set('type', SHOP_MENU_NAME['WORK_SCHEDULE']);
+                        $updates->set('type', SHOP_MENU_NAME['PROFILE']);
                         // レコード更新実行
                         if (!$this->Updates->save($updates)) {
                             throw new RuntimeException('レコードの登録ができませんでした。');

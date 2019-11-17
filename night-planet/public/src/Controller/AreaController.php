@@ -316,23 +316,30 @@ class AreaController extends AppController
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id);
 
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
-        $insta_user_name = $shop->snss[0]->instagram;
-        // インスタのキャッシュパス
-        $cache_path = preg_replace(
-            '/(\/\/)/',
-            '/',
-            WWW_ROOT.$shopInfo['cache_path']
-        );
-        // インスタ情報を取得
-        $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $cache_path);
-        $ig_data = $tmp_ig_data->business_discovery;
-        // インスタユーザーが存在しない場合
-        if (!empty($tmp_ig_data->error)) {
-            // エラーメッセージをセットする
-            $insta_error = $tmp_ig_data->error->error_user_title;
-            $this->set(compact('ig_error'));
+        $ig_data = null; // Instagramデータ
+        // Instagramアカウントが入力されていればインスタデータを取得する
+        if (!empty($shop->snss[0]->instagram)) {
+
+            $insta_user_name = $shop->snss[0]->instagram;
+            // インスタのキャッシュパス
+            $cache_path = preg_replace(
+                '/(\/\/)/',
+                '/',
+                WWW_ROOT.$shopInfo['cache_path']
+            );
+            // インスタ情報を取得
+            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $cache_path);
+            $ig_data = $tmp_ig_data->business_discovery;
+            // インスタユーザーが存在しない場合
+            if (!empty($tmp_ig_data->error)) {
+                // エラーメッセージをセットする
+                $insta_error = $tmp_ig_data->error->error_user_title;
+                $this->set(compact('ig_error'));
+            }
         }
-        $this->set(compact('shop', 'shopInfo', 'update_icon', 'updateInfo', 'diarys', 'sharer', 'credits', 'creditsHidden', 'ig_data'));
+
+        $this->set(compact('shop', 'shopInfo', 'update_icon', 'updateInfo'
+            , 'diarys', 'sharer', 'credits', 'creditsHidden', 'ig_data'));
         $this->render();
     }
 
@@ -453,22 +460,26 @@ class AreaController extends AppController
             }
         }
 
+        $ig_data = null; // Instagramデータ
+        // Instagramアカウントが入力されていればインスタデータを取得する
+        if (!empty($cast->snss[0]->instagram)) {
 
-        $insta_user_name = $cast->snss[0]->instagram;
-        // インスタのキャッシュパス
-        $cache_path = preg_replace(
-            '/(\/\/)/',
-            '/',
-            WWW_ROOT.$castInfo['cache_path']
-        );
-        // インスタ情報を取得
-        $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $cache_path);
-        $ig_data = $tmp_ig_data->business_discovery;
-        // インスタユーザーが存在しない場合
-        if (!empty($tmp_ig_data->error)) {
-            // エラーメッセージをセットする
-            $insta_error = $tmp_ig_data->error->error_user_title;
-            $this->set(compact('ig_error'));
+            $insta_user_name = $cast->snss[0]->instagram;
+            // インスタのキャッシュパス
+            $cache_path = preg_replace(
+                '/(\/\/)/',
+                '/',
+                WWW_ROOT.$castInfo['cache_path']
+            );
+            // インスタ情報を取得
+            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $cache_path);
+            $ig_data = $tmp_ig_data->business_discovery;
+            // インスタユーザーが存在しない場合
+            if (!empty($tmp_ig_data->error)) {
+                // エラーメッセージをセットする
+                $insta_error = $tmp_ig_data->error->error_user_title;
+                $this->set(compact('ig_error'));
+            }
         }
 
         $this->set(compact('cast', 'isWorkDay', 'ig_data', 'other_casts', 'shopInfo', 'castInfo'));

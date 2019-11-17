@@ -151,7 +151,7 @@ return [
         '006'=>'FaceBook',
         '007'=>'Twitter',
         '008'=>'店舗の掲載をご希望の方',
-        '009'=>'ログイン',
+        '009'=>'店舗ログイン',
     )),
 
     // ラベル定数 owner.label menu
@@ -235,17 +235,17 @@ return [
         'nanjo'=> [
             'label' => "南城",
             'path' => "nanjo",
-            'image' => "/img/common/area/area_4.png"
+            'image' => "/img/common/area/top-image.png"
         ],
         'tomigusuku'=> [
             'label' => "豊見城",
             'path' => "tomigusuku",
-            'image' => "/img/common/area/area_5.png"
+            'image' => "/img/common/area/top-image.png"
         ],
         'urasoe'=> [
             'label' => "浦添",
             'path' => "urasoe",
-            'image' => "/img/common/area/area_6.png"
+            'image' => "/img/common/area/top-image.png"
         ],
         'ginowan'=> [
             'label' => "宜野湾",
@@ -255,17 +255,17 @@ return [
         'okinawashi'=> [
             'label' => "沖縄市",
             'path' => "okinawashi",
-            'image' => "/img/common/area/area_8.png"
+            'image' => "/img/common/area/area_okinawashi_S.jpg"
         ],
         'uruma'=> [
             'label' => "うるま",
             'path' => "uruma",
-            'image' => "/img/common/area/area_9.png"
+            'image' => "/img/common/area/top-image.png"
         ],
         'nago'=> [
             'label' => "名護",
             'path' => "nago",
-            'image' => "/img/common/area/area_10.png"
+            'image' => "/img/common/area/top-image.png"
         ],
     )),
     // 業種リスト

@@ -92,12 +92,12 @@
     <li><a class="waves-effect" href="<?=SNS['INSTAGRAM']?>" target="_blank"><i class="material-icons">cloud</i><?= USER_LM['005'] ?></a></li>
     <li><a class="waves-effect" href="<?=SNS['FACEBOOK']?>" target="_blank"><i class="material-icons">cloud</i><?= USER_LM['006'] ?></a></li>
     <li><a class="waves-effect" href="<?=SNS['TWITTER']?>" target="_blank"><i class="material-icons">cloud</i><?= USER_LM['007'] ?></a></li>
-    <li><a class="waves-effect" href="/entry/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
+    <li><a class="waves-effect" href="/other/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="<?=API['GOOGLE_FORM_CONTACT']?>" target="_blank"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-    <li><a class="waves-effect" href="/entry/privacy_policy"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
-    <li><a class="waves-effect" href="/entry/terms"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
+    <li><a class="waves-effect" href="/other/privacy_policy"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
+    <li><a class="waves-effect" href="/other/terms"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
     <li><a class="waves-effect" href="/entry/" target="_blank"><i class="material-icons">star_half</i><?= USER_LM['008'] ?></a></li>
-    <li><a class="waves-effect" href="<?=ADMIN_DOMAIN?>/owner/owners/login"><i class="material-icons">vpn_key</i><?= USER_LM['009'] ?></a></li>
+    <li><a class="waves-effect" href="<?=ADMIN_DOMAIN?>"><i class="material-icons">vpn_key</i><?= USER_LM['009'] ?></a></li>
     <li><div class="divider"></div></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
   </ul>
@@ -147,14 +147,14 @@
       <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">cloud</i><?= USER_LM['007'] ?></span><a class="" href="<?=SNS['TWITTER']?>" target="_blank"></a></div></div>
     </div>
     <div class="row">
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></span><a class="" href="/entry/faq"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></span><a class="" href="/other/faq"></a></div></div>
       <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></span><a class="" href="<?=API['GOOGLE_FORM_CONTACT']?>" target="_blank"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></span><a class="" href="/entry/privacy_policy"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></span><a class="" href="/other/privacy_policy"></a></div></div>
     </div>
     <div class="row">
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">description</i><?= COMMON_LM['005'] ?></span><a class="" href="/entry/terms"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">description</i><?= COMMON_LM['005'] ?></span><a class="" href="/other/terms"></a></div></div>
       <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">star_half</i><?= USER_LM['008'] ?></span><a class="" href="/entry/" target="_blank"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">vpn_key</i><?= USER_LM['009'] ?></span><a class="" href="<?=ADMIN_DOMAIN?>/owner/owners/login"></a></div></div>
+      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">vpn_key</i><?= USER_LM['009'] ?></span><a class="" href="<?=ADMIN_DOMAIN?>"></a></div></div>
     </div>
     <div class="row">
       <div class="col s12">

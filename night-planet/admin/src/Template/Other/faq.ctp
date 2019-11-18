@@ -1,4 +1,4 @@
-<div class="entry container">
+<div class="other container">
     <div class="row">
         <div class="col s12">
             <h5>よくある質問</h5>

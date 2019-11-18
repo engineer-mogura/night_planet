@@ -104,66 +104,6 @@ class EntryController extends AppController
         $this->layout = false;
         $this->render();
     }
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    public function detail()
-    {
-        $this->layout = false;
-        $this->render();
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    public function memberShip()
-    {
-        $this->render();
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    public function contract()
-    {
-        $this->render();
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    public function faq()
-    {
-        $this->render();
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    public function terms()
-    {
-        $this->render();
-    }
-
-    /**
-     * Undocumented function
-     *
-     * @return void
-     */
-    public function privacyPolicy()
-    {
-        $this->render();
-    }
 
     public function signup()
     {

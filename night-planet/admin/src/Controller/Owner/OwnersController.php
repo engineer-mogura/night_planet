@@ -245,7 +245,7 @@ class OwnersController extends AppController
             // 仮登録してるレコードを削除する
             $this->Owners->delete($owner);
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
-            return $this->redirect('/entry/signup');
+            return $this->redirect(PUBLIC_DOMAIN.'/entry/signup');
         }
 
         // 認証完了でログインページへ

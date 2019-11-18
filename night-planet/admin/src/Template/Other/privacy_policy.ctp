@@ -1,9 +1,9 @@
-<div class="entry container">
+<div class="other container">
     <div class="row">
         <div class="col s12">
-            <div class="card-panel deep-orange darken-2">
-                <h5 class="white-text">プライバシーポリシー</h5>
-                <span class="white-text">
+            <div class="card-panel">
+                <h5>プライバシーポリシー</h5>
+                <span>
                 <p>【<?= LT['001'] ?>】（以下，「本サイト」といいます。）は，本ウェブサイト上で提供するサービス（以下,「本サービス」といいます。）におけるプライバシー情報の取扱いについて，以下のとおりプライバシーポリシー（以下，「本ポリシー」といいます。）を定めます。</p>
                 <blockquote><h6>第1条（プライバシー情報）</h6></blockquote>
                 <ul>

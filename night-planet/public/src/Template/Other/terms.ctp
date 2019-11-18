@@ -1,8 +1,9 @@
-<div class="entry container">
+<div class="other container">
     <div class="row">
         <div class="col s12">
-            <div class="card-panel deep-orange darken-2">
-            <span class="white-text">
+            <div class="card-panel">
+            <h5>利用規約</h5>
+            <span>
               <p>この利用規約（以下，「本規約」といいます。）は，【<?= LT['001'] ?>】（以下，「本サイト」といいます。）がこのウェブサイト上で提供するサービス（以下，「本サービス」といいます。）の利用条件を定めるものです。登録ユーザーの皆さま（以下，「ユーザー」といいます。）には，本規約に従って，本サービスをご利用いただきます。</p>
               <blockquote><h6>第1条（適用）</h6></blockquote>
               <p>本規約は，ユーザーと本サイトとの間の本サービスの利用に関わる一切の関係に適用されるものとします。</p>

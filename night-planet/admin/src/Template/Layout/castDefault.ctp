@@ -60,17 +60,17 @@
         <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.Cast.email')?></span></a>
       </div>
     </li>
-    <li><a href="/cast/casts/index?activeTab=dashbord" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons" href="">dashboard</i><?= CAST_LM['001'] ?></a></li>
-    <li><a href="/cast/casts/profile?activeTab=profile" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">person</i><?= CAST_LM['002'] ?></a></li>
-    <li><a href="/cast/casts/top-image?activeTab=top-image" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">image</i><?= CAST_LM['003'] ?></a></li>
-    <li><a href="/cast/casts/diary?activeTab=diary" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">note_add</i><?= CAST_LM['004'] ?></a></li>
-    <li><a href="/cast/casts/gallery?activeTab=gallery" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">photo_library</i><?= CAST_LM['005'] ?></a></li>
-    <li><a href="/cast/casts/sns?activeTab=sns" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">chat_bubble_outline</i><?= CAST_LM['006'] ?></a></li>
+    <li><a href="/cast/casts/index" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons" href="">dashboard</i><?= CAST_LM['001'] ?></a></li>
+    <li><a href="/cast/casts/profile" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">person</i><?= CAST_LM['002'] ?></a></li>
+    <li><a href="/cast/casts/top-image" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">image</i><?= CAST_LM['003'] ?></a></li>
+    <li><a href="/cast/casts/diary" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">note_add</i><?= CAST_LM['004'] ?></a></li>
+    <li><a href="/cast/casts/gallery" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">photo_library</i><?= CAST_LM['005'] ?></a></li>
+    <li><a href="/cast/casts/sns" class="waves-effect <?php if($role != 'cast'){echo "btn-disabled";}?>"><i class="material-icons">chat_bubble_outline</i><?= CAST_LM['006'] ?></a></li>
     <li><a class="waves-effect" href="/cast/casts"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
-    <li><a class="waves-effect" href="#!"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
+    <li><a class="waves-effect" href="/other/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
+    <li><a class="waves-effect" href="<?=API['GOOGLE_FORM_CONTACT']?>" target="_blank"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>
+    <li><a class="waves-effect" href="/other/privacy_policy"><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></a></li>
+    <li><a class="waves-effect" href="/other/terms"><i class="material-icons">description</i><?= COMMON_LM['005'] ?></a></li>
     <li><div class="divider"></div></li>
     <li><a href="/cast/casts/logout" class="waves-effect"><i class="material-icons" href="">keyboard_backspace</i><?= COMMON_LM['007'] ?></a></li>
     <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
@@ -78,7 +78,8 @@
   <div class="nav-header-cron-dummy"></div>
   <nav id="nav-header-menu" class="nav-header-menu nav-opacity">
     <div class="nav-wrapper">
-      <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
+      <a href=
+      "#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
       <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'] ?></a>
       <ul class="right">
         <li><a data-target="modal-help" class="modal-trigger"><i class="material-icons">help</i></a></li>

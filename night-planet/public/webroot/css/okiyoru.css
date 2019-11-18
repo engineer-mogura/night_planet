@@ -11,6 +11,11 @@ html,body {
 .entry.container {
   padding: initial;
 }
+
+.other.container {
+  padding: initial;
+}
+
 body.fixed {
   position: fixed;
   width: 100%;

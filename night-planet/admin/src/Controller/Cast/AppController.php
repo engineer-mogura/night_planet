@@ -63,6 +63,7 @@ class AppController extends \App\Controller\AppController
     {
         parent::beforeFilter($event);
         $this->Auth->allow(['signup','verify','resetVerify','logout','passReset']);
+        $this->Auth->config('authError', "もう一度ログインしてください。");
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
         $this->viewBuilder()->layout('castDefault');
     }

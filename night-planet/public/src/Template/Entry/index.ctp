@@ -172,17 +172,17 @@
             <div class="row">
                 <div class="col-md-5">
                     <div class="feature-list">
-                        <h3>Designed with Sketch!</h3>
-                        <p>Easily change/switch/swap every placeholder inside every image on Sedna with the included Sketch files. You’ll have this template customised to suit your business in no time! </p>
-                        <p>Nam vehicula malesuada lectus, interdum fringilla nibh. Duis aliquam vitae metus a pharetra. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec fermentum augue quis augue ornare, eget faucibus felis pharetra. Proin condimentum et leo quis fringilla.
+                        <h3>For Desktop!</h3>
+                        <p>PCでは常にサイドバーを表示します。</p>
+                        <p>ユーザーはほぼスマートフォンでアクセスしますが、ご覧の通りPC表示でも統一されたデザインです。
                         </p>
-                        <a href="#" class="btn btn-ghost btn-accent btn-small">What's Sketch?</a>
+                        <p>このように全デバイスでデザインを一定に保ちます。</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="macbook-wrap wp3"></div>
-        <div class="responsive-feature-img"><img src="/Sedna/img/macbook-pro.png" alt="responsive devices"></div>
+        <div class="responsive-feature-img"><img src="/Sedna/img/desctop-device.png" alt="responsive devices"></div>
     </section>
     <section class="hero-strip section-padding">
         <div class="container">

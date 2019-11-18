@@ -132,9 +132,9 @@ return [
     // ラベル定数 label title
     define('LT', array(
         '000'=>'NightPlanet ナイプラ',
-        '001'=>'NightPlanet<span style="font-size: small"> ナイプラ</span>',
+        '001'=>'<span class="logo-head-color">N</span>ight<span class="logo-head-color"> P</span>lanet<span style="font-size: small"> ナイプラ</span>',
         '002'=>'Copyright 2018',
-        '003'=>'NightPlanet ナイプラ All Rights Reserved.',
+        '003'=>'<span class="logo-head-color">N</span>ight<span class="logo-head-color"> P</span>lanet<span style="font-size: small"> ナイプラ</span> All Rights Reserved.',
         '004'=>'管理画面',
         '005'=>'<span class="area-logo-tail">☽ナイト検索☽</span>',
         '006'=>'オーナーログイン画面',

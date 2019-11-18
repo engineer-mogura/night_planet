@@ -59,6 +59,10 @@ li > a.sideNav-active {
   color: #fff;
   background-color: #26a69a;
 } */
+span.logo-head-color {
+  color: #f9a500;
+  font-size: larger;
+}
 .brand-logo.oki-brand-logo{
   margin-left: 50px;
 }

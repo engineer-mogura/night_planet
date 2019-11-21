@@ -180,18 +180,12 @@ class OwnersController extends AppController
         // 指定フォルダ配下にあればラストの連番に+1していく
         if (file_exists($dir->path)) {
             $dirArray = scandir($dir->path);
-            for($i = 0; $i <= count($dirArray); $i++) {
-                if(strpos($dirArray[$i],'.') !== false) {
-                    unset($dirArray[$i]);
-                }
-            }
-            $nextDir = sprintf("%05d",count($dirArray) + 1);
-
+            $nextDir = sprintf("%05d", (int) end($dirArray) + 1);
         } else {
-        // 指定フォルダが空なら00001連番から振る
+            // 指定フォルダが空なら00001連番から振る
             $nextDir = sprintf("%05d", 1);
-
         }
+
         // コネクションオブジェクト取得
         $connection = ConnectionManager::get('default');
         // トランザクション処理開始
@@ -325,12 +319,7 @@ class OwnersController extends AppController
                 // 指定フォルダ配下にあればラストの連番に+1していく
                 if (file_exists($dir->path)) {
                     $dirArray = scandir($dir->path);
-                    for ($i = 0; $i <= count($dirArray); $i++) {
-                        if (strpos($dirArray[$i], '.') !== false) {
-                            unset($dirArray[$i]);
-                        }
-                    }
-                    $nextDir = sprintf("%05d", count($dirArray) + 1);
+                    $nextDir = sprintf("%05d", (int) end($dirArray) + 1);
                 } else {
                     // 指定フォルダが空なら00001連番から振る
                     $nextDir = sprintf("%05d", 1);

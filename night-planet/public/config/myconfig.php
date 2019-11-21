@@ -132,9 +132,9 @@ return [
     // ラベル定数 label title
     define('LT', array(
         '000'=>'NightPlanet ナイプラ',
-        '001'=>'<span class="logo-head-color">N</span>ight<span class="logo-head-color"> P</span>lanet<span style="font-size: small"> ナイプラ</span>',
+        '001'=>'<span class="logo-head-color">N</span>ight<span class="logo-head-color"> P</span>lanet<span style="font-size: x-small"> ナイプラ</span>',
         '002'=>'Copyright 2018',
-        '003'=>'<span class="logo-head-color">N</span>ight<span class="logo-head-color"> P</span>lanet<span style="font-size: small"> ナイプラ</span> All Rights Reserved.',
+        '003'=>'<span class="logo-head-color">N</span>ight<span class="logo-head-color"> P</span>lanet<span style="font-size: x-small"> ナイプラ</span> All Rights Reserved.',
         '004'=>'管理画面',
         '005'=>'<span class="area-logo-tail">☽ナイト検索☽</span>',
         '006'=>'オーナーログイン画面',
@@ -411,8 +411,8 @@ return [
 
     // メール設定
     define('MAIL', array(
-        'CAST_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。メールを確認し認証を完了するようキャストへお伝えください。２４時間以内に完了しないと、やり直しになりますのでご注意ください。',
-        'OWNER_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。２４時間以内に完了しないと、やり直しになりますのでご注意ください。',
+        'CAST_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。１０分以内に完了してください。',
+        'OWNER_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。１０分以内に完了してください。',
         'FROM_INFO_GMAIL'=>'info.night.planet@gmail.com',
         'FROM_SUBSCRIPTION'=>'subscription@night-planet.com',
         'FROM_NAME'=>'NightPlanet事務局',

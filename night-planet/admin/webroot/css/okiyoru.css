@@ -622,7 +622,7 @@ div.description {
 #casts-section h6, #today-member-modal h6{
   padding-top: 7px;
   color: white;
-  background-color: #26a69a;
+  background-color: #fb8c00;
   height: 30px;
   border-radius: 32px;
 }
@@ -865,7 +865,7 @@ span.icon-vertical-align {
 .cast-header .count-box {
   padding-top: 6px;
   color: white;
-  background-color: #26a69a;
+  background-color: #fb8c00;
   height: 30px;
   border-radius: 32px;
 }
@@ -956,7 +956,7 @@ table th{
   position: relative;
   text-align: left;
   width: 30%;
-  background-color: #52c2d0;
+  background-color: #00b0ff;
   color: white;
   text-align: center;
   /* padding: 10px 0 ; */

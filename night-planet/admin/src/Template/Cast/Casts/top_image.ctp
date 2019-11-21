@@ -6,7 +6,7 @@
                 <?php echo $this->Flash->render(); ?>
                 <h5><?=('トップ画像') ?></h5>
                 <div id="show-top-image" style="text-align:center">
-                    <img width="100%" height="300" src="<?= $gallery[0]['file_path'] ?>" />
+                    <img width="100%" height="300" src="<?= $top_image ?>" />
                     <button type="button" class="waves-effect waves-light btn-large changeBtn">変更</button>
                 </div>
                 <form id="save-top-image" name="save_top_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/cast/casts/save_top_image" style="display:none;">

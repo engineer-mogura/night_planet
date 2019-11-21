@@ -151,7 +151,7 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('system')
-            ->maxLength('system', 600,"システムは600文字以内にしてください。")
+            ->maxLength('system', 900,"システムは900文字以内にしてください。")
             ->allowEmptyString('system');
 
         $validator

@@ -101,7 +101,7 @@
         </div>
         <div style="display:none;">
             <!-- TODO: 暫定でキャストのパスワード初期値を決めている -->
-            <input type="hidden" name="password" value="pass">
+            <input type="hidden" name="password" value="pass1234">
             <input type="hidden" name="role" value="cast">
         </div>
         <div class="card-content" style="text-align:center;">

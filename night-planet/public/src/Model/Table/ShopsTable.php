@@ -87,6 +87,7 @@ class ShopsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+
         $validator->setProvider('custom', 'App\Model\Validation\CustomValidation');
 
         $validator
@@ -95,12 +96,12 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('area')
-            ->notEmpty('area', 'エリアを選択してください。')
+            ->notEmpty('area','エリアを選択してください。')
             ->requirePresence('area', 'create');
 
         $validator
             ->scalar('genre')
-            ->notEmpty('genre', '店舗のジャンルを選択してください。')
+            ->notEmpty('genre','店舗のジャンルを選択してください。')
             ->requirePresence('genre', 'create');
 
         $validator
@@ -110,21 +111,21 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('name')
-            ->maxLength('name', 40, "店舗名は40文字以内にしてください。")
+            ->maxLength('name', 40,"店舗名は40文字以内にしてください。")
             ->allowEmptyString('name');
 
         $validator
             ->scalar('catch')
-            ->minLength('catch', 5, "キャッチコピーが短すぎます。")
-            ->maxLength('catch', 100, "キャッチコピーは100文字以内にしてください。")
+            ->minLength('catch', 5,"キャッチコピーが短すぎます。")
+            ->maxLength('catch', 100,"キャッチコピーは100文字以内にしてください。")
             ->allowEmptyString('catch');
 
         $validator
             ->scalar('tel')
-            ->maxLength('tel', 15, "電話番号が長いです。")
+            ->maxLength('tel', 15,"電話番号が長いです。")
             ->allowEmptyString('tel')
             ////電話番号形式のチェック ////
-            ->add('tel', 'tel_check', [
+            ->add('tel', 'tel_check',[
                 'rule' =>'tel_check',
                 'provider' => 'custom',
                 'message' => '無効な電話番号です。'
@@ -132,7 +133,7 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('staff')
-            ->maxLength('staff', 255, "スタッフは255文字以内にしてください。")
+            ->maxLength('staff', 255,"スタッフは255文字以内にしてください。")
             ->allowEmptyString('staff');
 
         $validator
@@ -145,12 +146,12 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('bus_hosoku')
-            ->maxLength('bus_hosoku', 255, "補足は120文字以内にしてください。")
+            ->maxLength('bus_hosoku', 255,"補足は120文字以内にしてください。")
             ->allowEmptyString('bus_hosoku');
 
         $validator
             ->scalar('system')
-            ->maxLength('system', 600, "システムは600文字以内にしてください。")
+            ->maxLength('system', 900,"システムは900文字以内にしてください。")
             ->allowEmptyString('system');
 
         $validator
@@ -160,17 +161,17 @@ class ShopsTable extends Table
 
         $validator
             ->scalar('pref21')
-            ->maxLength('pref21', 3, "都道府県が不正です。")
+            ->maxLength('pref21', 3,"都道府県が不正です。")
             ->allowEmptyString('pref21');
 
         $validator
             ->scalar('addr21')
-            ->maxLength('addr21', 10, "市町村が不正です。")
+            ->maxLength('addr21', 10,"市町村が不正です。")
             ->allowEmptyString('addr21');
 
         $validator
             ->scalar('strt21')
-            ->maxLength('strt21', 30, "以降の住所が不正です。")
+            ->maxLength('strt21', 30,"以降の住所が不正です。")
             ->allowEmptyString('strt21');
 
         return $validator;
@@ -190,8 +191,8 @@ class ShopsTable extends Table
         return $rules;
     }
 
-    /**
-     * リクエストデータがエンティティーに変換される前に呼ばれる処理。
+        /**
+     * リクエストデータがエンティティーに変換される前に呼ばれる処理。 
      * 主にリクエストデータに変換を掛けたり、バリデーションを条件次第で事前に解除したりできる。
      * @param Event $event
      * @param ArrayObject $data

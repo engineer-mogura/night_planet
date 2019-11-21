@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 11 月 13 日 19:36
+-- Generation Time: 2019 年 11 月 21 日 23:15
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.3.8
 
@@ -55,18 +55,6 @@ CREATE TABLE `articles` (
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- テーブルのデータのダンプ `articles`
---
-
-INSERT INTO `articles` (`id`, `user_id`, `title`, `slug`, `body`, `published`, `created`, `modified`) VALUES
-(1, 1, 'First Post', 'first-post', 'This is the first post.This is the first post.This is the first post.This is the first post.This is the first post.This is the first post.This is the first post.', 1, '2018-12-26 20:50:09', '2018-12-31 12:29:33'),
-(24, 1, 'ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'ffaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 0, '2018-12-30 21:54:10', '2018-12-31 12:10:24'),
-(25, 1, 'title1title1title1title1', 'title1title1title1title1', 'body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1body1', 0, '2018-12-30 22:32:45', '2018-12-30 22:32:45'),
-(26, 1, 'title2title2title2title2title2', 'title2title2title2title2title2', 'body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2body2', 0, '2018-12-30 22:33:07', '2018-12-31 09:07:13'),
-(27, 1, 'tomori1tomori1tomori1tomori1tomori1', 'tomori1tomori1tomori1tomori1tomori1', 'tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1tomori1', 0, '2018-12-31 12:35:53', '2018-12-31 12:35:53'),
-(29, 2, 'tomori1の投稿', 'tomori1no-tou-gao', 'tomori1の投稿tomori1の投稿tomori1の投稿tomori1の投稿tomori1の投稿tomori1の投稿tomori1の投稿tomori1の投稿', 0, '2018-12-31 16:37:42', '2018-12-31 16:37:42');
-
 -- --------------------------------------------------------
 
 --
@@ -78,17 +66,6 @@ CREATE TABLE `articles_tags` (
   `article_id` int(11) NOT NULL,
   `tag_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `articles_tags`
---
-
-INSERT INTO `articles_tags` (`article_id`, `tag_id`) VALUES
-(26, 1),
-(1, 2),
-(25, 2),
-(24, 5),
-(1, 7);
 
 -- --------------------------------------------------------
 
@@ -102,7 +79,7 @@ CREATE TABLE `casts` (
   `shop_id` int(11) NOT NULL,
   `role` varchar(10) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `nickname` varchar(30) NOT NULL,
+  `nickname` varchar(30) CHARACTER SET utf8mb4 NOT NULL,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) DEFAULT NULL,
   `birthday` datetime DEFAULT NULL,
@@ -110,7 +87,7 @@ CREATE TABLE `casts` (
   `blood_type` varchar(20) DEFAULT NULL,
   `constellation` varchar(20) DEFAULT NULL,
   `age` varchar(5) DEFAULT NULL,
-  `message` varchar(50) DEFAULT NULL,
+  `message` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL,
   `holiday` varchar(50) DEFAULT NULL,
   `dir` varchar(255) DEFAULT NULL,
   `remember_token` varchar(64) DEFAULT NULL,
@@ -125,24 +102,23 @@ CREATE TABLE `casts` (
 --
 
 INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `password`, `birthday`, `three_size`, `blood_type`, `constellation`, `age`, `message`, `holiday`, `dir`, `remember_token`, `status`, `delete_flag`, `created`, `modified`) VALUES
-(1, 38, 'cast', '山田　敏子２', 'ＨＡＮＡ', 'okiyoru99@gmail.com', '$2y$10$3Y5FfELSqG8hCwipy1VWNOvPn0A07QPRl0B7QVbgqtplAjRRFBfDC', '2000-02-14 00:00:00', NULL, 'blood_type1', 'constellation4', '22', 'メッセージメッセージメッセージメッセージメッセージメッセージメッセージメセージメッセー', NULL, '00002', NULL, 1, 0, '2019-03-23 16:51:25', '2019-09-05 23:33:01'),
-(33, 38, 'cast', '鈴木　一郎', 'イチロー', 'okiyoru99@gmail.com', '$2y$10$CQjIhOficE9SZJ5lgggxVuq4cUSwZG0O9CX6WC2GWbQBdQvPBYyda', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-07-31 19:22:54', '2019-07-31 23:30:57'),
-(35, 54, 'cast', 'なな', 'なな', 'okiyoru99@gmail.com', '$2y$10$Op0.Cgd9vufJu7f6azq53OjtUaeDXUBZJ6jsgQAq3AeywhRkPJ0j.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-08 23:37:31', '2019-09-05 23:27:03'),
-(41, 54, 'cast', 'りおな', 'りおな', 'okiyoru99@gmail.com', '$2y$10$OeB2W0ufPZJpOKoZngWFpOrkNeFSETNOMPl/adL5DhpSrts0Cfrpe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-09 00:01:51', '2019-09-05 23:28:00'),
-(42, 54, 'cast', 'ゆいか', 'ゆいか', 'okiyoru99@gmail.com', '$2y$10$2ksjTbJZy//cLD.fK6rypeYmfSLPckgcNoxn.2pPLN4ovl9jIc5ae', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-09 20:20:25', '2019-08-09 20:22:56'),
-(43, 54, 'cast', 'まみ', 'まみ', 'okiyoru99@gmail.com', '$2y$10$zMiLChXeQlZ1VGnNHfivTewm7eWrHxOmw24oOxd24eXzvEcshFf/C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-09 20:23:37', '2019-09-05 23:29:37'),
-(44, 54, 'cast', 'あやの', 'あやの', 'okiyoru99@gmail.com', '$2y$10$yKV7WFDrJtjI/3bG.HKcIOHdKWcMGkAMkb0i78eigS2LMn7F8FV4O', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-09 20:26:27', '2019-09-05 23:30:19'),
-(45, 54, 'cast', 'さくら', 'さくら', 'okiyoru99@gmail.com', '$2y$10$ZK7IpBPgr3ZQiwxFOn/ZpOGxodptM.mq5E45v3giYcPoNcjo57WU6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00006', NULL, 1, 0, '2019-08-09 20:33:22', '2019-09-05 23:34:48'),
-(46, 54, 'cast', 'あや', 'あや', 'okiyoru99@gmail.com', '$2y$10$hlJU3b8NhEM/O34sBLjRGu7MLqDx4/K5HEi/9nykdHgnUUeHfFAXa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00007', NULL, 1, 0, '2019-08-09 20:37:42', '2019-09-05 23:35:57'),
-(47, 54, 'cast', 'ひな', 'ひな', 'okiyoru99@gmail.com', '$2y$10$AyXZpXWXKYZfs.kZL3V8ueCyxgip9ipQLMhuSo6EawXFs4pY1Y1Ja', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00008', NULL, 1, 0, '2019-08-09 20:39:57', '2019-09-05 23:36:30'),
-(48, 55, 'cast', 'しほ', 'しほ', 'okiyoru99@gmail.com', '$2y$10$TXeMOwhsK/4vPQoJn.ZCN.PxboDRp8jSYurqQkuVwfqWKlKTWdiXy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-10 16:11:29', '2019-09-05 23:38:32'),
-(49, 55, 'cast', 'るか', 'るか', 'okiyoru99@gmail.com', '$2y$10$AoA.bJqZuQC0SSjDCRvK4uiZQeIRtpM/U/6udQp/mes77GXgemtJK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-10 16:17:02', '2019-09-05 23:39:26'),
-(50, 55, 'cast', 'あーす', 'あーす', 'okiyoru99@gmail.com', '$2y$10$nZe1EOBngjM3iDxMVLLPNuBXc8b.1DOWhNrdk3WGJ.qhPSbY4Qimi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-10 16:18:42', '2019-09-05 23:39:47'),
-(51, 55, 'cast', 'みずき', 'みずき', 'okiyoru99@gmail.com', '$2y$10$/6K5phAfNciUFN.6lAh/0OftmW4kArVeGsekekfWjzJyIOV8WAetW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-10 16:20:27', '2019-09-05 23:40:10'),
-(52, 55, 'cast', 'しの', 'しの', 'okiyoru3@gmail.com', '$2y$10$dzUNVjZvry8zpdHXf7Xr8O84YzhGfSG.MXsJm/uBNKz2yk.M5.zNm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-10 16:21:58', '2019-09-09 00:41:32'),
-(53, 56, 'cast', 'なお', 'なお1', 'okiyoru1@gmail.com', '$2y$10$QiCOJSSG9UQv9QOeOLTgZOJF6HfBw7BmtOCcu3xHx5XZwlRgsFNNG', NULL, NULL, 'blood_type1', 'constellation3', '22', 'CLUB琉球をよろしくで~す', NULL, '00001', NULL, 1, 0, '2019-08-30 17:23:36', '2019-09-28 11:34:55'),
-(54, 56, 'cast', 'にーな', 'にーな', 'okiyoru2@gmail.com', '$2y$10$5bX0v1ycjzISzcMkWIHXYOa5Pgbiio0idh7NuPZMzddUse3YYWKT2', NULL, NULL, '', '', '', 'club琉球をよろしくお願いします！', NULL, '00002', '5964e2a2162f5ebf8907b2442413340480842c04f275111b23acc73cf9ecc954', 1, 0, '2019-08-10 17:27:06', '2019-09-09 23:29:19'),
-(88, 67, 'cast', 'tomori', 'tomorin', 't.takuma830@gmail.com', '$2y$10$xCM9VrPZWUEFLlkRUDYcUeZe/FGs24lGwsww9KdUvPuzl/ujw/JSO', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 0, 0, '2019-11-12 23:54:49', '2019-11-12 23:55:09');
+(1, 1, 'cast', 'なな', 'なな', 'okiyoru99@gmail.com', '$2y$10$Op0.Cgd9vufJu7f6azq53OjtUaeDXUBZJ6jsgQAq3AeywhRkPJ0j.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-08 23:37:31', '2019-09-05 23:27:03'),
+(2, 1, 'cast', 'りおな', 'りおな', 'okiyoru99@gmail.com', '$2y$10$OeB2W0ufPZJpOKoZngWFpOrkNeFSETNOMPl/adL5DhpSrts0Cfrpe', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-09 00:01:51', '2019-09-05 23:28:00'),
+(3, 1, 'cast', 'ゆいか', 'ゆいか', 'okiyoru99@gmail.com', '$2y$10$2ksjTbJZy//cLD.fK6rypeYmfSLPckgcNoxn.2pPLN4ovl9jIc5ae', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-09 20:20:25', '2019-08-09 20:22:56'),
+(4, 1, 'cast', 'まみ', 'まみ', 'okiyoru99@gmail.com', '$2y$10$zMiLChXeQlZ1VGnNHfivTewm7eWrHxOmw24oOxd24eXzvEcshFf/C', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-09 20:23:37', '2019-09-05 23:29:37'),
+(5, 1, 'cast', 'あやの', 'あやの', 'okiyoru99@gmail.com', '$2y$10$yKV7WFDrJtjI/3bG.HKcIOHdKWcMGkAMkb0i78eigS2LMn7F8FV4O', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-09 20:26:27', '2019-09-05 23:30:19'),
+(6, 1, 'cast', 'さくら', 'さくら', 'okiyoru99@gmail.com', '$2y$10$ZK7IpBPgr3ZQiwxFOn/ZpOGxodptM.mq5E45v3giYcPoNcjo57WU6', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00006', NULL, 1, 0, '2019-08-09 20:33:22', '2019-09-05 23:34:48'),
+(7, 1, 'cast', 'あや', 'あや', 'okiyoru99@gmail.com', '$2y$10$hlJU3b8NhEM/O34sBLjRGu7MLqDx4/K5HEi/9nykdHgnUUeHfFAXa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00007', NULL, 1, 0, '2019-08-09 20:37:42', '2019-09-05 23:35:57'),
+(8, 1, 'cast', 'ひな', 'ひな', 'okiyoru99@gmail.com', '$2y$10$AyXZpXWXKYZfs.kZL3V8ueCyxgip9ipQLMhuSo6EawXFs4pY1Y1Ja', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00008', NULL, 1, 0, '2019-08-09 20:39:57', '2019-09-05 23:36:30'),
+(9, 2, 'cast', 'しほ', 'しほ', 'okiyoru99@gmail.com', '$2y$10$TXeMOwhsK/4vPQoJn.ZCN.PxboDRp8jSYurqQkuVwfqWKlKTWdiXy', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00001', NULL, 1, 0, '2019-08-10 16:11:29', '2019-09-05 23:38:32'),
+(10, 2, 'cast', 'るか', 'るか', 'okiyoru99@gmail.com', '$2y$10$AoA.bJqZuQC0SSjDCRvK4uiZQeIRtpM/U/6udQp/mes77GXgemtJK', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00002', NULL, 1, 0, '2019-08-10 16:17:02', '2019-09-05 23:39:26'),
+(11, 2, 'cast', 'あーす', 'あーす', 'okiyoru99@gmail.com', '$2y$10$nZe1EOBngjM3iDxMVLLPNuBXc8b.1DOWhNrdk3WGJ.qhPSbY4Qimi', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00003', NULL, 1, 0, '2019-08-10 16:18:42', '2019-09-05 23:39:47'),
+(12, 2, 'cast', 'みずき', 'みずき', 'okiyoru99@gmail.com', '$2y$10$/6K5phAfNciUFN.6lAh/0OftmW4kArVeGsekekfWjzJyIOV8WAetW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-10 16:20:27', '2019-09-05 23:40:10'),
+(13, 2, 'cast', 'しの', 'しの', 'okiyoru99@gmail.com', '$2y$10$dzUNVjZvry8zpdHXf7Xr8O84YzhGfSG.MXsJm/uBNKz2yk.M5.zNm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-10 16:21:58', '2019-09-09 00:41:32'),
+(14, 3, 'cast', 'なお', 'なお', 'okiyoru1@gmail.com', '$2y$10$9vJ4TwXPELht86ugs9.05u3ef5vgj/OPtrozkOISVnJG93yssCbua', NULL, NULL, 'blood_type1', 'constellation3', '22', 'CLUB琉球をよろしくで~す', NULL, '00001', NULL, 1, 0, '2019-08-30 17:23:36', '2019-11-17 16:53:01'),
+(15, 3, 'cast', 'にーな', 'にーな', 'okiyoru2@gmail.com', '$2y$10$5bX0v1ycjzISzcMkWIHXYOa5Pgbiio0idh7NuPZMzddUse3YYWKT2', NULL, NULL, '', '', '', 'club琉球をよろしくお願いします！', NULL, '00002', '5964e2a2162f5ebf8907b2442413340480842c04f275111b23acc73cf9ecc91', 1, 0, '2019-08-10 17:27:06', '2019-09-09 23:29:19'),
+(18, 7, 'cast', 'リエ', 'リエ', 'okiyoru99@gmail.com', '$2y$10$1k6VOOYYhrFWRdI3gDX9suL6uqXH.Afq7LslSe1OumDBene7y3Wt.', NULL, NULL, 'blood_type4', 'constellation9', '27', '', NULL, '00001', NULL, 1, 0, '2019-11-21 22:32:25', '2019-11-21 23:03:20'),
+(19, 7, 'cast', 'リン', 'リン', 'okiyoru3@gmail.com', '$2y$10$iCoE.fqQaAWQze/N.8ELYOl/kjYvQtCgrij7gZEJaw7rQjTkGI0Am', NULL, NULL, '', 'constellation6', '29', '', NULL, '00002', NULL, 1, 0, '2019-11-21 23:06:00', '2019-11-21 23:07:58');
 
 -- --------------------------------------------------------
 
@@ -169,28 +145,6 @@ CREATE TABLE `cast_schedules` (
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- テーブルのデータのダンプ `cast_schedules`
---
-
-INSERT INTO `cast_schedules` (`id`, `shop_id`, `cast_id`, `event_type_id`, `title`, `details`, `start`, `end`, `time_start`, `time_end`, `all_day`, `status`, `active`, `created`, `modified`) VALUES
-(1, 56, 53, NULL, '休み', NULL, '2019-09-12 00:00:00', '2019-09-12 00:00:00', NULL, NULL, '1', NULL, 1, '2019-09-21 14:48:28', '2019-09-21 14:48:28'),
-(2, 56, 53, NULL, '仕事', NULL, '2019-09-03 00:00:00', '2019-09-03 16:00:00', '00:00', '16:00', '1', NULL, 1, '2019-09-21 14:52:11', '2019-09-22 14:41:22'),
-(3, 56, 53, NULL, '仕事', NULL, '2019-09-05 00:00:00', '2019-09-05 00:00:00', '00:00', '00:00', '1', NULL, 1, '2019-09-21 16:05:04', '2019-09-22 13:30:13'),
-(8, 56, 53, NULL, '休み', NULL, '2019-10-24 00:00:00', '2019-10-24 00:00:00', NULL, NULL, '1', NULL, 1, '2019-09-22 01:49:04', '2019-09-22 01:49:04'),
-(9, 56, 54, NULL, '仕事', NULL, '2019-10-01 21:30:00', '2019-10-01 00:00:00', '21:30', NULL, '1', NULL, 1, '2019-09-22 02:13:19', '2019-09-22 02:13:19'),
-(10, 56, 54, NULL, '仕事', NULL, '2019-09-30 21:00:00', '2019-09-30 00:00:00', '21:00', NULL, '1', NULL, 1, '2019-09-22 02:15:01', '2019-09-22 02:15:01'),
-(11, 56, 54, NULL, '休み', NULL, '2019-09-19 00:00:00', '2019-09-19 00:00:00', NULL, NULL, '1', NULL, 1, '2019-09-22 02:15:11', '2019-09-22 02:15:11'),
-(12, 56, 54, NULL, '休み', NULL, '2019-09-17 00:00:00', '2019-09-17 00:00:00', NULL, NULL, '1', NULL, 1, '2019-09-22 02:15:18', '2019-09-22 02:15:18'),
-(13, 56, 54, NULL, '休み', NULL, '2019-09-18 00:00:00', '2019-09-18 00:00:00', NULL, NULL, '1', NULL, 1, '2019-09-22 02:15:23', '2019-09-22 02:15:23'),
-(14, 56, 54, NULL, '仕事', NULL, '2019-09-13 08:00:00', '2019-09-13 10:00:00', '08:00', '10:00', '1', NULL, 1, '2019-09-22 02:15:31', '2019-09-22 02:15:31'),
-(15, 56, 53, NULL, '仕事', NULL, '2019-09-22 22:00:00', '2019-09-22 00:00:00', '22:00', NULL, '1', NULL, 1, '2019-09-22 16:21:42', '2019-09-22 16:21:42'),
-(16, 56, 53, NULL, '仕事', NULL, '2019-10-01 00:30:00', '2019-10-01 00:00:00', '00:30', NULL, '1', NULL, 1, '2019-10-04 22:30:46', '2019-10-04 22:30:46'),
-(17, 56, 53, NULL, '仕事', NULL, '2019-10-02 00:00:00', '2019-10-02 00:00:00', '00:00', NULL, '1', NULL, 1, '2019-10-04 22:31:02', '2019-10-04 22:31:02'),
-(18, 56, 53, NULL, '仕事', NULL, '2019-10-03 00:00:00', '2019-10-03 00:00:00', '00:00', NULL, '1', NULL, 1, '2019-10-04 22:42:23', '2019-10-04 22:42:23'),
-(19, 56, 53, NULL, '仕事', NULL, '2019-10-12 00:00:00', '2019-10-12 00:00:00', '00:00', NULL, '1', NULL, 1, '2019-10-12 01:30:31', '2019-10-12 01:30:31'),
-(20, 56, 53, NULL, '仕事', NULL, '2019-10-15 20:30:00', '2019-10-15 00:00:00', '20:30', NULL, '1', NULL, 1, '2019-10-12 01:32:40', '2019-10-12 01:32:40');
-
 -- --------------------------------------------------------
 
 --
@@ -215,24 +169,11 @@ CREATE TABLE `coupons` (
 --
 
 INSERT INTO `coupons` (`id`, `shop_id`, `status`, `from_day`, `to_day`, `title`, `content`, `created`, `modified`) VALUES
-(11, 2, 0, '2019-02-05 00:00:00', '2019-02-13 00:00:00', 'タイトル１', 'タイトル１タイトル１', '2019-02-12 23:04:16', '2019-02-12 23:04:16'),
-(12, 57, 0, '2019-02-11 00:00:00', '2019-02-13 00:00:00', 'existsInexistsIn', 'existsInexistsInexistsIn', '2019-02-12 23:45:12', '2019-02-12 23:45:12'),
-(13, 57, 0, '2019-02-12 00:00:00', '2019-02-19 00:00:00', 'ｆｆｆｆ', 'ｆｄｆｄｆｄｄ', '2019-02-13 00:36:09', '2019-02-13 00:36:09'),
-(14, 57, 0, '2019-02-04 00:00:00', '2019-02-28 00:00:00', 'ｆｆｄｄｆ', 'ｆｄｆ', '2019-02-13 18:09:26', '2019-02-13 18:09:26'),
-(44, 38, 1, '2019-02-02 00:00:00', '2019-03-18 00:00:00', 'クーポンタイトル２クーポンタイトル２クーポンタイトル２', 'クーポン内容２クーポン内\r\nクーポン内容２クーポン内容２\r\nクーポン内容２クーポン内容２クーポン内容２クーポン', '2019-03-03 01:12:48', '2019-07-31 23:43:48'),
-(45, 38, 1, '2000-02-02 00:00:00', '2000-02-23 00:00:00', 'クーポン内容1クーポン内容1', 'クーポン内容1クーポン内容1', '0000-00-00 00:00:00', '2019-07-30 00:17:20'),
-(47, 0, 0, '2019-06-07 00:00:00', '2019-06-18 00:00:00', 'クーポン内容4クーポン内容4 クーポン内容4クーポン内容4 クーポン内容4クーポン内容4', 'クーポン内容4クーポン内容4\r\nクーポン内容4クーポン内容4\r\nクーポン内容4クーポン内容4', '2019-06-30 20:15:12', '2019-06-30 20:15:12'),
-(48, 0, 0, '2019-06-04 00:00:00', '2019-06-06 00:00:00', 'クーポン内容4クーポン内容4 クーポン内容4クーポン内容4 クーポン内容4クーポン内容4', 'クーポン内容4クーポン内容4\r\nクーポン内容4クーポン内容4\r\nクーポン内容4クーポン内容4', '2019-06-30 20:16:22', '2019-06-30 20:16:22'),
-(49, 0, 0, '2019-06-07 00:00:00', '2019-06-25 00:00:00', 'testt', 'tteete', '2019-06-30 21:28:28', '2019-06-30 21:28:28'),
-(50, 0, 0, '2019-02-01 00:00:00', '2019-03-19 00:00:00', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４', '2019-06-30 21:31:26', '2019-06-30 21:31:26'),
-(51, 0, 0, '2019-06-05 00:00:00', '2019-06-26 00:00:00', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４', '2019-06-30 21:33:07', '2019-06-30 21:33:07'),
-(52, 0, 0, '2019-06-05 00:00:00', '2019-06-26 00:00:00', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４', '2019-06-30 21:42:09', '2019-06-30 21:42:09'),
-(53, 0, 0, '2019-06-05 00:00:00', '2019-06-26 00:00:00', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４', '2019-06-30 21:42:18', '2019-06-30 21:42:18'),
-(54, 0, 0, '2019-06-05 00:00:00', '2019-06-26 00:00:00', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４クーポンタイトル４', '2019-06-30 21:43:16', '2019-06-30 21:43:16'),
-(55, 38, 1, '2019-06-01 00:00:00', '2019-06-26 00:00:00', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４', 'クーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４\r\nクーポンタイトル４クーポンタイトル４クーポンタイトル４', '2019-06-30 21:45:20', '2019-07-30 00:16:59'),
-(56, 38, 1, '2019-07-05 00:00:00', '2019-07-23 00:00:00', 'クーポン 編集押下処理クーポン 編集押下処理', 'クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編集押下処理クーポン 編', '2019-07-30 00:05:03', '2019-07-31 23:44:04'),
-(57, 54, 1, '2019-08-08 00:00:00', '2019-09-30 00:00:00', 'ウェルカムドリンク1杯サービス or 時間+10分サービス', '入店時にこちらのクーポンをお見せいただくと、ウェルカムドリンク1杯サービス、\r\nまたは時間＋１０分延長サービスになります。', '2019-08-08 23:31:00', '2019-08-08 23:31:18'),
-(58, 56, 1, '2019-08-10 00:00:00', '2020-08-10 00:00:00', '初回セット料金1000円OFF', '初回セット料金1000円OFFになります。\r\n是非ご利用ください!! スタッフ、キャスト一同心よりお待ちしております🙇‍♂️', '2019-08-10 17:31:09', '2019-09-18 19:06:52');
+(1, 1, 1, '2019-08-08 00:00:00', '2019-09-30 00:00:00', 'ウェルカムドリンク1杯サービス or 時間+10分サービス', '入店時にこちらのクーポンをお見せいただくと、ウェルカムドリンク1杯サービス、\r\nまたは時間＋１０分延長サービスになります。', '2019-08-08 23:31:00', '2019-08-08 23:31:18'),
+(2, 2, 1, '2019-08-10 00:00:00', '2020-08-10 00:00:00', '初回セット料金1000円OFF', '初回セット料金1000円OFFになります。\r\n是非ご利用ください!! スタッフ、キャスト一同心よりお待ちしております🙇‍♂️', '2019-08-10 17:31:09', '2019-09-18 19:06:52'),
+(3, 5, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', '😎新規オープンキャンペーンにつきまして😎', '来店の際始めに男子従業員に夜遊びを見たと伝えて頂くと、初回1時間4000円でご案内させていただきます!', '2019-11-21 00:28:36', '2019-11-21 00:28:43'),
+(4, 6, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', 'GIZA PALACEのクーポン１', 'ウェルカムドリンク1杯サービスor時間+10分サービス', '2019-11-21 19:53:04', '2019-11-21 19:53:09'),
+(5, 7, 0, '2019-11-01 00:00:00', '2020-11-01 00:00:00', 'New Club Mのクーポン１', 'ﾅｲﾌﾟﾗをご利用のお客様に限り、時間サービス+カラオケ&乾杯ビールサービス', '2019-11-21 20:13:52', '2019-11-21 20:13:52');
 
 -- --------------------------------------------------------
 
@@ -248,14 +189,6 @@ CREATE TABLE `developers` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `developers`
---
-
-INSERT INTO `developers` (`id`, `email`, `password`, `created`, `modified`) VALUES
-(2, 'dev3@gmail.com', '$2y$10$nL/kI91hjg11GHNPafsH0OVn9rq5TwMHYmmSEMSaIoGDu.Ua0sCp2', '2019-01-06 21:23:05', '2019-01-13 18:46:10'),
-(3, 'dev4@gmail.com', '$2y$10$XcLOtHKPdLvHofbqqbpX1u7/Wiosc5NaTjmHfRTIwEcMQ8Vunw896', '2019-01-11 21:19:43', '2019-01-13 18:47:16');
 
 -- --------------------------------------------------------
 
@@ -274,33 +207,6 @@ CREATE TABLE `diarys` (
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- テーブルのデータのダンプ `diarys`
---
-
-INSERT INTO `diarys` (`id`, `cast_id`, `title`, `content`, `dir`, `created`, `modified`) VALUES
-(144, 1, '山田　敏子２', '山田　敏子２\r\n山田　敏子２\r\n山田　敏子２', '/2019/07/25/20190725_203603', '2019-07-25 20:36:03', '2019-07-25 20:36:03'),
-(145, 1, '山田　敏子２山田　敏子２山田　敏子２山田　敏子２', '山田　敏子２山田　敏子２', '/2019/07/25/20190725_204108', '2019-07-25 20:41:09', '2019-07-25 20:41:09'),
-(146, 1, '山田　敏子２山田　敏子２山田　敏子２山田　敏子２', '山田　敏子２山田　敏子２', '/2019/07/25/20190725_204727', '2019-07-25 20:47:29', '2019-07-25 20:47:29'),
-(148, 1, 'OKIYORU GoOKIYORU Go', 'OKIYORU GoOKIYORU GoOKIYORU Go\r\nOKIYORU Go', '/2019/07/25/20190725_211615', '2019-07-25 21:16:17', '2019-07-29 00:56:51'),
-(149, 1, 'OKIYORU GoOKIYORU Go', 'OKIYORU ', '/2019/07/25/20190725_211740', '2019-07-25 21:17:41', '2019-07-27 20:30:29'),
-(151, 1, 'テスト投稿テスト投稿テスト投稿テスト投稿', 'テスト投稿テスト投稿テスト投稿テスト投稿テスト投稿😎😎😎😎😎\r\nテスト投稿テスト投稿😎😎😎😎😎😎😎😎😎😎😎\r\n😎😎\r\n😎テスト投稿テスト投稿テスト投稿テスト投稿テスト投稿テスト投稿😎😎😎😎😎\r\nテスト投稿テスト投稿😎😎😎😎😎😎😎😎😎😎😎\r\n😎😎\r\n😎テスト投稿', '/2019/07/26/20190726_231704', '2019-07-26 23:17:04', '2019-08-11 22:40:38'),
-(152, 54, '初投稿でーす！', '初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎', '/2019/08/11/20190811_165616', '2019-08-11 16:56:16', '2019-08-11 22:30:15'),
-(153, 54, '投稿２回目ー', '初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿', '/2019/08/11/20190811_225921', '2019-08-11 22:59:21', '2019-09-08 21:25:34'),
-(154, 1, '久しぶりの投稿ー！', '久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー久しぶりの投稿ー😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥😥', '/2019/08/11/20190811_230316', '2019-08-11 23:03:16', '2019-08-14 00:32:34'),
-(155, 1, '日記😎日記😎日記😎日記😎日', '日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎日記😎', '/2019/08/13/20190813_232147', '2019-08-13 23:21:48', '2019-08-13 23:21:48'),
-(156, 1, '銀次郎に行ってきた！', 'ハイボールの美味い店に行ってきたよー🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺🍺😥🍺\r\n', '/2019/08/14/20190814_002817', '2019-08-14 00:28:17', '2019-08-14 15:57:25'),
-(157, 1, 'shah', 'ちやのゆならゆひやむなり\r\n', '/2019/08/14/20190814_005025', '2019-08-14 00:50:25', '2019-08-14 21:28:21'),
-(158, 1, 'てｓってｔｔｔ', 'shehshdhdudj\r\n\r\n', '/2019/08/14/20190814_144755', '2019-08-14 14:47:55', '2019-08-14 20:46:48'),
-(159, 1, 'test', 'gssdq\r\n\r\n\r\nsqzaa', '/2019/08/14/20190814_145318', '2019-08-14 14:53:18', '2019-08-14 20:42:38'),
-(160, 1, 'tet', 'tets', '/2019/08/14/20190814_213009', '2019-08-14 21:30:09', '2019-08-14 21:30:09'),
-(161, 1, 'fd', 'fd', '/2019/08/14/20190814_213231', '2019-08-14 21:32:31', '2019-08-14 21:32:31'),
-(162, 1, 'fdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdf', 'DfESｄｆｄ', '/2019/08/14/20190814_234916', '2019-08-14 23:49:16', '2019-08-14 23:49:16'),
-(163, 35, 'アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺', 'アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな☺\r\n\r\n\r\nアリーナ所属なな☺アリーナ所属なな☺アリーナ所属なな', '/2019/08/15/20190815_035620', '2019-08-15 03:56:20', '2019-08-15 21:10:01'),
-(166, 53, '初投稿２！初投稿２！初投稿２！初投稿２！初投稿２！', '初投稿２！初投稿２！初投稿２！初投稿２！', '/2019/09/03/20190903_211229', '2019-09-03 21:12:29', '2019-09-03 21:12:29'),
-(167, 54, '投稿３回目ー', '投稿３回目ー\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎初投稿初投稿初投稿初投稿初投稿初投稿\r\n初投稿初投稿😎\r\n\r\n初投稿初投稿初投稿初投稿', '/2019/09/28/20190928_214908', '2019-09-28 21:49:09', '2019-09-28 21:49:09'),
-(168, 53, '初投稿３！初投稿３！', '初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！初投稿３！', '/2019/10/05/20191005_171125', '2019-10-05 17:11:25', '2019-10-05 17:11:25');
-
 -- --------------------------------------------------------
 
 --
@@ -316,13 +222,6 @@ CREATE TABLE `diary_likes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `diary_likes`
---
-
-INSERT INTO `diary_likes` (`id`, `diary_id`, `cast_id`, `user_id`, `created`, `modified`) VALUES
-(1, 164, 53, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -354,9 +253,9 @@ CREATE TABLE `jobs` (
   `work_time_hosoku` varchar(50) DEFAULT NULL,
   `from_age` varchar(2) DEFAULT NULL,
   `to_age` varchar(2) DEFAULT NULL,
-  `qualification_hosoku` varchar(50) DEFAULT NULL,
+  `qualification_hosoku` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL,
   `holiday` varchar(50) DEFAULT NULL,
-  `holiday_hosoku` varchar(50) DEFAULT NULL,
+  `holiday_hosoku` varchar(50) CHARACTER SET utf8mb4 DEFAULT NULL,
   `treatment` varchar(255) DEFAULT NULL,
   `pr` varchar(400) CHARACTER SET utf8mb4 DEFAULT NULL,
   `tel1` varchar(15) DEFAULT NULL,
@@ -372,16 +271,13 @@ CREATE TABLE `jobs` (
 --
 
 INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `work_to_time`, `work_time_hosoku`, `from_age`, `to_age`, `qualification_hosoku`, `holiday`, `holiday_hosoku`, `treatment`, `pr`, `tel1`, `tel2`, `email`, `lineid`, `created`, `modified`) VALUES
-(1, 38, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, 'work_time_hosoku', '21', '24', 'qualification_hosoku', '水,木,金,日', 'holiday_hosoku', '送迎あり,個人ロッカーあり', 'PR文PR文PR文PR文PR文PR文PR文\r\nPR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文PR文\r\nPR文PR文PR文PR文PR文PR文PR文', '09037968838', '08037968838', 't.takuma830@gmail.com', 'testLINEID', '2019-03-20 00:06:19', '2019-08-10 11:38:08'),
-(2, 39, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
-(101, 54, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, '時間相談に応じます 1日2～3時間の勤務もOKです', '20', '30', '※初心者大歓迎', '土', '	勤務日数はおまかせします。', '体験入店あり,日払い可,レンタル衣装あり,ノルマなし,未経験者歓迎,各種バックあり,送迎あり,経験者優遇,ドレス・制服貸与あり', '浦添エリアの人気店!! 【体験保証時給3,000円】 未経験者大歓迎!在籍中キャストのほとんどが掛け持ちや週1～3出勤など 自分に合ったスタイルで働いております。貴女も是非「体験入店」でお試し下さい! 掛け持ちオッケー(掛け持ちの方も多数在籍してます) 即日体験入店OK、スタッフ専用駐車場完備(30台) お酒飲まなくてもOK(車で出勤して飲まずにお仕事する方も多いですよ!) 送迎もあります!', '09097874621', '0988786792', NULL, 'kaitok0502', '2019-08-07 23:56:04', '2019-08-10 14:50:33'),
-(102, 55, 'ガールズバー', 'カウンターレディ', '20:00:00', NULL, '※時間相談に応じます、３ｈ～の短時間でもOK', '18', '30', '※初心者・学生・主婦・シングルマザー大歓迎', NULL, '週１日～勤務ＯＫ、週末のみでもＯＫ', '日払い可,各種バックあり,ノルマなし,送迎あり,未経験者歓迎', '楽しく働くならここ！ まだまだオープンしたばかりのガールズバーです♪ 時給１,２００円～１,５００円以上！ 完全日払い制!! 送迎有り（中南部） お友達同士の応募、一日体験もオッケイです♪ 気軽にお問い合わせください♪＼(^o^)／', '09068653218', '', NULL, '', '2019-08-10 15:16:08', '2019-08-10 16:29:44'),
-(105, 63, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-08-18 19:24:23', '2019-08-18 19:24:23'),
-(106, 56, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, '21:00～LASTまでの間でお好きな時間', '18', '35', '（高校生不可）', NULL, '', '体験入店あり,お友達と一緒に面接可,未経験者歓迎,週末のみ可,ノルマなし,レンタル衣装あり,週１から可,大型連休あり,モノレール駅からすぐ,日払い可,送迎あり,給与支給2回,ヘアメイクあり,各種バックあり,経験者優遇,ドレス・制服貸与あり,個人ロッカーあり,友達紹介料あり', '初めまして、店長の仁科です。\r\n求人を見ていただきありがとうございます(^^)\r\n少なからずこのホームページを開いたこの瞬間は期待と不安が入り混じっているかと思います！\r\nまた、未経験の方はさらに一歩が踏み出せない、なんてこともありますよね！\r\n僕自身も同じ経験がありますので一歩踏み出す勇気がどれほど大変なのかわかります！\r\nだからこそ一度勇気を出して電話を下さい！\r\nしっかりした対応、サポートをさせていただきますのでどんな小さなことでもお気軽に問い合わせのほうをしてきてください！\r\nお待ちしています(^_^)', '0120596307', '', NULL, '', '0000-00-00 00:00:00', '2019-08-25 16:30:11'),
-(107, 64, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-09 14:41:21', '2019-11-09 14:41:21'),
-(108, 65, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-11 20:48:34', '2019-11-11 20:48:34'),
-(109, 66, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-12 21:27:54', '2019-11-12 21:27:54'),
-(110, 67, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-12 23:36:34', '2019-11-12 23:36:34');
+(1, 1, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, '時間相談に応じます 1日2～3時間の勤務もOKです', '20', '30', '※初心者大歓迎', '土', '	勤務日数はおまかせします。', '体験入店あり,日払い可,レンタル衣装あり,ノルマなし,未経験者歓迎,各種バックあり,送迎あり,経験者優遇,ドレス・制服貸与あり', '浦添エリアの人気店!! 【体験保証時給3,000円】 未経験者大歓迎!在籍中キャストのほとんどが掛け持ちや週1～3出勤など 自分に合ったスタイルで働いております。貴女も是非「体験入店」でお試し下さい! 掛け持ちオッケー(掛け持ちの方も多数在籍してます) 即日体験入店OK、スタッフ専用駐車場完備(30台) お酒飲まなくてもOK(車で出勤して飲まずにお仕事する方も多いですよ!) 送迎もあります!', '09097874621', '0988786792', NULL, 'kaitok0502', '2019-08-07 23:56:04', '2019-08-10 14:50:33'),
+(2, 2, 'ガールズバー', 'カウンターレディ', '20:00:00', NULL, '※時間相談に応じます、３ｈ～の短時間でもOK', '18', '30', '※初心者・学生・主婦・シングルマザー大歓迎', NULL, '週１日～勤務ＯＫ、週末のみでもＯＫ', '日払い可,各種バックあり,ノルマなし,送迎あり,未経験者歓迎', '楽しく働くならここ！ まだまだオープンしたばかりのガールズバーです♪ 時給１,２００円～１,５００円以上！ 完全日払い制!! 送迎有り（中南部） お友達同士の応募、一日体験もオッケイです♪ 気軽にお問い合わせください♪＼(^o^)／', '09068653218', '', NULL, '', '2019-08-10 15:16:08', '2019-08-10 16:29:44'),
+(3, 3, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, '21:00～LASTまでの間でお好きな時間', '18', '35', '（高校生不可）', NULL, '', '体験入店あり,お友達と一緒に面接可,未経験者歓迎,週末のみ可,ノルマなし,レンタル衣装あり,週１から可,大型連休あり,モノレール駅からすぐ,日払い可,送迎あり,給与支給2回,ヘアメイクあり,各種バックあり,経験者優遇,ドレス・制服貸与あり,個人ロッカーあり,友達紹介料あり', '初めまして、店長の仁科です。\r\n求人を見ていただきありがとうございます(^^)\r\n少なからずこのホームページを開いたこの瞬間は期待と不安が入り混じっているかと思います！\r\nまた、未経験の方はさらに一歩が踏み出せない、なんてこともありますよね！\r\n僕自身も同じ経験がありますので一歩踏み出す勇気がどれほど大変なのかわかります！\r\nだからこそ一度勇気を出して電話を下さい！\r\nしっかりした対応、サポートをさせていただきますのでどんな小さなことでもお気軽に問い合わせのほうをしてきてください！\r\nお待ちしています(^_^)', '0120596307', '', NULL, '', '0000-00-00 00:00:00', '2019-08-25 16:30:11'),
+(4, 4, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, '', '20', '30', '18歳～30歳位迄　※経験者大歓迎　※未経験者大歓迎', NULL, '', '体験入店あり,お友達と一緒に面接可,週末のみ可,週１から可,大型連休あり,日払い可,各種バックあり,友達紹介料あり,未経験者歓迎,ノルマなし,モノレール駅からすぐ,送迎あり,ヘアメイクあり,経験者優遇,ドレス・制服貸与あり,個人ロッカーあり', '体験入店時給000円～5000円以上!!\r\n時給3000円～5000円以上!!\r\n＋売上バック10～20%!!ドリンクバック、ボトルバック等、各種高額バック有り!!\r\n新しい豪華な店内でお仕事出来ます♪\r\nお酒が飲めないコでも全然大丈夫だし、未経験のコは自分のペースでゆっくりお仕事していってください!\r\n\r\nキャストさんが働き易い環境作りを準備してお待ちしています。心機一転、一緒にがんばって行きましょう!!\r\nわからない事や不安な事は遠慮なく聞いてくださいね！そして当店では頑張る貴女を応援します。', '09097836829', '0988617771', NULL, 'agarie0823', '2019-11-20 23:54:43', '2019-11-21 00:12:49'),
+(5, 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-21 00:25:37', '2019-11-21 00:25:37'),
+(6, 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-21 19:50:48', '2019-11-21 19:50:48'),
+(7, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-21 20:11:20', '2019-11-21 20:11:20');
 
 -- --------------------------------------------------------
 
@@ -591,13 +487,13 @@ CREATE TABLE `owners` (
 --
 
 INSERT INTO `owners` (`id`, `name`, `role`, `tel`, `email`, `password`, `gender`, `age`, `dir`, `remember_token`, `status`, `created`, `modified`) VALUES
-(57, '', 'owner', '', 'okiyoru99@gmail.com', '$2y$10$vBxr/LLpjQ07C1LpN2bvWuJ8LNVy2vtvpx1qZgd1VousDjoN83qVq', 0, '', '00005', NULL, 1, '2019-02-12 21:42:22', '2019-03-15 18:15:38'),
-(92, '', 'owner', '', 'okiyoru2@gmail.com', '$2y$10$K0knx7GKbgg8BIYt5sUZ7.1KSX2s2sL/GuNT5H.WalyeWiq09JF0O', 0, '', '00002', NULL, 1, '2019-08-07 23:50:33', '2019-08-07 23:55:25'),
-(93, '', 'owner', '', 'okiyoru3@gmail.com', '$2y$10$JQueljItW8sT42R1z2weG.Jc/z/ziO8AuoUrLXvAk9NjxQXw7hscG', 0, '', '00001', NULL, 1, '2019-08-10 15:10:55', '2019-08-10 15:16:07'),
-(94, '鈴木太郎', 'owner', '09012341234', 'okiyoru1@gmail.com', '$2y$10$M68eGdvgIadmxzRw6.1EHu5gEN3fA7DShvvz1KjGTzBbR/giYsd6O', 1, '36', '00002', NULL, 1, '2019-08-10 16:55:43', '2019-09-09 23:26:05'),
-(98, '鈴木次郎', 'owner', '09012341234', 'okiyoru99@gmail.com', '$2y$10$PojdyaiQojD22nYfrmObv.H3ARmAWV3PTZK.6qGkjOEE..1y7yCm6', 1, '33', '00001', NULL, 1, '2019-08-18 17:07:25', '2019-08-18 22:17:22'),
-(99, 'ダミー', 'owner', '99999999999', 'dammy@gmail.com', 'dammy', 1, '99', '99999', NULL, 1, '2019-08-18 17:07:25', '2019-08-18 22:17:22'),
-(161, 'tomori', 'owner', '09012341234', 't.takuma830@gmail.com', '$2y$10$8YV5ZGUdRFRx3cKzcjNWTu70IBAiMDRthUByZOuxquXm8255VMIRq', 1, '29', '00009', NULL, 1, '2019-11-12 23:24:57', '2019-11-12 23:25:24');
+(1, 'ARENA -アリーナ-  オーナー', 'owner', '09012341234', 'okiyoru99@gmail.com', '$2y$10$K0knx7GKbgg8BIYt5sUZ7.1KSX2s2sL/GuNT5H.WalyeWiq09JF0O', 1, '30', '00001', NULL, 1, '2019-08-07 23:50:33', '2019-08-07 23:55:25'),
+(2, 'フェリス オーナー', 'owner', '09012341234', 'okiyoru99@gmail.com', '$2y$10$HlUiI8DOHGKWFyOOhgxcTe.jie/qWlDAA3hp/p3I7yecULEarklL.', 1, '30', '00002', NULL, 1, '2019-08-10 15:10:55', '2019-11-17 13:42:55'),
+(3, 'club 琉球 オーナー', 'owner', '09012341234', 'okiyoru99@gmail.com', '$2y$10$M68eGdvgIadmxzRw6.1EHu5gEN3fA7DShvvz1KjGTzBbR/giYsd6O', 1, '30', '00003', NULL, 1, '2019-08-10 16:55:43', '2019-09-09 23:26:05'),
+(4, 'Shuri -シュリ- オーナー', 'owner', '09012341234', 'okiyoru99@gmail.com', '$2y$10$oHZcgvU1lfAUUPtmM8B8LurxPaeNjgzFTh4RjVtyumn6LxmZycFXW', 1, '30', '00004', NULL, 1, '2019-11-20 23:51:45', '2019-11-20 23:52:59'),
+(5, 'club Petit -プティ-', 'owner', '09012341234', 'okiyoru2@gmail.com', '$2y$10$NC5kjf30ZxtvY1NKkrvvteT7bqZTPBZganLpnqNdwrlXKmoDWdEKe', 1, '30', '00005', NULL, 1, '2019-11-21 00:23:05', '2019-11-21 00:23:26'),
+(6, 'GIZA PALACE -ギザパレス- オーナー', 'owner', '09012341234', 'okiyoru3@gmail.com', '$2y$10$UGdfqZx38e8tQ4Qafw9ro.AOYBEuEf0ZfRHJh6LwMTcJOIFaRCMpi', 1, '30', '00006', NULL, 1, '2019-11-21 19:46:57', '2019-11-21 19:49:04'),
+(7, 'New Club M -エム- オーナー', 'owner', '09012341234', 'okiyoru1@gmail.com', '$2y$10$.KD/sPE6iXYYt6Lns8MnceMSKMA8AyrN.vtu163udkmz1OwTTcMIi', 1, '30', '00007', NULL, 1, '2019-11-21 20:05:56', '2019-11-21 20:09:59');
 
 -- --------------------------------------------------------
 
@@ -620,11 +516,13 @@ CREATE TABLE `servece_plans` (
 --
 
 INSERT INTO `servece_plans` (`id`, `owner_id`, `current_plan`, `previous_plan`, `created`, `modified`) VALUES
-(1, 156, 'light', 'light', '2019-11-11 18:36:08', '2019-11-11 18:36:08'),
-(2, 158, 'light', 'light', '2019-11-12 21:10:36', '2019-11-12 21:10:36'),
-(3, 159, 'light', 'light', '2019-11-12 23:20:36', '2019-11-12 23:20:36'),
-(4, 160, 'light', 'light', '2019-11-12 23:22:50', '2019-11-12 23:22:50'),
-(5, 161, 'light', 'light', '2019-11-12 23:25:27', '2019-11-12 23:25:27');
+(1, 1, 'light', 'light', '2019-11-11 18:36:08', '2019-11-11 18:36:08'),
+(2, 2, 'light', 'light', '2019-11-12 21:10:36', '2019-11-12 21:10:36'),
+(3, 3, 'light', 'light', '2019-11-12 23:20:36', '2019-11-12 23:20:36'),
+(4, 4, 'light', 'light', '2019-11-20 23:53:00', '2019-11-20 23:53:00'),
+(5, 5, 'light', 'light', '2019-11-21 00:23:26', '2019-11-21 00:23:26'),
+(6, 6, 'light', 'light', '2019-11-21 19:49:04', '2019-11-21 19:49:04'),
+(7, 7, 'light', 'light', '2019-11-21 20:09:59', '2019-11-21 20:09:59');
 
 -- --------------------------------------------------------
 
@@ -640,13 +538,13 @@ CREATE TABLE `shops` (
   `genre` varchar(255) DEFAULT NULL,
   `dir` varchar(255) DEFAULT NULL,
   `name` varchar(40) DEFAULT NULL,
-  `catch` varchar(100) DEFAULT NULL,
+  `catch` varchar(100) CHARACTER SET utf8mb4 DEFAULT NULL,
   `tel` varchar(15) DEFAULT NULL,
   `staff` varchar(255) DEFAULT NULL,
   `bus_from_time` time DEFAULT NULL,
   `bus_to_time` time DEFAULT NULL,
-  `bus_hosoku` varchar(255) DEFAULT NULL,
-  `system` varchar(600) DEFAULT NULL,
+  `bus_hosoku` varchar(255) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `system` varchar(900) CHARACTER SET utf8mb4 DEFAULT NULL,
   `credit` varchar(255) DEFAULT NULL,
   `pref21` varchar(3) DEFAULT NULL,
   `addr21` varchar(10) DEFAULT NULL,
@@ -660,27 +558,13 @@ CREATE TABLE `shops` (
 --
 
 INSERT INTO `shops` (`id`, `owner_id`, `area`, `genre`, `dir`, `name`, `catch`, `tel`, `staff`, `bus_from_time`, `bus_to_time`, `bus_hosoku`, `system`, `credit`, `pref21`, `addr21`, `strt21`, `created`, `modified`) VALUES
-(38, 57, 'naha', 'snack', '00005', 'OKIYORUGO', '沖縄県浦添市にある総在籍数70名を誇る県内最大級時間制クラブ。\r\nエリアNo.1クラスの実績と自信。接待向けのお店。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '20:00:00', '03:00:00', '※日曜日も営業しております！', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'AmericanExpress,Diners,VISA,MasterCard', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-08-10 13:49:39'),
-(39, 2147483647, 'naha', 'cabacula', '00006', '那覇店舗名１', '那覇のキャバクラをお探しなら那覇店舗名１\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(40, 2147483647, 'naha', 'cabacula', '00007', '那覇店舗名２', '那覇のキャバクラをお探しなら那覇店舗名２\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(41, 2147483647, 'naha', 'cabacula', '00008', '那覇店舗名３', '那覇のキャバクラをお探しなら那覇店舗名３\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(42, 2147483647, 'naha', 'cabacula', '00005', '那覇店舗名４', '那覇のキャバクラをお探しなら那覇店舗名４\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(43, 2147483647, 'naha', 'girlsbar', '00005', '那覇店舗名５', '那覇のガールズバーをお探しなら那覇店舗名５\r\n時間制・飲み放題で安心のガールズバーです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(44, 2147483647, 'naha', 'snack', '00005', '那覇店舗名６', '那覇のスナックをお探しなら那覇店舗名６\r\n時間制・飲み放題で安心のスナックです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(45, 2147483647, 'miyakojima', 'cabacula', '00005', '宮古島店舗名１', '宮古島のキャバクラをお探しなら宮古島店舗名１\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(46, 2147483647, 'miyakojima', 'cabacula', '00005', '宮古島店舗名２', '宮古島のキャバクラをお探しなら宮古島店舗名２\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(47, 2147483647, 'miyakojima', 'cabacula', '00005', '宮古島店舗名３', '宮古島のキャバクラをお探しなら宮古島店舗名３\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(48, 2147483647, 'miyakojima', 'cabacula', '00005', '宮古島店舗名４', '宮古島のキャバクラをお探しなら宮古島店舗名４\r\n時間制・飲み放題で安心のキャバクラです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(49, 2147483647, 'miyakojima', 'girlsbar', '00005', '宮古島店舗名５', '宮古島のガールズバーをお探しなら宮古島店舗名５\r\n時間制・飲み放題で安心のガールズバーです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(50, 2147483647, 'miyakojima', 'snack', '00005', '宮古島店舗名６', '宮古島のスナックをお探しなら宮古島店舗名６\r\n時間制・飲み放題で安心のスナックです。', '09012341234', '全国各地から集まった20歳～30歳の明るい女のコ多数', '14:30:00', '20:00:00', '※日曜日も営業しております。', '時間制 1時間飲み放題\r\nお一人様（税・サービス料込）\r\n￥3,000（3名様より）￥4,000（2名様）￥6,000（1名様）\r\n★ＶＩＰルーム、カラオケ完備', 'MasterCard,Diners,AmericanExpress,VISA,JCB', '沖縄県', '浦添市', '〇〇〇ＸＸ－ＸＸ－ＸＸ', '2019-02-12 21:42:56', '2019-05-14 19:44:32'),
-(54, 92, 'urasoe', 'club', '00001', 'ARENA -アリーナ-', '沖縄県浦添市にある総在籍数70名を誇る県内最大級時間制クラブ。\r\nエリアNo.1クラスの実績と自信。接待向けのお店', '09097874621', '', '22:00:00', '04:00:00', '・(金・土・祝日前日)22:00～05:00 ・年中無休', '★SET料金★\r\n・御1人様	70分/10,000円\r\n・2名様以上	70分/5,000円\r\n・御延長	上記同額\r\n★指名★\r\n・本指名	1,000円\r\n・場内指名	1,000円\r\n★ドリンク★\r\n・ビール	1,000円(グラス1杯)\r\n・カクテル	各1,000円(グラス1杯)\r\n・ワイン	各1,000円(グラス1杯)\r\n★ボトル★\r\n・泡盛	3,000円～\r\n・焼酎	3,000円～\r\n・ワイン	8,000円～\r\n・ウィスキー	15,000円\r\n・シャンパン	8,000円～\r\n★VIP Room★\r\n室料	20,000円\r\n★その他★\r\n・団体	～100名まで可', 'VISA,JCB,MasterCard,AmericanExpress', '沖縄県', '浦添市', '城間3-5-1 MSシュタークビル2F', '2019-08-07 23:55:27', '2019-08-08 23:26:45'),
-(55, 93, 'urasoe', 'girlsbar', '00001', 'フェリス', 'カラオケもダーツも楽しめちゃうイベント盛りだくさんのガールズバー♡', '09068653218', '', '21:00:00', NULL, '不定休', '★ブロンズコース♡７０分♡	￥２,５００円★\r\n泡盛／かりゆし・瑞穂　酎ハイ／レモン・緑茶・ウーロン　カクテル／ピーチウーロン・カルアミルク・カシスオレンジ・カシスウーロン・カシスソーダ・モスコミュール・ジントニック・カシスミルク　ソフトドリンク/コーラ・オレンジ・ウーロン茶・緑茶\r\n★シルバーコース♡７０分♡	￥３,０００円★\r\nブロンズメニュー ＋ 泡盛／菊ブラ・久米仙・残波・残黒　ビール　焼酎／鏡月　カクテル／サングリア\r\n★ゴールドコース♡７０分♡	￥３,５００円★\r\nブロンズメニュー・シルバーメニュー ＋ 泡盛／ＶＩＰゴールド・北谷長老・琉球王朝　焼酎／二階堂・吉四六\r\n★ＳｔａｆＤｒｉｎｋ★\r\nＡＬＬ １,０００円\r\n★カラオケ１曲★\r\n２００円\r\n★歌い放題（時間内）★\r\n１,０００円\r\n★女性グールプのみ★\r\n１,０００円 ＯＦＦ\r\n★ダーツ投げ放題★\r\n５００円 \r\n★時間無制限 飲み放題★\r\n５,０００円 \r\n★単品メニュー５,０００円～有り★', 'MasterCard,VISA', '沖縄県', '浦添市', '経塚518 テナントビルてぃーだ 2F', '2019-08-10 15:16:07', '2019-08-10 15:52:53'),
-(56, 94, 'naha', 'cabacula', '00002', 'Club琉球', '那覇市松山にGRANDOPEN!!\r\nKING of RESORT!! CLUB 琉球', '0989757973', '', '21:00:00', NULL, '月曜定休日', '★1time 60min★\r\n・保証	５，０００円\r\n・マンツーマン	８，０００円\r\n・ＶＩＰ	１，０００円\r\n・指名料	１，０００円\r\n・場内指名料	１，０００円\r\n・ＳＣ	１５％　（税込）\r\n・PRIVATE ROOM　１５，０００円（ＳＣ　２５％　税込）\r\n・SECRET ROOM　２０，０００円（ＳＣ　２５％　税込）\r\n★Free Drink★\r\n・MAIN Floor	ビール、泡盛、焼酎、ソフトドリンク各種\r\n・VIP Floor	ビール、ハイボール、泡盛(古酒)、焼酎、ソフトドリンク各種', 'MasterCard,VISA,JCB,AmericanExpress,Diners', '沖縄県', '那覇市', '松山2-9-17 カーニバルビル4F 5F', '2019-08-10 16:58:22', '2019-10-05 12:08:16'),
-(63, 98, 'ginowan', 'girlsbar', '00001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-08-18 19:24:23', '2019-08-18 19:24:23'),
-(64, 152, 'ishigakijima', 'cabacula', '00001', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-09 14:41:20', '2019-11-09 14:41:20'),
-(65, 156, 'naha', 'girlsbar', '00002', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-11 20:48:21', '2019-11-11 20:48:21'),
-(66, 158, 'urasoe', 'snack', '00001', 'ナイプラ', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-12 21:27:54', '2019-11-12 21:27:54'),
-(67, 161, 'naha', 'girlsbar', '00003', 'tenpo1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-12 23:36:32', '2019-11-12 23:36:32');
+(1, 1, 'urasoe', 'club', '00001', 'ARENA -アリーナ-', '沖縄県浦添市にある総在籍数70名を誇る県内最大級時間制クラブ。\r\nエリアNo.1クラスの実績と自信。接待向けのお店', '09097874621', '', '22:00:00', '04:00:00', '・(金・土・祝日前日)22:00～05:00 ・年中無休', '★SET料金★\r\n・御1人様	70分/10,000円\r\n・2名様以上	70分/5,000円\r\n・御延長	上記同額\r\n★指名★\r\n・本指名	1,000円\r\n・場内指名	1,000円\r\n★ドリンク★\r\n・ビール	1,000円(グラス1杯)\r\n・カクテル	各1,000円(グラス1杯)\r\n・ワイン	各1,000円(グラス1杯)\r\n★ボトル★\r\n・泡盛	3,000円～\r\n・焼酎	3,000円～\r\n・ワイン	8,000円～\r\n・ウィスキー	15,000円\r\n・シャンパン	8,000円～\r\n★VIP Room★\r\n室料	20,000円\r\n★その他★\r\n・団体	～100名まで可', 'VISA,JCB,MasterCard,AmericanExpress', '沖縄県', '浦添市', '城間3-5-1 MSシュタークビル2F', '2019-08-07 23:55:27', '2019-08-08 23:26:45'),
+(2, 2, 'urasoe', 'girlsbar', '00001', 'フェリス', 'カラオケもダーツも楽しめちゃうイベント盛りだくさんのガールズバー♡', '09068653218', '', '21:00:00', NULL, '不定休', '★ブロンズコース♡７０分♡	￥２,５００円★\r\n泡盛／かりゆし・瑞穂　酎ハイ／レモン・緑茶・ウーロン　カクテル／ピーチウーロン・カルアミルク・カシスオレンジ・カシスウーロン・カシスソーダ・モスコミュール・ジントニック・カシスミルク　ソフトドリンク/コーラ・オレンジ・ウーロン茶・緑茶\r\n★シルバーコース♡７０分♡	￥３,０００円★\r\nブロンズメニュー ＋ 泡盛／菊ブラ・久米仙・残波・残黒　ビール　焼酎／鏡月　カクテル／サングリア\r\n★ゴールドコース♡７０分♡	￥３,５００円★\r\nブロンズメニュー・シルバーメニュー ＋ 泡盛／ＶＩＰゴールド・北谷長老・琉球王朝　焼酎／二階堂・吉四六\r\n★ＳｔａｆＤｒｉｎｋ★\r\nＡＬＬ １,０００円\r\n★カラオケ１曲★\r\n２００円\r\n★歌い放題（時間内）★\r\n１,０００円\r\n★女性グールプのみ★\r\n１,０００円 ＯＦＦ\r\n★ダーツ投げ放題★\r\n５００円 \r\n★時間無制限 飲み放題★\r\n５,０００円 \r\n★単品メニュー５,０００円～有り★', 'MasterCard,VISA', '沖縄県', '浦添市', '経塚518 テナントビルてぃーだ 2F', '2019-08-10 15:16:07', '2019-08-10 15:52:53'),
+(3, 3, 'naha', 'cabacula', '00001', 'Club 琉球', '那覇市松山にGRANDOPEN!!\r\nKING of RESORT!! CLUB 琉球', '0989757973', '', '21:00:00', NULL, '月曜定休日', '★1time 60min★\r\n・保証	５，０００円\r\n・マンツーマン	８，０００円\r\n・ＶＩＰ	１，０００円\r\n・指名料	１，０００円\r\n・場内指名料	１，０００円\r\n・ＳＣ	１５％　（税込）\r\n・PRIVATE ROOM　１５，０００円（ＳＣ　２５％　税込）\r\n・SECRET ROOM　２０，０００円（ＳＣ　２５％　税込）\r\n★Free Drink★\r\n・MAIN Floor	ビール、泡盛、焼酎、ソフトドリンク各種\r\n・VIP Floor	ビール、ハイボール、泡盛(古酒)、焼酎、ソフトドリンク各種', 'MasterCard,VISA,JCB,AmericanExpress,Diners', '沖縄県', '那覇市', '松山2-9-17 カーニバルビル4F 5F', '2019-08-10 16:58:22', '2019-10-05 12:08:16'),
+(4, 4, 'naha', 'cabacula', '00002', 'Shuri -シュリ-', NULL, '0988634729', '', '21:00:00', NULL, '定休日　年中無休', '・2名様以上\r\n　21:00～LAST（60min）￥5000\r\n・1名様\r\n　21:00～LAST（60min）￥10000\r\n\r\n・税金・サービス料	20％\r\n・目安予算 	￥5,100～￥8,000\r\n・VIP料金	￥20,000\r\n・指名料	￥1000\r\n・場内指名料	￥1000\r\n・延長方法	確認有り\r\n・予約	可\r\n・お気軽にお電話下さい。\r\n・服装	スーツ\r\n・カラオケ	有り\r\n・駐車場	無し', 'VISA,JCB,Diners,MasterCard', '沖縄県', '那覇市', '松山1-4-8 フラワードリームビル2F', '2019-11-20 23:54:43', '2019-11-21 00:07:56'),
+(5, 5, 'naha', 'cabacula', '00003', 'club Petit -プティ-', '安心!信用!を第1にお客様が心から楽しめる空間をご用意させて頂いています!\r\n個性豊かな女の子ばかりなので必ずご希望にあった女の子が見つかるはず!^_^\r\n松山で飲む際は是非CLUBプティへ!', '0989880690', '', '21:00:00', NULL, '', '・お二人様以上\r\n　21時〜21時59分 保証 5000円\r\n　22時〜ラスト 保証 6000円\r\n　Single Charge マンツー 3000円\r\n・お一人様\r\n　1セット60分 8000円\r\n　TAX15%\r\n・団体	～20名まで可\r\n・朝キャバ	無し\r\n・カラオケ	有り', '', '沖縄県', '那覇市', '松山2-16-16 K1ビル 5階', '2019-11-21 00:25:36', '2019-11-21 00:31:23'),
+(6, 6, 'naha', 'snack', '00001', 'GIZA PALACE -ギザパレス-', 'ステージのあるお店で楽しい時間を過ごしませんか❔', '0988661159', '', '20:00:00', NULL, '休日 年中無休', '★お1人様(60分)\r\n　10000円\r\n★お2人様以上(60分)\r\n　5000円\r\n★指名料\r\n　1000円\r\n★パーティープランのご予約承ります\r\n　[2次会・親睦会・バースデー等]\r\n　(2時間半飲み放題)カラオケ有り\r\n　男性 3,000円\r\n　女性 2,500円\r\n\r\n■カクテル\r\n■ハイボール\r\n■泡盛\r\n■ソフトドリンク\r\n\r\n★VIPルーム・個室もございます!\r\n\r\n　お問い合わせは\r\n　090-3792-8415[仲里]\r\n　までお気軽にご連絡下さい', '', '沖縄県', '那覇市', 'おもろまち4-8-9 フェイスビル4F', '2019-11-21 19:50:48', '2019-11-21 19:57:34'),
+(7, 7, 'okinawashi', 'cabacula', '00001', 'New Club M -エム-', NULL, '08064901426', '', '22:00:00', NULL, '定休日	日曜', 'お一人様 8,000円×60分\r\nお二人様以上1人4,000円×60分\r\n･指名料 1,000円\r\n･ｶﾗｵｹ 1曲200円\r\n･飲み放題ｼｽﾃﾑ\r\n\r\n◆ﾌﾘｰﾄﾞﾘﾝｸ\r\n･ﾊｳｽﾎﾞﾄﾙ(泡盛)\r\n･ｳｰﾛﾝ茶\r\n･緑茶\r\n･ﾌﾞﾗｯｸｺｰﾋｰ\r\n･ｽﾄﾚｰﾄﾃｨ\r\n\r\n★ｵﾌﾟｼｮﾝ★\r\n◆ｶｸﾃﾙ･ﾋﾞｰﾙ\r\n･ﾋﾞｰﾙ1,000円\r\n･ﾉﾝｱﾙｺｰﾙ･ﾋﾞｰﾙ1,000円\r\n･ｸﾞﾗｽﾜｲﾝ(赤)1,000円\r\n･ｸﾞﾗｽﾜｲﾝ(白)1,000円\r\n･ｼｬﾝﾃﾞｨｶﾞﾌ1,000円\r\n･ﾚｯﾄﾞｱｲ1,000円\r\n･ｶｼｽｳｰﾛﾝ1,000円\r\n･ｶﾙｱﾐﾙｸ1,000円\r\n･ﾌｧｼﾞｰﾈｰﾌﾞﾙ1,000円\r\n･ﾋﾟｰﾁｳｰﾛﾝ1,000円\r\n･ﾊｲﾎﾞｰﾙ1,000円\r\n･ﾃｷｰﾗﾛｰｽﾞ1,000円\r\n\r\n◆ﾎﾞﾄﾙ\r\n･菊の露 親方の酒2,000円\r\n･菊の露 VIPｺﾞｰﾙﾄﾞ5,000円\r\n･黒霧島2,000円\r\n･赤霧島5,000円\r\n･ｼｯｸｽｴｲﾄﾅｲﾝ10,000円\r\n･山崎15,000円\r\n･ﾍﾈｼｰx.o 30,000円\r\n\r\n◆ｼｬﾝﾊﾟﾝ\r\n･ｶﾌｪﾄﾞ･ﾊﾟﾘ8,000円\r\n･ﾓｴ･ｼｬﾝﾄﾞﾝ25,000円\r\n･ﾓｴ･ｼｬﾝﾄﾞﾝﾛｾﾞ35,000円\r\n･ﾍﾞﾙ･ｴﾎﾟｯｸ60,000円\r\n･ﾍﾞﾙ･ｴﾎﾟｯｸﾛｾﾞ120,000円', 'MasterCard,VISA,JCB,AmericanExpress,Diners', '沖縄県', '沖縄市', '上地1-13-13 ヤング5ビル5F', '2019-11-21 20:11:20', '2019-11-21 20:30:35');
 
 -- --------------------------------------------------------
 
@@ -699,22 +583,6 @@ CREATE TABLE `shop_infos` (
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- テーブルのデータのダンプ `shop_infos`
---
-
-INSERT INTO `shop_infos` (`id`, `shop_id`, `title`, `content`, `dir`, `created`, `modified`) VALUES
-(1, 56, '店舗からのお知らせ😎店舗からのお知らせ😎店舗からのお知らせ😎店舗からのお知らせ😎', '店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?店舗からのお知らせ?', '/2019/08/13/20190813_233634', '2019-08-13 23:37:01', '2019-08-13 23:37:01'),
-(2, 56, '店舗からのお知らせ２😎店舗からのお知らせ２😎', '店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?\r\n\r\n店舗からのお知らせ２?店舗からのお知らせ２?\r\n店舗からのお知らせ２?店舗からのお知らせ２?\r\n\r\n\r\n店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?店舗からのお知らせ２?\r\n\r\n店舗からのお知らせ２?', '/2019/08/14/20190814_214500', '2019-08-14 21:45:00', '2019-08-14 21:45:00'),
-(3, 56, '店舗からのお知らせ３😎店舗からのお知らせ３😎店舗からのお知らせ３😎', '店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?\r\n\r\n店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?\r\n店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?店舗からのお知らせ３?ｖ', '/2019/08/14/20190814_214806', '2019-08-14 21:48:06', '2019-08-14 21:48:06'),
-(4, 56, '店舗からのお知らせ４😎店舗からのお知らせ４😎店舗からのお知らせ４😎店舗からのお知らせ４😎', '店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?\r\n\r\n店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?\r\n\r\n\r\n\r\n店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?店舗からのお知らせ４?\r\n\r\n\r\n店舗からのお知らせ４?店舗からのお知らせ４?', '/2019/08/14/20190814_215031', '2019-08-14 21:50:31', '2019-08-14 21:50:31'),
-(5, 56, '店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎', '店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎店舗からのお知らせ５😎', '/2019/08/14/20190814_215514', '2019-08-14 21:55:14', '2019-08-14 21:55:14'),
-(6, 56, '店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎', '店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎\r\n\r\n\r\n\r\n店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎\r\n店舗からのお知らせ６😎店舗からのお知らせ６😎店舗からのお知らせ６😎', '/2019/08/14/20190814_220035', '2019-08-14 22:00:35', '2019-08-14 22:00:35'),
-(7, 56, '店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎', '店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎店舗からのお知らせ７😎', '/2019/08/14/20190814_235405', '2019-08-14 23:54:05', '2019-10-22 13:43:52'),
-(8, 55, 'フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎', 'フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎\r\n\r\n\r\n\r\nフェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎フェリスからのお知らせ😎', '/2019/08/15/20190815_160853', '2019-08-15 16:08:53', '2019-08-15 16:08:53'),
-(9, 56, '店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎', '店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎店舗からのお知らせ８😎', '/2019/10/05/20191005_152611', '2019-10-05 15:26:11', '2019-10-05 15:26:11'),
-(10, 56, 'てｓｔ', 'てｓってｓｔ', '/2019/10/22/20191022_140211', '2019-10-22 14:02:11', '2019-10-22 14:02:11');
-
 -- --------------------------------------------------------
 
 --
@@ -730,13 +598,6 @@ CREATE TABLE `shop_info_likes` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `shop_info_likes`
---
-
-INSERT INTO `shop_info_likes` (`id`, `shop_info_id`, `shop_id`, `user_id`, `created`, `modified`) VALUES
-(1, 9, 56, 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -757,14 +618,6 @@ CREATE TABLE `snss` (
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- テーブルのデータのダンプ `snss`
---
-
-INSERT INTO `snss` (`id`, `shop_id`, `cast_id`, `facebook`, `twitter`, `instagram`, `line`, `created`, `modified`) VALUES
-(2, 56, NULL, 'Night-Planet-101941477849319', 'OkinawaHack', 't.a.k.u.m.a_', '', '2019-08-31 01:09:16', '2019-08-31 12:19:41'),
-(7, NULL, 54, 'Night-Planet-101941477849319', 'OkinawaHack', 't.a.k.u.m.a_', '', '2019-09-10 01:05:20', '2019-09-10 22:17:07');
-
 -- --------------------------------------------------------
 
 --
@@ -778,19 +631,6 @@ CREATE TABLE `tags` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- テーブルのデータのダンプ `tags`
---
-
-INSERT INTO `tags` (`id`, `title`, `created`, `modified`) VALUES
-(1, 'testtag', '2018-12-30 21:53:07', '2018-12-30 21:53:07'),
-(2, 'tag1', '2018-12-30 22:12:12', '2018-12-30 22:12:12'),
-(3, 'tag2', '2018-12-30 22:12:30', '2018-12-30 22:12:30'),
-(4, 'tag3', '2018-12-30 22:12:41', '2018-12-30 22:12:41'),
-(5, 'tag4', '2018-12-31 10:17:24', '2018-12-31 10:17:24'),
-(6, 'tag5', '2018-12-31 10:25:15', '2018-12-31 10:25:15'),
-(7, 'tag6', '2018-12-31 10:33:44', '2018-12-31 10:33:44');
 
 -- --------------------------------------------------------
 
@@ -814,107 +654,39 @@ CREATE TABLE `updates` (
 --
 
 INSERT INTO `updates` (`id`, `shop_id`, `cast_id`, `type`, `content`, `created`, `modified`) VALUES
-(67, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-18 01:16:23', '2019-09-18 01:16:23'),
-(68, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-18 19:03:18', '2019-09-18 19:03:18'),
-(69, 56, NULL, 'coupon', 'クーポン情報を更新しました。', '2019-09-18 19:06:52', '2019-09-18 19:06:52'),
-(72, 56, 53, 'cast_gallery', 'なおさんがギャラリーを追加しました。', '2019-09-19 00:33:30', '2019-09-19 00:33:30'),
-(73, 56, 54, 'cast_gallery', 'にーなさんがギャラリーを追加しました。', '2019-09-19 00:33:30', '2019-09-19 00:33:30'),
-(74, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-19 22:05:26', '2019-09-19 22:05:26'),
-(75, 56, 53, 'profile', 'なおさんがプロフィールを更新しました。', '2019-09-21 03:12:05', '2019-09-21 03:12:05'),
-(76, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 01:23:45', '2019-09-22 01:23:45'),
-(77, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 01:30:24', '2019-09-22 01:30:24'),
-(78, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 01:38:34', '2019-09-22 01:38:34'),
-(79, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 01:39:16', '2019-09-22 01:39:16'),
-(80, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 01:43:26', '2019-09-22 01:43:26'),
-(81, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 01:46:44', '2019-09-22 01:46:44'),
-(82, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 01:48:23', '2019-09-22 01:48:23'),
-(83, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 01:48:34', '2019-09-22 01:48:34'),
-(84, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 02:17:10', '2019-09-22 02:17:10'),
-(85, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-09-22 16:22:17', '2019-09-22 16:22:17'),
-(86, 56, 53, 'cast_gallery', 'なおさんがギャラリーを追加しました。', '2019-09-28 00:26:28', '2019-09-28 00:26:28'),
-(87, 56, 53, 'cast_gallery', 'なおさんがギャラリーを追加しました。', '2019-09-28 11:08:19', '2019-09-28 11:08:19'),
-(88, 56, 53, 'cast_gallery', 'なおさんがギャラリーを追加しました。', '2019-09-28 11:27:00', '2019-09-28 11:27:00'),
-(89, 56, 53, 'cast_gallery', 'なおさんがギャラリーを追加しました。', '2019-09-28 11:30:47', '2019-09-28 11:30:47'),
-(90, 56, 53, 'profile', 'なおさんがプロフィールを更新しました。', '2019-09-28 11:34:55', '2019-09-28 11:34:55'),
-(91, 56, 53, 'cast_gallery', 'なおさんがギャラリーを追加しました。', '2019-09-28 11:35:26', '2019-09-28 11:35:26'),
-(92, 56, 53, 'cast_gallery', 'なおさんがギャラリーを追加しました。', '2019-09-28 11:37:25', '2019-09-28 11:37:25'),
-(93, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 16:00:23', '2019-09-28 16:00:23'),
-(94, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 16:08:10', '2019-09-28 16:08:10'),
-(95, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 16:11:18', '2019-09-28 16:11:18'),
-(96, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 16:15:56', '2019-09-28 16:15:56'),
-(97, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 16:30:03', '2019-09-28 16:30:03'),
-(98, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 16:31:02', '2019-09-28 16:31:02'),
-(99, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 16:31:29', '2019-09-28 16:31:29'),
-(100, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 16:31:52', '2019-09-28 16:31:52'),
-(101, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 17:04:25', '2019-09-28 17:04:25'),
-(102, 56, 53, 'work_schedule', 'なお1さんがプロフィールアイコンを更新しました。', '2019-09-28 17:04:40', '2019-09-28 17:04:40'),
-(103, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 17:22:19', '2019-09-28 17:22:19'),
-(104, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 17:37:25', '2019-09-28 17:37:25'),
-(105, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 17:49:58', '2019-09-28 17:49:58'),
-(106, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 17:51:53', '2019-09-28 17:51:53'),
-(107, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 17:53:49', '2019-09-28 17:53:49'),
-(108, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 17:56:18', '2019-09-28 17:56:18'),
-(109, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 17:57:15', '2019-09-28 17:57:15'),
-(110, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:08:49', '2019-09-28 18:08:49'),
-(111, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:14:08', '2019-09-28 18:14:08'),
-(112, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:14:24', '2019-09-28 18:14:24'),
-(113, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:15:03', '2019-09-28 18:15:03'),
-(114, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:17:40', '2019-09-28 18:17:40'),
-(115, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:17:59', '2019-09-28 18:17:59'),
-(116, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:18:08', '2019-09-28 18:18:08'),
-(117, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:18:19', '2019-09-28 18:18:19'),
-(118, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:18:34', '2019-09-28 18:18:34'),
-(119, 56, 53, 'cast_top_image', 'なお1さんがトップ画像を変更しました。', '2019-09-28 18:41:13', '2019-09-28 18:41:13'),
-(120, 56, 54, 'diary', 'にーなさんが日記を追加しました。', '2019-09-28 21:49:09', '2019-09-28 21:49:09'),
-(121, 56, 54, 'diary', 'にーなさんが日記を追加しました。', '2019-09-28 22:46:03', '2019-09-28 22:46:03'),
-(122, 56, 54, 'diary', 'にーなさんが日記を追加しました。', '2019-09-29 14:05:15', '2019-09-29 14:05:15'),
-(123, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 11:49:57', '2019-10-05 11:49:57'),
-(124, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 11:52:40', '2019-10-05 11:52:40'),
-(125, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 12:08:16', '2019-10-05 12:08:16'),
-(126, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 12:22:41', '2019-10-05 12:22:41'),
-(127, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 12:47:32', '2019-10-05 12:47:32'),
-(128, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 12:48:35', '2019-10-05 12:48:35'),
-(129, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 12:50:22', '2019-10-05 12:50:22'),
-(130, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 12:56:14', '2019-10-05 12:56:14'),
-(131, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-05 12:56:27', '2019-10-05 12:56:27'),
-(132, 56, NULL, 'shop_gallery', '店内ギャラリーを更新しました。', '2019-10-05 13:38:24', '2019-10-05 13:38:24'),
-(133, 56, NULL, 'shop_gallery', '店内ギャラリーを更新しました。', '2019-10-05 13:40:29', '2019-10-05 13:40:29'),
-(134, 56, NULL, 'shop_gallery', '店内ギャラリーを更新しました。', '2019-10-05 13:41:01', '2019-10-05 13:41:01'),
-(135, 56, NULL, 'shop_gallery', '店内ギャラリーを更新しました。', '2019-10-05 14:36:16', '2019-10-05 14:36:16'),
-(136, 56, NULL, 'event', '店舗からのお知らせを追加しました。', '2019-10-05 15:26:11', '2019-10-05 15:26:11'),
-(137, 56, 53, 'diary', 'なお1さんが日記を追加しました。', '2019-10-05 17:11:25', '2019-10-05 17:11:25'),
-(138, 56, NULL, 'event', '店舗からのお知らせを追加しました。', '2019-10-05 17:21:44', '2019-10-05 17:21:44'),
-(139, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-06 00:47:18', '2019-10-06 00:47:18'),
-(140, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-10 00:16:19', '2019-10-10 00:16:19'),
-(141, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-10 00:16:58', '2019-10-10 00:16:58'),
-(142, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:24:31', '2019-10-11 00:24:31'),
-(143, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:43:46', '2019-10-11 00:43:46'),
-(144, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:43:48', '2019-10-11 00:43:48'),
-(145, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:44:01', '2019-10-11 00:44:01'),
-(146, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:48:15', '2019-10-11 00:48:15'),
-(147, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-11 00:48:36', '2019-10-11 00:48:36'),
-(148, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 01:34:20', '2019-10-12 01:34:20'),
-(149, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:51:03', '2019-10-12 22:51:03'),
-(150, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:54:01', '2019-10-12 22:54:01'),
-(151, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:56:48', '2019-10-12 22:56:48'),
-(152, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:57:11', '2019-10-12 22:57:11'),
-(153, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-12 22:58:24', '2019-10-12 22:58:24'),
-(154, 56, NULL, 'event', '店舗からのお知らせを追加しました。', '2019-10-22 14:02:11', '2019-10-22 14:02:11'),
-(155, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-22 14:02:33', '2019-10-22 14:02:33'),
-(156, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-26 22:23:45', '2019-10-26 22:23:45'),
-(157, 56, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-10-26 22:24:44', '2019-10-26 22:24:44'),
-(158, 56, NULL, 'work_schedule', '本日のメンバーを更新しました。', '2019-10-28 15:06:53', '2019-10-28 15:06:53'),
-(159, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-10 01:13:09', '2019-11-10 01:13:09'),
-(160, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-10 01:39:21', '2019-11-10 01:39:21'),
-(161, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-10 01:50:25', '2019-11-10 01:50:25'),
-(162, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-10 02:03:51', '2019-11-10 02:03:51'),
-(163, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-10 02:06:21', '2019-11-10 02:06:21'),
-(164, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-10 02:08:35', '2019-11-10 02:08:35'),
-(165, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-10 10:59:48', '2019-11-10 10:59:48'),
-(166, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-12 23:39:07', '2019-11-12 23:39:07'),
-(167, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-12 23:48:45', '2019-11-12 23:48:45'),
-(168, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-12 23:52:42', '2019-11-12 23:52:42'),
-(169, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-12 23:55:09', '2019-11-12 23:55:09');
+(1, 4, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-11-20 23:56:09', '2019-11-20 23:56:09'),
+(2, 4, NULL, 'shop_gallery', '店内ギャラリーを更新しました。', '2019-11-20 23:58:59', '2019-11-20 23:58:59'),
+(3, 4, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 00:02:42', '2019-11-21 00:02:42'),
+(4, 4, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 00:04:11', '2019-11-21 00:04:11'),
+(5, 4, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 00:07:11', '2019-11-21 00:07:11'),
+(6, 4, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 00:07:56', '2019-11-21 00:07:56'),
+(7, 5, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-11-21 00:26:08', '2019-11-21 00:26:08'),
+(8, 5, NULL, 'shop_gallery', '店内ギャラリーを更新しました。', '2019-11-21 00:26:54', '2019-11-21 00:26:54'),
+(9, 5, NULL, 'coupon', 'クーポン情報を更新しました。', '2019-11-21 00:28:36', '2019-11-21 00:28:36'),
+(10, 5, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 00:30:51', '2019-11-21 00:30:51'),
+(11, 5, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 00:31:23', '2019-11-21 00:31:23'),
+(12, 6, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-11-21 19:51:50', '2019-11-21 19:51:50'),
+(13, 6, NULL, 'coupon', 'クーポン情報を更新しました。', '2019-11-21 19:53:04', '2019-11-21 19:53:04'),
+(14, 6, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 19:57:34', '2019-11-21 19:57:34'),
+(15, 6, NULL, 'shop_gallery', '店内ギャラリーを更新しました。', '2019-11-21 19:58:18', '2019-11-21 19:58:18'),
+(16, 7, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-11-21 20:11:51', '2019-11-21 20:11:51'),
+(17, 7, NULL, 'shop_gallery', '店内ギャラリーを更新しました。', '2019-11-21 20:12:21', '2019-11-21 20:12:21'),
+(18, 7, NULL, 'coupon', 'クーポン情報を更新しました。', '2019-11-21 20:13:52', '2019-11-21 20:13:52'),
+(19, 7, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 20:16:22', '2019-11-21 20:16:22'),
+(20, 7, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 20:23:26', '2019-11-21 20:23:26'),
+(21, 7, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 20:24:13', '2019-11-21 20:24:13'),
+(22, 7, NULL, 'system', '店舗情報を更新しました。', '2019-11-21 20:30:35', '2019-11-21 20:30:35'),
+(23, 7, 16, 'profile', 'リエさんがプロフィールアイコンを更新しました。', '2019-11-21 20:50:04', '2019-11-21 20:50:04'),
+(24, 7, 16, 'profile', 'リエさんがプロフィールを更新しました。', '2019-11-21 20:50:16', '2019-11-21 20:50:16'),
+(25, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-21 22:22:55', '2019-11-21 22:22:55'),
+(26, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-21 22:40:19', '2019-11-21 22:40:19'),
+(27, 7, 18, 'profile', 'リエさんがプロフィールアイコンを更新しました。', '2019-11-21 22:53:19', '2019-11-21 22:53:19'),
+(28, 7, 18, 'profile', 'リエさんがプロフィールを更新しました。', '2019-11-21 22:55:01', '2019-11-21 22:55:01'),
+(29, 7, 18, 'profile', 'リエさんがプロフィールを更新しました。', '2019-11-21 23:03:20', '2019-11-21 23:03:20'),
+(30, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-21 23:06:20', '2019-11-21 23:06:20'),
+(31, 7, 19, 'profile', 'リンさんがプロフィールアイコンを更新しました。', '2019-11-21 23:07:07', '2019-11-21 23:07:07'),
+(32, 7, 19, 'profile', 'リンさんがプロフィールを更新しました。', '2019-11-21 23:07:25', '2019-11-21 23:07:25'),
+(33, 7, 19, 'cast_gallery', 'リンさんがギャラリーを追加しました。', '2019-11-21 23:09:49', '2019-11-21 23:09:49');
 
 -- --------------------------------------------------------
 
@@ -931,16 +703,6 @@ CREATE TABLE `users` (
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- テーブルのデータのダンプ `users`
---
-
-INSERT INTO `users` (`id`, `email`, `password`, `created`, `modified`) VALUES
-(1, 'user0@gmail.com', '$2y$10$3C/Y5drnCFszyr3VIC1rYOqtNP4eq7bLazPB2NuBPwD20wqmhKEe6', '2018-12-26 19:56:45', '2019-01-13 18:50:32'),
-(2, 'user1@gmail.com', '$2y$10$pqGXOHd/SsqZpxiWIavel.xXZMp6OB3dJ39XN3Xs/zczVX/emgOma', '2018-12-31 12:35:03', '2019-01-13 19:21:50'),
-(4, 'user2@gmail.com', '$2y$10$XX2efgIYRB1FyO36LtUo8eAWOZgENhH5S3acDf1mnaMMaU5xzvPd2', '2019-01-14 00:27:29', '2019-01-14 00:27:29'),
-(5, 'user3@gmail.com', '$2y$10$7VwUs..iiR49F/3mQ/1Af.rwcvLKmpPmicWNPt0IKffw5kQMNJROG', '2019-01-22 18:21:26', '2019-01-22 18:21:26');
-
 -- --------------------------------------------------------
 
 --
@@ -955,14 +717,6 @@ CREATE TABLE `work_schedules` (
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- テーブルのデータのダンプ `work_schedules`
---
-
-INSERT INTO `work_schedules` (`id`, `shop_id`, `cast_ids`, `created`, `modified`) VALUES
-(1, 0, '54,53', '2019-09-17 22:20:02', '2019-09-17 22:20:02'),
-(2, 56, '53,54', '2019-09-17 22:21:36', '2019-10-28 15:06:53');
 
 --
 -- Indexes for dumped tables
@@ -1131,43 +885,43 @@ ALTER TABLE `admin_accounts`
 -- AUTO_INCREMENT for table `articles`
 --
 ALTER TABLE `articles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `casts`
 --
 ALTER TABLE `casts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `cast_schedules`
 --
 ALTER TABLE `cast_schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `coupons`
 --
 ALTER TABLE `coupons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `developers`
 --
 ALTER TABLE `developers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `diarys`
 --
 ALTER TABLE `diarys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=169;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `diary_likes`
 --
 ALTER TABLE `diary_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `event_types`
@@ -1179,7 +933,7 @@ ALTER TABLE `event_types`
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `master_role`
@@ -1191,61 +945,61 @@ ALTER TABLE `master_role`
 -- AUTO_INCREMENT for table `owners`
 --
 ALTER TABLE `owners`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `servece_plans`
 --
 ALTER TABLE `servece_plans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `shops`
 --
 ALTER TABLE `shops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `shop_infos`
 --
 ALTER TABLE `shop_infos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `shop_info_likes`
 --
 ALTER TABLE `shop_info_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `snss`
 --
 ALTER TABLE `snss`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `work_schedules`
 --
 ALTER TABLE `work_schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- ダンプしたテーブルの制約

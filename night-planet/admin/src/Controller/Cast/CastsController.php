@@ -420,23 +420,24 @@ class CastsController extends AppController
      */
     public function topImage()
     {
-
-        $gallery = array();
-
         // ディクレトリ取得
         $dir = new Folder(preg_replace('/(\/\/)/', '/'
             , WWW_ROOT.$this->viewVars['userInfo']['top_image_path'])
             , true, 0755);
 
-        // ファイルは１つのみだけど配列で取得する
         $files = glob($dir->path.DS.'*.*');
-        foreach( $files as $file ) {
-            $timestamp = date('Y/m/d H:i', filemtime($file));
-            array_push($gallery, array(
-                "file_path"=>$this->viewVars['userInfo']['top_image_path'].DS.(basename( $file ))
-                ,"date"=>$timestamp));
+
+        // ファイルが存在したら、画像をセット
+        if(count($files) > 0) {
+            foreach( $files as $file ) {
+                $this->set('top_image', $this->viewVars['userInfo']['top_image_path']
+                .DS.(basename($file)));
+            }
+        } else {
+            // 共通トップ画像をセット
+            $this->set('top_image', PATH_ROOT['CAST_TOP_IMAGE']);
         }
-        $this->set(compact('gallery'));
+
         $this->render();
     }
 
@@ -1422,18 +1423,12 @@ class CastsController extends AppController
         // 指定フォルダ配下にあればラストの連番に+1していく
         if (file_exists($dir->path)) {
             $dirArray = scandir($dir->path);
-            for ($i = 0; $i <= count($dirArray); $i++) {
-                if (strpos($dirArray[$i], '.') !== false) {
-                    unset($dirArray[$i]);
-                }
-            }
-            $nextDir = sprintf("%05d", count($dirArray) + 1);
-
+            $nextDir = sprintf("%05d", (int) end($dirArray) + 1);
         } else {
             // 指定フォルダが空なら00001連番から振る
             $nextDir = sprintf("%05d", 1);
-
         }
+
         // コネクションオブジェクト取得
         $connection = ConnectionManager::get('default');
         // トランザクション処理開始

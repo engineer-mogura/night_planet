@@ -127,11 +127,11 @@
     <div class="row">
       <div class="input-field col s12 m10 l12 ">
         <input type="tel" id="tel" class="validate" name="tel">
-        <label for="tel">連絡先</label>
+        <label for="tel">連絡先 ※ハイフン無しで入力してください。</label>
       </div>
     </div>
     <div class="row">
-      <div class="col s12 m12 l12"><label style="font-size: 1rem;">営業時間</label></div>
+      <div class="col s12 m12 l12"><label style="font-size: 1rem;">営業時間 ※終了時間は入力無で「LAST」の表示になります。</label></div>
       <div class="col s5 m2 l2"><input id="bus-from-time" class="timepicker" name="bus_from_time"></div>
       <div class="col s2 m2 l2 center-align">～</div>
       <div class="col s5 m2 l2"><input id="bus-to-time" class="timepicker" name="bus_to_time"></div>
@@ -150,7 +150,7 @@
     </div>
     <div class="row">
       <div class="input-field col s12 m10 l12 ">
-        <textarea id="system" class="validate materialize-textarea" name="system" data-length="600"></textarea>
+        <textarea id="system" class="validate materialize-textarea" name="system" data-length="900"></textarea>
         <label for="system">システム</label>
       </div>
     </div>

@@ -105,7 +105,7 @@
   <nav id="nav-header-menu" class="nav-header-menu nav-opacity">
     <div class="nav-wrapper">
       <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
-      <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'] ?><?=!empty($areaTitle)?'<span class="area-logo"> '.$areaTitle.'</span>':"" ?></a>
+      <a href="<?= $areaLink ?>" class="brand-logo oki-brand-logo"><?= LT['001'] ?><?=!empty($areaTitle)?'<span class="area-logo"> '.$areaTitle.'</span>':"" ?></a>
       <ul class="right">
         <li><a data-target="modal-search" class="modal-trigger"><i class="material-icons">search</i></a></li>
         <li><a data-target="modal-login" class="modal-trigger"><i class="material-icons">vpn_key</i></a></li>

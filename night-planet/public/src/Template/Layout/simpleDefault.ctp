@@ -8,11 +8,11 @@
   <title>
     <?= $this->fetch('title') ?>
   </title>
-  <?= $this->Html->meta('apple-touch-icon-precomposed', '/favicon.ico', [
-    'type'=>'icon',
-    'size' => '144x144',
-    'rel'=>'apple-touch-icon-precomposed'
-])."\n";?>
+  <?= $this->Html->meta('apple-touch-icon-precomposed', '/night_planet_top_favicon.png', [
+      'type'=>'icon',
+      'size' => '144x144',
+      'rel'=>'apple-touch-icon-precomposed'
+  ])."\n";?>
   <?= META['USER_NO_INDEX'] ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
   <?= META['NO_FOLLOW'] ? $this->Html->meta('robots',['content'=> 'nofollow']): "";?>
   <?= $this->Html->meta('icon') ?>

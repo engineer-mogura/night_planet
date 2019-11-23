@@ -6,6 +6,8 @@
                 <span id="dummy" style="display: hidden;"></span>
                 <?= $this->Flash->render() ?>
                 <h5><?= $cast->name.'　所属：'?><a href="<?=$userInfo['shop_url']?>" target=”_blank” rel="noopener noreferrer"><?=$cast->shop->name?></a></h5>
+                <p style="font-weight: bolder;">現在、一番下の出勤スケジュールのみが有効になります。</p>
+
                 <div id="cast" class="row">
                     <div class="col s12 m4 l4">
                         <div class="card">

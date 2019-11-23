@@ -109,7 +109,8 @@ class AreaController extends AppController
 
         // コントローラ名からエリアタイトルをセット
         $areaTitle = AREA[mb_strtolower($this->request->getparam("controller"))]['label'];
-        $this->set(compact('title', 'description', 'areaTitle'));
+        $areaLink = DS.AREA[mb_strtolower($this->request->getparam("controller"))]['path'];
+        $this->set(compact('title', 'description', 'areaTitle', 'areaLink'));
     }
 
     public function index()

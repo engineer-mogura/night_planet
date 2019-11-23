@@ -217,16 +217,6 @@ return [
 
     // 所属エリアリスト
     define('AREA', array(
-        'miyakojima'=> [
-            'label' => "宮古島",
-            'path' => "miyakojima",
-            'image' => "/img/common/area/area_miyako_S.png"
-        ],
-        'ishigakijima'=> [
-            'label' => "石垣島",
-            'path' => "ishigakijima",
-            'image' => "/img/common/area/area_ishigaki_L.png"
-        ],
         'naha'=> [
             'label' => "那覇",
             'path' => "naha",
@@ -267,43 +257,53 @@ return [
             'path' => "nago",
             'image' => "/img/common/area/top-image.png"
         ],
+        'miyakojima'=> [
+            'label' => "宮古島",
+            'path' => "miyakojima",
+            'image' => "/img/common/area/area_miyako_S.png"
+        ],
+        'ishigakijima'=> [
+            'label' => "石垣島",
+            'path' => "ishigakijima",
+            'image' => "/img/common/area/area_ishigaki_L.png"
+        ],
     )),
     // 業種リスト
     define('GENRE', array(
         'cabacula'=> [
             'label' => "キャバクラ",
             'path' => "cabacula",
-            'image' => "/img/common/genre/cabacura.jpg"
+            'image' => "/img/common/genre/cabacula.png"
         ],
         'snack'=> [
             'label' => "スナック",
             'path' => "snack",
-            'image' => "/img/common/genre/cabacura.jpg"
+            'image' => "/img/common/genre/snack.png"
         ],
         'girlsbar'=> [
             'label' => "ガールズバー",
             'path' => "girlsbar",
-            'image' => "/img/common/genre/girsbar.jpg"
+            'image' => "/img/common/genre/girlsbar.png"
         ],
         'club'=> [
             'label' => "クラブ",
             'path' => "club",
-            'image' => "/img/common/genre/lounge.jpg"
+            'image' => "/img/common/genre/club.png"
         ],
         'lounge'=> [
             'label' => "ラウンジ",
             'path' => "lounge",
-            'image' => "/img/common/genre/lounge.jpg"
+            'image' => "/img/common/genre/lounge.png"
         ],
         'pub'=> [
             'label' => "パブ",
             'path' => "pub",
-            'image' => "/img/common/genre/bar.jpg"
+            'image' => "/img/common/genre/pub.png"
         ],
         'bar'=> [
             'label' => "バー",
             'path' => "bar",
-            'image' => "/img/common/genre/bar.jpg"
+            'image' => "/img/common/genre/bar.png"
         ],
     )),
     // 星座リスト
@@ -411,8 +411,8 @@ return [
 
     // メール設定
     define('MAIL', array(
-        'CAST_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、１０分以内に認証を完了してください。',
-        'OWNER_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、１０分以内に認証を完了してください。',
+        'CAST_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。１０分以内に完了してください。',
+        'OWNER_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。１０分以内に完了してください。',
         'FROM_INFO_GMAIL'=>'info.night.planet@gmail.com',
         'FROM_SUBSCRIPTION'=>'subscription@night-planet.com',
         'FROM_NAME'=>'NightPlanet事務局',

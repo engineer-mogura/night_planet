@@ -13,7 +13,7 @@
     'type'=>'icon',
     'size' => '144x144',
     'rel'=>'apple-touch-icon-precomposed'
-])."\n";?>
+  ])."\n";?>
   <?= META['USER_NO_INDEX'] ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
   <?= META['NO_FOLLOW'] ? $this->Html->meta('robots',['content'=> 'nofollow']): "";?>
   <?= $this->Html->meta('icon') ?>

@@ -132,7 +132,7 @@
 						<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="80">
 					</a>
 					<h6><?=$cast->nickname?>
-						<?=isset($cast->new_cast) ? '<i class="material-icons add-cast-icon">group_add</i>':''?>
+						<?=isset($cast->new_cast) ? '<i class="material-icons add-cast-icon">fiber_new</i>':''?>
 						<?=isset($cast->update_cast) ? '<i class="material-icons update-cast-icon">update</i>':''?>
 					</h6>
 				</div>

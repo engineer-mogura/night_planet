@@ -357,22 +357,18 @@ form .error-message {
 .my-gallery > figure {
   margin: initial;
 }
-.my-gallery{
-  line-height: 0;
-  -webkit-column-count: 3;
-  -webkit-column-gap: 0px;
-  -moz-column-count: 3;
-  -moz-column-gap: 0px;
-  column-count: 3;
-  column-gap: 0px;
-  }
 .my-gallery figure{
+  float: left;
+  margin: 0;
+  width: 33.333333333333%;
   margin:0;
 }
 .my-gallery figure.col{
   padding:initial;
 }
 .my-gallery figure img{
+  display: list-item;
+  height: 200px;
   width:100%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -1145,7 +1141,9 @@ form .message-label {
     /* 検索画面 END */
 
   /* ユーザー END */
-
+  .my-gallery figure img{
+    height: 120px;
+  }
 }
 
 @media only screen and (max-width: 600px) {
@@ -1300,7 +1298,9 @@ form .message-label {
 }
 
 @media only screen and (min-width: 600px) and (max-width: 992px) {
-
+  .my-gallery figure img{
+    height: 160px;
+    }
 }
 
 @media only screen and (min-width: 993px) {

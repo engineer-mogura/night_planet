@@ -5,6 +5,8 @@
             <div class="red darken-1 card-panel col s12 center-align">
                 <p class="white-text recruit-label section-label"><span> 店舗 </span></p>
             </div>
+            <p style="font-weight: bolder;">店舗アクセスレポートは現在機能を停止中です。近日中に機能を再開いたしますので、それまでしばらくお待ちください。以下のグラフはダミーデータになります。</p>
+
             <div class="col s12 m6 l6 year-graph-section section">
                 <div class="card-panel year-graph-shop section">
                     <canvas id="shopMonthChart" height="300"></canvas>

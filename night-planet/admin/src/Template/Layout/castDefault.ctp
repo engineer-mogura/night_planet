@@ -36,10 +36,10 @@
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
-  <?= $this->Html->css('materialize.css') ?>
+  <?= $this->Html->css('materialize.min.css') ?>
   <?= $this->Html->css('okiyoru.css') ?>
   <?= $this->Html->css('jquery.notifyBar.css') ?>
-  <?= $this->Html->css('fullcalendar.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
+  <?= $this->Html->css('fullcalendar.min.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
 
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>

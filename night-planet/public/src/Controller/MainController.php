@@ -48,8 +48,12 @@ class MainController extends AppController
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
+        $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', null);
+        $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', null);
+        //広告を配列にセット
+        $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
         $insta_data = $this->Util->getInstagram(null, API['INSTAGRAM_USER_NAME'], API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
-        $this->set(compact('selectList', 'diarys', 'notices', 'insta_data'));
+        $this->set(compact('selectList', 'diarys', 'notices', 'insta_data','adsenses'));
     }
 
     /**

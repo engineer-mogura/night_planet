@@ -134,9 +134,13 @@ class AreaController extends AppController
             $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['isArea']]['path'];
             $genreCounts[$row['genre']]['count'] = $row['count'];
         }
+        $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', $this->viewVars['isArea']);
+        $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', $this->viewVars['isArea']);
+        //広告を配列にセット
+        $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea'], null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea']);
-        $this->set(compact('genreCounts', 'selectList', 'diarys', 'notices'));
+        $this->set(compact('genreCounts', 'selectList', 'diarys', 'notices', 'adsenses'));
 
         $this->render();
     }

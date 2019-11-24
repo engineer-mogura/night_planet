@@ -43,6 +43,8 @@ return [
         'FILE_MAX'=>'8', // アップロードファイル数
         'UPDATE_INFO_DAY_MAX'=>'10', // アップロードファイル数
         'SHOW_GALLERY_MAX'=>'10', // キャストのギャラリー最大表示数
+        'TOP_SLIDER_GALLERY_MAX'=>'3', // トップスライダーのギャラリー最大表示数
+        'SUB_SLIDER_GALLERY_MAX'=>'10', // サブスライダーのギャラリー最大表示数
     )),
 
     // 店舗メニュー名
@@ -82,6 +84,7 @@ return [
         'OWNER'=> 'owner',
         'USER'=> 'user',
         'CAST'=> 'cast',
+        'ADSENSE'=> 'adsense',
         'NOTICE'=> 'notice',
         'DIARY'=> 'diary',
         'GALLERY'=> 'gallery',
@@ -110,16 +113,6 @@ return [
         'FACEBOOK'=> 'https://www.facebook.com/Night-Planet-101941477849319/', // FACEBOOK アプリID
         'TWITTER'=> 'https://twitter.com/night_planet910', // TWITTERアカウント
 
-    )),
-    // TODO: リリース前には、パスを本番へ変更する。
-    // WEBアプリケーションパス設定 path.config
-    define('APP_PATH', array(
-        'APP'=> $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['HTTP_HOST']."/", /** ローカル環境 */
-        'APP_ADMIN'=> $_SERVER['REQUEST_SCHEME'].'://'. $_SERVER['HTTP_HOST']."/'", /** ローカル環境 */
-        //'APP'=> 'https://devokiyorugo.work/', /** テスト環境 */
-        //'APP_ADMIN'=> 'https://devokiyorugo.work/', /** テスト環境 */
-        //'APP'=> 'https://night-planet.com/', /** 本番環境 */
-        //'APP_ADMIN'=> 'https://night-planet.com/', /** 本番環境 */
     )),
 
     // ラベル定数 developer.label menu

@@ -48,23 +48,25 @@
   <?= $this->Html->script('ajaxzip3.js') ?>
   <?= $this->Html->script('masonry.pkgd.min.js') ?><!-- タイル表示プラグイン TODO: 未使用状態 -->
   <?= $this->Html->script('moment.min.js') ?><!-- fullcalendar-3.9.0 -->
-  <?= $this->Html->script('fullcalendar.js') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
+  <?= $this->Html->script('fullcalendar.min.js') ?><!-- fullcalendar-3.9.0 -->
   <?= $this->Html->script('fullcalendar_locale/ja.js') ?><!-- fullcalendar-3.9.0 -->
   <?= $this->Html->script(API['GOOGLE_MAP_APIS']) ?>
   <?= $this->Html->script("load-image.all.min.js") ?><!-- 画像の縦横を自動調整してくれるプラグインExif情報関連 -->
-  <?= $this->Html->script("jquery.marquee.js") ?><!-- 縦方向スクロールしてくれるプラグイン -->
+  <?= $this->Html->script("jquery.marquee.min.js") ?><!-- 縦方向スクロールしてくれるプラグイン -->
+  <?= $this->Html->script("swiper.min.js") ?><!-- swiper-master スライダープラグイン -->
   <script src='/PhotoSwipe-master/dist/photoswipe.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
-  <?= $this->Html->css('materialize.css') ?>
+  <?= $this->Html->css('materialize.min.css') ?>
   <?= $this->Html->css('okiyoru.css') ?>
   <?= $this->Html->css('instagram.css') ?>
   <?= $this->Html->css('jquery.notifyBar.css') ?>
-  <?= $this->Html->css('fullcalendar.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
-  <?= $this->Html->css('jquery.marquee.css') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
+  <?= $this->Html->css('fullcalendar.min.css') ?><!-- fullcalendar-3.9.0 -->
+  <?= $this->Html->css('jquery.marquee.min.css') ?><!-- marquee -->
+  <?= $this->Html->css('swiper.min.css') ?><!-- swiper-master スライダープラグイン -->
 
   <?= $this->fetch('meta') ?>
   <?= $this->fetch('css') ?>

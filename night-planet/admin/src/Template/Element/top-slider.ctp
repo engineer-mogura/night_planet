@@ -1,25 +1,23 @@
-<div class="slider">
-    <ul class="slides">
-		<li>
-			<img src="/img/common/area/top4.jpg"> <!-- random image -->
-			<div class="caption center-align">
-				<h5>沖縄の夜遊び探しは【<?=LT['001']?>】!</h5>
-				<h6 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h6>
+<section class="swiper-container loading">
+    <div class="swiper-wrapper">
+		<?php
+			foreach ($adsenses['main_adsenses'] as $key => $value) :
+		?>
+        <div class="swiper-slide linkbox"
+            style="background-image:url(<?= $value->image ?>)">
+            <img src="<?= $value->image ?>" class="entity-img" />
+            <div class="content">
+                <span class="caption" data-swiper-parallax="-20%" data-swiper-parallax-scale=".7"><?=$value->Shops['catch']?></span>
 			</div>
-		</li>
-		<li>
-			<img src="/img/common/area/top5.jpg"> <!-- random image -->
-			<div class="caption left-align">
-				<h5>沖縄の夜遊び探しは【<?=LT['001']?>】!</h5>
-				<h6 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h6>
-			</div>
-		</li>
-		<li>
-			<img src="/img/common/area/top6.jpg"> <!-- random image -->
-			<div class="caption right-align">
-				<h5>沖縄の夜遊び探しは【<?=LT['001']?>】!</h5>
-				<h6 class="light grey-text text-lighten-3">キーワード、エリア、ジャンルですぐに見つかる!</h6>
-			</div>
-		</li>
-    </ul>
-</div>
+			<a href="<?=$value->shop_url?>"></a>
+		</div>
+		<?php
+			endforeach;
+		?>
+    </div>
+    <!-- If we need pagination -->
+    <div class="swiper-pagination"></div>
+    <!-- If we need navigation buttons -->
+    <div class="swiper-button-prev swiper-button-white"></div>
+    <div class="swiper-button-next swiper-button-white"></div>
+</section>

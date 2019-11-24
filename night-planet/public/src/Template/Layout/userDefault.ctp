@@ -72,6 +72,12 @@
   <?= $this->fetch('css') ?>
   <?= $this->fetch('script') ?>
 </head>
+  <style>
+    .swiper-container .swiper-slide img {
+        max-width: 100%;
+        height: auto;
+    }
+  </style>
   <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = PATH_ROOT['NO_IMAGE02']; ?>
   <?php $id = $this->request->getSession()->read('Auth.User.id') ?>
   <?php $role = $this->request->getSession()->read('Auth.User.role') ?>
@@ -179,5 +185,62 @@
     </div>
     <!-- END #return_top -->
   </footer>
+  <script>
+    // Params
+    var sliderSelector = '.swiper-container',
+        options = {
+          init: false,
+          loop: true,
+          speed:800,
+          slidesPerView: 2, // or 'auto'
+          // spaceBetween: 10,
+          centeredSlides : true,
+          effect: 'coverflow', // 'cube', 'fade', 'coverflow',
+          autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+          },
+          coverflowEffect: {
+            rotate: 50, // Slide rotate in degrees
+            stretch: 0, // Stretch space between slides (in px)
+            depth: 100, // Depth offset in px (slides translate in Z axis)
+            modifier: 1, // Effect multipler
+            slideShadows : true, // Enables slides shadows
+          },
+          grabCursor: true,
+          parallax: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          breakpoints: {
+            0: {
+              slidesPerView: 1,
+              spaceBetween: 10
+            },
+            // when window width is <= 480px
+            991: {
+              slidesPerView: 2,
+              spaceBetween: 20
+            },
+            // when window width is <= 640px
+ 
+          },
+          // Events
+          on: {
+            imagesReady: function(){
+              this.el.classList.remove('loading');
+            }
+          }
+        };
+    var mySwiper = new Swiper(sliderSelector, options);
+
+    // Initialize slider
+    mySwiper.init();
+  </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2019 年 11 月 21 日 23:15
+-- Generation Time: 2019 年 11 月 25 日 00:32
 -- サーバのバージョン： 5.6.42
 -- PHP Version: 7.3.8
 
@@ -36,6 +36,45 @@ CREATE TABLE `admin_accounts` (
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `adsenses`
+--
+
+DROP TABLE IF EXISTS `adsenses`;
+CREATE TABLE `adsenses` (
+  `id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
+  `shop_id` int(11) NOT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  `area` varchar(20) DEFAULT NULL,
+  `genre` varchar(20) DEFAULT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `catch` varchar(100) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `valid_start` date NOT NULL,
+  `valid_end` date NOT NULL,
+  `top_show_flg` int(1) NOT NULL,
+  `area_show_flg` int(1) NOT NULL,
+  `top_order` int(2) DEFAULT NULL,
+  `area_order` int(2) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `adsenses`
+--
+
+INSERT INTO `adsenses` (`id`, `owner_id`, `shop_id`, `type`, `area`, `genre`, `name`, `catch`, `valid_start`, `valid_end`, `top_show_flg`, `area_show_flg`, `top_order`, `area_order`, `created`, `modified`) VALUES
+(1, 3, 3, 'main', 'naha', 'cabacula', 'c3fefd89d394e40fca5d4873947fc0ac1278f515.jpg', '☺那覇で飲むならclub琉球へ☺', '2019-11-23', '2019-11-30', 1, 1, 1, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(2, 7, 7, 'main', 'okinawashi', 'cabacula', '032c48645a01a0724dbcafd6bd438cd69c86a9d2.jpg', '☺沖縄市で飲むならClub M -エム-へ☺', '2019-11-23', '2019-11-30', 0, 1, 2, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(3, 6, 6, 'main', 'naha', 'snack', 'a7677aa193d21c15da63b2dede741a303e4c5928.jpg', '☺那覇で飲むならGIZA PALACE -ギザパレス-へ☺', '2019-11-23', '2019-11-30', 0, 1, 3, 2, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(4, 1, 1, 'sub', 'urasoe', 'club', 'fa897ef69c325e84d4a73e1d681e103d2de24f61.jpg', '☺那覇で飲むならARENA -アリーナ-へ☺', '2019-11-23', '2019-11-30', 1, 1, 1, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(5, 2, 2, 'sub', 'urasoe', 'girlsbar', '7676cf4feb6ceae2268ea8dcdb8e8b4f8df8d503.jpg', '☺浦添で飲むならフェリスへ☺', '2019-11-23', '2019-11-30', 1, 1, 2, 2, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(6, 4, 4, 'main', 'naha', 'cabacula', '691f0c0dfddd2c595470edf172e2977bb725a201.jpg', '☺那覇で飲むならShuri -シュリ-へ☺', '2019-11-23', '2019-11-30', 1, 1, 2, 3, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(7, 5, 5, 'main', 'naha', 'cabacula', '6df41db604efd3ed5ae5bf30ba6aca462418323b.jpg', '☺那覇で飲むならclub Petit -プティ-へ☺', '2019-11-23', '2019-11-30', 1, 1, 3, 4, '2019-08-10 16:58:22', '2019-08-10 16:58:22');
 
 -- --------------------------------------------------------
 
@@ -145,6 +184,16 @@ CREATE TABLE `cast_schedules` (
   `modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- テーブルのデータのダンプ `cast_schedules`
+--
+
+INSERT INTO `cast_schedules` (`id`, `shop_id`, `cast_id`, `event_type_id`, `title`, `details`, `start`, `end`, `time_start`, `time_end`, `all_day`, `status`, `active`, `created`, `modified`) VALUES
+(1, 7, 19, NULL, '休み', NULL, '2019-11-07 00:00:00', '2019-11-07 00:00:00', NULL, NULL, '1', NULL, 1, '2019-11-23 00:58:33', '2019-11-23 00:58:33'),
+(2, 7, 19, NULL, '休み', NULL, '2019-11-08 00:00:00', '2019-11-08 00:00:00', NULL, NULL, '1', NULL, 1, '2019-11-23 00:58:39', '2019-11-23 00:58:39'),
+(3, 7, 19, NULL, '仕事', NULL, '2019-11-24 00:00:00', '2019-11-24 00:00:00', '00:00', NULL, '1', NULL, 1, '2019-11-23 00:59:16', '2019-11-23 00:59:16'),
+(4, 7, 19, NULL, '仕事', NULL, '2019-11-25 21:00:00', '2019-11-25 03:00:00', '21:00', '03:00', '1', NULL, 1, '2019-11-23 01:00:00', '2019-11-23 01:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -171,9 +220,9 @@ CREATE TABLE `coupons` (
 INSERT INTO `coupons` (`id`, `shop_id`, `status`, `from_day`, `to_day`, `title`, `content`, `created`, `modified`) VALUES
 (1, 1, 1, '2019-08-08 00:00:00', '2019-09-30 00:00:00', 'ウェルカムドリンク1杯サービス or 時間+10分サービス', '入店時にこちらのクーポンをお見せいただくと、ウェルカムドリンク1杯サービス、\r\nまたは時間＋１０分延長サービスになります。', '2019-08-08 23:31:00', '2019-08-08 23:31:18'),
 (2, 2, 1, '2019-08-10 00:00:00', '2020-08-10 00:00:00', '初回セット料金1000円OFF', '初回セット料金1000円OFFになります。\r\n是非ご利用ください!! スタッフ、キャスト一同心よりお待ちしております🙇‍♂️', '2019-08-10 17:31:09', '2019-09-18 19:06:52'),
-(3, 5, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', '😎新規オープンキャンペーンにつきまして😎', '来店の際始めに男子従業員に夜遊びを見たと伝えて頂くと、初回1時間4000円でご案内させていただきます!', '2019-11-21 00:28:36', '2019-11-21 00:28:43'),
+(3, 5, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', '😎新規オープンキャンペーンにつきまして😎', '来店の際始めに男子従業員にﾅｲﾌﾟﾗを見たと伝えて頂くと、初回1時間4000円でご案内させていただきます!', '2019-11-21 00:28:36', '2019-11-21 00:28:43'),
 (4, 6, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', 'GIZA PALACEのクーポン１', 'ウェルカムドリンク1杯サービスor時間+10分サービス', '2019-11-21 19:53:04', '2019-11-21 19:53:09'),
-(5, 7, 0, '2019-11-01 00:00:00', '2020-11-01 00:00:00', 'New Club Mのクーポン１', 'ﾅｲﾌﾟﾗをご利用のお客様に限り、時間サービス+カラオケ&乾杯ビールサービス', '2019-11-21 20:13:52', '2019-11-21 20:13:52');
+(5, 7, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', 'New Club Mのクーポン１', 'ﾅｲﾌﾟﾗをご利用のお客様に限り、時間サービス+カラオケ&乾杯ビールサービス', '2019-11-21 20:13:52', '2019-11-21 20:13:52');
 
 -- --------------------------------------------------------
 
@@ -618,6 +667,13 @@ CREATE TABLE `snss` (
   `modified` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- テーブルのデータのダンプ `snss`
+--
+
+INSERT INTO `snss` (`id`, `shop_id`, `cast_id`, `facebook`, `twitter`, `instagram`, `line`, `created`, `modified`) VALUES
+(1, 7, NULL, '', '', 't.a.k.u.m.a_', '', '2019-11-22 18:09:55', '2019-11-22 18:09:55');
+
 -- --------------------------------------------------------
 
 --
@@ -686,7 +742,8 @@ INSERT INTO `updates` (`id`, `shop_id`, `cast_id`, `type`, `content`, `created`,
 (30, NULL, NULL, 'diary', '新しいキャストを追加しました。', '2019-11-21 23:06:20', '2019-11-21 23:06:20'),
 (31, 7, 19, 'profile', 'リンさんがプロフィールアイコンを更新しました。', '2019-11-21 23:07:07', '2019-11-21 23:07:07'),
 (32, 7, 19, 'profile', 'リンさんがプロフィールを更新しました。', '2019-11-21 23:07:25', '2019-11-21 23:07:25'),
-(33, 7, 19, 'cast_gallery', 'リンさんがギャラリーを追加しました。', '2019-11-21 23:09:49', '2019-11-21 23:09:49');
+(33, 7, 19, 'cast_gallery', 'リンさんがギャラリーを追加しました。', '2019-11-21 23:09:49', '2019-11-21 23:09:49'),
+(34, 7, NULL, 'event', '店舗からのお知らせを追加しました。', '2019-11-22 21:20:07', '2019-11-22 21:20:07');
 
 -- --------------------------------------------------------
 
@@ -727,6 +784,13 @@ CREATE TABLE `work_schedules` (
 --
 ALTER TABLE `admin_accounts`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `adsenses`
+--
+ALTER TABLE `adsenses`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `owner_id` (`owner_id`);
 
 --
 -- Indexes for table `articles`
@@ -882,6 +946,12 @@ ALTER TABLE `admin_accounts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `adsenses`
+--
+ALTER TABLE `adsenses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
 -- AUTO_INCREMENT for table `articles`
 --
 ALTER TABLE `articles`
@@ -897,7 +967,7 @@ ALTER TABLE `casts`
 -- AUTO_INCREMENT for table `cast_schedules`
 --
 ALTER TABLE `cast_schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `coupons`
@@ -975,7 +1045,7 @@ ALTER TABLE `shop_info_likes`
 -- AUTO_INCREMENT for table `snss`
 --
 ALTER TABLE `snss`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tags`
@@ -987,7 +1057,7 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `updates`
 --
 ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `users`

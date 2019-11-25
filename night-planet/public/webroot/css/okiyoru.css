@@ -1638,12 +1638,12 @@ ul.marquee{
 .swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet::before {
   transition: all 0.3s ease;
 }
-*,
-*:before,
-*:after {
+#top-slider *,
+#top-slider *:before,
+#top-slider *:after {
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  /*padding: 0;*/
 }
 .swiper-container {
   width: 100%;

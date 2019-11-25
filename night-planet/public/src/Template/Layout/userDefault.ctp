@@ -34,8 +34,8 @@
       'size' => '144x144',
       'rel'=>'apple-touch-icon-precomposed'
   ])."\n";?>
-  <?= META['USER_NO_INDEX'] ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
-  <?= META['NO_FOLLOW'] ? $this->Html->meta('robots',['content'=> 'nofollow']): "";?>
+  <?= USER_NO_INDEX ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
+  <?= NO_FOLLOW ? $this->Html->meta('robots',['content'=> 'nofollow']): "";?>
   <?= $this->Html->meta('description',['content'=> $description]) ?>
   <?= $this->Html->meta('icon') ?>
   <?= $this->Html->script('jquery-3.1.0.min.js') ?>

@@ -9,24 +9,109 @@
         define("PUBLIC_DOMAIN",'http://night-planet.local');
         define("ADMIN_DOMAIN",'http://admin.night-planet.local');
         define("IMG_DOMAIN",'http://img.night-planet.local');
-
+        define("USER_NO_INDEX", true); //「userDefault.ctp」検索エンジンにインデックスしないか
+        define("OWNER_NO_INDEX", true); // 「ownerDefault.ctp」検索エンジンにインデックスしないか
+        define("SHOP_NO_INDEX", true); // 「shopDefault.ctp」検索エンジンにインデックスしないか
+        define("CAST_NO_INDEX", true); // 「castDefault.ctp」検索エンジンにインデックスしないか
+        define("SIMPLE_NO_INDEX", true); // 「simpleDefault.ctp」検索エンジンにインデックスしないか
+        define("NO_FOLLOW", true); // ステージング環境用 ページ内のリンク先をフォローしないか
+        // API関連プロパティ設定
+        define('API', array(
+            'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // ステージング環境用 GoogleマップのAPIキー
+            'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-1', // ステージング環境用 GoogleアナリティクスのAPIキー
+            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-1', // ステージング環境用 GoogleアナリティクスのID
+            'GOOGLE_ANALYTICS_VIEW_ID'=>'204802703', // ステージング環境用 Analytics Reporting API V4 view_id
+            'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
+            'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
+            'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+            'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
+            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
+            'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
+            'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
+            'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
+            'INSTAGRAM_CACHE_TIME'=> 360, // インスタグラムキャッシュタイム
+        ));
     } else if(strpos($_SERVER['HTTP_HOST'],'192.168.33.10') !== false){
         // スマホのローカル環境の場合
         define("PUBLIC_DOMAIN",'192.168.33.10');
         define("ADMIN_DOMAIN",'192.168.33.10');
         define("IMG_DOMAIN",'192.168.33.10');
-
+        define("USER_NO_INDEX", true); //「userDefault.ctp」検索エンジンにインデックスしないか
+        define("OWNER_NO_INDEX", true); // 「ownerDefault.ctp」検索エンジンにインデックスしないか
+        define("SHOP_NO_INDEX", true); // 「shopDefault.ctp」検索エンジンにインデックスしないか
+        define("CAST_NO_INDEX", true); // 「castDefault.ctp」検索エンジンにインデックスしないか
+        define("SIMPLE_NO_INDEX", true); // 「simpleDefault.ctp」検索エンジンにインデックスしないか
+        define("NO_FOLLOW", true); // ステージング環境用 ページ内のリンク先をフォローしないか
+        // API関連プロパティ設定
+        define('API', array(
+            'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // ステージング環境用 GoogleマップのAPIキー
+            'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-1', // ステージング環境用 GoogleアナリティクスのAPIキー
+            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-1', // ステージング環境用 GoogleアナリティクスのID
+            'GOOGLE_ANALYTICS_VIEW_ID'=>'204802703', // ステージング環境用 Analytics Reporting API V4 view_id
+            'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
+            'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
+            'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+            'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
+            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
+            'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
+            'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
+            'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
+            'INSTAGRAM_CACHE_TIME'=> 360, // インスタグラムキャッシュタイム
+        ));
     } else if(strpos($_SERVER['HTTP_HOST'],'dev') !== false){
         // ステージング環境の場合
         define("PUBLIC_DOMAIN",'https://devokiyorugo.work');
         define("ADMIN_DOMAIN",'https://admin.devokiyorugo.work');
         define("IMG_DOMAIN",'https://img.devokiyorugo.work');
-
+        define("USER_NO_INDEX", true); //「userDefault.ctp」検索エンジンにインデックスしないか
+        define("OWNER_NO_INDEX", true); // 「ownerDefault.ctp」検索エンジンにインデックスしないか
+        define("SHOP_NO_INDEX", true); // 「shopDefault.ctp」検索エンジンにインデックスしないか
+        define("CAST_NO_INDEX", true); // 「castDefault.ctp」検索エンジンにインデックスしないか
+        define("SIMPLE_NO_INDEX", true); // 「simpleDefault.ctp」検索エンジンにインデックスしないか
+        define("NO_FOLLOW", true); // ステージング環境用 ページ内のリンク先をフォローしないか
+        // API関連プロパティ設定
+        define('API', array(
+            'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // ステージング環境用 GoogleマップのAPIキー
+            'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-1', // ステージング環境用 GoogleアナリティクスのAPIキー
+            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-1', // ステージング環境用 GoogleアナリティクスのID
+            'GOOGLE_ANALYTICS_VIEW_ID'=>'204802703', // ステージング環境用 Analytics Reporting API V4 view_id
+            'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
+            'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
+            'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+            'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
+            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
+            'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
+            'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
+            'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
+            'INSTAGRAM_CACHE_TIME'=> 360, // インスタグラムキャッシュタイム
+        ));
     } else {
         // 本番環境の場合
         define("PUBLIC_DOMAIN",'https://night-planet.com');
         define("ADMIN_DOMAIN",'https://admin.night-planet.com');
         define("IMG_DOMAIN",'https://img.night-planet.com');
+        define("USER_NO_INDEX", false); //「userDefault.ctp」検索エンジンにインデックスしないか
+        define("OWNER_NO_INDEX", true); // 「ownerDefault.ctp」検索エンジンにインデックスしないか
+        define("SHOP_NO_INDEX", true); // 「shopDefault.ctp」検索エンジンにインデックスしないか
+        define("CAST_NO_INDEX", true); // 「castDefault.ctp」検索エンジンにインデックスしないか
+        define("SIMPLE_NO_INDEX", true); // 「simpleDefault.ctp」検索エンジンにインデックスしないか
+        define("NO_FOLLOW", false); // ステージング環境用 ページ内のリンク先をフォローしないか
+        // API関連プロパティ設定
+        define('API', array(
+            'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // 本番環境用 GoogleマップのAPIキー
+            'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-2', // 本番環境用 GoogleアナリティクスのAPIキー
+            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-2', // 本番環境用 GoogleアナリティクスのID
+            'GOOGLE_ANALYTICS_VIEW_ID'=>'206887249', // 本番環境用 Analytics Reporting API V4 view_id
+            'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
+            'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
+            'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+            'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
+            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
+            'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
+            'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
+            'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
+            'INSTAGRAM_CACHE_TIME'=> 360, // インスタグラムキャッシュタイム
+        ));
     }
 
 return [
@@ -423,6 +508,7 @@ return [
         'DIARY_TITLE'=>'_area_の_genre_ _shop_|_cast_の日記ページ。ポータルサイト『_service_name_』',
         'GALLERY_TITLE'=>'_area_の_genre_ _shop_|_cast_のギャラリーページ。ポータルサイト『_service_name_』',
     )),
+
     // SEO メタ関連
     define('META', array(
         'TOP_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーのポータルサイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
@@ -433,39 +519,8 @@ return [
         'CAST_DESCRIPTION'=>'_cast_のトップページです！様々なキャストが在籍しています！新人キャストも随時紹介していきます！お店探しは『_service_name_』で！',
         'DIARY_DESCRIPTION'=>'_cast_の日記ページです！日々の出来事などを日記に綴っていきますのでお見逃しなく！お店探しは『_service_name_』で！',
         'GALLERY_DESCRIPTION'=>'_cast_のギャラリーページです！毎日更新していきますのでお見逃しなく！お店探しは『_service_name_』で！',
-        'USER_NO_INDEX'=>true, // ステージング環境用 使用テンプレート「userDefault.ctp」検索エンジンにインデックスするかしないか
-        'OWNER_NO_INDEX'=>true, // ステージング環境用 使用テンプレート「ownerDefault.ctp」検索エンジンにインデックスするかしないか
-        'SHOP_NO_INDEX'=>true, // ステージング環境用 使用テンプレート「shopDefault.ctp」検索エンジンにインデックスするかしないか
-        'CAST_NO_INDEX'=>true, // ステージング環境用 使用テンプレート「castDefault.ctp」検索エンジンにインデックスするかしないか
-        'SIMPLE_NO_INDEX'=>true, // ステージング環境用 使用テンプレート「simpleDefault.ctp」検索エンジンにインデックスするかしないか
-        'NO_FOLLOW'=>true, // ステージング環境用 ページ内のリンク先をフォローするかしないか
-        // 'USER_NO_INDEX'=>FALSE, // 本番環境用 使用テンプレート「userDefault.ctp」検索エンジンにインデックスするかしないか
-        // 'OWNER_NO_INDEX'=>TRUE, // 本番環境用 使用テンプレート「ownerDefault.ctp」検索エンジンにインデックスするかしないか
-        // 'SHOP_NO_INDEX'=>TRUE, // 本番環境用 使用テンプレート「shopDefault.ctp」検索エンジンにインデックスするかしないか
-        // 'CAST_NO_INDEX'=>TRUE, // 本番環境用 使用テンプレート「castDefault.ctp」検索エンジンにインデックスするかしないか
-        // 'SIMPLE_NO_INDEX'=>TRUE, // 本番環境用 使用テンプレート「simpleDefault.ctp」検索エンジンにインデックスするかしないか
-        // 'NO_FOLLOW'=>TRUE, // 本番環境用 ページ内のリンク先をフォローするかしないか
     )),
 
-    // API関連プロパティ設定
-    define('API', array(
-        // 'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // 本番環境用 GoogleマップのAPIキー
-        // 'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-146237049-1', // 本番環境用 GoogleアナリティクスのAPIキー
-        // 'GOOGLE_ANALYTICS_ID'=>'UA-146237049-1', // 本番環境用 GoogleアナリティクスのID
-        'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // ステージング環境用 GoogleマップのAPIキー
-        'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-1', // ステージング環境用 GoogleアナリティクスのAPIキー
-        'GOOGLE_ANALYTICS_ID'=>'UA-151147225-1', // ステージング環境用 GoogleアナリティクスのID
-        'GOOGLE_ANALYTICS_VIEW_ID'=>'204802703', // ステージング環境用 Analytics Reporting API V4 view_id
-        'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
-        'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
-        'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
-        'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
-        'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
-        'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
-        'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
-        'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
-        'INSTAGRAM_CACHE_TIME'=> 360, // インスタグラムキャッシュタイム
-    )),
     // サービスプラン
     define('SERVECE_PLAN', array(
         'light'=> [

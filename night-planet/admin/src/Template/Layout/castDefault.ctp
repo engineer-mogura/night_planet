@@ -26,7 +26,7 @@
   <?= $this->Html->script('jquery.notifyBar.js') ?>
   <?= $this->Html->script('ajaxzip3.js') ?>
   <?= $this->Html->script('moment.min.js') ?><!-- fullcalendar-3.9.0 -->
-  <?= $this->Html->script('fullcalendar.js') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
+  <?= $this->Html->script('fullcalendar.min.js') ?><!-- fullcalendar-3.9.0 --><!-- TODO: minの方を読み込むようにする。軽量化のため -->
   <?= $this->Html->script('fullcalendar_locale/ja.js') ?><!-- fullcalendar-3.9.0 -->
   <?= $this->Html->script(API['GOOGLE_MAP_APIS']) ?>
   <?= $this->Html->script("load-image.all.min.js") ?><!-- 画像の縦横を自動調整してくれるプラグインExif情報関連 -->

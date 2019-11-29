@@ -15,7 +15,11 @@
                     <li class="tab"><a href="#sns">SNS</a></li>
                 </ul>
             </div>
-            <div class="col" style="margin-top:30px;"><h5><a href="<?=$shopInfo['shop_url']?>" target=”_blank” rel="noopener noreferrer">店舗ページを確認する</a></h5></div>
+            <div class="col" style="margin-top:30px;">
+                <p>
+                    <a href="<?=$shopInfo['shop_url']?>" target="_blank" rel="noopener noreferrer">店舗ページを確認する</a>
+                </p>
+            </div>
             <!-- トップ画像タブ START-->
             <?= $this->element('shopEdit/top-image'); ?>
             <!-- トップ画像タブ END-->

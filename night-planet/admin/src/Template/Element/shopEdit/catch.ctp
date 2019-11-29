@@ -1,6 +1,6 @@
 <div id="catch" class="col s12">
   <?php echo $this->Flash->render(); ?>
-  <h5>キャッチコピー</h5>
+  <p>キャッチコピー<span><a data-target="modal-help" data-help="1" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
   <div id="show-catch">
     <div class="row">
       <form id="delete-catch" name="delete_catch" method="post" style="display:none;" action="/owner/shops/delete_catch">
@@ -16,14 +16,16 @@
             <div class="card-panel light-blue accent-1"><?=$this->Text->autoParagraph($shop->catch); ?></div>
           </div>
         </div>
-        <div class="card-content" class="center-align">
+        <div class="card-content center-align">
           <button type="button" class="waves-effect waves-light btn-large catch-changeBtn">変更</button>
           <button type="button" class="waves-effect waves-light btn-large catch-deleteBtn">削除</button>
         </div>
       <?php } else { ?>
-        <p>まだ登録されていません。</p>
-        <button type="button" class="waves-effect waves-light btn-large catch-changeBtn">登録</button>
-      <?php } ?>
+        <div class="card-content center-align">
+          <p>まだ登録されていません。</p>
+          <button type="button" class="waves-effect waves-light btn-large catch-changeBtn">登録</button>
+        </div>
+     <?php } ?>
     </div>
   </div>
   <form id="save-catch" name="save_catch" method="post" action="/owner/shops/save_catch" style="display:none;">
@@ -36,7 +38,7 @@
         <label for="cast-copy">キャッチコピー</label>
       </div>
     </div>
-    <div class="card-content" class="center-align">
+    <div class="card-content center-align">
       <button type="button" class="waves-effect waves-light btn-large catch-changeBtn">やめる</button>
       <button type="button" class="waves-effect waves-light btn-large catch-saveBtn">更新</button>
     </div>

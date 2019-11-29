@@ -1,6 +1,6 @@
 <div id="tenpo" class="col s12">
   <?php echo $this->Flash->render();  ?>
-  <h5>店舗情報</h5>
+  <p>店舗情報<span><a data-target="modal-help" data-help="4" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
   <div id="show-tenpo">
     <div class="row">
       <div class="col s12 m12 l12">

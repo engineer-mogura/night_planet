@@ -69,6 +69,9 @@ function crearOwnerEvents() {
  * ショップ画面のイベントクリア
  */
 function crearShopEvents() {
+    /** 共通 START */
+    $(document).off('click', '.modal-trigger.edit-help');
+    /** 共通 END */
     /** トップ画像タブ START */
     $(document).off('click', '.top-image-changeBtn');
     $(document).off('click', '.top-image-saveBtn');
@@ -422,6 +425,45 @@ function castImageDeleteBtn(form, obj){
     });
 }
 
+/**
+ * ヘルプモーダル表示処理
+ */
+var helpModal = function() {
+    $('#modal-help').modal({
+
+        ready: function() {
+            scrollPosition = $(window).scrollTop();
+            // モーダル表示してる時は、背景画面のスクロールを禁止する
+            $('body').addClass('fixed').css({'top': -scrollPosition});
+        },
+        // モーダル非表示完了コールバック
+        complete: function() {
+            // モーダル非表示した時は、背景画面のスクロールを解除する
+            $('body').removeClass('fixed').css({'top': 0});
+            window.scrollTo( 0 , scrollPosition );
+            $('.modal-content.help').animate({scrollTop : 0}, 1000);
+            $('.modal-trigger.edit-help').each(function(i, el) {
+                whichHelp = $(el).attr('data-help');
+                $('.collapsible.help').collapsible('close', whichHelp);
+            });
+        }
+    });
+    $('.collapsible.help').collapsible();
+    var whichHelp,target,targetP,scrollP,position;
+    // ヘルプをクリックした時
+    $(document).on('click', '.modal-trigger.edit-help', function(e) {
+      e.preventDefault();
+      whichHelp = $(this).attr('data-help');
+      $('.collapsible.help').collapsible('open', whichHelp);
+      targetP = $('#section' + whichHelp).position();
+      scrollH = $('.modal-content.help').scrollTop();
+      position = targetP.top + scrollH;
+      $('.modal-content.help').animate({
+        scrollTop: position
+      }, 400);
+    });
+ 
+  }
 
     // common initialize
     function initialize() {
@@ -461,27 +503,7 @@ function castImageDeleteBtn(form, obj){
         $('.collapsible').collapsible();
         Materialize.updateTextFields();
         $('input, textarea').characterCounter();
-        // materializecss modal モーダル表示してる時は、背景のスクロール禁止する
-        // $('.modal').modal();
-        $('.modal').modal({
-            // dismissible: true, // Modal can be dismissed by clicking outside of the modal
-            // opacity: 0.5, // Opacity of modal background
-            // inDuration: 300, // Transition in duration
-            // outDuration: 200, // Transition out duration
-            // startingTop: '4%', // Starting top style attribute
-            // endingTop: '10%', // Ending top style attribute
-            ready: function() {
-                scrollPosition = $(window).scrollTop();
-                // モーダル表示してる時は、背景画面のスクロールを禁止する
-                $('body').addClass('fixed').css({'top': -scrollPosition});
-            },
-            // モーダル非表示完了コールバック
-            complete: function() {
-                // モーダル非表示した時は、背景画面のスクロールを解除する
-                $('body').removeClass('fixed').css({'top': 0});
-                window.scrollTo( 0 , scrollPosition );
-            }
-        });
+
         // TODO: ユーザーのログイン機能実装時に解除する
         $('#modal-login').modal({
 
@@ -619,6 +641,21 @@ function castImageDeleteBtn(form, obj){
  * ユーザー画面の初期化処理
  */
 function initializeUser() {
+
+    // 通常モーダルの初期化処理(個別に設定する場合は、この処理の下に再初期化すること)
+    $('.modal').modal({
+        ready: function() {
+            scrollPosition = $(window).scrollTop();
+            // モーダル表示してる時は、背景画面のスクロールを禁止する
+            $('body').addClass('fixed').css({'top': -scrollPosition});
+        },
+        // モーダル非表示完了コールバック
+        complete: function() {
+            // モーダル非表示した時は、背景画面のスクロールを解除する
+            $('body').removeClass('fixed').css({'top': 0});
+            window.scrollTo( 0 , scrollPosition );
+        }
+    });
 
     // ユーザーの初期化処理
     var x = $(window).width();
@@ -821,6 +858,21 @@ function commonSearch(isAjax) {
  */
 function initializeOwner() {
 
+    // 通常モーダルの初期化処理(個別に設定する場合は、この処理の下に再初期化すること)
+    $('.modal').modal({
+        ready: function() {
+            scrollPosition = $(window).scrollTop();
+            // モーダル表示してる時は、背景画面のスクロールを禁止する
+            $('body').addClass('fixed').css({'top': -scrollPosition});
+        },
+        // モーダル非表示完了コールバック
+        complete: function() {
+            // モーダル非表示した時は、背景画面のスクロールを解除する
+            $('body').removeClass('fixed').css({'top': 0});
+            window.scrollTo( 0 , scrollPosition );
+        }
+    });
+
     /* プロフィール 画面 START */
     if($("#profile").length) {
         var $profile = $("#profile");
@@ -893,6 +945,24 @@ function initializeOwner() {
  * ショップ画面の初期化処理
  */
 function initializeShop() {
+
+    // 通常モーダルの初期化処理(個別に設定する場合は、この処理の下に再初期化すること)
+    $('.modal').modal({
+        ready: function() {
+            scrollPosition = $(window).scrollTop();
+            // モーダル表示してる時は、背景画面のスクロールを禁止する
+            $('body').addClass('fixed').css({'top': -scrollPosition});
+        },
+        // モーダル非表示完了コールバック
+        complete: function() {
+            // モーダル非表示した時は、背景画面のスクロールを解除する
+            $('body').removeClass('fixed').css({'top': 0});
+            window.scrollTo( 0 , scrollPosition );
+        }
+    });
+
+    // ヘルプモーダルの初期化処理
+    helpModal();
 
     /* 店舗情報 画面 START */
     if($("#shop-edit").length) {
@@ -2455,9 +2525,20 @@ function initializeShop() {
  */
 function initializeCast() {
 
-    // TODO: ショップページとキャストページは分離していることから、jsファイルも分けるか
-    // 要素の存在判定で読み込まない処理にするか後で考える。
-    // キャスト用の初期化処理
+    // 通常モーダルの初期化処理(個別に設定する場合は、この処理の下に再初期化すること)
+    $('.modal').modal({
+        ready: function() {
+            scrollPosition = $(window).scrollTop();
+            // モーダル表示してる時は、背景画面のスクロールを禁止する
+            $('body').addClass('fixed').css({'top': -scrollPosition});
+        },
+        // モーダル非表示完了コールバック
+        complete: function() {
+            // モーダル非表示した時は、背景画面のスクロールを解除する
+            $('body').removeClass('fixed').css({'top': 0});
+            window.scrollTo( 0 , scrollPosition );
+        }
+    });
 
     birthdayPickerIni();
 

@@ -1,8 +1,6 @@
 <?php
-use Cake\Routing\Router;
 
-//$url = Router::url(['controller' => 'Owners', 'action' => 'verify', $owner->tokenGenerate()], true);
-$url = ADMIN_DOMAIN.'/cast/casts/verify/'.$cast->tokenGenerate();
+$url = ADMIN_DOMAIN.'/cast/casts/verify/'.$cast->tokenGenerate(60);
 ?>
 <?= $cast->name ?>様。初めまして、<?= MAIL['FROM_NAME'] ?>です。<br>
 【<?=$shop_name?>】様より、スタッフ登録のご案内があります。<br>

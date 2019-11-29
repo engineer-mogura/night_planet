@@ -1,6 +1,6 @@
 <div id="job" class="col s12">
   <?php echo $this->Flash->render();  ?>
-  <h5>求人情報</h5>
+  <p>求人情報<span><a data-target="modal-help" data-help="6" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
   <div id="show-job">
     <div class="row">
       <?php foreach ($shop->jobs as $key => $job): ?>

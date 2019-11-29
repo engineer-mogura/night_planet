@@ -1,6 +1,6 @@
 <div id="coupon" class="col s12">
   <?php echo $this->Flash->render();  ?>
-  <h5>クーポン</h5>
+  <p>クーポン<span><a data-target="modal-help" data-help="2" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
   <div id="show-coupon">
     <div class="row">
       <form id="delete-coupon" name="delete_coupon" method="post" style="display:none;" action="/owner/shops/delete_coupon">

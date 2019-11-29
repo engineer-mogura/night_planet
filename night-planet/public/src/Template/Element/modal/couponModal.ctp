@@ -2,7 +2,7 @@
 	<div class="modal-content">
 		<?php if(count($shop->coupons) > 0): ?>
 		<ul class="collection with-header">
-			<li class="collection-header"><h4>使いたいクーポン番号をお店の人に見せてね☆</h4></li>
+			<li class="collection-header"><p>😍使用するクーポンをお店側に見せてね😍</p></li>
 			<?php foreach($shop->coupons as  $key => $coupon): ?>
 				<li class="collection-item">
 				<!-- <i class="material-icons circle">folder</i> -->
@@ -14,7 +14,7 @@
 		</ul>
 		<?php else: ?>
 		<div class="">
-			<p>クーポンの登録はありません。</p>
+			<p>😥クーポンの登録はありません。😥</p>
 		</div>
 		<?php endif; ?>
 	</div>

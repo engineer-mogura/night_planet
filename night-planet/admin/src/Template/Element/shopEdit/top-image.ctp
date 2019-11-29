@@ -1,6 +1,6 @@
 <div id="top-image" class="col s12">
   <?php echo $this->Flash->render(); ?>
-  <h5>トップ画像</h5>
+  <p>トップ画像<span><a data-target="modal-help" data-help="0" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
   <div id="show-top-image" style="text-align:center">
     <img width="100%" height="300" src="<?= $shop->top_image ?>" />
     <button type="button" class="waves-effect waves-light btn-large top-image-changeBtn">変更</button>

@@ -1059,12 +1059,12 @@ class UtilComponent extends Component
 
         // データ取得に失敗した場合
         // サーバエラーを返す
-        if (!$ig_json || !$ig_data) {
-            //	exit('データ取得に失敗しました');
-            // 500 Internal Server Error
-            header('HTTP', true, 500);
-            exit;
-        }
+        // if (!$ig_json || !$ig_data) {
+        //     //	exit('データ取得に失敗しました');
+        //     // 500 Internal Server Error
+        //     header('HTTP', true, 500);
+        //     exit;
+        // }
 
         // 初期表示の設定確認
         if ($show_mode !== 'grid' && $show_mode !== 'list') {

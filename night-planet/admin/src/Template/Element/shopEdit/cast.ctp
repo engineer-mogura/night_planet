@@ -1,5 +1,5 @@
 <div id="cast" class="col s12">
-    <h5>キャスト</h5>
+    <p>キャスト<span><a data-target="modal-help" data-help="3" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
     <div id="show-cast">
         <div class="row">
             <form id="delete-cast" name="delete_cast" method="post" style="display:none;"

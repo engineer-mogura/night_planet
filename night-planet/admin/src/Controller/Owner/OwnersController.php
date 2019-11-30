@@ -155,7 +155,12 @@ class OwnersController extends AppController
      */
     public function verify($token)
     {
-        $owner = $this->Owners->get(Token::getId($token));
+        try {
+            $owner = $this->Owners->get(Token::getId($token));
+        } catch(RuntimeException $e) {
+            $this->Flash->error('URLが無効になっています。');
+            return $this->redirect(['action' => 'signup']);
+        }
         // 以下でトークンの有効期限や改ざんを検証することが出来る
         if (!$owner->tokenVerify($token)) {
             $this->log($this->Util->setLog($owner
@@ -669,8 +674,12 @@ class OwnersController extends AppController
         // シンプルレイアウトを使用
         $this->viewBuilder()->layout('simpleDefault');
         $owner = $this->Auth->identify();
-
-        $owner = $this->Owners->get(Token::getId($token));
+        try {
+            $owner = $this->Owners->get(Token::getId($token));
+        } catch(RuntimeException $e) {
+            $this->Flash->error('URLが無効になっています。');
+            return $this->redirect(['action' => 'login']);
+        }
 
         // 以下でトークンの有効期限や改ざんを検証することが出来る
         if (!$owner->tokenVerify($token)) {

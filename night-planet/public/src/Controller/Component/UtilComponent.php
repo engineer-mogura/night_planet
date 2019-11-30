@@ -1000,7 +1000,7 @@ class UtilComponent extends Component
 
         //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
         if (!empty($target_user)) {
-            $fields      = 'business_discovery.username('.$target_user.'){id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id,media{caption,media_url,media_type,children,like_count,comments_count,timestamp,id}}';
+            $fields      = 'business_discovery.username('.$target_user.'){id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id,media{caption,media_url,media_type,children{media_url,media_type},like_count,comments_count,timestamp,id}}';
         }
         //自分のアカウントの画像が取得できればOKな場合は$queryを以下のようにしてください。
         if (!empty($insta_business_name)) {

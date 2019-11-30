@@ -496,8 +496,6 @@ var helpModal = function() {
         $('.slider').slider();
         // materializecss selectbox
         $('select').material_select();
-        // materializecss tooltip
-        $('.tooltipped').tooltip({delay: 50});
         $('.materialboxed').materialbox();
         $('.scrollspy').scrollSpy();
         $('.collapsible').collapsible();

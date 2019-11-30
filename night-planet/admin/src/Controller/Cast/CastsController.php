@@ -1394,7 +1394,14 @@ class CastsController extends AppController
      */
     public function verify($token)
     {
-        $cast = $this->Casts->get(Token::getId($token));
+        // シンプルレイアウトを使用
+        $this->viewBuilder()->layout('simpleDefault');
+        try {
+            $cast = $this->Casts->get(Token::getId($token));
+        } catch(RuntimeException $e) {
+            $this->Flash->error('URLが無効になっています。');
+            return $this->render('/common/error');
+        }
 
         // 以下でトークンの有効期限や改ざんを検証することが出来る
         if (!$cast->tokenVerify($token)) {
@@ -1403,9 +1410,13 @@ class CastsController extends AppController
             // 仮登録してるレコードを削除する
             $this->Casts->delete($cast);
 
-            $this->Flash->success(RESULT_M['AUTH_FAILED']);
-            return $this->redirect(['action' => 'signup']);
+            $this->Flash->error(RESULT_M['AUTH_FAILED']);
+            return $this->render('/common/error');
         }
+
+        // キャストレイアウトを使用
+        $this->viewBuilder()->layout('castDefault');
+
         // 仮登録時点で削除フラグは立っている想定。
         if ($cast->delete_flag != 1) {
             // すでに登録しているとみなし、ログイン画面へ
@@ -1557,8 +1568,12 @@ class CastsController extends AppController
         // シンプルレイアウトを使用
         $this->viewBuilder()->layout('simpleDefault');
         $cast = $this->Auth->identify();
-
-        $cast = $this->Casts->get(Token::getId($token));
+        try {
+            $cast = $this->Casts->get(Token::getId($token));
+        } catch(RuntimeException $e) {
+            $this->Flash->error('URLが無効になっています。');
+            return $this->render('/common/pass_reset_form');
+        }
 
         // 以下でトークンの有効期限や改ざんを検証することが出来る
         if (!$cast->tokenVerify($token)) {
@@ -1567,7 +1582,7 @@ class CastsController extends AppController
                 . $this->request->params['action']. "】", "pass_reset");
 
             $this->Flash->error(RESULT_M['PASS_RESET_FAILED']);
-            return $this->redirect(['action' => 'login']);
+            return $this->render('/common/pass_reset_form');
         }
 
         if ($this->request->is('post')) {

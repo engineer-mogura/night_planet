@@ -114,7 +114,7 @@
             <!-- プロフィール START -->
             <div id="cast-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="cast-label section-label"><span> プロフィール </span></p>
+                    <p class="cast-profile-label section-label"><span> プロフィール </span></p>
                 </div>
                 <div class="col s12 m12 l12">
                     <table class="bordered shop-table z-depth-2" border="1">
@@ -143,7 +143,7 @@
             <!-- キャストギャラリー START -->
             <div id="cast-gallery-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="shop-gallery-label section-label"><span> ギャラリー </span></p>
+                    <p class="cast-gallery-label section-label"><span> ギャラリー </span></p>
                 </div>
                 <?= count($cast->gallery) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
                 <div class="my-gallery" style="display:inline-block;">

@@ -763,6 +763,28 @@ div.description {
   background-size: contain;
   vertical-align: middle;
 }
+#cast-gallery-section .cast-gallery-label span:before,
+#cast-gallery-section .cast-gallery-label span:after {
+  background-image: url(/img/common/image-gallery-icon.jpg);
+  background-repeat: no-repeat;
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+#cast-section .cast-profile-label span:before,
+#cast-section .cast-profile-label span:after {
+  background-image: url(/img/common/user-icon.png);
+  background-repeat: no-repeat;
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
 #map-section .map-label span:before,
 #map-section .map-label span:after {
   background-image: url(/img/common/map-marker.png);

@@ -64,14 +64,11 @@
 				</li>
 				<li id="section4">
 					<div class="collapsible-header"><i class="material-icons">whatshot</i>店舗情報とは？</div>
-					<div class="collapsible-body"><span>店舗情報は早い段階で入力しておきましょう！
-						<br>アクセスユーザーは料金体制がどうなのか、店舗でカードが使えるか、等情報を把握したいはずです。</span></div>
+					<div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
 				</li>
 				<li id="section5">
 					<div class="collapsible-header"><i class="material-icons">whatshot</i>店舗ギャラリーとは？</div>
-					<div class="collapsible-body"><span>店舗ギャラリーは店内の雰囲気などイメージが湧くような画像を載せるとよいでしょう。
-					<br>アップロード制限として、９枚の画像のみとしています。
-					</span></div>
+					<div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
 				</li>
 				<li id="section6">
 					<div class="collapsible-header"><i class="material-icons">whatshot</i>求人情報とは？</div>

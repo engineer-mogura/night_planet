@@ -152,7 +152,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col s12 m12 l12"><label style="font-size: 1rem;">時間</label></div>
+      <div class="col s12 m12 l12"><label style="font-size: 1rem;">時間※終了時間は入力無で「LAST」の表示になります。（パソコンからは右クリックで表示します。）</label></div>
       <div class="col s5 m2 l2"><input id="work-from-time" class="timepicker" name="work_from_time"></div>
       <div class="col s2 m2 l2 center-align">～</div>
       <div class="col s5 m2 l2"><input id="work-to-time" class="timepicker" name="work_to_time"></div>

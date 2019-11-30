@@ -44,6 +44,13 @@
 			$caption = preg_replace('/(http[s]{0,1}:\/\/[a-zA-Z0-9\.\/#\?\&=\-_~]+)/', '<a href="$1" target="new" rel="noopener">$1</a>', $caption);
 			$caption = preg_replace('/#([^<>]+?)(\s|\n|\z|#|@)/', '<a href="https://www.instagram.com/explore/tags/$1/" target="new" rel="noopener">#$1</a>$2', $caption);
 			$caption = preg_replace('/@([^<>]+?)(\s|\n|\z|#|@)/', '<a href="https://www.instagram.com/$1/" target="new" rel="noopener">@$1</a>$2', $caption);
+			$is_multiple = false; // 複数画像判定
+			// 複数画像の場合
+			if(isset($post->children)):
+				if(count($post->children->data) > 1):
+					$is_multiple = true;
+				endif;
+			endif;
 			// 動画の場合は$post->media_urlが取得されないので$post->thumbnail_urlを使う (2019/08/27追記)
 			if($video = isset($post->thumbnail_url)):
 				$media = $post->thumbnail_url;
@@ -52,26 +59,25 @@
 			endif;
 ?>
         <div>
-		<a onclick="click_figure(this)" id="call-figure<?=h($key)?>" class="instagram" title="likes:<?php echo $post->like_count; ?>">
+		<a onclick="click_figure(this)" id="<?=$is_multiple ? 'call-figure-multiple'.h($key):'call-figure'.h($key) ?>" class="instagram" title="likes:<?php echo $post->like_count; ?>">
 			<div style="background-image: url('<?php echo $media; ?>');"></div>
-				<?php
+<?php
 				// 複数画像の場合
-				if(isset($post->children)):
-					if(count($post->children->data) > 1):
-				?>
+				if($is_multiple):
+?>
 				<span class="ig-children icon-vertical-align"><?=count($post->children->data)?></span>
-				<?php
-					endif;
+<?php
 				endif;
 				// 動画の場合
 				if(isset($post->thumbnail_url)):
-				?>
+?>
 				<span class="ig-video"></span><!-- 追加要素 -->
-			<?php
+<?php
 				endif;
-			?>
+?>
 				<span class="ig-comment icon-vertical-align"><i class="material-icons">comment</i><?=$post->comments_count;?></span>
 				<span class="ig-like icon-vertical-align"><i class="material-icons">favorite</i><?=$post->like_count;?></span>
+				<?= $post->media_type == 'VIDEO' ? '<span class="ig-video icon-vertical-align"><i class="small material-icons">play_arrow</i></span>' : "" ?></br>
 			</a>
           <time datetime="<?php echo $post->timestamp; ?>"><?php echo '投稿日時：', date('Y年 n月 j日', strtotime($post->timestamp)), ' (', $days[date('w', strtotime($post->timestamp))], ')'; ?></time>
           <p>
@@ -85,33 +91,71 @@
 	</main>
 <?php
 	if(is_array($ig_data->media->data)){
-?>
-        <div class="my-gallery" style="display:none;">
-<?php
-		foreach($ig_data->media->data as $key => $post){
-			if($video = isset($post->thumbnail_url)){
+
+		foreach ($ig_data->media->data as $key => $post) {
+
+			$is_multiple = false; // 複数画像判定
+			// 複数画像の場合
+			if(isset($post->children)):
+				if(count($post->children->data) > 1):
+					$is_multiple = true;
+				endif;
+			endif;
+
+			if ($video = isset($post->thumbnail_url)) {
 				$media = $post->thumbnail_url;
-			} else{
+			} else {
 				$media = $post->media_url;
 			}
+
+			// １枚画像の場合
+			if(!$is_multiple) {
 ?>
-			<figure>
-				<a href="<?php echo $post->media_url; ?>" class="instagram call-figure<?=h($key)?>" data-size="800x1000">
-					<img itemprop="thumbnail" alt="<?=$caption;?>" />
-				</a>
-				<figcaption style="display:none;">
-					<i class="small material-icons">favorite_border</i><?=$post->like_count?> 
-					<i class="small material-icons">comment</i><?=$post->comments_count?>
-					<?=isset($post->children) && count($post->children->data) > 1 ? '<i class="small material-icons">photo_library</i>'.count($post->children->data) : "" ?>
-					<?=isset($post->thumbnail_url) ? '<i class="small material-icons">play_arrow</i>': "" ?></br>
-					<?=$post->caption?>
-				</figcaption>
-			</figure>
+				<div class="my-gallery" style="display:none;">
+					<figure>
+						<a href="<?php echo $post->media_url; ?>" class="instagram call-figure<?=h($key)?>" data-size="800x1000">
+							<img itemprop="thumbnail" alt="<?=$caption; ?>" />
+						</a>
+						<figcaption style="display:none;">
+							<i class="small material-icons">favorite_border</i><?=$post->like_count?> 
+							<i class="small material-icons">comment</i><?=$post->comments_count?>
+							<?=isset($post->children) && count($post->children->data) > 1 ? '<i class="small material-icons">photo_library</i>'.count($post->children->data) : "" ?>
+							<?=isset($post->media_type) == 'VIDEO' ? '<i class="small material-icons">play_arrow</i>': "" ?></br>
+							<?=$post->caption?>
+						</figcaption>
+					</figure>
+				</div>
 <?php
+			} else {
+				// 複数画像の場合
+				if (count($post->children->data) > 1) {
+?>
+				<div class="my-gallery" style="display:none;">
+<?php
+					foreach ($post->children->data as $child_key => $child_post) {
+?>
+						<figure>
+							<a href="<?php echo $child_post->media_url; ?>" class="instagram <?= $child_key == 0 ? 'call-figure-multiple'.h($key):null?>" data-size="800x1000">
+								<img itemprop="thumbnail" alt="<?=$caption; ?>" />
+							</a>
+							<figcaption style="display:none;">
+								<i class="small material-icons">favorite_border</i><?=$post->like_count?> 
+								<i class="small material-icons">comment</i><?=$post->comments_count?>
+								<?=isset($post->children) && count($post->children->data) > 1 ? '<i class="small material-icons">photo_library</i>'.count($post->children->data) : "" ?>
+								<?=isset($post->media_type) == 'VIDEO' ? '<i class="small material-icons">play_arrow</i>': "" ?></br>
+								<?=$post->caption?>
+							</figcaption>
+						</figure>
+<?php
+					}
+				}
+?>
+				</div>
+<?php
+			}
 		}
 	}
 ?>
-        </div>
 </article>
 <script>
 

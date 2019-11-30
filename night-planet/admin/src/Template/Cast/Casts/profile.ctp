@@ -41,30 +41,48 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s12 m6 l6">
+                                <p>
+                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="なるべく本名で入力してください。"><i class="material-icons">help</i></a>
+                                </p>
                                 <input type="text" id="name" class="validate" name="name" value="<?=$cast->name ?>" data-length="30">
                                 <label for="name">名前</label>
                             </div>
                             <div class="input-field col s12 m6 l6">
+                                <p>
+                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="キャスト紹介ページではこちらの名前で表示します。"><i class="material-icons">help</i></a>
+                                </p>
                                 <input type="text" id="nickname" class="validate" name="nickname" value="<?=$cast->nickname ?>" data-length="30">
                                 <label for="nickname">ニックネーム</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12 m6 l6">
+                                <p>
+                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="アドレスの変更はできません。どうしても変更が必要な場合はお問い合わせください。"><i class="material-icons">help</i></a>
+                                </p>
                                 <input type="text" id="email" class="validate" name="email" value="<?=$cast->email ?>" disabled>
                                 <label for="email">Ｅメール</label>
                             </div>
                             <div class="input-field col s12 m6 l6">
+                                <p>
+                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="パスワードを変更する場合はパスワード変更からできます。"><i class="material-icons">help</i></a>
+                                </p>
                                 <input type="password" id="password" class="validate" name="password" value="<?=$cast->password ?>" disabled>
                                 <label for="password">パスワード</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12 m6 l6">
+                                <p>
+                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="キャスト紹介では誕生日として表示します。例：12/24"><i class="material-icons">help</i></a>
+                                </p>
                                 <input type="text" id="birthday" class="birthday-picker" name="birthday">
                                 <label>誕生日</label>
                             </div>
                             <div class="input-field col s12 m6 l6">
+                                <p>
+                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="年齢が公開されることはありません。"><i class="material-icons">help</i></a>
+                                </p>
                                 <select name="age">
                                     <option value="">年齢を選択してください</option>
                                     <?php foreach ($selectList['age'] as $key => $value) {

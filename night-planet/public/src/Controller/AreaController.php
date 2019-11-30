@@ -485,6 +485,13 @@ class AreaController extends AppController
             );
             // インスタ情報を取得
             $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $cache_path);
+            // データ取得に失敗した場合
+            if (!$tmp_ig_data) {
+                $this->log('【'.AREA[$shop->area]['label']
+                    .GENRE[$shop->genre]['label'].$shop->name
+                    .'】のインスタグラムのデータ取得に失敗しました。','error');
+                $this->Flash->warning('インスタグラムのデータ取得に失敗しました。');
+            }
             $ig_data = $tmp_ig_data->business_discovery;
             // インスタユーザーが存在しない場合
             if (!empty($tmp_ig_data->error)) {

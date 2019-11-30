@@ -23,10 +23,9 @@
             'GOOGLE_ANALYTICS_VIEW_ID'=>'204802703', // ステージング環境用 Analytics Reporting API V4 view_id
             'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
             'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
-            'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+            'INSTAGRAM_USER_NAME'=>'night_planet_098', // INSTAGRAMビジネスアカウントネーム
             'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
-          //'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
-            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAHJO7DZBXEZBjxOTJ21fkP6H84Y0JmpGoT6KzNHGe3szrawpIeeYXn9Fan8ZAghRok8UDnBKzwGHti2Il9UHxOcwCYV0zj4QwvHUXRrWA14Qfeoyk5EG8zyBYkWMtGtZBRz0PuSpUmOShqkKYubUvch8dLFdZC9jxeXrP6Ic3', // #3INSTAGRAMアクセストークン
+            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAGTZCNKM4ZBQ8D6ZB3OdmhgCEZAA0G1C5bXDVbQX0jn7CPjVhkgJL0IZCe6OW6rVllZAIz5J7QNHrUpzspZCCJyA2RvZBqV1DPirTWrow301ZBQZARV3HKiBOLkZCq5F69UCebDIj24Qq7RpXMLXRCAZASK2jKoqifng43wB53DkWcFp', // #3INSTAGRAMアクセストークン
             'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
             'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
             'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
@@ -51,10 +50,9 @@
             'GOOGLE_ANALYTICS_VIEW_ID'=>'204802703', // ステージング環境用 Analytics Reporting API V4 view_id
             'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
             'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
-            'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+            'INSTAGRAM_USER_NAME'=>'night_planet_098', // INSTAGRAMビジネスアカウントネーム
             'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
-          //'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
-            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAHJO7DZBXEZBjxOTJ21fkP6H84Y0JmpGoT6KzNHGe3szrawpIeeYXn9Fan8ZAghRok8UDnBKzwGHti2Il9UHxOcwCYV0zj4QwvHUXRrWA14Qfeoyk5EG8zyBYkWMtGtZBRz0PuSpUmOShqkKYubUvch8dLFdZC9jxeXrP6Ic3', // #3INSTAGRAMアクセストークン
+            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAGTZCNKM4ZBQ8D6ZB3OdmhgCEZAA0G1C5bXDVbQX0jn7CPjVhkgJL0IZCe6OW6rVllZAIz5J7QNHrUpzspZCCJyA2RvZBqV1DPirTWrow301ZBQZARV3HKiBOLkZCq5F69UCebDIj24Qq7RpXMLXRCAZASK2jKoqifng43wB53DkWcFp', // #3INSTAGRAMアクセストークン
             'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
             'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
             'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
@@ -79,10 +77,9 @@
             'GOOGLE_ANALYTICS_VIEW_ID'=>'204802703', // ステージング環境用 Analytics Reporting API V4 view_id
             'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
             'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
-            'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+            'INSTAGRAM_USER_NAME'=>'night_planet_098', // INSTAGRAMビジネスアカウントネーム
             'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
-          //'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
-            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAHJO7DZBXEZBjxOTJ21fkP6H84Y0JmpGoT6KzNHGe3szrawpIeeYXn9Fan8ZAghRok8UDnBKzwGHti2Il9UHxOcwCYV0zj4QwvHUXRrWA14Qfeoyk5EG8zyBYkWMtGtZBRz0PuSpUmOShqkKYubUvch8dLFdZC9jxeXrP6Ic3', // #3INSTAGRAMアクセストークン
+            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAGTZCNKM4ZBQ8D6ZB3OdmhgCEZAA0G1C5bXDVbQX0jn7CPjVhkgJL0IZCe6OW6rVllZAIz5J7QNHrUpzspZCCJyA2RvZBqV1DPirTWrow301ZBQZARV3HKiBOLkZCq5F69UCebDIj24Qq7RpXMLXRCAZASK2jKoqifng43wB53DkWcFp', // #3INSTAGRAMアクセストークン
             'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
             'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
             'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
@@ -107,10 +104,9 @@
             'GOOGLE_ANALYTICS_VIEW_ID'=>'206887249', // 本番環境用 Analytics Reporting API V4 view_id
             'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
             'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
-            'INSTAGRAM_USER_NAME'=>'nightplanet91', // INSTAGRAMビジネスアカウントネーム
+            'INSTAGRAM_USER_NAME'=>'night_planet_098', // INSTAGRAMビジネスアカウントネーム
             'INSTAGRAM_BUSINESS_ID'=>'17841418752048383', // INSTAGRAMビジネスアカウントID
-          //'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAPK4yZA5JNmLj1ZAecxAqZBqMb025I0TN2QXib2zBVfk9aWohBrPVASgJ86s2k74hSyV9Or7nw5ZAzfjXZAejnarfThA8MEnH6DwOZAOcoDDxZAv66tn2SlNRpCBGwE5gdDLRYvLZCne7ip7bUZASZBGOy9xgvZAEBasFXKCzJda5EG', // #3INSTAGRAMアクセストークン
-            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAHJO7DZBXEZBjxOTJ21fkP6H84Y0JmpGoT6KzNHGe3szrawpIeeYXn9Fan8ZAghRok8UDnBKzwGHti2Il9UHxOcwCYV0zj4QwvHUXRrWA14Qfeoyk5EG8zyBYkWMtGtZBRz0PuSpUmOShqkKYubUvch8dLFdZC9jxeXrP6Ic3', // #3INSTAGRAMアクセストークン
+            'INSTAGRAM_GRAPH_API_ACCESS_TOKEN'=>'EAAdniupaAi8BAGTZCNKM4ZBQ8D6ZB3OdmhgCEZAA0G1C5bXDVbQX0jn7CPjVhkgJL0IZCe6OW6rVllZAIz5J7QNHrUpzspZCCJyA2RvZBqV1DPirTWrow301ZBQZARV3HKiBOLkZCq5F69UCebDIj24Qq7RpXMLXRCAZASK2jKoqifng43wB53DkWcFp', // #3INSTAGRAMアクセストークン
             'INSTAGRAM_GRAPH_API'=> 'https://graph.facebook.com/v4.0/', // インスタグラムのAPIパス
             'INSTAGRAM_MAX_POSTS'=> 9, // インスタグラムの最大投稿取得数
             'INSTAGRAM_SHOW_MODE'=> 'grid', // インスタグラム表示モード
@@ -129,7 +125,7 @@ return [
     // プロパティ設定
     define('PROPERTY', array(
         'NEW_INFO_MAX'=>'4', // 新着情報関連の表示数
-        'FILE_MAX'=>'8', // アップロードファイル数
+        'FILE_MAX'=>'9', // アップロードファイル数
         'UPDATE_INFO_DAY_MAX'=>'10', // アップロードファイル数
         'SHOW_GALLERY_MAX'=>'10', // キャストのギャラリー最大表示数
         'TOP_SLIDER_GALLERY_MAX'=>'3', // トップスライダーのギャラリー最大表示数
@@ -198,7 +194,7 @@ return [
     )),
     // SNSリンク設定 path.config
     define('SNS', array(
-        'INSTAGRAM'=> 'https://www.instagram.com/nightplanet91/', // FACEBOOK アプリID
+        'INSTAGRAM'=> 'https://www.instagram.com/night_planet_098/', // FACEBOOK アプリID
         'FACEBOOK'=> 'https://www.facebook.com/Night-Planet-101941477849319/', // FACEBOOK アプリID
         'TWITTER'=> 'https://twitter.com/night_planet910', // TWITTERアカウント
 
@@ -317,7 +313,7 @@ return [
         'urasoe'=> [
             'label' => "浦添",
             'path' => "urasoe",
-            'image' => "/img/common/area/top-image.png"
+            'image' => "/img/common/area/area_urasoe.jpg"
         ],
         'ginowan'=> [
             'label' => "宜野湾",

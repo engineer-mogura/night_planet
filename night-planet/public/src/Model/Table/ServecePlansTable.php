@@ -40,7 +40,7 @@ class ServecePlansTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Owners', [
+        $this->belongsTo('owners', [
             'foreignKey' => 'owner_id',
             'joinType' => 'INNER'
         ]);

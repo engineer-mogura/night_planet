@@ -185,7 +185,7 @@ class AreaController extends AppController
 
         $shop = $this->Shops->find('all')
             ->where(['shops.id' => $id])
-            ->contain(['owners','casts' => function (Query $q) {
+            ->contain(['owners','owners.servece_plans','casts' => function (Query $q) {
                 return $q
                         ->where(['casts.status'=>'1']);
             }, 'coupons' => function (Query $q) {
@@ -359,7 +359,7 @@ class AreaController extends AppController
     {
         // キャスト情報、最新の日記情報とイイネの総数取得
         $cast = $this->Casts->find("all")->where(['casts.id' => $id])
-            ->contain(['shops', 'diarys' => function (Query $q) {
+            ->contain(['shops','shops.owners.servece_plans', 'diarys' => function (Query $q) {
                 return $q
                     ->order(['diarys.created'=>'DESC']);
             }

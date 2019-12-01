@@ -97,7 +97,8 @@ class UtilComponent extends Component
         $path = DS.PATH_ROOT['IMG'].DS.PATH_ROOT['OWNER'].DS.$owner['dir'];
 
         $ownerInfo = $ownerInfo + array('owner_path'=> $path
-        ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'profile_path'=> $path.DS.PATH_ROOT['PROFILE']);
+            ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
+            ,'current_plan'=>$owner->servece_plan->current_plan,'previous_plan'=>$owner->servece_plan->previous_plan);
 
         // ディクレトリ取得
         $dir = new Folder(preg_replace(
@@ -149,10 +150,11 @@ class UtilComponent extends Component
             .'?area='.$shop['area'].'&genre='.$shop['genre'].'&name='.$shop['name'];
 
         $shopInfo = $shopInfo + array('shop_path'=> $path
-        ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']
-        ,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE'],'notice_path'=>$path.DS.PATH_ROOT['NOTICE']
-        ,'cache_path'=>$path.DS.PATH_ROOT['CACHE'],'tmp_path'=>$path.DS.PATH_ROOT['TMP']
-        ,'shop_url'=>$shop_url);
+            ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']
+            ,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE'],'notice_path'=>$path.DS.PATH_ROOT['NOTICE']
+            ,'cache_path'=>$path.DS.PATH_ROOT['CACHE'],'tmp_path'=>$path.DS.PATH_ROOT['TMP']
+            ,'shop_url'=>$shop_url,'current_plan'=>$shop->owner->servece_plan->current_plan
+            ,'previous_plan'=>$shop->owner->servece_plan->previous_plan);
         return  $shopInfo;
     }
 
@@ -194,7 +196,9 @@ class UtilComponent extends Component
         $castInfo = $castInfo + array('cast_path'=> $path,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE']
             , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
             , 'schedule_path'=> $path.DS.PATH_ROOT['SCHEDULE'], 'diary_path'=> $path.DS.PATH_ROOT['DIARY']
-            , 'tmp_path'=> $path.DS.PATH_ROOT['TMP'], 'cache_path'=>$path.DS.PATH_ROOT['CACHE'], 'shop_url'=>$shop_url);
+            , 'tmp_path'=> $path.DS.PATH_ROOT['TMP'], 'cache_path'=>$path.DS.PATH_ROOT['CACHE'], 'shop_url'=>$shop_url
+            , 'current_plan'=>$shop->owner->servece_plan->current_plan
+            , 'previous_plan'=>$shop->owner->servece_plan->previous_plan);
 
         // ディクレトリ取得
         $dir = new Folder(preg_replace(
@@ -1000,13 +1004,22 @@ class UtilComponent extends Component
 
         //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
         if (!empty($target_user)) {
-            $fields      = 'business_discovery.username('.$target_user.'){id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id,media{caption,media_url,media_type,children{media_url,media_type},like_count,comments_count,timestamp,id}}';
+            $fields      = 'business_discovery.username('.$target_user.')
+                            {id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id
+                                ,media.limit(50){
+                                    caption,media_url,media_type
+                                    ,children{
+                                        media_url,media_type
+                                    }
+                                    ,like_count,comments_count,timestamp,id
+                                }
+                            }';
         }
         //自分のアカウントの画像が取得できればOKな場合は$queryを以下のようにしてください。
         if (!empty($insta_business_name)) {
             $fields      = 'name,media{caption,like_count,media_url,permalink,timestamp,username}&access_token='.$access_token;
         }
-
+        $fields = str_replace(array("\r\n","\r","\n","\t"," "), '', $fields);
         //////////////////////
         /* 初期設定ここまで */
         //////////////////////

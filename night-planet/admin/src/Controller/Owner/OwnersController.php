@@ -29,7 +29,10 @@ class OwnersController extends AppController
         $this->viewBuilder()->layout('ownerDefault');
         // オーナーに関する情報をセット
         if(!is_null($user = $this->Auth->user())){
-            $owner = $this->Owners->get($user['id']);
+            $owner = $this->Owners->find("all")
+                ->where(['owners.id'=>$user['id']])
+                ->contain(['servece_plans'])
+                ->first();
             $this->set('userInfo', $this->Util->getOwnerInfo($owner));
         }
     }
@@ -289,11 +292,9 @@ class OwnersController extends AppController
         $shop_count = $this->Shops->find('all')
             ->where(['owner_id' => $this->viewVars['userInfo']['id']])
             ->count();
-        $plan = $this->ServecePlans->find('all')
-            ->where(['owner_id'=>$this->viewVars['userInfo']['id']])
-            ->first();
+        $plan = $this->viewVars['userInfo']['current_plan'];
         // プレミアムSプラン以外 かつ 店舗が１件登録されている場合
-        if ($plan->current_plan != SERVECE_PLAN['premium_s']['label']
+        if ($plan != SERVECE_PLAN['premium_s']['label']
             && $shop_count >= 1) {
             // オーナートップページへ
             $search = array('_service_plan_');

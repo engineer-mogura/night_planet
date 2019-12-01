@@ -484,7 +484,9 @@ return [
         'REGISTERED_FAILED'=>'すでに登録されてます。ログインしてください。',
         'FRAUD_INPUT_FAILED'=>'メールアドレスまたはパスワードが不正です。',
         'CHANGE_FAILED'=>'切り替えに失敗しました。もう一度お試しください。',
-        'SHOP_ADD_FAILED'=>'店舗を追加するには、プラン【_service_plan_】の変更が必要です。',
+        'SHOP_ADD_FAILED'=>'店舗を追加するには、【_service_plan_】に変更が必要です。',
+        'INSTA_ADD_FAILED'=>'Instagramを追加するには、フリープラン以外の変更が必要です。',
+        'INSTA_ADD_CAST_FAILED'=>'Instagramを追加するには、【_service_plan_】に変更が必要です。',
     )),
 
     // メール設定
@@ -523,9 +525,9 @@ return [
 
     // サービスプラン
     define('SERVECE_PLAN', array(
-        'light'=> [
-            'name' => "ライトプラン",
-            'label' => "light",
+        'free'=> [
+            'name' => "フリープラン",
+            'label' => "free",
             'charge' => "0"
         ],
         'basic'=> [

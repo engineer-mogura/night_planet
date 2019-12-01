@@ -293,9 +293,14 @@ class OwnersController extends AppController
             ->where(['owner_id' => $this->viewVars['userInfo']['id']])
             ->count();
         $plan = $this->viewVars['userInfo']['current_plan'];
-        // プレミアムSプラン以外 かつ 店舗が１件登録されている場合
-        if ($plan != SERVECE_PLAN['premium_s']['label']
-            && $shop_count >= 1) {
+
+        try {
+            // プレミアムSプラン以外 かつ 店舗が１件登録されている場合 不正なパターンでエラー
+            if ($plan != SERVECE_PLAN['premium_s']['label'] && $shop_count >= 1) {
+                throw new RuntimeException(RESULT_M['SHOP_ADD_FAILED'].' 不正アクセスがあります。');
+            }
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
             // オーナートップページへ
             $search = array('_service_plan_');
             $replace = array(SERVECE_PLAN['premium_s']['name']);
@@ -303,6 +308,7 @@ class OwnersController extends AppController
             $this->Flash->error($message);
             return $this->redirect(['action' => 'index']);
         }
+
         // 登録ボタン押下時
         if ($this->request->is('post')) {
             // バリデーションは新規登録用を使う。

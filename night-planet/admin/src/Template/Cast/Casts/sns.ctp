@@ -1,10 +1,10 @@
 <div id="wrapper">
     <div class="container">
         <div class="row">
+            <?= $this->Flash->render() ?>
             <h5><?=('SNS') ?></h5>
             <div id="sns" class="col s12 m8 l8">
                 <span id="dummy" style="display: hidden;"></span>
-                <?= $this->Flash->render() ?>
                 <div class="card-panel grey lighten-5">
                     <form id="save-sns" name="save_sns" method="post" action="/cast/casts/sns/">
                         <div style="display:none;">
@@ -24,13 +24,13 @@
                         </div>
                         <div class="row">
                             <div class="input-field col s12 m12 l12">
-                                <input type="text" id="instagram" class="validate" name="instagram" value="<?=!empty($cast->snss[0]->instagram) ? $cast->snss[0]->instagram:"" ?>" data-length="255">
+                                <input type="text" id="instagram" class="validate" <?=$userInfo['current_plan'] != SERVECE_PLAN['premium_s']['label'] ? ' disabled ' : null ?> name="instagram" value="<?=!empty($cast->snss[0]->instagram) ? $cast->snss[0]->instagram:"" ?>" data-length="255">
                                 <label for="instagram">instagram</label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col s12 m12 l12">
-                                <input type="text" id="line" class="validate" name="line" value="<?=!empty($cast->snss[0]->line) ? $cast->snss[0]->line:"" ?>" data-length="255">
+                                <input type="text" id="line" class="validate" disabled name="line" value="<?=!empty($cast->snss[0]->line) ? $cast->snss[0]->line:"" ?>" data-length="255">
                                 <label for="line">line</label>
                             </div>
                         </div>

@@ -28,7 +28,11 @@ class CastsController extends AppController
         // キャストに関する情報をセット
         if (!is_null($user = $this->Auth->user())) {
             $cast = $this->Casts->get($user['id']);
-            $shop = $this->Shops->get($user['shop_id']);
+            // オーナーに関する情報をセット
+            $shop = $this->Shops->find("all")
+                ->where(['shops.id'=>$user['shop_id']])
+                ->contain(['owners.servece_plans'])
+                ->first();
             $this->set('userInfo', $this->Util->getCastItem($cast, $shop));
         }
     }
@@ -682,6 +686,26 @@ class CastsController extends AppController
             $errors = ""; // 返却メッセージ
             $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
             $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
+            $plan = $this->viewVars['userInfo']['current_plan'];
+
+            try {
+                // プレミアムSプラン以外 かつ Instagramが入力されていた場合 不正なパターンでエラー
+                if ($plan != SERVECE_PLAN['premium_s']['label'] && !empty($this->request->getData('instagram'))) {
+                    throw new RuntimeException(RESULT_M['INSTA_ADD_CAST_FAILED'].' 不正アクセスがあります。');
+                }
+            } catch (RuntimeException $e) {
+
+                // エラーメッセージをセット
+                $search = array('_service_plan_');
+                $replace = array(SERVECE_PLAN['premium_s']['name']);
+                $message = $this->Util->strReplace($search, $replace, RESULT_M['INSTA_ADD_CAST_FAILED']);
+
+                $this->log($this->Util->setLog($auth, $e));
+                $response = array('success'=>false,'message'=>$message);
+                $this->response->body(json_encode($response));
+                return;
+            }
+
             // レコードが存在するか
             // レコードがない場合は、新規で登録を行う。
             if (!$this->Snss->exists(['cast_id' =>$this->viewVars['userInfo']['id']])) {

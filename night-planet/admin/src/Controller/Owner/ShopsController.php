@@ -37,7 +37,10 @@ class ShopsController extends AppController
             }
 
             // オーナーに関する情報をセット
-            $owner = $this->Owners->get($user['id']);
+            $owner = $this->Owners->find("all")
+                ->where(['owners.id'=>$user['id']])
+                ->contain(['servece_plans'])
+                ->first();
             $this->set('userInfo', $this->Util->getOwnerInfo($owner));
 
             // 店舗情報取得
@@ -1091,6 +1094,21 @@ class ShopsController extends AppController
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Owner');
         $id = $auth['id']; // ユーザーID
+        $plan = $this->viewVars['userInfo']['current_plan'];
+
+        try {
+            // フリープラン かつ Instagramが入力されていた場合 不正なパターンでエラー
+            if ($plan == SERVECE_PLAN['free']['label'] && !empty($this->request->getData('instagram'))) {
+                throw new RuntimeException(RESULT_M['INSTA_ADD_FAILED'].' 不正アクセスがあります。');
+            }
+        } catch (RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
+            // エラーメッセージをセット
+            $response = array('success'=>false,'message'=>RESULT_M['INSTA_ADD_FAILED']);
+            $this->response->body(json_encode($response));
+            return;
+        }
+
         // レコードが存在するか
         // レコードがない場合は、新規で登録を行う。
         if(!$this->Snss->exists(['shop_id' =>$this->viewVars['shopInfo']['id']])) {

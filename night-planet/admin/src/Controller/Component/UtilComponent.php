@@ -971,7 +971,8 @@ class UtilComponent extends Component
       * @param [type] $access_token
       * @return $instagram_data
       */
-    public function getInstagram($insta_user_name = null, $insta_business_name = null, $cache_path)
+    public function getInstagram($insta_user_name = null
+        , $insta_business_name = null, $current_plan, $cache_path)
     {
 
         //////////////////////
@@ -1002,11 +1003,20 @@ class UtilComponent extends Component
         // 表示形式の初期設定 (グリッド表示の時は 'grid'、一覧表示の時は 'list' を指定)
         $show_mode      = API['INSTAGRAM_SHOW_MODE'];
 
+        // プラン情報により、取得制限数をセット
+        if ($current_plan == SERVECE_PLAN['basic']['label']) {
+            $get_post_num = 12;
+        } else if ($current_plan == SERVECE_PLAN['premium']['label']) {
+            $get_post_num = 54;
+        } else if ($current_plan == SERVECE_PLAN['premium_s']['label']) {
+            $get_post_num = 90;
+        }
+
         //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
         if (!empty($target_user)) {
             $fields      = 'business_discovery.username('.$target_user.')
                             {id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id
-                                ,media.limit(50){
+                                ,media.limit('.$get_post_num.'){
                                     caption,media_url,media_type
                                     ,children{
                                         media_url,media_type

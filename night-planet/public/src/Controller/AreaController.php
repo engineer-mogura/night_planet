@@ -333,7 +333,8 @@ class AreaController extends AppController
                 WWW_ROOT.$shopInfo['cache_path']
             );
             // インスタ情報を取得
-            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $cache_path);
+            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null
+                , $shopInfo['current_plan'], $cache_path);
             // データ取得に失敗した場合
             if (!$tmp_ig_data) {
                 $this->log('【'.AREA[$shop->area]['label']

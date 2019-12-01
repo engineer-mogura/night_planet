@@ -62,13 +62,13 @@
     </div>
     <div class="row">
       <div class="input-field col s12 m6 l6 ">
-        <input type="text" class="validate" name="instagram" data-length="255">
+        <input type="text" class="validate" <?=$userInfo['current_plan'] == SERVECE_PLAN['free']['label'] ? ' disabled ' : null ?>name="instagram" data-length="255">
         <label for="instagram">instagram</label>
       </div>
     </div>
     <div class="row">
       <div class="input-field col s12 m6 l6 ">
-        <input type="text" class="validate" name="line" data-length="255">
+        <input type="text" class="validate" disabled name="line" data-length="255">
         <label for="line">line</label>
       </div>
     </div>

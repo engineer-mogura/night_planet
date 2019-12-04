@@ -503,6 +503,7 @@ return [
     define('TITLE', array(
         'TOP_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。ポータルサイト『_service_name_』',
         'AREA_TITLE'=>'_area_のキャバクラ|クラブ|ガールズバー|スナック|バーを探すなら、ポータルサイト『_service_name_』',
+        'GENRE_TITLE'=>'_area_の_genre_を探すなら、ポータルサイト『_service_name_』',
         'SEARCH_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。ポータルサイト『_service_name_』',
         'SHOP_TITLE'=>'_area_の_genre_ _shop_のトップページ。ポータルサイト『_service_name_』',
         'NOTICE_TITLE'=>'_area_の_genre_ _shop_のお知らせページです。ポータルサイト『_service_name_』',
@@ -515,6 +516,7 @@ return [
     define('META', array(
         'TOP_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーのポータルサイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
         'AREA_DESCRIPTION'=>'_area_のキャバクラ・クラブ・ガールズバー・スナック・バーをお探しなら『_service_name_』で！店舗毎にお得なクーポン情報もあります！まずは検索から！',
+        'GENRE_DESCRIPTION'=>'_area_の_genre_をお探しなら『_service_name_』で！店舗毎にお得なクーポン情報もあります！まずは検索から！',
         'SEARCH_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーのポータルサイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
         'SHOP_DESCRIPTION'=>'_catch_copy_ お店探しは『_service_name_』で！',
         'NOTICE_DESCRIPTION'=>'_shop_からのお知らせページです！お得な情報も発信しますのでお見逃しなく！お店探しは『_service_name_』で！',

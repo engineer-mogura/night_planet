@@ -73,10 +73,12 @@
 							<a href="" data-size="800x1000"><img width="100%" src="" alt="写真の説明でーす。" /></a>
 						</figure>
 					</div>
-					<div class="card-content">
-						<p class="created right-align" name="created"></p>
-						<p class="title" name="title"></p>
-						<p class="content" name="content"></p>
+					<div class="col s12">
+						<div class="card-content">
+							<p class="created right-align" name="created"></p>
+							<p class="title" name="title"></p>
+							<p class="content" name="content"></p>
+						</div>
 					</div>
 				</div>
 			</div>

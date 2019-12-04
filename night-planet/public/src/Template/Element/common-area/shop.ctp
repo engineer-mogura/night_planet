@@ -128,7 +128,7 @@
 				<?php foreach($shop->casts as $cast): ?>
 				<div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
 					<a
-						href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
+						href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
 						<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="80">
 					</a>
 					<h6><?=$cast->nickname?>
@@ -163,8 +163,7 @@
 						<span class="like-count secondary-content icon-vertical-align color-blue"><i
 								class="small material-icons">favorite_border</i><?=count($value->diary_likes)?></span>
 							<a class="waves-effect hoverable"
-							href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
-							"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
+							href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id ?>"></a>
 					</li>
 					<?php endforeach ?>
 				</ul>

@@ -36,8 +36,8 @@
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 m12 l12">
-                                    <a class="waves-effect waves-light btn-large createBtn disabled"><i class="material-icons right">search</i>登録</a>
-                                    <a class="waves-effect waves-light btn-large cancelBtn disabled"><i class="material-icons right">search</i>やめる</a>
+                                    <a class="waves-effect waves-light btn-large createBtn disabled"><i class="material-icons right">file_upload</i>登録</a>
+                                    <a class="waves-effect waves-light btn-large cancelBtn disabled"><i class="material-icons right">cancel</i>やめる</a>
                                 </div>
                             </div>
                         </form>

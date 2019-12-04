@@ -60,52 +60,92 @@ class AppView extends View
      */
     public function setBreadcrumb($breadcrumbList)
     {
-        // 遷移先がエリアのトップ画面の場合
-        if (array_key_exists($breadcrumbList[0], AREA)) {
+        // 次の画面がエリアのトップページの場合
+        if ($this->viewVars['next_view'] == 'area') {
             $this->Breadcrumbs->add([
                 ['title' => '<i class="material-icons">home</i>', 'url' => DS],
                 ['title' => AREA[$breadcrumbList[0]]['label'], 'url' => ['controller' => $breadcrumbList[0], 'action' => 'index']]
             ]);
-        }
-        // 遷移先がエリア ⇒ ジャンル画面の場合
-        if ($breadcrumbList[1] == 'genre') {
-            // リストの最後に追加
-            $this->Breadcrumbs->add(
-                GENRE[$this->request->query('genre')]['label'],
-                "#!", ['class' => 'breadcrumbs-tail']
-            );
-        }
-        // 遷移先がエリア ⇒ ショップ画面の場合
-        if ($breadcrumbList[1] == 'shop') {
-            // リストの最後に追加
+        } else if ($this->viewVars['next_view'] == 'genre') {
+        // 次の画面がエリアのジャンルの場合
+            // リストに追加
             $this->Breadcrumbs->add([
-                ['title' => GENRE[$this->request->query['genre']]['label'],
-                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'genre','?'=> ['genre' =>$this->request->query['genre']]]],
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS]
+                , ['title' => AREA[$breadcrumbList[0]]['label']
+                    , 'url' => ['controller' => $breadcrumbList[0]]],
             ]);
             // リストの最後に追加
             $this->Breadcrumbs->add(
-                $this->request->query['name'],
-                "#!", ['class' => 'breadcrumbs-tail']
+                GENRE[$breadcrumbList[1]]['label'],
+                "#!",
+                ['class' => 'breadcrumbs-tail']
             );
-        }
-        // 遷移先がエリア ⇒ キャスト画面の場合
-        if ($breadcrumbList[1] == 'cast') {
-            // リストの最後に追加
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['SHOP']) {
+        // 次の画面が店舗の場合
+            // リストに追加
             $this->Breadcrumbs->add([
-                ['title' => GENRE[$this->request->query['genre']]['label'],
-                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'genre/','?'=> ['genre' =>$this->request->query['genre']]]],
-                ['title' => $this->request->query['name'],
-                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'shop/'.$this->request->query['shop'],
-                    '?' => ['genre' => $this->request->query['genre'], 'name' => $this->request->query['name']]]],
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS]
+                , ['title' => $this->viewVars['shopInfo']['area']['label']
+                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']]]
+                , ['title' => $this->viewVars['shopInfo']['genre']['label']
+                    ,'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                         .DS . $this->viewVars['shopInfo']['genre']['path']]],
             ]);
             // リストの最後に追加
             $this->Breadcrumbs->add(
-                $this->request->query['nickname'], "#!", ['class' => 'breadcrumbs-tail']
+                $this->viewVars['shop']['name'],
+                "#!",
+                ['class' => 'breadcrumbs-tail']
             );
-        }
-        // 遷移先がエリア ⇒ キャスト ⇒ 日記画面の場合
-        if ($breadcrumbList[1] == 'diary') {
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['CAST']) {
+        // 次の画面がキャストの場合
+            // リストに追加
+            $this->Breadcrumbs->add([
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS]
+                , ['title' => $this->viewVars['shopInfo']['area']['label']
+                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']]]
+                , ['title' => $this->viewVars['shopInfo']['genre']['label']
+                ,'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                        .DS . $this->viewVars['shopInfo']['genre']['path']]]
+                , ['title' => $this->viewVars['shopInfo']['name']
+                , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                        .DS . $this->viewVars['shopInfo']['genre']['path']
+                        .DS . $this->viewVars['shopInfo']['id']]],
+            ]);
             // リストの最後に追加
+            $this->Breadcrumbs->add(
+                $this->viewVars['cast']['nickname'],
+                "#!",
+                ['class' => 'breadcrumbs-tail']
+            );
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['DIARY']) {
+        // 次の画面が日記の場合
+            // リストに追加
+            $this->Breadcrumbs->add([
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS]
+                , ['title' => $this->viewVars['shopInfo']['area']['label']
+                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']]]
+                , ['title' => $this->viewVars['shopInfo']['genre']['label']
+                    ,'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                    .DS . $this->viewVars['shopInfo']['genre']['path']]]
+                , ['title' => $this->viewVars['shopInfo']['name']
+                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                    .DS . $this->viewVars['shopInfo']['genre']['path']
+                    .DS . $this->viewVars['shopInfo']['id']]]
+                , ['title' => $this->viewVars['cast']['nickname']
+                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                    .DS . PATH_ROOT['CAST']
+                    .DS . $this->viewVars['cast']['id']]],
+            ]);
+            // リストの最後に追加
+            $this->Breadcrumbs->add(
+                '日記',
+                "#!",
+                ['class' => 'breadcrumbs-tail']
+            );
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['GALLERY']) {
+        // 次の画面がギャラリーの場合
+            // リストに追加gallery
             $this->Breadcrumbs->add([
                 ['title' => GENRE[$this->request->query['genre']]['label'],
                     'url' => ['controller' => $breadcrumbList[0], 'action' => 'genre/',
@@ -120,65 +160,44 @@ class AppView extends View
             ]);
             // リストの最後に追加
             $this->Breadcrumbs->add(
-                '日記', "#!", ['class' => 'breadcrumbs-tail']
+                'ギャラリー',
+                "#!",
+                ['class' => 'breadcrumbs-tail']
             );
-        }
-        // 遷移先がエリア ⇒ キャスト ⇒ ギャラリー画面の場合
-        if ($breadcrumbList[1] == 'gallery') {
-            // リストの最後に追加
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['NOTICE']) {
+        // 次の画面がお知らせの場合
+            // リストに追加
             $this->Breadcrumbs->add([
-                ['title' => GENRE[$this->request->query['genre']]['label'],
-                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'genre/',
-                    '?'=> ['genre' =>$this->request->query['genre']]]],
-                ['title' => $this->request->query['name'],
-                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'shop/'.$this->request->query['shop'],
-                    '?' => ['shop' => $this->request->query['shop'],'genre' => $this->request->query['genre'], 'name' => $this->request->query['name']]]],
-                ['title' => $this->request->query['nickname'],
-                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'cast/'.$this->request->query['cast'],
-                    '?' => ['shop' => $this->request->query['shop'], 'cast' => $this->request->query['cast'], 'genre' => $this->request->query['genre'] , 'name' => $this->request->query['name'],
-                    'nickname' => $this->request->query['nickname']]]],
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS]
+                , ['title' => $this->viewVars['shopInfo']['area']['label']
+                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']]]
+                , ['title' => $this->viewVars['shopInfo']['genre']['label']
+                    ,'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                    .DS . $this->viewVars['shopInfo']['genre']['path']]]
+                , ['title' => $this->viewVars['shopInfo']['name']
+                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                    .DS . $this->viewVars['shopInfo']['genre']['path']
+                    .DS . $this->viewVars['shopInfo']['id']]],
             ]);
             // リストの最後に追加
             $this->Breadcrumbs->add(
-                'ギャラリー', "#!", ['class' => 'breadcrumbs-tail']
+                'お知らせ',
+                "#!",
+                ['class' => 'breadcrumbs-tail']
             );
-        }
-        // 遷移先がエリア ⇒ 店舗 ⇒ お知らせ画面の場合
-        if ($breadcrumbList[1] == 'notice') {
-            // リストの最後に追加
-            $this->Breadcrumbs->add([
-                ['title' => GENRE[$this->request->query['genre']]['label'],
-                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'genre/',
-                    '?'=> ['genre' =>$this->request->query['genre']]]],
-                ['title' => $this->request->query['name'],
-                    'url' => ['controller' => $breadcrumbList[0], 'action' => 'shop/'.$this->request->query['shop'],
-                    '?' => ['shop' => $this->request->query['shop'],'genre' => $this->request->query['genre'], 'name' => $this->request->query['name']]]],
-            ]);
-            // リストの最後に追加
-            $this->Breadcrumbs->add(
-                'お知らせ', "#!", ['class' => 'breadcrumbs-tail']
-            );
-        }
-
-        // パンくず設定
-        if ($this->template == 'top') {
-            $this->Breadcrumbs->add(
-                '<i class="material-icons">home</i>',
-                DS
-            );
-        }
-        // 検索画面のパンくず設定
-        if ($breadcrumbList[0] == 'search') {
+        } else if ($this->viewVars['next_view'] == 'search') {
+        // 次の画面が検索の場合
+            // リストに追加
             $this->Breadcrumbs->add([
                 ['title' => '<i class="material-icons">home</i>', 'url' => DS],
-                // ['title' => '検索', 'url' => ['controller' => 'search', 'action' => 'index']]
             ]);
             // リストの最後に追加
             $this->Breadcrumbs->add(
                 '検索',
-                ['controller' => 'search', 'action' => 'index'],
+                "#!",
                 ['class' => 'breadcrumbs-tail']
             );
         }
+
     }
 }

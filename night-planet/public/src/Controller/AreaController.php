@@ -27,48 +27,90 @@ class AreaController extends AppController
         $this->Updates = TableRegistry::get("updates");
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
-    }
 
+
+    }
     public function beforeFilter(Event $event)
     {
         // 常に現在エリアを取得
-        $isArea = mb_strtolower($this->request->getparam("controller"));
+        $is_area = mb_strtolower($this->request->getparam("controller"));
+        $this->set(compact('is_area'));
+        // レイアウトをセット
+        $this->viewBuilder()->layout('userDefault');
+    }
+    public function beforeRender(Event $event)
+    {
+        parent::beforeRender($event);
+        // 常に現在エリアを取得
+        $is_area = $this->viewVars['is_area'];
         // 常にエリア、ジャンルセレクトリストを取得
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set(compact('selectList', 'isArea'));
-        parent::beforeFilter($event);
-        $this->viewBuilder()->layout('userDefault');
-        $query = $this->request->getQuery();
+        $this->set(compact('selectList', 'is_area'));
         $url = explode(DS, rtrim($this->request->url, DS));
         $title = ''; // SEO対策
         $description = ''; // SEO対策
 
-        // キャストトップの場合
-        if (!empty($query['genre']) && !empty($query['name'])
-            && !empty($query['nickname']) && in_array(PATH_ROOT['CAST'], $url)) {
+        // 次の画面がエリアのトップページの場合
+        if ($this->viewVars['next_view'] == 'area') {
+
+            $search = array('_area_', '_service_name_');
+            $replace = array(AREA[$is_area]['label'], LT['000']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['AREA_TITLE']);
+            $description = $this->Util->strReplace($search, $replace, META['AREA_DESCRIPTION']);
+
+        } else if ($this->viewVars['next_view'] == 'genre') {
+        // 次の画面がエリアのジャンルの場合
+            // TODO: mata
+            $search = array('_area_', '_genre_', '_service_name_');
+            $replace = array($this->viewVars['area_genre']['area']['label']
+                , $this->viewVars['area_genre']['genre']['label'], LT['000']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['GENRE_TITLE']);
+            $search = array('_area_', '_genre_', '_service_name_');
+            $replace = array($this->viewVars['area_genre']['area']['label']
+                , $this->viewVars['area_genre']['genre']['label'], LT['000']);
+            $description = $this->Util->strReplace($search, $replace, META['GENRE_DESCRIPTION']);
+
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['SHOP']) {
+        // 次の画面が店舗トップページの場合
+
+            $search = array('_area_', '_genre_', '_shop_', '_service_name_');
+            $replace = array($this->viewVars['shopInfo']['area']['label']
+                , $this->viewVars['shopInfo']['genre']['label']
+                , $this->viewVars['shop']['name'], LT['000']);
+            $title = $this->Util->strReplace($search, $replace, TITLE['SHOP_TITLE']);
+            $search = array('_catch_copy_', '_service_name_');
+            $replace = array($this->viewVars['shop']['catch'], LT['000']);
+            $description = $this->Util->strReplace($search, $replace, META['SHOP_DESCRIPTION']);
+
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['CAST']) {
+        // 次の画面がキャストトップページの場合
+
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
-            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], $query['nickname'], LT['000']);
+            $replace = array($this->viewVars['shopInfo']['area']['label']
+                , $this->viewVars['shopInfo']['genre']['label']
+                , $this->viewVars['shopInfo']['name']
+                , $this->viewVars['cast']['nickname'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['CAST_TITLE']);
             $search = array('_cast_', '_service_name_');
-            $replace = array($query['nickname'], LT['000']);
+            $replace = array($this->viewVars['cast']['nickname'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['CAST_DESCRIPTION']);
 
-        // キャストの日記トップの場合
-        } elseif (!empty($query['genre']) && !empty($query['name'])
-        && !empty($query['nickname']) && in_array(PATH_ROOT['DIARY'], $url)) {
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['DIARY']) {
+        // 次の画面が日記ページの場合
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
-            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], $query['nickname'], LT['000']);
+            $replace = array($this->viewVars['shopInfo']['area']['label']
+                , $this->viewVars['shopInfo']['genre']['label']
+                , $this->viewVars['shopInfo']['name']
+                , $this->viewVars['cast']['nickname'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['DIARY_TITLE']);
             $search = array('_cast_', '_service_name_');
-            $replace = array($query['nickname'], LT['000']);
+            $replace = array($this->viewVars['cast']['nickname'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['DIARY_DESCRIPTION']);
 
         // キャストのギャラリートップの場合
         } elseif (!empty($query['genre']) && !empty($query['name'])
-        && !empty($query['nickname']) && in_array(PATH_ROOT['GALLERY'], $url)) {
+            && !empty($query['nickname']) && in_array(PATH_ROOT['GALLERY'], $url)) {
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
             $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
                 , $query['name'], $query['nickname'], LT['000']);
@@ -77,40 +119,19 @@ class AreaController extends AppController
             $replace = array($query['nickname'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['GALLERY_DESCRIPTION']);
 
-        // 店舗のお知らせトップの場合
-        } elseif (!empty($query['area']) && !empty($query['genre'])
-            && !empty($query['name']) && in_array(PATH_ROOT['NOTICE'], $url)) {
+        } else if ($this->viewVars['next_view'] == PATH_ROOT['NOTICE']) {
+        // 次の画面がお知らせページの場合
             $search = array('_area_', '_genre_', '_shop_', '_service_name_');
-            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], LT['000']);
+            $replace = array($this->viewVars['shopInfo']['area']['label']
+                , $this->viewVars['shopInfo']['genre']['label']
+                , $this->viewVars['shopInfo']['name'], LT['000']);
             $title = $this->Util->strReplace($search, $replace, TITLE['NOTICE_TITLE']);
             $search = array('_shop_', '_service_name_');
-            $replace = array($query['name'], LT['000']);
+            $replace = array($this->viewVars['shop']['name'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['NOTICE_DESCRIPTION']);
 
-        // 店舗トップページの場合
-        } elseif (!empty($query['area']) && !empty($query['genre'])
-            && !empty($query['name'])) {
-            $search = array('_area_', '_genre_', '_shop_', '_service_name_');
-            $replace = array(AREA[$url[0]]['label'], GENRE[$query['genre']]['label']
-                , $query['name'], LT['000']);
-            $title = $this->Util->strReplace($search, $replace, TITLE['SHOP_TITLE']);
-            $search = array('_catch_copy_', '_service_name_');
-            $replace = array($this->Shops->get($url[2])->catch, LT['000']);
-            $description = $this->Util->strReplace($search, $replace, META['SHOP_DESCRIPTION']);
-
-        // エリアのトップ画面の場合
-        } elseif (array_key_exists($url[0], AREA)) {
-            $search = array('_area_', '_service_name_');
-            $replace = array(AREA[$url[0]]['label'], LT['000']);
-            $title = $this->Util->strReplace($search, $replace, TITLE['AREA_TITLE']);
-            $description = $this->Util->strReplace($search, $replace, META['AREA_DESCRIPTION']);
         }
-
-        // コントローラ名からエリアタイトルをセット
-        $areaTitle = AREA[mb_strtolower($this->request->getparam("controller"))]['label'];
-        $areaLink = DS.AREA[mb_strtolower($this->request->getparam("controller"))]['path'];
-        $this->set(compact('title', 'description', 'areaTitle', 'areaLink'));
+        $this->set(compact('title', 'description', 'is_area'));
     }
 
     public function index()
@@ -122,37 +143,156 @@ class AreaController extends AppController
         $query = $this->Shops->find();
         $query = $this->Shops->find('all', array('fields' =>
                     array('area', 'genre', 'count' => $query->func()->count('genre'))));
-        $tmpList = $query->where(['area' => AREA[$this->viewVars['isArea']]['path']])
+        $tmpList = $query->where(['area' => AREA[$this->viewVars['is_area']]['path']])
             ->group('genre')->toArray();
         $genreCounts = GENRE; // ジャンルの配列をコピー
         // それぞれのジャンルの初期値カウントに０,エリア名をセットする
         foreach ($genreCounts as $key => $row) {
-            $genreCounts[$key] = $row + array('count'=> 0,'area' => AREA[$this->viewVars['isArea']]['path']);
+            $genreCounts[$key] = $row + array('count'=> 0,'area' => AREA[$this->viewVars['is_area']]['path']);
         }
         // DBから取得したジャンルのカウントをセットする
         foreach ($tmpList as $key => $row) {
-            $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['isArea']]['path'];
+            $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['is_area']]['path'];
             $genreCounts[$row['genre']]['count'] = $row['count'];
         }
-        $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', $this->viewVars['isArea']);
-        $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', $this->viewVars['isArea']);
+        $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', $this->viewVars['is_area']);
+        $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', $this->viewVars['is_area']);
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
-        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea'], null);
-        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['isArea']);
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area'], null);
+        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area']);
+        $this->set('next_view', 'area');
         $this->set(compact('genreCounts', 'selectList', 'diarys', 'notices', 'adsenses'));
 
         $this->render();
     }
 
-    public function genre()
+    /**
+     * cabacula function
+     *
+     * @return void
+     */
+    public function cabacula($id = null)
     {
-        $area_genre = ['area'=>AREA[$this->viewVars['isArea']]['label']
-            ,'genre'=>GENRE[$this->request->getQuery("genre")]['label']];
-        $shops = array(); // 店舗情報格納用
+        // 店舗ID存在した場合は、ショップアクションへ
+        if (!empty($id)) {
+            $this->commonShop($id);
+            return;
+        }
+        $this->commonGenre();
+        $this->render();
+        return;
+    }
+    /**
+     * snack function
+     *
+     * @return void
+     */
+    public function snack($id = null)
+    {
+        // 店舗ID存在した場合は、ショップアクションへ
+        if (!empty($id)) {
+            $this->commonShop($id);
+            return;
+        }
+        $this->commonGenre();
+        $this->render();
+        return;
+    }
+    /**
+     * girlsbar function
+     *
+     * @return void
+     */
+    public function girlsbar($id = null)
+    {
+        // 店舗ID存在した場合は、ショップアクションへ
+        if (!empty($id)) {
+            $this->commonShop($id);
+            return;
+        }
+        $this->commonGenre();
+        $this->render();
+        return;
+    }
+    /**
+     * club function
+     *
+     * @return void
+     */
+    public function club($id = null)
+    {
+        // 店舗ID存在した場合は、ショップアクションへ
+        if (!empty($id)) {
+            $this->commonShop($id);
+            return;
+        }
+        $this->commonGenre();
+        $this->render();
+        return;
+    }
+    /**
+     * lounge function
+     *
+     * @return void
+     */
+    public function lounge($id = null)
+    {
+        // 店舗ID存在した場合は、ショップアクションへ
+        if (!empty($id)) {
+            $this->commonShop($id);
+            return;
+        }
+        $this->commonGenre();
+        $this->render();
+        return;
+    }
+    /**
+     * pub function
+     *
+     * @return void
+     */
+    public function pub($id = null)
+    {
+        // 店舗ID存在した場合は、ショップアクションへ
+        if (!empty($id)) {
+            $this->commonShop($id);
+            return;
+        }
+        $this->commonGenre();
+        $this->render();
+        return;
+    }
+    /**
+     * bar function
+     *
+     * @return void
+     */
+    public function bar($id = null)
+    {
+        // 店舗ID存在した場合は、ショップアクションへ
+        if (!empty($id)) {
+            $this->commonShop($id);
+            return;
+        }
+        $this->commonGenre();
+        $this->render();
+        return;
+    }
+
+    /**
+     * 共通ジャンル画面 function
+     *
+     * @return void
+     */
+    public function commonGenre()
+    {
+        $url = explode(DS, rtrim($this->request->url, DS));
+
+        $area_genre = ['area'=> AREA[$url['0']], 'genre'=>GENRE[$url['1']]];
+        // エリア、ジャンルの店舗情報取得
         $shops = $this->Shops->find('all')
-                    ->where(['area'=>$this->viewVars['isArea'],
-                        'genre' => $this->request->getQuery("genre")])->toArray();
+                    ->where(['area'=> $url['0'], 'genre' => $url['1']])->toArray();
 
         // トップ画像を設定する
         foreach ($shops as $key => $shop) {
@@ -173,12 +313,18 @@ class AreaController extends AppController
                 $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
             }
         }
-
+        $this->set('next_view', 'genre');
         $this->set(compact('shops', 'area_genre'));
-        $this->render();
+        return;
     }
 
-    public function shop($id = null)
+    /**
+     * Undocumented function
+     *
+     * @param [type] $id
+     * @return void
+     */
+    public function commonShop($id)
     {
         $sharer =  Router::reverse($this->request, true);
         $columns = $this->ShopInfos->schema()->columns();
@@ -324,7 +470,6 @@ class AreaController extends AppController
         $ig_data = null; // Instagramデータ
         // Instagramアカウントが入力されていればインスタデータを取得する
         if (!empty($shop->snss[0]->instagram)) {
-
             $insta_user_name = $shop->snss[0]->instagram;
             // インスタのキャッシュパス
             $cache_path = preg_replace(
@@ -333,13 +478,12 @@ class AreaController extends AppController
                 WWW_ROOT.$shopInfo['cache_path']
             );
             // インスタ情報を取得
-            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null
-                , $shopInfo['current_plan'], $cache_path);
+            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $shopInfo['current_plan'], $cache_path);
             // データ取得に失敗した場合
             if (!$tmp_ig_data) {
                 $this->log('【'.AREA[$shop->area]['label']
                     .GENRE[$shop->genre]['label'].$shop->name
-                    .'】のインスタグラムのデータ取得に失敗しました。','error');
+                    .'】のインスタグラムのデータ取得に失敗しました。', 'error');
                 $this->Flash->warning('インスタグラムのデータ取得に失敗しました。');
             }
             $ig_data = $tmp_ig_data->business_discovery;
@@ -350,10 +494,11 @@ class AreaController extends AppController
                 $this->set(compact('ig_error'));
             }
         }
-
+        $this->set('next_view',PATH_ROOT['SHOP']);
         $this->set(compact('shop', 'shopInfo', 'update_icon', 'updateInfo'
             , 'diarys', 'sharer', 'credits', 'creditsHidden', 'ig_data'));
-        $this->render();
+        $this->render('shop');
+
     }
 
     public function cast($id = null)
@@ -476,7 +621,6 @@ class AreaController extends AppController
         $ig_data = null; // Instagramデータ
         // Instagramアカウントが入力されていればインスタデータを取得する
         if (!empty($cast->snss[0]->instagram)) {
-
             $insta_user_name = $cast->snss[0]->instagram;
             // インスタのキャッシュパス
             $cache_path = preg_replace(
@@ -485,12 +629,12 @@ class AreaController extends AppController
                 WWW_ROOT.$castInfo['cache_path']
             );
             // インスタ情報を取得
-            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $cache_path);
+            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $shopInfo['current_plan'], $cache_path);
             // データ取得に失敗した場合
             if (!$tmp_ig_data) {
                 $this->log('【'.AREA[$shop->area]['label']
                     .GENRE[$shop->genre]['label'].$shop->name
-                    .'】のインスタグラムのデータ取得に失敗しました。','error');
+                    .'】のインスタグラムのデータ取得に失敗しました。', 'error');
                 $this->Flash->warning('インスタグラムのデータ取得に失敗しました。');
             }
             $ig_data = $tmp_ig_data->business_discovery;
@@ -501,7 +645,7 @@ class AreaController extends AppController
                 $this->set(compact('ig_error'));
             }
         }
-
+        $this->set('next_view', PATH_ROOT['CAST']);
         $this->set(compact('cast', 'isWorkDay', 'ig_data', 'other_casts', 'shopInfo', 'castInfo'));
         $this->render();
     }
@@ -547,6 +691,7 @@ class AreaController extends AppController
         // キャストの全ての日記を取得
         $diarys = $this->Util->getDiarys($id, $this->viewVars['userInfo']['diary_path']);
 
+        $this->set('next_view', PATH_ROOT['DIARY']);
         $this->set(compact('cast', 'diarys'));
         $this->render();
     }
@@ -610,6 +755,7 @@ class AreaController extends AppController
         $shopInfo = $this->Util->getShopInfo($shop);
         $notices = $this->Util->getNotices($shop->id, $shopInfo['notice_path']);
 
+        $this->set('next_view', PATH_ROOT['NOTICE']);
         $this->set(compact('shop', 'notices', 'shopInfo'));
         $this->render();
     }

@@ -99,6 +99,7 @@ class SearchController extends AppController
         $selected = $this->request->getQuery();
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+        $this->set('next_view', 'search');
         $this->set(compact('search', 'selectList', 'selected'));
         $this->render();
     }

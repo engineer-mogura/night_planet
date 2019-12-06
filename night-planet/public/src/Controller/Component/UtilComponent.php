@@ -146,8 +146,7 @@ class UtilComponent extends Component
                 .DS.$shopInfo['genre']['path'].DS.$shop['dir'];
 
         $shop_url = PUBLIC_DOMAIN.DS.$shopInfo['area']['path']
-            .DS.PATH_ROOT['SHOP'].DS.$shop['id']
-            .'?area='.$shop['area'].'&genre='.$shop['genre'].'&name='.$shop['name'];
+                .DS.$shopInfo['genre']['path'].DS.$shop['id'];
 
         $shopInfo = $shopInfo + array('shop_path'=> $path
             ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'cast_path'=> $path.DS.PATH_ROOT['CAST']
@@ -190,8 +189,7 @@ class UtilComponent extends Component
                 .DS.$castInfo['genre']['path'].DS.$shop['dir']
                 .DS.PATH_ROOT['CAST'].DS.$cast['dir'];
         $shop_url = PUBLIC_DOMAIN.DS.$castInfo['area']['path']
-            .DS.PATH_ROOT['SHOP'].DS.$shop['id']
-            .'?genre='.$shop['genre'].'&name='.$shop['name'];
+                .DS.$castInfo['genre']['path'].DS.$shop['id'];
 
         $castInfo = $castInfo + array('cast_path'=> $path,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE']
             , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
@@ -685,9 +683,7 @@ class UtilComponent extends Component
             for ($i = 0; $i < count($adsense_files); $i++) {
                 if (basename($adsense_files[$i]) == $adsense->name) {
                     $shop_url = PUBLIC_DOMAIN.DS.$adsense->Shops['area']
-                        .DS.PATH_ROOT['SHOP'].DS.$adsense->Shops['id']
-                        .'?area='.$adsense->Shops['area'].'&genre='.$adsense->Shops['genre']
-                        .'&name='.$adsense->Shops['name'];
+                        .DS.$adsense->Shops['genre'].DS.$adsense->Shops['id'];
                     $adsense->set('shop_url', $shop_url);
                     $adsense->set('image', $img_path . DS . basename($adsense_files[$i]));
                     $is_exist = true;

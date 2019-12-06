@@ -83,13 +83,13 @@
 						<a class="waves-effect waves-light" href="#twitter-section"></a>
 					</div>
 				</div>
-				<div class="col s4 m3 l3">
+				<!-- <div class="col s4 m3 l3">
 					<div
 						class="<?=empty($shop->snss[0]['line'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label line"></br>LINE</span>
 						<a class="waves-effect waves-light" href="#line-section"></a>
 					</div>
-				</div>
+				</div> -->
 				<div class="col s4 m3 l3">
 					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['SHOP_GALLERY'], $update_icon) ? '<div class="new-info"></div>' : ''?>

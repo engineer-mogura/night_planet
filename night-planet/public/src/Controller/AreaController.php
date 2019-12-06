@@ -155,12 +155,17 @@ class AreaController extends AppController
             $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['is_area']]['path'];
             $genreCounts[$row['genre']]['count'] = $row['count'];
         }
+        // メイン広告を取得
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', $this->viewVars['is_area']);
+        // サブ広告を取得
         $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', $this->viewVars['is_area']);
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
+        // 日記を取得
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area'], null);
+        // お知らせを取得
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area']);
+
         $this->set('next_view', 'area');
         $this->set(compact('genreCounts', 'selectList', 'diarys', 'notices', 'adsenses'));
 
@@ -513,7 +518,7 @@ class AreaController extends AppController
             ])->first();
         // その他のキャストを取得する
         $other_casts = $this->Casts->find("all")
-            ->where(['casts.shop_id' => $this->request->getQuery('shop')
+            ->where(['casts.shop_id' => $cast->shop_id
                 , 'casts.id is not' => $id
             ])
             ->order(['created'=>'DESC'])

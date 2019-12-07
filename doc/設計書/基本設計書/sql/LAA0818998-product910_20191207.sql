@@ -1,25 +1,23 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
--- https://www.phpmyadmin.net/
+-- version 4.0.10.18
+-- https://www.phpmyadmin.net
 --
--- Host: localhost
--- Generation Time: 2019 年 11 月 25 日 00:32
--- サーバのバージョン： 5.6.42
--- PHP Version: 7.3.8
+-- ホスト: mysql140.phy.lolipop.lan
+-- 生成日時: 2019 年 12 月 07 日 21:47
+-- サーバのバージョン: 5.6.23-log
+-- PHP のバージョン: 5.3.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
--- Database: `okiyoru_db`
+-- データベース: `LAA0818998-product910`
 --
 
 -- --------------------------------------------------------
@@ -29,13 +27,14 @@ SET time_zone = "+00:00";
 --
 
 DROP TABLE IF EXISTS `admin_accounts`;
-CREATE TABLE `admin_accounts` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `admin_accounts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -44,8 +43,8 @@ CREATE TABLE `admin_accounts` (
 --
 
 DROP TABLE IF EXISTS `adsenses`;
-CREATE TABLE `adsenses` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `adsenses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
@@ -60,21 +59,23 @@ CREATE TABLE `adsenses` (
   `top_order` int(2) DEFAULT NULL,
   `area_order` int(2) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `owner_id` (`owner_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- テーブルのデータのダンプ `adsenses`
 --
 
 INSERT INTO `adsenses` (`id`, `owner_id`, `shop_id`, `type`, `area`, `genre`, `name`, `catch`, `valid_start`, `valid_end`, `top_show_flg`, `area_show_flg`, `top_order`, `area_order`, `created`, `modified`) VALUES
-(1, 3, 3, 'main', 'naha', 'cabacula', 'c3fefd89d394e40fca5d4873947fc0ac1278f515.jpg', '☺那覇で飲むならclub琉球へ☺', '2019-11-23', '2019-11-30', 1, 1, 1, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
-(2, 7, 7, 'main', 'okinawashi', 'cabacula', '032c48645a01a0724dbcafd6bd438cd69c86a9d2.jpg', '☺沖縄市で飲むならClub M -エム-へ☺', '2019-11-23', '2019-11-30', 0, 1, 2, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
-(3, 6, 6, 'main', 'naha', 'snack', 'a7677aa193d21c15da63b2dede741a303e4c5928.jpg', '☺那覇で飲むならGIZA PALACE -ギザパレス-へ☺', '2019-11-23', '2019-11-30', 0, 1, 3, 2, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
-(4, 1, 1, 'sub', 'urasoe', 'club', 'fa897ef69c325e84d4a73e1d681e103d2de24f61.jpg', '☺那覇で飲むならARENA -アリーナ-へ☺', '2019-11-23', '2019-11-30', 1, 1, 1, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
-(5, 2, 2, 'sub', 'urasoe', 'girlsbar', '7676cf4feb6ceae2268ea8dcdb8e8b4f8df8d503.jpg', '☺浦添で飲むならフェリスへ☺', '2019-11-23', '2019-11-30', 1, 1, 2, 2, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
-(6, 4, 4, 'main', 'naha', 'cabacula', '691f0c0dfddd2c595470edf172e2977bb725a201.jpg', '☺那覇で飲むならShuri -シュリ-へ☺', '2019-11-23', '2019-11-30', 1, 1, 2, 3, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
-(7, 5, 5, 'main', 'naha', 'cabacula', '6df41db604efd3ed5ae5bf30ba6aca462418323b.jpg', '☺那覇で飲むならclub Petit -プティ-へ☺', '2019-11-23', '2019-11-30', 1, 1, 3, 4, '2019-08-10 16:58:22', '2019-08-10 16:58:22');
+(1, 3, 3, 'main', 'naha', 'cabacula', 'https://drive.google.com/uc?id=1wWygal0ffxCWt8vNr1kz1tGwsLmWWidF', '☺那覇で飲むならclub琉球へ☺', '2019-11-23', '2020-11-30', 1, 1, 1, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(2, 7, 7, 'main', 'okinawashi', 'cabacula', 'https://drive.google.com/uc?id=11eatUtDDf0BqFXWaANLNgkAhxlDjS8Km', '☺沖縄市で飲むならClub M -エム-へ☺', '2019-11-23', '2020-11-30', 0, 1, 2, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(3, 6, 6, 'main', 'naha', 'snack', 'https://drive.google.com/uc?id=13_OA87Q6X7uTjxK-n5rcx0NIatztK2PY', '☺那覇で飲むならGIZA PALACE -ギザパレス-へ☺', '2019-11-23', '2020-11-30', 0, 1, 3, 2, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(4, 1, 1, 'sub', 'urasoe', 'club', 'https://drive.google.com/uc?id=12eB2CTJlntMMHcgw7UvmPJpcsfIc90Pw', '☺那覇で飲むならARENA -アリーナ-へ☺', '2019-11-23', '2020-11-30', 0, 1, 1, 1, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(5, 2, 2, 'sub', 'urasoe', 'girlsbar', 'https://drive.google.com/uc?id=11fiDfGF4X5Qi-Txf2AfzpYOanrvT8bl7', '☺浦添で飲むならフェリスへ☺', '2019-11-23', '2020-11-30', 0, 1, 2, 2, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(6, 4, 4, 'main', 'naha', 'cabacula', 'https://drive.google.com/uc?id=1IyfWxskShqZ338577E1gzQI3IHw3eTf2', '☺那覇で飲むならShuri -シュリ-へ☺', '2019-11-23', '2020-11-30', 1, 1, 2, 3, '2019-08-10 16:58:22', '2019-08-10 16:58:22'),
+(7, 5, 5, 'main', 'naha', 'cabacula', 'https://drive.google.com/uc?id=1lJ74IUkOdV9CfkSaLY79pAMzM1Stk0Iz', '☺那覇で飲むならclub Petit -プティ-へ☺', '2019-11-23', '2020-11-30', 1, 1, 3, 4, '2019-08-10 16:58:22', '2019-08-10 16:58:22');
 
 -- --------------------------------------------------------
 
@@ -83,16 +84,19 @@ INSERT INTO `adsenses` (`id`, `owner_id`, `shop_id`, `type`, `area`, `genre`, `n
 --
 
 DROP TABLE IF EXISTS `articles`;
-CREATE TABLE `articles` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `articles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `slug` varchar(191) NOT NULL,
   `body` text,
   `published` tinyint(1) DEFAULT '0',
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -101,9 +105,11 @@ CREATE TABLE `articles` (
 --
 
 DROP TABLE IF EXISTS `articles_tags`;
-CREATE TABLE `articles_tags` (
+CREATE TABLE IF NOT EXISTS `articles_tags` (
   `article_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL
+  `tag_id` int(11) NOT NULL,
+  PRIMARY KEY (`article_id`,`tag_id`),
+  KEY `tag_key` (`tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -113,8 +119,8 @@ CREATE TABLE `articles_tags` (
 --
 
 DROP TABLE IF EXISTS `casts`;
-CREATE TABLE `casts` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `casts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) NOT NULL,
   `role` varchar(10) NOT NULL,
   `name` varchar(30) NOT NULL,
@@ -133,8 +139,10 @@ CREATE TABLE `casts` (
   `status` int(1) NOT NULL,
   `delete_flag` int(1) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_key` (`shop_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
 
 --
 -- テーブルのデータのダンプ `casts`
@@ -155,7 +163,7 @@ INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `pass
 (12, 2, 'cast', 'みずき', 'みずき', 'okiyoru99@gmail.com', '$2y$10$/6K5phAfNciUFN.6lAh/0OftmW4kArVeGsekekfWjzJyIOV8WAetW', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00004', NULL, 1, 0, '2019-08-10 16:20:27', '2019-09-05 23:40:10'),
 (13, 2, 'cast', 'しの', 'しの', 'okiyoru99@gmail.com', '$2y$10$dzUNVjZvry8zpdHXf7Xr8O84YzhGfSG.MXsJm/uBNKz2yk.M5.zNm', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '00005', NULL, 1, 0, '2019-08-10 16:21:58', '2019-09-09 00:41:32'),
 (14, 3, 'cast', 'なお', 'なお', 'okiyoru1@gmail.com', '$2y$10$9vJ4TwXPELht86ugs9.05u3ef5vgj/OPtrozkOISVnJG93yssCbua', NULL, NULL, 'blood_type1', 'constellation3', '22', 'CLUB琉球をよろしくで~す', NULL, '00001', NULL, 1, 0, '2019-08-30 17:23:36', '2019-11-17 16:53:01'),
-(15, 3, 'cast', 'にーな', 'にーな', 'okiyoru2@gmail.com', '$2y$10$5bX0v1ycjzISzcMkWIHXYOa5Pgbiio0idh7NuPZMzddUse3YYWKT2', NULL, NULL, '', '', '', 'club琉球をよろしくお願いします！', NULL, '00002', '5964e2a2162f5ebf8907b2442413340480842c04f275111b23acc73cf9ecc91', 1, 0, '2019-08-10 17:27:06', '2019-09-09 23:29:19'),
+(15, 3, 'cast', 'にーな', 'にーな', 'okiyoru2@gmail.com', '$2y$10$IccvqXgH5z6UxsUctPg03u8vacc2vepP3JoJ2L7AZMi0/NTP3ol7.', NULL, NULL, '', '', '', 'club琉球をよろしくお願いします！', NULL, '00002', '0', 1, 0, '2019-08-10 17:27:06', '2019-12-07 02:35:18'),
 (18, 7, 'cast', 'リエ', 'リエ', 'okiyoru99@gmail.com', '$2y$10$1k6VOOYYhrFWRdI3gDX9suL6uqXH.Afq7LslSe1OumDBene7y3Wt.', NULL, NULL, 'blood_type4', 'constellation9', '27', '', NULL, '00001', NULL, 1, 0, '2019-11-21 22:32:25', '2019-11-21 23:03:20'),
 (19, 7, 'cast', 'リン', 'リン', 'okiyoru3@gmail.com', '$2y$10$iCoE.fqQaAWQze/N.8ELYOl/kjYvQtCgrij7gZEJaw7rQjTkGI0Am', NULL, NULL, '', 'constellation6', '29', '', NULL, '00002', NULL, 1, 0, '2019-11-21 23:06:00', '2019-11-21 23:07:58');
 
@@ -166,8 +174,8 @@ INSERT INTO `casts` (`id`, `shop_id`, `role`, `name`, `nickname`, `email`, `pass
 --
 
 DROP TABLE IF EXISTS `cast_schedules`;
-CREATE TABLE `cast_schedules` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `cast_schedules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) NOT NULL,
   `cast_id` int(11) NOT NULL,
   `event_type_id` int(11) DEFAULT NULL,
@@ -181,8 +189,9 @@ CREATE TABLE `cast_schedules` (
   `status` varchar(20) DEFAULT NULL,
   `active` int(1) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- テーブルのデータのダンプ `cast_schedules`
@@ -201,8 +210,8 @@ INSERT INTO `cast_schedules` (`id`, `shop_id`, `cast_id`, `event_type_id`, `titl
 --
 
 DROP TABLE IF EXISTS `coupons`;
-CREATE TABLE `coupons` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `coupons` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) NOT NULL,
   `status` int(1) NOT NULL,
   `from_day` datetime NOT NULL,
@@ -210,8 +219,10 @@ CREATE TABLE `coupons` (
   `title` text CHARACTER SET utf8mb4 NOT NULL,
   `content` text CHARACTER SET utf8mb4 NOT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_key` (`shop_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- テーブルのデータのダンプ `coupons`
@@ -219,8 +230,8 @@ CREATE TABLE `coupons` (
 
 INSERT INTO `coupons` (`id`, `shop_id`, `status`, `from_day`, `to_day`, `title`, `content`, `created`, `modified`) VALUES
 (1, 1, 1, '2019-08-08 00:00:00', '2019-09-30 00:00:00', 'ウェルカムドリンク1杯サービス or 時間+10分サービス', '入店時にこちらのクーポンをお見せいただくと、ウェルカムドリンク1杯サービス、\r\nまたは時間＋１０分延長サービスになります。', '2019-08-08 23:31:00', '2019-08-08 23:31:18'),
-(2, 2, 1, '2019-08-10 00:00:00', '2020-08-10 00:00:00', '初回セット料金1000円OFF', '初回セット料金1000円OFFになります。\r\n是非ご利用ください!! スタッフ、キャスト一同心よりお待ちしております🙇‍♂️', '2019-08-10 17:31:09', '2019-09-18 19:06:52'),
-(3, 5, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', '😎新規オープンキャンペーンにつきまして😎', '来店の際始めに男子従業員にﾅｲﾌﾟﾗを見たと伝えて頂くと、初回1時間4000円でご案内させていただきます!', '2019-11-21 00:28:36', '2019-11-21 00:28:43'),
+(2, 2, 1, '2019-08-10 00:00:00', '2020-08-10 00:00:00', '初回セット料金1000円OFF', '初回セット料金1000円OFFになります。\r\n是非ご利用ください!! スタッフ、キャスト一同心よりお待ちしております?‍♂️', '2019-08-10 17:31:09', '2019-09-18 19:06:52'),
+(3, 5, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', '?新規オープンキャンペーンにつきまして?', '来店の際始めに男子従業員にﾅｲﾌﾟﾗを見たと伝えて頂くと、初回1時間4000円でご案内させていただきます!', '2019-11-21 00:28:36', '2019-11-21 00:28:43'),
 (4, 6, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', 'GIZA PALACEのクーポン１', 'ウェルカムドリンク1杯サービスor時間+10分サービス', '2019-11-21 19:53:04', '2019-11-21 19:53:09'),
 (5, 7, 1, '2019-11-01 00:00:00', '2020-11-01 00:00:00', 'New Club Mのクーポン１', 'ﾅｲﾌﾟﾗをご利用のお客様に限り、時間サービス+カラオケ&乾杯ビールサービス', '2019-11-21 20:13:52', '2019-11-21 20:13:52');
 
@@ -231,13 +242,14 @@ INSERT INTO `coupons` (`id`, `shop_id`, `status`, `from_day`, `to_day`, `title`,
 --
 
 DROP TABLE IF EXISTS `developers`;
-CREATE TABLE `developers` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `developers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -246,15 +258,24 @@ CREATE TABLE `developers` (
 --
 
 DROP TABLE IF EXISTS `diarys`;
-CREATE TABLE `diarys` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `diarys` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `cast_id` int(11) NOT NULL,
   `title` varchar(50) NOT NULL,
   `content` varchar(600) NOT NULL,
   `dir` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cast_key` (`cast_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=2 ;
+
+--
+-- テーブルのデータのダンプ `diarys`
+--
+
+INSERT INTO `diarys` (`id`, `cast_id`, `title`, `content`, `dir`, `created`, `modified`) VALUES
+(1, 15, 'テスト', 'テスト', '/2019/12/07/20191207_023747', '2019-12-07 02:37:47', '2019-12-07 02:37:47');
 
 -- --------------------------------------------------------
 
@@ -263,14 +284,16 @@ CREATE TABLE `diarys` (
 --
 
 DROP TABLE IF EXISTS `diary_likes`;
-CREATE TABLE `diary_likes` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `diary_likes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `diary_id` int(11) NOT NULL,
   `cast_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `diary_like_key` (`diary_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -279,11 +302,12 @@ CREATE TABLE `diary_likes` (
 --
 
 DROP TABLE IF EXISTS `event_types`;
-CREATE TABLE `event_types` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `event_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `color` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `color` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -292,8 +316,8 @@ CREATE TABLE `event_types` (
 --
 
 DROP TABLE IF EXISTS `jobs`;
-CREATE TABLE `jobs` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `jobs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) NOT NULL,
   `industry` varchar(30) DEFAULT NULL,
   `job_type` varchar(30) DEFAULT NULL,
@@ -312,8 +336,10 @@ CREATE TABLE `jobs` (
   `email` varchar(255) DEFAULT NULL,
   `lineid` varchar(20) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `owner_key` (`shop_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- テーブルのデータのダンプ `jobs`
@@ -326,7 +352,8 @@ INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `
 (4, 4, '時間制(キャバクラ)', 'レディスタッフ・キャスト', '21:00:00', NULL, '', '20', '30', '18歳～30歳位迄　※経験者大歓迎　※未経験者大歓迎', NULL, '', '体験入店あり,お友達と一緒に面接可,週末のみ可,週１から可,大型連休あり,日払い可,各種バックあり,友達紹介料あり,未経験者歓迎,ノルマなし,モノレール駅からすぐ,送迎あり,ヘアメイクあり,経験者優遇,ドレス・制服貸与あり,個人ロッカーあり', '体験入店時給000円～5000円以上!!\r\n時給3000円～5000円以上!!\r\n＋売上バック10～20%!!ドリンクバック、ボトルバック等、各種高額バック有り!!\r\n新しい豪華な店内でお仕事出来ます♪\r\nお酒が飲めないコでも全然大丈夫だし、未経験のコは自分のペースでゆっくりお仕事していってください!\r\n\r\nキャストさんが働き易い環境作りを準備してお待ちしています。心機一転、一緒にがんばって行きましょう!!\r\nわからない事や不安な事は遠慮なく聞いてくださいね！そして当店では頑張る貴女を応援します。', '09097836829', '0988617771', NULL, 'agarie0823', '2019-11-20 23:54:43', '2019-11-21 00:12:49'),
 (5, 5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-21 00:25:37', '2019-11-21 00:25:37'),
 (6, 6, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-21 19:50:48', '2019-11-21 19:50:48'),
-(7, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-21 20:11:20', '2019-11-21 20:11:20');
+(7, 7, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-21 20:11:20', '2019-11-21 20:11:20'),
+(8, 8, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2019-11-27 22:40:52', '2019-11-27 22:40:52');
 
 -- --------------------------------------------------------
 
@@ -335,7 +362,7 @@ INSERT INTO `jobs` (`id`, `shop_id`, `industry`, `job_type`, `work_from_time`, `
 --
 
 DROP TABLE IF EXISTS `master_codes`;
-CREATE TABLE `master_codes` (
+CREATE TABLE IF NOT EXISTS `master_codes` (
   `id` int(11) NOT NULL,
   `code` varchar(255) NOT NULL,
   `code_name` varchar(255) NOT NULL,
@@ -490,13 +517,14 @@ INSERT INTO `master_codes` (`id`, `code`, `code_name`, `code_group`, `sort`, `de
 --
 
 DROP TABLE IF EXISTS `master_role`;
-CREATE TABLE `master_role` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `master_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `role` varchar(64) NOT NULL COMMENT 'ロール名',
   `role_name` varchar(64) NOT NULL COMMENT 'ロール名',
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ロール';
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='ロール' AUTO_INCREMENT=5 ;
 
 --
 -- テーブルのデータのダンプ `master_role`
@@ -515,8 +543,8 @@ INSERT INTO `master_role` (`id`, `role`, `role_name`, `created`, `modified`) VAL
 --
 
 DROP TABLE IF EXISTS `owners`;
-CREATE TABLE `owners` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `owners` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `role` varchar(10) NOT NULL,
   `tel` varchar(15) NOT NULL,
@@ -528,8 +556,9 @@ CREATE TABLE `owners` (
   `remember_token` varchar(64) DEFAULT NULL,
   `status` int(11) DEFAULT '0',
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- テーブルのデータのダンプ `owners`
@@ -542,7 +571,8 @@ INSERT INTO `owners` (`id`, `name`, `role`, `tel`, `email`, `password`, `gender`
 (4, 'Shuri -シュリ- オーナー', 'owner', '09012341234', 'okiyoru99@gmail.com', '$2y$10$oHZcgvU1lfAUUPtmM8B8LurxPaeNjgzFTh4RjVtyumn6LxmZycFXW', 1, '30', '00004', NULL, 1, '2019-11-20 23:51:45', '2019-11-20 23:52:59'),
 (5, 'club Petit -プティ-', 'owner', '09012341234', 'okiyoru2@gmail.com', '$2y$10$NC5kjf30ZxtvY1NKkrvvteT7bqZTPBZganLpnqNdwrlXKmoDWdEKe', 1, '30', '00005', NULL, 1, '2019-11-21 00:23:05', '2019-11-21 00:23:26'),
 (6, 'GIZA PALACE -ギザパレス- オーナー', 'owner', '09012341234', 'okiyoru3@gmail.com', '$2y$10$UGdfqZx38e8tQ4Qafw9ro.AOYBEuEf0ZfRHJh6LwMTcJOIFaRCMpi', 1, '30', '00006', NULL, 1, '2019-11-21 19:46:57', '2019-11-21 19:49:04'),
-(7, 'New Club M -エム- オーナー', 'owner', '09012341234', 'okiyoru1@gmail.com', '$2y$10$.KD/sPE6iXYYt6Lns8MnceMSKMA8AyrN.vtu163udkmz1OwTTcMIi', 1, '30', '00007', NULL, 1, '2019-11-21 20:05:56', '2019-11-21 20:09:59');
+(7, 'New Club M -エム- オーナー', 'owner', '09012341234', 'okiyoru1@gmail.com', '$2y$10$.KD/sPE6iXYYt6Lns8MnceMSKMA8AyrN.vtu163udkmz1OwTTcMIi', 1, '30', '00007', NULL, 1, '2019-11-21 20:05:56', '2019-11-21 20:09:59'),
+(8, '西銘亮子', 'owner', '09084083832', 'undecided-ryono@q.vodafone.ne.jp', '$2y$10$mItFFaOhGAmSmAGBJNHBzeCnJMVukAQCCXMVCsiK9p9YDXhCpsDG.', 0, '34', '00008', '73fafe36112be6367a6f0ec4731078770c5c55a4b98e9515f79c21407131456b', 1, '2019-11-27 22:37:08', '2019-11-27 22:38:17');
 
 -- --------------------------------------------------------
 
@@ -551,27 +581,29 @@ INSERT INTO `owners` (`id`, `name`, `role`, `tel`, `email`, `password`, `gender`
 --
 
 DROP TABLE IF EXISTS `servece_plans`;
-CREATE TABLE `servece_plans` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `servece_plans` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) NOT NULL,
   `current_plan` varchar(20) NOT NULL,
   `previous_plan` varchar(20) NOT NULL,
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- テーブルのデータのダンプ `servece_plans`
 --
 
 INSERT INTO `servece_plans` (`id`, `owner_id`, `current_plan`, `previous_plan`, `created`, `modified`) VALUES
-(1, 1, 'light', 'light', '2019-11-11 18:36:08', '2019-11-11 18:36:08'),
-(2, 2, 'light', 'light', '2019-11-12 21:10:36', '2019-11-12 21:10:36'),
-(3, 3, 'light', 'light', '2019-11-12 23:20:36', '2019-11-12 23:20:36'),
-(4, 4, 'light', 'light', '2019-11-20 23:53:00', '2019-11-20 23:53:00'),
-(5, 5, 'light', 'light', '2019-11-21 00:23:26', '2019-11-21 00:23:26'),
-(6, 6, 'light', 'light', '2019-11-21 19:49:04', '2019-11-21 19:49:04'),
-(7, 7, 'light', 'light', '2019-11-21 20:09:59', '2019-11-21 20:09:59');
+(1, 1, 'free', 'light', '2019-11-11 18:36:08', '2019-11-11 18:36:08'),
+(2, 2, 'free', 'light', '2019-11-12 21:10:36', '2019-11-12 21:10:36'),
+(3, 3, 'premium_s', 'light', '2019-11-12 23:20:36', '2019-11-12 23:20:36'),
+(4, 4, 'free', 'light', '2019-11-20 23:53:00', '2019-11-20 23:53:00'),
+(5, 5, 'free', 'light', '2019-11-21 00:23:26', '2019-11-21 00:23:26'),
+(6, 6, 'free', 'light', '2019-11-21 19:49:04', '2019-11-21 19:49:04'),
+(7, 7, 'free', 'light', '2019-11-21 20:09:59', '2019-11-21 20:09:59'),
+(8, 8, 'premium_s', 'light', '2019-11-27 22:38:19', '2019-11-27 22:38:19');
 
 -- --------------------------------------------------------
 
@@ -580,8 +612,8 @@ INSERT INTO `servece_plans` (`id`, `owner_id`, `current_plan`, `previous_plan`, 
 --
 
 DROP TABLE IF EXISTS `shops`;
-CREATE TABLE `shops` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `shops` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) NOT NULL,
   `area` varchar(255) DEFAULT NULL,
   `genre` varchar(255) DEFAULT NULL,
@@ -599,8 +631,10 @@ CREATE TABLE `shops` (
   `addr21` varchar(10) DEFAULT NULL,
   `strt21` varchar(30) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `owner_id` (`owner_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- テーブルのデータのダンプ `shops`
@@ -613,7 +647,8 @@ INSERT INTO `shops` (`id`, `owner_id`, `area`, `genre`, `dir`, `name`, `catch`, 
 (4, 4, 'naha', 'cabacula', '00002', 'Shuri -シュリ-', NULL, '0988634729', '', '21:00:00', NULL, '定休日　年中無休', '・2名様以上\r\n　21:00～LAST（60min）￥5000\r\n・1名様\r\n　21:00～LAST（60min）￥10000\r\n\r\n・税金・サービス料	20％\r\n・目安予算 	￥5,100～￥8,000\r\n・VIP料金	￥20,000\r\n・指名料	￥1000\r\n・場内指名料	￥1000\r\n・延長方法	確認有り\r\n・予約	可\r\n・お気軽にお電話下さい。\r\n・服装	スーツ\r\n・カラオケ	有り\r\n・駐車場	無し', 'VISA,JCB,Diners,MasterCard', '沖縄県', '那覇市', '松山1-4-8 フラワードリームビル2F', '2019-11-20 23:54:43', '2019-11-21 00:07:56'),
 (5, 5, 'naha', 'cabacula', '00003', 'club Petit -プティ-', '安心!信用!を第1にお客様が心から楽しめる空間をご用意させて頂いています!\r\n個性豊かな女の子ばかりなので必ずご希望にあった女の子が見つかるはず!^_^\r\n松山で飲む際は是非CLUBプティへ!', '0989880690', '', '21:00:00', NULL, '', '・お二人様以上\r\n　21時〜21時59分 保証 5000円\r\n　22時〜ラスト 保証 6000円\r\n　Single Charge マンツー 3000円\r\n・お一人様\r\n　1セット60分 8000円\r\n　TAX15%\r\n・団体	～20名まで可\r\n・朝キャバ	無し\r\n・カラオケ	有り', '', '沖縄県', '那覇市', '松山2-16-16 K1ビル 5階', '2019-11-21 00:25:36', '2019-11-21 00:31:23'),
 (6, 6, 'naha', 'snack', '00001', 'GIZA PALACE -ギザパレス-', 'ステージのあるお店で楽しい時間を過ごしませんか❔', '0988661159', '', '20:00:00', NULL, '休日 年中無休', '★お1人様(60分)\r\n　10000円\r\n★お2人様以上(60分)\r\n　5000円\r\n★指名料\r\n　1000円\r\n★パーティープランのご予約承ります\r\n　[2次会・親睦会・バースデー等]\r\n　(2時間半飲み放題)カラオケ有り\r\n　男性 3,000円\r\n　女性 2,500円\r\n\r\n■カクテル\r\n■ハイボール\r\n■泡盛\r\n■ソフトドリンク\r\n\r\n★VIPルーム・個室もございます!\r\n\r\n　お問い合わせは\r\n　090-3792-8415[仲里]\r\n　までお気軽にご連絡下さい', '', '沖縄県', '那覇市', 'おもろまち4-8-9 フェイスビル4F', '2019-11-21 19:50:48', '2019-11-21 19:57:34'),
-(7, 7, 'okinawashi', 'cabacula', '00001', 'New Club M -エム-', NULL, '08064901426', '', '22:00:00', NULL, '定休日	日曜', 'お一人様 8,000円×60分\r\nお二人様以上1人4,000円×60分\r\n･指名料 1,000円\r\n･ｶﾗｵｹ 1曲200円\r\n･飲み放題ｼｽﾃﾑ\r\n\r\n◆ﾌﾘｰﾄﾞﾘﾝｸ\r\n･ﾊｳｽﾎﾞﾄﾙ(泡盛)\r\n･ｳｰﾛﾝ茶\r\n･緑茶\r\n･ﾌﾞﾗｯｸｺｰﾋｰ\r\n･ｽﾄﾚｰﾄﾃｨ\r\n\r\n★ｵﾌﾟｼｮﾝ★\r\n◆ｶｸﾃﾙ･ﾋﾞｰﾙ\r\n･ﾋﾞｰﾙ1,000円\r\n･ﾉﾝｱﾙｺｰﾙ･ﾋﾞｰﾙ1,000円\r\n･ｸﾞﾗｽﾜｲﾝ(赤)1,000円\r\n･ｸﾞﾗｽﾜｲﾝ(白)1,000円\r\n･ｼｬﾝﾃﾞｨｶﾞﾌ1,000円\r\n･ﾚｯﾄﾞｱｲ1,000円\r\n･ｶｼｽｳｰﾛﾝ1,000円\r\n･ｶﾙｱﾐﾙｸ1,000円\r\n･ﾌｧｼﾞｰﾈｰﾌﾞﾙ1,000円\r\n･ﾋﾟｰﾁｳｰﾛﾝ1,000円\r\n･ﾊｲﾎﾞｰﾙ1,000円\r\n･ﾃｷｰﾗﾛｰｽﾞ1,000円\r\n\r\n◆ﾎﾞﾄﾙ\r\n･菊の露 親方の酒2,000円\r\n･菊の露 VIPｺﾞｰﾙﾄﾞ5,000円\r\n･黒霧島2,000円\r\n･赤霧島5,000円\r\n･ｼｯｸｽｴｲﾄﾅｲﾝ10,000円\r\n･山崎15,000円\r\n･ﾍﾈｼｰx.o 30,000円\r\n\r\n◆ｼｬﾝﾊﾟﾝ\r\n･ｶﾌｪﾄﾞ･ﾊﾟﾘ8,000円\r\n･ﾓｴ･ｼｬﾝﾄﾞﾝ25,000円\r\n･ﾓｴ･ｼｬﾝﾄﾞﾝﾛｾﾞ35,000円\r\n･ﾍﾞﾙ･ｴﾎﾟｯｸ60,000円\r\n･ﾍﾞﾙ･ｴﾎﾟｯｸﾛｾﾞ120,000円', 'MasterCard,VISA,JCB,AmericanExpress,Diners', '沖縄県', '沖縄市', '上地1-13-13 ヤング5ビル5F', '2019-11-21 20:11:20', '2019-11-21 20:30:35');
+(7, 7, 'okinawashi', 'cabacula', '00001', 'New Club M -エム-', NULL, '08064901426', '', '22:00:00', NULL, '定休日	日曜', 'お一人様 8,000円×60分\r\nお二人様以上1人4,000円×60分\r\n･指名料 1,000円\r\n･ｶﾗｵｹ 1曲200円\r\n･飲み放題ｼｽﾃﾑ\r\n\r\n◆ﾌﾘｰﾄﾞﾘﾝｸ\r\n･ﾊｳｽﾎﾞﾄﾙ(泡盛)\r\n･ｳｰﾛﾝ茶\r\n･緑茶\r\n･ﾌﾞﾗｯｸｺｰﾋｰ\r\n･ｽﾄﾚｰﾄﾃｨ\r\n\r\n★ｵﾌﾟｼｮﾝ★\r\n◆ｶｸﾃﾙ･ﾋﾞｰﾙ\r\n･ﾋﾞｰﾙ1,000円\r\n･ﾉﾝｱﾙｺｰﾙ･ﾋﾞｰﾙ1,000円\r\n･ｸﾞﾗｽﾜｲﾝ(赤)1,000円\r\n･ｸﾞﾗｽﾜｲﾝ(白)1,000円\r\n･ｼｬﾝﾃﾞｨｶﾞﾌ1,000円\r\n･ﾚｯﾄﾞｱｲ1,000円\r\n･ｶｼｽｳｰﾛﾝ1,000円\r\n･ｶﾙｱﾐﾙｸ1,000円\r\n･ﾌｧｼﾞｰﾈｰﾌﾞﾙ1,000円\r\n･ﾋﾟｰﾁｳｰﾛﾝ1,000円\r\n･ﾊｲﾎﾞｰﾙ1,000円\r\n･ﾃｷｰﾗﾛｰｽﾞ1,000円\r\n\r\n◆ﾎﾞﾄﾙ\r\n･菊の露 親方の酒2,000円\r\n･菊の露 VIPｺﾞｰﾙﾄﾞ5,000円\r\n･黒霧島2,000円\r\n･赤霧島5,000円\r\n･ｼｯｸｽｴｲﾄﾅｲﾝ10,000円\r\n･山崎15,000円\r\n･ﾍﾈｼｰx.o 30,000円\r\n\r\n◆ｼｬﾝﾊﾟﾝ\r\n･ｶﾌｪﾄﾞ･ﾊﾟﾘ8,000円\r\n･ﾓｴ･ｼｬﾝﾄﾞﾝ25,000円\r\n･ﾓｴ･ｼｬﾝﾄﾞﾝﾛｾﾞ35,000円\r\n･ﾍﾞﾙ･ｴﾎﾟｯｸ60,000円\r\n･ﾍﾞﾙ･ｴﾎﾟｯｸﾛｾﾞ120,000円', 'MasterCard,VISA,JCB,AmericanExpress,Diners', '沖縄県', '沖縄市', '上地1-13-13 ヤング5ビル5F', '2019-11-21 20:11:20', '2019-11-21 20:30:35'),
+(8, 8, 'urasoe', 'snack', '00001', 'Lounge Dear...  ディアー', NULL, '09084083832', '30代〜40代の元気な女性', '21:00:00', NULL, '今のところ定休日無し！', 'ボトル制', '', '沖縄県', '浦添市', '屋富祖4-5-13 コスモビル301', '2019-11-27 22:40:50', '2019-11-27 22:52:39');
 
 -- --------------------------------------------------------
 
@@ -622,15 +657,17 @@ INSERT INTO `shops` (`id`, `owner_id`, `area`, `genre`, `dir`, `name`, `catch`, 
 --
 
 DROP TABLE IF EXISTS `shop_infos`;
-CREATE TABLE `shop_infos` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `shop_infos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) NOT NULL,
   `title` varchar(50) NOT NULL,
   `content` varchar(600) NOT NULL,
   `dir` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_key` (`shop_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -639,14 +676,16 @@ CREATE TABLE `shop_infos` (
 --
 
 DROP TABLE IF EXISTS `shop_info_likes`;
-CREATE TABLE `shop_info_likes` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `shop_info_likes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_info_id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_info_key` (`shop_info_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -655,8 +694,8 @@ CREATE TABLE `shop_info_likes` (
 --
 
 DROP TABLE IF EXISTS `snss`;
-CREATE TABLE `snss` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `snss` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) DEFAULT NULL,
   `cast_id` int(11) DEFAULT NULL,
   `facebook` varchar(255) DEFAULT NULL,
@@ -664,15 +703,20 @@ CREATE TABLE `snss` (
   `instagram` varchar(255) DEFAULT NULL,
   `line` varchar(255) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_id` (`shop_id`),
+  KEY `cast_id` (`cast_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- テーブルのデータのダンプ `snss`
 --
 
 INSERT INTO `snss` (`id`, `shop_id`, `cast_id`, `facebook`, `twitter`, `instagram`, `line`, `created`, `modified`) VALUES
-(1, 7, NULL, '', '', 't.a.k.u.m.a_', '', '2019-11-22 18:09:55', '2019-11-22 18:09:55');
+(1, 7, NULL, '', '', 't.a.k.u.m.a_', '', '2019-11-22 18:09:55', '2019-11-22 18:09:55'),
+(2, 8, NULL, '', '', 'dear_inst', '', '2019-11-27 22:43:59', '2019-11-27 22:43:59'),
+(3, 3, NULL, NULL, NULL, 'clubryukyu', NULL, '2019-11-29 00:00:00', '2019-11-29 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -681,12 +725,14 @@ INSERT INTO `snss` (`id`, `shop_id`, `cast_id`, `facebook`, `twitter`, `instagra
 --
 
 DROP TABLE IF EXISTS `tags`;
-CREATE TABLE `tags` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(191) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -695,15 +741,18 @@ CREATE TABLE `tags` (
 --
 
 DROP TABLE IF EXISTS `updates`;
-CREATE TABLE `updates` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `updates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) DEFAULT NULL,
   `cast_id` int(11) DEFAULT NULL,
   `type` varchar(30) DEFAULT NULL,
   `content` varchar(255) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_id` (`shop_id`),
+  KEY `cast_id` (`cast_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
 
 --
 -- テーブルのデータのダンプ `updates`
@@ -743,7 +792,11 @@ INSERT INTO `updates` (`id`, `shop_id`, `cast_id`, `type`, `content`, `created`,
 (31, 7, 19, 'profile', 'リンさんがプロフィールアイコンを更新しました。', '2019-11-21 23:07:07', '2019-11-21 23:07:07'),
 (32, 7, 19, 'profile', 'リンさんがプロフィールを更新しました。', '2019-11-21 23:07:25', '2019-11-21 23:07:25'),
 (33, 7, 19, 'cast_gallery', 'リンさんがギャラリーを追加しました。', '2019-11-21 23:09:49', '2019-11-21 23:09:49'),
-(34, 7, NULL, 'event', '店舗からのお知らせを追加しました。', '2019-11-22 21:20:07', '2019-11-22 21:20:07');
+(34, 7, NULL, 'event', '店舗からのお知らせを追加しました。', '2019-11-22 21:20:07', '2019-11-22 21:20:07'),
+(35, 8, NULL, 'shop_top_image', 'トップ画像を更新しました。', '2019-11-27 22:42:10', '2019-11-27 22:42:10'),
+(36, 8, NULL, 'system', '店舗情報を更新しました。', '2019-11-27 22:52:39', '2019-11-27 22:52:39'),
+(37, 3, 15, 'diary', 'にーなさんが日記を追加しました。', '2019-12-07 02:37:47', '2019-12-07 02:37:47'),
+(38, 3, 15, 'cast_gallery', 'にーなさんがギャラリーを追加しました。', '2019-12-07 02:40:22', '2019-12-07 02:40:22');
 
 -- --------------------------------------------------------
 
@@ -752,13 +805,14 @@ INSERT INTO `updates` (`id`, `shop_id`, `cast_id`, `type`, `content`, `created`,
 --
 
 DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `modified` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -767,309 +821,15 @@ CREATE TABLE `users` (
 --
 
 DROP TABLE IF EXISTS `work_schedules`;
-CREATE TABLE `work_schedules` (
-  `id` int(11) NOT NULL,
+CREATE TABLE IF NOT EXISTS `work_schedules` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) NOT NULL,
   `cast_ids` varchar(255) DEFAULT NULL,
   `created` datetime NOT NULL,
-  `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `admin_accounts`
---
-ALTER TABLE `admin_accounts`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `adsenses`
---
-ALTER TABLE `adsenses`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `owner_id` (`owner_id`);
-
---
--- Indexes for table `articles`
---
-ALTER TABLE `articles`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `slug` (`slug`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indexes for table `articles_tags`
---
-ALTER TABLE `articles_tags`
-  ADD PRIMARY KEY (`article_id`,`tag_id`),
-  ADD KEY `tag_key` (`tag_id`);
-
---
--- Indexes for table `casts`
---
-ALTER TABLE `casts`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `shop_key` (`shop_id`);
-
---
--- Indexes for table `cast_schedules`
---
-ALTER TABLE `cast_schedules`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `coupons`
---
-ALTER TABLE `coupons`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `shop_key` (`shop_id`);
-
---
--- Indexes for table `developers`
---
-ALTER TABLE `developers`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `diarys`
---
-ALTER TABLE `diarys`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `cast_key` (`cast_id`);
-
---
--- Indexes for table `diary_likes`
---
-ALTER TABLE `diary_likes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `diary_like_key` (`diary_id`);
-
---
--- Indexes for table `event_types`
---
-ALTER TABLE `event_types`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `jobs`
---
-ALTER TABLE `jobs`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `owner_key` (`shop_id`);
-
---
--- Indexes for table `master_role`
---
-ALTER TABLE `master_role`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `owners`
---
-ALTER TABLE `owners`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `servece_plans`
---
-ALTER TABLE `servece_plans`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `shops`
---
-ALTER TABLE `shops`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `owner_id` (`owner_id`);
-
---
--- Indexes for table `shop_infos`
---
-ALTER TABLE `shop_infos`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `shop_key` (`shop_id`);
-
---
--- Indexes for table `shop_info_likes`
---
-ALTER TABLE `shop_info_likes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `shop_info_key` (`shop_info_id`);
-
---
--- Indexes for table `snss`
---
-ALTER TABLE `snss`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `shop_id` (`shop_id`),
-  ADD KEY `cast_id` (`cast_id`);
-
---
--- Indexes for table `tags`
---
-ALTER TABLE `tags`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `title` (`title`);
-
---
--- Indexes for table `updates`
---
-ALTER TABLE `updates`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `shop_id` (`shop_id`),
-  ADD KEY `cast_id` (`cast_id`);
-
---
--- Indexes for table `users`
---
-ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `work_schedules`
---
-ALTER TABLE `work_schedules`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `shop_id` (`shop_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `admin_accounts`
---
-ALTER TABLE `admin_accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `adsenses`
---
-ALTER TABLE `adsenses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `articles`
---
-ALTER TABLE `articles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `casts`
---
-ALTER TABLE `casts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
-
---
--- AUTO_INCREMENT for table `cast_schedules`
---
-ALTER TABLE `cast_schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `coupons`
---
-ALTER TABLE `coupons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `developers`
---
-ALTER TABLE `developers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `diarys`
---
-ALTER TABLE `diarys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `diary_likes`
---
-ALTER TABLE `diary_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `event_types`
---
-ALTER TABLE `event_types`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `jobs`
---
-ALTER TABLE `jobs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `master_role`
---
-ALTER TABLE `master_role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `owners`
---
-ALTER TABLE `owners`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `servece_plans`
---
-ALTER TABLE `servece_plans`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `shops`
---
-ALTER TABLE `shops`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
-
---
--- AUTO_INCREMENT for table `shop_infos`
---
-ALTER TABLE `shop_infos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `shop_info_likes`
---
-ALTER TABLE `shop_info_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `snss`
---
-ALTER TABLE `snss`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `tags`
---
-ALTER TABLE `tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `updates`
---
-ALTER TABLE `updates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `work_schedules`
---
-ALTER TABLE `work_schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  `modified` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `shop_id` (`shop_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- ダンプしたテーブルの制約
@@ -1080,7 +840,6 @@ ALTER TABLE `work_schedules`
 --
 ALTER TABLE `articles`
   ADD CONSTRAINT `articles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

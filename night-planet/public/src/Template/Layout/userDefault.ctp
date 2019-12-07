@@ -12,7 +12,7 @@
     <meta property="og:url" content="<?=$shopInfo['shop_url']?>" />
     <meta property="og:title" content="<?=isset($shop)?$shop->name:$cast->shop->name?>" />
     <meta property="og:description" content="<?=isset($shop)?h($shop->catch):h($cast->shop->catch)?>" />
-    <meta property="og:image" content="<?=PUBLIC_DOMAIN.$shop->top_image?>" />
+    <meta property="og:image" content="<?=isset($shop)?PUBLIC_DOMAIN.$shop->top_image:PUBLIC_DOMAIN.$cast->shop->top_image?>" />
   <?php 
     else:
   ?>

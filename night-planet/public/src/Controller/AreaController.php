@@ -622,6 +622,20 @@ class AreaController extends AppController
                 $otherCast->set('icon', PATH_ROOT['NO_IMAGE02']);
             }
         }
+        // 店舗のトップ画像を設定する
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$shopInfo['top_image_path']), true, 0755);
+
+        $files = array();
+        $files = glob($dir->path.DS.'*.*');
+        // ファイルが存在したら、画像をセット
+        if (count($files) > 0) {
+            foreach ($files as $file) {
+                $cast->shop->set('top_image', $shopInfo['top_image_path'].DS.(basename($file)));
+            }
+        } else {
+            // 共通トップ画像をセット
+            $cast->shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+        }
 
         $ig_data = null; // Instagramデータ
         // Instagramアカウントが入力されていればインスタデータを取得する

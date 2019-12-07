@@ -669,31 +669,21 @@ class UtilComponent extends Component
             }
         }
 
-        $root_path = WWW_ROOT.PATH_ROOT['IMG'].DS.PATH_ROOT['ADSENSE'];
-        $img_path = DS.PATH_ROOT['IMG'].DS.PATH_ROOT['ADSENSE'];
-        // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/', $root_path), true, 0755);
-        $adsense_files = glob($dir->path.DS.'*.*');
-        if (empty($adsense_files)) {
-            return null;
-        }
         // 広告のデータセット
         foreach ($adsense_list as $key => $adsense) {
-            $is_exist = false; // 画像存在フラグ
-            for ($i = 0; $i < count($adsense_files); $i++) {
-                if (basename($adsense_files[$i]) == $adsense->name) {
-                    $shop_url = PUBLIC_DOMAIN.DS.$adsense->Shops['area']
-                        .DS.$adsense->Shops['genre'].DS.$adsense->Shops['id'];
-                    $adsense->set('shop_url', $shop_url);
-                    $adsense->set('image', $img_path . DS . basename($adsense_files[$i]));
-                    $is_exist = true;
-                    break;
-                }
-            }
-            // 画像が存在しない場合は、エンティティを削除する
-            if (!$is_exist) {
+
+            // 画像パスが存在する場合
+            if (!empty($adsense->name)) {
+                $shop_url = PUBLIC_DOMAIN.DS.$adsense->Shops['area']
+                    .DS.$adsense->Shops['genre'].DS.$adsense->Shops['id'];
+                $adsense->set('shop_url', $shop_url);
+                $adsense->set('img_path', $adsense->name);
+
+            } else {
+                // 画像が存在しない場合は、エンティティを削除する
                 unset($adsense_list[$key]);
             }
+
         }
         // 広告データが取得出来ない場合は、泣く泣くランダムで取得する
         // ※誰も広告に載せたくないんかい(# ﾟДﾟ)！
@@ -731,19 +721,19 @@ class UtilComponent extends Component
                 if (count($files) > 0) {
                     foreach ($files as $file) {
 
-                        $adsense->set('image', $shopInfo['top_image_path'].DS.(basename($file)));
+                        $adsense->set('img_path', $shopInfo['top_image_path'].DS.(basename($file)));
                         $adsense->set('shop_url', $shopInfo['shop_url']);
                     }
                 } else {
                     // 共通トップ画像をセット
-                    $adsense->set('image', PATH_ROOT['SHOP_TOP_IMAGE']);
+                    $adsense->set('img_path', PATH_ROOT['SHOP_TOP_IMAGE']);
                 }
             }
             // それでも空ならNO IMAGEファイルをセットする
             if (empty($adsense_list)) {
                 $adsense = $shops->newEntity();
                 // 共通トップ画像をセット
-                $adsense->set('image', PATH_ROOT['SHOP_TOP_IMAGE']);
+                $adsense->set('img_path', PATH_ROOT['SHOP_TOP_IMAGE']);
                 array_push($adsense_list, $adsense);
             }
 

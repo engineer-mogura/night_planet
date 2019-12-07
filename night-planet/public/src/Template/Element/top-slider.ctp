@@ -4,8 +4,8 @@
 			foreach ($adsenses['main_adsenses'] as $key => $value) :
 		?>
         <div class="swiper-slide linkbox"
-            style="background-image:url(<?= $value->image ?>)">
-            <img src="<?= $value->image ?>" class="entity-img" />
+            style="background-image:url(<?= $value->img_path ?>)">
+            <img src="<?= $value->img_path ?>" class="entity-img" />
             <div class="content">
                 <span class="caption" data-swiper-parallax="-20%" data-swiper-parallax-scale=".7"><?=$value->Shops['catch']?></span>
 			</div>

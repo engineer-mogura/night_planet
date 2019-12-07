@@ -221,12 +221,12 @@
             <div class="col-md-4">
                     <article class="blog-post">
                         <figure>
-                            <a href="/naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
+                            <a href="<?=PUBLIC_DOMAIN?>/naha/cabacula/3" class="single_image">
                                 <div class="blog-img-wrap">
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>
                                     </div>
-                                    <img src="/Sedna/img/dca447d4540d4441ef6f0a7495ebea7d983f00e3.jpg" alt="Sedna blog image"/>
+                                    <img src="https://drive.google.com/uc?id=1o-KPXEgU4CS5yahUwTqPbVpmg_s9-o4t" alt="Sedna blog image"/>
                                 </div>
                             </a>
                             <figcaption>
@@ -238,16 +238,16 @@
                 <div class="col-md-4">
                     <article class="blog-post">
                         <figure>
-                            <a href="/naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
+                            <a href="<?=PUBLIC_DOMAIN?>/naha/cabacula/5" class="single_image">
                                 <div class="blog-img-wrap">
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>
                                     </div>
-                                    <img src="/Sedna/img/dca447d4540d4441ef6f0a7495ebea7d983f00e3.jpg" alt="Sedna blog image"/>
+                                    <img src="https://drive.google.com/uc?id=1qaNHuzbU8shWQH8WB2RRzNnUIA7jqGYt" alt="Sedna blog image"/>
                                 </div>
                             </a>
                             <figcaption>
-                            <h2><a class="blog-category" data-toggle="tooltip" data-placement="top" data-original-title="Club琉球">Club琉球</a></h2>
+                            <h2><a class="blog-category" data-toggle="tooltip" data-placement="top" data-original-title="club Petit">club Petit</a></h2>
                             </figcaption>
                         </figure>
                     </article>
@@ -255,16 +255,16 @@
                 <div class="col-md-4">
                     <article class="blog-post">
                         <figure>
-                            <a href="/naha/shop/56?area=naha&genre=cabacula&name=Club%E7%90%89%E7%90%83" class="single_image">
+                            <a href="<?=PUBLIC_DOMAIN?>/urasoe/snack/8" class="single_image">
                                 <div class="blog-img-wrap">
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>
                                     </div>
-                                    <img src="/Sedna/img/dca447d4540d4441ef6f0a7495ebea7d983f00e3.jpg" alt="Sedna blog image"/>
+                                    <img style="height: 250px;" src="https://drive.google.com/uc?id=1W0DGg5gh8ysSDb2xczqX7n67jutdJrRI" alt="Sedna blog image"/>
                                 </div>
                             </a>
                             <figcaption>
-                            <h2><a class="blog-category" data-toggle="tooltip" data-placement="top" data-original-title="Club琉球">Club琉球</a></h2>
+                            <h2><a class="blog-category" data-toggle="tooltip" data-placement="top" data-original-title="Lounge Dear...">Lounge Dear...</a></h2>
                             </figcaption>
                         </figure>
                     </article>

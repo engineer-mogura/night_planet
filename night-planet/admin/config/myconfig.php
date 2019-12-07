@@ -162,7 +162,7 @@ return [
         'NO_IMAGE03'=> '/img/common/no-img150_150/no-img7.png',
         'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
         'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
-        'NIGHT_PLANET_IMAGE'=> '/img/night_planet_top.png',
+        'NIGHT_PLANET_IMAGE'=> 'https://drive.google.com/uc?id=18mb-vlqKidqGfT21iptwlvm9628rBFkd',
         'CAST_TOP_IMAGE'=> '/img/common/cast/top-image.jpg',
         'SHOP_TOP_IMAGE'=> '/img/common/shop/top-image.png',
         'CREDIT'=> '/img/common/credit/',
@@ -298,52 +298,52 @@ return [
         'naha'=> [
             'label' => "那覇",
             'path' => "naha",
-            'image' => "/img/common/area/area_naha_S.png"
+            'image' => "https://drive.google.com/uc?id=1mvdIaSdNV9ZbdJMbSM1JB0ZLg-F7Ycil"
         ],
         'nanjo'=> [
             'label' => "南城",
             'path' => "nanjo",
-            'image' => "/img/common/area/top-image.png"
+            'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
         ],
         'tomigusuku'=> [
             'label' => "豊見城",
             'path' => "tomigusuku",
-            'image' => "/img/common/area/top-image.png"
+            'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
         ],
         'urasoe'=> [
             'label' => "浦添",
             'path' => "urasoe",
-            'image' => "/img/common/area/area_urasoe.jpg"
+            'image' => "https://drive.google.com/uc?id=1buvMC-enr5O1KOyLuhzwWLpF2Ms6VGX9"
         ],
         'ginowan'=> [
             'label' => "宜野湾",
             'path' => "ginowan",
-            'image' => "/img/common/area/area_ginowan_S.png"
+            'image' => "https://drive.google.com/uc?id=1OvwjLL7-l8nBZJuKclw_3zAz6GKhmTJK"
         ],
         'okinawashi'=> [
             'label' => "沖縄市",
             'path' => "okinawashi",
-            'image' => "/img/common/area/area_okinawashi_S.jpg"
+            'image' => "https://drive.google.com/uc?id=12SgcdrCYqhQm92ExPTBb6ALxEUFaCnI2"
         ],
         'uruma'=> [
             'label' => "うるま",
             'path' => "uruma",
-            'image' => "/img/common/area/top-image.png"
+            'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
         ],
         'nago'=> [
             'label' => "名護",
             'path' => "nago",
-            'image' => "/img/common/area/top-image.png"
+            'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
         ],
         'miyakojima'=> [
             'label' => "宮古島",
             'path' => "miyakojima",
-            'image' => "/img/common/area/area_miyako_S.png"
+            'image' => "https://drive.google.com/uc?id=1Iz-G8JTeXLs_gHNkqmbg621hUVmJ11pL"
         ],
         'ishigakijima'=> [
             'label' => "石垣島",
             'path' => "ishigakijima",
-            'image' => "/img/common/area/area_ishigaki_L.png"
+            'image' => "https://drive.google.com/uc?id=1mxTKDKq6RM2w4toKKmpEj-u7AVuRH0a4"
         ],
     )),
     // 業種リスト
@@ -351,37 +351,37 @@ return [
         'cabacula'=> [
             'label' => "キャバクラ",
             'path' => "cabacula",
-            'image' => "/img/common/genre/cabacula.png"
+            'image' => "https://drive.google.com/uc?id=1lgEzrYyH3h-_9ULqmSJSJ_XmnaVfqyGW"
         ],
         'snack'=> [
             'label' => "スナック",
             'path' => "snack",
-            'image' => "/img/common/genre/snack.png"
+            'image' => "https://drive.google.com/uc?id=1TTvCl-tlLA6LnnznlFsjAXPQFNh1F_Ri"
         ],
         'girlsbar'=> [
             'label' => "ガールズバー",
             'path' => "girlsbar",
-            'image' => "/img/common/genre/girlsbar.png"
+            'image' => "https://drive.google.com/uc?id=108dWaFNSntR4b3UIKnyOxjr-9bIJSI14"
         ],
         'club'=> [
             'label' => "クラブ",
             'path' => "club",
-            'image' => "/img/common/genre/club.png"
+            'image' => "https://drive.google.com/uc?id=170U2YZIE0Ew2m_1gWcR9UEzILupnabai"
         ],
         'lounge'=> [
             'label' => "ラウンジ",
             'path' => "lounge",
-            'image' => "/img/common/genre/lounge.png"
+            'image' => "https://drive.google.com/uc?id=1gZXTi4LPhYzfUptpsZImc8bf87mXve_7"
         ],
         'pub'=> [
             'label' => "パブ",
             'path' => "pub",
-            'image' => "/img/common/genre/pub.png"
+            'image' => "https://drive.google.com/uc?id=1naVYWMpUN4QTqI02zYXWbmzjYC7UzsJ5"
         ],
         'bar'=> [
             'label' => "バー",
             'path' => "bar",
-            'image' => "/img/common/genre/bar.png"
+            'image' => "https://drive.google.com/uc?id=1DUNny2vYOqVixDxghJkt7D2acvqNfVYK"
         ],
     )),
     // 星座リスト

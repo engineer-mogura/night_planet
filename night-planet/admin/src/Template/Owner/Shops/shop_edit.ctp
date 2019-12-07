@@ -3,7 +3,7 @@
         <span id="dummy" style="display: hidden;"></span>
         <div class="row">
             <div class="col s12 m12 l12 edit-menu">
-                <!-- <?= $this->Form->hidden('activeTab',['id'=>'activeTab','value' => $activeTab]); ?> -->
+                <?= $this->Form->hidden('select_tab',['id'=>'select_tab','value' => $select_tab]); ?>
                 <ul class="tabs">
                     <li class="tab"><a class="active" href="#top-image">トップ画像</a></li>
                     <li class="tab"><a href="#catch">キャッチコピー</a></li>

@@ -483,16 +483,6 @@ var helpModal = function() {
             }
         });
 
-        var activeTab = $('#activeTab').val();
-        var options = {
-            //'swipeable':true, // モバイル時のスワイプでタブ切り替え
-            //'responsiveThreshold':991,
-            'onShow': function() {   // タブ切り替え時のコールバック
-            }
-        }
-        $('ul.tabs').tabs(options);
-        // タブの事前選択
-        $('ul.tabs').tabs('select_tab', activeTab);
         $('.slider').slider();
         // materializecss selectbox
         $('select').material_select();
@@ -986,6 +976,11 @@ function initializeShop() {
             });
 
         });
+        // 他の画面でタブメニューが押された場合
+        if ($('#select_tab')) {
+            var tab = $('#select_tab').val();
+            $('[data-tab="' + tab + '"]').trigger('click');
+        }
         /* サイドメニュータブ 関連処理 END */
 
         /* トップ画像 関連処理 START */

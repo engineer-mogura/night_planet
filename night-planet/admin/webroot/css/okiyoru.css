@@ -395,6 +395,7 @@ form .warning-message {
   display: list-item;
   height: 200px;
   width:100%;
+  object-fit: cover;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-b;
@@ -1193,6 +1194,7 @@ form .message-label {
   /* ユーザー END */
   .my-gallery figure img{
     height: 120px;
+    object-fit: cover;
   }
 }
 
@@ -1350,6 +1352,7 @@ form .message-label {
 @media only screen and (min-width: 600px) and (max-width: 992px) {
   .my-gallery figure img{
     height: 160px;
+    object-fit: cover;
     }
 }
 

@@ -97,12 +97,12 @@ class ShopsController extends AppController
         // アクティブタブ
         $selected_tab = "";
         // サイドバーメニューのパラメータがあればセッションにセットする
-        if (isset($this->request->data["selected_tab"])) {
-            $this->request->session()->write('selected_tab', $this->request->getData("selected_tab"));
+        if (isset($this->request->query["select_tab"])) {
+            $this->request->session()->write('select_tab', $this->request->query["select_tab"]);
         }
         // セッションにアクティブタブがセットされていればセットする
-        if ($this->request->session()->check('selected_tab')) {
-            $selectedTab = $this->request->session()->consume('selected_tab');
+        if ($this->request->session()->check('select_tab')) {
+            $select_tab = $this->request->session()->consume('select_tab');
         }
 
         if(!is_null($user = $this->Auth->user())){
@@ -165,14 +165,6 @@ class ShopsController extends AppController
                 $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
             }
         }
-        // $imageCol = array_values(preg_grep('/^image/', $this->Shops->schema()->columns()));
-        // $imageList = array(); // 画面側でjsonとして使う画像リスト
-        // // 画像リストを作成する
-        // foreach ($imageCol as $key => $value) {
-        //     if (!empty($shop[$imageCol[$key]])) {
-        //         array_push($imageList, ['key'=>$imageCol[$key],'name'=>$shop[$imageCol[$key]]]);
-        //     }
-        // }
 
         // 作成するセレクトボックスを指定する
         $masCodeFind = array('industry','job_type','treatment','day');
@@ -189,7 +181,7 @@ class ShopsController extends AppController
         // クレジット、待遇リストをセット
         $masData = array('credit'=>json_encode($shopCredits),'treatment'=>json_encode($jobTreatments));
 
-        $this->set(compact('shop','gallery','masCredit','masData','selectList','selectedTab'));
+        $this->set(compact('shop','gallery','masCredit','masData','selectList','select_tab'));
         $this->render();
     }
 
@@ -537,7 +529,6 @@ class ShopsController extends AppController
         $auth = $this->request->session()->read('Auth.Owner');
         $id = $auth['id']; // ユーザーID
 
-        $this->request->session()->write('activeTab', 'coupon'); // タブ状態を保持
         $coupon = $this->Coupons->get($this->request->getData('id'));
         // ステータスをセット
         $coupon->status = $this->request->getData('status');

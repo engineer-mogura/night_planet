@@ -297,7 +297,8 @@ class AreaController extends AppController
         $area_genre = ['area'=> AREA[$url['0']], 'genre'=>GENRE[$url['1']]];
         // エリア、ジャンルの店舗情報取得
         $shops = $this->Shops->find('all')
-                    ->where(['area'=> $url['0'], 'genre' => $url['1']])->toArray();
+                    ->where(['area'=> $url['0'], 'genre' => $url['1']])
+                    ->contain(['snss'])->toArray();
 
         // トップ画像を設定する
         foreach ($shops as $key => $shop) {

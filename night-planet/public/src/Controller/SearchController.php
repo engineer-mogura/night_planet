@@ -115,7 +115,7 @@ class SearchController extends AppController
     {
         // 店舗検索の場合
         if ($requestData['search-choice'] == 'shop') {
-            $query = $this->Shops->find();
+            $query = $this->Shops->find()->contain(['snss']);
 
             foreach ($requestData as $key => $findData) {
                 // ラジオボタンの場合コンティニュー
@@ -157,7 +157,7 @@ class SearchController extends AppController
             }
         } elseif ($requestData['search-choice'] == 'cast') {
             // キャスト検索の場合
-            $query = $this->Casts->find()->contain('shops');
+            $query = $this->Casts->find()->contain(['shops','snss']);
 
             foreach ($requestData as $key => $findData) {
                 // ラジオボタンの場合コンティニュー

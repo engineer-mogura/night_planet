@@ -21,12 +21,14 @@ article#SNS_Instagram header > section{
   background          : linear-gradient(135deg,#ebff3709,#46ff4b09,#0affff09);
   border-bottom       : 1px solid #969696;
 }
-article#SNS_Instagram header h1{
+article#SNS_Instagram header h1 {
   margin              : 0px;
   padding             : 0px;
   height              : 60px;
 }
-article#SNS_Instagram header h1 > a{
+
+/**  店舗カード、キャストカードのインスタ表示 START ***/
+article#SNS_Instagram header h1 > a {
   position            : relative;
   display             : block;
   margin              : 0px;
@@ -34,7 +36,57 @@ article#SNS_Instagram header h1 > a{
   padding-left        : 10px;
   font-size           : 0;
 }
-article#SNS_Instagram header h1 > a > img{
+li.search-result-card h1 {
+  margin              : 0px;
+  padding             : 0px;
+}
+li.search-result-card h1 > a{
+  position: relative;
+  display: block;
+  margin: 0px;
+  margin-left: 100%;
+  padding-left: 10px;
+  font-size: 0;
+}
+li.search-result-card .Instagram_logo1 {
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-image: url(https://drive.google.com/uc?id=1X1xRVeikChMI0mb27Xb6aKZAC87syN2p);
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  left: -40px;
+  top: 30px;
+}
+li.search-result-card .facebook_logo1 {
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-image: url(https://drive.google.com/uc?id=1zHcGjMghY-NTaV3gwPq1LqbOGOJTRSbe);
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  left: -40px;
+  top: 30px;
+}
+li.search-result-card .twitter_logo1 {
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-image: url(https://drive.google.com/uc?id=13-gJ1A21LT8INk4SDbvCOuoxjAzkWVDz);
+  background-repeat: no-repeat;
+  background-size: contain;
+  position: absolute;
+  left: -40px;
+  top: 30px;
+}
+/**  店舗カード、キャストカードのインスタ表示 END ***/
+
+article#SNS_Instagram header h1 > a > img, li.search-result-card h1 > a > img {
   position            : absolute;
   top                 : 50px;
   left                : -75px;
@@ -45,7 +97,7 @@ article#SNS_Instagram header h1 > a > img{
   /* Instagramのロゴは上下左右にロゴの半分以上の空白が必要 */
   /* Detail => https://en.instagram-brand.com/assets/icons */
 }
-article#SNS_Instagram header h1 > a > svg{
+article#SNS_Instagram header h1 > a > svg, li.search-result-card h1 > a > svg {
   width               : 123.2px;
   height              : 44px;
 }
@@ -54,7 +106,7 @@ article#SNS_Instagram header .Instagram_logo1 {
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
   height: 30px;/*画像の高さ*/
-  background-image: url(/img/common/instagram_logo1.png);
+  background-image: url(https://drive.google.com/uc?id=1X1xRVeikChMI0mb27Xb6aKZAC87syN2p);
   background-repeat: no-repeat;
   background-size: contain;
   position: absolute;

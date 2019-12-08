@@ -12,6 +12,23 @@
 					<img src="<?= $rows->icon ?>" class="card-image-img" height="200">
 				</div>
 				<div class="card-stacked">
+					<h1>
+						<?php if (!empty($rows->snss[0]->instagram)): ?>
+							<a style="margin-left: 80%;">
+								<span class="Instagram_logo1"></span>
+							</a>
+						<?php endif; ?>
+						<?php if (!empty($rows->snss[0]->facebook)): ?>
+							<a style="margin-left: 90%;">
+								<span class="facebook_logo1"></span>
+							</a>
+						<?php endif; ?>
+						<?php if (!empty($rows->snss[0]->twitter)): ?>
+							<a style="margin-left: 100%;">
+								<span class="twitter_logo1"></span>
+							</a>
+						<?php endif; ?>
+					</h1>
 					<div class="card-content">
 						<h5 class="blue-text text-darken-2"><?= $rows['name']?><span style="font-size: small;"class="blue-text text-darken-2">　所属：<?=$rows->shop['name']?></span></h5>
 						<p class="blue-text text-darken-2"><?= $rows['message']

@@ -1208,7 +1208,7 @@ form .message-label {
   }
 
 }
-/** 出勤管理テーブル */
+/** 出勤管理テーブル START */
 #work-schedule-management .table-wrap {
   overflow-y:scroll;
   height:600px;
@@ -1228,7 +1228,15 @@ form .message-label {
   position: sticky;
   left: 0;
 } 
-/** 出勤管理テーブル */
+/** 出勤管理テーブル END */
+/** プラン変更画面 START */
+#change-plan div.card.plan-card button {
+  font-size: smaller;
+}
+#change-plan div.card.plan-card li {
+  list-style-type: decimal;
+}
+/** プラン変更画面 END */
 
 @media only screen and (max-width: 992px) {
   .brand-logo.oki-brand-logo{

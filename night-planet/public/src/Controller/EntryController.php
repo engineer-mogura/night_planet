@@ -146,7 +146,7 @@ class EntryController extends AppController
     {
         switch ($type) {
           case 'csrf':
-            $this->Session->setFlash(__('不正な送信が行われました'));
+            $this->Flash->error(__('不正な送信が行われました'));
             $this->redirect(array('controller' => 'entry', 'action' => $this->action));
             break;
           default:

@@ -926,9 +926,29 @@ $($profile).find(".saveBtn").on("click", function() {
     event.preventDefault();
     ajaxCommon($form, $("#wrapper"));
 });
+
 }
 // /* プロフィール 画面 END */
+
+/* プラン変更 画面 START */
+if($("#change-plan").length) {
+
+/**
+ * 全てのボタンを無効化する
+ */
+$('form').submit( function () {
+    var message = $(this).find('input[name="message"]').val();
+    var result = confirm(message);
+    if (result) {
+        $('button[type="submit"]').prop("disabled", true);
+        return true;
+    }
+    return false;
+});
 }
+/* プラン変更 画面 END */
+}
+
 /**
 * ショップ画面の初期化処理
 */

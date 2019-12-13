@@ -995,7 +995,7 @@ class UtilComponent extends Component
         } else if ($current_plan == SERVECE_PLAN['premium']['label']) {
             $get_post_num = 54;
         } else if ($current_plan == SERVECE_PLAN['premium_s']['label']) {
-            $get_post_num = 90;
+            $get_post_num = 120;
         }
 
         //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下

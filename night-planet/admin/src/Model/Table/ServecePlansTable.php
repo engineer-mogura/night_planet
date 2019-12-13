@@ -9,7 +9,7 @@ use Cake\Validation\Validator;
 /**
  * ServecePlans Model
  *
- * @property \App\Model\Table\OwnersTable|\Cake\ORM\Association\BelongsTo $Owners
+ * @property |\Cake\ORM\Association\BelongsTo $Owners
  *
  * @method \App\Model\Entity\ServecePlan get($primaryKey, $options = [])
  * @method \App\Model\Entity\ServecePlan newEntity($data = null, array $options = [])
@@ -70,6 +70,21 @@ class ServecePlansTable extends Table
             ->requirePresence('previous_plan', 'create')
             ->allowEmptyString('previous_plan', false);
 
+        $validator
+            ->integer('course')
+            ->requirePresence('course', 'create')
+            ->allowEmptyString('course', false);
+
+        $validator
+            ->date('from_start')
+            ->requirePresence('from_start', 'create')
+            ->allowEmptyDate('from_start', false);
+
+        $validator
+            ->date('to_end')
+            ->requirePresence('to_end', 'create')
+            ->allowEmptyDate('to_end', false);
+
         return $validator;
     }
 
@@ -82,7 +97,7 @@ class ServecePlansTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['owner_id'], 'Owners'));
+        $rules->add($rules->existsIn(['owner_id'], 'owners'));
 
         return $rules;
     }

@@ -10,11 +10,13 @@ use Cake\ORM\Entity;
  * @property int $owner_id
  * @property string $current_plan
  * @property string $previous_plan
+ * @property int $course
+ * @property \Cake\I18n\FrozenDate $from_start
+ * @property \Cake\I18n\FrozenDate $to_end
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
  * @property \App\Model\Entity\Owner $owner
- * @property \App\Model\Entity\Shop $shop
  */
 class ServecePlan extends Entity
 {
@@ -31,9 +33,11 @@ class ServecePlan extends Entity
         'owner_id' => true,
         'current_plan' => true,
         'previous_plan' => true,
+        'course' => true,
+        'from_start' => true,
+        'to_end' => true,
         'created' => true,
         'modified' => true,
-        'owner' => true,
-        'shop' => true
+        'owner' => true
     ];
 }

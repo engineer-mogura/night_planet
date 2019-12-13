@@ -47,6 +47,9 @@ class OwnersTable extends Table
         $this->hasOne('servece_plans', [
             'foreignKey' => 'owner_id'
         ]);
+        $this->hasOne('adsenses', [
+            'foreignKey' => 'owner_id'
+        ]);
     }
 
     /**

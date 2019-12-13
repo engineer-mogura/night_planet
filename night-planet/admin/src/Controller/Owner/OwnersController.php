@@ -5,11 +5,13 @@ use Cake\Log\Log;
 use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Mailer\Email;
+use Cake\Core\Configure;
+use RuntimeException;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
-use Cake\Datasource\ConnectionManager;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\Datasource\ConnectionManager;
 
 /**
 * Owners Controller
@@ -21,9 +23,12 @@ use Cake\Auth\DefaultPasswordHasher;
 class OwnersController extends AppController
 {
     use MailerAwareTrait;
+    public $components = array('Security');
 
     public function beforeFilter(Event $event) {
         // AppController.beforeFilterをコールバック
+        $this->Security->setConfig('blackHoleCallback', 'blackhole');
+        //$this->loadComponent('Csrf');
         parent::beforeFilter($event);
         // オーナー用テンプレート
         $this->viewBuilder()->layout('ownerDefault');
@@ -217,8 +222,8 @@ class OwnersController extends AppController
             // プラン情報セット
             $servecePlans = $this->ServecePlans->newEntity();
             $servecePlans->owner_id = $owner->id;
-            $servecePlans->current_plan = SERVECE_PLAN['light']['label'];
-            $servecePlans->previous_plan = SERVECE_PLAN['light']['label'];
+            $servecePlans->current_plan = SERVECE_PLAN['free']['label'];
+            $servecePlans->previous_plan = SERVECE_PLAN['free']['label'];
             // プラン登録
             if (!$this->ServecePlans->save($servecePlans)) {
                 throw new RuntimeException('レコードの登録に失敗しました。');
@@ -600,6 +605,111 @@ class OwnersController extends AppController
         $this->render();
     }
 
+    /**
+     * 契約詳細画面の処理
+     *
+     * @return void
+     */
+    public function contractDetails()
+    {
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+
+        $owner = $this->Owners->find('all')
+            ->where(['owners.id'=>$id])
+            ->contain(['servece_plans','shops.adsenses'=>[
+                        'sort'=>['type'=>'ASC','valid_start'=>'ASC']
+                ]])
+            ->toArray();
+
+        $this->set(compact('owner'));
+        $this->render();
+    }
+
+    /**
+     * プラン変更ボタンの処理
+     *
+     * @return void
+     */
+    public function changePlan()
+    {
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+
+        if ($this->request->is('post')) {
+
+            $owner = $this->Owners->find('all')
+                ->where(['owners.id'=>$id])
+                ->contain(['servece_plans','shops.adsenses'=>[
+                            'sort'=>['type'=>'ASC','valid_start'=>'ASC']
+                    ]])
+                ->toArray();
+            // 現在プランが適応中かチェックする
+            $is_range_plan = $this->Util->check_in_range($owner[0]->servece_plan->from_start
+                , $owner[0]->servece_plan->to_end, date("Y/m/d H:i:s"));
+            // プランを強制的に変更した不正なアクセスの場合
+            if ($is_range_plan) {
+                $this->log($this->Util->setLog($auth, "プランを強制的に変更しようとした不正なアクセスです。"));
+                $this->Flash->error(RESULT_M['CHANGE_PLAN_FAILED']);
+                return $this->redirect('/owner/owners/contract_details');
+            }
+
+            $message = RESULT_M['CHANGE_PLAN_SUCCESS']; // 返却メッセージ
+
+            // プラン情報セット
+            $servecePlans                = $this->ServecePlans->get($id);
+            $servecePlans->previous_plan = $servecePlans->current_plan;
+            $servecePlans->current_plan  = $this->request->getData('plan');
+            $servecePlans->course        = $this->request->getData('course');
+            $servecePlans->from_start    = date('Y-m-d', strtotime("now"));
+            $servecePlans->to_end        = date('Y-m-d'
+                , strtotime("+". $this->request->getData('course') . "month"));
+
+            try {
+                // レコード更新実行
+                if (!$this->ServecePlans->save($servecePlans)) {
+                    throw new RuntimeException('レコードの更新ができませんでした。');
+                }
+
+                $email = new Email('default');
+                $email->setFrom([MAIL['FROM_INFO_GMAIL'] => MAIL['FROM_NAME']])
+                    ->setSubject(MAIL['FROM_NAME_CHANGE_PLAN'])
+                    ->setTo($owner[0]->email)
+                    ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                    ->setTemplate("change_plan_success")
+                    ->setLayout("simple_layout")
+                    ->emailFormat("html")
+                    ->viewVars(['owner' => $owner[0]])
+                    ->send();
+                $this->set('owner', $owner[0]);
+                // 完了メッセージ
+                $this->Flash->success(RESULT_M['CHANGE_PLAN_SUCCESS']);
+                Log::info("ID：【".$owner[0]['id']."】アドレス：【".$owner[0]->email
+                    ."】" . RESULT_M['CHANGE_PLAN_SUCCESS'] . ', pass_reset');
+
+            } catch (RuntimeException $e) {
+                $this->log($this->Util->setLog($auth, $e));
+                $this->Flash->error(RESULT_M['CHANGE_PLAN_FAILED']);
+            }
+
+            return $this->redirect('/owner/owners/contract_details');
+
+        }
+
+        $owner = $this->Owners->find('all')
+            ->where(['owners.id'=>$id])
+            ->contain(['servece_plans','shops.adsenses'=>[
+                        'sort'=>['type'=>'ASC','valid_start'=>'ASC']
+                ]])
+            ->toArray();
+        // 現在プランが適応中かチェックする
+        $is_range_plan = $this->Util->check_in_range($owner[0]->servece_plan->from_start
+            , $owner[0]->servece_plan->to_end, date("Y/m/d H:i:s"));
+        $owner[0]->set('is_range_plan', $is_range_plan);
+        $this->set(compact('owner'));
+        $this->render();
+    }
+
     public function view($id = null)
     {
 
@@ -824,6 +934,20 @@ class OwnersController extends AppController
         }
         $this->set('owner', $owner);
         return $this->render();
+    }
+
+    public function blackhole($type)
+    {
+        switch ($type) {
+          case 'csrf':
+            $this->Flash->error(__('不正な送信が行われました'));
+            $this->redirect(array('controller' => 'owners', 'action' => 'index'));
+            break;
+          default:
+            $this->Flash->error(__('不正な送信が行われました'));
+            $this->redirect(array('controller' => 'owners', 'action' => 'index'));
+            break;
+        }
     }
 
 }

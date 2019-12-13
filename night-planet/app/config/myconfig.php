@@ -475,12 +475,14 @@ return [
         'HIDDEN_SUCCESS'=>'を非表示にしました',
         'AUTH_SUCCESS'=>'認証完了しました。ログインしてください。',
         'PASS_RESET_SUCCESS'=>'パスワード変更完了しました。ログインしてください。',
+        'CHANGE_PLAN_SUCCESS'=>'プランの変更が完了しました。ご登録のメールアドレスにお支払いの案内がありますのでご確認ください。',
         'DUPLICATE'=>'同じ画像はアップできませんでした。',
         'SIGNUP_FAILED'=>'登録に失敗しました。もう一度登録しなおしてください。',
         'UPDATE_FAILED'=>'編集に失敗しました。もう一度編集しなおしてください。',
         'DELETE_FAILED'=>'削除に失敗しました。もう一度削除しなおしてください。',
         'AUTH_FAILED'=>'認証に失敗しました。もう一度登録しなおしてください。',
         'PASS_RESET_FAILED'=>'一定時間が過ぎました。もう一度やり直してください。',
+        'CHANGE_PLAN_FAILED'=>'プランの変更に失敗しました。お手数ですがもう一度試して頂いてみてもダメな場合お問い合わせからご連絡の方お願い致します。',
         'REGISTERED_FAILED'=>'すでに登録されてます。ログインしてください。',
         'FRAUD_INPUT_FAILED'=>'メールアドレスまたはパスワードが不正です。',
         'CHANGE_FAILED'=>'切り替えに失敗しました。もう一度お試しください。',
@@ -497,6 +499,7 @@ return [
         'FROM_SUBSCRIPTION'=>'subscription@night-planet.com',
         'FROM_NAME'=>'NightPlanet事務局',
         'FROM_NAME_PASS_RESET'=>'【NightPlanet ﾅｲﾌﾟﾗ】パスワード再設定',
+        'FROM_NAME_CHANGE_PLAN'=>'【NightPlanet ﾅｲﾌﾟﾗ】プラン変更完了とお支払いのご案内',
     )),
 
     // SEO タイトル

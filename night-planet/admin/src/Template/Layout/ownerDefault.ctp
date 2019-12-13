@@ -56,7 +56,7 @@
     </li>
     <li><a href="/owner/owners/index" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons" href="">info_outline</i><?= OWNER_LM['001'] ?></a></li>
     <li><a href="/owner/owners/profile" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['002'] ?></a></li>
-    <li><a href="/owner/owners/index" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['003'] ?></a></li>
+    <li><a href="/owner/owners/contract_details" class="waves-effect <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">info_outline</i><?= OWNER_LM['003'] ?></a></li>
     <li><a class="waves-effect" href="/owner/owners"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect" href="/other/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect" href="<?=API['GOOGLE_FORM_CONTACT']?>" target="_blank"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

@@ -472,6 +472,106 @@ Features-stack
 }
 
 /* ==========================================================================
+Reports-stack
+========================================================================== */
+.reports {
+  position: relative;
+
+  p {
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+  h3 {
+    margin: 0 0 20px 0;
+  }
+  span.icon {
+    font-size: 35px;
+    color: $accent-color;
+    font-weight: bold;
+  }
+  .report-icon {
+    display: inline-block;
+    vertical-align: top;
+    padding: 6px 0 0 0;
+    margin-right: 20px;
+    width: 35px;
+  }
+  .report-content {
+    display: inline-block;
+    width: 75%;
+  }
+  .intro-icon {
+    display: inline-block;
+    vertical-align: top;
+    padding: 6px 0 0 0;
+    margin-right: 20px;
+  }
+  .intro-content {
+    display: inline-block;
+    width: 80%;
+  }
+  ul.reports-stack {
+    margin-top: 50px;
+  }
+  ul.reports-stack li {
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: solid 1px $keyline-color;
+  }
+  ul.reports-stack li:last-child {
+    padding-bottom: 0px;
+    border-bottom: none;
+  }
+  .ipad-wrap {
+    width: 706px;
+    height: 1002px;
+    background: url("../img/iphone6_report1.png") no-repeat center center;
+    z-index: 1;
+  }
+  .iphone-wrap {
+    width: 304px;
+    height: 620px;
+    background: url("../img/iphone6_report2.png") no-repeat center center;
+    position: absolute;
+    left: 530px;
+    bottom: 129px;
+    z-index: 2;
+  }
+  .device-showcase {
+    position: absolute;
+    bottom: -365px;
+    right: 61%;
+  }
+}
+.reports .responsive-report-img, .reports-extra .responsive-report-img {
+  display: none;
+}
+.devices {
+  position: relative;
+}
+
+/* ==========================================================================
+.reports-extra
+========================================================================== */
+.reports-extra {
+  position: relative;
+  z-index: 3;
+
+  .btn {
+    margin-top: 20px;
+  }
+  .macbook-wrap {
+    position: absolute;
+    width: 916px;
+    height: 540px;
+    background: url("../img/macbook-pro.png") no-repeat center center;
+    top: 114px;
+    z-index: 4;
+    left: 50%;
+  }
+}
+
+/* ==========================================================================
 .hero-strip
 ========================================================================== */
 .hero-strip {

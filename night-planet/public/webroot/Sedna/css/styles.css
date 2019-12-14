@@ -77,7 +77,7 @@ h5 {
 .btn-margin-right {
   margin-right: 20px; }
 
-section.intro, section.features-extra, section.sign-up {
+section.intro, section.features-extra, section.reports-extra, section.sign-up {
   background: #fff; }
 
 section.features, section.blog-intro, section.blog {
@@ -526,6 +526,87 @@ Features-stack
     width: 916px;
     height: 540px;
     background: url("../img/desctop-device.png") no-repeat center center;
+    top: 114px;
+    z-index: 4;
+    left: 50%; }
+
+/* ==========================================================================
+Reports-stack
+========================================================================== */
+.reports {
+  position: relative; }
+  .reports p {
+    margin-bottom: 0;
+    padding-bottom: 0; }
+  .reports h3 {
+    margin: 0 0 20px 0; }
+  .reports span.icon {
+    font-size: 35px;
+    color: #FF5274;
+    font-weight: bold; }
+  .reports .report-icon {
+    display: inline-block;
+    vertical-align: top;
+    padding: 6px 0 0 0;
+    margin-right: 20px;
+    width: 35px; }
+  .reports .report-content {
+    display: inline-block;
+    width: 75%; }
+  .reports .intro-icon {
+    display: inline-block;
+    vertical-align: top;
+    padding: 6px 0 0 0;
+    margin-right: 20px; }
+  .reports .intro-content {
+    display: inline-block;
+    width: 80%; }
+  .reports ul.reports-stack {
+    margin-top: 50px; }
+  .reports ul.reports-stack li {
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: solid 1px #E6E9EA; }
+  .reports ul.reports-stack li:last-child {
+    padding-bottom: 0px;
+    border-bottom: none; }
+  .reports .ipad-wrap {
+    width: 706px;
+    height: 1002px;
+    background: url("/Sedna/img/iphone6_report1.png") no-repeat center center;
+    z-index: 1; }
+  .reports .iphone-wrap {
+    width: 380px;
+    height: 670px;
+    background: url("/Sedna/img/iphone6_report2.png") no-repeat center center;
+    position: absolute;
+    left: 530px;
+    bottom: 129px;
+    z-index: 2; }
+  .reports .device-showcase {
+    position: absolute;
+    bottom: -365px;
+    right: 61%; }
+
+.reports .responsive-report-img, .reports-extra .responsive-report-img {
+  display: none; }
+
+.devices {
+  position: relative; }
+
+/* ==========================================================================
+.reports-extra
+========================================================================== */
+.reports-extra {
+  position: relative;
+  z-index: 3; }
+  .reports-extra .btn {
+    margin-top: 20px; }
+  .reports-extra .macbook-wrap {
+    position: absolute;
+    width: 916px;
+    height: 540px;
+    background: url("../img/desctop-device_report.png") no-repeat center center;
     top: 114px;
     z-index: 4;
     left: 50%; }

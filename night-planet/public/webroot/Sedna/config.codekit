@@ -415,6 +415,28 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/Sedna\/img\/devices_reports.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 166315,
+		"inputAbbreviatedPath": "\/Sedna\/img\/devices_reports.png",
+		"outputAbbreviatedPath": "\/Sedna\/img\/devices_reports.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/Sedna\/img\/devices_reports@2x.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 578012,
+		"inputAbbreviatedPath": "\/Sedna\/img\/devices_reports@2x.png",
+		"outputAbbreviatedPath": "\/Sedna\/img\/devices_reports@2x.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/Sedna\/img\/fancybox_overlay.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -481,6 +503,17 @@
 		"outputPathIsSetByUser": 0,
 		"processed": 0
 		},
+	"\/Sedna\/img\/iphone6_report1.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 153405,
+		"inputAbbreviatedPath": "\/Sedna\/img\/iphone6_report1.png",
+		"outputAbbreviatedPath": "\/Sedna\/img\/iphone6_report1.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
 	"\/Sedna\/img\/iphone-device.png": {
 		"fileType": 32768,
 		"ignore": 0,
@@ -499,6 +532,17 @@
 		"initialSize": 95273,
 		"inputAbbreviatedPath": "\/Sedna\/img\/iphone6.png",
 		"outputAbbreviatedPath": "\/Sedna\/img\/iphone6.png",
+		"outputPathIsOutsideProject": 0,
+		"outputPathIsSetByUser": 0,
+		"processed": 0
+		},
+	"\/Sedna\/img\/iphone6_report2.png": {
+		"fileType": 32768,
+		"ignore": 0,
+		"ignoreWasSetByUser": 0,
+		"initialSize": 95273,
+		"inputAbbreviatedPath": "\/Sedna\/img\/iphone6_report2.png",
+		"outputAbbreviatedPath": "\/Sedna\/img\/iphone6_report2.png",
 		"outputPathIsOutsideProject": 0,
 		"outputPathIsSetByUser": 0,
 		"processed": 0

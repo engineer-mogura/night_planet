@@ -218,6 +218,27 @@
 		width: 100%;
 	}
 
+	.reports {
+		padding-bottom: 0;
+	}
+
+	.reports .device-showcase,
+	.reports-extra .macbook-wrap {
+		display: none;
+	}
+
+	.reports .responsive-report-img,
+	.reports-extra .responsive-report-img {
+		display: block;
+		width: 85%;
+		margin: 15% auto 0;
+	}
+
+	.reports .responsive-report-img img,
+	.reports-extra .responsive-report-img img {
+		width: 100%;
+	}
+
 	.hero-strip {
 		margin-top: 0;
 	}
@@ -305,7 +326,7 @@
 		.features .iphone-wrap {
 			width: 304px;
 			height: 617px;
-			background: url("../img/iphone6.png") no-repeat center center;
+			background: url("../img/iphone6_report2.png") no-repeat center center;
 			position: absolute;
 			left: 350px;
 			bottom: 129px;
@@ -314,6 +335,37 @@
 		}
 
 		.features {
+			padding-bottom: 0;
+		}
+
+		.reports .device-showcase-left {
+			position: absolute;
+			bottom: -392px;
+			left: 41%;
+			right: auto;
+			transform: translateX(-50%);
+		}
+
+		.reports .ipad-wrap {
+			width: 706px;
+			height: 1002px;
+			background: url("../img/iphone6_report1.png") no-repeat center center;
+			z-index: 1;
+			background-size: 40%;
+		}
+
+		.reports .iphone-wrap {
+			width: 304px;
+			height: 617px;
+			background: url("../img/iphone6_report2.png") no-repeat center center;
+			position: absolute;
+			left: 350px;
+			bottom: 129px;
+			z-index: 2;
+			background-size: 40%;
+		}
+
+		.reports {
 			padding-bottom: 0;
 		}
 

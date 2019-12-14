@@ -8,6 +8,13 @@
     <meta charset="utf-8">
     <!--<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta property="og:site_name" content="<?=LT['000']?>" />
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="<?=PUBLIC_DOMAIN.DS?>" />
+    <meta property="og:title" content="【Night Planet ﾅｲﾌﾟﾗ】ご案内" />
+    <meta property="og:description" content="【Night Planet ﾅｲﾌﾟﾗ】SNSを駆使した集客を実現します。" />
+    <meta property="og:image" content="<?=PATH_ROOT['NIGHT_PLANET_IMAGE']?>" />
+
     <title>【Night Planet ﾅｲﾌﾟﾗ】 沖縄の夜をもっと盛り上げていきませんか？集客のためのポータルナビサイト</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -188,10 +195,87 @@
         <div class="container">
             <div class="col-md-12 text-center">
                 <h3 style="color:white;">
-                    もっと詳しく知りたいオーナー様
+                    集客にご興味があればまずはフリープランから！
                 </h3>
-                <p>以下のリンクより、詳細をご覧ください。</p>
-                <a href="#" class="btn btn-ghost btn-accent btn-large">詳細ページへ</a>
+                <div class="row">
+                    <div class="hero-content text-center">
+                        <a href="<?=API['GOOGLE_FORM_CONTACT']?>" class="btn btn-fill btn-large btn-margin-right">お問い合わせ</a>
+                        <a href="<?=API['GOOGLE_FORM_KEISAI_CONTACT']?>" class="btn btn-fill btn-large">掲載申し込み</a>
+                    </div>
+                </div>
+                <div class="logo-placeholder floating-logo"><img src="/Sedna/img/sketch-logo.png" alt="Sketch Logo"></div>
+            </div>
+        </div>
+    </section>
+    <section class="reports section-padding" id="reports">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5 col-md-offset-7">
+                    <div class="report-list">
+                        <h3>アクセス状況をレポーティングします。</h3>
+                        <p>店舗の年、月、日毎のアクセス、曜日毎のアクセス、キャストページのアクセス集計レポートを提供します。</p>
+                        <ul class="reports-stack">
+                            <li class="report-item">
+                                <div class="report-icon">
+                                    <span data-icon="&#xe018;" class="icon"></span>
+                                </div>
+                                <div class="report-content">
+                                    <h5>アクセス状況の可視化</h5>
+                                    <p>アクセス状況をグラフで分かりやすく提供します。可視化したグラフをチェックすることで、モチベーションアップにもつながります。
+                                    </p>
+                                </div>
+                            </li>
+                            <li class="report-item">
+                                <div class="report-icon">
+                                    <span data-icon="&#xe04c;" class="icon"></span>
+                                </div>
+                                <div class="report-content">
+                                    <h5>店舗の更新状況に比例</h5>
+                                    <p>更新を行い上位表示することがグラフにも良い影響を与えます。また、キャストの更新もあれば更にＵＰします。</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="device-showcase">
+            <div class="devices">
+                <div class="ipad-wrap wp1"></div>
+                <div class="iphone-wrap wp2"></div>
+            </div>
+        </div>
+        <div class="responsive-report-img"><img src="/Sedna/img/devices_reports.png" alt="responsive devices"></div>
+    </section>
+    <section class="reports-extra section-padding" id="assets">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="report-list">
+                        <h3>コンバージョンにコミット</h3>
+                        <p>アクセス数と来店数は必ずしもマッチするとは限りません。
+                            ただし、新規顧客の場合は店舗の存在を認知させることが可能です。
+                            今回の来店に繋がらなくても次回、来店する可能性はグッとUPします。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="macbook-wrap wp3"></div>
+        <div class="responsive-report-img"><img src="/Sedna/img/desctop-device_report.png" alt="responsive devices"></div>
+    </section>
+    <section class="hero-strip section-padding">
+        <div class="container">
+            <div class="col-md-12 text-center">
+                <h3 style="color:white;">
+                    集客にご興味があればまずはフリープランから！
+                </h3>
+                <div class="row">
+                    <div class="hero-content text-center">
+                        <a href="<?=API['GOOGLE_FORM_CONTACT']?>" class="btn btn-fill btn-large btn-margin-right">お問い合わせ</a>
+                        <a href="<?=API['GOOGLE_FORM_KEISAI_CONTACT']?>" class="btn btn-fill btn-large">掲載申し込み</a>
+                    </div>
+                </div>
                 <div class="logo-placeholder floating-logo"><img src="/Sedna/img/sketch-logo.png" alt="Sketch Logo"></div>
             </div>
         </div>
@@ -226,7 +310,7 @@
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>
                                     </div>
-                                    <img src="https://drive.google.com/uc?id=1o-KPXEgU4CS5yahUwTqPbVpmg_s9-o4t" alt="Sedna blog image"/>
+                                    <img style="height: 220px;" src="https://drive.google.com/uc?id=1o-KPXEgU4CS5yahUwTqPbVpmg_s9-o4t" alt="Sedna blog image"/>
                                 </div>
                             </a>
                             <figcaption>
@@ -243,7 +327,7 @@
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>
                                     </div>
-                                    <img src="https://drive.google.com/uc?id=1qaNHuzbU8shWQH8WB2RRzNnUIA7jqGYt" alt="Sedna blog image"/>
+                                    <img style="height: 220px;" src="https://drive.google.com/uc?id=1qaNHuzbU8shWQH8WB2RRzNnUIA7jqGYt" alt="Sedna blog image"/>
                                 </div>
                             </a>
                             <figcaption>
@@ -260,7 +344,7 @@
                                     <div class="overlay">
                                         <i class="fa fa-search"></i>
                                     </div>
-                                    <img style="height: 250px;" src="https://drive.google.com/uc?id=1W0DGg5gh8ysSDb2xczqX7n67jutdJrRI" alt="Sedna blog image"/>
+                                    <img style="height: 220px;" src="https://drive.google.com/uc?id=1W0DGg5gh8ysSDb2xczqX7n67jutdJrRI" alt="Sedna blog image"/>
                                 </div>
                             </a>
                             <figcaption>
@@ -333,7 +417,11 @@
                             <li><a href="#contact-keisai">掲載申し込み</a></li>
                         </ul>
                         <div class="social-share mobile">
-                            <p>ぜひ、集客を考えてるお友達に教えてあげてください！</p>
+                            <p>
+                                <span class="fa fa-heart pulse2"></span>
+                                ぜひ、集客を考えてるお友達にも教えてね
+                                <span class="fa fa-heart pulse2"></span>
+                            </p>
                             <a href="<?=SHARER['TWITTER'].PUBLIC_DOMAIN.DS?>" class="twitter-share"><i class="fa fa-twitter"></i></a> <a href="<?=SHARER['FACEBOOK'].PUBLIC_DOMAIN.DS?>" class="facebook-share"><i class="fa fa-facebook"></i></a>
                         </div></br></br>
                         <p>
@@ -347,7 +435,11 @@
                     </div>
                 </div>
                 <div class="social-share desktop">
-                    <p>ぜひ、集客を考えてるお友達に教えてあげてください！</p>
+                    <p>
+                        <span class="fa fa-heart pulse2"></span>
+                        ぜひ、集客を考えてるお友達にも教えてね
+                        <span class="fa fa-heart pulse2"></span>
+                    </p>
                     <a href="<?=SHARER['TWITTER'].PUBLIC_DOMAIN.DS?>" class="twitter-share"><i class="fa fa-twitter"></i></a> <a href="<?=SHARER['FACEBOOK'].PUBLIC_DOMAIN.DS?>" class="facebook-share"><i class="fa fa-facebook"></i></a>
                 </div>
             </div>

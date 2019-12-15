@@ -672,14 +672,14 @@ class OwnersController extends AppController
                 }
 
                 $email = new Email('default');
-                $email->setFrom([MAIL['FROM_INFO_GMAIL'] => MAIL['FROM_NAME']])
+                $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
                     ->setSubject(MAIL['FROM_NAME_CHANGE_PLAN'])
                     ->setTo($owner[0]->email)
-                    ->setBcc(MAIL['FROM_INFO_GMAIL'])
+                    ->setBcc(MAIL['FROM_SUBSCRIPTION'])
                     ->setTemplate("change_plan_success")
                     ->setLayout("simple_layout")
                     ->emailFormat("html")
-                    ->viewVars(['owner' => $owner[0]])
+                    ->viewVars(['owner' => $owner[0],'servecePlans' => $servecePlans])
                     ->send();
                 $this->set('owner', $owner[0]);
                 // 完了メッセージ

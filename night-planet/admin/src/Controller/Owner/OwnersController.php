@@ -222,8 +222,17 @@ class OwnersController extends AppController
             // プラン情報セット
             $servecePlans = $this->ServecePlans->newEntity();
             $servecePlans->owner_id = $owner->id;
-            $servecePlans->current_plan = SERVECE_PLAN['free']['label'];
-            $servecePlans->previous_plan = SERVECE_PLAN['free']['label'];
+            //**************************キャンペーン中 2019/12/1 ~ 2020/3/1 予定 *************************/
+            // $servecePlans->current_plan = SERVECE_PLAN['free']['label'];
+            // $servecePlans->previous_plan = SERVECE_PLAN['free']['label'];
+            $servecePlans->current_plan = SERVECE_PLAN['basic']['label'];
+            $servecePlans->previous_plan = SERVECE_PLAN['basic']['label'];
+            $servecePlans->course        = 3;
+            $servecePlans->from_start    = date('Y-m-d', strtotime("now"));
+            $servecePlans->to_end        = date('Y-m-d'
+                , strtotime("+". 3 . "month"));
+            //**************************キャンペーン中 2019/12/1 ~ 2020/3/1 予定 *************************/
+
             // プラン登録
             if (!$this->ServecePlans->save($servecePlans)) {
                 throw new RuntimeException('レコードの登録に失敗しました。');

@@ -4,7 +4,7 @@
 		<div class="modal-box">
 			<ul class="collapsible help" data-collapsible="accordion">
 				<li id="section0">
-					<div class="collapsible-header"><i class="material-icons">filter_drama</i>トップ画像とは？</div>
+					<div class="collapsible-header"><i class="material-icons">whatshot</i>トップ画像とは？</div>
 					<div class="collapsible-body">
 						<span>トップ画像とは、ユーザーが店舗の紹介ページにアクセスした時に一番上に表示される画像です。
 							こちらの画像は重要な役割を持っています。<br>何故なら検索したユーザーはトップ画像の見栄えでタップする確率が高いからです。
@@ -15,7 +15,7 @@
 					</div>
 				</li>
 				<li id="section1">
-					<div class="collapsible-header"><i class="material-icons">place</i>キャッチコピーとは？</div>
+					<div class="collapsible-header"><i class="material-icons">whatshot</i>キャッチコピーとは？</div>
 					<div class="collapsible-body"><span>キャッチコピーはお店のPR部分で宣伝となる場所です。これはGoogleで検索した際に概要部分に表示されます。
 							<br>また店舗基本的に120文字以内が最適とされています。<br><span
 								class="red-text">※</span>注意点としまして絵文字も使えますが文字数を２つ消費します。</span>

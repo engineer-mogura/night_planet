@@ -48,6 +48,7 @@
                                 <li><a href="#features">特徴</a></li>
                                 <li><a href="#shopcase">紹介</a></li>
                                 <li><a href="#owners-voice">オーナー様の声</a></li>
+                                <li><a href="#plan">プラン別料金表</a></li>
                             </ul>
                             <ul class="member-actions">
                                 <li><a href="<?=API['GOOGLE_FORM_CONTACT']?>" class="login">お問い合わせ</a></li>
@@ -384,6 +385,9 @@
             </div>
         </div>
     </section>
+    <!-- プラン表 START-->
+    <?= $this->element('planTable'); ?>
+    <!-- プラン表 END-->
     <section id="contact-keisai" class="section-padding text-center">
         <div class="container">
             <div class="row">
@@ -413,6 +417,7 @@
                             <li><a href="#features">特徴</a></li>
                             <li><a href="#shopcase">紹介</a></li>
                             <li><a href="#owners-voice">オーナー様の声</a></li>
+                            <li><a href="#plan">プラン別料金表</a></li>
                             <li><a href="#contact-keisai">お問い合わせ</a></li>
                             <li><a href="#contact-keisai">掲載申し込み</a></li>
                         </ul>

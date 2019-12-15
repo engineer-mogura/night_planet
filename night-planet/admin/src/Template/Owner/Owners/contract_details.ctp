@@ -12,17 +12,24 @@
                             <th align="center">あなたの会員ステータス</th>
                             <td>
 <?php
+                            $is_free = true; // フリープランか
                             $start = $this->Time->format($owner[0]->servece_plan->from_start, 'Y/M/d');
                             $end   = $this->Time->format($owner[0]->servece_plan->to_end, 'Y/M/d');
                             $course = $owner[0]->servece_plan->course;
+                            SERVECE_PLAN[$owner[0]->servece_plan->current_plan]['label'] != SERVECE_PLAN['free']['label'] ? 
+                                    $is_free = false : null;
 ?>
-                                <?= SERVECE_PLAN[$owner[0]->servece_plan->current_plan]['name']
-                                    .'　'.$course .'ヵ月コース'?>
+                                <?= !$is_free ? SERVECE_PLAN[$owner[0]->servece_plan->current_plan]['name']
+                                    .'　'.$course .'ヵ月コース' : SERVECE_PLAN[$owner[0]->servece_plan->current_plan]['name'] ?>
                             </td>
                         </tr>
                         <tr>
                             <th align="center">期間</th>
-                            <td><?php echo($start . ' ～ ' .$end); ?></td>
+                            <td><?php if(!$is_free) {
+                                echo($start . ' ～ ' .$end);
+                            } else {
+                                echo('期間制限なし');
+                            } ?></td>
                         </tr>
 <?php 
                             foreach ($owner[0]->shops as $key => $shop) {

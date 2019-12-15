@@ -917,6 +917,274 @@ footer {
     margin: 120px 0 120px 0; }
 
 /* ==========================================================================
+.night-planet original
+========================================================================== */
+@media only screen and (max-width: 601px) {
+  span.slide-message:after {
+    content: "右にスライド☞";
+  }
+  span.slide-message {
+    display: block;
+    text-align: center;
+  }
+  table{
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table tr{
+    border-bottom: solid 2px white;
+  }
+
+  table tr:last-child{
+    border-bottom: none;
+  }
+
+  table th{
+    position: relative;
+    text-align: left;
+    width: 30%;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  table th:after{
+    display: block;
+    content: "";
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    top:calc(50% - 10px);
+    right:-10px;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+  }
+
+  table td{
+    border-right: solid white;
+    text-align: left;
+    width: 70%;
+    text-align: center;
+    background-color: #eee;
+    padding: 10px 5px;
+  }
+
+  .sticky_table {
+    display: block;
+    position: relative;
+    overflow: scroll;
+    width: calc(100vw - 3.0rem);
+    /* height: calc(75vh); */
+    border-collapse: collapse;
+    font-size: 0;
+  }
+  .sticky_table thead,
+  .sticky_table tbody {
+    display: block;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+  }
+  .sticky_table th,
+  .sticky_table td {
+    /**display: inline-block;*/
+    width: 8.0rem;
+    font-size: 1.0rem;
+  }
+  .sticky_table tbody th {
+    width: 15%;
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+  }
+  #plan-table.charge tbody th {
+    width: 25%;
+  }
+  #plan-table.charge {
+    font-weight: 700;
+  }
+  /** ヘッダー 基本 */
+  table#plan-table tr.function td.default {
+    color: midnightblue;
+    font-weight: bold;
+  }
+  /** ヘッダー プレミアム */
+  table#plan-table tr.function td.premium {
+    color: sienna;
+    font-weight: bold;
+  }
+  /** ヘッダープラン */
+  table#plan-table tr.plan-hedder th {
+    background-color: #52c2d0;
+  }
+  table#plan-table tr.plan-hedder td {
+    color: #52c2d0;
+  }
+  table#plan-table tr.plan-hedder th:after{
+    border-left: 10px solid #52c2d0;
+  }
+  /** プレミアムSプラン */
+  table#plan-table tr.plan-premium_s th {
+    background-color: #f9a825;
+  }
+  table#plan-table tr.plan-premium_s td {
+    color: #f9a825;
+  }
+  table#plan-table tr.plan-premium_s th:after{
+    border-left: 10px solid #f9a825;
+  }
+  /** プレミアムプラン */
+  table#plan-table tr.plan-premium th {
+    background-color: #757575;
+  }
+  table#plan-table tr.plan-premium td {
+    color: #757575;
+  }
+  table#plan-table tr.plan-premium th:after{
+    border-left: 10px solid #757575;
+  }
+  /** ベーシックプラン */
+  table#plan-table tr.plan-basic th {
+    background-color: #ef6c00;
+  }
+  table#plan-table tr.plan-basic td {
+    color: #ef6c00;
+  }
+  table#plan-table tr.plan-basic th:after{
+    border-left: 10px solid #ef6c00;
+  }
+  /** フリープラン */
+  table#plan-table tr.plan-free th {
+    background-color: olivedrab;
+  }
+  table#plan-table tr.plan-free td {
+    color: olivedrab;
+  }
+  table#plan-table tr.plan-free th:after{
+    border-left: 10px solid olivedrab
+  }
+}
+
+table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table tr{
+  border-bottom: solid 2px white;
+}
+
+table tr:last-child{
+  border-bottom: none;
+}
+
+table th{
+  text-align: left;
+  width: 30%;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+}
+
+table th:after{
+  display: block;
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  top:calc(50% - 10px);
+  right:-10px;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+
+table td{
+  border-right: solid white;
+  text-align: left;
+  width: 70%;
+  text-align: center;
+  background-color: #eee;
+  padding: 10px 5px;
+}
+
+.sticky_table thead,
+.sticky_table tbody {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+.sticky_table th,
+.sticky_table td {
+  /**display: inline-block;*/
+  width: 8.0rem;
+  /* font-size: 1.0rem; */
+}
+.sticky_table tbody th {
+  width: 15%;
+}
+/** ヘッダー 基本 */
+table#plan-table tr.function td.default {
+  color: midnightblue;
+  font-weight: bold;
+}
+/** ヘッダー プレミアム */
+table#plan-table tr.function td.premium {
+  color: sienna;
+  font-weight: bold;
+}
+/** ヘッダープラン */
+table#plan-table tr.plan-hedder th {
+  background-color: #52c2d0;
+}
+table#plan-table tr.plan-hedder td {
+  color: #52c2d0;
+}
+table#plan-table tr.plan-hedder th:after{
+  border-left: 10px solid #52c2d0;
+}
+/** プレミアムSプラン */
+table#plan-table tr.plan-premium_s th {
+  background-color: #f9a825;
+}
+table#plan-table tr.plan-premium_s td {
+  color: #f9a825;
+}
+table#plan-table tr.plan-premium_s th:after{
+  border-left: 10px solid #f9a825;
+}
+/** プレミアムプラン */
+table#plan-table tr.plan-premium th {
+  background-color: #757575;
+}
+table#plan-table tr.plan-premium td {
+  color: #757575;
+}
+table#plan-table tr.plan-premium th:after{
+  border-left: 10px solid #757575;
+}
+/** ベーシックプラン */
+table#plan-table tr.plan-basic th {
+  background-color: #ef6c00;
+}
+table#plan-table tr.plan-basic td {
+  color: #ef6c00;
+}
+table#plan-table tr.plan-basic th:after{
+  border-left: 10px solid #ef6c00;
+}
+/** フリープラン */
+table#plan-table tr.plan-free th {
+  background-color: olivedrab;
+}
+table#plan-table tr.plan-free td {
+  color: olivedrab;
+}
+table#plan-table tr.plan-free th:after{
+  border-left: 10px solid olivedrab
+}
+/* ==========================================================================
 Icon font (http://www.elegantthemes.com/blog/freebie-of-the-week/free-line-style-icons)
 ========================================================================== */
 @font-face {

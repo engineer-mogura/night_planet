@@ -71,18 +71,18 @@
                 </tr>
                 <tr class="plan-premium_s">
                     <th><?=SERVECE_PLAN['premium_s']['name']?></th>
-                    <td>一括支払い<br>1,5000円</td>
-                    <td>一括支払い<br>3,1500円<br>😍13,500円お得😍<br>※メイン広告付き</td>
+                    <td>一括支払い<br>1,4980円</td>
+                    <td>一括支払い<br>3,1460円<br>😍13,500円お得😍<br>※メイン広告付き</td>
                 </tr>
                 <tr class="plan-premium">
                     <th><?=SERVECE_PLAN['premium']['name']?></th>
-                    <td>一括支払い<br>7,500円</td>
-                    <td>一括支払い<br>15,750円<br>😍6,750円お得😍<br>※メイン広告付き</td>
+                    <td>一括支払い<br>3,980円</td>
+                    <td>一括支払い<br>8,360円<br>😍3,580円お得😍<br>※メイン広告付き</td>
                 </tr>
                 <tr class="plan-basic">
                     <th><?=SERVECE_PLAN['basic']['name']?></th>
-                    <td>一括支払い<br>3000円</td>
-                    <td>一括支払い<br>6,300円<br>😍2,700円お得😍<br>※メイン広告付き</td>
+                    <td>一括支払い<br>1,980円</td>
+                    <td>一括支払い<br>4,200円<br>😍1,780円お得😍<br>※メイン広告付き</td>
                 </tr>
                 <tr class="plan-free">
                     <th><?=SERVECE_PLAN['free']['name']?></th>

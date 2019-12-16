@@ -1,6 +1,6 @@
 <div id="sns" class="col s12">
   <?php echo $this->Flash->render();  ?>
-  <p>SNS<span><a data-target="modal-help" data-help="7" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
+  <p>SNS<span><a href="" data-target="modal-help" data-help="7" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
   <div id="show-sns">
     <div class="row">
       <div class="col s12 m12 l12">

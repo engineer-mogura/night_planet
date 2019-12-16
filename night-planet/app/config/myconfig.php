@@ -196,7 +196,7 @@ return [
     define('SNS', array(
         'INSTAGRAM'=> 'https://www.instagram.com/night_planet_098/', // FACEBOOK アプリID
         'FACEBOOK'=> 'https://www.facebook.com/Night-Planet-101941477849319/', // FACEBOOK アプリID
-        'TWITTER'=> 'https://twitter.com/night_planet910', // TWITTERアカウント
+        'TWITTER'=> 'https://twitter.com/night_planet098', // TWITTERアカウント
 
     )),
 

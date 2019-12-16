@@ -1,6 +1,6 @@
 <div id="gallery" class="col s12">
     <?php echo $this->Flash->render();  ?>
-    <p>ギャラリー<span><a data-target="modal-help" data-help="5" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
+    <p>ギャラリー<span><a href="" data-target="modal-help" data-help="5" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
     <div class="row">
         <form id="delete-gallery" name="delete_gallery" method="post" style="display:none;" action="/owner/shops/delete_gallery">
             <input type="hidden" name="_method" value="POST">

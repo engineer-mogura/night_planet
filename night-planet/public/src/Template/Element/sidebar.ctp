@@ -43,7 +43,7 @@
 		</div>
 		<div class="row sharer-modal">
 			<div class="col l6">
-				<a class="b_hatena sharer-btn waves-effect waves-light btn-large">
+				<a class="b_hatena sharer-btn waves-effect waves-light btn-large disabled">
 					<span> はてブ</span>
 				</a>
 			</div>

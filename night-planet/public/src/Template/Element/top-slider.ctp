@@ -1,4 +1,4 @@
-<section id="top-slider" class="swiper-container loading">
+<section id="top-slider" class="swiper-container main-swiper loading">
     <div class="swiper-wrapper">
 		<?php
 			foreach ($adsenses['main_adsenses'] as $key => $value) :

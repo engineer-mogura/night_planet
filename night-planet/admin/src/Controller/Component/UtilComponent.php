@@ -727,6 +727,7 @@ class UtilComponent extends Component
                 } else {
                     // 共通トップ画像をセット
                     $adsense->set('img_path', PATH_ROOT['SHOP_TOP_IMAGE']);
+                    $adsense->set('shop_url', $shopInfo['shop_url']);
                 }
             }
             // それでも空ならNO IMAGEファイルをセットする

@@ -142,19 +142,27 @@ class AreaController extends AppController
 
         $query = $this->Shops->find();
         $query = $this->Shops->find('all', array('fields' =>
-                    array('area', 'genre', 'count' => $query->func()->count('genre'))));
-        $tmpList = $query->where(['area' => AREA[$this->viewVars['is_area']]['path']])
-            ->group('genre')->toArray();
+                    array('id', 'area', 'genre', 'count' => $query->func()->count('genre'))));
+        $shops = $query->where(['area' => AREA[$this->viewVars['is_area']]['path']])
+            ->group('genre')->contain(['casts'])->toArray();
+        $shops_cnt = 0;
+        $casts_cnt = 0;
         $genreCounts = GENRE; // ジャンルの配列をコピー
         // それぞれのジャンルの初期値カウントに０,エリア名をセットする
         foreach ($genreCounts as $key => $row) {
             $genreCounts[$key] = $row + array('count'=> 0,'area' => AREA[$this->viewVars['is_area']]['path']);
         }
         // DBから取得したジャンルのカウントをセットする
-        foreach ($tmpList as $key => $row) {
-            $genreCounts[$row['genre']]['area'] = AREA[$this->viewVars['is_area']]['path'];
-            $genreCounts[$row['genre']]['count'] = $row['count'];
+        foreach ($shops as $key => $shop) {
+            // 全体店舗数をセット
+            $shops_cnt += $shop->count;
+            // 全体スタッフ数をセット
+            $casts_cnt += count($shop->casts);
+            $genreCounts[$shop['genre']]['area'] = AREA[$this->viewVars['is_area']]['path'];
+            $genreCounts[$shop['genre']]['count'] = $shop['count'];
         }
+        $all_cnt = ['shops' => $shops_cnt, 'casts' => $casts_cnt];
+
         // メイン広告を取得
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', $this->viewVars['is_area']);
         // サブ広告を取得
@@ -167,7 +175,7 @@ class AreaController extends AppController
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area']);
 
         $this->set('next_view', 'area');
-        $this->set(compact('genreCounts', 'selectList', 'diarys', 'notices', 'adsenses'));
+        $this->set(compact('all_cnt', 'genreCounts', 'selectList', 'diarys', 'notices', 'adsenses'));
 
         $this->render();
     }

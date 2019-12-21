@@ -187,7 +187,7 @@
   </footer>
   <script>
     // Params
-    var sliderSelector = '.swiper-container',
+    var sliderSelector = '.main-swiper',
         options = {
           init: false,
           loop: true,
@@ -237,10 +237,34 @@
             }
           }
         };
-    var mySwiper = new Swiper(sliderSelector, options);
+
+    var mainSwiper = new Swiper(sliderSelector, options);
 
     // Initialize slider
-    mySwiper.init();
+    mainSwiper.init();
+
+    var subSwiper = new Swiper('.sub-swiper', {
+          slidesPerGroup: 1,
+          slidesPerView: 'auto',
+          loop: true,
+          spaceBetween: 2,
+          speed: 200,
+          autoplay: {
+            delay: 1500,
+            disableOnInteraction: false,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            type: 'bullets',
+            clickable: true
+          }
+        });
+    // Initialize slider
+    subSwiper.init();
   </script>
 </body>
 </html>

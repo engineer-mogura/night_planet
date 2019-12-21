@@ -6,6 +6,21 @@
 	<div class="row">
 		<div class="col s12 m8 l8">
 			<?= $this->element('info-marquee'); ?>
+			<div class="row count-section">
+				<div id="shop-menu-section" class="shop-menu">
+					<div class="deep-orange darken-1 card-panel col s6 center-align">
+						<p class="shop-count section-label"><span>　店舗 ( <?=$all_cnt['shops'];?> )</span></p>
+					</div>
+				</div>
+				<div id="casts-section" class="shop-menu">
+					<div class="deep-orange darken-1 card-panel col s6 center-align">
+						<p class="cast-count section-label"><span>スタッフ ( <?=$all_cnt['casts'];?> )</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="row sub-slider-section">
+				<?= $this->element('sub-slider'); ?>
+			</div>
 			<div class="row">
 				<?= $this->element('genreCard'); ?>
 			</div>

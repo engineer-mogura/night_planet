@@ -7,18 +7,33 @@
 	<div class="row">
 		<div class="col s12 m12 l8">
 			<?= $this->element('info-marquee'); ?>
+			<div class="row count-section">
+				<div id="shop-menu-section" class="shop-menu">
+					<div class="deep-orange darken-1 card-panel col s6 center-align">
+						<p class="shop-count section-label"><span>　店舗 ( <?=$all_cnt['shops'];?> )</span></p>
+					</div>
+				</div>
+				<div id="casts-section" class="shop-menu">
+					<div class="deep-orange darken-1 card-panel col s6 center-align">
+						<p class="cast-count section-label"><span>スタッフ ( <?=$all_cnt['casts'];?> )</span></p>
+					</div>
+				</div>
+			</div>
+			<div class="row sub-slider-section">
+				<?= $this->element('sub-slider'); ?>
+			</div>
 			<span>選択してキーワードを入力してください</span>
 			<?= $this->element('elmSearch'); ?>
 			<div class="row section area-section">
-				<?php foreach (AREA as $key => $value): ?>
+				<?php foreach ($area as $key => $value): ?>
 				<div class="col s12 m4 l6">
 					<div class="linkbox card waves-effect hoverable">
 						<div class="card-image">
 							<img src="<?=$value['image']?>" style="width: 100%;height: 200px;object-fit: cover; background-color: lightsalmon;">
 							<span class="card-title"><?=$value['label']?></span>
 						</div>
-						<div class="card-content">
-							<span class="blue-text text-darken-2"><?=$value['label']?>エリア</span>
+						<div class="card-content deep-orange darken-1">
+							<span class="white-text"><?=$value['label'].'エリア ( '.$value['count'].' )'?></span>
 						</div>
 						<a href="<?=$value['path']?>"></a>
 					</div>

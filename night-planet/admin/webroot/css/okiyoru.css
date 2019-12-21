@@ -407,6 +407,30 @@ form .warning-message {
 #top .section.tabs-section {
   height:600px;
 }
+#top .cast-count span:before, #area .cast-count span:before {
+  background-image: url(/img/common/users-icon.png);
+  background-repeat: no-repeat;
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+
+#top .shop-count span:before, #area .shop-count span:before {
+  background-image: url(/img/common/shop-icon.png);
+  background-repeat: no-repeat;
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+#top .count-section span, #area .count-section span {
+  color:white;
+}
 /* トップページ画面 END */
 
 /* 新規・ログイン画面 START */

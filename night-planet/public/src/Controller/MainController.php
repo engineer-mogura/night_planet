@@ -46,6 +46,32 @@ class MainController extends AppController
         //$this->redirect("http://localhost:8080/api-googles");
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+
+        $shops_query = $this->Shops->find();
+        $casts_query = $this->Casts->find();
+        $shops = $shops_query->select(['count'=> $shops_query->func()->count('area'),'area'])
+                    ->group('area')->toArray();
+        $shops_cnt = 0;
+        $area = array();
+        // 全体店舗数、エリア毎の店舗数をセットする
+        foreach (AREA as $key1 => $value) {
+            // エリア店舗を０で初期化
+            $value['count'] = 0;
+            array_push($area, $value);
+            foreach ($shops as $key2 => $shop) {
+                if ($value['path']  == $shop->area) {
+                    // 全体店舗数をセット
+                    $shops_cnt += $shop->count;
+                    // エリア店舗をセット
+                    $area[array_key_last($area)]['count'] = $shop->count;
+                    break;
+                }
+            }
+        }
+        // 全体スタッフ数を取得
+        $casts_cnt = $casts_query->count();
+        $all_cnt = ['shops' => $shops_cnt, 'casts' => $casts_cnt];
+
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', null);
@@ -53,7 +79,7 @@ class MainController extends AppController
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
         $insta_data = $this->Util->getInstagram(null, API['INSTAGRAM_USER_NAME'], API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
-        $this->set(compact('selectList', 'diarys', 'notices', 'insta_data','adsenses'));
+        $this->set(compact('area', 'all_cnt', 'selectList', 'diarys', 'notices', 'insta_data','adsenses'));
     }
 
     /**

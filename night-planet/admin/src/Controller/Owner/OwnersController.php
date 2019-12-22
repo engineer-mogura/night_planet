@@ -38,7 +38,11 @@ class OwnersController extends AppController
                 ->where(['owners.id'=>$user['id']])
                 ->contain(['servece_plans'])
                 ->first();
-            $this->set('userInfo', $this->Util->getOwnerInfo($owner));
+            $userInfo = $this->Util->getOwnerInfo($owner);
+            // 現在プラン適応フラグを取得する
+            $is_range_plan = $this->Util->check_in_range($owner->servece_plan->from_start
+                , $owner->servece_plan->to_end, date("Y/m/d"));
+            $this->set(compact('userInfo','is_range_plan'));
         }
     }
 
@@ -654,10 +658,8 @@ class OwnersController extends AppController
                     ]])
                 ->toArray();
             // 現在プランが適応中かチェックする
-            $is_range_plan = $this->Util->check_in_range($owner[0]->servece_plan->from_start
-                , $owner[0]->servece_plan->to_end, date("Y/m/d H:i:s"));
             // プランを強制的に変更した不正なアクセスの場合
-            if ($is_range_plan) {
+            if ($this->viewVars['is_range_plan']) {
                 $this->log($this->Util->setLog($auth, "プランを強制的に変更しようとした不正なアクセスです。"));
                 $this->Flash->error(RESULT_M['CHANGE_PLAN_FAILED']);
                 return $this->redirect('/owner/owners/contract_details');
@@ -711,10 +713,8 @@ class OwnersController extends AppController
                         'sort'=>['type'=>'ASC','valid_start'=>'ASC']
                 ]])
             ->toArray();
-        // 現在プランが適応中かチェックする
-        $is_range_plan = $this->Util->check_in_range($owner[0]->servece_plan->from_start
-            , $owner[0]->servece_plan->to_end, date("Y/m/d H:i:s"));
-        $owner[0]->set('is_range_plan', $is_range_plan);
+        // 現在プランフラグをセットする
+        $owner[0]->set('is_range_plan', $this->viewVars['is_range_plan']);
         $this->set(compact('owner'));
         $this->render();
     }

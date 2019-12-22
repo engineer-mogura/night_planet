@@ -482,8 +482,13 @@ class AreaController extends AppController
 
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         $ig_data = null; // Instagramデータ
-        // Instagramアカウントが入力されていればインスタデータを取得する
-        if (!empty($shop->snss[0]->instagram)) {
+
+        // 現在プランが適応中かチェックする
+        $is_range_plan = $this->Util->check_in_range($shop->owner->servece_plan->from_start
+        , $shop->owner->servece_plan->to_end, date("Y-m-d"));
+
+        // Instagramアカウントが入力されている かつ プランが適応中の場合インスタデータを取得する
+        if (!empty($shop->snss[0]->instagram) && $is_range_plan) {
             $insta_user_name = $shop->snss[0]->instagram;
             // インスタのキャッシュパス
             $cache_path = preg_replace(

@@ -491,15 +491,17 @@ return [
         'INSTA_ADD_CAST_FAILED'=>'Instagramを追加するには、【_service_plan_】に変更が必要です。',
     )),
 
-    // メール設定
+    // メール設定 ※ここを変更した場合は、Gmailのフィルタ条件も変更してください。
     define('MAIL', array(
         'CAST_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。１時間以内に完了してください。',
         'OWNER_AUTH_CONFIRMATION'=>'入力したアドレスにメールを送りました。URLをクリックし、認証を完了してください。１時間以内に完了してください。',
         'FROM_INFO_GMAIL'=>'info.night.planet@gmail.com',
+        'FROM_INFO'=>'info@night-planet.com',
         'FROM_SUBSCRIPTION'=>'subscription@night-planet.com',
         'FROM_NAME'=>'NightPlanet事務局',
         'FROM_NAME_PASS_RESET'=>'【NightPlanet ﾅｲﾌﾟﾗ】パスワード再設定',
         'FROM_NAME_CHANGE_PLAN'=>'【NightPlanet ﾅｲﾌﾟﾗ】プラン変更完了とお支払いのご案内',
+        'EXPIRED_SERVICE_PLAN'=>'【NightPlanet ﾅｲﾌﾟﾗ】サービスプランの有効期限切れのお知らせ',
     )),
 
     // SEO タイトル

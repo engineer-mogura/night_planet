@@ -70,6 +70,16 @@ class MainController extends AppController
                 }
             }
         }
+        $regin = [];
+        foreach (REGION as $key => $value1) {
+            $region_cnt = 0;
+            foreach ($area as $key => $value2) {
+                if ($value2['region'] == $value1['path']) {
+                    $region_cnt += $value2['count'];
+                }
+            }
+            $region[$value1['path']] = $region_cnt;
+        }
         // 全体スタッフ数を取得
         $casts_cnt = $casts_query->count();
         $all_cnt = ['shops' => $shops_cnt, 'casts' => $casts_cnt];
@@ -81,7 +91,7 @@ class MainController extends AppController
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
         $insta_data = $this->Util->getInstagram(null, API['INSTAGRAM_USER_NAME'], API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
-        $this->set(compact('area', 'all_cnt', 'selectList', 'diarys', 'notices', 'insta_data','adsenses'));
+        $this->set(compact('area', 'region', 'all_cnt', 'selectList', 'diarys', 'notices', 'insta_data','adsenses'));
     }
 
     /**

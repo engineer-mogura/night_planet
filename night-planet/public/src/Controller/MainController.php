@@ -34,7 +34,9 @@ class MainController extends AppController
     {
         parent::beforeFilter($event);
         $this->viewBuilder()->layout('userDefault');
-
+        // 常に現在エリアを取得
+        $is_area = AREA['okinawa']['path'];
+        $this->set(compact('is_area'));
         // SEO対策
         $title = str_replace("_service_name_", LT['000'], TITLE['TOP_TITLE']);
         $description = str_replace("_service_name_", LT['000'], META['TOP_DESCRIPTION']);

@@ -293,56 +293,129 @@ return [
 
     define('CATCHCOPY', '【NightPlanet<span style="font-size: small"> ナイプラ</span>】では、県内特化型ポータルサイトとして、沖縄全域のナイト情報を提供しております。高機能な検索システムを採用しておりますので、お客様にピッタリな情報がすぐに見つかります。店舗ごとに多彩なクーポン券もご用意しておりますので、お店に行く前にクーポン券をチェックしてみるのもいいでしょう。'),
 
+    // 領域リスト
+    define('REGION', array(
+            'okinawa'=> [
+                'label' => "沖縄",
+                'path' => "okinawa",
+            ],
+            'south'=> [
+                'label' => "南部",
+                'path' => "south",
+            ],
+            'center'=> [
+                'label' => "中部",
+                'path' => "center",
+            ],
+            'north'=> [
+                'label' => "北部",
+                'path' => "north",
+            ],
+            'miyakojima'=> [
+                'label' => "宮古島",
+                'path' => "miyakojima",
+            ],
+            'ishigakijima'=> [
+                'label' => "石垣島",
+                'path' => "ishigakijima",
+            ],
+    )),
     // 所属エリアリスト
     define('AREA', array(
+        'okinawa'=> [
+            'label' => "沖縄",
+            'path' => "okinawa",
+            'region' => "okinawa",
+            'image' => "https://drive.google.com/uc?id=1mvdIaSdNV9ZbdJMbSM1JB0ZLg-F7Ycil"
+        ],
         'naha'=> [
             'label' => "那覇",
             'path' => "naha",
+            'region' => "south",
             'image' => "https://drive.google.com/uc?id=1mvdIaSdNV9ZbdJMbSM1JB0ZLg-F7Ycil"
         ],
         'nanjo'=> [
             'label' => "南城",
             'path' => "nanjo",
+            'region' => "south",
             'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
         ],
         'tomigusuku'=> [
             'label' => "豊見城",
             'path' => "tomigusuku",
+            'region' => "south",
+            'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
+        ],
+        'itoman'=> [
+            'label' => "糸満",
+            'path' => "itoman",
+            'region' => "south",
+            'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
+        ],
+        'haebaru'=> [
+            'label' => "南風原",
+            'path' => "haebaru",
+            'region' => "south",
+            'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
+        ],
+        'yonabaru'=> [
+            'label' => "与那原",
+            'path' => "yonabaru",
+            'region' => "south",
             'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
         ],
         'urasoe'=> [
             'label' => "浦添",
             'path' => "urasoe",
+            'region' => "center",
             'image' => "https://drive.google.com/uc?id=1buvMC-enr5O1KOyLuhzwWLpF2Ms6VGX9"
         ],
         'ginowan'=> [
             'label' => "宜野湾",
             'path' => "ginowan",
+            'region' => "center",
             'image' => "https://drive.google.com/uc?id=1OvwjLL7-l8nBZJuKclw_3zAz6GKhmTJK"
+        ],
+        'chatan'=> [
+            'label' => "北谷",
+            'path' => "chatan",
+            'region' => "center",
+            'image' => "https://drive.google.com/uc?id=12SgcdrCYqhQm92ExPTBb6ALxEUFaCnI2"
+        ],
+        'nishihara'=> [
+            'label' => "西原",
+            'path' => "nishihara",
+            'region' => "center",
+            'image' => "https://drive.google.com/uc?id=12SgcdrCYqhQm92ExPTBb6ALxEUFaCnI2"
         ],
         'okinawashi'=> [
             'label' => "沖縄市",
             'path' => "okinawashi",
+            'region' => "center",
             'image' => "https://drive.google.com/uc?id=12SgcdrCYqhQm92ExPTBb6ALxEUFaCnI2"
         ],
         'uruma'=> [
             'label' => "うるま",
             'path' => "uruma",
+            'region' => "center",
             'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
         ],
         'nago'=> [
             'label' => "名護",
             'path' => "nago",
+            'region' => "north",
             'image' => "https://drive.google.com/uc?id=1wTZo1BHZ_HSTzoq38t51vqTnR9JH0c4w"
         ],
         'miyakojima'=> [
             'label' => "宮古島",
             'path' => "miyakojima",
+            'region' => "miyakojima",
             'image' => "https://drive.google.com/uc?id=1Iz-G8JTeXLs_gHNkqmbg621hUVmJ11pL"
         ],
         'ishigakijima'=> [
             'label' => "石垣島",
             'path' => "ishigakijima",
+            'region' => "ishigakijima",
             'image' => "https://drive.google.com/uc?id=1mxTKDKq6RM2w4toKKmpEj-u7AVuRH0a4"
         ],
     )),

@@ -5,13 +5,13 @@ use Cake\Log\Log;
 use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Mailer\Email;
-use Cake\Core\Configure;
 use RuntimeException;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Datasource\ConnectionManager;
+use \Cake\I18n\FrozenTime;
 
 /**
 * Owners Controller
@@ -41,7 +41,7 @@ class OwnersController extends AppController
             $userInfo = $this->Util->getOwnerInfo($owner);
             // 現在プラン適応フラグを取得する
             $is_range_plan = $this->Util->check_in_range($owner->servece_plan->from_start
-                , $owner->servece_plan->to_end, date("Y/m/d"));
+                , $owner->servece_plan->to_end, new FrozenTime(date("Y-m-d")));
             $this->set(compact('userInfo','is_range_plan'));
         }
     }

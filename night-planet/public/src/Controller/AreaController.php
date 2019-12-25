@@ -4,6 +4,7 @@ namespace App\Controller;
 use \Cake\ORM\Query;
 use Cake\Event\Event;
 use Cake\Routing\Router;
+use \Cake\I18n\FrozenTime;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
@@ -485,7 +486,7 @@ class AreaController extends AppController
 
         // 現在プランが適応中かチェックする
         $is_range_plan = $this->Util->check_in_range($shop->owner->servece_plan->from_start
-        , $shop->owner->servece_plan->to_end, date("Y-m-d"));
+        , $shop->owner->servece_plan->to_end, new FrozenTime(date("Y-m-d")));
 
         // Instagramアカウントが入力されている かつ プランが適応中の場合インスタデータを取得する
         if (!empty($shop->snss[0]->instagram) && $is_range_plan) {

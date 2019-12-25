@@ -25,20 +25,8 @@
 			<span>選択してキーワードを入力してください</span>
 			<?= $this->element('elmSearch'); ?>
 			<div class="row section area-section">
-				<?php foreach ($area as $key => $value): ?>
-				<div class="col s12 m4 l6">
-					<div class="linkbox card waves-effect hoverable">
-						<div class="card-image">
-							<img src="<?=$value['image']?>" style="width: 100%;height: 200px;object-fit: cover; background-color: lightsalmon;">
-							<span class="card-title"><?=$value['label']?></span>
-						</div>
-						<div class="card-content deep-orange darken-1">
-							<span class="white-text"><?=$value['label'].'エリア ( '.$value['count'].' )'?></span>
-						</div>
-						<a href="<?=$value['path']?>"></a>
-					</div>
-				</div>
-				<?php endforeach; ?>
+			<!-- エリアリスト -->
+				<?= $this->element('area-list'); ?>
 			</div>
 			<div class="row section tabs-section1">
 				<ul id="tabs-new-info" class="tabs tabs-fixed-width">

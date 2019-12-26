@@ -349,6 +349,9 @@ class AreaController extends AppController
             ->contain(['owners','owners.servece_plans','casts' => function (Query $q) {
                 return $q
                         ->where(['casts.status'=>'1']);
+            }, 'owners.shops' => function (Query $q) {
+                return $q
+                        ->where(['shops.id is not' => $id]);
             }, 'coupons' => function (Query $q) {
                 return $q
                         ->where(['coupons.status'=>'1']);
@@ -364,6 +367,20 @@ class AreaController extends AppController
                 return $q
                         ->where(["work_schedules.modified BETWEEN".$range]);
             },'jobs','snss'])->first();
+
+        // 店舗が複数ある場合
+        foreach($shop->owner->shops as $key => $value) {
+            if($value->id == $id) {
+               unset($shop->owner->shops[$key]);
+            }
+        }
+        // その他の店舗情報
+        $otherShopInfo = array();
+        // その他の店舗情報をセット
+        foreach($shop->owner->shops as $key => $value) {
+            array_push($otherShopInfo, $this->Util->getShopInfo($value));
+            $shop->owner->shops[$key]->set('shopInfo', $this->Util->getShopInfo($value));
+        }
 
         $shopInfo = $this->Util->getShopInfo($shop);
         $query = $this->Updates->find();

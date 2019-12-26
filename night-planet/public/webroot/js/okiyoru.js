@@ -1772,6 +1772,7 @@ $(document).on('click','.chip-treatment', function(event) {
     //※ブラウザでエラー発生するため（Uncaught TypeError: Cannot read property '*' of undefined）
     event.stopImmediatePropagation();
 });
+$('ul.tabs').tabs();
 
 }
 /* 店舗情報 画面 END */

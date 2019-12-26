@@ -209,9 +209,25 @@
 						} else { echo ('-'); } ?>
 								</td>
 							</tr>
+							<?php if(!empty($shop->owner->shops)) :?>
 							<tr>
-								<th align="center">スタッフ</th>
-								<td><?= !empty($shop->staff) ? h($shop->staff) : h('-') ?></td>
+								<th align="center">姉妹店</th>
+									<td>
+									<?php foreach ($shop->owner->shops as $key => $value) : ?>
+										<?=$key > 1 ? "</br>":null ?>
+										<a href="<?=$value->shopInfo['shop_url']?>" target="_self"><?=$value->name?></a>
+									<?php endforeach ; ?>
+									</td>
+							</tr>
+							<?php endif; ?>
+
+							<tr>
+								<th align="center">WEBサイト</th>
+								<?php if (!empty($shop->staff)) : ?>
+									<td><a href="<?=$shop->staff?>" target="_brank"><?=$shop->staff?></a></td>
+								<?php else : ?>
+									<td><?=h('-')?></td>
+								<?php endif; ?>
 							</tr>
 							<tr>
 								<th align="center" valign="top">システム</th>

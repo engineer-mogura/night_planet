@@ -47,7 +47,7 @@
             </td>
           </tr>
           <tr>
-            <th align="center">スタッフ</th>
+            <th align="center">WEBサイト</th>
             <td><?php if(!$shop->staff == '') {
               echo ($this->Text->autoParagraph($shop->staff));
             } else {echo ('登録されていません。');} ?>
@@ -145,7 +145,7 @@
     <div class="row">
       <div class="input-field col s12 m10 l12 ">
         <textarea id="staff" class="validate materialize-textarea" name="staff" data-length="50"></textarea>
-        <label for="staff">スタッフ</label>
+        <label for="staff">WEBサイト</label>
       </div>
     </div>
     <div class="row">

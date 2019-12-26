@@ -22,8 +22,8 @@
 			<div class="row sub-slider-section">
 				<?= $this->element('sub-slider'); ?>
 			</div>
-			<span>選択してキーワードを入力してください</span>
-			<?= $this->element('elmSearch'); ?>
+			<!-- <span>選択してキーワードを入力してください</span> -->
+			<!-- <?= $this->element('elmSearch'); ?> -->
 			<div class="row section area-section">
 			<!-- エリアリスト -->
 				<?= $this->element('area-list'); ?>

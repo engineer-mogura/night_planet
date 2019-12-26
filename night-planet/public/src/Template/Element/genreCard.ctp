@@ -1,4 +1,4 @@
-<div class="col s12 m6 l6">
+<div class="col s12 m12 l12">
 	<ul class="card-panel collection with-header">
 		<?php foreach ($genreCounts as $key => $row): ?>
 			<li class="collection-item linkbox">

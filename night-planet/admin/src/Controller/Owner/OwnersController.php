@@ -278,8 +278,23 @@ class OwnersController extends AppController
         $shops = $this->Shops->newEntity();
         // 認証されてる場合
         if(!is_null($user = $this->Auth->user())){
+
+            // 店舗追加フラグを設定する
+            $is_add = true; // 店舗追加フラグ
+
             // オーナーに所属する全ての店舗を取得する
             $shops = $this->Shops->find('all')->where(['owner_id' => $user['id']]);
+            $plan = $this->viewVars['userInfo']['current_plan'];
+
+            // 店舗追加フラグを設定する
+			if(count($shops) > 0):
+				$is_add = false;
+				// プレミアムプランの場合は店舗フラグを立てる
+				if($plan == SERVECE_PLAN['premium_s']['label']):
+					$is_add = true;
+				endif;
+			endif;
+
             // 店舗トップ画像を設定する
             foreach ($shops as $key => $shop) {
                 $path = PATH_ROOT['IMG'].DS.$shop->area.DS.$shop->genre
@@ -300,7 +315,7 @@ class OwnersController extends AppController
             }
         }
         //$val = $this->Analytics->getAnalytics();
-        $this->set('shops', $shops);
+        $this->set(compact('shops','is_add'));
         $this->render();
     }
 

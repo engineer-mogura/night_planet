@@ -24,7 +24,7 @@
                 <div class="or-form-wrap">
                     <h3><?= LT['001'] ?></h3>
                     <div class="left">
-                        <span>キャストログイン</span>
+                        <span>スタッフログイン</span>
                         <span class="right"><a href="/owner/owners/login/">オーナーはこちらからログイン</a></span>
                     </div>
                     <?= $this->Form->create(null, array('class' => 'login')) ?>

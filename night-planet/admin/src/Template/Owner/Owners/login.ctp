@@ -25,7 +25,7 @@
                     <h3><?= LT['001'] ?></h3>
                     <div class="left">
                         <span>オーナーログイン</span>
-                        <span class="right"><a href="/cast/casts/login/">キャストはこちらからログイン</a></span>
+                        <span class="right"><a href="/cast/casts/login/">スタッフはこちらからログイン</a></span>
                     </div>
                     <?= $this->Form->create(null, array('class' => 'login')) ?>
                     <?= $this->Form->control('email', array('required' => false)) ?>

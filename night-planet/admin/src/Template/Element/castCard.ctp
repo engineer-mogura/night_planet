@@ -1,7 +1,7 @@
 <div id="search-result">
 	<div class="col s12">
-		<h5 class="title"><?=h("キャストの検索結果")?></h5>
-		<h6 class="header"><?=h("キャストの検索結果 ".count($search)."件"."　キーワード「".$this->request->query('key_word')."」")?></h6>
+		<h5 class="title"><?=h("スタッフの検索結果")?></h5>
+		<h6 class="header"><?=h("スタッフの検索結果 ".count($search)."件"."　キーワード「".$this->request->query('key_word')."」")?></h6>
 		<p class="message"><?= count($search) == 0 ? h("検索結果が０件でした。条件を変更し、もう一度検索してみてください。"):""?></p>
 	</div>
 	<?php if(count($search) > 0) { ?>

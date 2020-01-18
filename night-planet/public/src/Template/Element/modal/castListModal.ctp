@@ -4,9 +4,9 @@
         <input type="hidden" name="id" value="<?=$workSchedule['id']?>">
         <input type="hidden" name="cast_ids" value="">
         <div class="modal-content">
-            <h5>キャスト一覧</h5>
+            <h5>スタッフ一覧</h5>
             <div class="chip-box">
-                <p>出勤するキャストを選択してください。</br>
+                <p>出勤するスタッフを選択してください。</br>
                     <span class="color:red;">前回の出勤メンバーは選択済みです。</span>
                 </p>
                 <?php $castIds = explode(',', $workSchedule['cast_ids']); ?>

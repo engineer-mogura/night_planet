@@ -69,7 +69,7 @@ class SearchController extends AppController
             if ($this->request->getQuery('search-choice') == 'shop') {
                 $this->render('/Element/shopCard');
             } elseif ($this->request->getQuery('search-choice') == 'cast') {
-                // キャスト検索の場合にキャスト用カードをレンダリング
+                // スタッフ検索の場合にスタッフ用カードをレンダリング
                 $this->render('/Element/castCard');
             }
 
@@ -91,7 +91,7 @@ class SearchController extends AppController
             // 使用するテンプレートに店舗用カードを使用
             $this->set('useTemplate', 'shop');
         } elseif ($this->request->getQuery('search-choice') == 'cast') {
-            // 使用するテンプレートにキャスト用カードを使用
+            // 使用するテンプレートにスタッフ用カードを使用
             $this->set('useTemplate', 'cast');
         }
 
@@ -105,7 +105,7 @@ class SearchController extends AppController
     }
 
     /**
-     * 店舗または、キャストを検索取得する
+     * 店舗または、スタッフを検索取得する
      *
      * @param [type] $requestData
      * @param [type] $columns
@@ -156,7 +156,7 @@ class SearchController extends AppController
                 }
             }
         } elseif ($requestData['search-choice'] == 'cast') {
-            // キャスト検索の場合
+            // スタッフ検索の場合
             $query = $this->Casts->find()->contain(['shops','snss']);
 
             foreach ($requestData as $key => $findData) {

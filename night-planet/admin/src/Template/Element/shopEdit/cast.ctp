@@ -1,5 +1,5 @@
 <div id="cast" class="col s12">
-    <p>キャスト<span><a href="" data-target="modal-help" data-help="3" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
+    <p>スタッフ<span><a href="" data-target="modal-help" data-help="3" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
     <div id="show-cast">
         <div class="row">
             <form id="delete-cast" name="delete_cast" method="post" style="display:none;"
@@ -19,7 +19,7 @@
                             <thead>
                                 <tr>
                                     <td colspan="2">
-                                        <span class="cast-num">キャスト＃<?=$key + 1?></span>
+                                        <span class="cast-num">スタッフ＃<?=$key + 1?></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -100,7 +100,7 @@
             </div>
         </div>
         <div style="display:none;">
-            <!-- TODO: 暫定でキャストのパスワード初期値を決めている -->
+            <!-- TODO: 暫定でスタッフのパスワード初期値を決めている -->
             <input type="hidden" name="password" value="pass1234">
             <input type="hidden" name="role" value="cast">
         </div>

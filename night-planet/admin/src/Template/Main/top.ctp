@@ -32,7 +32,7 @@
 					</div>
 					<div class="row">
 						<div class="col s12 m12 l12">
-							<a href="cast/casts" class="waves-effect waves-light btn-large">キャストログイン</a>
+							<a href="cast/casts" class="waves-effect waves-light btn-large">スタッフログイン</a>
 						</div>
 					</div>
 				</div>

@@ -27,7 +27,7 @@ article#SNS_Instagram header h1 {
   height              : 60px;
 }
 
-/**  店舗カード、キャストカードのインスタ表示 START ***/
+/**  店舗カード、スタッフカードのインスタ表示 START ***/
 article#SNS_Instagram header h1 > a {
   position            : relative;
   display             : block;
@@ -84,7 +84,7 @@ li.search-result-card .twitter_logo1 {
   left: -40px;
   top: 30px;
 }
-/**  店舗カード、キャストカードのインスタ表示 END ***/
+/**  店舗カード、スタッフカードのインスタ表示 END ***/
 
 article#SNS_Instagram header h1 > a > img, li.search-result-card h1 > a > img {
   position            : absolute;

@@ -158,7 +158,7 @@ class UtilComponent extends Component
     }
 
     /**
-     * キャスト情報を取得する。
+     * スタッフ情報を取得する。
      *
      * @return void
      */
@@ -291,7 +291,7 @@ class UtilComponent extends Component
     }
 
     /**
-     * キャストの全ての日記情報を取得する処理
+     * スタッフの全ての日記情報を取得する処理
      *
      * @param [type] $id
      * @param [type] $diaryPath
@@ -300,7 +300,7 @@ class UtilComponent extends Component
     public function getDiarys($id, $diaryPath)
     {
         $diarys = TableRegistry::get('diarys');
-        // キャスト情報、最新の日記情報とイイネの総数取得
+        // スタッフ情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
         $query = $diarys->find('all')->select($diarys->Schema()->columns());
         $ym = $query->func()->date_format([
@@ -470,7 +470,7 @@ class UtilComponent extends Component
     public function getNotices($id, $noticePath)
     {
         $shopInfos = TableRegistry::get('shop_infos');
-        // キャスト情報、最新の日記情報とイイネの総数取得
+        // スタッフ情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
         $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
         $ym = $query->func()->date_format([
@@ -566,7 +566,7 @@ class UtilComponent extends Component
     {
         $shopInfos = TableRegistry::get('shop_infos');
         $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
-        // キャスト情報、最新の日記情報とイイネの総数取得
+        // スタッフ情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
         if (!empty($isArea)) {
             $shopInfos = $shopInfos->find('all')

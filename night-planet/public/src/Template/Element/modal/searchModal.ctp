@@ -13,12 +13,12 @@
         <div class="col s6 m6 l6">
           <p>
             <input type="radio" name="search-choice" id="modal-cast-search" value="cast" <?=$selected['search-choice'] == 'cast' ? 'checked':''?> />
-            <label for="modal-cast-search">キャスト</label>
+            <label for="modal-cast-search">スタッフ</label>
           </p>
         </div>
         <li class="search col s12 m12 l12">
           <div class="input-field oki-input-field">
-            <input placeholder="店舗名、キャスト名を入力" value="<?= $selected['key_word']?>" name="key_word" type="text"
+            <input placeholder="店舗名、スタッフ名を入力" value="<?= $selected['key_word']?>" name="key_word" type="text"
               class="validate input-search">
           </div>
         </li>

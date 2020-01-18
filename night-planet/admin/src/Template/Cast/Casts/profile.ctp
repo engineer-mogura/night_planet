@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <?= $this->Flash->render() ?>
-            <h5><?=('キャスト情報') ?></h5>
+            <h5><?=('スタッフ情報') ?></h5>
             <div class="col s12 m4 l4">
                 <form id="save-image" name="save_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/cast/casts/profile">
                     <div style="display:none;">
@@ -49,7 +49,7 @@
                             </div>
                             <div class="input-field col s12 m6 l6">
                                 <p>
-                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="キャスト紹介ページではこちらの名前で表示します。"><i class="material-icons">help</i></a>
+                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="スタッフ紹介ページではこちらの名前で表示します。"><i class="material-icons">help</i></a>
                                 </p>
                                 <input type="text" id="nickname" class="validate" name="nickname" value="<?=$cast->nickname ?>" data-length="30">
                                 <label for="nickname">ニックネーム</label>
@@ -74,7 +74,7 @@
                         <div class="row">
                             <div class="input-field col s12 m6 l6">
                                 <p>
-                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="キャスト紹介では誕生日として表示します。例：12/24"><i class="material-icons">help</i></a>
+                                    <a class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="スタッフ紹介では誕生日として表示します。例：12/24"><i class="material-icons">help</i></a>
                                 </p>
                                 <input type="text" id="birthday" class="birthday-picker" name="birthday">
                                 <label>誕生日</label>

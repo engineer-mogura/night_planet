@@ -25,7 +25,7 @@ class CastsController extends AppController
     {
         // AppController.beforeFilterをコールバック
         parent::beforeFilter($event);
-        // キャストに関する情報をセット
+        // スタッフに関する情報をセット
         if (!is_null($user = $this->Auth->user())) {
             $cast = $this->Casts->get($user['id']);
             // オーナーに関する情報をセット
@@ -38,16 +38,16 @@ class CastsController extends AppController
     }
 
     /**
-     * キャスト画面トップの処理
+     * スタッフ画面トップの処理
      *
      * @return void
      */
     public function index()
     {
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
+        $id = $auth['id']; // スタッフID
         $query = $this->Diarys->find();
-        // キャストの記事といいね数を取得
+        // スタッフの記事といいね数を取得
         $diarys = $query->select(['id',
             'diary_like_num'=> $query->func()->count('diary_likes.diary_id')])
             ->contain('diary_likes')
@@ -97,7 +97,7 @@ class CastsController extends AppController
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = ""; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
+        $id = $auth['id']; // スタッフID
 
         try {
 
@@ -678,7 +678,7 @@ class CastsController extends AppController
     public function sns()
     {
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
+        $id = $auth['id']; // スタッフID
 
         // AJAXのアクセス以外は不正とみなす。
         if ($this->request->is('ajax')) {
@@ -999,7 +999,7 @@ class CastsController extends AppController
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
+        $id = $auth['id']; // スタッフID
         $files = array();
 
         $fileMax = PROPERTY['FILE_MAX']; // ファイルアップの制限数
@@ -1133,7 +1133,7 @@ class CastsController extends AppController
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['UPDATE_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
+        $id = $auth['id']; // スタッフID
         $tmpDir = null; // バックアップ用
         $dir = preg_replace('/(\/\/)/', '/',
             WWW_ROOT.$this->request->data["dir_path"]);
@@ -1280,7 +1280,7 @@ class CastsController extends AppController
         $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
         $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
         $auth = $this->request->session()->read('Auth.Cast');
-        $id = $auth['id']; // キャストID
+        $id = $auth['id']; // スタッフID
         $tmpDir = null; // バックアップ用
 
         try {
@@ -1411,7 +1411,7 @@ class CastsController extends AppController
     }
 
     /**
-     * キャスト登録時の認証
+     * スタッフ登録時の認証
      *
      * @param [type] $token
      * @return void
@@ -1438,7 +1438,7 @@ class CastsController extends AppController
             return $this->render('/common/error');
         }
 
-        // キャストレイアウトを使用
+        // スタッフレイアウトを使用
         $this->viewBuilder()->layout('castDefault');
 
         // 仮登録時点で削除フラグは立っている想定。
@@ -1449,7 +1449,7 @@ class CastsController extends AppController
         }
         // 店舗情報を取得
         $shopInfo = $this->Util->getShopInfo($this->Shops->get($cast->shop_id));
-        // キャスト用のディレクトリを掘る
+        // スタッフ用のディレクトリを掘る
         $dir = new Folder( preg_replace('/(\/\/)/', '/',
                 WWW_ROOT . $shopInfo['cast_path'].DS) , true, 0755);
 
@@ -1475,17 +1475,17 @@ class CastsController extends AppController
 
                 throw new RuntimeException('既にディレクトリが存在します。');
             }
-            // キャスト情報セット
+            // スタッフ情報セット
             $cast->dir = $nextDir; // 連番ディレクトリをセット
             $cast->delete_flag = 0; // 論理削除フラグを下げる
-            // キャスト登録
+            // スタッフ登録
             if (!$this->Casts->save($cast)) {
 
                 throw new RuntimeException('レコードの更新に失敗しました。');
             }
             // 更新情報を追加する
             $updates = $this->Updates->newEntity();
-            $updates->set('content', '新しいキャストを追加しました。');
+            $updates->set('content', '新しいスタッフを追加しました。');
             $updates->set('shop_id', $this->Auth->user('shop_id'));
             $updates->set('cast_id', $this->Auth->user('id'));
             $updates->set('type', SHOP_MENU_NAME['DIARY']);

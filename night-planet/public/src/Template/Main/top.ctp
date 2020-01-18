@@ -31,7 +31,7 @@
 			<div class="row section tabs-section1">
 				<ul id="tabs-new-info" class="tabs tabs-fixed-width">
                     <li class="tab col s6"><a href="#new-info-1-tabs">店舗からのお知らせ</a></li>
-                    <li class="tab col s6"><a class="active" href="#new-info-2-tabs">キャスト日記</a></li>
+                    <li class="tab col s6"><a class="active" href="#new-info-2-tabs">スタッフ日記</a></li>
                 </ul>
                 <div id="new-info-1-tabs" class="col s12">
 					<?php if(count($notices) > 0): ?>
@@ -84,7 +84,7 @@
 					<p class="section-label"><span> アクセスランキング </span></p>
 				</div>
 				<ul id="tabs-ranking" class="tabs tabs-fixed-width">
-					<li class="tab col s6"><a href="#ranking-1-tabs">キャスト</a></li>
+					<li class="tab col s6"><a href="#ranking-1-tabs">スタッフ</a></li>
 					<li class="tab col s6"><a class="active" href="#ranking-2-tabs">店舗</a></li>
 				</ul>
 				<div id="ranking-1-tabs" class="col s12">

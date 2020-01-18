@@ -39,10 +39,10 @@
 					</div>
 				</li>
 				<li id="section3">
-					<div class="collapsible-header"><i class="material-icons">whatshot</i>キャストとは？</div>
-					<div class="collapsible-body"><span>キャストを店舗に追加することが出来ます。
-							<br><?=LT['001']?>内でキャストのアカウントを作成いたします。
-							<br>キャストは自身の管理画面にログインすることが出来ます。
+					<div class="collapsible-header"><i class="material-icons">whatshot</i>スタッフとは？</div>
+					<div class="collapsible-body"><span>スタッフを店舗に追加することが出来ます。
+							<br><?=LT['001']?>内でスタッフのアカウントを作成いたします。
+							<br>スタッフは自身の管理画面にログインすることが出来ます。
 							<br>
 							<h6>追加手順</h6>
 							<div class="divider"></div>
@@ -52,14 +52,14 @@
 								class="red-text">※</span>紹介ページにはにニックネームのみで表示されます。
 							<div class="divider"></div>
 							<i class="material-icons">check</i>メールアドレスを入力<br><span
-								class="red-text">※</span>キャストの方にメールアドレスを確認する必要があります。
+								class="red-text">※</span>スタッフの方にメールアドレスを確認する必要があります。
 							<div class="divider"></div>
 							<i class="material-icons">check</i>登録ボタンをタップ<br><span
 								class="red-text">※</span>入力したメールアドレスに認証メールを送信します。
-							キャストの方で認証するためのリンクをタップする必要があります。認証の有効期限は１時間なので
+							スタッフの方で認証するためのリンクをタップする必要があります。認証の有効期限は１時間なので
 							過ぎた場合はやり直しになりますのでご注意ください。<br>認証完了後、画面の再読み込みを行ってください。
-							キャストが追加されましたら、クーポンと同様に表示切り替え「ON」にしてください。<br>
-							もしキャストが退職した場合等は「OFF」にするか削除をしてください。
+							スタッフが追加されましたら、クーポンと同様に表示切り替え「ON」にしてください。<br>
+							もしスタッフが退職した場合等は「OFF」にするか削除をしてください。
 						</span></div>
 				</li>
 				<li id="section4">

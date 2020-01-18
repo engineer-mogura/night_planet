@@ -98,7 +98,7 @@ class AppView extends View
                 ['class' => 'breadcrumbs-tail']
             );
         } else if ($this->viewVars['next_view'] == PATH_ROOT['CAST']) {
-        // 次の画面がキャストの場合
+        // 次の画面がスタッフの場合
             // リストに追加
             $this->Breadcrumbs->add([
                 ['title' => '<i class="material-icons">home</i>', 'url' => DS]

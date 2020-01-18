@@ -41,7 +41,7 @@
             <!-- 更新情報 START -->
             <?= $this->element('info-marquee'); ?>
             <!-- 更新情報 END -->
-            <!-- キャストメニュー START -->
+            <!-- スタッフメニュー START -->
             <div id="shop-menu-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
                     <p class="shop-menu-label section-label"><span> CAST MENU </span></p>
@@ -98,7 +98,7 @@
                 <div class="col s4 m3 l3">
                     <div class="pink lighten-4 linkbox card-panel hoverable center-align">
                         <?= in_array(SHOP_MENU_NAME['CAST'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-                        <span class="shop-menu-label casts"></br>キャスト</span>
+                        <span class="shop-menu-label casts"></br>スタッフ</span>
                         <a class="waves-effect waves-light" href="#casts-section"></a>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </div>
-            <!-- キャストメニュー END -->
+            <!-- スタッフメニュー END -->
             <!-- プロフィール START -->
             <div id="cast-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
@@ -140,7 +140,7 @@
                 </div>
             </div>
             <!-- プロフィール END -->
-            <!-- キャストギャラリー START -->
+            <!-- スタッフギャラリー START -->
             <div id="cast-gallery-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
                     <p class="cast-gallery-label section-label"><span> ギャラリー </span></p>
@@ -174,7 +174,7 @@
                     <?php endif;?>
                 </div>
             </div>
-            <!-- キャストギャラリー END -->
+            <!-- スタッフギャラリー END -->
             <!-- 日記 START -->
             <div id="diary-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
@@ -265,7 +265,7 @@
             </div>
             <?php endif;?>
             <!-- twitter END -->
-            <!-- キャストリスト START -->
+            <!-- スタッフリスト START -->
             <div id="casts-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
                     <p class="casts-label section-label"><span> CAST </span></p>
@@ -282,16 +282,16 @@
                 </div>
                 <?php endforeach; ?>
                 <?php else: ?>
-                <p class="col">キャストの登録はありません。</p>
+                <p class="col">スタッフの登録はありません。</p>
                 <?php endif; ?>
             </div>
-            <!-- キャストリスト END -->
+            <!-- スタッフリスト END -->
         </div>
         <!--デスクトップ用 サイドバー START -->
         <?= $this->element('sidebar'); ?>
         <!--デスクトップ用 サイドバー END -->
     </div>
 </div>
-<!-- キャスト用ボトムナビゲーション START -->
+<!-- スタッフ用ボトムナビゲーション START -->
 <?= $this->element('cast-bottom-navigation'); ?>
-<!-- キャスト用ボトムナビゲーション END -->
+<!-- スタッフ用ボトムナビゲーション END -->

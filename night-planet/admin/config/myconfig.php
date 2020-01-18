@@ -137,7 +137,7 @@ return [
         'COUPON'=>'coupon', // クーポン
         'WORK_SCHEDULE'=>'work_schedule', // 今日の出勤メンバー
         'EVENT'=>'event', // お知らせ
-        'CAST'=>'cast', // スタッフ
+        'STAFF'=>'staff', // スタッフ
         'DIARY'=>'diary', // 日記
         'SHOP_TOP_IMAGE'=>'shop_top_image', // 店舗トップ画像
         'SHOP_GALLERY'=>'shop_gallery', // 店内ギャラリー

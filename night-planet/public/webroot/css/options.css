@@ -20,4 +20,8 @@
 #shop-menu-section.option-menu-color-red .linkbox {
   background-color: #ff4372 !important;
 }
+#shop-menu-section .grey.linkbox {
+  background-color: #9F9F9F !important;
+}
+
 /** オプション メニュー色 END **/

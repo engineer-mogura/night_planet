@@ -3,7 +3,7 @@
 	<?= $this->element('nav-breadcrumb'); ?>
 	<div class="row">
 		<div id="shop-main" class="col s12 m8 l8">
-			<img class="responsive-img" width="100%" src=<?= $shop->top_image ?> />
+			<img class="responsive-img" style="height: fit-content;" width="100%" src=<?= $shop->top_image ?> />
 			<h5 class="left-align">
 				<?= !empty($shop->name) ? h($shop->name) : h('-') ?>
 			</h5>
@@ -23,40 +23,40 @@
 			<?= $this->element('info-marquee'); ?>
 			<!-- 更新情報 END -->
 			<!-- 店舗メニュー START -->
-			<div id="shop-menu-section" class="row shop-menu section scrollspy">
+			<div id="shop-menu-section" class="option-menu-color-<?=$shop->shop_options[0][menu_color]?> row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
 					<p class="shop-menu-label section-label"><span> SHOP MENU </span></p>
 				</div>
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['COUPON'], $update_icon) ? '<div class="new-info"></div>' : ''?>
 						<span class="shop-menu-label coupon"></br>クーポン</span>
 						<a class="waves-effect waves-light modal-trigger" href="#coupons-modal"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['WORK_SCHEDULE'], $update_icon) ? '<div class="new-info"></div>' : ''?>
 						<span class="shop-menu-label work-schedule"></br>今日の出勤</span>
 						<a class="waves-effect waves-light modal-trigger" href="#today-member-modal"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['EVENT'], $update_icon) ? '<div class="new-info"></div>' : ''?>
 						<span class="shop-menu-label event"></br>お知らせ</span>
 						<a class="waves-effect waves-light" href="#event-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= preg_grep("/^".SHOP_MENU_NAME['CAST']."/", $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label casts"></br>キャスト</span>
+						<span class="shop-menu-label casts"></br>スタッフ</span>
 						<a class="waves-effect waves-light" href="#casts-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['DIARY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
 						<span class="shop-menu-label diary"></br>日記</span>
 						<a class="waves-effect waves-light" href="#diary-section"></a>
@@ -64,54 +64,54 @@
 				</div>
 				<div class="col s4 m3 l3">
 					<div
-						class="<?=empty($shop->snss[0]['instagram'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
+						class="<?=empty($shop->snss[0]['instagram'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label instagram"></br>instagram</span>
 						<a class="waves-effect waves-light" href="#instagram-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
 					<div
-						class="<?=empty($shop->snss[0]['facebook'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
+						class="<?=empty($shop->snss[0]['facebook'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label facebook"></br>Facebook</span>
 						<a class="waves-effect waves-light" href="#facebook-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
 					<div
-						class="<?=empty($shop->snss[0]['twitter'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
+						class="<?=empty($shop->snss[0]['twitter'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label twitter"></br>Twitter</span>
 						<a class="waves-effect waves-light" href="#twitter-section"></a>
 					</div>
 				</div>
 				<!-- <div class="col s4 m3 l3">
 					<div
-						class="<?=empty($shop->snss[0]['line'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
+						class="<?=empty($shop->snss[0]['line'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label line"></br>LINE</span>
 						<a class="waves-effect waves-light" href="#line-section"></a>
 					</div>
 				</div> -->
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['SHOP_GALLERY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
 						<span class="shop-menu-label shop-gallery"></br>Shop Gallery</span>
 						<a class="waves-effect waves-light" href="#shop-gallery-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label map"></br>MAP</span>
 						<a class="waves-effect waves-light" href="#map-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['SYSTEM'], $update_icon) ? '<div class="new-info"></div>' : ''?>
 						<span class="shop-menu-label system"></br>店舗情報</span>
 						<a class="waves-effect waves-light" href="#shop-info-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m3 l3">
-					<div class="pink lighten-4 linkbox card-panel hoverable center-align">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['RECRUIT'], $update_icon) ? '<div class="new-info"></div>' : ''?>
 						<span class="shop-menu-label recruit"></br>リクルート</span>
 						<a class="waves-effect waves-light" href="#recruit-section"></a>
@@ -119,7 +119,7 @@
 				</div>
 			</div>
 			<!-- 店舗メニュー END -->
-			<!-- キャストリスト START -->
+			<!-- スタッフリスト START -->
 			<div id="casts-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
 					<p class="casts-label section-label"><span> CAST </span></p>
@@ -138,10 +138,10 @@
 				</div>
 				<?php endforeach; ?>
 				<?php else: ?>
-				<p class="col">キャストの登録はありません。</p>
+				<p class="col">スタッフの登録はありません。</p>
 				<?php endif; ?>
 			</div>
-			<!-- キャストリスト END -->
+			<!-- スタッフリスト END -->
 			<!-- 日記 START -->
 			<div id="diary-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">

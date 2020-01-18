@@ -925,7 +925,7 @@ span.icon-vertical-align {
 
 
 /* 店舗ページ END */
-/* キャストページ START */
+/* スタッフページ START */
 .cast-header .cast-name-box {
   color: #f88c00;
   font-weight: 600;
@@ -990,7 +990,7 @@ span.icon-vertical-align {
   0% {transform: translateY(0px);}
   100% {transform: translateY(-10px);}
 }
-/* キャストページ END */
+/* スタッフページ END */
 
 /* 日記ページ START */
 .diary-card .my-gallery .col {
@@ -1115,18 +1115,26 @@ li.daylist,li.eventlist {
   float: left;
   margin-left: 60px;
 }
+.materialboxed.materialboxed-gallery {
+  display: list-item;
+  height: 200px;
+  width:100%;
+  object-fit: cover;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-b;
+  border:solid #fff 1px;
+}
 
 /* 店舗編集ページ END */
-
-
-/* キャスト編集ページ START */
+/* スタッフ編集ページ START */
 
 .oki-new {
   margin-left: auto;
   z-index: 999;
   position: absolute;
 }
-/* キャスト編集ページ END */
+/* スタッフ編集ページ END */
 
 /* モーダル日記 お知らせ START */
 #modal-diary, #modal-notice {
@@ -1253,6 +1261,49 @@ form .message-label {
   left: 0;
 } 
 /** 出勤管理テーブル END */
+
+/** オプション画面 START */
+#option .menu-colors-section li{
+  margin-left: 20px;
+  float:left;
+}
+#option .menu-colors-section li.color-white:after{
+  content:'　';
+  border-radius: 20px;
+  background-color: white;
+}
+#option .menu-colors-section li.color-pink:after{
+  content:'　';
+  border-radius: 20px;
+  background-color: #f8bbd0;
+}
+#option .menu-colors-section li.color-yellow:after{
+  content:'　';
+  border-radius: 20px;
+  background-color: #fffe00;
+}
+#option .menu-colors-section li.color-perple:after{
+  content:'　';
+  border-radius: 20px;
+  background-color: #df47ff;
+}
+#option .menu-colors-section li.color-green:after{
+  content:'　';
+  border-radius: 20px;
+  background-color: #8eff9f;
+}
+#option .menu-colors-section li.color-blue:after{
+  content:'　';
+  border-radius: 20px;
+  background-color: #388bff;
+}
+#option .menu-colors-section li.color-red:after{
+  content:'　';
+  border-radius: 20px;
+  background-color: #ff4372;
+}
+/** オプション画面 END */
+
 /** プラン変更画面 START */
 #change-plan div.card.plan-card button {
   font-size: smaller;

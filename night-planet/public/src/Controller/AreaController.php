@@ -28,6 +28,7 @@ class AreaController extends AppController
         $this->Updates = TableRegistry::get("updates");
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
+        $this->ShopOptions = TableRegistry::get("shop_options");
 
 
     }
@@ -85,7 +86,7 @@ class AreaController extends AppController
             $description = $this->Util->strReplace($search, $replace, META['SHOP_DESCRIPTION']);
 
         } else if ($this->viewVars['next_view'] == PATH_ROOT['CAST']) {
-        // 次の画面がキャストトップページの場合
+        // 次の画面がスタッフトップページの場合
 
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
             $replace = array($this->viewVars['shopInfo']['area']['label']
@@ -109,7 +110,7 @@ class AreaController extends AppController
             $replace = array($this->viewVars['cast']['nickname'], LT['000']);
             $description = $this->Util->strReplace($search, $replace, META['DIARY_DESCRIPTION']);
 
-        // キャストのギャラリートップの場合
+        // スタッフのギャラリートップの場合
         } elseif (!empty($query['genre']) && !empty($query['name'])
             && !empty($query['nickname']) && in_array(PATH_ROOT['GALLERY'], $url)) {
             $search = array('_area_', '_genre_', '_shop_', '_cast_', '_service_name_');
@@ -366,7 +367,7 @@ class AreaController extends AppController
                 $range = "'".$start_date."' and '".$end_date."'";
                 return $q
                         ->where(["work_schedules.modified BETWEEN".$range]);
-            },'jobs','snss'])->first();
+            },'jobs','snss','shop_options'])->first();
 
         // 店舗が複数ある場合
         foreach($shop->owner->shops as $key => $value) {
@@ -410,16 +411,16 @@ class AreaController extends AppController
         }
         // 今日の日付から1ヶ月前
         $end_date = date('Y-m-d', strtotime("-1 month"));
-        // キャストの登録日付をチェックする
+        // スタッフの登録日付をチェックする
         foreach ($shop->casts as $key => $cast) {
             $user_created = $cast->created->format('Y-m-d');
             $end_ts = strtotime($end_date);
             $user_ts = strtotime($user_created);
-            // 新しいキャストの場合フラグセット
+            // 新しいスタッフの場合フラグセット
             if ($user_ts >= $end_ts) {
                 $cast->set('new_cast', true);
             }
-            // キャストの更新があればフラグをセット
+            // スタッフの更新があればフラグをセット
             foreach ($updateInfo as $key => $value) {
                 if (!empty($value->cast_id) && $value->cast_id == $cast->id) {
                     $cast->set('update_cast', true);
@@ -479,7 +480,7 @@ class AreaController extends AppController
             $shop->shop_infos[0]->set('gallery', $gallery);
         }
 
-        // キャストのアイコンを設定する
+        // スタッフのアイコンを設定する
         foreach ($shop->casts as $key => $cast) {
             $path = $shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'];
             $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$path), true, 0755);
@@ -495,7 +496,7 @@ class AreaController extends AppController
                 $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
             }
         }
-        // 店舗キャストの最新日記を取得する
+        // 店舗スタッフの最新日記を取得する
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id);
 
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
@@ -540,7 +541,7 @@ class AreaController extends AppController
 
     public function cast($id = null)
     {
-        // キャスト情報、最新の日記情報とイイネの総数取得
+        // スタッフ情報、最新の日記情報とイイネの総数取得
         $cast = $this->Casts->find("all")->where(['casts.id' => $id])
             ->contain(['shops','shops.owners.servece_plans', 'diarys' => function (Query $q) {
                 return $q
@@ -548,7 +549,7 @@ class AreaController extends AppController
             }
                 , 'diarys.diary_likes','Snss'
             ])->first();
-        // その他のキャストを取得する
+        // その他のスタッフを取得する
         $other_casts = $this->Casts->find("all")
             ->where(['casts.shop_id' => $cast->shop_id
                 , 'casts.id is not' => $id
@@ -556,7 +557,7 @@ class AreaController extends AppController
             ->order(['created'=>'DESC'])
             ->toArray();
 
-        // 本日のキャストの出勤有無を取得する
+        // 本日のスタッフの出勤有無を取得する
         $end_date = date("Y-m-d H:i:s");
         $start_date = date("Y-m-d H:i:s", strtotime($end_date . "-24 hour"));
         $range = "'".$start_date."' and '".$end_date."'";
@@ -567,7 +568,7 @@ class AreaController extends AppController
                     , 'FIND_IN_SET(\''. $cast->id .'\', cast_ids)'])
                 ->count();
 
-        // キャスト情報取得
+        // スタッフ情報取得
         $castInfo = $this->Util->getCastItem($cast, $cast->shop);
 
         // トップ画像を設定する
@@ -638,7 +639,7 @@ class AreaController extends AppController
 
         $shopInfo = $this->Util->getShopInfo($cast->shop);
 
-        // その他キャストのアイコンを設定する
+        // その他スタッフのアイコンを設定する
         foreach ($other_casts as $key => $otherCast) {
             $path = $shopInfo['cast_path'].DS.$otherCast->dir.DS.PATH_ROOT['PROFILE'];
             $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$path), true, 0755);
@@ -708,7 +709,7 @@ class AreaController extends AppController
             ->contain(['shops'])
             ->first();
 
-        // キャスト情報取得
+        // スタッフ情報取得
         $castInfo = $this->Util->getCastItem($cast, $cast->shop);
         // ギャラリーリストを作成
         // ディクレトリ取得
@@ -739,7 +740,7 @@ class AreaController extends AppController
         $this->set('userInfo', $this->Util->getCastItem($cast, $cast->shop));
         $this->set('shopInfo', $this->Util->getShopInfo($cast->shop));
 
-        // キャストの全ての日記を取得
+        // スタッフの全ての日記を取得
         $diarys = $this->Util->getDiarys($id, $this->viewVars['userInfo']['diary_path']);
 
         $this->set('next_view', PATH_ROOT['DIARY']);
@@ -765,7 +766,7 @@ class AreaController extends AppController
         return;
     }
     /**
-     * キャストの全ての日記情報を取得する処理
+     * スタッフの全ての日記情報を取得する処理
      *
      * @param [type] $id
      * @return array
@@ -773,7 +774,7 @@ class AreaController extends AppController
     public function getDiarys($id = null)
     {
         $columns = array('id','cast_id','title','content','dir');
-        // キャスト情報、最新の日記情報とイイネの総数取得
+        // スタッフ情報、最新の日記情報とイイネの総数取得
         $diarys = $this->Diarys->find("all")
             ->select($columns)
             ->where(['cast_id' => $id])
@@ -835,7 +836,7 @@ class AreaController extends AppController
         //         "'%Y/%c/%e %H:%i'" => 'literal']);
         //     $columns = $columns + ['ymd_created'=>$ymd];
 
-        //     // キャスト情報、最新の日記情報とイイネの総数取得
+        //     // スタッフ情報、最新の日記情報とイイネの総数取得
         //     $notice = $this->ShopInfos->find("all")
         //         ->select($columns)
         //         ->where(['id' => $this->request->query["id"]])

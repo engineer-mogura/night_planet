@@ -8,13 +8,9 @@
 				<div class="col s12 m6 l6">
 					<div class="card <?php if(count($shops) == $key + 1) { echo('targetScroll');}?>">
 						<div class="card-image">
-<?php         				$shop_url = PUBLIC_DOMAIN.DS.$shop['area']
-								.DS.PATH_ROOT['SHOP'].DS.$shop['id']
-								.'?genre='.$shop['genre'].'&name='.$shop['name'];
-?>
-						<a href="<?=$shop_url?>" target=”_blank” rel="noopener noreferrer"><?=$cast->shop->name?>
-							<img src="<?=$shop->top_image?>" alt="">
-						</a>
+							<a href="/owner/shops/index?shop_id=<?=$shop->id?>">
+								<img src="<?=$shop->top_image?>" height="300px;" width="100%" alt="">
+							</a>
 						</div>
 						<div class="card-content">
 							<table class="highlight">
@@ -35,7 +31,7 @@
 										<th>登録日</th>
 										<td><?=$this->Time->format($shop->created, 'Y年M月d日')?></td>
 									</tr>
-									<tr>
+									<tr style="height: 70px;">
 										<th>住所</th>
 										<td><?=$shop->full_address ?></td>
 									</tr>

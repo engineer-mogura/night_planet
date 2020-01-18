@@ -89,14 +89,14 @@ function crearShopEvents() {
     $(document).off('change', '.coupon-switchBtn');
     $(document).off('click', '.coupon-deleteBtn');
     /** クーポンタブ END */
-    /** キャストタブ START */
+    /** スタッフタブ START */
     $(document).off('click', '.cast-changeBtn');
     $(document).off('click', '.cast-addBtn');
     $(document).off('click', '.cast-saveBtn');
     $(document).off('click', '.check-cast-group');
     $(document).off('change', '.cast-switchBtn');
     $(document).off('click', '.cast-deleteBtn');
-    /** キャストタブ END */
+    /** スタッフタブ END */
     /** 店舗情報タブ START */
     $(document).off('click', '.tenpo-changeBtn');
     $(document).off('click', '.tenpo-saveBtn');
@@ -137,7 +137,7 @@ function crearShopEvents() {
 }
 
 /**
- * キャスト画面のイベントクリア
+ * スタッフ画面のイベントクリア
  */
 function crearCastEvents() {
 
@@ -367,7 +367,7 @@ function formValidete(form){
 }
 
 /**
- * キャスト画像 削除ボタン処理
+ * スタッフ画像 削除ボタン処理
  */
 function castImageDeleteBtn(form, obj){
 
@@ -745,7 +745,7 @@ function initializeUser() {
     }
     /* 店舗画面 END */
 
-    /* キャスト画面 START */
+    /* スタッフ画面 START */
     if($("#cast").length) {
 
         // 検索ボタン押した時
@@ -753,7 +753,7 @@ function initializeUser() {
         // 店舗住所取得
         var address = $("table td[name='address']").text();
     }
-    /* キャスト画面 END */
+    /* スタッフ画面 END */
 
     /* ギャラリー画面 START */
     if($("#gallery").length) {
@@ -1266,8 +1266,8 @@ function initializeShop() {
         });
         /* クーポン 関連処理 END */
 
-        /* キャスト 関連処理 START */
-        // キャスト 変更、やめるボタン押した時
+        /* スタッフ 関連処理 START */
+        // スタッフ 変更、やめるボタン押した時
         $(document).on("click", ".cast-changeBtn",function() {
             $("html,body").animate({scrollTop:0});
 
@@ -1296,7 +1296,7 @@ function initializeShop() {
             }
         });
 
-        // キャスト 追加ボタン押した時
+        // スタッフ 追加ボタン押した時
         $(document).on("click", ".cast-addBtn",function() {
             if ($('#save-cast').css('display') == 'block') {
                 $("#cast").find("#save-cast").hide();
@@ -1316,7 +1316,7 @@ function initializeShop() {
             }
         });
 
-        /* キャスト 登録ボタン押した時 */
+        /* スタッフ 登録ボタン押した時 */
         $(document).on("click", ".cast-saveBtn",function() {
 
             if (!confirm('こちらの内容に変更でよろしいですか？')) {
@@ -1330,7 +1330,7 @@ function initializeShop() {
             ajaxCommon($form, $("#cast"));
         });
 
-        /* キャスト チェックボックス押した時 */
+        /* スタッフ チェックボックス押した時 */
         $(document).on('click','.check-cast-group', function() {
             var $button = $('#cast').find('.cast-changeBtn,.cast-deleteBtn');
             var $addButton = $('#cast').find('.cast-addBtn');
@@ -1348,7 +1348,7 @@ function initializeShop() {
             }
         });
 
-        /* キャスト スイッチ押した時 */
+        /* スタッフ スイッチ押した時 */
         $(document).on('change', '.cast-switchBtn', function() {
             var target = $(this).closest('.cast-box');
             var json = JSON.parse($(target).find('input[name="json_data"]').val());
@@ -1390,13 +1390,13 @@ function initializeShop() {
             });
         });
 
-        // キャスト 削除ボタン押した時
+        // スタッフ 削除ボタン押した時
         $(document).on("click", ".cast-deleteBtn",function() {
 
             var checked = $('input[name="check_cast"]:checked');
             var json = JSON.parse($(checked).closest('.cast-box').find('input[name="json_data"]').val());
 
-            if (!confirm('【'+json.name+'】\n選択したキャストを削除してもよろしいですか？')) {
+            if (!confirm('【'+json.name+'】\n選択したスタッフを削除してもよろしいですか？')) {
                 return false;
             }
             var $form = $('form[id="delete-cast"]');
@@ -1407,7 +1407,7 @@ function initializeShop() {
             event.preventDefault();
             ajaxCommon($form, $("#cast"));
         });
-        /* キャスト 関連処理 END */
+        /* スタッフ 関連処理 END */
 
         /* 店舗情報 関連処理 START */
         // 店舗情報 変更、やめるボタン押した時
@@ -2093,12 +2093,32 @@ function initializeShop() {
 
     }
     /* お知らせ 画面 END */
+    /* 設定画面 START */
+    if($("#option").length) {
+
+        // 入力フォームに変更があった時
+        $(document).find('#option').on("input", function() {
+            $('#option').find(".saveBtn").removeClass("disabled");
+        });
+        // 登録ボタン押した時
+        $('#option').find(".saveBtn").on("click", function() {
+            if (!confirm('こちらの内容でよろしいですか？')) {
+                return false;
+            }
+            var $form =$('#save-option');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#wrapper"));
+        });
+    }
+    /* 設定画面 END */
     /* 出勤管理 画面 START */
     if($("#work-schedule-management").length) {
 
         fullcalendarSetting();
 
-        // 出勤管理 キャストタグを選択する
+        // 出勤管理 スタッフタグを選択する
         $(document).on('click','.chip-cast', function(event) {
 
             if ($(this).hasClass('back-color')) {
@@ -2113,7 +2133,7 @@ function initializeShop() {
         // 登録,更新,削除ボタン押した時
         $(document).on("click",".saveBtn", function() {
 
-            if (!confirm('選択したキャストが本日のメンバーでよろしいですか？\nメンバーはいつでも変更できます。')) {
+            if (!confirm('選択したスタッフが本日のメンバーでよろしいですか？\nメンバーはいつでも変更できます。')) {
                 return false;
             }
             var csv = "";
@@ -2287,7 +2307,7 @@ function initializeShop() {
     }
 
     /**
-     * @description モーダル日記表示 ユーザー、キャストのみで使用
+     * @description モーダル日記表示 ユーザー、スタッフのみで使用
      * @param  {} $form
      * @param  {} userType
      */
@@ -2328,7 +2348,7 @@ function initializeShop() {
                         scrollPosition = $(window).scrollTop();
                         // モーダル表示してる時は、背景画面のスクロールを禁止する
                         $('body').addClass('fixed').css({'top': -scrollPosition});
-                        // キャストの日記ディレクトリを取得する
+                        // スタッフの日記ディレクトリを取得する
                         var diaryDir = $("input[name='cast_dir']").val() + response['dir'];
                         // 日記カードの要素を複製し、複製したやつを表示するようにする。
                         var diaryCard = $(".diary-card").clone(true).insertAfter(".diary-card").addClass('clone').removeClass('hide');
@@ -2380,7 +2400,7 @@ function initializeShop() {
                             $($(this)[0]["$el"]).find('.clone').remove();
 
                         } else if(userType == 'admin') {
-                            //キャストの場合
+                            //スタッフの場合
                             // モーダルフォームをクリアする
                             $("#modal-edit-diary").find(".card-img").remove();
                             $("#modal-edit-diary").find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
@@ -2452,7 +2472,7 @@ function initializeShop() {
                         scrollPosition = $(window).scrollTop();
                         // モーダル表示してる時は、背景画面のスクロールを禁止する
                         $('body').addClass('fixed').css({'top': -scrollPosition});
-                        // キャストのお知らせディレクトリを取得する
+                        // スタッフのお知らせディレクトリを取得する
                         var noticeDir = $("input[name='notice_dir']").val() + response['dir'];
                         // お知らせカードの要素を複製し、複製したやつを表示するようにする。
                         var noticeCard = $(".notice-card").clone(true).insertAfter(".notice-card").addClass('clone').removeClass('hide');
@@ -2504,7 +2524,7 @@ function initializeShop() {
                             $($(this)[0]["$el"]).find('.clone').remove();
 
                         } else if(userType == 'admin') {
-                            //キャストの場合
+                            //スタッフの場合
                             // モーダルフォームをクリアする
                             $("#modal-edit-notice").find(".card-img").remove();
                             $("#modal-edit-notice").find('#modal-image-file').replaceWith($('#modal-image-file').val('').clone(true));
@@ -2535,7 +2555,7 @@ function initializeShop() {
     }
 
 /**
- * キャスト画面の初期化処理
+ * スタッフ画面の初期化処理
  */
 function initializeCast() {
 

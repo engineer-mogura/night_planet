@@ -62,6 +62,7 @@
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
   <?= $this->Html->css('materialize.min.css') ?>
   <?= $this->Html->css('okiyoru.css') ?>
+  <?= $this->Html->css('options.css') ?>
   <?= $this->Html->css('instagram.css') ?>
   <?= $this->Html->css('jquery.notifyBar.css') ?>
   <?= $this->Html->css('fullcalendar.min.css') ?><!-- fullcalendar-3.9.0 -->

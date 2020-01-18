@@ -148,7 +148,7 @@ class ShopsController extends AppController
                 ,"date"=>$timestamp));
         }
 
-        // キャストのアイコンを設定する
+        // スタッフのアイコンを設定する
         foreach ($shop->casts as $key => $cast) {
             $path = $this->viewVars['shopInfo']['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'];
             $dir = new Folder(preg_replace('/(\/\/)/', '/'
@@ -683,7 +683,7 @@ class ShopsController extends AppController
     }
 
     /**
-     * キャスト スイッチ押下処理
+     * スタッフ スイッチ押下処理
      *
      * @return void
      */
@@ -724,7 +724,7 @@ class ShopsController extends AppController
         $this->response->body(json_encode($response));
     }
     /**
-     * キャスト 削除押下処理
+     * スタッフ 削除押下処理
      *
      * @return void
      */
@@ -822,7 +822,7 @@ class ShopsController extends AppController
     }
 
     /**
-     * キャスト 編集押下処理
+     * スタッフ 編集押下処理
      *
      * @return void
      */
@@ -1750,8 +1750,8 @@ class ShopsController extends AppController
         $last_month = $end_date->modify('last day of next month'); // 翌日の月末を取得
         $end_date = new Time($last_month->format('Y-m-d') .' 23:59:59'); // 翌日の月末の日付変わる直前を取得
 
-        // 店舗に所属するキャストの
-        // 当月の月初から翌日の月末の日付変わる直前までのキャストのスケジュールを取得する
+        // 店舗に所属するスタッフの
+        // 当月の月初から翌日の月末の日付変わる直前までのスタッフのスケジュールを取得する
         $casts = $this->Casts->find('all')
             ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
             ->contain(['shops'
@@ -1766,7 +1766,7 @@ class ShopsController extends AppController
             ->where(['shop_id', $this->viewVars['shopInfo']['id']])
             ->first();
 
-        // キャスト配列リスト
+        // スタッフ配列リスト
         // $castList = array();
         $tempList = array();
 
@@ -1777,7 +1777,7 @@ class ShopsController extends AppController
             $workPlanList[] = 'ー';
         }
 
-        // キャスト情報を配列にセット
+        // スタッフ情報を配列にセット
         foreach ($casts as $key1 => $cast) {
 
             $tempList = array('castInfo'=>$this->Util->getCastItem($cast, $cast->shop));
@@ -1884,7 +1884,7 @@ class ShopsController extends AppController
         $last_month = $end_date->modify('last day of next month');
         $end_date = new Time($last_month->format('Y-m-d') .' 23:59:59');
 
-        // 店舗に所属する全てのキャストを取得する
+        // 店舗に所属する全てのスタッフを取得する
         $casts = $this->Casts->find('all')
             ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
             ->contain(['shops'
@@ -1899,7 +1899,7 @@ class ShopsController extends AppController
             ->where(['shop_id', $this->viewVars['shopInfo']['id']])
             ->first();
 
-        // キャスト配列リスト
+        // スタッフ配列リスト
         // $castList = array();
         $tempList = array();
 
@@ -1910,7 +1910,7 @@ class ShopsController extends AppController
             $workPlanList[] = 'ー';
         }
 
-        // キャスト情報を配列にセット
+        // スタッフ情報を配列にセット
         foreach ($casts as $key1 => $cast) {
 
             $tempList = array('castInfo'=>$this->Util->getCastItem($cast, $cast->shop));
@@ -1942,30 +1942,6 @@ class ShopsController extends AppController
             $cast->set('schedule_info', $tempList);
         }
 
-        // // 店舗に所属する全てのキャストを取得する
-        // $casts = $this->Casts->find('all')
-        //     ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
-        //     ->contain(['shops'])
-        //     ->order(['casts.created'=>'DESC'])->toArray();
-
-        // $WorkSchedule = $this->WorkSchedules->find('all')
-        //     ->where(['shop_id', $this->viewVars['shopInfo']['id']])
-        //     ->first();
-
-        // // キャスト配列リスト
-        // $castList = array();
-        // $tempList = array();
-
-        // // キャスト情報を配列にセット
-        // foreach ($casts as $key => $cast) {
-        //     array_push($tempList, $this->Util->getCastItem($cast, $cast->shop));
-        //     array_push($tempList[$key], $cast);
-        // }
-        // $castList = array_merge($castList, $tempList);
-        // $dateList = $this->Util->getPeriodDate();
-
-
-        // $this->set(compact('castList', 'dateList', 'WorkSchedule'));
         $this->set(compact('casts', 'dateList', 'workSchedule'));
 
         $this->render('/Owner/Shops/work_schedule');
@@ -1979,6 +1955,79 @@ class ShopsController extends AppController
         return;
     }
 
+    /**
+     * 設定 画面処理
+     *
+     * @return void
+     */
+    public function option()
+    {
+        $option = $this->ShopOptions->get($this->viewVars['shopInfo']['id']);
+        // マスタコード取得
+        $masCodeFind = array('option_menu_color');
+        // セレクトボックスを作成する
+        $mast_data = $this->Util->getSelectList($masCodeFind,$this->MasterCodes,false);
+
+        // 登録ボタン押下時
+        if ($this->request->is('ajax')) {
+
+            $flg = true; // 返却フラグ
+            $errors = ""; // 返却メッセージ
+            $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+            $message = RESULT_M['SIGNUP_SUCCESS']; // 返却メッセージ
+            $auth = $this->request->session()->read('Auth.Owner');
+            $id = $auth['id']; // ログインユーザID
+
+            // パラメタセット
+            $option->set(['menu_color'=>$this->request->getData('menu_color')[0]]);
+
+            try{
+                if(!$option->errors()) {
+                    if (!$this->ShopOptions->save($option)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                } else {
+
+                    foreach ($option->errors() as $key1 => $value1) {
+                        foreach ($value1 as $key2 => $value2) {
+                            $this->Flash->error($value2);
+                        }
+                    }
+                }
+            } catch (RuntimeException $e) {
+                $this->log($this->Util->setLog($auth, $e));
+                $flg = false;
+            }
+
+                // 例外が発生している場合にメッセージをセットして返却する
+                if (!$flg) {
+
+                    $message = RESULT_M['SIGNUP_FAILED'];
+                    $response = array(
+                        'success' => $flg,
+                        'message' => $message
+                    );
+                    $this->response->body(json_encode($response));
+                    return;
+                }
+
+            $this->set(compact('option','mast_data'));
+
+            $this->render('/Owner/Shops/option');
+            $response = array(
+                'html' => $this->response->body(),
+                'error' => $errors,
+                'success' => $flg,
+                'message' => $message
+            );
+            $this->response->body(json_encode($response));
+            return;
+
+        }
+
+        $this->set(compact('option','mast_data'));
+        $this->render();
+    }
 
     /**
      * お知らせアーカイブ表示画面の処理

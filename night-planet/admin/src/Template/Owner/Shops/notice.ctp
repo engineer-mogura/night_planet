@@ -4,6 +4,9 @@
         <span id="dummy" style="display: hidden;"></span>
         <?= $this->Flash->render() ?>
         <h5><?=h('店舗お知らせ') ?></h5>
+            <!-- 編集中の店舗 START-->
+            <?= $this->element('now_edit_shop'); ?>
+            <!-- 編集中の店舗 END-->
             <div id="notice" class="row">
                 <input type="hidden" name="file_max" value=<?=PROPERTY['FILE_MAX']?>>
                 <input type="hidden" name="notice_dir" value=<?=$shopInfo['notice_path'] ?>>

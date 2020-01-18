@@ -9,7 +9,11 @@
     <div class="container">
         <span id="dummy" style="display: hidden;"></span>
         <?= $this->Flash->render() ?>
-        <h5><?=h('出勤管理') ?></h5><span>〇：出勤可能 ✕：出勤不可 ー：未定</span>
+        <h5><?=h('出勤管理') ?></h5>
+        <!-- 編集中の店舗 START-->
+        <?= $this->element('now_edit_shop'); ?>
+        <!-- 編集中の店舗 END-->
+        <span>〇：出勤可能 ✕：出勤不可 ー：未定</span>
             <div id="work-schedule-management" class="row">
                 <!-- 出勤希望リスト START -->
                 <?php if(!empty($casts)) : ?>
@@ -58,7 +62,7 @@
                 </div>
                 <?php 
                     else :
-                        echo ('キャストが登録されていないか、表示ボタンがONになっていません。');
+                        echo ('スタッフが登録されていないか、表示ボタンがONになっていません。');
                     endif;?>
             </div>
             <div class="row">

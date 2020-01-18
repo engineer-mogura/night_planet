@@ -150,8 +150,9 @@ return [
 
     // 店舗編集画面のタブ制御設定
     define('TAB_CONTROLE', array(
-        'index', // 店舗ダッシュボード 画面
-        'notice', // 店舗お知らせ 画面
+        'index',        // 店舗ダッシュボード 画面
+        'notice',       // 店舗お知らせ 画面
+        'option',       // 設定 画面
         'workSchedule', // 出勤管理 画面
     )),
 
@@ -253,6 +254,7 @@ return [
         '010'=>'SNS',
         '011'=>'出勤管理',
         '012'=>'ダッシュボード',
+        '013'=>'設定',
     )),
 
     // ラベル定数 cast.label menu

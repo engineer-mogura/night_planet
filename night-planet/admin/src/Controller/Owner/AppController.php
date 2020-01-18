@@ -21,6 +21,7 @@ class AppController extends \App\Controller\AppController
         $this->ServecePlans = TableRegistry::get('servece_plans');
         $this->Updates = TableRegistry::get('updates');
         $this->ShopInfos = TableRegistry::get("shop_infos");
+        $this->ShopOptions = TableRegistry::get("shop_options");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
         $this->CastSchedules = TableRegistry::get("cast_schedules");
         $this->MasterCodes = TableRegistry::get("master_codes");
@@ -60,7 +61,7 @@ class AppController extends \App\Controller\AppController
         $shopAccess = ['index','shopEdit','saveTopImage','saveCatch','deleteCatch',
             'saveCoupon','deleteCoupon','switchCoupon','deleteCoupon','saveCast','switchCast',
             'deleteCast','saveTenpo','saveJob','saveSns','saveGallery','deleteGallery','notice','viewNotice',
-            'saveNotice','updateNotice','deleteNotice','workSchedule','saveWorkSchedule'];
+            'saveNotice','updateNotice','deleteNotice','option','workSchedule','saveWorkSchedule'];
 
         //TODO: 権限によって店舗管理者のみとオーナー兼店舗管理者を分ける？
         // 今は、分けず各アクションは統合する

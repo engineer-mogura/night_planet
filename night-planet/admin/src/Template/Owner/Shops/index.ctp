@@ -2,6 +2,11 @@
     <div id="dash-board" class="container">
         <span id="dummy" style="display: hidden;"></span>
         <div class="row">
+            <div class="col s12 m12 l12">
+                <!-- 編集中の店舗 START-->
+                <?= $this->element('now_edit_shop'); ?>
+                <!-- 編集中の店舗 END-->
+            </div>
             <div class="red darken-1 card-panel col s12 center-align">
                 <p class="white-text recruit-label section-label"><span> 店舗 </span></p>
             </div>
@@ -28,7 +33,7 @@
                 </div>
            </div>
            <div class="red darken-1 card-panel col s12 center-align">
-                <p class="white-text recruit-label section-label"><span> キャスト </span></p>
+                <p class="white-text recruit-label section-label"><span> スタッフ </span></p>
             </div>
            <div class="col s12 m6 l6 day-graph-section section">
                 <div class="card-panel day-graph-cast section">

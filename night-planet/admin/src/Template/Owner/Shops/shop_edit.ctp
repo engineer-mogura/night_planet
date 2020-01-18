@@ -8,18 +8,16 @@
                     <li class="tab"><a class="active" href="#top-image">トップ画像</a></li>
                     <li class="tab"><a href="#catch">キャッチコピー</a></li>
                     <li class="tab"><a href="#coupon">クーポン</a></li>
-                    <li class="tab"><a href="#cast">キャスト</a></li>
+                    <li class="tab"><a href="#cast">スタッフ</a></li>
                     <li class="tab"><a href="#tenpo">店舗情報</a></li>
                     <li class="tab"><a href="#gallery">店舗ギャラリー</a></li>
                     <li class="tab"><a href="#job">求人情報</a></li>
                     <li class="tab"><a href="#sns">SNS</a></li>
                 </ul>
             </div>
-            <div class="col" style="margin-top:30px;">
-                <p>
-                    <a href="<?=$shopInfo['shop_url']?>" target="_blank" rel="noopener noreferrer">店舗ページを確認する</a>
-                </p>
-            </div>
+            <!-- 編集中の店舗 START-->
+            <?= $this->element('now_edit_shop'); ?>
+            <!-- 編集中の店舗 END-->
             <!-- トップ画像タブ START-->
             <?= $this->element('shopEdit/top-image'); ?>
             <!-- トップ画像タブ END-->
@@ -29,9 +27,9 @@
             <!-- クーポンタブ START -->
             <?= $this->element('shopEdit/coupon'); ?>
             <!-- クーポンタブ END -->
-            <!-- キャストタブ START -->
+            <!-- スタッフタブ START -->
             <?= $this->element('shopEdit/cast'); ?>
-            <!-- キャストタブ END -->
+            <!-- スタッフタブ END -->
             <!-- 店舗情報タブ START -->
             <?= $this->element('shopEdit/tenpo'); ?>
             <!-- 店舗情報タブ END -->

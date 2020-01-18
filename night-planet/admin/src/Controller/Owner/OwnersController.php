@@ -414,6 +414,18 @@ class OwnersController extends AppController
                     if (!$this->Jobs->save($job)) {
                         throw new RuntimeException('レコードの登録に失敗しました。');
                     }
+                    // マスタコード取得
+                    $masCodeFind = array('option_menu_color');
+                    $mast_data = $this->Util->getSelectList($masCodeFind, $this->MasterCodes, false);
+                    // オプション情報セット
+                    $shop_options = $this->ShopOptions->newEntity();
+                    $shop_options->shop_id = $shop->id;
+                    $shop_options->menu_color = array_keys($mast_data['option_menu_color'])[0];
+
+                    // オプション登録
+                    if (!$this->ShopOptions->save($shop_options)) {
+                        throw new RuntimeException('レコードの登録に失敗しました。');
+                    }
                 } catch (RuntimeException $e) {
                     $this->log($this->Util->setLog($shop, $e));
                 }

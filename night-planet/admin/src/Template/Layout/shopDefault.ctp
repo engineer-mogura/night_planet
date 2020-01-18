@@ -73,6 +73,7 @@
     <li><a href="<?= in_array($this->request->getParam('action'), TAB_CONTROLE)?"/owner/shops/shopEdit?select_tab=sns":"#";?>" data-tab="sns" class="waves-effect hoverable tab-click <?php if($role != 'owner'){echo "btn-disabled";}?>"><i class="material-icons">chat_bubble_outline</i><?= SHOP_LM['010'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/owner/shops/notice"><i class="material-icons">notifications_active</i><?= SHOP_LM['009'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/owner/shops/work_schedule"><i class="material-icons">event_note</i><?= SHOP_LM['011'] ?></a></li>
+    <li><a class="waves-effect hoverable" href="/owner/shops/option"><i class="material-icons">settings</i><?= SHOP_LM['013'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/owner/owners"><i class="material-icons">home</i><?= COMMON_LM['004'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/other/faq"><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></a></li>
     <li><a class="waves-effect hoverable" href="/other/contract"><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></a></li>

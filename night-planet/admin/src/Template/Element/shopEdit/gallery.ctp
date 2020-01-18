@@ -12,7 +12,7 @@
             <div class="col s6 m4 l3 card-img">
                 <div class="card">
                     <div class="card-image">
-                        <img class="materialboxed" data-caption="" height="auto" width="auto" src="<?= $image['file_path'] ?>">
+                        <img class="materialboxed materialboxed-gallery" data-caption="" height="auto" width="auto" src="<?= $image['file_path'] ?>">
                         <a class="btn-floating halfway-fab waves-effect waves-light red tooltipped gallery-deleteBtn" data-delete=<?=$image['file_path']?> data-position="bottom" data-delay="50" data-tooltip="削除"><i class="material-icons">delete</i></a>
                     </div>
                 </div>

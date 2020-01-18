@@ -127,7 +127,7 @@ return [
         'NEW_INFO_MAX'=>'4', // 新着情報関連の表示数
         'FILE_MAX'=>'9', // アップロードファイル数
         'UPDATE_INFO_DAY_MAX'=>'10', // アップロードファイル数
-        'SHOW_GALLERY_MAX'=>'10', // キャストのギャラリー最大表示数
+        'SHOW_GALLERY_MAX'=>'10', // スタッフのギャラリー最大表示数
         'TOP_SLIDER_GALLERY_MAX'=>'3', // トップスライダーのギャラリー最大表示数
         'SUB_SLIDER_GALLERY_MAX'=>'10', // サブスライダーのギャラリー最大表示数
     )),
@@ -137,21 +137,22 @@ return [
         'COUPON'=>'coupon', // クーポン
         'WORK_SCHEDULE'=>'work_schedule', // 今日の出勤メンバー
         'EVENT'=>'event', // お知らせ
-        'CAST'=>'cast', // キャスト
+        'CAST'=>'cast', // スタッフ
         'DIARY'=>'diary', // 日記
         'SHOP_TOP_IMAGE'=>'shop_top_image', // 店舗トップ画像
         'SHOP_GALLERY'=>'shop_gallery', // 店内ギャラリー
         'SYSTEM'=>'system', // 店舗情報
         'RECRUIT'=>'recruit', // 求人情報
         'PROFILE'=>'profile', // プロフィール
-        'CAST_TOP_IMAGE'=>'cast_top_image', // キャストトップ画像
-        'CAST_GALLERY'=>'cast_gallery', // キャストギャラリー
+        'CAST_TOP_IMAGE'=>'cast_top_image', // スタッフトップ画像
+        'CAST_GALLERY'=>'cast_gallery', // スタッフギャラリー
     )),
 
     // 店舗編集画面のタブ制御設定
     define('TAB_CONTROLE', array(
-        'index', // 店舗ダッシュボード 画面
-        'notice', // 店舗お知らせ 画面
+        'index',        // 店舗ダッシュボード 画面
+        'notice',       // 店舗お知らせ 画面
+        'option',       // 設定 画面
         'workSchedule', // 出勤管理 画面
     )),
 
@@ -216,7 +217,7 @@ return [
         '004'=>'管理画面',
         '005'=>'<span class="area-logo-tail">☽ナイト検索☽</span>',
         '006'=>'オーナーログイン画面',
-        '007'=>'キャストログイン画面',
+        '007'=>'スタッフログイン画面',
     )),
 
     // ラベル定数 owner.label menu
@@ -244,7 +245,7 @@ return [
         '001'=>'トップ画像',
         '002'=>'キャッチコピー',
         '003'=>'クーポン',
-        '004'=>'キャスト',
+        '004'=>'スタッフ',
         '005'=>'店舗情報',
         '006'=>'店舗ギャラリー',
         // '007'=>'マップ',
@@ -253,6 +254,7 @@ return [
         '010'=>'SNS',
         '011'=>'出勤管理',
         '012'=>'ダッシュボード',
+        '013'=>'設定',
     )),
 
     // ラベル定数 cast.label menu
@@ -263,7 +265,7 @@ return [
         '004'=>'日記',
         '005'=>'ギャラリー',
         '006'=>'SNS',
-        '007'=>'キャストのトップへ行く',
+        '007'=>'スタッフのトップへ行く',
     )),
 
     // ラベルボタン定数 common.label button
@@ -598,7 +600,7 @@ return [
         'SEARCH_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーのポータルサイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
         'SHOP_DESCRIPTION'=>'_catch_copy_ お店探しは『_service_name_』で！',
         'NOTICE_DESCRIPTION'=>'_shop_からのお知らせページです！お得な情報も発信しますのでお見逃しなく！お店探しは『_service_name_』で！',
-        'CAST_DESCRIPTION'=>'_cast_のトップページです！様々なキャストが在籍しています！新人キャストも随時紹介していきます！お店探しは『_service_name_』で！',
+        'CAST_DESCRIPTION'=>'_cast_のトップページです！様々なスタッフが在籍しています！新人スタッフも随時紹介していきます！お店探しは『_service_name_』で！',
         'DIARY_DESCRIPTION'=>'_cast_の日記ページです！日々の出来事などを日記に綴っていきますのでお見逃しなく！お店探しは『_service_name_』で！',
         'GALLERY_DESCRIPTION'=>'_cast_のギャラリーページです！毎日更新していきますのでお見逃しなく！お店探しは『_service_name_』で！',
     )),

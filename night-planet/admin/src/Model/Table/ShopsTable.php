@@ -80,6 +80,9 @@ class ShopsTable extends Table
         $this->hasMany('adsenses', [
             'foreignKey' => 'shop_id'
         ]);
+        $this->hasMany('shop_options', [
+            'foreignKey' => 'shop_id'
+        ]);
     }
 
     /**

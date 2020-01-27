@@ -28,6 +28,26 @@
 			<!-- エリアリスト -->
 				<?= $this->element('area-list'); ?>
 			</div>
+			<!-- Photos START -->
+			<div id="shop-gallery-section" class="row shop-menu section scrollspy">
+				<div class="light-blue accent-2 card-panel col s12 center-align">
+					<p class="shop-gallery-label section-label"><span> New Photos </span></p>
+				</div>
+				<?= count($shop->gallery) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
+				<div class="my-gallery" style="display:inline-block;">
+					<?php foreach ($shop->gallery as $key => $value): ?>
+					<figure>
+						<a href="<?=$value['file_path']?>" data-size="800x1000">
+							<img width="100%" src="<?=$value['file_path']?>" alt="<?=$value['date']?>" />
+						</a>
+						<figcaption style="display:none;">
+							<?=$value['date']?>
+						</figcaption>
+					</figure>
+					<?php endforeach; ?>
+				</div>
+			</div>
+			<!-- Photos END -->
 			<div class="row section tabs-section1">
 				<ul id="tabs-new-info" class="tabs tabs-fixed-width">
                     <li class="tab col s6"><a href="#new-info-1-tabs">店舗からのお知らせ</a></li>
@@ -128,11 +148,37 @@
 							</li>
 						<?php endforeach ?>
 					</ul>
-				<?php else:?>
-					<p class="col">まだ日記がありません。</p>
-				<?php endif ?>
+					<?php else:?>
+						<p class="col">まだ日記がありません。</p>
+					<?php endif ?>
 				</div>
 			</div>
+			<!-- instagram START -->
+			<?php
+				if(!empty($ig_data)):
+			?>
+				<div id="instagram-section" class="row shop-menu section scrollspy">
+					<div class="light-blue accent-2 card-panel col s12 center-align">
+						<p class="instagram-label section-label"><span> ナイプラ公式 instagram </span></p>
+					</div>
+						<?php
+							if(!empty($ig_error)):
+								echo('<p class="col">'.$ig_error.'</p>');
+							elseif($ig_data->media_count == 0):
+								echo('<p class="col">まだ投稿がありません。</p>');
+							else:
+						?>
+						<!-- photoSwipe START -->
+						<?= $this->element('Instagram'); ?>
+						<!-- photoSwipe END -->
+						<?php
+							endif;
+						?>
+				</div>
+			<?php
+				endif;
+			?>
+			<!-- instagram END -->
 		</div>
 		<!--デスクトップ用 サイドバー START -->
 		<?= $this->element('sidebar'); ?>

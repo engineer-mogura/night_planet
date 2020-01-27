@@ -190,11 +190,15 @@ class UtilComponent extends Component
                 .DS.PATH_ROOT['CAST'].DS.$cast['dir'];
         $shop_url = PUBLIC_DOMAIN.DS.$castInfo['area']['path']
                 .DS.$castInfo['genre']['path'].DS.$shop['id'];
+        $cast_url = PUBLIC_DOMAIN.DS.$castInfo['area']['path']
+                .DS.$castInfo['genre']['path'].DS.$shop['id']
+                .DS.PATH_ROOT['CAST'].DS.$castInfo['id'];
 
         $castInfo = $castInfo + array('cast_path'=> $path,'top_image_path'=> $path.DS.PATH_ROOT['TOP_IMAGE']
             , 'image_path'=> $path.DS.PATH_ROOT['IMAGE'], 'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
             , 'schedule_path'=> $path.DS.PATH_ROOT['SCHEDULE'], 'diary_path'=> $path.DS.PATH_ROOT['DIARY']
-            , 'tmp_path'=> $path.DS.PATH_ROOT['TMP'], 'cache_path'=>$path.DS.PATH_ROOT['CACHE'], 'shop_url'=>$shop_url
+            , 'tmp_path'=> $path.DS.PATH_ROOT['TMP'], 'cache_path'=>$path.DS.PATH_ROOT['CACHE']
+            , 'shop_url'=>$shop_url, 'cast_url'=>$cast_url
             , 'current_plan'=>$shop->owner->servece_plan->current_plan
             , 'previous_plan'=>$shop->owner->servece_plan->previous_plan);
 

@@ -283,7 +283,7 @@ class OwnersController extends AppController
             $is_add = true; // 店舗追加フラグ
 
             // オーナーに所属する全ての店舗を取得する
-            $shops = $this->Shops->find('all')->where(['owner_id' => $user['id']]);
+            $shops = $this->Shops->find('all')->where(['owner_id' => $user['id']])->toArray();
             $plan = $this->viewVars['userInfo']['current_plan'];
 
             // 店舗追加フラグを設定する

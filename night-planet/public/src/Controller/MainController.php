@@ -84,14 +84,44 @@ class MainController extends AppController
         $casts_cnt = $casts_query->count();
         $all_cnt = ['shops' => $shops_cnt, 'casts' => $casts_cnt];
 
+        $ig_data = null; // Instagramデータ
+
+        // ナイプラのインスタデータを取得する
+        if (!empty(API['INSTAGRAM_USER_NAME'])) {
+            $insta_user_name = API['INSTAGRAM_USER_NAME'];
+            // インスタのキャッシュパス
+            $cache_path = preg_replace(
+                '/(\/\/)/',
+                '/',
+                WWW_ROOT.PATH_ROOT['NIGHT_PLANET_CACHE']
+            );
+            // インスタ情報を取得
+            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null
+                            , null, $cache_path);
+            // データ取得に失敗した場合
+            if (!$tmp_ig_data) {
+                $this->log('【'.AREA[$shop->area]['label']
+                    .GENRE[$shop->genre]['label'].$shop->name
+                    .'】のインスタグラムのデータ取得に失敗しました。', 'error');
+                $this->Flash->warning('インスタグラムのデータ取得に失敗しました。');
+            }
+            $ig_data = $tmp_ig_data->business_discovery;
+            // インスタユーザーが存在しない場合
+            if (!empty($tmp_ig_data->error)) {
+                // エラーメッセージをセットする
+                $insta_error = $tmp_ig_data->error->error_user_title;
+                $this->set(compact('ig_error'));
+            }
+            $is_naipura = true;
+        }
+
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', null);
         $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', null);
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
-        $insta_data = $this->Util->getInstagram(null, API['INSTAGRAM_USER_NAME'], API['INSTAGRAM_BUSINESS_ID'], API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN']);
-        $this->set(compact('area', 'region', 'all_cnt', 'selectList', 'diarys', 'notices', 'insta_data','adsenses'));
+        $this->set(compact('area', 'region', 'all_cnt', 'selectList', 'diarys', 'notices', 'ig_data','is_naipura', 'adsenses'));
     }
 
     /**

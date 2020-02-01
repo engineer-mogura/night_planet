@@ -114,7 +114,7 @@
   <nav id="nav-header-menu" class="nav-header-menu nav-opacity">
     <div class="nav-wrapper">
       <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
-      <a href="<?= DS.$is_area ?>" class="brand-logo oki-brand-logo"><?= LT['001'] ?><?=!empty($is_area)?'<span class="area-logo"> '.AREA[$is_area]['label'].'</span>':"" ?></a>
+      <a href="<?php $is_area != AREA['okinawa']['path'] ? DS.$is_area : DS?>" class="brand-logo oki-brand-logo"><?= LT['001'] ?><?=!empty($is_area)?'<span class="area-logo"> '.AREA[$is_area]['label'].'</span>':"" ?></a>
       <ul class="right">
         <li><a data-target="modal-search" class="modal-trigger"><i class="material-icons">search</i></a></li>
         <li><a data-target="modal-login" class="modal-trigger"><i class="material-icons">vpn_key</i></a></li>

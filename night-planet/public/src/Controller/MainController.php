@@ -20,14 +20,15 @@ class MainController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users = TableRegistry::get('users');
-        $this->Shops = TableRegistry::get('shops');
-        $this->Coupons = TableRegistry::get('coupons');
-        $this->Casts = TableRegistry::get('casts');
-        $this->Jobs = TableRegistry::get('jobs');
-        $this->Shop_infos = TableRegistry::get('shop_infos');
-        $this->Diarys = TableRegistry::get('diarys');
-        $this->MasterCodes = TableRegistry::get("master_codes");
+        $this->Users          = TableRegistry::get('users');
+        $this->Shops          = TableRegistry::get('shops');
+        $this->Coupons        = TableRegistry::get('coupons');
+        $this->Casts          = TableRegistry::get('casts');
+        $this->Jobs           = TableRegistry::get('jobs');
+        $this->Shop_infos     = TableRegistry::get('shop_infos');
+        $this->Diarys         = TableRegistry::get('diarys');
+        $this->MasterCodes    = TableRegistry::get("master_codes");
+        $this->NewPhotosRank  = TableRegistry::get('new_photos_rank');
     }
 
     public function beforeFilter(Event $event)
@@ -83,37 +84,39 @@ class MainController extends AppController
         // 全体スタッフ数を取得
         $casts_cnt = $casts_query->count();
         $all_cnt = ['shops' => $shops_cnt, 'casts' => $casts_cnt];
+        $new_photos = $this->NewPhotosRank->find("all")
+                        ->order(['id'=>'ASC'])
+                        ->toArray();
+        // $ig_data = null; // Instagramデータ
 
-        $ig_data = null; // Instagramデータ
-
-        // ナイプラのインスタデータを取得する
-        if (!empty(API['INSTAGRAM_USER_NAME'])) {
-            $insta_user_name = API['INSTAGRAM_USER_NAME'];
-            // インスタのキャッシュパス
-            $cache_path = preg_replace(
-                '/(\/\/)/',
-                '/',
-                WWW_ROOT.PATH_ROOT['NIGHT_PLANET_CACHE']
-            );
-            // インスタ情報を取得
-            $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null
-                            , null, $cache_path);
-            // データ取得に失敗した場合
-            if (!$tmp_ig_data) {
-                $this->log('【'.AREA[$shop->area]['label']
-                    .GENRE[$shop->genre]['label'].$shop->name
-                    .'】のインスタグラムのデータ取得に失敗しました。', 'error');
-                $this->Flash->warning('インスタグラムのデータ取得に失敗しました。');
-            }
-            $ig_data = $tmp_ig_data->business_discovery;
-            // インスタユーザーが存在しない場合
-            if (!empty($tmp_ig_data->error)) {
-                // エラーメッセージをセットする
-                $insta_error = $tmp_ig_data->error->error_user_title;
-                $this->set(compact('ig_error'));
-            }
-            $is_naipura = true;
-        }
+        // // ナイプラのインスタデータを取得する
+        // if (!empty(API['INSTAGRAM_USER_NAME'])) {
+        //     $insta_user_name = API['INSTAGRAM_USER_NAME'];
+        //     // インスタのキャッシュパス
+        //     $cache_path = preg_replace(
+        //         '/(\/\/)/',
+        //         '/',
+        //         WWW_ROOT.PATH_ROOT['NIGHT_PLANET_CACHE']
+        //     );
+        //     // インスタ情報を取得
+        //     $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null
+        //                     , null, $cache_path);
+        //     // データ取得に失敗した場合
+        //     if (!$tmp_ig_data) {
+        //         $this->log('【'.AREA[$shop->area]['label']
+        //             .GENRE[$shop->genre]['label'].$shop->name
+        //             .'】のインスタグラムのデータ取得に失敗しました。', 'error');
+        //         $this->Flash->warning('インスタグラムのデータ取得に失敗しました。');
+        //     }
+        //     $ig_data = $tmp_ig_data->business_discovery;
+        //     // インスタユーザーが存在しない場合
+        //     if (!empty($tmp_ig_data->error)) {
+        //         // エラーメッセージをセットする
+        //         $insta_error = $tmp_ig_data->error->error_user_title;
+        //         $this->set(compact('ig_error'));
+        //     }
+        //     $is_naipura = true;
+        // }
 
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
@@ -121,7 +124,7 @@ class MainController extends AppController
         $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', null);
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
-        $this->set(compact('area', 'region', 'all_cnt', 'selectList', 'diarys', 'notices', 'ig_data','is_naipura', 'adsenses'));
+        $this->set(compact('area', 'region', 'all_cnt', 'selectList', 'diarys', 'notices', 'new_photos', 'ig_data','is_naipura', 'adsenses'));
     }
 
     /**

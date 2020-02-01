@@ -129,6 +129,16 @@
 				<?php endif ?>
 				</div>
 			</div>
+			<!-- Photos START -->
+			<div id="instagram-section" class="row shop-menu section scrollspy">
+				<div class="light-blue accent-2 card-panel col s12 center-align">
+					<p class="instagram-label section-label"><span> Photos </span></p>
+				</div>
+				<!-- photoSwipe START -->
+				<?= $this->element('newPhotos'); ?>
+				<!-- photoSwipe END -->
+			</div>
+			<!-- Photos END -->
 		</div>
 		<div class="sidebar col s12 m4 l4">
 			<!-- 広告枠 START -->

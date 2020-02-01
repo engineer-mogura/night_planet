@@ -50,9 +50,9 @@ class SaveNewPhotosRankTask extends Shell
 
         $result = $this->Common->SaveNewPhotosRank();
         if ($result) {
-          $this->log($ca . '新着画像投稿を集計処理バッチ処理が成功しました。', LOG_DEBUG);
+          $this->log($ca . '新着画像投稿集計処理バッチ処理が成功しました。', LOG_DEBUG);
         } else {
-          $this->log($ca . '新着画像投稿を集計処理が失敗しました。', LOG_ERR);
+          $this->log($ca . '新着画像投稿集計処理が失敗しました。', LOG_ERR);
         }
         $this->log($ca . 'END', LOG_DEBUG);
     }

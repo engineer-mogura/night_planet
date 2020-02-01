@@ -16,19 +16,20 @@ class AreaController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users = TableRegistry::get('users');
-        $this->Shops = TableRegistry::get('shops');
-        $this->Coupons = TableRegistry::get('coupons');
-        $this->Casts = TableRegistry::get('casts');
-        $this->Diarys = TableRegistry::get('diarys');
+        $this->Users         = TableRegistry::get('users');
+        $this->Shops         = TableRegistry::get('shops');
+        $this->Coupons       = TableRegistry::get('coupons');
+        $this->Casts         = TableRegistry::get('casts');
+        $this->Diarys        = TableRegistry::get('diarys');
         $this->ShopInfoLikes = TableRegistry::get('shop_info_likes');
-        $this->DiaryLikes = TableRegistry::get('diary_likes');
-        $this->Jobs = TableRegistry::get('jobs');
-        $this->ShopInfos = TableRegistry::get("shop_infos");
-        $this->Updates = TableRegistry::get("updates");
-        $this->MasterCodes = TableRegistry::get("master_codes");
+        $this->DiaryLikes    = TableRegistry::get('diary_likes');
+        $this->Jobs          = TableRegistry::get('jobs');
+        $this->ShopInfos     = TableRegistry::get("shop_infos");
+        $this->Updates       = TableRegistry::get("updates");
+        $this->MasterCodes   = TableRegistry::get("master_codes");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
-        $this->ShopOptions = TableRegistry::get("shop_options");
+        $this->ShopOptions   = TableRegistry::get("shop_options");
+        $this->NewPhotosRank = TableRegistry::get('new_photos_rank');
 
 
     }
@@ -165,6 +166,11 @@ class AreaController extends AppController
         }
         $all_cnt = ['shops' => $shops_cnt, 'casts' => $casts_cnt];
 
+        $new_photos = $this->NewPhotosRank->find("all")
+            ->where(['area'=> AREA[$this->viewVars['is_area']]['label']])
+            ->order(['id'=>'ASC'])
+            ->toArray();
+
         // メイン広告を取得
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', $this->viewVars['is_area']);
         // サブ広告を取得
@@ -177,7 +183,7 @@ class AreaController extends AppController
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area']);
 
         $this->set('next_view', 'area');
-        $this->set(compact('all_cnt', 'genreCounts', 'selectList', 'diarys', 'notices', 'adsenses'));
+        $this->set(compact('all_cnt', 'genreCounts', 'selectList', 'new_photos', 'diarys', 'notices', 'adsenses'));
 
         $this->render();
     }

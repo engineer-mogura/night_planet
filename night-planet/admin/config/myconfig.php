@@ -164,7 +164,7 @@ return [
         'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
         'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
         'NIGHT_PLANET_IMAGE'=> 'https://drive.google.com/uc?id=18mb-vlqKidqGfT21iptwlvm9628rBFkd',
-        'NIGHT_PLANET_CACHE'=> '/img/cache/',
+        'NIGHT_PLANET_CACHE'=> '/img/tmp/cache/',
         'CAST_TOP_IMAGE'=> '/img/common/cast/top-image.jpg',
         'SHOP_TOP_IMAGE'=> '/img/common/shop/top-image.png',
         'CREDIT'=> '/img/common/credit/',
@@ -582,23 +582,23 @@ return [
 
     // SEO タイトル
     define('TITLE', array(
-        'TOP_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。ポータルサイト『_service_name_』',
-        'AREA_TITLE'=>'_area_のキャバクラ|クラブ|ガールズバー|スナック|バーを探すなら、ポータルサイト『_service_name_』',
-        'GENRE_TITLE'=>'_area_の_genre_を探すなら、ポータルサイト『_service_name_』',
-        'SEARCH_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。ポータルサイト『_service_name_』',
-        'SHOP_TITLE'=>'_area_の_genre_ _shop_のトップページ。ポータルサイト『_service_name_』',
-        'NOTICE_TITLE'=>'_area_の_genre_ _shop_のお知らせページです。ポータルサイト『_service_name_』',
-        'CAST_TITLE'=>'_area_の_genre_ _shop_|_cast_のトップページ。ポータルサイト『_service_name_』',
-        'DIARY_TITLE'=>'_area_の_genre_ _shop_|_cast_の日記ページ。ポータルサイト『_service_name_』',
-        'GALLERY_TITLE'=>'_area_の_genre_ _shop_|_cast_のギャラリーページ。ポータルサイト『_service_name_』',
+        'TOP_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。『_service_name_』',
+        'AREA_TITLE'=>'_area_のキャバクラ|クラブ|ガールズバー|スナック|バーを探すなら、『_service_name_』',
+        'GENRE_TITLE'=>'_area_の_genre_を探すなら、『_service_name_』',
+        'SEARCH_TITLE'=>'沖縄のキャバ|クラブ|ガールズバー|スナック|バーの検索サイト。『_service_name_』',
+        'SHOP_TITLE'=>'_area_の_genre_ _shop_のトップページ。『_service_name_』',
+        'NOTICE_TITLE'=>'_area_の_genre_ _shop_のお知らせページです。『_service_name_』',
+        'CAST_TITLE'=>'_area_の_genre_ _shop_|_cast_のトップページ。『_service_name_』',
+        'DIARY_TITLE'=>'_area_の_genre_ _shop_|_cast_の日記ページ。『_service_name_』',
+        'GALLERY_TITLE'=>'_area_の_genre_ _shop_|_cast_のギャラリーページ。『_service_name_』',
     )),
 
     // SEO メタ関連
     define('META', array(
-        'TOP_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーのポータルサイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
+        'TOP_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーの検索サイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
         'AREA_DESCRIPTION'=>'_area_のキャバクラ・クラブ・ガールズバー・スナック・バーをお探しなら『_service_name_』で！店舗毎にお得なクーポン情報もあります！まずは検索から！',
         'GENRE_DESCRIPTION'=>'_area_の_genre_をお探しなら『_service_name_』で！店舗毎にお得なクーポン情報もあります！まずは検索から！',
-        'SEARCH_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーのポータルサイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
+        'SEARCH_DESCRIPTION'=>'沖縄県内のキャバクラ・クラブ・ガールズバー・スナック・バーの検索サイト『_service_name_』は男女問わず気軽にお店の検索ができます。普段見つからないような穴場スポットも見つかるかも。',
         'SHOP_DESCRIPTION'=>'_catch_copy_ お店探しは『_service_name_』で！',
         'NOTICE_DESCRIPTION'=>'_shop_からのお知らせページです！お得な情報も発信しますのでお見逃しなく！お店探しは『_service_name_』で！',
         'CAST_DESCRIPTION'=>'_cast_のトップページです！様々なスタッフが在籍しています！新人スタッフも随時紹介していきます！お店探しは『_service_name_』で！',

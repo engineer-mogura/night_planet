@@ -953,6 +953,26 @@ class UtilComponent extends Component
         return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
     }
 
+     /**
+     * 指定ディレクトリ以下の指定ファイルを取得する処理
+     *
+     * @param [type] $dir
+     * @param [type] $exp
+     * @return array
+     */
+    function scanDir($dir, $exp) {
+        $list = $tmp = array();
+        foreach(glob($dir.'*/', GLOB_ONLYDIR) as $child) {
+            if ($tmp = self::scanDir($child, $exp)) {
+                $list = array_merge($list, $tmp);
+            }
+        }
+        foreach(glob($dir.'{'.$exp.'}', GLOB_BRACE) as $file) {
+            $list[] = $file;
+        }
+        return $list;
+    }
+
     /**
       * インスタAPIにアクセスし情報を取得する処理
       *
@@ -963,7 +983,7 @@ class UtilComponent extends Component
       * @return $instagram_data
       */
     public function getInstagram($insta_user_name = null
-        , $insta_business_name = null, $current_plan, $cache_path)
+        , $insta_business_name = null, $current_plan = null, $cache_path)
     {
 
         //////////////////////
@@ -1001,6 +1021,8 @@ class UtilComponent extends Component
             $get_post_num = 54;
         } else if ($current_plan == SERVECE_PLAN['premium_s']['label']) {
             $get_post_num = 120;
+        } else if (empty($current_plan)) {
+            $get_post_num = 120;
         }
 
         //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
@@ -1016,10 +1038,7 @@ class UtilComponent extends Component
                                 }
                             }';
         }
-        //自分のアカウントの画像が取得できればOKな場合は$queryを以下のようにしてください。
-        if (!empty($insta_business_name)) {
-            $fields      = 'name,media{caption,like_count,media_url,permalink,timestamp,username}&access_token='.$access_token;
-        }
+
         $fields = str_replace(array("\r\n","\r","\n","\t"," "), '', $fields);
         //////////////////////
         /* 初期設定ここまで */
@@ -1070,15 +1089,6 @@ class UtilComponent extends Component
                 $ig_data = null;
             }
         }
-
-        // データ取得に失敗した場合
-        // サーバエラーを返す
-        // if (!$ig_json || !$ig_data) {
-        //     //	exit('データ取得に失敗しました');
-        //     // 500 Internal Server Error
-        //     header('HTTP', true, 500);
-        //     exit;
-        // }
 
         // 初期表示の設定確認
         if ($show_mode !== 'grid' && $show_mode !== 'list') {

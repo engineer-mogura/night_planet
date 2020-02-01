@@ -72,7 +72,7 @@
 <?php
 				endif;
 				// 動画の場合
-				if(isset($post->thumbnail_url)):
+				if($post->media_type == 'VIDEO'):
 ?>
 				<span class="ig-video"></span><!-- 追加要素 -->
 <?php

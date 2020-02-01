@@ -331,11 +331,12 @@ article#SNS_Instagram input#show_list:checked + input + main > div > p > a{
 	font-size           : 16px;
 	line-height         : 26px;
   color               : white;
-  opacity             : 0.8;
   font-size           : smaller;color: goldenrod;
+  background-color    : darkslategray;
+  width               : 30%;
 }
 .ig-details > a {
-  color: goldenrod;
+  color: khaki;
 }
 .ig-children{ /* 必要であれば、セレクタは適宜変えて下さい */
 	position            : absolute;
@@ -359,7 +360,7 @@ span.badge.area-badge {
   bottom: 0;
   left: -15px;
   /* font-weight: 300; */
-  font-size: 0.1rem;
+  font-size: 10px;
   color: #fff;
   background-color: #8193c1;
   border-radius: 2px;

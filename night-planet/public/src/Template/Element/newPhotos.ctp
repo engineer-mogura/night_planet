@@ -3,7 +3,7 @@
     <header>
         <section>
             <div>
-				<a href="https://www.instagram.com/'<?= $ig_data->username ?>"><img src="<?php echo $ig_data->profile_picture_url; ?>" class="circle" width="60" alt="profile_picture"></a>
+				<a href="<?=SNS['INSTAGRAM']?>"><img src="<?=PATH_ROOT['NIGHT_PLANET_IMAGE']?>" class="circle" width="60" alt="profile_picture"></a>
             </div>
 
         </section>

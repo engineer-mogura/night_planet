@@ -149,8 +149,8 @@ class CommonComponent extends Component
         $sns->set("shop", $this->Shops->newEntity());
         $sns->set("instagram", API['INSTAGRAM_USER_NAME']);
         $sns->shop->set("shopInfo"
-            , array('area' => REGION['okinawa']['label']
-            , 'genre' => "ナイプラ"));
+            , array('area' => REGION['okinawa']
+            , 'genre' => array('label'=>'ナイプラ')));
         array_push($snss, $sns);
 
         // Instagram情報セット

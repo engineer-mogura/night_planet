@@ -12,15 +12,30 @@ use Cake\ORM\TableRegistry;
 use Cake\Controller\Component;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Controller\ComponentRegistry;
+use Cake\Datasource\ConnectionManager;
 use App\Controller\Component\UtilComponent;
 
-class CommonComponent extends Component
+class BatchComponent extends Component
 {
 
     use MailerAwareTrait; // メールクラス
     public function initialize() {
         // Utilコンポーネント
         $this->Util = new UtilComponent(new ComponentRegistry());
+    }
+
+        /**
+     * mysqldumpを実行する
+     * @return mixed
+     */
+    public function execMysqldump()
+    {
+        // コネクションオブジェクト取得
+        $con = ConnectionManager::get('default');
+        $date = date('Ymd-His');
+        $command = sprintf('mysqldump -u %s -p %s %s > %sbackup.sql', $con->config()['username'], $con->config()['password'], $con->config()['database'], PATH_ROOT['BACKUP'].'/'. $date);
+        exec($command, $output, $result);
+        return $result;
     }
 
     /**

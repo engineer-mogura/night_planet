@@ -123,7 +123,7 @@
 							<i class="small material-icons">favorite_border</i><?=$post->like_count?> 
 							<i class="small material-icons">comment</i><?=$post->comments_count?>
 							<?=isset($post->children) && count($post->children->data) > 1 ? '<i class="small material-icons">photo_library</i>'.count($post->children->data) : "" ?>
-							<?=isset($post->media_type) == 'VIDEO' ? '<i class="small material-icons">play_arrow</i>': "" ?></br>
+							<?=$post->media_type == 'VIDEO' ? '<i class="small material-icons">play_arrow</i>': "" ?></br>
 							<?=$post->caption?>
 						</figcaption>
 					</figure>
@@ -145,7 +145,7 @@
 								<i class="small material-icons">favorite_border</i><?=$post->like_count?> 
 								<i class="small material-icons">comment</i><?=$post->comments_count?>
 								<?=isset($post->children) && count($post->children->data) > 1 ? '<i class="small material-icons">photo_library</i>'.count($post->children->data) : "" ?>
-								<?=isset($post->media_type) == 'VIDEO' ? '<i class="small material-icons">play_arrow</i>': "" ?></br>
+								<?=$post->media_type == 'VIDEO' ? '<i class="small material-icons">play_arrow</i>': "" ?></br>
 								<?=$post->caption?>
 							</figcaption>
 						</figure>

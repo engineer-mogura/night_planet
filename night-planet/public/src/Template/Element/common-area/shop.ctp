@@ -126,7 +126,7 @@
 				</div>
 				<?php if(count($shop->casts) > 0): ?>
 				<?php foreach($shop->casts as $cast): ?>
-				<div class="cast-icon-list center-align col s3 m4 l4<?=isset($cast->new_cast) ? ' bound':''?>">
+				<div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
 					<a
 						href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
 						<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="80">

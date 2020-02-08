@@ -28,13 +28,14 @@ class BatchComponent extends Component
      * mysqldumpを実行する
      * @return mixed
      */
-    public function execMysqldump()
+    public function databaseBackup()
     {
         // コネクションオブジェクト取得
         $con = ConnectionManager::get('default');
         $date = date('Ymd-His');
-        $command = sprintf('mysqldump -u %s -p %s %s > %sbackup.sql', $con->config()['username'], $con->config()['password'], $con->config()['database'], PATH_ROOT['BACKUP'].'/'. $date);
+        $command = sprintf('mysqldump -u%s -p%s %s > %sbackup.sql', $con->config()['username'], $con->config()['password'], $con->config()['database'], PATH_ROOT['BACKUP'].'/'. $date);
         exec($command, $output, $result);
+        Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_snpr');
         return $result;
     }
 
@@ -185,9 +186,9 @@ class BatchComponent extends Component
             $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null, $shop->shopInfo['current_plan'], $cache_path);
             // データ取得に失敗した場合
             if (!$tmp_ig_data) {
-                $this->log('【'.AREA[$shop->area]['label']
+                Log::warning(__LINE__ . '::' . __METHOD__ . '::'.'【'.AREA[$shop->area]['label']
                     .GENRE[$shop->genre]['label'].$shop->name
-                    .'】のインスタグラムのデータ取得に失敗しました。', 'error');
+                    .'】のインスタグラムのデータ取得に失敗しました。', "batch_snpr");
             }
             $ig_data = $tmp_ig_data->business_discovery;
             // インスタユーザーが存在しない場合
@@ -328,7 +329,7 @@ class BatchComponent extends Component
             }
 
         } catch(RuntimeException $e) {
-            $this->log("バッチ処理, ". $e, "error");
+            Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。". $e, "batch_snpr");
             $result = false; // 異常終了フラグ
         }
 

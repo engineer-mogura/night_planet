@@ -386,6 +386,17 @@ return [
             'scopes' => 'pass_reset',
             'levels' => [],
         ],
+        // バッチログ定義
+        'batch_snpr' => [
+            'className' => 'Cake\Log\Engine\FileLog',
+            'path' => LOGS,
+            'file' => date('Ymd').'_batch_snpr',
+            'url' => env('LOG_ERROR_URL', null),
+            'size' => '50MB',
+            'rotate' => 30,
+            'scopes' => 'batch_snpr',
+            'levels' => ['info', 'warning', 'error', 'critical', 'alert', 'emergency'],
+        ],
     ],
 
     /**

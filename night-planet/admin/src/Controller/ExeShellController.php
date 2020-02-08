@@ -16,52 +16,51 @@ use Cake\Console\Command\AppShell;
 class ExeShellController extends AppController
 {
 
+    static public $exec_path = ""; // シェル実行パス
+
     public function beforeFilter(Event $event)
     {
         // AppController.beforeFilterをコールバック
         parent::beforeFilter($event);
-        // App::uses('AppShell','Console/Command');
-        // App::uses('WatashiShell','Console/Command');
+
+        // シェル実行パス判定
+        if (strpos(ADMIN_DOMAIN, 'local') === false) {
+          // レンタルサーバーのPHPパスを設定する
+          ExeShellController::$exec_path = '/usr/local/php/7.1/bin/php ' . ROOT . DS .'bin/cake.php ';
+        } else {
+          // ローカル仮想サーバーのPHPパスを設定する
+          ExeShellController::$exec_path = 'php ' . ROOT . DS .'bin/cake.php ';
+        }
+
     }
 
-    public function databasebackup()
+    public function databaseBackup()
     {
-      // App::uses('AppShell', 'Console/Command');
-      // App::uses('DatabaseBackupShell', 'Console/Command');
-      //var_dump(phpinfo());
-      // $shell = new \App\Shell\MysqldumpTask();
-      // $shell->taskNames = ['Mysqldump'];
-      // $shell->OptionParser = $shell->getOptionParser();
-      // $shell->startup();
-      // $shell->main();
-      // exec('php /var/www/html/night-planet/admin/bin/cake.php DatabaseBackup');
-      //exec('php ' . ROOT . DS .'bin/cake databasebackup ' . TMP . ' > /dev/null &');
-      exec('php ' . ROOT . DS .'bin/cake.php DatabaseBackup');
-      //$myShell = new \App\Shell\DatabaseBackupShell;
-      // $myShell = new \App\Shell\Task\MysqldumpTask;
-      // //$myShell->OptionParser = $myShell->getOptionParser();
-      // $myShell->startup();
-      //$myShell->main();
-      // $this->render('/ExeShell/result');
-
-      // $shell = new \App\Shell\DatabaseBackupShell;
-      // $shell->getOptionParser();
-      // $shell->main();
-    }
-
-    public function saveNewPhotosRank()
-    {
-
-      exec('php ' . ROOT . DS .'bin/cake.php SaveNewPhotosRank', $output, $result);
-      //exec("php >>> \Cake\Log\Log::config('queriesLog', ['className' => 'File', 'path' => LOGS, 'levels' => ['notice', 'info', 'debug'], 'file' => 'sqllog'])", $output, $result);
-      $this->log(__LINE__ . '::' . __METHOD__ . '::' . $output . "結果コード:" . $result, 'error');
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を開始します。--------', 'batch_snpr');
+      exec(ExeShellController::$exec_path .$this->request->param('action') , $output, $result);
+      Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_snpr');
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を終了します。--------', 'batch_snpr');
       // ダミー画面を表示する
       // シンプルレイアウトを使用
       $this->viewBuilder()->layout('simpleDefault');
       return $this->render("/exeshell/result");
     }
-    public function index()
+
+    /**
+     * 新着フォト投稿DB登録処理
+     *
+     * @return void
+     */
+    public function saveNewPhotosRank()
     {
-      var_dump(phpinfo());
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を開始します。--------', 'batch_snpr');
+      exec(ExeShellController::$exec_path .$this->request->param('action') , $output, $result);
+      Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_snpr');
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を終了します。--------', 'batch_snpr');
+      // ダミー画面を表示する
+      // シンプルレイアウトを使用
+      $this->viewBuilder()->layout('simpleDefault');
+      return $this->render("/exeshell/result");
     }
+
 }

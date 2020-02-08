@@ -41,7 +41,7 @@ class DatabaseBackupShell extends Shell
     {
         // タスクの実行
         $result = $this->Batch->databaseBackup();
-        if ($result == 0) {
+        if ($result) {
             Log::info(__LINE__ . '::' . __METHOD__ . "::バッチ処理が成功しました。", "batch_snpr");
         } else {
             Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。", "batch_snpr");

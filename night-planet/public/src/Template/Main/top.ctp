@@ -136,7 +136,7 @@
 			<!-- Photos START -->
 			<div id="instagram-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="instagram-label section-label"><span> Photos </span></p>
+					<p class="instagram-label section-label"><span> New Photos </span></p>
 				</div>
 				<!-- photoSwipe START -->
 				<?= $this->element('newPhotos'); ?>

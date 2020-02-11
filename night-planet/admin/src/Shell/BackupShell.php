@@ -10,7 +10,7 @@ use App\Controller\Component\BatchComponent;
 /**
  * DatabaseBackup shell command.
  */
-class DatabaseBackupShell extends Shell
+class BackupShell extends Shell
 {
     public $tasks = ['Mysqldump']; // ← タスクの読み込み
      function initialize()
@@ -40,7 +40,8 @@ class DatabaseBackupShell extends Shell
     public function main()
     {
         // タスクの実行
-        $result = $this->Batch->databaseBackup();
+        $result = $this->Batch->backup();
+
         if ($result) {
             Log::info(__LINE__ . '::' . __METHOD__ . "::バッチ処理が成功しました。", "batch_snpr");
         } else {

@@ -6,7 +6,7 @@ use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Collection\Collection;
 use Cake\Console\Shell;
-use Cake\Console\Command\DatabaseBackupShell;
+use Cake\Console\Command\BackupShell;
 
 use Cake\Console\Command\AppShell;
 
@@ -16,25 +16,31 @@ use Cake\Console\Command\AppShell;
 class ExeShellController extends AppController
 {
 
-    static public $exec_path = ""; // シェル実行パス
+    static public $shell_path = ""; // シェル実行パス
+    static public $php_path   = ""; // PHPパス
+    static public $exec_path  = ""; // 実行パス
 
     public function beforeFilter(Event $event)
     {
         // AppController.beforeFilterをコールバック
         parent::beforeFilter($event);
 
-        // シェル実行パス判定
+        // PHPパス判定
         if (strpos(ADMIN_DOMAIN, 'local') === false) {
           // レンタルサーバーのPHPパスを設定する
-          ExeShellController::$exec_path = '/usr/local/php/7.1/bin/php ' . ROOT . DS .'bin/cake.php ';
+          ExeShellController::$exec_path = '/usr/local/php/7.1/bin/php ';
         } else {
           // ローカル仮想サーバーのPHPパスを設定する
-          ExeShellController::$exec_path = 'php ' . ROOT . DS .'bin/cake.php ';
+          ExeShellController::$exec_path = 'php ';
         }
+        // シェル実行パスを設定する
+        ExeShellController::$shell_path  = ROOT . DS .'bin/cake.php ';
+        // 実行パスを設定する
+        ExeShellController::$exec_path   = ExeShellController::$exec_path . ExeShellController::$shell_path;
 
     }
 
-    public function databaseBackup()
+    public function backup()
     {
       Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を開始します。--------', 'batch_snpr');
       exec(ExeShellController::$exec_path .$this->request->param('action') , $output, $result);

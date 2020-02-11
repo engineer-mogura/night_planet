@@ -24,17 +24,88 @@ class BatchComponent extends Component
         $this->Util = new UtilComponent(new ComponentRegistry());
     }
 
-        /**
+    /**
      * mysqldumpを実行する
      * @return mixed
      */
-    public function databaseBackup()
+    public function backup()
     {
+        $result = true; // 正常終了フラグ
         // コネクションオブジェクト取得
         $con = ConnectionManager::get('default');
-        $date = date('Ymd-His');
-        $command = sprintf('mysqldump -u%s -p%s %s > %sbackup.sql', $con->config()['username'], $con->config()['password'], $con->config()['database'], PATH_ROOT['BACKUP'].'/'. $date);
-        exec($command, $output, $result);
+        // バックアップファイルを何日分残しておくか
+        $period='+7';
+        // ルートディレクトリ
+        $root = dirname(ROOT);
+        // 日付
+        $date = date('Ymd');
+        // バックアップファイルを保存するディレクトリ
+        $dirpath = $root . DS . 'np_backup' . DS . $date;
+        // mysqldumpパス
+        $mysqldump_path = '/usr/bin/mysqldump ';
+
+        // バックアップディクレトリ作成
+        exec('mkdir '. $dirpath, $output, $result_code);
+
+        // コマンド
+        $command = sprintf($mysqldump_path . ' -u%s -p%s %s > %sbackup.sql'
+            , $con->config()['username'], $con->config()['password']
+            , $con->config()['database'], $dirpath . DS . $date);
+
+        // データベースバックアップ
+        exec($command, $output, $result_code);
+
+        // 結果コードが0の場合imageディクレトリをバックアップする
+        if ($result_code == 0) {
+
+            // バックアップ元フォルダ
+            $backupfolder= $root . DS . 'img';
+            // ファイル名を定義(※ファイル名で日付がわかるようにしておきます)
+            $filename = 'images_' . $date . '.tar.gz ';
+
+            // バックアップ実行
+            exec('tar -zcvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
+            // パーミッション変更
+            exec('chmod 700 ' . $dirpath . DS . $filename);
+            // 古いバックアップファイルを削除
+            exec('find ' . dirname($dirpath) . ' -type d -mtime ' . $period . " -exec rm {} \\;");
+
+        } else {
+            $result = false;
+        }
+        Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result_code, 'batch_snpr');
+        return $result;
+    }
+
+    /**
+     * ディクレトリバックアップを実行する
+     * @return mixed
+     */
+    public function dirBackup()
+    {
+        $result = true; // 正常終了フラグ
+        // バックアップファイルを何日分残しておくか
+        $period='+7';
+        // ルートディレクトリ
+        $root = dirname(ROOT);
+        // 日付
+        $date = date('Ymd');
+        // バックアップファイルを保存するディレクトリ
+        $dirpath = $root . DS . 'np_backup';
+        // バックアップ元フォルダ
+        $backupfolder= $root . DS . 'img';
+        // ファイル名を定義(※ファイル名で日付がわかるようにしておきます)
+        $filename = 'images_' . $date . 'tar.gz ';
+        // バックアップ実行
+        exec('tar -zcvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
+        // パーミッション変更
+        exec('chmod 700 ' . $dirpath . DS . $filename);
+        // 古いバックアップファイルを削除
+        exec('find ' . $dirpath . ' -type f -mtime ' . $period . " -exec rm {} \\;");
+        // 結果コードが0以外の場合FALSEを設定する
+        if ($result_code != 0) {
+            $result = false;
+        }
         Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_snpr');
         return $result;
     }

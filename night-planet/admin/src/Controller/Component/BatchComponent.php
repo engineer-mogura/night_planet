@@ -45,12 +45,20 @@ class BatchComponent extends Component
         $mysqldump_path = '/usr/bin/mysqldump ';
 
         // バックアップディクレトリ作成
+        exec('mkdir '. $root . DS . 'np_backup', $output, $result_code);
+        // パーミッション変更
+        exec('chmod 700 ' . $root . DS . 'np_backup');
+
+        // バックアップディクレトリ作成
         exec('mkdir '. $dirpath, $output, $result_code);
+        // パーミッション変更
+        exec('chmod 700 ' . $dirpath);
 
         // コマンド
-        $command = sprintf($mysqldump_path . ' -u%s -p%s %s > %sbackup.sql'
-            , $con->config()['username'], $con->config()['password']
-            , $con->config()['database'], $dirpath . DS . $date);
+        $command = sprintf($mysqldump_path . ' -h %s -u %s -p%s %s > %sbackup.sql'
+            , $con->config()['host'], $con->config()['username']
+            , $con->config()['password'], $con->config()['database']
+            , $dirpath . DS . $date);
 
         // データベースバックアップ
         exec($command, $output, $result_code);
@@ -59,9 +67,9 @@ class BatchComponent extends Component
         if ($result_code == 0) {
 
             // バックアップ元フォルダ
-            $backupfolder= $root . DS . 'img';
+            $backupfolder = strstr(IMG_DOMAIN, 'img');
             // ファイル名を定義(※ファイル名で日付がわかるようにしておきます)
-            $filename = 'images_' . $date . '.tar.gz ';
+            $filename = $backupfolder . '_' . $date . '.tar.gz ';
 
             // バックアップ実行
             exec('tar -zcvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);

@@ -69,10 +69,10 @@ class BatchComponent extends Component
             // バックアップ元フォルダ
             $backupfolder = strstr(IMG_DOMAIN, 'img');
             // ファイル名を定義(※ファイル名で日付がわかるようにしておきます)
-            $filename = $backupfolder . '_' . $date . '.tar.gz ';
+            $filename = $backupfolder . '_' . $date . '.tar ';
 
             // バックアップ実行
-            exec('tar -zcvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
+            exec('tar -cvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
             // パーミッション変更
             exec('chmod 700 ' . $dirpath . DS . $filename);
             // 古いバックアップファイルを削除

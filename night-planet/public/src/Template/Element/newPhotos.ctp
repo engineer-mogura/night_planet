@@ -6,8 +6,11 @@
 			<div class="col s3 m3 l3">
 				<a href="<?=SNS['INSTAGRAM']?>"><img src="<?=PATH_ROOT['NIGHT_PLANET_IMAGE']?>" class="circle" width="60" alt="profile_picture"></a>
             </div>
-			<div class="col s9 m9 l9">
+			<div class="col s6 m6 l6">
 				<span style="color:#666;">ナイプラの新着フォトです</span>
+            </div>
+			<div class="col s3 m3 l3">
+				<a href="<?=SNS['INSTAGRAM']?>"><img src="<?=PATH_ROOT['NIGHT_PLANET_CHARA']?>" class="" width="60" alt="profile_picture"></a>
             </div>
         </section>
     </header>

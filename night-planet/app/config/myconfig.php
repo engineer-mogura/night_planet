@@ -164,6 +164,7 @@ return [
         'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
         'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
         'NIGHT_PLANET_IMAGE'=> 'https://drive.google.com/uc?id=18mb-vlqKidqGfT21iptwlvm9628rBFkd',
+        'NIGHT_PLANET_CHARA'=> 'https://drive.google.com/uc?id=1VaqWsqOBUm7dnji0iHbCkSAgIlAp7dn6',
         'NIGHT_PLANET_CACHE'=> '/img/tmp/cache/',
         'CAST_TOP_IMAGE'=> '/img/common/cast/top-image.jpg',
         'SHOP_TOP_IMAGE'=> '/img/common/shop/top-image.png',

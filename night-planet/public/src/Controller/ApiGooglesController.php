@@ -42,8 +42,8 @@ class ApiGooglesController extends AppController
             // Create an authorized analytics service object.
             $analytics = new Google_Service_AnalyticsReporting($client);
             $this->log('$_SESSION[acces_token]1:'.$_SESSION['access_token'], 'debug');
-            $end_date = date("Y-m-d");
-            $start_date = date("2019-01-01");
+            $start_date = date("2020-01-01");
+            $end_date   = date("2020-02-01");
 
             // Call the Analytics Reporting API V4.
             $response = $this->getReport($analytics, $start_date, $end_date);
@@ -74,21 +74,60 @@ class ApiGooglesController extends AppController
         $VIEW_ID = API['GOOGLE_ANALYTICS_VIEW_ID'];
 
         // ディメンション(データの属性)の設定
-        $dimentions = ['ga:pageTitle', 'ga:pagePath','ga:landingPagePath', 'ga:date'];
+        $dimentions = ['ga:pageTitle', 'ga:pagePath','ga:landingPagePath', 'ga:date', 'ga:dayOfWeek'];
         $arrayDimensions = [];
         for ( $i = 0; $i < count($dimentions); $i++) {
             $setDimensions = new Google_Service_AnalyticsReporting_Dimension();
             $setDimensions->setName($dimentions[$i]);
             $arrayDimensions[] = $setDimensions;
         }
+
+        $filersArray = array('/okinawa/','/naha/','/nanjo/','/tomigusuku/'
+            ,'/itoman/','/haebaru/','/yonabaru/','/urasoe/','/ginowan/'
+            ,'/chatan/','/nishihara/','/okinawashi/','/uruma/','/nago/'
+            ,'/miyakojima/','/ishigakijima/');
+
+        // キャスト,日記,お知らせ画面を対象外にする
+        // 管理画面を対象外にする
+        $filter = new Google_Service_AnalyticsReporting_DimensionFilter();
+        $filter->setDimensionName("ga:pagePath");
+        $filter->setNot(true);
+        $filter->setOperator("REGEXP");
+        $filter->setExpressions( ["/.*(cast|diary|notice).*/"] );
+
+        // キャスト画面を対象外にする
+        $filter2 = new Google_Service_AnalyticsReporting_DimensionFilter();
+        $filter2->setDimensionName("ga:pagePathLevel2");
+        $filter2->setNot(false);
+        $filter2->setOperator("IN_LIST");
+        $filter2->setExpressions($filersArray);
+
+        // ステージング環境を対象外にする
+        $filter3 = new Google_Service_AnalyticsReporting_DimensionFilter();
+        $filter3->setDimensionName("ga:pagePath");
+        $filter3->setNot(true);
+        $filter3->setOperator("REGEXP");
+        $filter3->setExpressions( ["devokiyorugo.work"] );
+
+        $filters = new Google_Service_AnalyticsReporting_DimensionFilterClause();
+        $filters->setFilters(array($filter));
+
+        $filters2 = new Google_Service_AnalyticsReporting_DimensionFilterClause();
+        $filters2->setFilters(array($filter2));
+
+        $filters3 = new Google_Service_AnalyticsReporting_DimensionFilterClause();
+        $filters3->setFilters(array($filter3));
+
+        $arrayFilters[] = array($filters, $filters2, $filters3);
+
         // ディメンション(データの属性)の設定
         $landingPagePath = new Google_Service_AnalyticsReporting_Dimension();
         $landingPagePath->setName("ga:landingPagePath");
 
         // Create the DateRange object.
         $dateRange = new Google_Service_AnalyticsReporting_DateRange();
-        $dateRange->setStartDate("7daysAgo");
-        $dateRange->setEndDate("today");
+        $dateRange->setStartDate($start_date);
+        $dateRange->setEndDate($end_date);
 
         // Create the Metrics object.
         $sessions = new Google_Service_AnalyticsReporting_Metric();
@@ -118,8 +157,9 @@ class ApiGooglesController extends AppController
         $request->setMetrics(array($sessions,$pageviews,$users));   // 項目のオブジェクトはここに追加する
 
         $request->setDimensions($arrayDimensions);   // Dimensions
+        $request->setDimensionFilterClauses($arrayFilters); // URLをフィルター
         $request->setOrderBys($ordering);                   // 表示順
-        $request->setPageSize(10);   //ページサイズの設定（取得件数）
+        //$request->setPageSize(10);   //ページサイズの設定（取得件数）
 
         $body = new Google_Service_AnalyticsReporting_GetReportsRequest();
         $body->setReportRequests( array( $request) );

@@ -619,7 +619,7 @@ return [
             'label' => "basic",
             'charge' => "5000"
         ],
-        'premium'
+        'premium'=> [
             'name' => "プレミアムプラン",
             'label' => "premium",
             'charge' => "10000"

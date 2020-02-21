@@ -46,6 +46,22 @@ class UtilComponent extends Component
     }
 
     /**
+     * 引数の値を合算する
+     *
+     * @param mixed
+     * @param mixed
+     * @return mixed
+     */
+    public function addVal($val=null,$addVal=null)
+    {
+        if (is_null($val)) {
+            $val = 0;
+        }
+        $val = $val + $addVal;
+        return $val;
+    }
+
+    /**
      * null値の時にデフォルト値を返却する
      *
      * 引数1がnull値なら戻り値は引数2の値を返す。
@@ -63,6 +79,7 @@ class UtilComponent extends Component
 
         return '';
     }
+
     /**
      * null値の時にデフォルト値を返却する
      *
@@ -932,6 +949,40 @@ class UtilComponent extends Component
             $period[] = date('Y-m', strtotime($startDate . '+' . $i . 'month'));
         }
         return $period;
+    }
+
+    /**
+     * 指定曜日を返す
+     * @return void
+     */
+    public function getWeek($week)
+    {
+        $array_week = array();
+
+        switch($week) {
+            case 0:
+                $array_week = ["en"=>"monday", "ja"=>"日曜日"];
+                break;
+            case 1:
+                $array_week = ["en"=>"monday", "ja"=>"月曜日"];
+                break;
+            case 2:
+                $array_week = ["en"=>"tuesday", "ja"=>"火曜日"];
+                break;
+            case 3:
+                $array_week = ["en"=>"wednesday", "ja"=>"水曜日"];
+                break;
+            case 4:
+                $array_week = ["en"=>"thursday", "ja"=>"木曜日"];
+                break;
+            case 5:
+                $array_week = ["en"=>"friday", "ja"=>"金曜日"];
+                break;
+            case 6:
+                $array_week = ["en"=>"friday", "ja"=>"土曜日"];
+                break;
+        }
+        return $array_week;
     }
 
     /**

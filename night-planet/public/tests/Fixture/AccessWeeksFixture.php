@@ -15,7 +15,7 @@ class AccessWeeksFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
-        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'autoIncrement' => true, 'precision' => null],
+        'id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'shop_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'owner_id' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'name' => ['type' => 'string', 'length' => 255, 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'comment' => '', 'precision' => null, 'fixed' => null],
@@ -45,13 +45,6 @@ class AccessWeeksFixture extends TestFixture
         'sunday_users' => ['type' => 'integer', 'length' => 11, 'unsigned' => false, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'created' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
         'modified' => ['type' => 'datetime', 'length' => null, 'null' => true, 'default' => null, 'comment' => '', 'precision' => null],
-        '_indexes' => [
-            'shop_id' => ['type' => 'index', 'columns' => ['shop_id'], 'length' => []],
-            'owner_id' => ['type' => 'index', 'columns' => ['owner_id'], 'length' => []],
-        ],
-        '_constraints' => [
-            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
-        ],
         '_options' => [
             'engine' => 'InnoDB',
             'collation' => 'utf8_general_ci'
@@ -95,8 +88,8 @@ class AccessWeeksFixture extends TestFixture
                 'sunday_sessions' => 1,
                 'sunday_pageviews' => 1,
                 'sunday_users' => 1,
-                'created' => '2020-02-15 17:50:37',
-                'modified' => '2020-02-15 17:50:37'
+                'created' => '2020-02-18 22:47:22',
+                'modified' => '2020-02-18 22:47:22'
             ],
         ];
         parent::init();

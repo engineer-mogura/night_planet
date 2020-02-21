@@ -1,19 +1,24 @@
 <?php
-namespace App\Shell;
+namespace App\Shell\Task;
 
 use Cake\Console\Shell;
+use Cake\ORM\TableRegistry;
+use App\Controller\ApiGooglesController;
 
 /**
- * GetAnalyticsReport shell command.
+ * GetAnalyticsReport shell task.
  */
-class GetAnalyticsReportShell extends Shell
+class GetAnalyticsReportTask extends Shell
 {
-    public $tasks = ['GetAnalyticsReport']; // ← タスクの読み込み
+    public function initialize()
+    {
+        parent::initialize();
+        $this->ApiGoogles = new ApiGooglesController();
+    }
     /**
      * Manage the available sub-commands along with their arguments and help
      *
      * @see http://book.cakephp.org/3.0/en/console-and-shells.html#configuring-options-and-generating-help
-     *
      * @return \Cake\Console\ConsoleOptionParser
      */
     public function getOptionParser()
@@ -30,8 +35,17 @@ class GetAnalyticsReportShell extends Shell
      */
     public function main()
     {
-        $this->out($this->OptionParser->help());
-        // タスクの実行
-        $this->GetAnalyticsReport->main();
+        $this->execGetAnalyticsReport();
+    }
+
+    /**
+     * GetAnalyticsReportを実行する
+     * @return mixed
+     */
+    private function execGetAnalyticsReport()
+    {
+        // 
+        $this->ApiGoogles->index();
+        return $result;
     }
 }

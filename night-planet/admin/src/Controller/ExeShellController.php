@@ -69,4 +69,21 @@ class ExeShellController extends AppController
       return $this->render("/exeshell/result");
     }
 
+    /**
+     * 各店舗のアクセスレポートを集計する処理
+     *
+     * @return void
+     */
+    public function analyticsReport()
+    {
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を開始します。--------', 'batch_snpr');
+      exec(ExeShellController::$exec_path .$this->request->param('action') , $output, $result);
+      Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_snpr');
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を終了します。--------', 'batch_snpr');
+      // ダミー画面を表示する
+      // シンプルレイアウトを使用
+      $this->viewBuilder()->layout('simpleDefault');
+      return $this->render("/exeshell/result");
+    }
+
 }

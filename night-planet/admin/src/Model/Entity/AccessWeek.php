@@ -52,6 +52,7 @@ class AccessWeek extends Entity
      * @var array
      */
     protected $_accessible = [
+        'id' => true,
         'shop_id' => true,
         'owner_id' => true,
         'name' => true,

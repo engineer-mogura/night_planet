@@ -61,7 +61,14 @@ class AccessYearsTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', 'create');
+            ->requirePresence('id', 'create')
+            ->allowEmptyString('id', false);
+
+        $validator
+            ->scalar('y')
+            ->maxLength('y', 20)
+            ->requirePresence('y', 'create')
+            ->allowEmptyString('y', false);
 
         $validator
             ->scalar('name')
@@ -88,23 +95,148 @@ class AccessYearsTable extends Table
             ->allowEmptyString('pagePath', false);
 
         $validator
-            ->integer('sessions')
-            ->requirePresence('sessions', 'create')
-            ->allowEmptyString('sessions', false);
+            ->integer('1_sessions')
+            ->allowEmptyString('1_sessions');
 
         $validator
-            ->integer('pageviews')
-            ->requirePresence('pageviews', 'create')
-            ->allowEmptyString('pageviews', false);
+            ->integer('1_pageviews')
+            ->allowEmptyString('1_pageviews');
 
         $validator
-            ->integer('users')
-            ->requirePresence('users', 'create')
-            ->allowEmptyString('users', false);
+            ->integer('1_users')
+            ->allowEmptyString('1_users');
 
         $validator
-            ->dateTime('date')
-            ->allowEmptyDateTime('date');
+            ->integer('2_sessions')
+            ->allowEmptyString('2_sessions');
+
+        $validator
+            ->integer('2_pageviews')
+            ->allowEmptyString('2_pageviews');
+
+        $validator
+            ->integer('2_users')
+            ->allowEmptyString('2_users');
+
+        $validator
+            ->integer('3_sessions')
+            ->allowEmptyString('3_sessions');
+
+        $validator
+            ->integer('3_pageviews')
+            ->allowEmptyString('3_pageviews');
+
+        $validator
+            ->integer('3_users')
+            ->allowEmptyString('3_users');
+
+        $validator
+            ->integer('4_sessions')
+            ->allowEmptyString('4_sessions');
+
+        $validator
+            ->integer('4_pageviews')
+            ->allowEmptyString('4_pageviews');
+
+        $validator
+            ->integer('4_users')
+            ->allowEmptyString('4_users');
+
+        $validator
+            ->integer('5_sessions')
+            ->allowEmptyString('5_sessions');
+
+        $validator
+            ->integer('5_pageviews')
+            ->allowEmptyString('5_pageviews');
+
+        $validator
+            ->integer('5_users')
+            ->allowEmptyString('5_users');
+
+        $validator
+            ->integer('6_sessions')
+            ->allowEmptyString('6_sessions');
+
+        $validator
+            ->integer('6_pageviews')
+            ->allowEmptyString('6_pageviews');
+
+        $validator
+            ->integer('6_users')
+            ->allowEmptyString('6_users');
+
+        $validator
+            ->integer('7_sessions')
+            ->allowEmptyString('7_sessions');
+
+        $validator
+            ->integer('7_pageviews')
+            ->allowEmptyString('7_pageviews');
+
+        $validator
+            ->integer('7_users')
+            ->allowEmptyString('7_users');
+
+        $validator
+            ->integer('8_sessions')
+            ->allowEmptyString('8_sessions');
+
+        $validator
+            ->integer('8_pageviews')
+            ->allowEmptyString('8_pageviews');
+
+        $validator
+            ->integer('8_users')
+            ->allowEmptyString('8_users');
+
+        $validator
+            ->integer('9_sessions')
+            ->allowEmptyString('9_sessions');
+
+        $validator
+            ->integer('9_pageviews')
+            ->allowEmptyString('9_pageviews');
+
+        $validator
+            ->integer('9_users')
+            ->allowEmptyString('9_users');
+
+        $validator
+            ->integer('10_sessions')
+            ->allowEmptyString('10_sessions');
+
+        $validator
+            ->integer('10_pageviews')
+            ->allowEmptyString('10_pageviews');
+
+        $validator
+            ->integer('10_users')
+            ->allowEmptyString('10_users');
+
+        $validator
+            ->integer('11_sessions')
+            ->allowEmptyString('11_sessions');
+
+        $validator
+            ->integer('11_pageviews')
+            ->allowEmptyString('11_pageviews');
+
+        $validator
+            ->integer('11_users')
+            ->allowEmptyString('11_users');
+
+        $validator
+            ->integer('12_sessions')
+            ->allowEmptyString('12_sessions');
+
+        $validator
+            ->integer('12_pageviews')
+            ->allowEmptyString('12_pageviews');
+
+        $validator
+            ->integer('12_users')
+            ->allowEmptyString('12_users');
 
         return $validator;
     }

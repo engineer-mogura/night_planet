@@ -61,7 +61,8 @@ class AccessWeeksTable extends Table
     {
         $validator
             ->integer('id')
-            ->allowEmptyString('id', 'create');
+            ->requirePresence('id', 'create')
+            ->allowEmptyString('id', false);
 
         $validator
             ->scalar('name')

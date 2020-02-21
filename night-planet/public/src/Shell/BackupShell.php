@@ -2,13 +2,22 @@
 namespace App\Shell;
 
 use Cake\Console\Shell;
+use Cake\Log\Log;
+use Cake\Controller\Component;
+use Cake\Controller\ComponentRegistry;
+use App\Controller\Component\BatchComponent;
 
 /**
  * DatabaseBackup shell command.
  */
-class DatabaseBackupShell extends Shell
+class BackupShell extends Shell
 {
     public $tasks = ['Mysqldump']; // ← タスクの読み込み
+     function initialize()
+    {
+    // コンポーネントを参照(コンポーネントを利用する場合)
+        $this->Batch = new BatchComponent(new ComponentRegistry());
+    }
     /**
      * Manage the available sub-commands along with their arguments and help
      *
@@ -30,8 +39,13 @@ class DatabaseBackupShell extends Shell
      */
     public function main()
     {
-        $this->out($this->OptionParser->help());
         // タスクの実行
-        $this->Mysqldump->main();
+        $result = $this->Batch->backup();
+
+        if ($result) {
+            Log::info(__LINE__ . '::' . __METHOD__ . "::バッチ処理が成功しました。", "batch_snpr");
+        } else {
+            Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。", "batch_snpr");
+        }
     }
 }

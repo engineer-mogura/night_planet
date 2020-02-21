@@ -422,14 +422,27 @@ class BatchComponent extends Component
      *
      * @return array
      */
-    public function analyticsReport($reports)
+    public function analyticsReport()
     {
+
+        $is_hosyu = true; // 保守用 日時範囲を指定して一括登録する
+
+        $this->ApiGoogles = new ApiGooglesController();
+
+        // アナリティクスレポート取得
+        $reports = $this->ApiGoogles->index($is_hosyu);
+
+        // 保守用処理なら終了
+        if ($is_hosyu) {
+            return true;
+        }
+
         $this->AccessYears  = TableRegistry::get('access_years');
         $this->AccessMonths = TableRegistry::get('access_months');
         $this->AccessWeeks  = TableRegistry::get('access_weeks');
         $this->Shops        = TableRegistry::get('shops');
         // google api クラス
-        $this->ApiGoogles = new ApiGooglesController();
+        //$this->ApiGoogles = new ApiGooglesController();
         //$reports = $this->ApiGoogles->oauth2Callback();
         //$this->redirect("http://localhost:8080/api-googles/oauth2-callback");
         $result = true; // 正常終了フラグ
@@ -458,16 +471,15 @@ class BatchComponent extends Component
                 $metrics = $row->getMetrics();
 
                 // 日付
-                $date = Time::now();
+                $date = date("Y-m-d");
                 // Y-M-D
-                $data_check = $date->year . '-' . $date->month . '-' . $date->day;
+                $data_check = $date;
 
                 $range_start  = $data_check . ' 0:00:00';
                 $range_end    = $data_check . ' 1:00:00';
                 $range_target = $data_check . ' ' . Time::now()->i18nFormat('HH:mm:ss');
                 // 年別、週別を更新するかチェックする
                 $is_update = $this->Util->check_in_range($range_start, $range_end, $range_target);
-
                 // 曜日を取得する
                 for ($dimensionIndex = 0; $dimensionIndex < count($dimensionHeaders); $dimensionIndex++) {
                     if ($dimensionHeaders[$dimensionIndex] == 'ga:dayOfWeek') {
@@ -503,8 +515,7 @@ class BatchComponent extends Component
                             // 年別、週別を更新するか
                             if ($is_update) {
 
-                                // 前日の日付を取得する
-                                $zen_date = Time::now()->subDays(1);
+                                $zen_date = new Time($date);
 
                                 // 年別アクセスエンティティ
                                 $y = $zen_date->year;
@@ -514,7 +525,7 @@ class BatchComponent extends Component
                                 // 取得出来なかったら新規エンティティ
                                 if (empty($entity_year)) {
                                     $patch_year =  $patch_data;
-                                    $patch_year['y'] = $entity_year->year;
+                                    $patch_year['y'] = $y;
                                     $entity_year = $this->AccessYears->newEntity();
                                     $entity_year = $this->AccessYears
                                         ->patchEntity($entity_year, $patch_year,
@@ -563,6 +574,11 @@ class BatchComponent extends Component
                             if ($is_update) {
                                 // 月別アクセスエンティティ
                                 $ym = $zen_date->year . '-' . $zen_date->month;
+                                $day = $zen_date->day;
+                            } else {
+                                // 月別アクセスエンティティ
+                                $ym = $date->year . '-' . $date->month;
+                                $day = $date->day;
                             }
 
                             $entity_month = $this->AccessMonths->find()
@@ -571,7 +587,7 @@ class BatchComponent extends Component
                             // 取得出来なかったら新規エンティティ
                             if (empty($entity_month)) {
                                 $patch_month =  $patch_data;
-                                $patch_month['ym'] = $date->year . '-' . $date->month;
+                                $patch_month['ym'] = $ym;
                                 $entity_month = $this->AccessMonths->newEntity();
                                 $entity_month = $this->AccessMonths
                                     ->patchEntity($entity_month, $patch_month,
@@ -579,15 +595,15 @@ class BatchComponent extends Component
                             }
 
                             // 月別アクセスエンティティ
-                            $entity_month->set($date->day . '_sessions', $this->Util
+                            $entity_month->set($day . '_sessions', $this->Util
                                 ->addVal($entity_month->get(
-                                    $date->day . '_sessions'), (int) $values[0]));
-                            $entity_month->set($date->day . '_pageviews', $this->Util
+                                    $day . '_sessions'), (int) $values[0]));
+                            $entity_month->set($day . '_pageviews', $this->Util
                                 ->addVal($entity_month->get(
-                                    $date->day . '_pageviews'), (int) $values[1]));
-                            $entity_month->set($date->day . '_users', $this->Util
+                                    $day . '_pageviews'), (int) $values[1]));
+                            $entity_month->set($day . '_users', $this->Util
                                 ->addVal($entity_month->get(
-                                    $date->day . '_users'), (int) $values[2]));
+                                    $day . '_users'), (int) $values[2]));
 
                             array_push($entities_month, $entity_month);
 
@@ -598,21 +614,27 @@ class BatchComponent extends Component
 
                     }
                 }
-
                 try{
                     // レコードを一括登録する
                     // 年別、週別を更新するか
                     if ($is_update) {
-                        if (!$this->AccessYears->saveMany($entities_year)) {
-                            throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                        if (!empty($entities_year)) {
+                            if (!$this->AccessYears->saveMany($entities_year)) {
+                                throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                            }
                         }
-                        if (!$this->AccessWeeks->saveMany($entities_week)) {
-                            throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
-                        }
-                    }
 
-                    if (!$this->AccessMonths->saveMany($entities_month)) {
-                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                        if (!empty($entities_week)) {
+                            if (!$this->AccessWeeks->saveMany($entities_week)) {
+                                throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                            }
+                        }
+
+                    }
+                    if (!empty($entities_year)) {
+                        if (!$this->AccessMonths->saveMany($entities_month)) {
+                            throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                        }
                     }
 
                 } catch(RuntimeException $e) {
@@ -625,20 +647,18 @@ class BatchComponent extends Component
 
         return $result;
     }
+
    /**
      * 各店舗のアクセスレポートを集計する処理 保守用
      *
      * @return array
      */
-    public function analyticsReportHosyu($reports,  $start_date, $count)
+    public function analyticsReportHosyu($reports,  $start_date)
     {
         $this->AccessYears  = TableRegistry::get('access_years');
         $this->AccessMonths = TableRegistry::get('access_months');
         $this->AccessWeeks  = TableRegistry::get('access_weeks');
-        //$this->AccessTodays = TableRegistry::get('access_todays');
         $this->Shops        = TableRegistry::get('shops');
-        // google api クラス
-        $this->ApiGoogles = new ApiGooglesController();
 
         $result = true; // 正常終了フラグ
         $action_name = "analyticsReport,";

@@ -1,11 +1,14 @@
 <?php
 namespace App\Controller;
 
+use Cake\Log\Log;
 use Google_Client;
-use Cake\Error\Debugger;
 use Google_Service_Analytics;
+use Cake\Controller\Component;
 use App\Controller\AppController;
+use Cake\Controller\ComponentRegistry;
 use Google_Service_AnalyticsReporting;
+use App\Controller\Component\BatchComponent;
 use Google_Service_AnalyticsReporting_Metric;
 use Google_Service_AnalyticsReporting_OrderBy;
 use Google_Service_AnalyticsReporting_DateRange;
@@ -14,14 +17,74 @@ use Google_Service_AnalyticsReporting_ReportRequest;
 use Google_Service_AnalyticsReporting_DimensionFilter;
 use Google_Service_AnalyticsReporting_GetReportsRequest;
 use Google_Service_AnalyticsReporting_DimensionFilterClause;
-use Cake\Controller\Component;
-use Cake\Controller\ComponentRegistry;
-use App\Controller\Component\BatchComponent;
-use Cake\I18n\Time;
-use Cake\I18n\Date;
 
 class ApiGooglesController extends AppController
 {
+
+        /**
+     * Undocumented function 保守用
+     *
+     * @return void
+     */
+    public function index($is_hosyu)
+    {
+
+        // 自動レンダリングを OFF
+        $this->render(false, false);
+
+        $KEY_FILE_LOCATION = CONFIG . 'api_config/service-account-credentials.json';
+
+        // Create and configure a new client object.
+        $client = new Google_Client();
+        $client->setApplicationName("Hello Analytics Reporting");
+        $client->setAuthConfig($KEY_FILE_LOCATION);
+        $client->setScopes(Google_Service_Analytics::ANALYTICS_READONLY);
+        $analytics = new Google_Service_AnalyticsReporting($client);
+
+        // 保守用一括登録処理の場合
+        if ($is_hosyu) {
+
+            $start = '2020-02-15'; // 開始日
+            $end   = '2020-02-15'; // 終了日
+
+            Log::info(__LINE__ . '::' . __METHOD__ 
+                . "::保守用一括登録処理,開始日：". $start . "終了日：". $end , "batch_snpr");
+
+            $moto_start_date = date($start);
+            $moto_end_date = date($end);
+
+            // コンポーネントを参照(コンポーネントを利用する場合)
+            $this->Batch = new BatchComponent(new ComponentRegistry());
+            $is = true;
+            $count = 0;
+            while ($is) {
+
+                $start_date = date("Y-m-d",strtotime($moto_start_date . "+" . $count . " day"));
+                $end_date = date("Y-m-d",strtotime($moto_end_date . "+" . $count . " day"));
+                // Call the Analytics Reporting API V4.
+                $response = $this->getReport($analytics, $start_date, $end_date);
+
+                // タスクの実行
+                $result = $this->Batch->analyticsReportHosyu($response, $start_date);
+                $today = date("Y-m-d");
+                if (strtotime($start_date) === strtotime($today)) {
+                    $is = false;
+                }
+                $count++;
+            }
+        } else {
+            // 通常登録処理の場合
+            $start_date = date("Y-m-d");
+            $end_date = date("Y-m-d");
+            $response = $this->getReport($analytics, $start_date, $end_date);
+            $this->printResults($response);
+            return $response;
+        }
+
+
+
+    }
+
 //     public function index()
 //     {
 
@@ -72,74 +135,74 @@ class ApiGooglesController extends AppController
 //         }
 //     }
 
-    /**
-     * Undocumented function 保守用
-     *
-     * @return void
-     */
-    public function index()
-    {
+//     /**
+//      * Undocumented function 保守用
+//      *
+//      * @return void
+//      */
+//     public function index()
+//     {
 
-        // 自動レンダリングを OFF
-        $this->render(false, false);
+//         // 自動レンダリングを OFF
+//         $this->render(false, false);
 
-        //		// Load the Google API PHP Client Library.
-        //		require_once __DIR__ . '/vendor/autoload.php';
+//         //		// Load the Google API PHP Client Library.
+//         //		require_once __DIR__ . '/vendor/autoload.php';
 
-        session_start();
+//         session_start();
 
-        $client = new Google_Client();
-        // $client->setAuthConfig(__DIR__ . '/client_secrets.json');
-        $client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
-        $client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
+//         $client = new Google_Client();
+//         // $client->setAuthConfig(__DIR__ . '/client_secrets.json');
+//         $client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
+//         $client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
 
-        // If the user has already authorized this app then get an access token
-        // else redirect to ask the user to authorize access to Google Analytics.
-        if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
-            // Set the access token on the client.
-            $client->setAccessToken($_SESSION['access_token']);
+//         // If the user has already authorized this app then get an access token
+//         // else redirect to ask the user to authorize access to Google Analytics.
+//         if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
+//             // Set the access token on the client.
+//             $client->setAccessToken($_SESSION['access_token']);
 
-            // Create an authorized analytics service object.
-            $analytics = new Google_Service_AnalyticsReporting($client);
-            $this->log('$_SESSION[acces_token]1:'.$_SESSION['access_token'], 'debug');
+//             // Create an authorized analytics service object.
+//             $analytics = new Google_Service_AnalyticsReporting($client);
+//             $this->log('$_SESSION[acces_token]1:'.$_SESSION['access_token'], 'debug');
 
-            $moto_start_date = date('2020-02-10');
-            $moto_end_date = date('2020-02-10');
-            // $moto_start_date = date('2020-02-15');
-            // $moto_end_date = date('2020-02-15');
+//             $moto_start_date = date('2020-02-10');
+//             $moto_end_date = date('2020-02-10');
+//             // $moto_start_date = date('2020-02-15');
+//             // $moto_end_date = date('2020-02-15');
 
-            // コンポーネントを参照(コンポーネントを利用する場合)
-            $this->Batch = new BatchComponent(new ComponentRegistry());
-            $is = true;
-            $count = 0;
-            while ($is) {
-                $start_date = date("Y-m-d",strtotime($moto_start_date . "+" . $count . " day"));
-                $end_date = date("Y-m-d",strtotime($moto_end_date . "+" . $count . " day"));
+//             // コンポーネントを参照(コンポーネントを利用する場合)
+//             $this->Batch = new BatchComponent(new ComponentRegistry());
+//             $is = true;
+//             $count = 0;
+//             while ($is) {
+//                 $start_date = date("Y-m-d",strtotime($moto_start_date . "+" . $count . " day"));
+//                 $end_date = date("Y-m-d",strtotime($moto_end_date . "+" . $count . " day"));
 
-                // Call the Analytics Reporting API V4.
-                $response = $this->getReport($analytics, $start_date, $end_date);
-                $this->log('$_SESSION[access_token]2:'.$_SESSION['access_token'], 'debug');
+//                 // Call the Analytics Reporting API V4.
+//                 $response = $this->getReport($analytics, $start_date, $end_date);
+//                 $this->log('$_SESSION[access_token]2:'.$_SESSION['access_token'], 'debug');
 
-                // タスクの実行
-                $result = $this->Batch->analyticsReportHosyu($response,  $start_date, $count);
-                $today = date("Y-m-d");
-                if (strtotime($start_date) === strtotime($today)) {
-                    $is = false;
-                }
-                $count++;
-            }
+//                 // タスクの実行
+//                 $result = $this->Batch->analyticsReportHosyu($response,  $start_date, $count);
+//                 $today = date("Y-m-d");
+//                 if (strtotime($start_date) === strtotime($today)) {
+//                     $is = false;
+//                 }
+//                 $count++;
+//             }
 
-            // Print the response.
-            $this->printResults($response);
-        } else {
+//             // Print the response.
+//             $this->printResults($response);
+//         } else {
 
-//		  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
-            $redirect_uri = $_SERVER['REQUEST_SCHEME'].'://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback';
-            $this->log($redirect_uri, 'debug');
-            //		  header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
-            $this->redirect(filter_var($redirect_uri, FILTER_SANITIZE_URL));
-        }
-    }
+// //		  $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php';
+//             $redirect_uri = $_SERVER['REQUEST_SCHEME'].'://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback';
+//             $this->log($redirect_uri, 'debug');
+//             //		  header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
+//             $this->redirect(filter_var($redirect_uri, FILTER_SANITIZE_URL));
+//         }
+//     }
 
     /**
      * Queries the Analytics Reporting API V4.
@@ -300,8 +363,13 @@ class ApiGooglesController extends AppController
         // from the client_secrets.json you downloaded from the Developers Console.
         $client = new Google_Client();
         //$client->setAuthConfig(__DIR__ . '/client_secrets.json');
-        $client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
-        //		$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
+
+        // OAuth 2.0 クライアント IDで認証する
+        // $client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
+        // サービス アカウントで認証する
+        $client->setAuthConfig(CONFIG . 'api_config/service-account-credentials.json');
+
+        // $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
         $client->setRedirectUri($_SERVER['REQUEST_SCHEME'].'://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback');
         $client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
 

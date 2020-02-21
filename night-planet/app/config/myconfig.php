@@ -19,8 +19,8 @@
         define('API', array(
             'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // ステージング環境用 GoogleマップのAPIキー
             'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-2', // ステージング環境用 GoogleアナリティクスのAPIキー
-            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-2', // ステージング環境用 GoogleアナリティクスのID
-            'GOOGLE_ANALYTICS_VIEW_ID'=>'206985662', // ステージング環境用 Analytics Reporting API V4 view_id
+            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-2', // 本番環境用 GoogleアナリティクスのID
+            'GOOGLE_ANALYTICS_VIEW_ID'=>'206985662', // 本番環境用 Analytics Reporting API V4 view_id
             'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
             'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
             'INSTAGRAM_USER_NAME'=>'night_planet_098', // INSTAGRAMビジネスアカウントネーム
@@ -45,9 +45,9 @@
         // API関連プロパティ設定
         define('API', array(
             'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // ステージング環境用 GoogleマップのAPIキー
-            'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-206965636-1', // ステージング環境用 GoogleアナリティクスのAPIキー
-            'GOOGLE_ANALYTICS_ID'=>'UA-206965636-1', // ステージング環境用 GoogleアナリティクスのID
-            'GOOGLE_ANALYTICS_VIEW_ID'=>'206965636', // ステージング環境用 Analytics Reporting API V4 view_id
+            'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-2', // ステージング環境用 GoogleアナリティクスのAPIキー
+            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-2', // 本番環境用 GoogleアナリティクスのID
+            'GOOGLE_ANALYTICS_VIEW_ID'=>'206985662', // 本番環境用 Analytics Reporting API V4 view_id
             'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
             'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
             'INSTAGRAM_USER_NAME'=>'night_planet_098', // INSTAGRAMビジネスアカウントネーム
@@ -73,8 +73,8 @@
         define('API', array(
             'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // ステージング環境用 GoogleマップのAPIキー
             'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-2', // ステージング環境用 GoogleアナリティクスのAPIキー
-            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-2', // ステージング環境用 GoogleアナリティクスのID
-            'GOOGLE_ANALYTICS_VIEW_ID'=>'206985662', // ステージング環境用 Analytics Reporting API V4 view_id
+            'GOOGLE_ANALYTICS_ID'=>'UA-151147225-2', // 本番環境用 GoogleアナリティクスのID
+            'GOOGLE_ANALYTICS_VIEW_ID'=>'206985662', // 本番環境用 Analytics Reporting API V4 view_id
             'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
             'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
             'INSTAGRAM_USER_NAME'=>'night_planet_098', // INSTAGRAMビジネスアカウントネーム
@@ -101,7 +101,7 @@
             'GOOGLE_MAP_APIS'=>'https://maps.googleapis.com/maps/api/js?key=AIzaSyBGCiLpAFLMTxTipLAolKmJRV5CFW1fgKg', // 本番環境用 GoogleマップのAPIキー
             'GOOGLE_ANALYTICS_APIS'=>'https://www.googletagmanager.com/gtag/js?id=UA-151147225-2', // 本番環境用 GoogleアナリティクスのAPIキー
             'GOOGLE_ANALYTICS_ID'=>'UA-151147225-2', // 本番環境用 GoogleアナリティクスのID
-            'GOOGLE_ANALYTICS_VIEW_ID'=>'151147225', // 本番環境用 Analytics Reporting API V4 view_id
+            'GOOGLE_ANALYTICS_VIEW_ID'=>'206985662', // 本番環境用 Analytics Reporting API V4 view_id
             'GOOGLE_FORM_KEISAI_CONTACT'=>'https://forms.gle/p4MDR79jnNTSQDH77', // Googleフォーム 掲載申し込みフォーム
             'GOOGLE_FORM_CONTACT'=>'https://forms.gle/3A1wnSDsDK7xr56o9', // Googleフォーム お問い合わせフォーム
             'INSTAGRAM_USER_NAME'=>'night_planet_098', // INSTAGRAMビジネスアカウントネーム

@@ -5,10 +5,6 @@ use Cake\Log\Log;
 use Cake\Event\Event;
 use Token\Util\Token;
 use Cake\Collection\Collection;
-use Cake\Console\Shell;
-use Cake\Console\Command\BackupShell;
-
-use Cake\Console\Command\AppShell;
 
 /**
  * Controls the data flow into shops object and updates the view whenever data changes.

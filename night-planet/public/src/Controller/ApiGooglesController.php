@@ -300,8 +300,13 @@ class ApiGooglesController extends AppController
         // from the client_secrets.json you downloaded from the Developers Console.
         $client = new Google_Client();
         //$client->setAuthConfig(__DIR__ . '/client_secrets.json');
-        $client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
-        //		$client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
+
+        // OAuth 2.0 クライアント IDで認証する
+        // $client->setAuthConfig(CONFIG . 'api_config/client_secrets.json');
+        // サービス アカウントで認証する
+        $client->setAuthConfig(CONFIG . 'api_config/service-account-credentials.json');
+
+        // $client->setRedirectUri('http://' . $_SERVER['HTTP_HOST'] . '/oauth2callback.php');
         $client->setRedirectUri($_SERVER['REQUEST_SCHEME'].'://' . $_SERVER['HTTP_HOST'] . '/api-googles/oauth2-callback');
         $client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
 

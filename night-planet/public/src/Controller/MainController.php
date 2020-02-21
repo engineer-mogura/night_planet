@@ -46,7 +46,7 @@ class MainController extends AppController
 
     public function top()
     {
-        $this->redirect("http://localhost:8080/api-googles/oauth2-callback");
+        //$this->redirect("http://localhost:8080/api-googles/oauth2-callback");
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
 

@@ -83,7 +83,7 @@ class BatchComponent extends Component
         } else {
             $result = false;
         }
-        Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result_code, 'batch_snpr');
+        Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result_code, 'batch_bk');
         return $result;
     }
 
@@ -116,7 +116,7 @@ class BatchComponent extends Component
         if ($result_code != 0) {
             $result = false;
         }
-        Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_snpr');
+        Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_bk');
         return $result;
     }
 
@@ -308,7 +308,13 @@ class BatchComponent extends Component
                     foreach ($ig_data['media']['data'] as $key => $value) {
                         if ($key == 5) { break; }
                         $newPhotosRankEntity = $this->NewPhotosRank->newEntity();
-
+                        // メディアURLが取得出来ない場合があるのでその際は、ログ出してスルーする
+                        if (empty($value['media_url'])) {
+                            Log::warning(__LINE__ . '::' . __METHOD__ . '::'.'【'.AREA[$shop->area]['label']
+                                .GENRE[$shop->genre]['label'].$shop->name
+                                .'】のインスタグラム【 media_url 】が存在しませんでした。', "batch_snpr");
+                            continue;
+                        }
                         $newPhotosRankEntity->set('name', $ig_data['username']);
                         $newPhotosRankEntity->set('area', $shop->shopInfo['area']['label']);
                         $newPhotosRankEntity->set('genre', $shop->shopInfo['genre']['label']);
@@ -336,7 +342,6 @@ class BatchComponent extends Component
                         if ($key == 5) { break; }
 
                         $photo_path = $shop->shopInfo['notice_path'] . $value['dir'];
-
                         $dir = new Folder(preg_replace('/(\/\/)/', '/'
                                 , WWW_ROOT.$photo_path), true, 0755);
                         $files = glob($dir->path.DS.'*.*');
@@ -400,12 +405,13 @@ class BatchComponent extends Component
             if ($this->NewPhotosRank->find('all')->count() > 0) {
                 // 新着フォトランキングレコード削除
                 if (!$this->NewPhotosRank->deleteAll([""])) {
+                    Log::error(__LINE__ . '::' . __METHOD__ . "::レコードの削除に失敗しました。". $e, "batch_snpr");
                     throw new RuntimeException($action_name.'レコードの削除に失敗しました。');
                 }
             }
-            $entities = $this->NewPhotosRank->newEntities($newPhotosRankEntityList);
             // レコードを一括登録する
             if (!$this->NewPhotosRank->saveMany($newPhotosRankEntityList)) {
+                Log::error(__LINE__ . '::' . __METHOD__ . "::レコードの登録に失敗しました。". $e, "batch_snpr");
                 throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
             }
 
@@ -441,10 +447,7 @@ class BatchComponent extends Component
         $this->AccessMonths = TableRegistry::get('access_months');
         $this->AccessWeeks  = TableRegistry::get('access_weeks');
         $this->Shops        = TableRegistry::get('shops');
-        // google api クラス
-        //$this->ApiGoogles = new ApiGooglesController();
-        //$reports = $this->ApiGoogles->oauth2Callback();
-        //$this->redirect("http://localhost:8080/api-googles/oauth2-callback");
+
         $result = true; // 正常終了フラグ
         $action_name = "analyticsReport,";
 
@@ -638,7 +641,7 @@ class BatchComponent extends Component
                     }
 
                 } catch(RuntimeException $e) {
-                    Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。". $e, "batch_snpr");
+                    Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。". $e, "batch_ar");
                     $result = false; // 異常終了フラグ
                 }
             }
@@ -666,12 +669,10 @@ class BatchComponent extends Component
         $entities_year  = array();
         $entities_month = array();
         $entities_week  = array();
-        //$entities_today = array();
 
         $entity_year  = null;
         $entity_month = null;
         $entity_week  = null;
-        //$entity_today = null;
 
         for ($reportIndex = 0; $reportIndex < count($reports); $reportIndex++) {
             $report = $reports[ $reportIndex ];
@@ -854,7 +855,7 @@ class BatchComponent extends Component
                     }
 
                 } catch(RuntimeException $e) {
-                    Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。". $e, "batch_snpr");
+                    Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。". $e, "batch_ar");
                     $result = false; // 異常終了フラグ
                 }
             }

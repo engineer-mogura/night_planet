@@ -3,7 +3,6 @@ namespace App\Controller\Owner;
 
 use Cake\ORM\TableRegistry;
 use Cake\Event\Event;
-use Cake\Core\Configure;
 
 class AppController extends \App\Controller\AppController
 {
@@ -12,19 +11,22 @@ class AppController extends \App\Controller\AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Owners = TableRegistry::get('owners');
-        $this->Shops = TableRegistry::get('shops');
-        $this->Coupons = TableRegistry::get('coupons');
-        $this->Casts = TableRegistry::get('casts');
-        $this->Jobs = TableRegistry::get('jobs');
-        $this->Snss = TableRegistry::get('snss');
-        $this->ServecePlans = TableRegistry::get('servece_plans');
-        $this->Updates = TableRegistry::get('updates');
-        $this->ShopInfos = TableRegistry::get("shop_infos");
-        $this->ShopOptions = TableRegistry::get("shop_options");
+        $this->Owners        = TableRegistry::get('owners');
+        $this->Shops         = TableRegistry::get('shops');
+        $this->Coupons       = TableRegistry::get('coupons');
+        $this->Casts         = TableRegistry::get('casts');
+        $this->Jobs          = TableRegistry::get('jobs');
+        $this->Snss          = TableRegistry::get('snss');
+        $this->ServecePlans  = TableRegistry::get('servece_plans');
+        $this->Updates       = TableRegistry::get('updates');
+        $this->ShopInfos     = TableRegistry::get("shop_infos");
+        $this->ShopOptions   = TableRegistry::get("shop_options");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
         $this->CastSchedules = TableRegistry::get("cast_schedules");
-        $this->MasterCodes = TableRegistry::get("master_codes");
+        $this->MasterCodes   = TableRegistry::get("master_codes");
+        $this->AccessYears   = TableRegistry::get('access_years');
+        $this->AccessMonths  = TableRegistry::get('access_months');
+        $this->AccessWeeks   = TableRegistry::get('access_weeks');
         $this->loadComponent('Auth', [
             'authenticate' => [
                 'Form' => [

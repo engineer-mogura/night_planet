@@ -38,10 +38,10 @@ class ExeShellController extends AppController
 
     public function backup()
     {
-      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を開始します。--------', 'batch_snpr');
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を開始します。--------', 'batch_bk');
       exec(ExeShellController::$exec_path .$this->request->param('action') , $output, $result);
-      Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_snpr');
-      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を終了します。--------', 'batch_snpr');
+      Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_bk');
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を終了します。--------', 'batch_bk');
       // ダミー画面を表示する
       // シンプルレイアウトを使用
       $this->viewBuilder()->layout('simpleDefault');
@@ -72,10 +72,10 @@ class ExeShellController extends AppController
      */
     public function analyticsReport()
     {
-      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を開始します。--------', 'batch_snpr');
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を開始します。--------', 'batch_ar');
       exec(ExeShellController::$exec_path .$this->request->param('action') , $output, $result);
-      Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_snpr');
-      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を終了します。--------', 'batch_snpr');
+      Log::info(__LINE__ . '::' . __METHOD__ . '::' . "アウトプット:".$output . "結果コード:" . $result, 'batch_ar');
+      Log::info('--------'.__LINE__ . '::' . __METHOD__ . '::処理を終了します。--------', 'batch_ar');
       // ダミー画面を表示する
       // シンプルレイアウトを使用
       $this->viewBuilder()->layout('simpleDefault');

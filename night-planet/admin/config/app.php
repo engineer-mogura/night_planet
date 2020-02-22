@@ -386,15 +386,37 @@ return [
             'scopes' => 'pass_reset',
             'levels' => [],
         ],
-        // バッチログ定義
+        // イメージディレクトリ、DBバックアップするバッチログ定義
+        'batch_bk' => [
+            'className' => 'Cake\Log\Engine\FileLog',
+            'path' => LOGS . 'batch_bk' . DS,
+            'file' => date('Ymd').'_batch_bk',
+            'url' => env('LOG_ERROR_URL', null),
+            'size' => '50MB',
+            'rotate' => 30,
+            'scopes' => 'batch_bk',
+            'levels' => ['info', 'warning', 'error', 'critical', 'alert', 'emergency'],
+        ],
+        // 新着画像投稿を集計するバッチログ定義
         'batch_snpr' => [
             'className' => 'Cake\Log\Engine\FileLog',
-            'path' => LOGS,
+            'path' => LOGS . 'batch_snpr' . DS,
             'file' => date('Ymd').'_batch_snpr',
             'url' => env('LOG_ERROR_URL', null),
             'size' => '50MB',
             'rotate' => 30,
             'scopes' => 'batch_snpr',
+            'levels' => ['info', 'warning', 'error', 'critical', 'alert', 'emergency'],
+        ],
+        // 各店舗のアクセスレポートを集計するバッチログ定義
+        'batch_ar' => [
+            'className' => 'Cake\Log\Engine\FileLog',
+            'path' => LOGS . 'batch_ar' . DS,
+            'file' => date('Ymd').'_batch_ar',
+            'url' => env('LOG_ERROR_URL', null),
+            'size' => '50MB',
+            'rotate' => 30,
+            'scopes' => 'batch_ar',
             'levels' => ['info', 'warning', 'error', 'critical', 'alert', 'emergency'],
         ],
     ],

@@ -43,9 +43,9 @@ class AnalyticsReportShell extends Shell
         // タスクの実行
         $result = $this->Batch->analyticsReport();
         if ($result) {
-            Log::info(__LINE__ . '::' . __METHOD__ . "::バッチ処理が成功しました。", "batch_snpr");
+            Log::info(__LINE__ . '::' . __METHOD__ . "::バッチ処理が成功しました。", "batch_ar");
         } else {
-            Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。", "batch_snpr");
+            Log::error(__LINE__ . '::' . __METHOD__ . "::バッチ処理が失敗しました。", "batch_ar");
         }
     }
 }

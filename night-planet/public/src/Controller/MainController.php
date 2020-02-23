@@ -1,10 +1,12 @@
 <?php
 namespace App\Controller;
 
-use Token\Util\Token;
-use Cake\Mailer\MailerAwareTrait;
-use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 use Cake\Event\Event;
+use Token\Util\Token;
+use Cake\Filesystem\Folder;
+use Cake\ORM\TableRegistry;
+use Cake\Mailer\MailerAwareTrait;
 
 /**
 * Users Controller
@@ -29,6 +31,7 @@ class MainController extends AppController
         $this->Diarys         = TableRegistry::get('diarys');
         $this->MasterCodes    = TableRegistry::get("master_codes");
         $this->NewPhotosRank  = TableRegistry::get('new_photos_rank');
+
     }
 
     public function beforeFilter(Event $event)
@@ -87,44 +90,20 @@ class MainController extends AppController
         $new_photos = $this->NewPhotosRank->find("all")
                         ->order(['id'=>'ASC'])
                         ->toArray();
-        // $ig_data = null; // Instagramデータ
 
-        // // ナイプラのインスタデータを取得する
-        // if (!empty(API['INSTAGRAM_USER_NAME'])) {
-        //     $insta_user_name = API['INSTAGRAM_USER_NAME'];
-        //     // インスタのキャッシュパス
-        //     $cache_path = preg_replace(
-        //         '/(\/\/)/',
-        //         '/',
-        //         WWW_ROOT.PATH_ROOT['NIGHT_PLANET_CACHE']
-        //     );
-        //     // インスタ情報を取得
-        //     $tmp_ig_data = $this->Util->getInstagram($insta_user_name, null
-        //                     , null, $cache_path);
-        //     // データ取得に失敗した場合
-        //     if (!$tmp_ig_data) {
-        //         $this->log('【'.AREA[$shop->area]['label']
-        //             .GENRE[$shop->genre]['label'].$shop->name
-        //             .'】のインスタグラムのデータ取得に失敗しました。', 'error');
-        //         $this->Flash->warning('インスタグラムのデータ取得に失敗しました。');
-        //     }
-        //     $ig_data = $tmp_ig_data->business_discovery;
-        //     // インスタユーザーが存在しない場合
-        //     if (!empty($tmp_ig_data->error)) {
-        //         // エラーメッセージをセットする
-        //         $insta_error = $tmp_ig_data->error->error_user_title;
-        //         $this->set(compact('ig_error'));
-        //     }
-        //     $is_naipura = true;
-        // }
+        $start_date = new Time(date("Y-m-d",strtotime(date('Y-m-d') . "-7 day")));
+        $end_date   = new Time(date("Y-m-d"));
+        $limit      = 7;
 
+        $shop_ranking = $this->Util->getRanking($limit, $start_date, $end_date, null);
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', null);
         $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', null);
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
-        $this->set(compact('area', 'region', 'all_cnt', 'selectList', 'diarys', 'notices', 'new_photos', 'ig_data','is_naipura', 'adsenses'));
+        $this->set(compact('area', 'region', 'all_cnt', 'selectList', 'diarys'
+            , 'notices', 'new_photos', 'ig_data','is_naipura', 'adsenses', 'shop_ranking'));
     }
 
     /**

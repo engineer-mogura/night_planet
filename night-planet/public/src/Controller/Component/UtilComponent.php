@@ -3,6 +3,7 @@
 namespace App\Controller\Component;
 
 use Cake\Log\Log;
+use Cake\I18n\Time;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\ORM\TableRegistry;
@@ -1033,123 +1034,196 @@ class UtilComponent extends Component
       * @param [type] $access_token
       * @return $instagram_data
       */
-    public function getInstagram($insta_user_name = null
-        , $insta_business_name = null, $current_plan = null, $cache_path)
-    {
+      public function getInstagram($insta_user_name = null
+      , $insta_business_name = null, $current_plan = null, $cache_path)
+  {
 
-        //////////////////////
-        /*     初期設定     */
-        //////////////////////
+      //////////////////////
+      /*     初期設定     */
+      //////////////////////
 
-        // 投稿の最大取得数
-        $max_posts      = API['INSTAGRAM_MAX_POSTS'];
+      // 投稿の最大取得数
+      $max_posts      = API['INSTAGRAM_MAX_POSTS'];
 
-        // Graph API の URL
-        $graph_api      = API['INSTAGRAM_GRAPH_API'];
+      // Graph API の URL
+      $graph_api      = API['INSTAGRAM_GRAPH_API'];
 
-        // ビジネスID
-        $ig_buisiness   = API['INSTAGRAM_BUSINESS_ID'];
+      // ビジネスID
+      $ig_buisiness   = API['INSTAGRAM_BUSINESS_ID'];
 
-        // 無期限のページアクセストークン
-        $access_token   = API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN'];
+      // 無期限のページアクセストークン
+      $access_token   = API['INSTAGRAM_GRAPH_API_ACCESS_TOKEN'];
 
-        //ここに取得したいInstagramビジネスアカウントのユーザー名を入力してください。
-        //https://www.instagram.com/nightplanet91/なので
-        //「nightplanet91」がユーザー名になります
-        $target_user    = $insta_user_name;
+      //ここに取得したいInstagramビジネスアカウントのユーザー名を入力してください。
+      //https://www.instagram.com/nightplanet91/なので
+      //「nightplanet91」がユーザー名になります
+      $target_user    = $insta_user_name;
 
-        // キャッシュ時間の設定 (最短更新間隔 [sec])
-        // 更新頻度が高いと Graph API の時間当たりの利用制限に引っかかる可能性があるので、30sec以上を推奨
-        $cache_lifetime = API['INSTAGRAM_CACHE_TIME'];
+      // キャッシュ時間の設定 (最短更新間隔 [sec])
+      // 更新頻度が高いと Graph API の時間当たりの利用制限に引っかかる可能性があるので、30sec以上を推奨
+      $cache_lifetime = API['INSTAGRAM_CACHE_TIME'];
 
-        // 表示形式の初期設定 (グリッド表示の時は 'grid'、一覧表示の時は 'list' を指定)
-        $show_mode      = API['INSTAGRAM_SHOW_MODE'];
+      // 表示形式の初期設定 (グリッド表示の時は 'grid'、一覧表示の時は 'list' を指定)
+      $show_mode      = API['INSTAGRAM_SHOW_MODE'];
 
-        // プラン情報により、取得制限数をセット
-        if ($current_plan == SERVECE_PLAN['basic']['label']) {
-            $get_post_num = 12;
-        } else if ($current_plan == SERVECE_PLAN['premium']['label']) {
-            $get_post_num = 54;
-        } else if ($current_plan == SERVECE_PLAN['premium_s']['label']) {
-            $get_post_num = 120;
-        } else if (empty($current_plan)) {
-            $get_post_num = 120;
-        }
+      // プラン情報により、取得制限数をセット
+      if ($current_plan == SERVECE_PLAN['basic']['label']) {
+          $get_post_num = 12;
+      } else if ($current_plan == SERVECE_PLAN['premium']['label']) {
+          $get_post_num = 54;
+      } else if ($current_plan == SERVECE_PLAN['premium_s']['label']) {
+          $get_post_num = 120;
+      } else if (empty($current_plan)) {
+          $get_post_num = 120;
+      }
 
-        //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
-        if (!empty($target_user)) {
-            $fields      = 'business_discovery.username('.$target_user.')
-                            {id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id
-                                ,media.limit('.$get_post_num.'){
-                                    caption,media_url,media_type
-                                    ,children{
-                                        media_url,media_type
-                                    }
-                                    ,like_count,comments_count,timestamp,id
-                                }
-                            }';
-        }
+      //自分が所有するアカウント以外のInstagramビジネスアカウントが投稿している写真も取得したい場合は以下
+      if (!empty($target_user)) {
+          $fields      = 'business_discovery.username('.$target_user.')
+                          {id,name,username,profile_picture_url,followers_count,follows_count,media_count,ig_id
+                              ,media.limit('.$get_post_num.'){
+                                  caption,media_url,media_type
+                                  ,children{
+                                      media_url,media_type
+                                  }
+                                  ,like_count,comments_count,timestamp,id
+                              }
+                          }';
+      }
 
-        $fields = str_replace(array("\r\n","\r","\n","\t"," "), '', $fields);
-        //////////////////////
-        /* 初期設定ここまで */
-        //////////////////////
+      $fields = str_replace(array("\r\n","\r","\n","\t"," "), '', $fields);
+      //////////////////////
+      /* 初期設定ここまで */
+      //////////////////////
 
-        //////////////////////
-        /*     取得処理     */
-        //////////////////////
+      //////////////////////
+      /*     取得処理     */
+      //////////////////////
 
-        /*
-        キャッシュしておいたファイルが指定時間以内に更新されていたらキャッシュしたファイルのデータを使用する
-        指定時間以上経過していたら新たに Instagaram Graph API へリクエストする
-        */
+      /*
+      キャッシュしておいたファイルが指定時間以内に更新されていたらキャッシュしたファイルのデータを使用する
+      指定時間以上経過していたら新たに Instagaram Graph API へリクエストする
+      */
 
-        // キャッシュ用のディレクトリが存在するか確認
-        // なければ作成する
-        if (!file_exists(dirname($cache_path). '/cache/')) {
-            if (mkdir(dirname($cache_path). '/cache/', 0774)) {
-                chmod(dirname($cache_path). '/cache/', 0774);
-            }
-        }
+      // キャッシュ用のディレクトリが存在するか確認
+      // なければ作成する
+      if (!file_exists(dirname($cache_path). '/cache/')) {
+          if (mkdir(dirname($cache_path). '/cache/', 0774)) {
+              chmod(dirname($cache_path). '/cache/', 0774);
+          }
+      }
 
-        // キャッシュファイルの最終更新日時を取得
-        $cache_lastmodified = @filemtime(dirname($cache_path). '/cache/instagram_graph_api.dat');
+      // キャッシュファイルの最終更新日時を取得
+      $cache_lastmodified = @filemtime(dirname($cache_path). '/cache/instagram_graph_api.dat');
 
-        // 更新日時の比較
-        if (!$cache_lastmodified) {
-            // Graph API から JSON 形式でデータを取得
-            $ig_json = @file_get_contents($graph_api. $ig_buisiness. '?fields='. $fields. '&access_token='. $access_token);
-            // 取得したデータをキャッシュに保存する
-            file_put_contents(dirname($cache_path). '/cache/instagram_graph_api.dat', $ig_json, LOCK_EX);
-        } else {
-            if (time() - $cache_lastmodified > $cache_lifetime) {
-                // キャッシュの最終更新日時がキャッシュ時間よりも古い場合は再取得する
-                $ig_json = @file_get_contents($graph_api. $ig_buisiness. '?fields='. $fields. '&access_token='. $access_token);
-                // 取得したデータをキャッシュに保存する
-                file_put_contents(dirname($cache_path). '/cache/instagram_graph_api.dat', $ig_json, LOCK_EX);
-            } else {
-                // キャッシュファイルが新しければキャッシュデータを使用する
-                $ig_json = @file_get_contents(dirname($cache_path). '/cache/instagram_graph_api.dat');
-            }
-        }
+      // 更新日時の比較
+      if (!$cache_lastmodified) {
+          // Graph API から JSON 形式でデータを取得
+          $ig_json = @file_get_contents($graph_api. $ig_buisiness. '?fields='. $fields. '&access_token='. $access_token);
+          // 取得したデータをキャッシュに保存する
+          file_put_contents(dirname($cache_path). '/cache/instagram_graph_api.dat', $ig_json, LOCK_EX);
+      } else {
+          if (time() - $cache_lastmodified > $cache_lifetime) {
+              // キャッシュの最終更新日時がキャッシュ時間よりも古い場合は再取得する
+              $ig_json = @file_get_contents($graph_api. $ig_buisiness. '?fields='. $fields. '&access_token='. $access_token);
+              // 取得したデータをキャッシュに保存する
+              file_put_contents(dirname($cache_path). '/cache/instagram_graph_api.dat', $ig_json, LOCK_EX);
+          } else {
+              // キャッシュファイルが新しければキャッシュデータを使用する
+              $ig_json = @file_get_contents(dirname($cache_path). '/cache/instagram_graph_api.dat');
+          }
+      }
 
-        // 取得したJSON形式データを配列に展開する
-        if ($ig_json) {
-            $ig_data = json_decode($ig_json);
-            if (isset($ig_data->error)) {
-                $ig_data = null;
-            }
-        }
+      // 取得したJSON形式データを配列に展開する
+      if ($ig_json) {
+          $ig_data = json_decode($ig_json);
+          if (isset($ig_data->error)) {
+              $ig_data = null;
+          }
+      }
 
-        // 初期表示の設定確認
-        if ($show_mode !== 'grid' && $show_mode !== 'list') {
-            $show_mode = 'grid';
-        }
+      // 初期表示の設定確認
+      if ($show_mode !== 'grid' && $show_mode !== 'list') {
+          $show_mode = 'grid';
+      }
 
-        return $ig_data;
-    }
+      return $ig_data;
+  }
 
     /**
+     * 店舗ランキング情報を取得する処理
+     *
+     * @param [type] $limit
+     * @param [type] $start_date
+     * @param [type] $end_date
+     * @param [type] $area
+     * @return shop_ranking
+     */
+    public function getRanking($limit, $start_date, $end_date, $area = null)
+    {
+        $this->AccessYears   = TableRegistry::get('access_years');
+        $this->AccessMonths  = TableRegistry::get('access_months');
+        $this->AccessWeeks   = TableRegistry::get('access_weeks');
+
+        $start_ym = $start_date->year . '-' . $start_date->month;
+        $end_ym   = $end_date->year . '-' . $end_date->month;
+        $start_day  = (int) $start_date->day;
+        $in_array = [$start_ym, $end_ym];
+
+        // エリアの指定が無い場合
+        if (empty($area)) {
+            $wk_shop_ranking = $this->AccessMonths->find()
+                ->where(['ym IN' => $in_array])
+                ->contain(['shops']);
+        } else {
+            $wk_shop_ranking = $this->AccessMonths->find()
+                ->where(['ym IN' => $in_array, 'access_months.area' => $area])
+                ->contain(['shops']);
+        }
+
+        foreach ($wk_shop_ranking as $key => $value) {
+            $wk_start_day = $start_day;
+            for ($i = 0; $i < 6; $i++) {
+                $value->set('total_sessions'
+                    , $value->get('total_sessions') + $value[$wk_start_day . '_sessions']);
+                $value->set('total_pageviews'
+                    , $value->get('total_pageviews') + $value[$wk_start_day . '_pageviews']);
+                $value->set('total_users'
+                    , $value->get('total_users') + $value[$wk_start_day . '_users']);
+                $wk_start_day++;
+            }
+        }
+        $wk_shop_ranking = $wk_shop_ranking->toArray();
+        foreach ($wk_shop_ranking as $key => $value) {
+            $sort[$key] = $value['total_pageviews'];
+        }
+        array_multisort($sort, SORT_DESC, $wk_shop_ranking);
+
+        foreach ($wk_shop_ranking as $key => $value) {
+
+            $this->getShopInfo($value->Shops);
+            $value->set('shopInfo', $this->getShopInfo($value->Shops));
+            // トップ画像を設定する
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$value->shopInfo['top_image_path']), true, 0755);
+
+            $file = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if (count($file) > 0) {
+                $value->set('top_image', $value->shopInfo['top_image_path'].DS.(basename($file[0])));
+            } else {
+                // 共通トップ画像をセット
+                $value->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+            }
+            $shop_ranking[$key] = $value;
+            if ($key == $limit) {
+                break;
+            }
+        }
+
+      return $shop_ranking;
+  }
+
+/**
      * ログを加工してセットする
      *
      * @param Array $user

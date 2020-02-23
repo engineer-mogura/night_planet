@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use Cake\I18n\Time;
 use \Cake\ORM\Query;
 use Cake\Event\Event;
 use Cake\Routing\Router;
@@ -171,6 +172,11 @@ class AreaController extends AppController
             ->order(['id'=>'ASC'])
             ->toArray();
 
+        $start_date = new Time(date("Y-m-d",strtotime(date('Y-m-d') . "-7 day")));
+        $end_date   = new Time(date("Y-m-d"));
+        $limit      = 7;
+
+        $shop_ranking = $this->Util->getRanking($limit, $start_date, $end_date, $this->viewVars['is_area']);
         // メイン広告を取得
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', $this->viewVars['is_area']);
         // サブ広告を取得
@@ -183,7 +189,8 @@ class AreaController extends AppController
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area']);
 
         $this->set('next_view', 'area');
-        $this->set(compact('all_cnt', 'genreCounts', 'selectList', 'new_photos', 'diarys', 'notices', 'adsenses'));
+        $this->set(compact('all_cnt', 'genreCounts', 'selectList', 'new_photos'
+            , 'diarys', 'notices', 'adsenses', 'shop_ranking'));
 
         $this->render();
     }

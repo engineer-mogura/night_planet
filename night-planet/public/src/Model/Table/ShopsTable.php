@@ -83,6 +83,9 @@ class ShopsTable extends Table
         $this->hasMany('shop_options', [
             'foreignKey' => 'shop_id'
         ]);
+        $this->hasMany('access_months', [
+            'foreignKey' => 'shop_id'
+        ]);
     }
 
     /**

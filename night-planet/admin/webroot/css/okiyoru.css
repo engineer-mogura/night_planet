@@ -1,6 +1,7 @@
 
 html {
   font-family: GillSans, Calibri, Trebuchet, sans-serif;
+  color : #595958;
 }
 html,body {
   -webkit-overflow-scrolling: touch;
@@ -403,6 +404,46 @@ form .warning-message {
   }
 /* PhotoSwipe END */
 
+/* ランキング START */
+.my-ranking > figure {
+  margin : initial;
+}
+.my-ranking figure{
+  float  : left;
+  margin : 0;
+  width  : 25%;
+  margin : 0;
+}
+.my-ranking figure.col {
+  padding : initial;
+}
+.my-ranking figure img{
+  display            : list-item;
+  height             : 100px;
+  width              : 100%;
+  object-fit         : cover;
+  -webkit-box-sizing : border-box;
+  -moz-box-sizing    : border-box;
+  box-sizing         : border-b;
+  border             : solid #fff 1px;
+  }
+.my-ranking figure > span.rank {
+  display: block;
+  text-align: center;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding-left: 2px;
+  padding-right: 2px;
+  font-size: 10px;
+  color: #fff;
+  background-color: #4465b9;
+  border-radius: 2px;
+}
+.my-ranking figure > span.rank.rank-header {
+  margin-top: 5px;
+}
+  /* ランキング END */
+
 /* トップページ画面 START */
 #top .section.tabs-section {
   height:600px;
@@ -428,8 +469,15 @@ form .warning-message {
   background-size: contain;
   vertical-align: middle;
 }
-#top .count-section span, #area .count-section span {
-  color:white;
+ul.tabs > li.tab-original.tab {
+  background-color : #cfddff;
+  margin-left      : 5px;
+  margin-right     : 5px;
+  border-top-left-radius  : 10px;
+  border-top-right-radius : 10px;
+}
+ul.tabs > li.tab-original.tab > a {
+  color : #595958;
 }
 /* トップページ画面 END */
 
@@ -823,6 +871,16 @@ div.description {
 #recruit-section .recruit-label span:before,
 #recruit-section .recruit-label span:after {
   background-image: url(/img/common/recruit-icon.png);
+  content: '';/*何も入れない*/
+  display: inline-block;/*忘れずに！*/
+  width: 30px;/*画像の幅*/
+  height: 30px;/*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+.tabs-section2 .trending_up-label span:before,
+.tabs-section2 .trending_up-label span:after {
+  background-image: url(/img/common/trending_up-icon.png);
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/

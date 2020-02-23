@@ -10,7 +10,6 @@ use Cake\Mailer\Email;
 use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
-use App\Controller\ApiGooglesController;
 
 /**
  * Controls the data flow into shops object and updates the view whenever data changes.
@@ -59,9 +58,7 @@ class ShopsController extends AppController
      */
     public function index()
     {
-        //$ApiGooglesController = new ApiGooglesController();
-        //$this->redirect("http://admin.night-planet.local/api-googles");
-        //$ApiGooglesController->index();
+
         // アクティブタブ
         $selected_tab = "";
         // サイドバーメニューのパラメータがあればセッションにセットする
@@ -81,9 +78,28 @@ class ShopsController extends AppController
                 ->contain(['coupons','Jobs','snss','casts' => function(Query $q) {
                 return $q->where(['casts.delete_flag'=>'0']);
             }])->first();
+
+            // 現在日付
+            $date = Time::now();
+            $y = $date->year;
+            $ym = $date->year . '-' . $date->month;
+
+            $access_years = $this->AccessYears->find()
+                                ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id
+                                        ,'y' => $y])->first();
+            $access_months = $this->AccessMonths->find()
+                                ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id
+                                        ,'ym' => $ym])->first();
+            $access_weeks = $this->AccessWeeks->find()
+                                ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id])
+                                ->first();
+            $reports = array('access_years' => json_encode($access_years)
+                            , 'access_months' => json_encode($access_months)
+                            , 'access_weeks' => json_encode($access_weeks)
+                            );
         }
 
-        $this->set(compact('shop'));
+        $this->set(compact('shop', 'reports'));
         $this->render();
     }
     /**

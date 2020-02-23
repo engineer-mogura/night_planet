@@ -48,7 +48,7 @@ class ApiGooglesController extends AppController
             $end   = '2020-02-15'; // 終了日
 
             Log::info(__LINE__ . '::' . __METHOD__ 
-                . "::保守用一括登録処理,開始日：". $start . "終了日：". $end , "batch_snpr");
+                . "::保守用一括登録処理,開始日：". $start . "終了日：". $end , "batch_ar");
 
             $moto_start_date = date($start);
             $moto_end_date = date($end);
@@ -77,7 +77,8 @@ class ApiGooglesController extends AppController
             $start_date = date("Y-m-d");
             $end_date = date("Y-m-d");
             $response = $this->getReport($analytics, $start_date, $end_date);
-            $this->printResults($response);
+            // 画面表示する場合は、コメント解除する↓
+            // $this->printResults($response);
             return $response;
         }
 

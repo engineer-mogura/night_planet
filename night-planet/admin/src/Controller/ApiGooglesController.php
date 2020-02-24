@@ -44,8 +44,8 @@ class ApiGooglesController extends AppController
         // 保守用一括登録処理の場合
         if ($is_hosyu) {
 
-            $start = '2020-02-15'; // 開始日
-            $end   = '2020-02-15'; // 終了日
+            $start = '2019-11-01'; // 開始日
+            $end   = '2019-11-01'; // 終了日
 
             Log::info(__LINE__ . '::' . __METHOD__ 
                 . "::保守用一括登録処理,開始日：". $start . "終了日：". $end , "batch_ar");

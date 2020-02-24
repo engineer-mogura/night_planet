@@ -70,8 +70,6 @@ class ShopsController extends AppController
             $selectedTab = $this->request->session()->consume('selected_tab');
         }
 
-        //$this->redirect('/ApiGoogles/index');
-
         if(!is_null($user = $this->Auth->user())){
             $shop = $this->Shops->find()
                 ->where(['shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
@@ -84,22 +82,30 @@ class ShopsController extends AppController
             $y = $date->year;
             $ym = $date->year . '-' . $date->month;
 
+            $range_years  = array();
+            $range_months = array();
             $access_years = $this->AccessYears->find()
-                                ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id
-                                        ,'y' => $y])->first();
+                                ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id])
+                                ->order(['y' => 'DESC'])->toArray();
             $access_months = $this->AccessMonths->find()
-                                ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id
-                                        ,'ym' => $ym])->first();
+                                ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id])
+                                ->order(['ym' => 'DESC'])->toArray();
+            foreach ($access_years as $key => $value) {
+                array_push($range_years, $value->y);
+            }
+            foreach ($access_months as $key => $value) {
+                array_push($range_months, $value->ym);
+            }
             $access_weeks = $this->AccessWeeks->find()
                                 ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id])
                                 ->first();
             $reports = array('access_years' => json_encode($access_years)
                             , 'access_months' => json_encode($access_months)
                             , 'access_weeks' => json_encode($access_weeks)
-                            );
+                            , 'ranges' => [$range_years, $range_months]);
         }
 
-        $this->set(compact('shop', 'reports'));
+    $this->set(compact('shop', 'reports'/*, 'ranges' */));
         $this->render();
     }
     /**

@@ -91,7 +91,7 @@ class MainController extends AppController
                         ->order(['id'=>'ASC'])
                         ->toArray();
 
-        $start_date = new Time(date("Y-m-d",strtotime(date('Y-m-d') . "-7 day")));
+        $start_date = new Time(date("Y-m-d",strtotime(date('Y-m-d') . "-30 day")));
         $end_date   = new Time(date("Y-m-d"));
         $limit      = 7;
 

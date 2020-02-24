@@ -7,12 +7,22 @@
                 <?= $this->element('now_edit_shop'); ?>
                 <!-- 編集中の店舗 END-->
             </div>
-            <div class="red darken-1 card-panel col s12 center-align">
-                <p class="white-text recruit-label section-label"><span> 店舗 </span></p>
+            <div class="white card-panel col s12 center-align">
+                <p class="recruit-label section-label"><span> 店舗 </span></p>
             </div>
             <div class="col s12 m6 l6 year-graph-section section">
                 <div class="card-panel year-graph-shop section">
+                    <div class="input-field col s12">
+                        <select id="range-y">
+                            <option value="" disabled selected><?=$reports['ranges'][0][0]?></option>
+                            <?php  foreach ($reports['ranges'][0] as $key => $value) {
+                                echo ('<option value="'. $value .'">'. $value .'</option>');
+                            } ?>
+                        </select>
+                        <label>選択</label>
+                    </div>
                     <canvas id="shopYearChart" height="300"></canvas>
+                    <input data-shop_year="" type="hidden" name="shop_year_data">
                 </div>
             </div>
             <div class="col s12 m6 l6 year-graph-section section">
@@ -25,13 +35,23 @@
             </div>
             <div class="col s12 m6 l6 day-graph-section section">
                 <div class="card-panel day-graph-shop section">
+                    <div class="input-field col s12">
+                        <select id="range-ym">
+                            <option value="" disabled selected><?=$reports['ranges'][1][0]?></option>
+                            <?php  foreach ($reports['ranges'][1] as $key => $value) {
+                                echo ('<option value="'. $value .'">'. $value .'</option>');
+                            } ?>
+                        </select>
+                        <label>選択</label>
+                    </div>
                     <!--描画箇所 -->
                     <canvas id="shopMonthChart" height="500"></canvas>
                     <!--凡例箇所 -->
+                    <input data-shop_month="" type="hidden" name="shop_month_data">
                 </div>
             </div>
-            <div class="red darken-1 card-panel col s12 center-align">
-                <p class="white-text recruit-label section-label"><span> スタッフ </span></p>
+            <div class="white card-panel col s12 center-align">
+                <p class="recruit-label section-label"><span> スタッフ </span></p>
             </div>
             <div class="col s12">
                 <p style="font-weight: bolder;">
@@ -64,12 +84,9 @@
 
         // データセット
         var data = [
-            accessWeeks['monday_pageviews']
-            , accessWeeks['tuesday_pageviews']
-            , accessWeeks['wednesday_pageviews']
-            , accessWeeks['thursday_pageviews']
-            , accessWeeks['friday_pageviews']
-            , accessWeeks['saturday_pageviews']
+            accessWeeks['monday_pageviews'], accessWeeks['tuesday_pageviews']
+            , accessWeeks['wednesday_pageviews'], accessWeeks['thursday_pageviews']
+            , accessWeeks['friday_pageviews'], accessWeeks['saturday_pageviews']
             , accessWeeks['sunday_pageviews']
         ]
         var ctx = document.getElementById("shopWeekChart");
@@ -79,13 +96,8 @@
                 labels: ["月曜", "火曜", "水曜", "木曜", "金曜", "土曜", "日曜"],
                 datasets: [{
                     backgroundColor: [
-                        "#ff8cd1",
-                        "#00ec5f",
-                        "#ffeb00",
-                        "#1995ff",
-                        "#ff8303",
-                        "#ff0000",
-                        "#d800ff"
+                        "#ff8cd1", "#00ec5f", "#ffeb00", "#1995ff",
+                        "#ff8303", "#ff0000", "#d800ff"
                     ],
                     data: data
                 }]
@@ -103,7 +115,7 @@
     /**
     * 月間別アクセス状況作成
     */
-    var shopYearChart = function (accessYears) {
+    var shopYearChart = function (accessYears/*, rangeYears*/) {
 
         var data = [];
         var label = [];
@@ -112,6 +124,25 @@
             data.push(accessYears[i + '_pageviews']);
             label.push(i + ' 月');
         }
+
+        //全データ格納用
+        var allData = {};
+        // 年月分割
+        for (var i = 0; i < accessYears.length; i++) {
+
+            var span = accessYears[i]['y'];
+            var data = [];
+            var label = [];
+            // データセット
+            for (var j = 1; j <= 12; j++) {
+                data.push(accessYears[i][j + '_pageviews']);
+                label.push(j + ' 月');
+            }
+            allData[span] = {'data' : data, 'label' : label, 'span' : span};
+        }
+        $('input').data('shop_year', allData);
+
+        var nowY = accessYears[0]['y'];
         var ctx = document.getElementById('shopYearChart').getContext('2d');
         var chart = new Chart(ctx, {
             // The type of chart we want to create
@@ -119,12 +150,12 @@
 
             // The data for our dataset
             data: {
-                labels: label,
+                labels: allData[nowY].label,
                 datasets: [{
                     label: '月間アクセス状況',
                     backgroundColor: 'rgb(255, 25, 102)',
                     borderColor: 'rgb(255, 99, 132)',
-                    data: data
+                    data: allData[nowY].data,
                 }]
             },
 
@@ -132,30 +163,47 @@
             options: {
                 title: {
                     display: true,
-                    text: accessYears['y'] + ' 年'
+                    text: allData[nowY].span,
                 }
             }
+        });
+
+        $("#range-y").change(function(){
+            var y = $(this).val();
+            var data = $('input[name="shop_year_data"]').data()['shop_year'][y];
+            chart.data.labels = data.label;
+            chart.data.datasets[0].data = data.data;
+            chart.options.title.text = data.span;
+            chart.update();
         });
     }
 
     /**
      * 日別アクセス状況作成
      */
-    var shopMonthChart = function (accessMonths) {
+    var shopMonthChart = function (accessMonths/*, rangeMonths*/) {
 
+        //全データ格納用
+        var allData = {};
         // 年月分割
-        var arrayYm = accessMonths['ym'].split('-');
-        const howManyDays = new Date(arrayYm[0], arrayYm[1], 0).getDate();
-        var span = arrayYm[1] + " 月 1 日 ～ "
-            + arrayYm[1] + " 月 " + howManyDays + " 日";
-        var data = [];
-        var label = [];
-        // データセット
-        for (var i = 1; i <= howManyDays; i++) {
-            data.push(accessMonths[i + '_pageviews']);
-            label.push(i + ' 日');
+        for (var i = 0; i < accessMonths.length; i++) {
+            var arrayYm = accessMonths[i]['ym'].split('-');
+            var howManyDays = new Date(arrayYm[0], arrayYm[1], 0).getDate();
+            var span = arrayYm[1] + " 月 1 日 ～ "
+                + arrayYm[1] + " 月 " + howManyDays + " 日";
+            var data = [];
+            var label = [];
+            // データセット
+            for (var j = 1; j <= howManyDays; j++) {
+                data.push(accessMonths[i][j + '_pageviews']);
+                label.push(j + ' 日');
+            }
+            var ym = accessMonths[i].ym;
+            allData[ym] = {'data' : data, 'label' : label, 'span' : span};
         }
+        $('input').data('shop_month', allData);
 
+        var nowYm = accessMonths[0]['ym'];
         var ctx = document.getElementById('shopMonthChart').getContext('2d');
         var chart = new Chart(ctx, {
             // The type of chart we want to create
@@ -163,24 +211,33 @@
 
             // The data for our dataset
             data: {
-                labels: label,
+                labels: allData[nowYm].label,
                 datasets: [{
                     label: '日別アクセス状況',
-                    backgroundColor: 'rgb(255, 25, 102)',
+                    backgroundColor: 'rgb(255, 140, 0)',
                     borderColor: 'rgb(255, 99, 132)',
-                    data: data
+                    data: allData[nowYm].data,
                 }]
             },
             options: {
                 title: {
                     display: true,
-                    text: span
+                    text: allData[nowYm].span,
                 }
                 // responsive: true,
                 // maintainAspectRatio: false,
                 // 各種設定の記述
             }
 
+        });
+
+        $("#range-ym").change(function(){
+            var ym = $(this).val();
+            var data = $('input[name="shop_month_data"]').data()['shop_month'][ym];
+            chart.data.labels = data.label;
+            chart.data.datasets[0].data = data.data;
+            chart.options.title.text = data.span;
+            chart.update();
         });
     }
     /**
@@ -245,12 +302,15 @@
 
         });
     }
-    var accessYears = JSON.parse('<?php echo ($reports['access_years']); ?>');
+    var accessYears  = JSON.parse('<?php echo ($reports['access_years']); ?>');
     var accessMonths = JSON.parse('<?php echo ($reports['access_months']); ?>');
-    var accessWeeks = JSON.parse('<?php echo ($reports['access_weeks']); ?>');
-    shopYearChart(accessYears);
+    var accessWeeks  = JSON.parse('<?php echo ($reports['access_weeks']); ?>');
+    // var rangeYears   = JSON.parse('<?php echo ($ranges['range_years']); ?>');
+    // var rangeMonths  = JSON.parse('<?php echo ($ranges['range_months']); ?>');
+
+    shopYearChart(accessYears/*, rangeYears*/);
+    shopMonthChart(accessMonths/*, rangeMonths*/);
     shopWeekChart(accessWeeks);
-    shopMonthChart(accessMonths);
     castWeekChart();
     castTotalChartCast();
     $(document).ready(function () {

@@ -71,10 +71,12 @@ class BatchComponent extends Component
             // バックアップ元フォルダ
             $backupfolder = strstr(IMG_DOMAIN, 'img');
             // ファイル名を定義(※ファイル名で日付がわかるようにしておきます)
-            $filename = $backupfolder . '_' . $date . '.tar ';
+            //$filename = $backupfolder . '_' . $date . '.tar ';
+            $filename = $backupfolder . '_' . $date . '.zip ';
 
             // バックアップ実行
-            exec('tar -cvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
+            //exec('tar -cvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
+            exec('zip -r ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
             // パーミッション変更
             exec('chmod 700 ' . $dirpath . DS . $filename);
             // 古いバックアップファイルを削除
@@ -431,7 +433,7 @@ class BatchComponent extends Component
     public function analyticsReport()
     {
 
-        $is_hosyu = true; // 保守用 日時範囲を指定して一括登録する
+        $is_hosyu = false; // 保守用 日時範囲を指定して一括登録する
 
         $this->ApiGoogles = new ApiGooglesController();
 

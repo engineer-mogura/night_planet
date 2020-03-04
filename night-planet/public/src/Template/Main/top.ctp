@@ -101,7 +101,7 @@
 								<a href="<?=$value->shopInfo['shop_url']?>" data-size="800x1000">
 									<img width="100%" src="<?=$value['top_image']?>" alt="<?=$value->shopInfo['area']['label'] . $value->name?>" />
 								</a>
-								<span class="rank rank-footer truncate"><?=$value->shopInfo['area']['label']?>
+								<span class="rank rank-footer truncate"><?=$value->shopInfo['area']['label'].' '.$value->shopInfo['genre']['label']?>
 									<br><?=$value->name?></span>
 							</figure>
 						<?php endforeach ?>

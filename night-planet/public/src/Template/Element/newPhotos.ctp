@@ -32,7 +32,8 @@
 		<a onclick="click_figure(this)" id="<?='call-figure'.h($key) ?>" class="instagram" title="likes:<?php echo $post->like_count; ?>">
 			<div style="background-image: url('<?php echo $media; ?>');">
 				<div class="footer-box">
-					<span class="badge area-badge"><span class="footer-message"><?=$post->area ." ". $post->genre;?></span></span>
+					<span class="badge area-badge truncate"><span class="footer-message"><?=$post->area ." ". $post->genre;?>
+					<br><?=$post->name?></span></span>
 				</div>
 			</div>
 <?php

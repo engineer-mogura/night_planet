@@ -962,7 +962,7 @@ class UtilComponent extends Component
 
         switch($week) {
             case 0:
-                $array_week = ["en"=>"monday", "ja"=>"日曜日"];
+                $array_week = ["en"=>"sunday", "ja"=>"日曜日"];
                 break;
             case 1:
                 $array_week = ["en"=>"monday", "ja"=>"月曜日"];
@@ -980,7 +980,7 @@ class UtilComponent extends Component
                 $array_week = ["en"=>"friday", "ja"=>"金曜日"];
                 break;
             case 6:
-                $array_week = ["en"=>"friday", "ja"=>"土曜日"];
+                $array_week = ["en"=>"saturday", "ja"=>"土曜日"];
                 break;
         }
         return $array_week;
@@ -1165,8 +1165,8 @@ class UtilComponent extends Component
         $this->AccessMonths  = TableRegistry::get('access_months');
         $this->AccessWeeks   = TableRegistry::get('access_weeks');
 
-        $start_ym = $start_date->year . '-' . $start_date->month;
-        $end_ym   = $end_date->year . '-' . $end_date->month;
+        $start_ym = $start_date->year . '-' . $start_date->format('m');
+        $end_ym   = $end_date->year . '-' . $end_date->format('m');
         $start_day  = (int) $start_date->day;
         $in_array = [$start_ym, $end_ym];
 

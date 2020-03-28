@@ -786,6 +786,8 @@ class ShopsController extends AppController
             if (!$dir->copy($tmpDir->path)) {
                 throw new RuntimeException('バックアップに失敗しました。');
             }
+            // TODO: 何故かcopy処理でパスが変更されるので再セットする
+            $dir->path = $del_path;
             // 日記ディレクトリ削除処理実行
             if (!$dir->delete()) {
                 throw new RuntimeException('ディレクトリの削除ができませんでした。');
@@ -1782,7 +1784,7 @@ class ShopsController extends AppController
                     ->where(['cast_schedules.start >='=> $start_date
                             , 'cast_schedules.start <='=> $end_date])
                     ->order(['cast_schedules.start'=>'ASC']);
-            }])->order(['casts.created'=>'DESC']);
+            }])->order(['casts.created'=>'DESC'])->toArray();
 
         $workSchedule = $this->WorkSchedules->find('all')
             ->where(['shop_id', $this->viewVars['shopInfo']['id']])

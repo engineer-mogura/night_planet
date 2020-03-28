@@ -27,13 +27,20 @@ class CastsController extends AppController
         parent::beforeFilter($event);
         // スタッフに関する情報をセット
         if (!is_null($user = $this->Auth->user())) {
-            $cast = $this->Casts->get($user['id']);
-            // オーナーに関する情報をセット
-            $shop = $this->Shops->find("all")
-                ->where(['shops.id'=>$user['shop_id']])
-                ->contain(['owners.servece_plans'])
-                ->first();
-            $this->set('userInfo', $this->Util->getCastItem($cast, $shop));
+            if ($this->Casts->exists(['id' => $user['id']])) {
+                $cast = $this->Casts->get($user['id']);
+                // オーナーに関する情報をセット
+                $shop = $this->Shops->find("all")
+                    ->where(['shops.id'=>$user['shop_id']])
+                    ->contain(['owners.servece_plans'])
+                    ->first();
+                $this->set('userInfo', $this->Util->getCastItem($cast, $shop));
+            } else {
+                $session = $this->request->getSession();
+                $session->destroy();
+                $this->Flash->error('うまくアクセス出来ませんでした。もう一度やり直してみてください。');
+            }
+
         }
     }
 

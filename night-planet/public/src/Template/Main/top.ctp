@@ -80,7 +80,7 @@
 				</div>
 			</div>
 			<div class="row section tabs-section2">
-				<div class="light-blue accent-2 card-panel col s12 center-align">
+				<div class="light-blue accent-2 card-panel col s12 center-align trending_up-label-section">
 					<p class="trending_up-label section-label"><span> ランキング </span></p>
 				</div>
 				<ul id="tabs-ranking" class="tabs tabs-fixed-width">

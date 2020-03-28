@@ -21,6 +21,9 @@ article#SNS_Instagram header > section{
   background          : linear-gradient(135deg,#ebff3709,#46ff4b09,#0affff09);
   border-bottom       : 1px solid #969696;
 }
+article#SNS_Instagram header > section#new-photos {
+  padding             : 2.5em;
+}
 article#SNS_Instagram header h1 {
   margin              : 0px;
   padding             : 0px;
@@ -386,13 +389,38 @@ article#SNS_Instagram span.badge {
   height: 35px;
   line-height: 1.5;
 }
-@media only screen and (max-width: 450px) {
-  
+article#SNS_Instagram a{
+	position:relative;
+	line-height:2em;
+	text-indent:2em;
 }
-/* article#SNS_Instagram input#show_list:checked + input + main > div > a > span.ig-children {
-  display             : block;
-  margin              : 5px;
-  font-size           : 14px;
-  color               : #A4A4A4;
-  text-align          : right;
-} */
+/** キャラクター設定 START **/
+article#SNS_Instagram a.img.night-planet-chara:after {
+  position: absolute;
+  bottom: -3.5em;
+  content: "";
+  display: inline-block;
+  width: 4em;
+  height: 4em;
+  background-size: contain;
+  background-image: url(/img/common/544587.png);
+  background-repeat: no-repeat;
+}
+article#SNS_Instagram a.img.night-planet-img:after {
+  border-radius: 100%;
+  position: absolute;
+  bottom: -3.5em;
+  content: "";
+  display: inline-block;
+  width: 4em;
+  height: 4em;
+  background-size: contain;
+  background-image: url(/img/common/night_planet_top_favicon.png);
+  background-repeat: no-repeat;
+}
+/** キャラクター設定 END **/
+@media only screen and (max-width: 450px) {
+  /* article#SNS_Instagram header > section {
+    padding: 1em;
+  } */
+}

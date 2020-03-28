@@ -1,16 +1,16 @@
 
 <article id="SNS_Instagram">
     <header>
-        <section>
+        <section id="new-photos">
             <div class="row" style="margin-bottom:0px;">
 			<div class="col s3 m3 l3">
-				<a href="<?=SNS['INSTAGRAM']?>"><img src="<?=PATH_ROOT['NIGHT_PLANET_IMAGE']?>" class="circle" width="60" alt="profile_picture"></a>
+				<a href="<?=SNS['INSTAGRAM']?>" class="img night-planet-img circle"></a>
             </div>
 			<div class="col s6 m6 l6">
-				<span style="color:#666;">ナイプラの新着フォトです</span>
+				<span style="color:#666;font-size: x-small;">ナイプラの新着フォトです</span>
             </div>
 			<div class="col s3 m3 l3">
-				<a href="<?=SNS['INSTAGRAM']?>"><img src="<?=PATH_ROOT['NIGHT_PLANET_CHARA']?>" class="" width="60" alt="profile_picture"></a>
+				<a href="<?=SNS['INSTAGRAM']?>" class="img night-planet-chara"></a>
             </div>
         </section>
     </header>

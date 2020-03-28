@@ -886,13 +886,52 @@ div.description {
 .tabs-section2 .trending_up-label span:before,
 .tabs-section2 .trending_up-label span:after {
   background-image: url(/img/common/trending_up-icon.png);
-  content: '';/*何も入れない*/
-  display: inline-block;/*忘れずに！*/
-  width: 30px;/*画像の幅*/
-  height: 30px;/*画像の高さ*/
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 30px;
   background-size: contain;
   vertical-align: middle;
 }
+
+.tabs-section2 .trending_up-label {
+	position:relative;
+	line-height:2em;
+	text-indent:2em;
+}
+/** キャラクター設定 START **/
+.tabs-section2 .trending_up-label:after {
+  left: 11.5em;
+  position: absolute;
+  bottom: -15px;
+  content: "";
+  display: inline-block;
+  width: 8em;
+  height: 10em;
+  background-size: contain;
+  background-image: url(/img/common/507054.png);
+  background-repeat: no-repeat;
+}
+#instagram-section .instagram-label:after {
+  left: 11em;
+  position: absolute;
+  bottom: -35px;
+  content: "";
+  display: inline-block;
+  width: 8em;
+  height: 10em;
+  background-size: contain;
+  background-image: url(/img/common/1534417.png);
+  background-repeat: no-repeat;
+}
+/** キャラクター設定 END **/
+
+#instagram-section .instagram-label {
+	position:relative;
+	line-height:2em;
+	text-indent:2em;
+}
+
 p.section-label {
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/

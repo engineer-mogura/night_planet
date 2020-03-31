@@ -1330,6 +1330,19 @@ form .message-label {
     height: 120px;
     object-fit: cover;
   }
+
+  #casts-section .add-cast-icon {
+    height: 20px;
+    width: 20px;
+    font-size: inherit;
+  }
+  #casts-section .update-cast-icon {
+    right: 10px;
+    height: 20px;
+    width: 20px;
+    font-size: inherit;
+  }
+
 }
 
 @media only screen and (max-width: 600px) {
@@ -1532,6 +1545,11 @@ form .message-label {
     position: sticky;
     top: 10px;
   }
+
+  #casts-section .cast-icon-list img.circle, #today-member-modal .cast-icon-list img.circle {
+    height: 150px;
+  }
+
 }
 
 @media only screen and (min-width: 600px) and (max-width: 992px) {

@@ -4,7 +4,7 @@
 	</div>
 <div id="area" class="container">
 	<div class="row">
-		<div class="col s12 m8 l8">
+		<div class="col s12 m12 l8">
 			<?= $this->element('info-marquee'); ?>
 			<div class="row count-section">
 				<div id="shop-menu-section" class="shop-menu">
@@ -116,7 +116,7 @@
 			</div>
 			<!-- Photos END -->
 		</div>
-		<div class="sidebar col s12 m4 l4">
+		<div class="sidebar col s12 m12 l4">
 			<!-- 広告枠 START -->
 			<?= $this->element('banner'); ?>
 			<!-- 広告枠 END -->

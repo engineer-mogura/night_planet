@@ -1,4 +1,4 @@
-<div class="sidebar col s12 m4 l4">
+<div class="sidebar col s12 m12 l4">
 	<div class="section hide-on-med-and-down">
 		<!-- シェアボタン START -->
 		<?php if(isset($shop) || isset($cast)): ?>

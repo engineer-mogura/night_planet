@@ -2,7 +2,7 @@
 	<?= $this->Flash->render() ?>
 	<?= $this->element('nav-breadcrumb'); ?>
 	<div class="row">
-		<div id="shop-main" class="col s12 m8 l8">
+		<div id="shop-main" class="col s12 m12 l8">
 			<img class="responsive-img" width="100%" src=<?= $shop->top_image ?> />
 			<h5 class="left-align">
 				<?= !empty($shop->name) ? h($shop->name) : h('-') ?>

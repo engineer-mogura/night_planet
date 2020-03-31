@@ -35,7 +35,7 @@ class BatchComponent extends Component
         // コネクションオブジェクト取得
         $con = ConnectionManager::get('default');
         // バックアップファイルを何日分残しておくか
-        $period='+7';
+        $period='+30';
         // ルートディレクトリ
         $root = dirname(ROOT);
         // 日付
@@ -46,12 +46,12 @@ class BatchComponent extends Component
         $mysqldump_path = '/usr/bin/mysqldump ';
 
         // バックアップディクレトリ作成
-        exec('mkdir '. $root . DS . 'np_backup', $output, $result_code);
+        exec('mkdir -p '. $root . DS . 'np_backup', $output, $result_code);
         // パーミッション変更
         exec('chmod 700 ' . $root . DS . 'np_backup');
 
         // バックアップディクレトリ作成
-        exec('mkdir '. $dirpath, $output, $result_code);
+        exec('mkdir -p '. $dirpath, $output, $result_code);
         // パーミッション変更
         exec('chmod 700 ' . $dirpath);
 
@@ -75,11 +75,12 @@ class BatchComponent extends Component
 
             // バックアップ実行
             //exec('tar -cvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
-            exec('zip -r ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
+            //exec('zip -r ' . $dirpath . DS . $filename . $root . '/' . $backupfolder.'/img', $output, $result_code);
+            exec('zip -r ' . $dirpath . DS . $filename . $root . DS . $backupfolder, $output, $result_code);
             // パーミッション変更
             exec('chmod 700 ' . $dirpath . DS . $filename);
             // 古いバックアップファイルを削除
-            exec('find ' . dirname($dirpath) . ' -type d -mtime ' . $period . " -exec rm {} \\;");
+            exec('find ' . dirname($dirpath) . ' -mtime ' . $period . " -exec rm -d {} \;", $output);
 
         } else {
             $result = false;
@@ -432,8 +433,8 @@ class BatchComponent extends Component
     public function analyticsReport()
     {
 
-        $is_hosyu = false; // 保守用 日時範囲を指定して一括登録する
-        $is_update = false; // 年別、週別を更新するかフラグ
+        $is_hosyu = true; // 保守用 日時範囲を指定して一括登録する
+        $is_update = true; // 年別、週別を更新するかフラグ
         $this->ApiGoogles = new ApiGooglesController();
 
         // 保守の場合は日付チェックしない

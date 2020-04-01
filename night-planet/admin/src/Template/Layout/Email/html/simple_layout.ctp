@@ -1723,7 +1723,7 @@
                                                 </th>
                                             </tr>
                                             <tr>
-                                                <td style="font-size:25px;">
+                                                <td>
                                                     <p data-parsed="">
                                                         <?php echo $this->fetch('content'); ?>
                                                     </p>

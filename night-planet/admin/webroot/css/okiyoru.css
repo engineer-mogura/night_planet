@@ -933,6 +933,7 @@ div.description {
 }
 
 p.section-label {
+  right: 5%;
   content: '';/*何も入れない*/
   display: inline-block;/*忘れずに！*/
   background-size: contain;

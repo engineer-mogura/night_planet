@@ -6,7 +6,7 @@
 			<div class="col s3 m3 l3">
 				<a href="<?=SNS['INSTAGRAM']?>" class="img night-planet-img circle"></a>
             </div>
-			<div class="col s6 m6 l6">
+			<div class="col s6 m6 l6" style="text-align:center">
 				<span style="color:#666;font-size: x-small;">ナイプラの新着フォトです</span>
             </div>
 			<div class="col s3 m3 l3">

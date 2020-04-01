@@ -73,6 +73,7 @@
 				endif;
 				// 動画の場合
 				if($post->media_type == 'VIDEO'):
+					echo("");
 ?>
 				<span class="ig-video"></span><!-- 追加要素 -->
 <?php

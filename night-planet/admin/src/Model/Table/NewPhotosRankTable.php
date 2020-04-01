@@ -94,7 +94,7 @@ class NewPhotosRankTable extends Table
 
         $validator
             ->scalar('photo_path')
-            ->maxLength('photo_path', 255)
+            ->maxLength('photo_path', 700)
             ->requirePresence('photo_path', 'create')
             ->allowEmptyString('photo_path', false);
 

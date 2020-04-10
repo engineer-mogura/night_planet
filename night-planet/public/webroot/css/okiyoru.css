@@ -27,14 +27,13 @@ body.fixed {
 li{
   list-style-type: none;
 }
-a.button-collapse.oki-button-collapse{
-  /*display: block;*/
-}
+
 .nav-wrapper,.container,footer{
   padding-left: 300px;
 }
 footer.page-footer .footer-item, footer.page-footer .footer-description {
-  background-color: #484848;
+  /* background-image: url(/img/common/obi3.jpg); */
+  background-color: #333333;
   color: white;
 }
 footer.page-footer .footer-item span {
@@ -51,15 +50,16 @@ nav.nav-breadcrumb {
 .nav-wrapper.nav-wrapper-oki {
   padding-left: initial;
 }
+.nav-wrapper.nav-wrapper-oki div{
+  background-image: url(/img/common/obi3.jpg);
+  height: 100%;
+  width: 100%;
+}
 li > a.sideNav-active {
   color: initial;
   color: #fff;
   background-color: #26a69a;
 }
-/* .side-nav > li > a:hover {
-  color: #fff;
-  background-color: #26a69a;
-} */
 span.logo-head-color {
   color: #f9a500;
   font-size: larger;
@@ -81,6 +81,7 @@ span.area-logo-tail {
 .page-footer {
   padding-top: 20px;
   color: initial;
+  background-image: url(/img/common/obi3.jpg);
   background-color: #3e3e3e;
 }
 .page-footer .card-panel {
@@ -176,15 +177,18 @@ nav#nav-header-menu {
   z-index: 10;
   width: 100%;
   transition: .3s;
+  background-image: url(/img/common/obi3.jpg);
 }
 div.nav-header-cron-dummy {
   height: 64px;
   width: 100%;
 }
 nav.nav-opacity {
-  background-color: rgba(0, 0, 0, 0.55);
+  opacity: .8;  /* 透過度を適宜指定してください */
+  /* background-color: rgba(0, 0, 0, 0.55); */
 }
 nav {
+  background-image: url(/img/common/obi3.jpg);
   color: #fff;
   background-color: #3e3e3e;
 }
@@ -448,6 +452,12 @@ form .warning-message {
 #top .section.tabs-section {
   height:600px;
 }
+#top .count-section .card-panel{
+  background-image: url(/img/common/obi2.png);
+}
+#area .count-section .card-panel{
+  background-image: url(/img/common/obi2.png);
+}
 #top .cast-count span:before, #area .cast-count span:before {
   background-image: url(/img/common/users-icon.png);
   background-repeat: no-repeat;
@@ -527,15 +537,11 @@ ul.tabs > li.tab-original.tab > .active {
 
 
 /* 店舗ページ START */
-#shop {
 
-}
 #shop-main, #cast-main {
   margin-top: 0.5rem;
 }
-div.header-discription-message {
-  color: antiquewhite;
-}
+
 div.description {
   display: -webkit-box;
   margin: 2em 0 2.5em;
@@ -725,15 +731,16 @@ div.description {
   height: 30px;
   border-radius: 32px;
 }
-/* #casts-section h6.new-cast-pop {
-  background-color: hotpink;
-} */
+div.row.section > .card-panel{
+  background-image: url(/img/common/obi2.png);
+  background-size: 102%;
+}
 #casts-section .cast-icon-list  {
   position: relative;
 }
 #casts-section .add-cast-icon {
   position: absolute;
-  top: -2px;
+  bottom: 25%;
   left: 10px;
   height: 30px;
   width: 30px;
@@ -743,7 +750,7 @@ div.description {
 }
 #casts-section .update-cast-icon {
   position: absolute;
-  top: -2px;
+  bottom: 25%;
   right: 10px;
   height: 30px;
   width: 30px;
@@ -1099,9 +1106,6 @@ span.icon-vertical-align {
 .diary-card .my-gallery .col {
   padding: initial;
 }
-.card-action.like-field {
-  
-}
 
 .like-field .like-field-span {
   margin-left: 0.5rem;
@@ -1311,7 +1315,12 @@ form .message-label {
   div.nav-header-cron-dummy {
     height: 56px;
   }
-
+  nav.nav-breadcrumb > .nav-wrapper.nav-wrapper-oki i {
+    font-size: small;
+  }
+  nav.nav-breadcrumb > .nav-wrapper.nav-wrapper-oki a {
+    font-size: xx-small;
+  }
   /* 日記ページ START */
  
   /* 日記ページ END */
@@ -1430,9 +1439,7 @@ form .message-label {
 /** プラン変更画面 END */
 
 @media only screen and (max-width: 992px) {
-  .brand-logo.oki-brand-logo{
-    /*margin-left: initial;*/
-  }
+
   .button-collapse {
     display: block;
   }
@@ -1626,6 +1633,12 @@ form .message-label {
   }
 }
 
+@media only screen and (min-width: 768px) {
+  #casts-section .cast-icon-list img.circle, #today-member-modal .cast-icon-list img.circle{
+    height:130px;
+  }
+}
+
 @media only screen and (max-width: 992px) {
 
 }
@@ -1694,8 +1707,10 @@ form .message-label {
 
 }
 
-@media only screen and (min-width: 450px) {
-
+@media only screen and (max-width: 450px) {
+  #casts-section h6 span, #today-member-modal h6 span{
+    font-size: x-small;
+  }
 }
 
 @media only screen and (min-width: 480px) {

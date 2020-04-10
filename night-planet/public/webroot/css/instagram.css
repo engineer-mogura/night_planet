@@ -61,7 +61,7 @@ li.search-result-card .Instagram_logo1 {
   background-size: contain;
   position: absolute;
   left: -40px;
-  top: 30px;
+  top: 20px;
 }
 li.search-result-card .facebook_logo1 {
   content: '';/*何も入れない*/
@@ -73,7 +73,7 @@ li.search-result-card .facebook_logo1 {
   background-size: contain;
   position: absolute;
   left: -40px;
-  top: 30px;
+  top: 20px;
 }
 li.search-result-card .twitter_logo1 {
   content: '';/*何も入れない*/
@@ -85,7 +85,7 @@ li.search-result-card .twitter_logo1 {
   background-size: contain;
   position: absolute;
   left: -40px;
-  top: 30px;
+  top: 20px;
 }
 /**  店舗カード、スタッフカードのインスタ表示 END ***/
 

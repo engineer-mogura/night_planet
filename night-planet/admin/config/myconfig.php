@@ -157,6 +157,8 @@ return [
         'SHOW_GALLERY_MAX'=>'10', // スタッフのギャラリー最大表示数
         'TOP_SLIDER_GALLERY_MAX'=>'3', // トップスライダーのギャラリー最大表示数
         'SUB_SLIDER_GALLERY_MAX'=>'10', // サブスライダーのギャラリー最大表示数
+        'RANKING_SHOW_MAX'=>'11', // ランキングの表示最大表示数
+        'RANKING_SPAN_MAX'=>'15', // ランキングの日付範囲数
     )),
 
     // 店舗メニュー名

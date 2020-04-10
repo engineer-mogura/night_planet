@@ -57,7 +57,14 @@ class MainController extends AppController
         $casts_query = $this->Casts->find();
         $shops = $shops_query->select(['count'=> $shops_query->func()->count('area'),'area'])
                     ->group('area')->toArray();
+
+        // 全体店舗数
         $shops_cnt = 0;
+        // 画面表示するランキング数【１カラム：３】,【２カラム：７】,【３カラム：１０】,【４カラム：１３】
+        $limit      = PROPERTY['RANKING_SHOW_MAX'];
+        // 範囲日数※最大で直近３０日前までとすること
+        $range      = PROPERTY['RANKING_SPAN_MAX'];
+
         $area = array();
         // 全体店舗数、エリア毎の店舗数をセットする
         foreach (AREA as $key1 => $value) {
@@ -91,11 +98,7 @@ class MainController extends AppController
                         ->order(['id'=>'ASC'])
                         ->toArray();
 
-        $start_date = new Time(date("Y-m-d",strtotime(date('Y-m-d') . "-30 day")));
-        $end_date   = new Time(date("Y-m-d"));
-        $limit      = 7;
-
-        $shop_ranking = $this->Util->getRanking($limit, $start_date, $end_date, null);
+        $shop_ranking = $this->Util->getRanking($range, $limit, null);
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', null);

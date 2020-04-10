@@ -69,18 +69,24 @@ class BatchComponent extends Component
 
             // バックアップ元フォルダ
             $backupfolder = strstr(IMG_DOMAIN, 'img');
+            $backup_name = $dirpath . DS . $backupfolder . '_' . $date;
             // ファイル名を定義(※ファイル名で日付がわかるようにしておきます)
             //$filename = $backupfolder . '_' . $date . '.tar ';
-            $filename = $backupfolder . '_' . $date . '.zip ';
+            //$filename = $backupfolder . '_' . $date . '.zip';
 
             // バックアップ実行
             //exec('tar -cvf ' . $dirpath . DS . $filename . $backupfolder, $output, $result_code);
             //exec('zip -r ' . $dirpath . DS . $filename . $root . '/' . $backupfolder.'/img', $output, $result_code);
-            exec('zip -r ' . $dirpath . DS . $filename . $root . DS . $backupfolder, $output, $result_code);
+            // zip圧縮
+            //exec('zip -r ' . $dirpath . DS . $filename . ' ' . $root . DS . $backupfolder, $output, $result_code);
+            // imgディクレトリディクレトリ作成
+            exec('mkdir -p '. $backup_name, $output, $result_code);
             // パーミッション変更
-            exec('chmod 700 ' . $dirpath . DS . $filename);
+            exec('chmod 700 ' . $backup_name);
+            // imgディクレトリコピーバックアップ※隠しファイルも一応コピーする
+            exec('cp -ra ' . $root . DS . $backupfolder . DS . '. ' . $backup_name, $output, $result_code);
             // 古いバックアップファイルを削除
-            exec('find ' . dirname($dirpath) . ' -mtime ' . $period . " -exec rm -d {} \;", $output);
+            exec('find ' . dirname($dirpath) . '/ -maxdepth 1 -mtime ' . $period . " -exec rm -d {} \;", $output);
 
         } else {
             $result = false;
@@ -702,7 +708,9 @@ class BatchComponent extends Component
                 $row = $rows[ $rowIndex ];
                 $dimensions = $row->getDimensions();
                 $metrics = $row->getMetrics();
-
+                if (preg_match("/ガールズトーク/", $dimensions[0])) {
+                    echo("test");
+                }
                 // 曜日を取得する
                 for ($dimensionIndex = 0; $dimensionIndex < count($dimensionHeaders); $dimensionIndex++) {
                     if ($dimensionHeaders[$dimensionIndex] == 'ga:dayOfWeek') {
@@ -735,7 +743,7 @@ class BatchComponent extends Component
                             // 年別アクセスエンティティ
                             $y   = $now_date->format('Y');
                             $ym  = $now_date->format('Y-m');
-                            $day = $now_date->format('d');
+                            $day = $now_date->format('j');
 
                             // 月別アクセスエンティティ
                             $entity_year = $this->AccessYears->find()

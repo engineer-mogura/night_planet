@@ -1153,53 +1153,144 @@ class UtilComponent extends Component
     /**
      * 店舗ランキング情報を取得する処理
      *
+     * @param [type] $range
      * @param [type] $limit
-     * @param [type] $start_date
-     * @param [type] $end_date
      * @param [type] $area
      * @return shop_ranking
      */
-    public function getRanking($limit, $start_date, $end_date, $area = null)
+    public function getRanking($range, $limit, $area = null)
     {
         $this->AccessYears   = TableRegistry::get('access_years');
         $this->AccessMonths  = TableRegistry::get('access_months');
         $this->AccessWeeks   = TableRegistry::get('access_weeks');
+        $this->Shops   = TableRegistry::get('shops');
 
+        // ショップランキング再セット用
+        $wk_entities_s_rank  = array();
+        // ショップランキング返却用
+        $entities_s_rank  = array();
+
+        // 開始年月日
+        $start_date = new Time(date("Y-m-d",strtotime(date('Y-m-d') . "-" . $range . "day")));
+        // 現在日時
+        $now_date   = new Time(date("Y-m-d"));
+
+        // クエリ検索条件取得
         $start_ym = $start_date->year . '-' . $start_date->format('m');
-        $end_ym   = $end_date->year . '-' . $end_date->format('m');
-        $start_day  = (int) $start_date->day;
-        $in_array = [$start_ym, $end_ym];
+        $end_ym   = $now_date->year . '-' . $now_date->format('m');
+
+        // 先月まで跨いでるかフラグ取得
+        $start_ym != $end_ym ? $is_prev_month = true : $is_prev_month = false;
+        // クエリ検索条件セット
+        $is_prev_month ? $in_array = [$start_ym, $end_ym] : $in_array = [$start_ym];
+
+        // 前月まで跨いでる場合
+        if ($is_prev_month) {
+            $zen_date = new Time($start_date); // 最終日取得用
+            $zen_date->modify('last day of this month'); // 前月の月末を取得
+        }
+
+        $now_month = new Time($now_date); // 当月作業用
 
         // エリアの指定が無い場合
         if (empty($area)) {
+
             $wk_shop_ranking = $this->AccessMonths->find()
-                ->where(['ym IN' => $in_array])
-                ->contain(['shops']);
+                ->contain(['shops' => function($q) {
+                    return $q->select($this->Shops->Schema()->columns());
+                }])
+            ->where(['ym IN' => $in_array])
+            ->order(['shop_id','ym'])->toArray();
+
         } else {
+
             $wk_shop_ranking = $this->AccessMonths->find()
-                ->where(['ym IN' => $in_array, 'access_months.area' => $area])
-                ->contain(['shops']);
+                ->contain(['shops' => function($q) {
+                    return $q->select($this->Shops->Schema()->columns());
+                }])
+            ->where(['ym IN' => $in_array, 'access_months.area' => $area])
+            ->order(['shop_id','ym'])->toArray();
         }
 
+        // 店舗毎にグループ化する
+        $wk_shop_ranking = $this->groupArray($wk_shop_ranking, 'shop_id');
+
         foreach ($wk_shop_ranking as $key => $value) {
-            $wk_start_day = $start_day;
-            for ($i = 0; $i < 6; $i++) {
-                $value->set('total_sessions'
-                    , $value->get('total_sessions') + $value[$wk_start_day . '_sessions']);
-                $value->set('total_pageviews'
-                    , $value->get('total_pageviews') + $value[$wk_start_day . '_pageviews']);
-                $value->set('total_users'
-                    , $value->get('total_users') + $value[$wk_start_day . '_users']);
-                $wk_start_day++;
+
+            // 現在日を取得
+            $now = (int)$now_date->format('d');
+            // 開始日を取得
+            $cnt =  $now - $range;
+
+            $shop_ranking = $value[0];
+
+            // 複数あれば、先月まで跨いでる店舗
+            if (count($value) > 1) {
+
+                foreach ($value as $key => $value2) {
+
+                    // 初回のみ
+                    if ($key == 0) {
+                        // 前月の開始日をセット
+                        $cnt = $cnt + $zen_date->format('d');
+                        // 前月の末日をセット
+                        $now = $zen_date->format('d');
+                    } else {
+                        // 現在月の月初をセット
+                        $cnt = 1;
+                        // 現在日をセット
+                        $now = (int)$now_date->format('d');
+                    }
+
+                    for ($cnt; $cnt <= $now; $cnt++) {
+
+                        $_sessions  = !empty($value2[$cnt . '_sessions']) ? $value2[$cnt . '_sessions'] : 0;
+                        $_pageviews = !empty($value2[$cnt . '_pageviews']) ? $value2[$cnt . '_pageviews'] : 0;
+                        $_users     = !empty($value2[$cnt . '_sessions']) ? $value2[$cnt . '_sessions'] : 0;
+
+                        $shop_ranking->set('total_sessions'
+                            , $shop_ranking->get('total_sessions') + $_sessions);
+                        $shop_ranking->set('total_pageviews'
+                            , $shop_ranking->get('total_pageviews') + $_pageviews);
+                        $shop_ranking->set('total_users'
+                            , $shop_ranking->get('total_users') + $_users);
+
+                    }
+
+                }
+
+            } else {
+
+                // 範囲日数 － 現在の日にち <= 0 の場合は前月を跨ぐので当月の月初をセット
+                if ($cnt <= 0) { $cnt = 1; }
+
+                for ($cnt; $cnt <= $now; $cnt++) {
+
+                    $_sessions  = !empty($value[0][$cnt . '_sessions']) ? $value[0][$cnt . '_sessions'] : 0;
+                    $_pageviews = !empty($value[0][$cnt . '_pageviews']) ? $value[0][$cnt . '_pageviews'] : 0;
+                    $_users     = !empty($value[0][$cnt . '_sessions']) ? $value[0][$cnt . '_sessions'] : 0;
+
+                    $shop_ranking->set('total_sessions'
+                        , $shop_ranking->get('total_sessions') + $_sessions);
+                    $shop_ranking->set('total_pageviews'
+                        , $shop_ranking->get('total_pageviews') + $_pageviews);
+                    $shop_ranking->set('total_users'
+                        , $shop_ranking->get('total_users') + $_users);
+
+                }
+
             }
+            array_push($wk_entities_s_rank,  $shop_ranking);
+
         }
-        $wk_shop_ranking = $wk_shop_ranking->toArray();
-        foreach ($wk_shop_ranking as $key => $value) {
+
+        foreach ($wk_entities_s_rank as $key => $value) {
             $sort[$key] = $value['total_pageviews'];
         }
-        array_multisort($sort, SORT_DESC, $wk_shop_ranking);
+        // ランキング順にソートする
+        array_multisort($sort, SORT_DESC, $wk_entities_s_rank);
 
-        foreach ($wk_shop_ranking as $key => $value) {
+        foreach ($wk_entities_s_rank as $key => $value) {
 
             $this->getShopInfo($value->Shops);
             $value->set('shopInfo', $this->getShopInfo($value->Shops));
@@ -1214,13 +1305,13 @@ class UtilComponent extends Component
                 // 共通トップ画像をセット
                 $value->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
             }
-            $shop_ranking[$key] = $value;
+            $entities_s_rank[$key] = $value;
             if ($key == $limit) {
                 break;
             }
         }
 
-      return $shop_ranking;
+      return $entities_s_rank;
   }
 
 /**

@@ -4,9 +4,9 @@
 	<div class="row">
 		<div id="shop-main" class="col s12 m12 l8">
 			<img class="responsive-img" width="100%" src=<?= $shop->top_image ?> />
-			<h5 class="left-align">
+			<p class="left-align">
 				<?= !empty($shop->name) ? h($shop->name) : h('-') ?>
-			</h5>
+			</p>
 			<!-- キャッチコピー START -->
 			<div class="row section header-discription-message">
 				<div class="card-panel light-blue">
@@ -129,9 +129,9 @@
 				<div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
 					<a
 						href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
-						<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="80">
+						<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="70">
 					</a>
-					<h6><?=$cast->nickname?>
+					<h6 class="truncate"><span><?=$cast->nickname?></span>
 						<?=isset($cast->new_cast) ? '<i class="material-icons add-cast-icon">fiber_new</i>':''?>
 						<?=isset($cast->update_cast) ? '<i class="material-icons update-cast-icon">update</i>':''?>
 					</h6>

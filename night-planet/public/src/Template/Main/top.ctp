@@ -119,9 +119,6 @@
 				<!-- photoSwipe END -->
 			</div>
 			<!-- Photos END -->
-			<!-- instagram START -->
-
-			<!-- instagram END -->
 		</div>
 		<!--デスクトップ用 サイドバー START -->
 		<?= $this->element('sidebar'); ?>

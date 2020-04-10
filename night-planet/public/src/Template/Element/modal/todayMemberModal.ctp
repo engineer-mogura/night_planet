@@ -10,7 +10,7 @@
 							<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
 								<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="80">
 							</a>
-							<h6><?=$cast->nickname?></h6>
+							<h6 class="truncate"><span><?=$cast->nickname?></span></h6>
 						</div>
 					<?php endforeach; ?>
 				<?php else: ?>

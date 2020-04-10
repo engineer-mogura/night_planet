@@ -35,7 +35,7 @@
 							<?php endif; ?>
 						</h1>
 						<div class="card-content">
-							<h5 class="blue-text text-darken-2"><?= $rows['name']?></h5>
+							<h6 class="blue-text text-darken-2"><?= $rows['name']?></h6>
 							<p class="blue-text text-darken-2"><?= $rows['catch']
 							.'<br>'.GENRE[$rows['genre']]['label'].'|'.$rows['addr21'].$rows['strt21']	?></p>
 						</div>

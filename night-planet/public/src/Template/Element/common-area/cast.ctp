@@ -275,7 +275,7 @@
                 <div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
                     <a
                         href="<?=DS.$cast->shop['area'].DS.PATH_ROOT['CAST'].DS.$other_cast['id']."?genre=".$cast->shop['genre']."&name=".$cast->shop['name']."&shop=".$cast->shop['id']."&nickname=".$other_cast['nickname']?>">
-                        <img src="<?=$other_cast->icon?>" alt="" class="circle" width="100%" height="80">
+                        <img src="<?=$other_cast->icon?>" alt="" class="circle" width="100%" height="70">
                     </a>
                     <h6><?=$other_cast->nickname?>
                     </h6>

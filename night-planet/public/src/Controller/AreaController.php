@@ -151,6 +151,14 @@ class AreaController extends AppController
             ->group('genre')->contain(['casts'])->toArray();
         $shops_cnt = 0;
         $casts_cnt = 0;
+
+        // 全体店舗数
+        $shops_cnt = 0;
+        // 画面表示するランキング数【１カラム：３】,【２カラム：７】,【３カラム：１０】,【４カラム：１３】
+        $limit      = PROPERTY['RANKING_SHOW_MAX'];
+        // 範囲日数※最大で直近３０日前までとすること
+        $range      = PROPERTY['RANKING_SPAN_MAX'];
+
         $genreCounts = GENRE; // ジャンルの配列をコピー
         // それぞれのジャンルの初期値カウントに０,エリア名をセットする
         foreach ($genreCounts as $key => $row) {
@@ -172,11 +180,7 @@ class AreaController extends AppController
             ->order(['id'=>'ASC'])
             ->toArray();
 
-        $start_date = new Time(date("Y-m-d",strtotime(date('Y-m-d') . "-7 day")));
-        $end_date   = new Time(date("Y-m-d"));
-        $limit      = 7;
-
-        $shop_ranking = $this->Util->getRanking($limit, $start_date, $end_date, $this->viewVars['is_area']);
+        $shop_ranking = $this->Util->getRanking($range, $limit, $this->viewVars['is_area']);
         // メイン広告を取得
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', $this->viewVars['is_area']);
         // サブ広告を取得

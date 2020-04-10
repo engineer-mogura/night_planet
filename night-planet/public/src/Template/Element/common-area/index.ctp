@@ -116,13 +116,11 @@
 			</div>
 			<!-- Photos END -->
 		</div>
-		<div class="sidebar col s12 m12 l4">
-			<!-- 広告枠 START -->
-			<?= $this->element('banner'); ?>
-			<!-- 広告枠 END -->
-		</div>
+		<!--デスクトップ用 サイドバー START -->
+		<?= $this->element('sidebar'); ?>
+		<!--デスクトップ用 サイドバー END -->
 	</div>
+	<!-- 共通ボトムナビゲーション START -->
+	<?= $this->element('bottom-navigation'); ?>
+	<!-- 共通ボトムナビゲーション END -->
 </div>
-<!-- 共通ボトムナビゲーション START -->
-<?= $this->element('bottom-navigation'); ?>
-<!-- 共通ボトムナビゲーション END -->

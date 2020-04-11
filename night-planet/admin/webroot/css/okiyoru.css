@@ -230,9 +230,12 @@ nav {
   margin: auto;
   z-index: 1999;
 }
-/* ローディング END */
 
-/* ローディング START */
+.pace-running .wrap {
+  display:none;
+}
+
+/* ローディング END */
 
 .linkbox {
   position: relative;
@@ -246,7 +249,6 @@ nav {
   height:100%;
   width: 100%;
 }
-/* ローディング END */
 
 /* フラッシュメッセージ系 START */
 
@@ -727,7 +729,12 @@ div.description {
 #casts-section h6, #today-member-modal h6{
   padding-top: 7px;
   color: white;
-  background-color: #fb8c00;
+  height: 30px;
+  border-radius: 32px;
+}
+#casts-section h6 span, #today-member-modal h6 span{
+  padding-top: 7px;
+  color: slategrey;
   height: 30px;
   border-radius: 32px;
 }
@@ -1037,13 +1044,12 @@ span.icon-vertical-align {
 /* 店舗ページ END */
 /* スタッフページ START */
 .cast-header .cast-name-box {
-  color: #f88c00;
-  font-weight: 600;
+  color: slategrey;
 }
 .cast-header .count-box {
   padding-top: 6px;
-  color: white;
-  background-color: #fb8c00;
+  /* color: white;
+  background-color: #fb8c00; */
   height: 30px;
   border-radius: 32px;
 }
@@ -1708,7 +1714,8 @@ form .message-label {
 }
 
 @media only screen and (max-width: 450px) {
-  #casts-section h6 span, #today-member-modal h6 span{
+  #casts-section h6 span, #today-member-modal h6 span,
+  #cast-main .cast-header-icon * {
     font-size: x-small;
   }
 }

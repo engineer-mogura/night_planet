@@ -59,6 +59,10 @@
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script><!-- 画面ローディング -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/red/pace-theme-center-circle.min.css" /><!-- 画面ローディング -->
+
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
   <?= $this->Html->css('materialize.min.css') ?>
   <?= $this->Html->css('okiyoru.css') ?>
@@ -142,50 +146,52 @@
   <!-- photoSwipe START -->
   <?= $this->element('photoSwipe'); ?>
   <!-- photoSwipe END -->
-  <?= $this->fetch('content') ?>
-  <footer class="page-footer">
-    <div class="row">
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></span><a class="" href="#!"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">event_available</i><?= USER_LM['002'] ?></span><a class="" href="#!"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></span><a class="" href="#!"></a></div></div>
-      <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">home</i><?= USER_LM['004'] ?></span><a class="" href="/"></a></div></div>
-    </div>
-    <div class="row">
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">cloud</i><?= USER_LM['005'] ?></span><a class="" href="<?=SNS['INSTAGRAM']?>" target="_blank"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">cloud</i><?= USER_LM['006'] ?></span><a class="" href="<?=SNS['FACEBOOK']?>" target="_blank"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">cloud</i><?= USER_LM['007'] ?></span><a class="" href="<?=SNS['TWITTER']?>" target="_blank"></a></div></div>
-    </div>
-    <div class="row">
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></span><a class="" href="/other/faq"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></span><a class="" href="<?=API['GOOGLE_FORM_CONTACT']?>" target="_blank"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></span><a class="" href="/other/privacy_policy"></a></div></div>
-    </div>
-    <div class="row">
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">description</i><?= COMMON_LM['005'] ?></span><a class="" href="/other/terms"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">star_half</i><?= USER_LM['008'] ?></span><a class="" href="/entry/" target="_blank"></a></div></div>
-      <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">vpn_key</i><?= USER_LM['009'] ?></span><a class="" href="<?=ADMIN_DOMAIN?>"></a></div></div>
-    </div>
-    <div class="row">
-      <div class="col s12">
-        <div class="card-panel footer-description">
-          <span><?= CATCHCOPY ?></span>
+  <div class="wrap">
+    <?= $this->fetch('content') ?>
+    <footer class="page-footer">
+      <div class="row">
+        <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></span><a class="" href="#!"></a></div></div>
+        <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">event_available</i><?= USER_LM['002'] ?></span><a class="" href="#!"></a></div></div>
+        <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">trending_up</i><?= USER_LM['003'] ?></span><a class="" href="#!"></a></div></div>
+        <div class="col s12 m6 l3"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">home</i><?= USER_LM['004'] ?></span><a class="" href="/"></a></div></div>
+      </div>
+      <div class="row">
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">cloud</i><?= USER_LM['005'] ?></span><a class="" href="<?=SNS['INSTAGRAM']?>" target="_blank"></a></div></div>
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">cloud</i><?= USER_LM['006'] ?></span><a class="" href="<?=SNS['FACEBOOK']?>" target="_blank"></a></div></div>
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">cloud</i><?= USER_LM['007'] ?></span><a class="" href="<?=SNS['TWITTER']?>" target="_blank"></a></div></div>
+      </div>
+      <div class="row">
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">help_outline</i><?= COMMON_LM['001'] ?></span><a class="" href="/other/faq"></a></div></div>
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">contact_mail</i><?= COMMON_LM['002'] ?></span><a class="" href="<?=API['GOOGLE_FORM_CONTACT']?>" target="_blank"></a></div></div>
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">priority_high</i><?= COMMON_LM['003'] ?></span><a class="" href="/other/privacy_policy"></a></div></div>
+      </div>
+      <div class="row">
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">description</i><?= COMMON_LM['005'] ?></span><a class="" href="/other/terms"></a></div></div>
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">star_half</i><?= USER_LM['008'] ?></span><a class="" href="/entry/" target="_blank"></a></div></div>
+        <div class="col s12 m6 l4"><div class="linkbox card-panel hoverable footer-item"><span><i class="material-icons">vpn_key</i><?= USER_LM['009'] ?></span><a class="" href="<?=ADMIN_DOMAIN?>"></a></div></div>
+      </div>
+      <div class="row">
+        <div class="col s12">
+          <div class="card-panel footer-description">
+            <span><?= CATCHCOPY ?></span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="footer-copyright oki-footer-copyright">
-      <?= LT['002']; ?>
-      <?=(2018-date('Y'))?' - '.date('Y'):'';?> <?= LT['003'] ?>
-    </div>
-    <!-- START #return_top -->
-    <div id="return_top" class="hide-on-med-and-down">
-      <div class="fixed-action-btn">
-        <a class="btn-floating btn-large black">
-          <i class="large material-icons">keyboard_arrow_up</i>
-        </a>
+      <div class="footer-copyright oki-footer-copyright">
+        <?= LT['002']; ?>
+        <?=(2018-date('Y'))?' - '.date('Y'):'';?> <?= LT['003'] ?>
       </div>
-    </div>
-    <!-- END #return_top -->
-  </footer>
+      <!-- START #return_top -->
+      <div id="return_top" class="hide-on-med-and-down">
+        <div class="fixed-action-btn">
+          <a class="btn-floating btn-large black">
+            <i class="large material-icons">keyboard_arrow_up</i>
+          </a>
+        </div>
+      </div>
+      <!-- END #return_top -->
+    </footer>
+  </div>
   <script>
     // Params
     var sliderSelector = '.main-swiper',

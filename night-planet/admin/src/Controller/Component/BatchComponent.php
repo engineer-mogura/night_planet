@@ -439,8 +439,8 @@ class BatchComponent extends Component
     public function analyticsReport()
     {
 
-        $is_hosyu = true; // 保守用 日時範囲を指定して一括登録する
-        $is_update = true; // 年別、週別を更新するかフラグ
+        $is_hosyu = PROPERTY['ANALYTICS_REPORT_HOSYU']; // 日時範囲を指定して一括登録する（運用はFALSE）
+        $is_update = PROPERTY['ANALYTICS_YEAR_WEEK_ISUPDATE']; // 年別、週別を更新するかフラグ
         $this->ApiGoogles = new ApiGooglesController();
 
         // 保守の場合は日付チェックしない

@@ -14,7 +14,7 @@
                 <img class="responsive-img" width="100%" src=<?=$cast->top_image?> />
                 <div class="cast-header-icon" style="height:70px;">
                     <div class="col s5 m5" style="position:relative;bottom:50px;">
-                        <img src="<?=$cast->icon?>" width="70px" height="70px" class="circle">
+                        <img src="<?=$cast->icon?>" width="75px" height="70px" class="circle">
                         <span
                             class="cast-name-box icon-vertical-align"><?= !empty($cast->nickname)? $cast->nickname: h("ー")?></span>
                     </div>
@@ -277,8 +277,7 @@
                         href="<?=DS.$cast->shop['area'].DS.PATH_ROOT['CAST'].DS.$other_cast['id']."?genre=".$cast->shop['genre']."&name=".$cast->shop['name']."&shop=".$cast->shop['id']."&nickname=".$other_cast['nickname']?>">
                         <img src="<?=$other_cast->icon?>" alt="" class="circle" width="100%" height="70">
                     </a>
-                    <h6><?=$other_cast->nickname?>
-                    </h6>
+                    <h6 class="truncate"><span><?=$other_cast->nickname?></span></h6>
                 </div>
                 <?php endforeach; ?>
                 <?php else: ?>

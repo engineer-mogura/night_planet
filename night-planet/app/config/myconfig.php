@@ -157,8 +157,10 @@ return [
         'SHOW_GALLERY_MAX'=>'10', // スタッフのギャラリー最大表示数
         'TOP_SLIDER_GALLERY_MAX'=>'3', // トップスライダーのギャラリー最大表示数
         'SUB_SLIDER_GALLERY_MAX'=>'10', // サブスライダーのギャラリー最大表示数
-        'RANKING_SHOW_MAX'=>'14', // ランキングの表示最大表示数
+        'RANKING_SHOW_MAX'=>'11', // ランキングの表示最大表示数
         'RANKING_SPAN_MAX'=>'15', // ランキングの日付範囲数
+        'ANALYTICS_REPORT_HOSYU'=>false, // アナリティクスレポートの保守フラグ
+        'ANALYTICS_YEAR_WEEK_ISUPDATE'=>true, // アナリティクスレポートの年別、週別を更新するかフラグ
     )),
 
     // 店舗メニュー名

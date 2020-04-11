@@ -220,10 +220,10 @@ $('.birthday-picker').pickadate('setDate', new Date());
 }
 
 function telme(message, tel) {
-var result = confirm(message);
-if (result == true){
-location.href = "tel:"+tel;
-}
+    var result = confirm(message);
+    if (result == true){
+        location.href = "tel:"+tel;
+    }
 }
 
 /**
@@ -525,8 +525,10 @@ $('.chips').on('chip.select', function(e, chip){
 //     color: #fff;
 //     /* background-color: #3e3e3e; */
 // }
-/** 下にスクロールでヘッダー非表示・上にスクロールでヘッダー表示 */
+
 $(function() {
+
+    /** 下にスクロールでヘッダー非表示・上にスクロールでヘッダー表示 */
     var $win = $(window),
         $header = $('#nav-header-menu'),
         headerHeight = $header.outerHeight(),
@@ -547,6 +549,12 @@ $(function() {
         }
         startPos = value;
     });
+
+    // ローディング終了後、画面をフェードイン
+    Pace.on('done', function(){
+        $('.wrap').fadeIn();
+    });
+
 });
 
 // show return top button

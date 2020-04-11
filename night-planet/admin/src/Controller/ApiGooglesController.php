@@ -45,8 +45,8 @@ class ApiGooglesController extends AppController
         // 保守用一括登録処理の場合
         if ($is_hosyu) {
 
-            $start = '2019-12-10'; // 開始日
-            $end   = '2019-12-10'; // 終了日
+            $start = '2020-04-05'; // 開始日
+            $end   = '2020-04-05'; // 終了日
             // $start = '2020-02-21'; // 開始日
             // $end   = '2020-02-21'; // 終了日
 
@@ -115,7 +115,7 @@ class ApiGooglesController extends AppController
         $VIEW_ID = API['GOOGLE_ANALYTICS_VIEW_ID'];
 
         // ディメンション(データの属性)の設定
-        $dimentions = ['ga:pageTitle', 'ga:pagePath','ga:landingPagePath', 'ga:date', 'ga:dayOfWeek', 'ga:dayOfWeekName'];
+        $dimentions = ['ga:pageTitle', 'ga:pagePath', 'ga:date', 'ga:dayOfWeek', 'ga:dayOfWeekName'];
         $arrayDimensions = [];
         for ( $i = 0; $i < count($dimentions); $i++) {
             $setDimensions = new Google_Service_AnalyticsReporting_Dimension();
@@ -159,7 +159,7 @@ class ApiGooglesController extends AppController
         $filters3 = new Google_Service_AnalyticsReporting_DimensionFilterClause();
         $filters3->setFilters(array($filter3));
 
-        $arrayFilters[] = array($filters, $filters2, $filters3);
+        $arrayFilters[] = array($filters, $filters2/*,$filters3*/);
 
         // ディメンション(データの属性)の設定
         // $landingPagePath = new Google_Service_AnalyticsReporting_Dimension();
@@ -240,8 +240,8 @@ class ApiGooglesController extends AppController
                 }
             }
             print('</br></br></br></br>');
-            //$this->log($rows,'debug');
-            var_dump('"$report:"'.$rows);
+            $this->log($rows,'debug');
+            //var_dump('"$report:"'.$rows);
         }
     }
 

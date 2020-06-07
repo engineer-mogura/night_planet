@@ -1512,7 +1512,7 @@ class CastsController extends AppController
             $paths[] = $dir->path . DS . PATH_ROOT['SCHEDULE'];
             $paths[] = $dir->path . DS . PATH_ROOT['TMP'];
             // その他ディレクトリ作成
-            if ($this->Util->createDir($paths)) {
+            if (!$this->Util->createDir($paths)) {
                 throw new RuntimeException('ディレクトリの作成に失敗しました。');
             }
             // コミット

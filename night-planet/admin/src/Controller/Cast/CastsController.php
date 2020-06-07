@@ -250,9 +250,7 @@ class CastsController extends AppController
                             if ($fileBefor->size() > CAPACITY['MAX_NUM_BYTES_FILE']) {
                                 throw new RuntimeException('ファイルサイズが大きすぎます。');
                             }
-                            // 一時ファイル作成
-                            $this->Util->createCastDir($this->viewVars['userInfo']);
- 
+
                             if (!$fileBefor->copy(preg_replace('/(\/\/)/', '/',
                                 WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name))) {
                                 throw new RuntimeException('バックアップに失敗しました。');

@@ -1314,7 +1314,26 @@ class UtilComponent extends Component
       return $entities_s_rank;
   }
 
-/**
+    /**
+     * ディレクトリを作成する
+     *
+     * @param Array $userInfo
+     * @return Boolean $true $false
+     */
+    public function createDir($paths)
+    {
+        $rslt = true;
+        foreach ($paths as $key => $path) {
+            $d = new Folder($path, true, 0777);
+            // ディレクトリが存在するかチェック
+            if (!file_exists($d->path)) {
+                $rslt = false;
+            }
+        }
+        return $rslt;
+    }
+
+    /**
      * ログを加工してセットする
      *
      * @param Array $user

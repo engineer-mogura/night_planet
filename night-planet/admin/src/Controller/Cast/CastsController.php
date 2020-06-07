@@ -251,6 +251,8 @@ class CastsController extends AppController
                                 throw new RuntimeException('ファイルサイズが大きすぎます。');
                             }
                             // 一時ファイル作成
+                            $this->Util->createCastDir($this->viewVars['userInfo']);
+ 
                             if (!$fileBefor->copy(preg_replace('/(\/\/)/', '/',
                                 WWW_ROOT.$this->viewVars['userInfo']['tmp_path'].DS.$fileBefor->name))) {
                                 throw new RuntimeException('バックアップに失敗しました。');
@@ -1503,6 +1505,16 @@ class CastsController extends AppController
 
             // ディレクトリを掘る
             $dir = new Folder($dir->path.$nextDir, true, 0755);
+            $paths[] = $dir->path . DS . PATH_ROOT['TOP_IMAGE'];
+            $paths[] = $dir->path . DS . PATH_ROOT['IMAGE'];
+            $paths[] = $dir->path . DS . PATH_ROOT['PROFILE'];
+            $paths[] = $dir->path . DS . PATH_ROOT['DIARY'];
+            $paths[] = $dir->path . DS . PATH_ROOT['SCHEDULE'];
+            $paths[] = $dir->path . DS . PATH_ROOT['TMP'];
+            // その他ディレクトリ作成
+            if ($this->Util->createDir($paths)) {
+                throw new RuntimeException('ディレクトリの作成に失敗しました。');
+            }
             // コミット
             $connection->commit();
 

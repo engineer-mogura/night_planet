@@ -243,6 +243,12 @@ class OwnersController extends AppController
             }
             // ディレクトリを掘る
             $dir = new Folder($dir->path.$nextDir, true, 0755);
+            $paths[] = $dir->path . DS . PATH_ROOT['IMAGE'];
+            $paths[] = $dir->path . DS . PATH_ROOT['PROFILE'];
+            // その他ディレクトリ作成
+            if ($this->Util->createDir($paths)) {
+                throw new RuntimeException('ディレクトリの作成に失敗しました。');
+            }
             // コミット
             $connection->commit();
             // 認証完了したら、メール送信
@@ -394,6 +400,16 @@ class OwnersController extends AppController
 
                     // ディレクトリを掘る
                     $dir = new Folder($dir->path.$nextDir, true, 0755);
+                    $paths[] = $dir->path . DS . PATH_ROOT['TOP_IMAGE'];
+                    $paths[] = $dir->path . DS . PATH_ROOT['IMAGE'];
+                    $paths[] = $dir->path . DS . PATH_ROOT['CACHE'];
+                    $paths[] = $dir->path . DS . PATH_ROOT['NOTICE'];
+                    $paths[] = $dir->path . DS . PATH_ROOT['CAST'];
+                    $paths[] = $dir->path . DS . PATH_ROOT['TMP'];
+                    // その他ディレクトリ作成
+                    if ($this->Util->createDir($paths)) {
+                        throw new RuntimeException('ディレクトリの作成に失敗しました。');
+                    }
                     // コミット
                     $connection->commit();
                 } catch (RuntimeException $e) {

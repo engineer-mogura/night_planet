@@ -10,6 +10,15 @@
             <div class="white card-panel col s12 center-align">
                 <p class="recruit-label section-label"><span> 店舗 </span></p>
             </div>
+            <?php 
+                if(count($reports['ranges'][0][0]) == 0 ):
+            ?>
+            <div class="col year-graph-section section">
+                <p>アクセスデータがありません。数日経ってからご確認下さい。</p>
+            </div>
+            <?php
+                else:
+            ?>
             <div class="col s12 m6 l6 year-graph-section section">
                 <div class="card-panel year-graph-shop section">
                     <div class="input-field col s12">
@@ -50,9 +59,21 @@
                     <input data-shop_month="" type="hidden" name="shop_month_data">
                 </div>
             </div>
+            <?php
+                endif;
+            ?>
             <div class="white card-panel col s12 center-align">
                 <p class="recruit-label section-label"><span> スタッフ </span></p>
             </div>
+            <?php 
+                if(count($reports['ranges'][0][0]) == 0 ):
+            ?>
+            <div class="col year-graph-section section">
+                <p>スタッフアクセスレポートは現在機能を停止中です。近日中に機能を再開いたしますので、それまでしばらくお待ちください。</p>
+            </div>
+            <?php
+                else:
+            ?>
             <div class="col s12">
                 <p style="font-weight: bolder;">
                 スタッフアクセスレポートは現在機能を停止中です。近日中に機能を再開いたしますので、それまでしばらくお待ちください。以下のグラフはダミーデータになります。</p>
@@ -71,6 +92,9 @@
                     <!--凡例箇所 -->
                 </div>
             </div>
+            <?php
+                endif;
+            ?>
         </div>
     </div>
 </div>

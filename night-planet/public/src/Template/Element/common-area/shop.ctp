@@ -78,7 +78,7 @@
 				</div>
 				<div class="col s4 m4 l4">
 					<div
-						class="<?=empty($shop->snss[0]['facebook'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
+						class="<?=/*empty($shop->snss[0]['facebook'])*/ !$isShow_fb ? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label facebook"></br>Facebook</span>
 						<a class="waves-effect waves-light" href="#facebook-section"></a>
 					</div>
@@ -272,22 +272,26 @@
 			<?php endif;?>
 			<!-- instagram END -->
 			<!-- facebook START -->
-			<?php if(!empty($shop->snss[0]['facebook'])): ?>
-			<div id="facebook-section" class="row shop-menu section scrollspy">
-				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="facebook-label section-label"><span> facebook </span></p>
-				</div>
-				<div id="fb-root"></div>
-				<script async defer crossorigin="anonymous"
-					src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0&appId=2084171171889711&autoLogAppEvents=1"></script>
-			</div>
-			<div class="fb-page" data-href="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>"
-				data-tabs="timeline,messages" data-width="500" data-height="" data-small-header="false"
-				data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
-				<blockquote cite="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>/"
-					class="fb-xfbml-parse-ignore"><a
-						href="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>/"></a></blockquote>
-			</div>
+			<?php if($isShow_fb): ?>
+				<?php if(!empty($shop->snss[0]['facebook'])): ?>
+					<div id="facebook-section" class="row shop-menu section scrollspy">
+						<div class="light-blue accent-2 card-panel col s12 center-align">
+							<p class="facebook-label section-label"><span> facebook </span></p>
+						</div>
+						<div id="fb-root"></div>
+						<script async defer crossorigin="anonymous"
+							src="https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v4.0&appId=2084171171889711&autoLogAppEvents=1"></script>
+					</div>
+					<div class="fb-container">
+						<div class="fb-page" data-href="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>"
+							data-tabs="timeline,messages" data-width="500" data-height="" data-small-header="false"
+							data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true">
+							<blockquote cite="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>/"
+								class="fb-xfbml-parse-ignore"><a
+									href="https://www.facebook.com/<?=$shop->snss[0]['facebook']?>/"></a></blockquote>
+						</div>
+					</div>
+				<?php endif;?>
 			<?php endif;?>
 			<!-- facebook END -->
 			<!-- twitter START -->

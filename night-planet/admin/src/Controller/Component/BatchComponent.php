@@ -220,7 +220,7 @@ class BatchComponent extends Component
         ])->limit("200")->toArray();
 
         $snss   =  $this->Snss->find("all", ["DISTINCT instagram"])
-                    ->where(["instagram IS NOT NULL"])
+                    ->where(["instagram != ''"])
                     ->contain(['shops', 'shops.owners.servece_plans' => function (Query $q) {
                         return $q
                             ->where(['current_plan is not'=> SERVECE_PLAN['free']['label']]);
@@ -479,14 +479,6 @@ class BatchComponent extends Component
         $result = true; // 正常終了フラグ
         $action_name = "analyticsReport,";
 
-        $entities_year  = array();
-        $entities_month = array();
-        $entities_week  = array();
-
-        $entity_year  = null;
-        $entity_month = null;
-        $entity_week  = null;
-
         for ($reportIndex = 0; $reportIndex < count($reports); $reportIndex++) {
             $report = $reports[ $reportIndex ];
             $header = $report->getColumnHeader();
@@ -518,7 +510,17 @@ class BatchComponent extends Component
                 }
 
                 for ($i = 0; $i < count($dimensionHeaders) && $i < count($dimensions); $i++) {
+
                     if ($dimensionHeaders[$i] == 'ga:pagePath') {
+
+                        $entities_year  = array();
+                        $entities_month = array();
+                        $entities_week  = array();
+
+                        $entity_year  = null;
+                        $entity_month = null;
+                        $entity_week  = null;
+
                         $url_aplit = explode('/', $dimensions[$i]);
                         $index = count($url_aplit);
                         // 配列の最後が数字の場合
@@ -668,7 +670,7 @@ class BatchComponent extends Component
         return $result;
     }
 
-        /**
+    /**
      * 各店舗のアクセスレポートを集計する処理 保守用
      *
      * @return array
@@ -683,14 +685,6 @@ class BatchComponent extends Component
 
         $result = true; // 正常終了フラグ
         $action_name = "analyticsReport,";
-
-        $entities_year  = array();
-        $entities_month = array();
-        $entities_week  = array();
-
-        $entity_year  = null;
-        $entity_month = null;
-        $entity_week  = null;
 
         for ($reportIndex = 0; $reportIndex < count($reports); $reportIndex++) {
             $report = $reports[ $reportIndex ];
@@ -708,9 +702,7 @@ class BatchComponent extends Component
                 $row = $rows[ $rowIndex ];
                 $dimensions = $row->getDimensions();
                 $metrics = $row->getMetrics();
-                if (preg_match("/ガールズトーク/", $dimensions[0])) {
-                    echo("test");
-                }
+
                 // 曜日を取得する
                 for ($dimensionIndex = 0; $dimensionIndex < count($dimensionHeaders); $dimensionIndex++) {
                     if ($dimensionHeaders[$dimensionIndex] == 'ga:dayOfWeek') {
@@ -720,7 +712,17 @@ class BatchComponent extends Component
                 }
 
                 for ($i = 0; $i < count($dimensionHeaders) && $i < count($dimensions); $i++) {
+
                     if ($dimensionHeaders[$i] == 'ga:pagePath') {
+
+                        $entities_year  = array();
+                        $entities_month = array();
+                        $entities_week  = array();
+
+                        $entity_year  = null;
+                        $entity_month = null;
+                        $entity_week  = null;
+
                         $url_aplit = explode('/', $dimensions[$i]);
                         $index = count($url_aplit);
                         // 配列の最後が数字の場合
@@ -744,7 +746,9 @@ class BatchComponent extends Component
                             $y   = $now_date->format('Y');
                             $ym  = $now_date->format('Y-m');
                             $day = $now_date->format('j');
-
+                            // if ($shop_id == 23) {
+                            //     echo("");
+                            // }
                             // 月別アクセスエンティティ
                             $entity_year = $this->AccessYears->find()
                                 ->where(['shop_id' => $shop_id, 'y' => $y])

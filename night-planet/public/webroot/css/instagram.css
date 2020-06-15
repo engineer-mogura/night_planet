@@ -56,7 +56,7 @@ li.search-result-card .Instagram_logo1 {
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
   height: 30px;/*画像の高さ*/
-  background-image: url(https://drive.google.com/uc?id=1X1xRVeikChMI0mb27Xb6aKZAC87syN2p);
+  background-image: url("/img/common/sns/instagram_logo.png");
   background-repeat: no-repeat;
   background-size: contain;
   position: absolute;
@@ -68,7 +68,7 @@ li.search-result-card .facebook_logo1 {
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
   height: 30px;/*画像の高さ*/
-  background-image: url(https://drive.google.com/uc?id=1zHcGjMghY-NTaV3gwPq1LqbOGOJTRSbe);
+  background-image: url("/img/common/sns/facebook_logo.png");
   background-repeat: no-repeat;
   background-size: contain;
   position: absolute;
@@ -80,7 +80,7 @@ li.search-result-card .twitter_logo1 {
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
   height: 30px;/*画像の高さ*/
-  background-image: url(https://drive.google.com/uc?id=13-gJ1A21LT8INk4SDbvCOuoxjAzkWVDz);
+  background-image: url("/img/common/sns/twitter_logo.png");
   background-repeat: no-repeat;
   background-size: contain;
   position: absolute;
@@ -109,7 +109,7 @@ article#SNS_Instagram header .Instagram_logo1 {
   display: inline-block;/*忘れずに！*/
   width: 30px;/*画像の幅*/
   height: 30px;/*画像の高さ*/
-  background-image: url(https://drive.google.com/uc?id=1X1xRVeikChMI0mb27Xb6aKZAC87syN2p);
+  background-image: url("/img/common/sns/instagram_logo.png");
   background-repeat: no-repeat;
   background-size: contain;
   position: absolute;

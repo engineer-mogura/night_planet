@@ -496,7 +496,14 @@ ul.tabs > li.tab-original.tab > .active {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
+
 /* トップページ画面 END */
+
+/* サブスライダー セクション START */
+.swiper-container.sub-swiper .swiper-wrapper {
+  height: 150px;
+}
+/* サブスライダー セクション END */
 
 /* 新規・ログイン画面 START */
 .or-form-wrap {
@@ -557,6 +564,9 @@ div.description {
 /** SHOP MENU START */
 .shop-menu .shop-menu-label {
   font-size: xx-small;
+}
+nav ul a {
+  padding: 0 5px;
 }
 .new-info {
   position: absolute;
@@ -912,6 +922,11 @@ div.row.section > .card-panel{
 	position:relative;
 	line-height:2em;
 	text-indent:2em;
+}
+/* facebook プラグインの最低限の幅 */
+.fb-container {
+  width: 100%;
+  max-width: 500px;
 }
 /** キャラクター設定 START **/
 .tabs-section2 .trending_up-label:after {
@@ -1518,6 +1533,9 @@ form .message-label {
     font-size: 12px;
     line-height: 1.2;
   }
+  #user-default .wrap {
+    padding-bottom: 50px;
+  }
   #user-default > footer {
     margin-bottom: 50px;
   }
@@ -1643,6 +1661,11 @@ form .message-label {
   #casts-section .cast-icon-list img.circle, #today-member-modal .cast-icon-list img.circle{
     height:130px;
   }
+  /* facebook プラグインの最低限の幅 */
+  .fb-container {
+		width: 500px;
+  }
+
 }
 
 @media only screen and (max-width: 992px) {
@@ -1924,7 +1947,7 @@ ul.marquee{
   margin: 0;
   /*padding: 0;*/
 }
-.swiper-container {
+.swiper-container.main-swiper {
   width: 100%;
   height: 28vw;
   transition: opacity 0.6s ease;
@@ -2013,8 +2036,8 @@ ul.marquee{
   }
 }
 @media (max-width: 1023px) {
-  .swiper-container {
-    height: 40vw;
+  .swiper-container.main-swiper {
+    height: 50vw;
   }
   .swiper-container.swiper-container-coverflow {
     padding-top: 0;

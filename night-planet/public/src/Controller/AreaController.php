@@ -549,9 +549,13 @@ class AreaController extends AppController
                 $this->set(compact('ig_error'));
             }
         }
+
+        // facebook廃止 2020/06/11
+        $isShow_fb = false;
+
         $this->set('next_view',PATH_ROOT['SHOP']);
         $this->set(compact('shop', 'shopInfo', 'update_icon', 'updateInfo'
-            , 'diarys', 'sharer', 'credits', 'creditsHidden', 'ig_data'));
+            , 'diarys', 'sharer', 'credits', 'creditsHidden', 'ig_data', 'isShow_fb'));
         $this->render('shop');
 
     }

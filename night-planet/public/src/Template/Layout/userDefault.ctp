@@ -54,14 +54,15 @@
   <?= $this->Html->script("load-image.all.min.js") ?><!-- 画像の縦横を自動調整してくれるプラグインExif情報関連 -->
   <?= $this->Html->script("jquery.marquee.min.js") ?><!-- 縦方向スクロールしてくれるプラグイン -->
   <?= $this->Html->script("swiper.min.js") ?><!-- swiper-master スライダープラグイン -->
+  <?= $this->Html->script("infinite-scroll.pkgd.min.js") ?><!-- 無限スクロール プラグイン -->
   <script src='/PhotoSwipe-master/dist/photoswipe.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <script src='/PhotoSwipe-master/dist/photoswipe-ui-default.min.js'></script> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script><!-- 画面ローディング -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/red/pace-theme-center-circle.min.css" /><!-- 画面ローディング -->
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>--><!-- 画面ローディング -->
+  <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/red/pace-theme-center-circle.min.css" />--><!-- 画面ローディング -->
 
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
   <?= $this->Html->css('materialize.min.css') ?>
@@ -251,25 +252,32 @@
     mainSwiper.init();
 
     var subSwiper = new Swiper('.sub-swiper', {
-          slidesPerGroup: 1,
-          slidesPerView: 'auto',
-          loop: true,
-          spaceBetween: 2,
-          speed: 200,
-          autoplay: {
-            delay: 1500,
-            disableOnInteraction: false,
-          },
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev'
-          },
-          pagination: {
-            el: '.swiper-pagination',
-            type: 'bullets',
-            clickable: true
-          }
-        });
+      pagination: '.swiper-pagination',
+      paginationClickable: true,
+      nextButton: '.swiper-button-next',
+      prevButton: '.swiper-button-prev',
+      loop: true,
+      speed: 200,
+      autoplay: {
+        delay: 1500,
+        disableOnInteraction: false,
+      },
+      slidesPerView: 2,
+      centeredSlides : true,
+      slideToClickedSlide: true,
+      visibilityFullFit: true,
+      spaceBetween: 1,
+      breakpoints: {
+        543: {
+          slidesPerView: 2
+        }
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+        clickable: true
+      }
+    });
     // Initialize slider
     subSwiper.init();
   </script>

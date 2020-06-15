@@ -45,8 +45,8 @@ class ApiGooglesController extends AppController
         // 保守用一括登録処理の場合
         if ($is_hosyu) {
 
-            $start = '2020-04-05'; // 開始日
-            $end   = '2020-04-05'; // 終了日
+            $start = '2020-06-08'; // 開始日
+            $end   = '2020-06-08'; // 終了日
             // $start = '2020-02-21'; // 開始日
             // $end   = '2020-02-21'; // 終了日
 

@@ -145,10 +145,13 @@ class OwnersController extends AppController
         $this->set('owner', $owner);
     }
 
+    /**
+     * セッション情報を削除し、ログアウトする
+     */
     public function logout()
     {
         $auth = $this->request->session()->read('Auth.Owner');
-
+        $this->request->session()->destroy();
         Log::info($this->Util->setAccessLog(
             $auth, $this->request->params['action']), 'access');
 

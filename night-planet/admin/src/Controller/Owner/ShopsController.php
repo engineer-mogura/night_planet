@@ -84,6 +84,10 @@ class ShopsController extends AppController
 
             $range_years  = array();
             $range_months = array();
+            $access_years = array();
+            $access_months = array();
+            $access_weeks = array();
+
             $access_years = $this->AccessYears->find()
                                 ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id])
                                 ->order(['y' => 'DESC'])->toArray();
@@ -1787,7 +1791,7 @@ class ShopsController extends AppController
             }])->order(['casts.created'=>'DESC'])->toArray();
 
         $workSchedule = $this->WorkSchedules->find('all')
-            ->where(['shop_id', $this->viewVars['shopInfo']['id']])
+            ->where(['work_schedules.shop_id' => $this->viewVars['shopInfo']['id']])
             ->first();
 
         // スタッフ配列リスト
@@ -1863,7 +1867,7 @@ class ShopsController extends AppController
         } else {
             // スケジュールテーブルからidのみを取得する
             $old_Work_schedule = $this->WorkSchedules->find('all')
-                ->where(['shop_id', $this->viewVars['shopInfo']['id']])
+                ->where(['shop_id' => $this->viewVars['shopInfo']['id']])
                 ->first();
             $Work_schedule = $this->WorkSchedules
                 ->patchEntity($old_Work_schedule, $this->request->getData());

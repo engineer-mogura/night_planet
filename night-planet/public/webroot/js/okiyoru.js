@@ -551,9 +551,9 @@ $(function() {
     });
 
     // ローディング終了後、画面をフェードイン
-    Pace.on('done', function(){
-        $('.wrap').fadeIn();
-    });
+    // Pace.on('done', function(){
+    //     $('.wrap').fadeIn();
+    // });
 
 });
 

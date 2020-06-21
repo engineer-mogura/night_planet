@@ -424,7 +424,9 @@ class UtilComponent extends Component
             $diarys = $diarys->find('all')
             ->contain(['diary_likes','casts','casts.shops'])
             ->matching('casts.shops', function ($q) use ($isArea) {
-                return $q->where(['shops.area'=>$isArea]);
+                return $q->where(['shops.area'=>$isArea,
+                        'shops.status = 1 AND shops.delete_flag = 0
+                            AND casts.status = 1 AND casts.delete_flag = 0']);
             })
             ->order(['diarys.created' => 'DESC'])
             ->limit($rowNum)->all();
@@ -432,13 +434,17 @@ class UtilComponent extends Component
             $diarys = $diarys->find('all')
                 ->contain(['diary_likes','casts','casts.shops'])
                 ->matching('casts.shops', function ($q) use ($shop_id) {
-                    return $q->where(['shops.id'=>$shop_id]);
+                    return $q->where(['shops.id'=>$shop_id,
+                        'shops.status = 1 AND shops.delete_flag = 0
+                            AND casts.status = 1 AND casts.delete_flag = 0']);
                 })
                 ->order(['diarys.created' => 'DESC'])
                 ->limit($rowNum)->all();
         } else {
             $diarys = $diarys->find('all')
                 ->contain(['diary_likes','casts','casts.shops'])
+                ->where('shops.status = 1 AND shops.delete_flag = 0
+                        AND casts.status = 1 AND casts.delete_flag = 0')
                 ->order(['diarys.created' => 'DESC'])
                 ->limit($rowNum)->all();
         }
@@ -594,13 +600,15 @@ class UtilComponent extends Component
             $shopInfos = $shopInfos->find('all')
                 ->contain(['shop_info_likes','shops'])
                 ->matching('shops', function ($q) use ($isArea) {
-                    return $q->where(['shops.area'=>$isArea]);
+                    return $q->where(['shops.area'=>$isArea,
+                            'status = 1 AND delete_flag = 0']);
                 })
                 ->order(['shop_infos.created' => 'DESC'])
                 ->limit($rowNum)->all();
         } else {
             $shopInfos = $shopInfos->find('all')
                 ->contain(['shop_info_likes','shops'])
+                ->where(['status = 1 AND delete_flag = 0'])
                 ->order(['shop_infos.created' => 'DESC'])
                 ->limit($rowNum)->all();
         }
@@ -659,6 +667,7 @@ class UtilComponent extends Component
                     ->where(['area_show_flg' => 1, 'type' => 'main', 'adsenses.area' => $area
                         , 'NOW() BETWEEN valid_start AND valid_end'])
                     ->contain(['shops'])
+                    ->where(['status = 1 AND delete_flag = 0'])
                     ->order(['area_order' => 'ASC'])
                     ->limit($max_num)->all()->toArray();
             } else if ($target == 'sub') {
@@ -667,6 +676,7 @@ class UtilComponent extends Component
                     ->where(['area_show_flg' => 1, 'type' => 'sub', 'adsenses.area' => $area
                         , 'NOW() BETWEEN valid_start AND valid_end'])
                     ->contain(['shops'])
+                    ->where(['status = 1 AND delete_flag = 0'])
                     ->order(['area_order' => 'ASC'])
                     ->limit($sub_num)->all()->toArray();
             }
@@ -678,6 +688,7 @@ class UtilComponent extends Component
                     ->where(['top_show_flg' => 1, 'type' => 'main'
                         , 'NOW() BETWEEN valid_start AND valid_end'])
                     ->contain(['shops'])
+                    ->where(['status = 1 AND delete_flag = 0'])
                     ->order(['top_order' => 'ASC'])
                     ->limit($max_num)->all()->toArray();
             } else if ($target == 'sub') {
@@ -686,6 +697,7 @@ class UtilComponent extends Component
                     ->where(['top_show_flg' => 1, 'type' => 'sub'
                         , 'NOW() BETWEEN valid_start AND valid_end'])
                     ->contain(['shops'])
+                    ->where(['status = 1 AND delete_flag = 0'])
                     ->order(['top_order' => 'ASC'])
                     ->limit($sub_num)->all()->toArray();
             }
@@ -716,14 +728,15 @@ class UtilComponent extends Component
                     'fields' => 'id',
                     'order' => 'RAND()',
                     'limit' => $max_num))
-                    ->where(['area' => $area])
+                    ->where(['area' => $area, 'status = 1 AND delete_flag = 0'])
                     ->toArray();
             } else {
                 $ids = $shops->find( 'list', array(
                     'fields' => 'id',
                     'order' => 'RAND()',
-                    'limit' => $max_num))->toArray();
-
+                    'limit' => $max_num))
+                    ->where(['status = 1 AND delete_flag = 0'])
+                    ->toArray();
             }
             // idが取得出来た場合
             if (!empty($ids)) {
@@ -1199,7 +1212,7 @@ class UtilComponent extends Component
                 ->contain(['shops' => function($q) {
                     return $q->select($this->Shops->Schema()->columns());
                 }])
-            ->where(['ym IN' => $in_array])
+            ->where(['ym IN' => $in_array, 'status = 1 AND delete_flag = 0'])
             ->order(['shop_id','ym'])->toArray();
 
         } else {
@@ -1208,7 +1221,8 @@ class UtilComponent extends Component
                 ->contain(['shops' => function($q) {
                     return $q->select($this->Shops->Schema()->columns());
                 }])
-            ->where(['ym IN' => $in_array, 'access_months.area' => $area])
+            ->where(['ym IN' => $in_array, 'access_months.area' => $area
+                , 'status = 1 AND delete_flag = 0'])
             ->order(['shop_id','ym'])->toArray();
         }
 

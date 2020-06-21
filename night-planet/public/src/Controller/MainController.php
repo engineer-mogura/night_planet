@@ -56,6 +56,7 @@ class MainController extends AppController
         $shops_query = $this->Shops->find();
         $casts_query = $this->Casts->find();
         $shops = $shops_query->select(['count'=> $shops_query->func()->count('area'),'area'])
+                    ->where(['status = 1 AND delete_flag = 0'])
                     ->group('area')->toArray();
 
         // 全体店舗数
@@ -92,7 +93,11 @@ class MainController extends AppController
             $region[$value1['path']] = $region_cnt;
         }
         // 全体スタッフ数を取得
-        $casts_cnt = $casts_query->count();
+        $casts_cnt = $casts_query->find('all')
+            ->contain(['shops'])
+            ->where(['shops.status = 1 AND shops.delete_flag = 0'])
+            ->count();
+
         $all_cnt = ['shops' => $shops_cnt, 'casts' => $casts_cnt];
         $new_photos = $this->NewPhotosRank->find("all")
                         ->order(['id'=>'ASC'])

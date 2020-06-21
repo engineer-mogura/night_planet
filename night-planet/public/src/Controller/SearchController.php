@@ -83,6 +83,9 @@ class SearchController extends AppController
             return;
         }
 
+        // 次の画面
+        $next_view = 'search';
+
         // 検索ページ以外からの場合は新しくレンダリングする
         $search = $this->getSearch($this->request->getQuery());
 
@@ -99,8 +102,7 @@ class SearchController extends AppController
         $selected = $this->request->getQuery();
         $masterCodesFind = array('area','genre');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
-        $this->set('next_view', 'search');
-        $this->set(compact('search', 'selectList', 'selected'));
+        $this->set(compact('search', 'next_view', 'selectList', 'selected'));
         $this->render();
     }
 
@@ -115,7 +117,9 @@ class SearchController extends AppController
     {
         // 店舗検索の場合
         if ($requestData['search-choice'] == 'shop') {
-            $query = $this->Shops->find()->contain(['snss']);
+            $query = $this->Shops->find()
+               ->where(['shops.status = 1 AND shops.delete_flag = 0'])
+               ->contain(['snss']);
 
             foreach ($requestData as $key => $findData) {
                 // ラジオボタンの場合コンティニュー
@@ -157,7 +161,9 @@ class SearchController extends AppController
             }
         } elseif ($requestData['search-choice'] == 'cast') {
             // スタッフ検索の場合
-            $query = $this->Casts->find()->contain(['shops','snss']);
+            $query = $this->Casts->find("all")
+                ->contain(['shops', 'snss'])
+                ->where(['casts.status = 1 AND casts.delete_flag = 0']);
 
             foreach ($requestData as $key => $findData) {
                 // ラジオボタンの場合コンティニュー
@@ -176,7 +182,8 @@ class SearchController extends AppController
                         $query
                             ->contain('shops')
                             ->matching('shops', function (Query $q) use ($key, $findData) {
-                                return $q->where(['shops.'.$key => $findData]);
+                                return $q->where(['shops.'.$key => $findData,
+                                    'shops.status = 1 AND shops.delete_flag = 0']);
                             });
                     }
                 }

@@ -23,6 +23,8 @@ use Cake\ORM\Entity;
  * @property string|null $pref21
  * @property string|null $addr21
  * @property string|null $strt21
+ * @property string|null $status
+ * @property string|null $delete_flag
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
  *
@@ -65,6 +67,8 @@ class Shop extends Entity
         'pref21' => true,
         'addr21' => true,
         'strt21' => true,
+        'status' => true,
+        'delete_flag' => true,
         'created' => true,
         'modified' => true,
         'owner' => true,
@@ -90,5 +94,4 @@ class Shop extends Entity
         return $this->_properties['pref21'] .
             $this->_properties['addr21'] . $this->_properties['strt21'];
     }
-
 }

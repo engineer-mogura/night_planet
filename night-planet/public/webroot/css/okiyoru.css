@@ -499,6 +499,15 @@ ul.tabs > li.tab-original.tab > .active {
 
 /* トップページ画面 END */
 
+/* unknow画面 START */
+#unknow .unknow-image {
+  text-align: center;
+}
+#unknow .unknow-message {
+  font-weight: bold;
+}
+/* unknow画面 END */
+
 /* サブスライダー セクション START */
 .swiper-container.sub-swiper .swiper-wrapper {
   height: 150px;

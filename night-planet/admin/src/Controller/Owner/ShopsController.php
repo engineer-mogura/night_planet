@@ -109,7 +109,7 @@ class ShopsController extends AppController
                             , 'ranges' => [$range_years, $range_months]);
         }
 
-    $this->set(compact('shop', 'reports'/*, 'ranges' */));
+        $this->set(compact('shop', 'reports'/*, 'ranges' */));
         $this->render();
     }
     /**

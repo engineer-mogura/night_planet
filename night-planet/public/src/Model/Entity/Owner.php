@@ -19,6 +19,7 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string|null $dir
  * @property string|null $remember_token
  * @property int|null $status
+ * @property int|null $delete_flag
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  *
@@ -47,6 +48,7 @@ class Owner extends Entity
         'dir' => true,
         'remember_token' => true,
         'status' => true,
+        'delete_flag' => true,
         'created' => true,
         'modified' => true,
         'shops' => true

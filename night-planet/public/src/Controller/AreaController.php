@@ -146,14 +146,19 @@ class AreaController extends AppController
 
         $query = $this->Shops->find();
         $query = $this->Shops->find('all', array('fields' =>
-                    array('id', 'area', 'genre', 'count' => $query->func()->count('genre'))));
+                    array('id', 'area', 'genre', 'count' => $query->func()->count('genre'))))
+                    ->where(['shops.status = 1 AND shops.delete_flag = 0']);
+
         $shops = $query->where(['area' => AREA[$this->viewVars['is_area']]['path']])
-            ->group('genre')->contain(['casts'])->toArray();
-        $shops_cnt = 0;
-        $casts_cnt = 0;
+                        ->group('genre')->contain(['casts' => function(Query $q) {
+                            return $q->where(['casts.status = 1 AND casts.delete_flag = 0']);
+                        }])->toArray();
 
         // 全体店舗数
         $shops_cnt = 0;
+        // 全体スタッフ数
+        $casts_cnt = 0;
+
         // 画面表示するランキング数【１カラム：３】,【２カラム：７】,【３カラム：１０】,【４カラム：１３】
         $limit      = PROPERTY['RANKING_SHOW_MAX'];
         // 範囲日数※最大で直近３０日前までとすること
@@ -164,12 +169,14 @@ class AreaController extends AppController
         foreach ($genreCounts as $key => $row) {
             $genreCounts[$key] = $row + array('count'=> 0,'area' => AREA[$this->viewVars['is_area']]['path']);
         }
+
+        // 店舗数セット
+        $shops_cnt = count($shops);
+
         // DBから取得したジャンルのカウントをセットする
         foreach ($shops as $key => $shop) {
-            // 全体店舗数をセット
-            $shops_cnt += $shop->count;
-            // 全体スタッフ数をセット
-            $casts_cnt += count($shop->casts);
+        // スタッフ数セット
+        $casts_cnt += count($shop->casts);
             $genreCounts[$shop['genre']]['area'] = AREA[$this->viewVars['is_area']]['path'];
             $genreCounts[$shop['genre']]['count'] = $shop['count'];
         }
@@ -324,7 +331,8 @@ class AreaController extends AppController
         $area_genre = ['area'=> AREA[$url['0']], 'genre'=>GENRE[$url['1']]];
         // エリア、ジャンルの店舗情報取得
         $shops = $this->Shops->find('all')
-                    ->where(['area'=> $url['0'], 'genre' => $url['1']])
+                    ->where(['area'=> $url['0'], 'genre' => $url['1'],
+                    'status = 1 AND delete_flag = 0'])
                     ->contain(['snss'])->toArray();
 
         // トップ画像を設定する
@@ -363,13 +371,15 @@ class AreaController extends AppController
         $columns = $this->ShopInfos->schema()->columns();
 
         $shop = $this->Shops->find('all')
-            ->where(['shops.id' => $id])
+            ->where(['shops.id' => $id,
+                'shops.status = 1 AND shops.delete_flag = 0'])
             ->contain(['owners','owners.servece_plans','casts' => function (Query $q) {
                 return $q
                         ->where(['casts.status'=>'1']);
             }, 'owners.shops' => function (Query $q) {
                 return $q
-                        ->where(['shops.id is not' => $id]);
+                        ->where(['shops.id is not' => $id,
+                            'shops.status = 1 AND shops.delete_flag = 0']);
             }, 'coupons' => function (Query $q) {
                 return $q
                         ->where(['coupons.status'=>'1']);
@@ -385,6 +395,15 @@ class AreaController extends AppController
                 return $q
                         ->where(["work_schedules.modified BETWEEN".$range]);
             },'jobs','snss','shop_options'])->first();
+
+        // 店舗が非表示または論理削除している場合はリダイレクトする
+        if (empty($shop)) {
+            $url = explode(DS, $this->request->url);
+            return $this->redirect(
+                ['controller' => 'Unknow', 'action' => 'shop',
+                     '?'=> array('area'=>$url[0], 'genre'=>$url[1], 'id'=>$url[2])]
+            );
+        }
 
         // 店舗が複数ある場合
         foreach($shop->owner->shops as $key => $value) {
@@ -563,17 +582,34 @@ class AreaController extends AppController
     public function cast($id = null)
     {
         // スタッフ情報、最新の日記情報とイイネの総数取得
-        $cast = $this->Casts->find("all")->where(['casts.id' => $id])
-            ->contain(['shops','shops.owners.servece_plans', 'diarys' => function (Query $q) {
+        $cast = $this->Casts->find("all")
+            ->where(['casts.id' => $id,
+                'casts.status = 1 AND casts.delete_flag = 0'])
+            ->contain(['shops' => function (Query $q) {
+                return $q
+                        ->where(['shops.id is not' => $id,
+                            'shops.status = 1 AND shops.delete_flag = 0']);
+            },'shops.owners.servece_plans', 'diarys' => function (Query $q) {
                 return $q
                     ->order(['diarys.created'=>'DESC']);
             }
                 , 'diarys.diary_likes','Snss'
             ])->first();
+
+        // 店舗が非表示または論理削除している場合はリダイレクトする
+        if (empty($cast)) {
+            $url = explode(DS, $this->request->url);
+            return $this->redirect(
+                ['controller' => 'Unknow', 'action' => 'cast',
+                        '?'=> array('area'=>$url[0])]
+            );
+        }
+
         // その他のスタッフを取得する
         $other_casts = $this->Casts->find("all")
-            ->where(['casts.shop_id' => $cast->shop_id
-                , 'casts.id is not' => $id
+            ->where(['casts.shop_id' => $cast->shop_id,
+                'casts.id is not' => $id,
+                'casts.status = 1 AND casts.delete_flag = 0'
             ])
             ->order(['created'=>'DESC'])
             ->toArray();

@@ -1,12 +1,12 @@
-<div id="wrapper">
+<div id="dashbord">
 	<div class="container">
 		<?= $this->Flash->render() ?>
-		<h5><?= __('オーナー画面') ?></h5>
+		<h5><?= __('店舗一覧') ?></h5>
 		<div class="row">
 			<?php foreach ($shops  as $key => $shop): ?>
 			<?php $shopPath = DS.PATH_ROOT['IMG'].DS.$shop->area.DS.$shop->genre.DS.$shop->dir; ?>
-				<div class="col s12 m6 l6">
-					<div class="card <?php if(count($shops) == $key + 1) { echo('targetScroll');}?>">
+				<div class="col s12 m6 l6 shop-box">
+					<div class="card">
 						<div class="card-image">
 							<a href="/owner/shops/index?shop_id=<?=$shop->id?>">
 								<img src="<?=$shop->top_image?>" height="300px;" width="100%" alt="">
@@ -17,10 +17,21 @@
 								<thead>
 									<tr>
 										<td colspan="2">
+											<span class="shop-num">店舗＃<?=$key + 1?></span>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2">
+											<div style="display:none;">
+												<input type="hidden" name="json_data" value='<?=$shop ?>'>
+											</div>
 											<span><?=$shop->name ?></span>
 											<a href="#!" class="secondary-content">
 												<div class="switch">
-													<label>OFF<input type="checkbox" value="<?=$shop->status ?>" name="shop_switch<?=$shop->id ?>" class="shop-switchBtn" <?php if ($shop->status == 1) { echo 'checked'; }?>><span class="lever"></span>ON</label>
+													<label>OFF<input type="checkbox" value="<?=$shop->status ?>"
+															name="shop_switch<?=$shop->id ?>" class="shop-switchBtn"
+															<?php if ($shop->status == 1) { echo 'checked'; }?>><span
+															class="lever"></span>ON</label>
 												</div>
 											</a>
 										</td>
@@ -39,7 +50,9 @@
 							</table>
 						</div>
 						<div class="card-action">
-							<a href="/owner/shops/index?shop_id=<?=$shop->id?>">店舗詳細</a>
+							<span>
+								<a class="waves-effect waves-light btn" href="/owner/shops/index?shop_id=<?=$shop->id?>">店舗詳細</a>
+							</span>
 						</div>
 					</div>
 				</div>

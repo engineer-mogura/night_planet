@@ -32,7 +32,7 @@
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <?= $this->Html->css('fontello-3eba660b/css/fontello.css') ?>
-  <?= $this->Html->css('materialize.css') ?>
+  <?= $this->Html->css('materialize.min.css') ?>
   <?= $this->Html->css('okiyoru.css') ?>
   <?= $this->Html->css('jquery.notifyBar.css') ?>
 

@@ -31,7 +31,7 @@
     "codic.case": "camelCase",
     "todohighlight.isEnable": true,
     "[php]": {
-        "editor.defaultFormatter": "junstyle.php-cs-fixer"
+        "editor.defaultFormatter": "Sophisticode.php-formatter"
     },
     "sync.gist": "53c6e4dff500bdc991319feb50d38b8d",
     "window.zoomLevel": 0,

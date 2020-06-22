@@ -28,6 +28,8 @@ class OwnersController extends AppController
     public function beforeFilter(Event $event) {
         // AppController.beforeFilterをコールバック
         $this->Security->setConfig('blackHoleCallback', 'blackhole');
+        // 店舗スイッチアクションのセキュリティ無効化 AJAXを使用しているので
+        $this->Security->setConfig('unlockedActions', ['switchShop']);
         //$this->loadComponent('Csrf');
         parent::beforeFilter($event);
         // オーナー用テンプレート
@@ -326,6 +328,48 @@ class OwnersController extends AppController
         //$val = $this->Analytics->getAnalytics();
         $this->set(compact('shops','is_add'));
         $this->render();
+    }
+
+    /**
+     * 店舗 スイッチ押下処理
+     *
+     * @return void
+     */
+    public function switchShop()
+    {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
+        $flg = true; // 返却フラグ
+        $message = RESULT_M['DELETE_SUCCESS']; // 返却メッセージ
+        $errors = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $auth = $this->request->session()->read('Auth.Owner');
+        $id = $auth['id']; // ユーザーID
+
+        $shop = $this->Shops->get($this->request->getData('id'));
+        // ステータスをセット
+        $shop->status = $this->request->getData('status');
+        // メッセージをセット
+        $shop->status == 1 ? 
+            $message = RESULT_M['DISPLAY_SUCCESS']: $message = RESULT_M['HIDDEN_SUCCESS'];
+        try {
+            // レコード更新実行
+            if (!$this->Shops->save($shop)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
+            }
+        } catch(RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
+            $message = RESULT_M['CHANGE_FAILED'];
+            $flg = false;
+        }
+
+        $response = array(
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
     }
 
     public function shopAdd()

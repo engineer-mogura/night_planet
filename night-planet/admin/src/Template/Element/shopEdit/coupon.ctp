@@ -12,7 +12,7 @@
           <div style="display:none;">
             <input type="hidden" name="json_data" value='<?=$coupon ?>'>
           </div>
-          <ul class="collection z-depth-2 <?php if(count($shop->coupons) == $key + 1) { echo('targetScroll');}?>">
+          <ul class="collection z-depth-2 <?php if(count($shop->coupons) == $key + 1) { echo('coupon-Scroll');}?>">
             <li class="collection-item">
               <table class="highlight">
                 <thead>

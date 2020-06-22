@@ -53,7 +53,11 @@ function crearUserEvents() {}
 /**
  * オーナー画面のイベントクリア
  */
-function crearOwnerEvents() {}
+function crearOwnerEvents() {
+    /** オーナートップ画面 START */
+    $(document).off("change", ".shop-switchBtn");
+    /** オーナートップ画面 END */
+}
 
 /**
  * ショップ画面のイベントクリア
@@ -945,6 +949,68 @@ function initializeOwner() {
         },
     });
 
+    /* ダッシュボード 画面 START */
+    if ($("#dashbord").length) {
+        /* スタッフ スイッチ押した時 */
+        $(document).on("change", ".shop-switchBtn", function () {
+            var target = $(this).closest(".shop-box");
+            var json = JSON.parse(
+                $(target).find('input[name="json_data"]').val()
+            );
+            var status = 1; // チェック状態初期値
+            // チェックされてない場合
+            if (!$(this).prop("checked")) {
+                status = 0;
+            }
+            var data = {
+                id: json.id,
+                status: status,
+                action: "/owner/owners/switch_shop",
+            };
+
+            $.ajax({
+                type: "POST",
+                datatype: "JSON",
+                url: data.action,
+                data: data,
+                timeout: 10000,
+                beforeSend: function (xhr, settings) {
+                    $("#dashbord").find(".shop-switchBtn").attr("disabled", true);
+                },
+                complete: function (xhr, textStatus) {
+                    $("#dashbord").find(".shop-switchBtn").attr("disabled", false);
+                },
+                success: function (response, dataType) {
+                    // OKの場合
+                    if (response.success) {
+                        Materialize.toast(
+                            $(target).find(".shop-num").text() +
+                                response.message,
+                            3000,
+                            "rounded"
+                        );
+                    } else {
+                        // NGの場合
+                        Materialize.toast(
+                            $(target).find(".shop-num").text() +
+                                response.message,
+                            3000,
+                            "rounded"
+                        );
+                    }
+                },
+                error: function (response, textStatus, xhr) {
+                    $("#dashbord").find(".shop-switchBtn").attr("disabled", false);
+                    $.notifyBar({
+                        cssClass: "error",
+                        html: "通信に失敗しました。ステータス：" + textStatus,
+                    });
+                },
+            });
+        });
+    }
+    /* ダッシュボード 画面 END */
+
     /* プロフィール 画面 START */
     if ($("#profile").length) {
         var $profile = $("#profile");
@@ -1303,7 +1369,7 @@ function initializeShop() {
 
             if ($(this).prop("checked")) {
                 $("html,body").animate(
-                    { scrollTop: $(".targetScroll").offset().top },
+                    { scrollTop: $(".coupon-Scroll").offset().top },
                     1200
                 );
                 // 一旦全てをクリアして再チェックする
@@ -1484,7 +1550,7 @@ function initializeShop() {
 
             if ($(this).prop("checked")) {
                 $("html,body").animate(
-                    { scrollTop: $(".targetScroll").offset().top },
+                    { scrollTop: $(".cast-Scroll").offset().top },
                     1200
                 );
                 // 一旦全てをクリアして再チェックする

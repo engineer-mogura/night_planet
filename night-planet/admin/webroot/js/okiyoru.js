@@ -1369,7 +1369,7 @@ function initializeShop() {
 
             if ($(this).prop("checked")) {
                 $("html,body").animate(
-                    { scrollTop: $(".targetScroll").offset().top },
+                    { scrollTop: $(".coupon-Scroll").offset().top },
                     1200
                 );
                 // 一旦全てをクリアして再チェックする
@@ -1550,7 +1550,7 @@ function initializeShop() {
 
             if ($(this).prop("checked")) {
                 $("html,body").animate(
-                    { scrollTop: $(".targetScroll").offset().top },
+                    { scrollTop: $(".cast-Scroll").offset().top },
                     1200
                 );
                 // 一旦全てをクリアして再チェックする

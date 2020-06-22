@@ -13,7 +13,7 @@
                 <div style="display:none;">
                     <input type="hidden" name="json_data" value='<?=$cast ?>'>
                 </div>
-                <ul class="collection z-depth-2 <?php if(count($shop->casts) == $key + 1) { echo('targetScroll');}?>">
+                <ul class="collection z-depth-2 <?php if(count($shop->casts) == $key + 1) { echo('cast-Scroll');}?>">
                     <li class="collection-item">
                         <table class="highlight">
                             <thead>

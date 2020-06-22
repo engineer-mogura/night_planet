@@ -589,7 +589,7 @@ class AreaController extends AppController
                 return $q
                         ->where(['shops.id is not' => $id,
                             'shops.status = 1 AND shops.delete_flag = 0']);
-            },'shops.owners.servece_plans', 'diarys' => function (Query $q) {
+            }, 'diarys' => function (Query $q) {
                 return $q
                     ->order(['diarys.created'=>'DESC']);
             }
@@ -790,9 +790,24 @@ class AreaController extends AppController
 
     public function diary($id = null)
     {
-        $cast = $this->Casts->find('all')->where(['casts.id' => $id])
-            ->contain(['shops'])
-            ->first();
+        $cast = $this->Casts->find("all")
+            ->where(['casts.id' => $id,
+                'casts.status = 1 AND casts.delete_flag = 0'])
+            ->contain(['shops' => function (Query $q) {
+                return $q
+                        ->where(['shops.id is not' => $id,
+                            'shops.status = 1 AND shops.delete_flag = 0']);
+            }
+            ])->first();
+
+        // 店舗が非表示または論理削除している場合はリダイレクトする
+        if (empty($cast)) {
+            $url = explode(DS, $this->request->url);
+            return $this->redirect(
+                ['controller' => 'Unknow', 'action' => 'diary',
+                        '?'=> array('area'=>$url[0])]
+            );
+        }
 
         $this->set('userInfo', $this->Util->getCastItem($cast, $cast->shop));
         $this->set('shopInfo', $this->Util->getShopInfo($cast->shop));

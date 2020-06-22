@@ -106,6 +106,16 @@ class UnknowController extends AppController
         $this->render();
     }
 
+    public function diary()
+    {
+        // 検索ボックス内容セットする
+        $masterCodesFind = array('area','genre');
+        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+
+        $this->set(compact('selectList'));
+        $this->render();
+    }
+
     /**
      * json返却用の設定
      *

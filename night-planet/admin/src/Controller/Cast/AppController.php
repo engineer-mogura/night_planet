@@ -68,4 +68,27 @@ class AppController extends \App\Controller\AppController
         $this->viewBuilder()->layout('castDefault');
     }
 
+   /**
+     * ユーザのステータス、論理削除フラグチェック
+     *
+     * @param Array $user
+     * @return Boolean $rslt
+     */
+    public function checkStatus($user)
+    {
+        $rslt = true;
+
+        if ($user['status'] == 0 || $user['delete_flag'] == 1) {
+            $rslt = false;
+            $body .= "そのままご送信ください。【ID】： ".$user->id."、";
+            $body .= "【お名前】： ".$user->name."、";
+            $body .= "【メールアドレス】： ".$user->email;
+
+            $message = "アカウントが凍結または削除された可能性があります。アカウントを回復希望の方はお問い合わせのリンクを開きそのままご送信ください。";
+            $this->log($this->Util->setLog($user, $message));
+            $this->Flash->error($message . "<a href='mailto:info@night-planet.com?subject=アカウント回復希望&amp;body=".$body."'>お問い合わせ</a>", ['escape' => false]);
+        }
+
+        return $rslt;
+    }
 }

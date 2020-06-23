@@ -68,6 +68,11 @@ class CastsController extends AppController
         $cast = $this->Casts->find('all')
             ->contain(['shops','diarys'])->where(['casts.id'=>$id])->first();
 
+        // 非表示または論理削除している場合はログイン画面にリダイレクトする
+        if (!$this->checkStatus($cast)) {
+            return $this->redirect($this->Auth->logout());
+        }
+
         // JSONファイルをDB内容にて、更新する
         // JSONファイルに書き込むカラム情報
         $Columns = array('id','title','start','end'
@@ -213,7 +218,10 @@ class CastsController extends AppController
     {
         $auth = $this->request->session()->read('Auth.Cast');
         $id = $auth['id']; // ユーザーID
-
+        // 非表示または論理削除している場合はログイン画面にリダイレクトする
+        if (!$this->checkStatus($this->Casts->get($this->viewVars['userInfo']['id']))) {
+            return $this->redirect($this->Auth->logout());
+        }
         if ($this->request->is('ajax')) {
 
             $flg = true; // 返却フラグ
@@ -686,6 +694,11 @@ class CastsController extends AppController
     {
         $auth = $this->request->session()->read('Auth.Cast');
         $id = $auth['id']; // スタッフID
+
+        // 非表示または論理削除している場合はログイン画面にリダイレクトする
+        if (!$this->checkStatus($this->Casts->get($this->viewVars['userInfo']['id']))) {
+            return $this->redirect($this->Auth->logout());
+        }
 
         // AJAXのアクセス以外は不正とみなす。
         if ($this->request->is('ajax')) {

@@ -31,6 +31,7 @@ class OwnersController extends AppController
         // 店舗スイッチアクションのセキュリティ無効化 AJAXを使用しているので
         $this->Security->setConfig('unlockedActions', ['switchShop']);
         //$this->loadComponent('Csrf');
+
         parent::beforeFilter($event);
         // オーナー用テンプレート
         $this->viewBuilder()->layout('ownerDefault');
@@ -188,7 +189,7 @@ class OwnersController extends AppController
             return $this->redirect(['action' => 'signup']);
         }
         // 仮登録時点で仮登録フラグは立っていない想定。
-        if ($owner->status != 0) {
+        if ($owner->status == 1) {
             // すでに登録しているとみなし、ログイン画面へ
             $this->Flash->success(RESULT_M['REGISTERED_FAILED']);
             return $this->redirect(['action' => 'login']);
@@ -221,8 +222,9 @@ class OwnersController extends AppController
             }
 
             // オーナー情報セット
-            $owner->dir = $nextDir; // 連番ディレクトリをセット
-            $owner->status = 1; // 仮登録フラグを下げる
+            $owner->dir = $nextDir;  // 連番ディレクトリをセット
+            $owner->status = 1;      // 仮登録フラグを下げる
+            $owner->delete_flag = 0; // 削除フラグを下げる
             // オーナー本登録
             if (!$this->Owners->save($owner)) {
 
@@ -294,7 +296,15 @@ class OwnersController extends AppController
             $is_add = true; // 店舗追加フラグ
 
             // オーナーに所属する全ての店舗を取得する
-            $shops = $this->Shops->find('all')->where(['owner_id' => $user['id']])->toArray();
+            $shops = $this->Shops->find('all')
+                ->contain(['owners'])
+                ->where(['owner_id' => $user['id']])->toArray();
+
+            // 非表示または論理削除している場合はログイン画面にリダイレクトする
+            if (!$this->checkStatus($shops[0]->owner)) {
+                return $this->redirect($this->Auth->logout());
+            }
+
             $plan = $this->viewVars['userInfo']['current_plan'];
 
             // 店舗追加フラグを設定する
@@ -374,6 +384,11 @@ class OwnersController extends AppController
 
     public function shopAdd()
     {
+        // 非表示または論理削除している場合はログイン画面にリダイレクトする
+        if (!$this->checkStatus($this->Owners->get($this->viewVars['userInfo']['id']))) {
+            return $this->redirect($this->Auth->logout());
+        }
+
         // オーナーに所属する店舗をカウント
         $shop_count = $this->Shops->find('all')
             ->where(['owner_id' => $this->viewVars['userInfo']['id']])
@@ -439,6 +454,8 @@ class OwnersController extends AppController
                     $shop->name = $this->request->getData('name');
                     $shop->area = $this->request->getData('area');
                     $shop->genre = $this->request->getData('genre');
+                    $shop->status = 0;
+                    $shop->delete_flag = 0;
                     $shop->dir = $nextDir;
                     // 店舗登録
                     if (!$this->Shops->save($shop)) {
@@ -518,6 +535,11 @@ class OwnersController extends AppController
     {
         $auth = $this->request->session()->read('Auth.Owner');
         $id = $auth['id']; // ユーザーID
+
+        // 非表示または論理削除している場合はログイン画面にリダイレクトする
+        if (!$this->checkStatus($this->Owners->get($this->viewVars['userInfo']['id']))) {
+            return $this->redirect($this->Auth->logout());
+        }
 
         if ($this->request->is('ajax')) {
 
@@ -837,6 +859,11 @@ class OwnersController extends AppController
             $owner = $this->Owners->newEntity( $this->request->getData()
                 , ['validate' => 'OwnerPassReset1']);
 
+            // 非表示または論理削除している場合はログイン画面にリダイレクトする
+            if (!$this->checkStatus($owner)) {
+                return $this->redirect($this->Auth->logout());
+            }
+
             if(!$owner->errors()) {
                 // メールアドレスで取得
                 $owner = $this->Owners->find()
@@ -991,6 +1018,12 @@ class OwnersController extends AppController
 
                 $hasher = new DefaultPasswordHasher();
                 $owner = $this->Owners->get($this->viewVars['userInfo']['id']);
+
+                // 非表示または論理削除している場合はログイン画面にリダイレクトする
+                if (!$this->checkStatus($owner)) {
+                    return $this->redirect($this->Auth->logout());
+                }
+
                 $equal_check = $hasher->check($this->request->getData('password')
                     , $owner->password);
                 // 入力した現在のパスワードとデータベースのパスワードを比較する

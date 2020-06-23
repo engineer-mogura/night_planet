@@ -1781,7 +1781,8 @@ class ShopsController extends AppController
         // 店舗に所属するスタッフの
         // 当月の月初から翌日の月末の日付変わる直前までのスタッフのスケジュールを取得する
         $casts = $this->Casts->find('all')
-            ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
+            ->where(['shop_id' => $this->viewVars['shopInfo']['id']
+                    , 'casts.status' => 1 , 'casts.delete_flag' => 0])
             ->contain(['shops'
                 , 'cast_schedules' => function (Query $q) use ($start_date, $end_date)  {
                     return $q
@@ -1914,7 +1915,8 @@ class ShopsController extends AppController
 
         // 店舗に所属する全てのスタッフを取得する
         $casts = $this->Casts->find('all')
-            ->where(['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => '1'])
+            ->where(['shop_id' => $this->viewVars['shopInfo']['id']
+                    , 'casts.status' => 1 , 'casts.delete_flag' => 0])
             ->contain(['shops'
                 , 'cast_schedules' => function (Query $q) use ($start_date, $end_date)  {
                     return $q

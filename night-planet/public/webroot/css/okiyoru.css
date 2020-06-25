@@ -1401,10 +1401,6 @@ form .message-label {
   height:600px;
 }
 #work-schedule-management table tr.tr-header th {
-  /* 縦スクロール時に固定する */
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
   /* tbody内のセルより手前に表示する */
   z-index: 1;
   width: initial;

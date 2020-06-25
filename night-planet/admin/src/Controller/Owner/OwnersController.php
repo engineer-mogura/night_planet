@@ -859,15 +859,16 @@ class OwnersController extends AppController
             $owner = $this->Owners->newEntity( $this->request->getData()
                 , ['validate' => 'OwnerPassReset1']);
 
-            // 非表示または論理削除している場合はログイン画面にリダイレクトする
-            if (!$this->checkStatus($owner)) {
-                return $this->redirect($this->Auth->logout());
-            }
-
             if(!$owner->errors()) {
+
                 // メールアドレスで取得
                 $owner = $this->Owners->find()
                     ->where(['email' => $owner->email])->first();
+
+                // 非表示または論理削除している場合はログイン画面にリダイレクトする
+                if (!$this->checkStatus($owner)) {
+                    return $this->redirect($this->Auth->logout());
+                }
 
                 $email = new Email('default');
                 $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])

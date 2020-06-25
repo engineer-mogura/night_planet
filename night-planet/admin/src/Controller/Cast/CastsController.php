@@ -1574,6 +1574,11 @@ class CastsController extends AppController
                 $cast = $this->Casts->find()
                     ->where(['email' => $cast->email])->first();
 
+                // 非表示または論理削除している場合はログイン画面にリダイレクトする
+                if (!$this->checkStatus($cast)) {
+                    return $this->redirect($this->Auth->logout());
+                }
+
                 $email = new Email('default');
                 $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])
                     ->setSubject(MAIL['FROM_NAME_PASS_RESET'])

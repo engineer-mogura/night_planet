@@ -301,7 +301,7 @@ class OwnersController extends AppController
                 ->where(['owner_id' => $user['id']])->toArray();
 
             // 非表示または論理削除している場合はログイン画面にリダイレクトする
-            if (!$this->checkStatus($shops[0]->owner)) {
+            if (!$this->checkStatus($user)) {
                 return $this->redirect($this->Auth->logout());
             }
 

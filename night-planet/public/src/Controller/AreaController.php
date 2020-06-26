@@ -375,7 +375,7 @@ class AreaController extends AppController
                 'shops.status = 1 AND shops.delete_flag = 0'])
             ->contain(['owners','owners.servece_plans','casts' => function (Query $q) {
                 return $q
-                        ->where(['casts.status'=>'1']);
+                        ->where(['casts.status = 1 AND casts.delete_flag = 0']);
             }, 'owners.shops' => function (Query $q) {
                 return $q
                         ->where(['shops.id is not' => $id,

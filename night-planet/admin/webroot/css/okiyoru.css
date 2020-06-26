@@ -549,6 +549,11 @@ ul.tabs > li.tab-original.tab > .active {
     width: 200px;
     object-fit: cover;
   }
+  .search-word {
+    border-radius: 15px;
+    padding: 3px 8px;
+    margin: 5px;
+  }
   /* 検索画面 END */
 
 /* ユーザー END */

@@ -1,15 +1,15 @@
 <div id="search-result">
 	<div class="col s12">
-		<?php $key_word = empty($this->request->query('key_word'))? "キーワード指定なし": $this->request->query('key_word'); ?>
-		<?php $area = empty($this->request->query('area'))? "エリア指定なし": AREA[$this->request->query('area')]['label']; ?>
-		<?php $genre = empty($this->request->query('genre'))? "ジャンル指定なし": GENRE[$this->request->query('genre')]['label']; ?>
+		<?php $key_word = empty($this->request->query('key_word'))? "指定なし": $this->request->query('key_word'); ?>
+		<?php $area = empty($this->request->query('area'))? "指定なし": AREA[$this->request->query('area')]['label']; ?>
+		<?php $genre = empty($this->request->query('genre'))? "指定なし": GENRE[$this->request->query('genre')]['label']; ?>
 		<?php if(isset($unknow)): ?>
 			<span class="header"><?=h($area.'の'.$genre.'　'.count($search).'人')?></span>
 		<?php else: ?>
-			<span class="header"><?=h("スタッフの検索結果 ".count($search)." 人")?></span><br>
-			<span class="header"><?=h("キーワード「".$key_word."」")?></span><br>
-			<span class="header"><?=h("エリア「".$area."」")?></span><br>
-			<span class="header"><?=h("ジャンル「".$genre."」")?></span>
+			<div class="search-word white-text left header brown darken-1"><?=h("スタッフの検索結果 ".count($search)." 人")?></div>
+			<div class="search-word white-text left header red darken-1"><?=h("キーワード「".$key_word."」")?></div>
+			<div class="search-word white-text left header blue darken-1"><?=h("エリア「".$area."」")?></div>
+			<div class="search-word white-text left header orange darken-1"><?=h("ジャンル「".$genre."」")?></div>
 			<p class="message"><?= count($search) == 0 ? h("検索結果が０人でした。条件を変更し、もう一度検索してみてください。"):""?></p>
 		<?php endif; ?>
 	</div>

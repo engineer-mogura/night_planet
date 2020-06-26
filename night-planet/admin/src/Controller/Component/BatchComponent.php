@@ -208,8 +208,11 @@ class BatchComponent extends Component
         $exp = "*.dat";
 
         $shops = $this->Shops->find('all')
-            ->contain(['casts', 'casts.diarys' => function (Query $q) {
-                return $q
+            ->contain(['casts' => function (Query $q) {
+                    return $q
+                        ->where(['casts.status = 1 AND casts.delete_flag = 0']);
+                }, 'casts.diarys' => function (Query $q) {
+                    return $q
                         ->order(['diarys.created'=>'DESC'])
                         ->limit(5);
                 }, 'shop_infos' => function (Query $q) {
@@ -217,11 +220,15 @@ class BatchComponent extends Component
                         ->order(['shop_infos.created'=>'DESC'])
                         ->limit(5);
                 }
-        ])->limit("200")->toArray();
+            ])
+            ->where(['shops.status = 1 AND shops.delete_flag = 0'])->limit("200")->toArray();
 
         $snss   =  $this->Snss->find("all", ["DISTINCT instagram"])
                     ->where(["instagram != ''"])
-                    ->contain(['shops', 'shops.owners.servece_plans' => function (Query $q) {
+                    ->contain(['shops' => function (Query $q) {
+                        return $q
+                            ->where(['shops.status = 1 AND shops.delete_flag = 0']);
+                    }, 'shops.owners.servece_plans' => function (Query $q) {
                         return $q
                             ->where(['current_plan is not'=> SERVECE_PLAN['free']['label']]);
                     }])->limit(199)->toArray();

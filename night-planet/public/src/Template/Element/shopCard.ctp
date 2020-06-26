@@ -1,15 +1,20 @@
 <div id="search-result">
 	<div class="col s12">
-		<?php $key_word = empty($this->request->query('key_word'))? "キーワード指定なし": $this->request->query('key_word'); ?>
-		<?php $area = empty($this->request->query('area'))? "エリア指定なし": AREA[$this->request->query('area')]['label']; ?>
-		<?php $genre = empty($this->request->query('genre'))? "ジャンル指定なし": GENRE[$this->request->query('genre')]['label']; ?>
-		<?php if(isset($unknow)): ?>
+		<?php $key_word = empty($this->request->query('key_word'))? "指定なし": $this->request->query('key_word'); ?>
+		<?php $area = empty($this->request->query('area'))? "指定なし": AREA[$this->request->query('area')]['label']; ?>
+		<?php $genre = empty($this->request->query('genre'))? "指定なし": GENRE[$this->request->query('genre')]['label']; ?>
+		<!-- パンくずからのジャンルの場合 -->
+		<?php if(isset($shops)): ?>
+			<span class="header"><?=h($area_genre['area']['label'].'の'.$area_genre['genre']['label'].'　'.count($shops).'件')?></span>
+		<?php $search = $shops; ?>
+		<!-- UNKNOWからの場合 -->
+		<?php elseif(isset($unknow)): ?>
 			<span class="header"><?=h($area.'の'.$genre.'　'.count($search).'件')?></span>
 		<?php else: ?>
-			<span class="header"><?=h("店舗の検索結果 ".count($search)." 件")?></span><br>
-			<span class="header"><?=h("キーワード「".$key_word."」")?></span><br>
-			<span class="header"><?=h("エリア「".$area."」")?></span><br>
-			<span class="header"><?=h("ジャンル「".$genre."」")?></span>
+			<div class="search-word white-text left header brown darken-1"><?=h("店舗の検索結果 ".count($search)." 件")?></div>
+			<div class="search-word white-text left header red darken-1"><?=h("キーワード「".$key_word."」")?></div>
+			<div class="search-word white-text left header blue darken-1"><?=h("エリア「".$area."」")?></div>
+			<div class="search-word white-text left header orange darken-1"><?=h("ジャンル「".$genre."」")?></div>
 			<p class="message"><?= count($search) == 0 ? h("検索結果が０件でした。条件を変更し、もう一度検索してみてください。"):""?></p>
 		<?php endif; ?>
 	</div>

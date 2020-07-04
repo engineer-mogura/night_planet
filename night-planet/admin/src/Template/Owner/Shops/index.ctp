@@ -10,14 +10,19 @@
             <div class="white card-panel col s12 center-align">
                 <p class="recruit-label section-label"><span> 店舗 </span></p>
             </div>
-            <?php 
-                if(count($reports['ranges'][0][0]) == 0 ):
+            <?php
+                if($reports['access_years'] == '[]'
+                    && $reports['access_months'] == '[]'
+                    && $reports['access_weeks'] == '[]'):
             ?>
             <div class="col year-graph-section section">
-                <p>アクセスデータがありません。数日経ってからご確認下さい。</p>
+                <p>登録して数日はアクセスデータがありません。数日経ってからご確認下さい。</p>
             </div>
             <?php
-                else:
+                endif;
+            ?>
+            <?php
+                if($reports['access_years'] != '[]'):
             ?>
             <div class="col s12 m6 l6 year-graph-section section">
                 <div class="card-panel year-graph-shop section">
@@ -34,6 +39,18 @@
                     <input data-shop_year="" type="hidden" name="shop_year_data">
                 </div>
             </div>
+            <?php
+                else:
+            ?>
+            <div class="col year-graph-section section">
+                <p>年別アクセスデータがありません。数日経ってからご確認下さい。</p>
+            </div>
+            <?php
+                endif;
+            ?>
+            <?php
+                if($reports['access_weeks'] != '[]'):
+            ?>
             <div class="col s12 m6 l6 year-graph-section section">
                 <div class="card-panel year-graph-shop section">
                     <!--描画箇所 -->
@@ -42,6 +59,18 @@
                     <ul id="chart_legend"></ul>
                 </div>
             </div>
+            <?php
+                else:
+            ?>
+            <div class="col year-graph-section section">
+                <p>曜日別アクセスデータがありません。数日経ってからご確認下さい。</p>
+            </div>
+            <?php
+                endif;
+            ?>
+            <?php
+                if($reports['access_months'] != '[]'):
+            ?>
             <div class="col s12 m6 l6 day-graph-section section">
                 <div class="card-panel day-graph-shop section">
                     <div class="input-field col s12">
@@ -58,6 +87,12 @@
                     <!--凡例箇所 -->
                     <input data-shop_month="" type="hidden" name="shop_month_data">
                 </div>
+            </div>
+            <?php
+                else:
+            ?>
+            <div class="col day-graph-section section">
+                <p>月別アクセスデータがありません。数日経ってからご確認下さい。</p>
             </div>
             <?php
                 endif;
@@ -108,10 +143,10 @@
 
         // データセット
         var data = [
-            accessWeeks['monday_pageviews'], accessWeeks['tuesday_pageviews']
-            , accessWeeks['wednesday_pageviews'], accessWeeks['thursday_pageviews']
-            , accessWeeks['friday_pageviews'], accessWeeks['saturday_pageviews']
-            , accessWeeks['sunday_pageviews']
+            accessWeeks[0]['monday_pageviews'], accessWeeks[0]['tuesday_pageviews']
+            , accessWeeks[0]['wednesday_pageviews'], accessWeeks[0]['thursday_pageviews']
+            , accessWeeks[0]['friday_pageviews'], accessWeeks[0]['saturday_pageviews']
+            , accessWeeks[0]['sunday_pageviews']
         ]
         var ctx = document.getElementById("shopWeekChart");
         var shopWeekChart = new Chart(ctx, {
@@ -332,10 +367,19 @@
     // var rangeYears   = JSON.parse('<?php echo ($ranges['range_years']); ?>');
     // var rangeMonths  = JSON.parse('<?php echo ($ranges['range_months']); ?>');
 
-    shopYearChart(accessYears/*, rangeYears*/);
-    shopMonthChart(accessMonths/*, rangeMonths*/);
-    shopWeekChart(accessWeeks);
+    if(accessYears.length > 0) {
+        shopYearChart(accessYears/*, rangeYears*/);
+    }
+    if(accessMonths.length > 0) {
+        shopMonthChart(accessMonths/*, rangeMonths*/);
+    }
+    if(accessWeeks.length > 0) {
+        shopWeekChart(accessWeeks);
+    }
+    // スタッフは停止中
+    if (false) {castWeekChart()}
     castWeekChart();
+    if (false) {castTotalChartCast()}
     castTotalChartCast();
     $(document).ready(function () {
         $(".card-panel").css("padding", "5px");

@@ -102,7 +102,8 @@ class ShopsController extends AppController
             }
             $access_weeks = $this->AccessWeeks->find()
                                 ->where(['shop_id' => $shop->id, 'owner_id' => $shop->owner_id])
-                                ->first();
+                                ->toArray();
+
             $reports = array('access_years' => json_encode($access_years)
                             , 'access_months' => json_encode($access_months)
                             , 'access_weeks' => json_encode($access_weeks)

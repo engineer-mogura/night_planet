@@ -145,19 +145,18 @@ class AreaController extends AppController
         }
 
         $query = $this->Shops->find();
-        $query = $this->Shops->find('all', array('fields' =>
+        $genre_cnt = $this->Shops->find('all', array('fields' =>
                     array('id', 'area', 'genre', 'count' => $query->func()->count('genre'))))
-                    ->where(['shops.status = 1 AND shops.delete_flag = 0']);
+                    ->group('genre')
+                    ->where(['area' => AREA[$this->viewVars['is_area']]['path']
+                        , 'shops.status = 1 AND shops.delete_flag = 0'])
+                    ->toArray();
 
-        $shops = $query->where(['area' => AREA[$this->viewVars['is_area']]['path']])
-                        ->group('genre')->contain(['casts' => function(Query $q) {
+        $shops = $query->where(['area' => AREA[$this->viewVars['is_area']]['path']
+                            , 'shops.status = 1 AND shops.delete_flag = 0'])
+                        ->contain(['casts' => function(Query $q) {
                             return $q->where(['casts.status = 1 AND casts.delete_flag = 0']);
                         }])->toArray();
-
-        // 全体店舗数
-        $shops_cnt = 0;
-        // 全体スタッフ数
-        $casts_cnt = 0;
 
         // 画面表示するランキング数【１カラム：３】,【２カラム：７】,【３カラム：１０】,【４カラム：１３】
         $limit      = PROPERTY['RANKING_SHOW_MAX'];
@@ -170,16 +169,26 @@ class AreaController extends AppController
             $genreCounts[$key] = $row + array('count'=> 0,'area' => AREA[$this->viewVars['is_area']]['path']);
         }
 
-        // 店舗数セット
-        $shops_cnt = count($shops);
-
         // DBから取得したジャンルのカウントをセットする
-        foreach ($shops as $key => $shop) {
-        // スタッフ数セット
-        $casts_cnt += count($shop->casts);
+        foreach ($genre_cnt as $key => $shop) {
+ 
             $genreCounts[$shop['genre']]['area'] = AREA[$this->viewVars['is_area']]['path'];
             $genreCounts[$shop['genre']]['count'] = $shop['count'];
         }
+
+        // 全体店舗数
+        $shops_cnt = 0;
+        // 全体スタッフ数
+        $casts_cnt = 0;
+        // 店舗数セットする
+        foreach ($genre_cnt as $key => $row) {
+            $shops_cnt += $row['count'];
+        }
+        // スタッフ数セットする
+        foreach ($shops as $key => $shop) {
+            $casts_cnt += count($shop->casts);
+        }
+
         $all_cnt = ['shops' => $shops_cnt, 'casts' => $casts_cnt];
 
         $new_photos = $this->NewPhotosRank->find("all")

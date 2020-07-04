@@ -78,7 +78,7 @@ class AppController extends \App\Controller\AppController
     {
         $rslt = true;
 
-        if ($user['status'] == 0 || $user['delete_flag'] == 1) {
+        if ($user['delete_flag'] == 1) {
             $rslt = false;
             $body .= "そのままご送信ください。【ID】： ".$user->id."、";
             $body .= "【お名前】： ".$user->name."、";

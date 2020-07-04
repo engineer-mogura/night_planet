@@ -45,8 +45,8 @@ class ApiGooglesController extends AppController
         // 保守用一括登録処理の場合
         if ($is_hosyu) {
 
-            $start = '2020-06-08'; // 開始日
-            $end   = '2020-06-08'; // 終了日
+            $start = '2019-10-20'; // 開始日
+            $end   = '2019-10-20'; // 終了日
             // $start = '2020-02-21'; // 開始日
             // $end   = '2020-02-21'; // 終了日
 
@@ -72,7 +72,8 @@ class ApiGooglesController extends AppController
                     // Call the Analytics Reporting API V4.
 
                     $response = $this->getReport($analytics, $start_date, $end_date);
-                    // タスクの実行
+
+                    // 画面表示する場合は、コメント解除する↓
                     //$this->printResults($response);
 
                     $result = $this->Batch->analyticsReportHosyu($response, $start_date);

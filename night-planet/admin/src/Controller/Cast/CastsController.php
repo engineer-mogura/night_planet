@@ -1403,8 +1403,6 @@ class CastsController extends AppController
 
                 $this->Flash->error(RESULT_M['FRAUD_INPUT_FAILED']);
             } else {
-                debug("this->request->getData()");
-                debug($this->request->getData());
                 foreach ($cast->errors() as $key1 => $value1) {
                     foreach ($value1 as $key2 => $value2) {
                         $this->Flash->error($value2);

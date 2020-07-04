@@ -486,6 +486,11 @@ class BatchComponent extends Component
         $result = true; // 正常終了フラグ
         $action_name = "analyticsReport,";
 
+        // テーブル格納用
+        $entities_year  = array();
+        $entities_month = array();
+        $entities_week  = array();
+
         for ($reportIndex = 0; $reportIndex < count($reports); $reportIndex++) {
             $report = $reports[ $reportIndex ];
             $header = $report->getColumnHeader();
@@ -520,13 +525,12 @@ class BatchComponent extends Component
 
                     if ($dimensionHeaders[$i] == 'ga:pagePath') {
 
-                        $entities_year  = array();
-                        $entities_month = array();
-                        $entities_week  = array();
-
                         $entity_year  = null;
                         $entity_month = null;
                         $entity_week  = null;
+                        $is_first_year_data  = true; // 対象年のデータ存在有無
+                        $is_first_month_data = true; // 対象月のデータ存在有無
+                        $is_first_week_data  = true; // 対象週のデータ存在有無
 
                         $url_aplit = explode('/', $dimensions[$i]);
                         $index = count($url_aplit);
@@ -544,6 +548,9 @@ class BatchComponent extends Component
                                         ,'name'=>$shop->name,'area'=>$shop->area
                                         ,'genre'=>$shop->genre,'pagePath'=>$dimensions[$i]);
 
+                            Log::info(',年月日::' . $dimensions[2]. ' ,パス::' . $dimensions[1] . 
+                                ' ,店舗名::' . $shop->name, "batch_ar");
+
                             // 年別、週別を更新するか
                             if ($is_update) {
 
@@ -558,6 +565,9 @@ class BatchComponent extends Component
                                     ->first();
                                 // 取得出来なかったら新規エンティティ
                                 if (empty($entity_year)) {
+
+                                    $is_first_year_data = false;
+
                                     $patch_year =  $patch_data;
                                     $patch_year['y'] = $y;
                                     $entity_year = $this->AccessYears->newEntity();
@@ -571,6 +581,9 @@ class BatchComponent extends Component
                                     ->where(['shop_id'=>$shop_id])->first();
                                 // 取得出来なかったら新規エンティティ
                                 if (empty($entity_week)) {
+
+                                    $is_first_week_data = false;
+
                                     $entity_week  = $this->AccessWeeks->newEntity();
                                     $entity_week = $this->AccessWeeks
                                         ->patchEntity($entity_week, $patch_data,
@@ -599,8 +612,21 @@ class BatchComponent extends Component
                                     ->addVal($entity_week->get(
                                         $week['en'] . '_users'), (int) $values[2]));
 
-                                array_push($entities_year,  $entity_year);
-                                array_push($entities_week,  $entity_week);
+                                // データが存在しない場合は先にインサートする
+                                if (!$is_first_year_data) {
+                                    if (!$this->AccessYears->save($entity_year)) {
+                                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                                    }
+                                } else {
+                                    array_push($entities_year,  $entity_year);
+                                }
+                                if (!$is_first_week_data) {
+                                    if (!$this->AccessWeeks->save($entity_week)) {
+                                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                                    }
+                                } else {
+                                    array_push($entities_week,  $entity_week);
+                                }
 
                             }
 
@@ -620,6 +646,9 @@ class BatchComponent extends Component
                                 ->first();
                             // 取得出来なかったら新規エンティティ
                             if (empty($entity_month)) {
+
+                                $is_first_month_data = false;
+
                                 $patch_month =  $patch_data;
                                 $patch_month['ym'] = $ym;
                                 $entity_month = $this->AccessMonths->newEntity();
@@ -639,7 +668,14 @@ class BatchComponent extends Component
                                 ->addVal($entity_month->get(
                                     $day . '_users'), (int) $values[2]));
 
-                            array_push($entities_month, $entity_month);
+                            // データが存在しない場合は先にインサートする
+                            if (!$is_first_month_data) {
+                                if (!$this->AccessMonths->save($entity_month)) {
+                                    throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                                }
+                            } else {
+                                array_push($entities_month, $entity_month);
+                            }
 
                         } else {
                             // 店舗以外のURLの場合
@@ -655,16 +691,22 @@ class BatchComponent extends Component
                 // レコードを一括登録する
                 // 年別、週別を更新するか
                 if ($is_update) {
-                    if (!$this->AccessYears->saveMany($entities_year)) {
-                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                    // レコードを一括登録する
+                    if (count($entities_year) > 0) {
+                        if (!$this->AccessYears->saveMany($entities_year)) {
+                            throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                        }
                     }
-                    if (!$this->AccessWeeks->saveMany($entities_week)) {
-                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                    if (count($entities_week) > 0) {
+                        if (!$this->AccessWeeks->saveMany($entities_week)) {
+                            throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                        }
                     }
                 }
-
-                if (!$this->AccessMonths->saveMany($entities_month)) {
-                    throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                if (count($entities_month) > 0) {
+                    if (!$this->AccessMonths->saveMany($entities_month)) {
+                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                    }
                 }
 
             } catch(RuntimeException $e) {
@@ -692,6 +734,10 @@ class BatchComponent extends Component
 
         $result = true; // 正常終了フラグ
         $action_name = "analyticsReport,";
+        // テーブル格納用
+        $entities_year  = array();
+        $entities_month = array();
+        $entities_week  = array();
 
         for ($reportIndex = 0; $reportIndex < count($reports); $reportIndex++) {
             $report = $reports[ $reportIndex ];
@@ -722,13 +768,12 @@ class BatchComponent extends Component
 
                     if ($dimensionHeaders[$i] == 'ga:pagePath') {
 
-                        $entities_year  = array();
-                        $entities_month = array();
-                        $entities_week  = array();
-
                         $entity_year  = null;
                         $entity_month = null;
                         $entity_week  = null;
+                        $is_first_year_data  = true; // 対象年のデータ存在有無
+                        $is_first_month_data = true; // 対象月のデータ存在有無
+                        $is_first_week_data  = true; // 対象週のデータ存在有無
 
                         $url_aplit = explode('/', $dimensions[$i]);
                         $index = count($url_aplit);
@@ -749,19 +794,26 @@ class BatchComponent extends Component
                             // 日付を取得する
                             $now_date   = new Time($start_date);
 
+                            Log::info('$start_date::' .$start_date. ',年月日::' . 
+                                $dimensions[2]. ' ,パス::' . $dimensions[1] . 
+                                    ' ,店舗名::' . $shop->name, "batch_ar");
+
                             // 年別アクセスエンティティ
                             $y   = $now_date->format('Y');
                             $ym  = $now_date->format('Y-m');
                             $day = $now_date->format('j');
-                            // if ($shop_id == 23) {
-                            //     echo("");
-                            // }
+                            if ($ym == "2020-05\n" && $shop_id = 29) {
+                                echo($ym);
+                            }
                             // 月別アクセスエンティティ
                             $entity_year = $this->AccessYears->find()
                                 ->where(['shop_id' => $shop_id, 'y' => $y])
                                 ->first();
                             // 取得出来なかったら新規エンティティ
                             if (empty($entity_year)) {
+
+                                $is_first_year_data = false;
+
                                 $patch_year =  $patch_data;
                                 $patch_year['y'] = $y;
                                 $entity_year = $this->AccessYears->newEntity();
@@ -776,6 +828,9 @@ class BatchComponent extends Component
                                 ->first();
                             // 取得出来なかったら新規エンティティ
                             if (empty($entity_month)) {
+
+                                $is_first_month_data = false;
+
                                 $patch_month =  $patch_data;
                                 $patch_month['ym'] = $ym;
                                 $entity_month = $this->AccessMonths->newEntity();
@@ -789,6 +844,9 @@ class BatchComponent extends Component
                                 ->where(['shop_id'=>$shop_id])->first();
                             // 取得出来なかったら新規エンティティ
                             if (empty($entity_week)) {
+
+                                $is_first_week_data = false;
+
                                 $entity_week  = $this->AccessWeeks->newEntity();
                                 $entity_week = $this->AccessWeeks
                                     ->patchEntity($entity_week, $patch_data,
@@ -828,9 +886,28 @@ class BatchComponent extends Component
                                 ->addVal($entity_week->get(
                                     $week['en'] . '_users'), (int) $values[2]));
 
-                            array_push($entities_month, $entity_month);
-                            array_push($entities_week,  $entity_week);
-                            array_push($entities_year,  $entity_year);
+                            // データが存在しない場合は先にインサートする
+                            if (!$is_first_year_data) {
+                                if (!$this->AccessYears->save($entity_year)) {
+                                    throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                                }
+                            } else {
+                                array_push($entities_year,  $entity_year);
+                            }
+                            if (!$is_first_week_data) {
+                                if (!$this->AccessWeeks->save($entity_week)) {
+                                    throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                                }
+                            } else {
+                                array_push($entities_week,  $entity_week);
+                            }
+                            if (!$is_first_month_data) {
+                                if (!$this->AccessMonths->save($entity_month)) {
+                                    throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                                }
+                            } else {
+                                array_push($entities_month, $entity_month);
+                            }
 
                         } else {
                             // 店舗以外のURLの場合
@@ -844,14 +921,20 @@ class BatchComponent extends Component
 
             try{
                 // レコードを一括登録する
-                if (!$this->AccessYears->saveMany($entities_year)) {
-                    throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                if (count($entities_year) > 0) {
+                    if (!$this->AccessYears->saveMany($entities_year)) {
+                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                    }
                 }
-                if (!$this->AccessWeeks->saveMany($entities_week)) {
-                    throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                if (count($entities_week) > 0) {
+                    if (!$this->AccessWeeks->saveMany($entities_week)) {
+                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                    }
                 }
-                if (!$this->AccessMonths->saveMany($entities_month)) {
-                    throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                if (count($entities_month) > 0) {
+                    if (!$this->AccessMonths->saveMany($entities_month)) {
+                        throw new RuntimeException($action_name.'レコードの登録に失敗しました。');
+                    }
                 }
 
             } catch(RuntimeException $e) {

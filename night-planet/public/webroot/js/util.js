@@ -329,6 +329,23 @@ function getParam(name, url) {
 }
 
   /**
+   * CSSアニメーションを間隔を空けてループ再生させる処理
+   * @param  {} arg 調べたい文字列
+   */
+  function looopAnimation(id, className, delay) {
+    var element = document.getElementById(id);
+    element.addEventListener("animationend", listener);
+
+    function listener(event) {
+      event.target.classList.remove(className);
+      setTimeout(playAnimation, delay);
+    }
+
+    function playAnimation() {
+      element.classList.add(className);
+    }
+  }
+  /**
    * 文字列のjson形式であるかどうか
    * @param  {} arg 調べたい文字列
    */

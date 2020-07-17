@@ -34,7 +34,7 @@
       'size' => '144x144',
       'rel'=>'apple-touch-icon-precomposed'
   ])."\n";?>
-  <?= USER_NO_INDEX ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
+  <?= SIMPLE_NO_INDEX ? $this->Html->meta('robots',['content'=> 'noindex']): "";?>
   <?= NO_FOLLOW ? $this->Html->meta('robots',['content'=> 'nofollow']): "";?>
   <?= $this->Html->meta('description',['content'=> $description]) ?>
   <?= $this->Html->meta('icon') ?>
@@ -283,7 +283,6 @@
     });
     // Initialize slider
     subSwiper.init();
-
   </script>
 </body>
 </html>

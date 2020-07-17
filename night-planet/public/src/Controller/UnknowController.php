@@ -35,7 +35,7 @@ class UnknowController extends AppController
         // parent::beforeFilter($event);
         // $this->Auth->allow(['signup','verify','logout']);
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
-        $this->viewBuilder()->layout('userDefault');
+        $this->viewBuilder()->layout('unknowDefault');
 
         $query = $this->request->getQuery();
         // 検索結果でエリア、ジャンルで文言を決める

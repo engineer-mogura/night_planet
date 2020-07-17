@@ -21,12 +21,9 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<span>
-				<span class="btn-floating waves-effect waves-green btn-flat blue">
-					<i class="material-icons">favorite_border</i>
-				</span>
-				<span class="like-field-span like-count"></span>
-			</span>
+			<a class="modal-footer__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+				<i class="material-icons">favorite</i>
+			</a>
 			<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
 		</div>
 	</div>

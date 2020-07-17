@@ -6,7 +6,7 @@
 					<?php $idsArr = explode(',', $shop->work_schedules[0]['cast_ids']);?>
 					<?php foreach($shop->casts as $cast): ?>
 						<?php if(!in_array($cast->id, $idsArr)) { continue; } ?>
-						<div class="cast-icon-list center-align col s3 m3 l3">
+						<div class="p-casts-section__list center-align col s3 m3 l3">
 							<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
 								<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="80">
 							</a>

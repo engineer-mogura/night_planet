@@ -13,7 +13,7 @@
 						<p class="shop-count section-label"><span>　店舗 ( <?=$all_cnt['shops'];?> )</span></p>
 					</div>
 				</div>
-				<div id="casts-section" class="shop-menu">
+				<div id="" class="shop-menu">
 					<div class="white card-panel col s6 center-align">
 						<p class="cast-count section-label"><span>スタッフ ( <?=$all_cnt['casts'];?> )</span></p>
 					</div>
@@ -43,11 +43,14 @@
 									<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$value->gallery_count?></span>
 									<p><span class="color-blue"><?= AREA[$value->shop['area']]['label'].' '.GENRE[$value->shop['genre']]['label']
 										.' '.$value->shop['name']?></span><br>
-									<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
+										<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
-									<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->shop_info_likes)?></span>
+									<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+										<i class="material-icons">favorite</i>
+									</a>
 									<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->shop->id."?area=".$value->shop->area."&genre=".$value->shop->genre
-										."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
+										."&name=".$value->shop->name."&shop_infos=".$value->id ?>">
+									</a>
 								</li>
 							<?php endforeach ?>
 						</ul>
@@ -68,7 +71,9 @@
 										.' '.$value->cast->shop['name']?></span><br>
 										<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
-									<span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($value->diary_likes)?></span>
+									<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+										<i class="material-icons">favorite</i>
+									</a>
 									<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
 									"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
 								</li>

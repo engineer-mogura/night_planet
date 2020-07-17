@@ -18,7 +18,7 @@
 			<?php foreach ($search as $key => $rows): ?>
 				<li class="linkbox col card horizontal waves-effect hoverable search-result-card">
 					<div class="card-image">
-						<img src="<?= $rows->icon ?>" class="card-image-img" height="200">
+						<img src="<?= $rows->icon ?>" class="card-image-img" height="300">
 					</div>
 					<div class="card-stacked">
 						<h1>
@@ -38,10 +38,15 @@
 								</a>
 							<?php endif; ?>
 						</h1>
-						<div class="card-content">
-							<h5 class="blue-text text-darken-2"><?= $rows['name']?><span style="font-size: small;"class="blue-text text-darken-2">　所属：<?=$rows->shop['name']?></span></h5>
-							<p class="blue-text text-darken-2"><?= $rows['message']
-							.'<br>'.GENRE[$rows->shop['genre']]['label'].'|'.$rows->shop['addr21'].$rows->shop['strt21']?></p>
+						<div class="card-content linkbox__card-content">
+							<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+								<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
+							</a>
+							<span class="card-tag white-text red"><?= $rows['name']?></span><span class="card-tag white-text red"><?= $rows->shop['name']?></span>
+							<p class="gray-text text-darken-2"><?= $rows['message']
+							. '<br><span class="card-tag white-text orange darken-1">'
+							 . GENRE[$rows->shop['genre']]['label'] . '</span><span class="card-tag white-text blue darken-1">'
+							  . $rows->shop['addr21'] . '</span>' . $rows->shop['strt21']?></p>
 						</div>
 					</div>
 					<a href="<?=DS.$rows->shop['area'].DS.'cast'.DS.$rows['id']

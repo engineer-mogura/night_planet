@@ -153,7 +153,7 @@ return [
     define('PROPERTY', array(
         'NEW_INFO_MAX'=>'4', // 新着情報関連の表示数
         'FILE_MAX'=>'9', // アップロードファイル数
-        'UPDATE_INFO_DAY_MAX'=>'10', // アップロードファイル数
+        'UPDATE_INFO_DAY_MAX'=>'24', // アップロードファイル数
         'SHOW_GALLERY_MAX'=>'10', // スタッフのギャラリー最大表示数
         'TOP_SLIDER_GALLERY_MAX'=>'3', // トップスライダーのギャラリー最大表示数
         'SUB_SLIDER_GALLERY_MAX'=>'10', // サブスライダーのギャラリー最大表示数

@@ -9,26 +9,60 @@
     <?= $this->element('nav-breadcrumb'); ?>
     <div class="row">
         <div id="cast-main" class="col s12 m12 l8">
-            <!-- ヘッダー START -->
-            <div class="cast-header">
-                <img class="responsive-img" width="100%" src=<?=$cast->top_image?> />
-                <div class="cast-header-icon" style="height:70px;">
-                    <div class="col s5 m5" style="position:relative;bottom:50px;">
-                        <img src="<?=$cast->icon?>" width="75px" height="70px" class="circle">
-                        <span
-                            class="cast-name-box icon-vertical-align"><?= !empty($cast->nickname)? $cast->nickname: h("ー")?></span>
+			<!-- スタッフヘッダ START -->
+            <div class="row cast-head-section">
+				<img class="responsive-img" width="100%" src=<?= $cast->top_image ?>>
+                <div class="cast-head">
+                    <div class="cast-head-line1 col s12">
+                        <ul class="cast-head-line1__ul">
+                            <li class="cast-head-line1__ul_li cast-icon">
+                                <img src="<?=$cast->icon?>" width="75px" height="70px" class="circle">
+                            </li>
+                            <li class="cast-head-line1__ul_li favorite">
+                                <div class="cast-head-line1__ul_li__favorite">
+                                    <a class="btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+                                        <i class="material-icons">favorite</i>
+                                    </a>
+                                    <i class="favorite-add material-icons">add</i>
+                                    <span class="cast-head-line1__ul_li__favorite__count">0</span>
+                                </div>
+                            </li>
+                            <li class="cast-head-line1__ul_li">
+                                <div class="cast-head-line1__ul_li__voice">
+                                    <a class="btn-floating btn waves-effect waves-light light-blue accent-2 modal-trigger" data-target="modal-login">
+                                        <i class="material-icons">comment</i>
+                                    </a>
+                                    <i class="favorite-add material-icons">add</i>
+                                    <span class="cast-head-line1__ul_li__voice__count">0</span>
+                                </div>
+                            </li>
+                            <li class="cast-head-line1__ul_li">
+                                <div class="cast-head-line1__ul_li__voice">
+                                    <a class="btn-floating btn orange darken-4">
+                                        <i class="material-icons">camera_alt</i>
+                                    </a>
+                                    <span class="cast-head-line1__ul_li__image__count">0</span>
+                                </div>
+                            </li>
+                            <li class="cast-head-line1__ul_li day-work">
+								<div class="cast-head-line1__ul_li__day-work<?=$isWorkDay > 0 ? " puyon":""?>">
+									<span class="cast-head-line1__ul_li__day-work__status">
+                                        <?=$isWorkDay > 0 ? "本日出勤予定":"本日出勤未定"?>
+									</span>
+								</div>
+							</li>
+                        </ul>
                     </div>
-                    <div class="col s4 m4 count-box">
-                        <span class="header-diary icon-vertical-align"><?=count($cast->diarys)?></span>
-                        <span class="header-gallery icon-vertical-align"><?=count($cast->gallery)?></span>
+                    <div class="cast-head-line2 col s12">
+                        <ul class="cast-head-line1__ul">
+                            <li class="cast-head-line1__ul_li">
+                                <?= !empty($cast->name) ? h($cast->name) : h('-') ?>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="col s3 m3 today-work-box">
-                        <span
-                            class="header-working icon-vertical-align center-align <?=$isWorkDay > 0 ? " bound":""?>"><?=$isWorkDay > 0 ? "本日出勤予定":"本日出勤未定"?></span>
-                    </div>
-                </div>
-            </div>
-            <!-- ヘッダー END -->
+				</div>
+			</div>
+            <!-- スタッフヘッダ END -->
             <!-- メッセージ START -->
             <div class="row section header-discription-message">
                 <div class="card-panel light-blue">
@@ -99,7 +133,7 @@
                     <div class="pink lighten-4 linkbox card-panel hoverable center-align">
                         <?= in_array(SHOP_MENU_NAME['CAST'], $update_icon) ? '<div class="new-info"></div>' : ''?>
                         <span class="shop-menu-label casts"></br>スタッフ</span>
-                        <a class="waves-effect waves-light" href="#casts-section"></a>
+                        <a class="waves-effect waves-light" href="#p-casts-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
@@ -266,23 +300,30 @@
             <?php endif;?>
             <!-- twitter END -->
             <!-- スタッフリスト START -->
-            <div id="casts-section" class="row shop-menu section scrollspy">
-                <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="casts-label section-label"><span> CAST </span></p>
-                </div>
-                <?php if(count($other_casts) > 0): ?>
-                <?php foreach($other_casts as $other_cast): ?>
-                <div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
-                    <a
-                        href="<?=DS.$cast->shop['area'].DS.PATH_ROOT['CAST'].DS.$other_cast['id']."?genre=".$cast->shop['genre']."&name=".$cast->shop['name']."&shop=".$cast->shop['id']."&nickname=".$other_cast['nickname']?>">
-                        <img src="<?=$other_cast->icon?>" alt="" class="circle" width="100%" height="70">
-                    </a>
-                    <h6 class="truncate"><span><?=$other_cast->nickname?></span></h6>
-                </div>
-                <?php endforeach; ?>
-                <?php else: ?>
-                <p class="col">スタッフの登録はありません。</p>
-                <?php endif; ?>
+
+            <div id="p-casts-section" class="row shop-menu section scrollspy">
+				<div class="light-blue accent-2 card-panel col s12 center-align">
+					<p class="casts-label section-label"><span> STAFF </span></p>
+				</div>
+				<?php if(count($other_casts) > 0): ?>
+				<?php foreach($other_casts as $other_cast): ?>
+				<div class="p-casts-section__list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
+					<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+						<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
+					</a>
+					<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
+						<img src="<?=$other_cast->icon?>" alt="<?=$other_cast->nickname?>" class="p-casts-section__list_img_circle circle">
+					</a>
+					<div class="p-casts-section__p-casts-section__list__icons">
+						<?=isset($cast->new_cast) ? '<i class="material-icons icons__new-icon puyon">fiber_new</i>':''?>
+						<?=isset($cast->update_cast) ? '<i class="material-icons icons__update-icon puyon">update</i>':''?>
+					</div>
+					<span class="p-casts-section__p-casts-section__list__name truncate"><?=$other_cast->nickname?></span>
+				</div>
+				<?php endforeach; ?>
+				<?php else: ?>
+				<p class="col">スタッフの登録はありません。</p>
+				<?php endif; ?>
             </div>
             <!-- スタッフリスト END -->
         </div>

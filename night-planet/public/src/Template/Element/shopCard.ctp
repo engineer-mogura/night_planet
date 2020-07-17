@@ -23,18 +23,18 @@
 			<?php foreach ($search as $key => $rows): ?>
 				<li class="linkbox col card horizontal waves-effect hoverable search-result-card">
 					<div class="card-image">
-						<img src="<?= $rows->top_image ?>" class="card-image-img" height="200">
+						<img src="<?= $rows->top_image ?>" class="card-image-img" height="300">
 					</div>
 					<div class="card-stacked">
 						<h1>
-						<?php if (!empty($rows->snss[0]->instagram)): ?>
-								<a style="margin-left: 80%;">
+							<!-- <?php if (!empty($rows->snss[0]->instagram)): ?>
+								<a style="margin-left: 90%;">
 									<span class="Instagram_logo1"></span>
 								</a>
-							<?php endif; ?>
-							<?php if (!empty($rows->snss[0]->facebook)): ?>
+							<?php endif; ?> -->
+							<?php if (!empty($rows->snss[0]->instagram)): ?>
 								<a style="margin-left: 90%;">
-									<span class="facebook_logo1"></span>
+									<span class="Instagram_logo1"></span>
 								</a>
 							<?php endif; ?>
 							<?php if (!empty($rows->snss[0]->twitter)): ?>
@@ -43,10 +43,20 @@
 								</a>
 							<?php endif; ?>
 						</h1>
-						<div class="card-content">
-							<h6 class="blue-text text-darken-2"><?= $rows['name']?></h6>
-							<p class="blue-text text-darken-2"><?= $rows['catch']
-							.'<br>'.GENRE[$rows['genre']]['label'].'|'.$rows['addr21'].$rows['strt21']	?></p>
+						<div class="card-content linkbox__card-content">
+							<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+								<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
+							</a>
+							<span class="card-tag white-text red"><?= $rows['name']?></span>
+
+
+							<p class="gray-text text-darken-2"><?= $rows['catch']?></p>
+							<span class="card-tag white-text orange darken-1">
+								<?=GENRE[$rows['genre']]['label']?>
+							</span>
+							<span class="card-tag white-text blue darken-1">
+								<?=$rows['addr21']?></span>
+								<?=$rows['strt21']?>
 						</div>
 					</div>
 					<a href="<?= DS.$rows['area'].DS.$rows['genre'].DS.$rows['id'] ?>"></a>

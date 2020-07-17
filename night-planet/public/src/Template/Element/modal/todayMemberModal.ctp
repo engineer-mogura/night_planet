@@ -6,11 +6,18 @@
 					<?php $idsArr = explode(',', $shop->work_schedules[0]['cast_ids']);?>
 					<?php foreach($shop->casts as $cast): ?>
 						<?php if(!in_array($cast->id, $idsArr)) { continue; } ?>
-						<div class="cast-icon-list center-align col s3 m3 l3">
-							<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
-								<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="80">
+						<div class="p-casts-section__list center-align col s3 m3 l3">
+							<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1">
+								<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
 							</a>
-							<h6 class="truncate"><span><?=$cast->nickname?></span></h6>
+							<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">
+								<img src="<?=$cast->icon?>" alt="<?=$cast->nickname?>" class="p-casts-section__list_img_circle circle">
+							</a>
+							<div class="p-casts-section__p-casts-section__list__icons">
+								<?=isset($cast->new_cast) ? '<i class="material-icons icons__new-icon">fiber_new</i>':''?>
+								<?=isset($cast->update_cast) ? '<i class="material-icons icons__update-icon">update</i>':''?>
+							</div>
+							<span class="p-casts-section__p-casts-section__list__name truncate"><?=$cast->nickname?></span>
 						</div>
 					<?php endforeach; ?>
 				<?php else: ?>

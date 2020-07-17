@@ -433,7 +433,7 @@ class AreaController extends AppController
         $columns = $this->Updates->schema()->columns();
         // 店舗の更新情報を取得する
         $updateInfo = $this->Updates->find('all', array(
-            'conditions' => array('updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' DAY')
+            'conditions' => array('updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR')
         ))
         ->join([
             'table' => 'updates',
@@ -455,7 +455,7 @@ class AreaController extends AppController
             }
         }
         // 今日の日付から1ヶ月前
-        $end_date = date('Y-m-d', strtotime("-1 month"));
+        $end_date = date('Y-m-d', strtotime("-7 day"));
         // スタッフの登録日付をチェックする
         foreach ($shop->casts as $key => $cast) {
             $user_created = $cast->created->format('Y-m-d');

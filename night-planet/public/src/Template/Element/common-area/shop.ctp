@@ -3,10 +3,50 @@
 	<?= $this->element('nav-breadcrumb'); ?>
 	<div class="row">
 		<div id="shop-main" class="col s12 m12 l8">
-			<img class="responsive-img" width="100%" src=<?= $shop->top_image ?> />
-			<p class="left-align">
-				<?= !empty($shop->name) ? h($shop->name) : h('-') ?>
-			</p>
+			<!-- 店舗ヘッダ START -->
+			<div class="row shop-head-section">
+				<img class="responsive-img" width="100%" src=<?= $shop->top_image ?> />
+				<div class="shop-head">
+					<div class="shop-head-line1 col s12">
+						<ul class="shop-head-line1__ul">
+							<li class="shop-head-line1__ul_li">
+								<div class="shop-head-line1__ul_li__favorite">
+									<a class="btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+										<i class="material-icons">favorite</i>
+									</a>
+									<i class="favorite-add material-icons">add</i>
+									<span class="shop-head-line1__ul_li__favorite__count">0</span>
+								</div>
+							</li>
+							<li class="shop-head-line1__ul_li">
+								<div class="shop-head-line1__ul_li__voice">
+									<a class="btn-floating btn waves-effect waves-light red modal-trigger" data-target="modal-login">
+										<i class="material-icons">comment</i>
+									</a>
+									<i class="voice-add material-icons">add</i>
+									<span class="shop-head-line1__ul_li__voice__count">0</span>
+								</div>
+							</li>
+							<li class="shop-head-line1__ul_li">
+                                <div class="shop-head-line1__ul_li__voice">
+                                    <a class="btn-floating btn orange darken-4">
+                                        <i class="material-icons">camera_alt</i>
+                                    </a>
+                                    <span class="shop-head-line1__ul_li__image__count">0</span>
+                                </div>
+                            </li>
+						</ul>
+					</div>
+					<div class="shop-head-line2 col s12">
+						<ul class="shop-head-line1__ul">
+							<li class="shop-head-line1__ul_li">
+								<?= !empty($shop->name) ? h($shop->name) : h('-') ?>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- 店舗ヘッダ END -->
 			<!-- キャッチコピー START -->
 			<div class="row section header-discription-message">
 				<div class="card-panel light-blue">
@@ -52,7 +92,7 @@
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= preg_grep("/^".SHOP_MENU_NAME['STAFF']."/", $update_icon) ? '<div class="new-info"></div>' : ''?>
 						<span class="shop-menu-label casts"></br>スタッフ</span>
-						<a class="waves-effect waves-light" href="#casts-section"></a>
+						<a class="waves-effect waves-light" href="#p-casts-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
@@ -76,20 +116,14 @@
 						<a class="waves-effect waves-light" href="#instagram-section"></a>
 					</div>
 				</div>
-				<div class="col s4 m4 l4">
+				<!-- line facebook廃止 -->
+				<!-- <div class="col s4 m4 l4">
 					<div
 						class="<?=/*empty($shop->snss[0]['facebook'])*/ !$isShow_fb ? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label facebook"></br>Facebook</span>
 						<a class="waves-effect waves-light" href="#facebook-section"></a>
 					</div>
-				</div>
-				<div class="col s4 m4 l4">
-					<div
-						class="<?=empty($shop->snss[0]['twitter'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label twitter"></br>Twitter</span>
-						<a class="waves-effect waves-light" href="#twitter-section"></a>
-					</div>
-				</div>
+				</div> -->
 				<!-- <div class="col s4 m4 l4">
 					<div
 						class="<?=empty($shop->snss[0]['line'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
@@ -97,6 +131,20 @@
 						<a class="waves-effect waves-light" href="#line-section"></a>
 					</div>
 				</div> -->
+				<!-- line facebook廃止 -->
+				<div class="col s4 m4 l4">
+					<div
+						class="<?=empty($shop->snss[0]['twitter'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
+						<span class="shop-menu-label twitter"></br>Twitter</span>
+						<a class="waves-effect waves-light" href="#twitter-section"></a>
+					</div>
+				</div>
+				<div class="col s4 m4 l4">
+					<div class="lighten-4 linkbox card-panel hoverable center-align">
+						<span class="shop-menu-label comment"></br>口コミ</span>
+						<a class="waves-effect waves-light" href="#comment-section"></a>
+					</div>
+				</div>
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<span class="shop-menu-label map"></br>MAP</span>
@@ -120,21 +168,24 @@
 			</div>
 			<!-- 店舗メニュー END -->
 			<!-- スタッフリスト START -->
-			<div id="casts-section" class="row shop-menu section scrollspy">
+			<div id="p-casts-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
 					<p class="casts-label section-label"><span> STAFF </span></p>
 				</div>
 				<?php if(count($shop->casts) > 0): ?>
 				<?php foreach($shop->casts as $cast): ?>
-				<div class="cast-icon-list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
-					<a
-						href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
-						<img src="<?=$cast->icon?>" alt="" class="circle" width="100%" height="70">
+				<div class="p-casts-section__list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
+					<!-- <a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+						<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
+					</a> -->
+					<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
+						<img src="<?=$cast->icon?>" alt="<?=$cast->nickname?>" class="p-casts-section__list_img_circle circle">
 					</a>
-					<h6 class="truncate"><span><?=$cast->nickname?></span>
-						<?=isset($cast->new_cast) ? '<i class="material-icons add-cast-icon">fiber_new</i>':''?>
-						<?=isset($cast->update_cast) ? '<i class="material-icons update-cast-icon">update</i>':''?>
-					</h6>
+					<div class="p-casts-section__p-casts-section__list__icons">
+						<?=isset($cast->new_cast) ? '<i class="material-icons icons__new-icon puyon">fiber_new</i>':''?>
+						<?=isset($cast->update_cast) ? '<i class="material-icons icons__update-icon puyon">update</i>':''?>
+					</div>
+					<span class="p-casts-section__p-casts-section__list__name truncate"><?=$cast->nickname?></span>
 				</div>
 				<?php endforeach; ?>
 				<?php else: ?>
@@ -272,7 +323,7 @@
 			<?php endif;?>
 			<!-- instagram END -->
 			<!-- facebook START -->
-			<?php if($isShow_fb): ?>
+			<!-- <?php if($isShow_fb): ?>
 				<?php if(!empty($shop->snss[0]['facebook'])): ?>
 					<div id="facebook-section" class="row shop-menu section scrollspy">
 						<div class="light-blue accent-2 card-panel col s12 center-align">
@@ -292,7 +343,7 @@
 						</div>
 					</div>
 				<?php endif;?>
-			<?php endif;?>
+			<?php endif;?> -->
 			<!-- facebook END -->
 			<!-- twitter START -->
 			<?php if(!empty($shop->snss[0]['twitter'])): ?>
@@ -335,12 +386,12 @@
 						</figure>
 						<?php endforeach; ?>
 					</div>
-					<div class="col s12">
+					<div class="col s12 event-section__content">
 						<p class="right-align"><?=$shop->shop_infos[0]->created->nice()?></p>
 						<p class="title">
 							<?=$shop->shop_infos[0]->title?>
 						</p>
-						<p class="content"><?=$this->Text->autoParagraph($shop->shop_infos[0]->content)?></p>
+						<p><?=$this->Text->autoParagraph($shop->shop_infos[0]->content)?></p>
 						<p>
 							<span class="icon-vertical-align color-blue"><i class="material-icons">favorite_border</i><span
 									class="like-field-span like-count"><?=count($shop->shop_infos[0]->likes)?></span></span>
@@ -377,6 +428,14 @@
 				</div>
 			</div>
 			<!-- 店舗ギャラリー END -->
+			<!-- 口コミ START -->
+			<div id="comment-section" class="row shop-menu section scrollspy">
+				<div class="light-blue accent-2 card-panel col s12 center-align">
+					<p class="comment-label section-label"><span> 口コミ </span></p>
+				</div>
+				<p class="col">口コミはありません。</p>
+			</div>
+			<!-- 口コミ MAP END -->
 			<!-- GOOGLE MAP START -->
 			<div id="map-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">

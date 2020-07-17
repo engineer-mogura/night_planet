@@ -20,18 +20,21 @@
                             <?php $count = 0; ?>
                             <?php foreach ($diarys as $key => $rows): ?>
                             <?php foreach ($rows as $key => $row): ?>
-                            <li class="linkbox collection-item avatar archiveLink">
-                                <input type="hidden" name="diary_id" value=<?=$row->id?>>
-                                <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
-                                <img src="<?= $imgPath ?>" alt="" class="circle">
-                                <span class="title color-blue"><?= $row->created->nice() ?></span>
-                                <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i><?=$row->gallery_count?></span>
-                                <p><span class="truncate"><?= $row->title ?><br>
-                                    <?= $row['content'] ?></span>
-                                </p>
-                                <a class="waves-effect hoverable" href="#">
-                                    <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row->diary_likes) ?></span>
+                            <li class="linkbox collection-item avatar">
+                                <a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+                                    <i class="material-icons">favorite</i>
                                 </a>
+                                <div class="archiveLink">
+                                    <input type="hidden" name="diary_id" value=<?=$row->id?>>
+                                    <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                                    <img src="<?= $imgPath ?>" alt="" class="circle">
+                                    <span class="title color-blue"><?= $row->created->nice() ?></span>
+                                    <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i><?=$row->gallery_count?></span>
+                                    <p><span class="truncate"><?= $row->title ?><br>
+                                        <?= $row['content'] ?></span>
+                                    </p>
+                                    <a class="waves-effect hoverable" href="#"></a>
+                                </div>
                             </li>
                             <?php $count = $count + 1;?>
                             <?php if ($count == 5) {break;} ?>
@@ -47,15 +50,19 @@
                                 <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                                 <?php foreach ($rows as $row): ?>
                                 <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
-                                <div class="linkbox collapsible-body archiveLink">
-                                <input type="hidden" name="diary_id" value=<?=$row->id?>>
-                                <span class="title color-blue"><?= $row->created->nice() ?></span>
-                                <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$row->gallery_count?></span>
-                                <span class="like-count secondary-content icon-vertical-align color-blue"><i class="small material-icons">favorite_border</i><?=count($row->diary_likes)?></span>
-                                    <a class="waves-effect hoverable" href="#"></a><p><span class="truncate"><?= $row->title ?><br>
-                                    <?= $row['content'] ?>
-                                </span>
-                                </p>
+                                <div class="linkbox collapsible-body">
+                                    <a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
+                                        <i class="material-icons">favorite</i>
+                                    </a>
+                                    <div class="archiveLink">
+                                        <input type="hidden" name="diary_id" value=<?=$row->id?>>
+                                        <span class="title color-blue"><?= $row->created->nice() ?></span>
+                                        <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i><?=$row->gallery_count?></span>
+                                        <p><span class="truncate"><?= $row->title ?><br>
+                                            <?= $row['content'] ?></span>
+                                        </p>
+                                        <a class="waves-effect hoverable" href="#"></a>
+                                    </div>
                                 </div>
                                 <?php endforeach; ?>
                             </li>

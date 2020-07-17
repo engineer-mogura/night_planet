@@ -1873,6 +1873,11 @@ class ShopsController extends AppController
                 ->first();
             $Work_schedule = $this->WorkSchedules
                 ->patchEntity($old_Work_schedule, $this->request->getData());
+
+            // 選択済みのメンバーで再登録した場合、レコードの変更無しなるため、変更フラグを立てる
+            if (count($Work_schedule->getDirty()) == 0) {
+                $Work_schedule->setDirty('cast_ids', true);
+            }
         }
 
         try {

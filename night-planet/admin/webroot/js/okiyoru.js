@@ -537,10 +537,14 @@ function initialize() {
     // TODO: ユーザーのログイン機能実装時に解除する
     $("#modal-login").modal({
         ready: function () {
+            $("#modal-login").css('z-index','9999');
             alert("現在ログイン機能は利用できません。");
+            // this.close();
         },
         // モーダル非表示完了コールバック
-        complete: function () {},
+        complete: function () {
+            // alert("complete");
+        },
     });
 
     // materializecss Chips

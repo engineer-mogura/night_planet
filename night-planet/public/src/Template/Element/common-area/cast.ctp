@@ -307,7 +307,7 @@
 				</div>
 				<?php if(count($other_casts) > 0): ?>
 				<?php foreach($other_casts as $other_cast): ?>
-				<div class="p-casts-section__list center-align col s3 m3 l3<?=isset($cast->new_cast) ? ' bound':''?>">
+				<div class="p-casts-section__list center-align col s3 m3 l3">
 					<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
 						<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
 					</a>

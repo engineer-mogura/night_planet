@@ -6,13 +6,13 @@
       <div class="search-box">
         <div class="row">
           <li class="search col s12 l12">
-            <div class="input-field oki-input-field">
+            <div class="input-field">
               <input id="email" type="email" class="validate">
               <label for="email">タイトル</label>
             </div>
           </li>
           <li class="search col s12 l12">
-            <div class="input-field oki-input-field">
+            <div class="input-field">
               <input id="password" type="password" class="validate">
               <label for="password">Password</label>
             </div>

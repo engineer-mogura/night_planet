@@ -7,7 +7,7 @@
 					<?php foreach($shop->casts as $cast): ?>
 						<?php if(!in_array($cast->id, $idsArr)) { continue; } ?>
 						<div class="p-casts-section__list center-align col s3 m3 l3">
-							<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1">
+							<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
 								<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
 							</a>
 							<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']."?genre=".$shop['genre']."&name=".$shop['name']."&shop=".$shop['id']."&nickname=".$cast['nickname']?>">

@@ -4,13 +4,13 @@
       <div class="modal-login__modal-box">
         <div class="row">
           <li class="modal-login__modal-box__li-mail col s12 l12">
-            <div class="input-field oki-input-field">
+            <div class="input-field">
               <input type="email" class="validate modal-login__input" placeholder="メールアドレス">
               <label for="email">Email</label>
             </div>
           </li>
           <li class="modal-login__modal-box__li-pass col s12 l12">
-            <div class="input-field oki-input-field">
+            <div class="input-field">
               <input type="password" class="validate modal-login__input" placeholder="パスワード">
               <label for="password">Password</label>
             </div>

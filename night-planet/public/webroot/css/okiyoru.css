@@ -90,18 +90,6 @@ span.area-logo-tail {
 .page-footer .card-panel {
     padding: 10px;
 }
-/* footer ul.collection li{
-border-style: solid;
-border-width: 1px;
-}
-ul > li > a.footer-item.collection-item{
-background-color: initial;
-color:white;
-}
-footer i.material-icons{
-vertical-align: bottom;
-  margin-right: 10px;
-} */
 .footer-copyright.oki-footer-copyright {
     display: block;
     text-align: -webkit-center;
@@ -118,7 +106,18 @@ li.search.col.s12 > a,
 li.search.col.s3 > a {
     width: 100%;
 }
-
+/* 検索モーダル START */
+.modal-search__input-field {
+    margin: initial;
+}
+.modal-search__input-field .dropdown-content li {
+    height: 35px;
+    min-height: 35px;
+}
+.modal-search__form__div {
+    font-size: xx-small;
+}
+/* 検索モーダル END */
 span.notice {
     vertical-align: super;
 }
@@ -2170,6 +2169,9 @@ form .message-label {
     }
     #modal-search {
         width: 100%;
+        height: 90%;
+        height: 90%;
+        max-height: 90%;
     }
     #sharer-modal {
         width: 100%;

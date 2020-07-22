@@ -148,6 +148,7 @@
   <?= $this->element('photoSwipe'); ?>
   <!-- photoSwipe END -->
   <div class="wrap">
+    <?= $this->Flash->render() ?>
     <?= $this->fetch('content') ?>
     <footer class="page-footer">
       <div class="row">
@@ -284,6 +285,13 @@
     // Initialize slider
     subSwiper.init();
 
+    $(document).ready(function () {
+      // 認証後、初回のみログインモーダル表示
+      var isLoginModalShow  = '<?php echo ($is_login_modal_show); ?>';
+      if (isLoginModalShow == 1) {
+        $('#modal-login').modal('open');
+      }
+    });
   </script>
 </body>
 </html>

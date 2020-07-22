@@ -1,7 +1,13 @@
 <?php
+// オーナー認証とユーザー認証を切り分ける。
+// ホントはファイルを分けた方が良かった…。
+if (!empty($owner)) :
+    $url = ADMIN_DOMAIN . '/owner/owners/verify/' . $owner->tokenGenerate();
+    echo($owner->name . "様。初めまして、" . MAIL['FROM_NAME'] . 'です。<br>');
+elseif (!empty($user)) :
+    $url = PUBLIC_DOMAIN . '/user/users/verify/' . $user->tokenGenerate();
+    echo($user->name . "様。初めまして、" . MAIL['FROM_NAME'] . 'です。<br>');
+endif;
 
-$url = ADMIN_DOMAIN.'/owner/owners/verify/'.$owner->tokenGenerate();
-?>
-<?= $owner->name ?>様。初めまして、<?= MAIL['FROM_NAME'] ?>です。<br>
-メールアドレスの認証をするために以下のURLにアクセスしてください。<br><br>
-<?= $url ?>
+echo('メールアドレスの認証をするために以下のURLにアクセスしてください。<br><br>');
+echo($url);

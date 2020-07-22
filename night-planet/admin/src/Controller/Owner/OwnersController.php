@@ -49,60 +49,60 @@ class OwnersController extends AppController
         }
     }
 
-    public function signup()
-    {
-        // レイアウトを使用しない
-        $this->viewBuilder()->autoLayout(false);
+    // public function signup()
+    // {
+    //     // レイアウトを使用しない
+    //     $this->viewBuilder()->autoLayout(false);
 
-        // 登録ボタン押下時
-        if ($this->request->is('post')) {
-            // バリデーションは新規登録用を使う。
-            $owner = $this->Owners->newEntity( $this->request->getData(),['validate' => 'ownerRegistration']);
+    //     // 登録ボタン押下時
+    //     if ($this->request->is('post')) {
+    //         // バリデーションは新規登録用を使う。
+    //         $owner = $this->Owners->newEntity( $this->request->getData(),['validate' => 'ownerRegistration']);
 
-            if(!$owner->errors()) {
+    //         if(!$owner->errors()) {
 
-                $owner = $this->Owners->patchEntity($owner, $this->request->getData());
+    //             $owner = $this->Owners->patchEntity($owner, $this->request->getData());
 
-                if ($this->Owners->save($owner)) {
+    //             if ($this->Owners->save($owner)) {
 
-                    $this->getMailer('Owner')->send('ownerRegistration', [$owner]);
-                    $this->Flash->success(MAIL['OWNER_AUTH_CONFIRMATION']);
-                    return $this->redirect(['action' => 'login']);
-                }
-            } else {
+    //                 $this->getMailer('Owner')->send('ownerRegistration', [$owner]);
+    //                 $this->Flash->success(MAIL['OWNER_AUTH_CONFIRMATION']);
+    //                 return $this->redirect(['action' => 'login']);
+    //             }
+    //         } else {
 
-                foreach ($owner->errors() as $key1 => $value1) {
-                    foreach ($value1 as $key2 => $value2) {
-                        $this->Flash->error($value2);
-                    }
-                }
-            }
-        }
-        // エリア、ジャンルリスト生成
-        $params1 = array("area");
-        $params2 = array("genre");
-        //条件文を作成
-        $condition1 = array(
-            'conditions' => array('master_codes.delete_flag is' => null,
-                                  'master_codes.code_group in' => $params1),
-                                  'keyField' => 'code',
-                                  'valueField' => 'code_name',
-            'order' => array('sort' => 'ASC'));
-        $area = $this->MasterCodes->find('list',$condition1);
-        //条件文を作成
-        $condition2 = array(
-            'conditions' => array('master_codes.delete_flag is' => null,
-                                  'master_codes.code_group in' => $params2),
-                                  'keyField' => 'code',
-                                  'valueField' => 'code_name',
-            'order' => array('sort' => 'ASC'));
-        $genre = $this->MasterCodes->find('list',$condition2);
-        $area = $area->toArray();
-        $genre = $genre->toArray();
+    //             foreach ($owner->errors() as $key1 => $value1) {
+    //                 foreach ($value1 as $key2 => $value2) {
+    //                     $this->Flash->error($value2);
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     // エリア、ジャンルリスト生成
+    //     $params1 = array("area");
+    //     $params2 = array("genre");
+    //     //条件文を作成
+    //     $condition1 = array(
+    //         'conditions' => array('master_codes.delete_flag is' => null,
+    //                               'master_codes.code_group in' => $params1),
+    //                               'keyField' => 'code',
+    //                               'valueField' => 'code_name',
+    //         'order' => array('sort' => 'ASC'));
+    //     $area = $this->MasterCodes->find('list',$condition1);
+    //     //条件文を作成
+    //     $condition2 = array(
+    //         'conditions' => array('master_codes.delete_flag is' => null,
+    //                               'master_codes.code_group in' => $params2),
+    //                               'keyField' => 'code',
+    //                               'valueField' => 'code_name',
+    //         'order' => array('sort' => 'ASC'));
+    //     $genre = $this->MasterCodes->find('list',$condition2);
+    //     $area = $area->toArray();
+    //     $genre = $genre->toArray();
 
-        $this->set(compact('owner','area','genre'));
-        $this->render();
-    }
+    //     $this->set(compact('owner','area','genre'));
+    //     $this->render();
+    // }
 
     public function login()
     {
@@ -224,7 +224,6 @@ class OwnersController extends AppController
             // オーナー情報セット
             $owner->dir = $nextDir;  // 連番ディレクトリをセット
             $owner->status = 1;      // 仮登録フラグを下げる
-            $owner->delete_flag = 0; // 削除フラグを下げる
             // オーナー本登録
             if (!$this->Owners->save($owner)) {
 

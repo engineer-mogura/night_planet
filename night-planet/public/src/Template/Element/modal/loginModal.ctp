@@ -32,8 +32,8 @@
           <div class="col s8">
             <ul>
               <li class="modal-login__modal-box__li signup">
-                <button class="modal-login__modal-box__li_btn-signup btn waves-effect waves-light" type="submit" name="action">新規登録
-                </button>
+                <a class="modal-login__modal-box__li_btn-signup btn waves-effect waves-light" href="/user/users/signup" name="action">新規登録
+                </a>
               </li>
             </ul>
           </div>

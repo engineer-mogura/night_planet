@@ -6,16 +6,23 @@ use Token\Model\Entity\TokenTrait;
 use Cake\Auth\DefaultPasswordHasher;
 
 /**
-* User Entity
-*
-* @property int $id
-* @property string $email
-* @property string $password
-* @property \Cake\I18n\FrozenTime|null $created
-* @property \Cake\I18n\FrozenTime|null $modified
-*
-* @property \App\Model\Entity\Article[] $articles
-*/
+ * User Entity
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $role
+ * @property string $email
+ * @property string $password
+ * @property string|null $file_name
+ * @property string|null $remember_token
+ * @property int $status
+ * @property int $delete_flag
+ * @property \Cake\I18n\FrozenTime|null $created
+ * @property \Cake\I18n\FrozenTime|null $modified
+ *
+ * @property \App\Model\Entity\DiaryLike[] $diary_likes
+ * @property \App\Model\Entity\ShopInfoLike[] $shop_info_likes
+ */
 class User extends Entity
 {
     use TokenTrait;
@@ -29,12 +36,19 @@ class User extends Entity
      * @var array
      */
     protected $_accessible = [
-      'email' => true,
-      'password' => true,
-      'created' => true,
-      'modified' => true,
-      'articles' => true
-  ];
+        'name' => true,
+        'role' => true,
+        'email' => true,
+        'password' => true,
+        'file_name' => true,
+        'remember_token' => true,
+        'status' => true,
+        'delete_flag' => true,
+        'created' => true,
+        'modified' => true,
+        'diary_likes' => true,
+        'shop_info_likes' => true
+    ];
 
     /**
      * Fields that are excluded from JSON versions of the entity.
@@ -42,8 +56,9 @@ class User extends Entity
      * @var array
      */
     protected $_hidden = [
-      'password'
-  ];
+        'password',
+        //'remember_token',  // 自動ログイン用トークン TODO: リリース前にコメントインする
+        ];
 
     protected function _setPassword($value)
     {

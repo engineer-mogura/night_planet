@@ -534,19 +534,6 @@ function initialize() {
     Materialize.updateTextFields();
     $("input, textarea").characterCounter();
 
-    // TODO: ユーザーのログイン機能実装時に解除する
-    $("#modal-login").modal({
-        ready: function () {
-            $("#modal-login").css('z-index','9999');
-            alert("現在ログイン機能は利用できません。");
-            this.close();
-        },
-        // モーダル非表示完了コールバック
-        complete: function () {
-            // alert("complete");
-        },
-    });
-
     // materializecss Chips
     $(document).find(".chips").material_chip();
     // materializecss Chips 追加イベント
@@ -785,6 +772,20 @@ function initializeUser() {
                 $("#marquee-author").find("> span").fadeOut(250);
         },
     });
+
+    // TODO: ユーザーのログイン機能実装時に解除する
+    $("#modal-login").modal({
+        ready: function () {
+            $("#modal-login").css('z-index','9999');
+            alert("現在ログイン機能は利用できません。");
+            //this.close();
+        },
+        // モーダル非表示完了コールバック
+        complete: function () {
+            // alert("complete");
+        },
+    });
+
     /* トップ画面 START */
     if ($("#top").length) {
         // 検索ボタン押した時

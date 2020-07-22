@@ -3,7 +3,6 @@ namespace App\Controller\User;
 
 use Cake\ORM\TableRegistry;
 use Cake\Event\Event;
-use Cake\Core\Configure;
 
 class AppController extends \App\Controller\AppController
 {
@@ -12,55 +11,47 @@ class AppController extends \App\Controller\AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users = TableRegistry::get('Users');
+        $this->Users = TableRegistry::get("users");
         $this->Shops = TableRegistry::get('shops');
-        $this->Coupons = TableRegistry::get('Coupons');
-        $this->Casts = TableRegistry::get('Casts');
-        $this->Jobs = TableRegistry::get('Jobs');
+        $this->Casts = TableRegistry::get('casts');
+        $this->Diarys = TableRegistry::get('diarys');
+        $this->DiaryLikes = TableRegistry::get('diary_likes');
+        $this->CastSchedules = TableRegistry::get('cast_schedules');
+        $this->Snss = TableRegistry::get('snss');
+        $this->Updates = TableRegistry::get('updates');
         $this->MasterCodes = TableRegistry::get("master_codes");
         $this->loadComponent('Auth', [
-            // 'authenticate' => [
-            //     'Form' => [
-            //         'userModel' => 'Users',
-            //         'fields' => ['username' => 'email','password' => 'password']
-            //     ],
-            //    'NodeLink/RememberMe.Cookie' => [
-            //        'userModel' => 'Users',  // 'Form'認証と同じモデルを指定します
-            //        'fields' => ['token' => 'remember_token'],  // Remember-Me認証用のトークンを保存するカラムを指定します
-            //    ],
-            // ],
+            'authenticate' => [
+                'Form' => [
+                    'userModel' => 'Users',
+                    'fields' => ['username' => 'email','password' => 'password']
+                ],
+               'NodeLink/RememberMe.Cookie' => [
+                   'userModel' => 'Users',  // 'Form'認証と同じモデルを指定します
+                   'fields' => ['token' => 'remember_token'],  // Remember-Me認証用のトークンを保存するカラムを指定します
+               ],
+            ],
             'storage' => ['className' => 'Session', 'key' => 'Auth.User'],
 
             'loginAction' => ['controller' => 'Users','action' => 'login'],
-            'unauthorizedRedirect' => ['controller' => 'Users','action' => 'login'],
+            'unauthorizedRedirect' => ['controller' => 'Main','action' => 'top'],
             'loginRedirect' => ['controller' => 'Users','action' => 'index'],
-            'logoutRedirect' => ['controller' => 'Users','action' => 'login'],
+            'logoutRedirect' => ['controller' => 'Main','action' => 'top'],
             // コントローラーで isAuthorized を使用します
             'authorize' => ['Controller'],
-                // 未認証の場合、直前のページに戻します
-            // 'unauthorizedRedirectedRedirect' => $this->referer()
+            // 未認証の場合、直前のページに戻します
+            'unauthorizedRedirectedRedirect' => $this->referer()
         ]);
 
-        $query = $this->request->getQuery();
-        // 検索結果でタイトルで決める
-        $title = '';
-        if (!empty($query['area']) && !empty($query['genre'])) {
-            // コントローラでセットされたtitleを代入してセパレータを追加
-            $title .=  AREA[$query['area']]['label'] . 'の'.
-                        GENRE[$query['genre']]['label'].'一覧';
-        } elseif (!empty($query['area'])) {
-            $title .=  AREA[$query['area']]['label'] . '一覧';
-        } elseif (!empty($query['genre'])) {
-            $title .=  GENRE[$query['genre']]['label'] . '一覧';
-        }
-        $this->set('title', $title);
     }
 
     public function isAuthorized($user)
     {
         $action = $this->request->getParam('action');
+
         // ログイン時に許可するアクション
-        if (in_array($action, ['top', 'search', 'index', 'view', 'add', 'delete', 'edit'])) {
+        $access = ['index','deleteDiary','updateDiary','passChange'];
+        if (in_array($action, $access)) {
             return true;
         }
         return false;
@@ -69,8 +60,33 @@ class AppController extends \App\Controller\AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        $this->Auth->allow(['top', 'search', 'signup','verify','logout']);
+        $this->Auth->allow(['signup','verify','resetVerify','logout','passReset']);
+        $this->Auth->config('authError', "もう一度ログインしてください。");
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
         $this->viewBuilder()->layout('userDefault');
+    }
+
+   /**
+     * ユーザのステータス、論理削除フラグチェック
+     *
+     * @param Array $user
+     * @return Boolean $rslt
+     */
+    public function checkStatus($user)
+    {
+        $rslt = true;
+
+        if ($user['delete_flag'] == 1) {
+            $rslt = false;
+            $body .= "そのままご送信ください。【ID】： ".$user->id."、";
+            $body .= "【お名前】： ".$user->name."、";
+            $body .= "【メールアドレス】： ".$user->email;
+
+            $message = "アカウントが凍結または削除された可能性があります。アカウントを回復希望の方はお問い合わせのリンクを開きそのままご送信ください。";
+            $this->log($this->Util->setLog($user, $message));
+            $this->Flash->error($message . "<a href='mailto:info@night-planet.com?subject=アカウント回復希望&amp;body=".$body."'>お問い合わせ</a>", ['escape' => false]);
+        }
+
+        return $rslt;
     }
 }

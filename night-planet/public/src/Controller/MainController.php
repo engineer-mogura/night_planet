@@ -36,15 +36,18 @@ class MainController extends AppController
 
     public function beforeFilter(Event $event)
     {
+        // ユーザ認証後の初回のみ自動でモーダルを表示するパラメタをセットする
+        if ($this->request->session()->check('auth_success')) {
+            $is_login_modal_show = $this->request->session()->consume('auth_success');
+        }
         parent::beforeFilter($event);
         $this->viewBuilder()->layout('userDefault');
         // 常に現在エリアを取得
         $is_area = AREA['okinawa']['path'];
-        $this->set(compact('is_area'));
         // SEO対策
         $title = str_replace("_service_name_", LT['000'], TITLE['TOP_TITLE']);
         $description = str_replace("_service_name_", LT['000'], META['TOP_DESCRIPTION']);
-        $this->set(compact("title", "description"));
+        $this->set(compact("title", "description","is_area","is_login_modal_show"));
     }
 
     public function top()

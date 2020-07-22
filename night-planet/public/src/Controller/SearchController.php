@@ -36,7 +36,8 @@ class SearchController extends AppController
         // $this->Auth->allow(['signup','verify','logout']);
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
         $this->viewBuilder()->layout('userDefault');
-
+        // 常に現在エリアを取得
+        $is_area = AREA['okinawa']['path'];
         $query = $this->request->getQuery();
         // 検索結果でエリア、ジャンルで文言を決める
         $result = '';
@@ -53,7 +54,7 @@ class SearchController extends AppController
         $title = str_replace("_service_name_", LT['000'], TITLE['SEARCH_TITLE']);
         $description = str_replace("_service_name_", LT['000'], META['SEARCH_DESCRIPTION']);
 
-        $this->set(compact("result", "title", "description"));
+        $this->set(compact("result", "title", "description","is_area"));
     }
 
     public function index()

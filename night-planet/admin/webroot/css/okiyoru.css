@@ -661,22 +661,21 @@ ul.tabs > li.tab-original.tab > .active {
   font-weight: 700;
   color: firebrick;
 }
-input.modal-login__input::placeholder {
+.modal-login__modal-box input::placeholder {
   color: firebrick;
   font-size: x-small;
 }
-/* IE */
-input.modal-login__input::placeholder {
+.modal-login__modal-box .checkbox > label {
   color: firebrick;
-}
-/* Edge */
-input.modal-login__input::placeholder {
-  color: firebrick;
+  font-size: x-small;
 }
 #modal-login .modal-login__modal-footer {
   background-color: initial;
 }
-.modal-login__modal-box button {
+.modal-login__modal-box .input-field {
+  width: 80%;
+}
+.modal-login__modal-box__li-remember_me label {
   font-size: xx-small;
 }
 .modal-login__modal-box__li {
@@ -684,20 +683,40 @@ input.modal-login__input::placeholder {
   margin-right: 17px;
   float: left;
 }
+.modal-login__modal-box__li {
+  margin-top:10px;
+  margin-right: 17px;
+  float: left;
+}
+.modal-login__modal-box__li__input {
+  color: #ff0000;
+  font-weight: bold;
+}
 .modal-login__modal-box__li > button {
   letter-spacing: initial;
   padding: 0 1rem;
 }
-.modal-login__modal-box__li_btn-login,
+.modal-login__modal-box__li > a {
+  letter-spacing: initial;
+  padding: 0 1rem;
+}
+.modal-login__modal-box a,
+.modal-login__modal-box button {
+  font-size: xx-small;
+}
+
+.modal-login__modal-box__li_btn-login {
+  background-color: #ff8d00;
+}
 .modal-login__modal-box__li_btn-forget {
-  background-color: #4296ff;
+  background-color: #389aff;
 }
 .modal-login__modal-box__li_btn-signup {
   background-color: #ff0000;
 }
-.modal-login__modal-box__li.signup {
+/* .modal-login__modal-box__li.signup {
   width: 100%;
-}
+} */
 /* 検索画面 START */
 .linkbox__card-content {
   position: relative;

@@ -1,0 +1,77 @@
+#!/usr/bin/bash
+
+#共通 START
+#スラッシュ
+DS=/
+#logフォルダ
+LOGS=/logs
+#imgフォルダ
+IMG=/img
+#デベロッパフォルダ
+DEVELOPER=/developer
+#ウェブルートフォルダ
+WEBROOT=/webroot
+#エリアフォルダ配列
+AREA=(naha nanjo tomigusuku itoman haebaru yonabaru urasoe ginowan chatan nishihara okinawashi uruma nago miyakojima ishigakijima)
+#ジャンルフォルダ配列
+GENRE=(cabacula snack girlsbar club lounge pub bar)
+#その他フォルダ配列
+OTHER=(common owner user)
+#環境名
+LOCAL_ENV=開発環境
+HOSYU_ENV=保守環境
+HONBAN_ENV=本番環境
+#共通 END
+
+#プレフィックス START
+#P_LOGS=.log
+#プレフィックス END
+
+#サフィックス START
+S_LOGS=.log
+#サフィックス END
+
+#開発環境 START
+
+# ##ベース環境
+# BASE_ENV=$LOCAL_ENV
+# #ベースフォルダ
+# BASE_DIR=/vagrant/night-planet
+# #パブリック側ログフォルダ
+# PUBLIC_DIR=$BASE_DIR'/public'
+# #アドミン側ログフォルダ
+# ADMIN_DIR=$BASE_DIR'/admin'
+# #イメージ側フォルダ
+# IMAGE_DIR=$BASE_DIR$DS$IMG$WEBROOT$IMG
+
+#開発環境 END
+
+#保守環境 START
+
+##ベース環境
+BASE_ENV=$HOSYU_ENV
+##ベースフォルダ
+BASE_DIR=/home/users/2/hippy.jp-myachin/web/dev-night-planet
+##パブリック側フォルダ
+PUBLIC_DIR=$BASE_DIR'/devokiyorugo.work'
+##アドミン側フォルダ
+ADMIN_DIR=$BASE_DIR'/admin.devokiyorugo.work'
+##イメージ側フォルダ
+IMAGE_DIR=$BASE_DIR'/img.devokiyorugo.work'$WEBROOT$IMG
+
+#保守環境 END
+
+#本番環境 START
+
+# #ベース環境
+# BASE_ENV=$HONBAN_ENV
+# #ベースフォルダ
+# BASE_DIR=/home/users/2/hippy.jp-myachin/web/night-planet
+# #パブリック側フォルダ
+# PUBLIC_DIR=$BASE_DIR'/night-planet.com'
+# #アドミン側フォルダ
+# ADMIN_DIR=$BASE_DIR'/admin.night-planet.com'
+# #イメージ側フォルダ
+# IMAGE_DIR=$BASE_DIR'/img.night-planet.com'$WEBROOT$IMG
+
+#本番環境 END

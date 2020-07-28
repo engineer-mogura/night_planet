@@ -39,6 +39,12 @@ class MainController extends AppController
         // ユーザ認証後の初回のみ自動でモーダルを表示するパラメタをセットする
         if ($this->request->session()->check('auth_success')) {
             $is_login_modal_show = $this->request->session()->consume('auth_success');
+            if ($this->request->session()->check('error')) {
+                $errors = $this->request->session()->consume('error');
+                foreach ($errors as $key => $error) {
+                    $this->request->data($key, $error);
+                }
+            }
         }
         parent::beforeFilter($event);
         $this->viewBuilder()->layout('userDefault');

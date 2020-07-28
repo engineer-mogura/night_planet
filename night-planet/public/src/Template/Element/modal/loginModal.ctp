@@ -1,39 +1,34 @@
 <div id="modal-login" class="modal">
     <div class="modal-content">
+    <?= $this->Flash->render() ?>
       <p class="modal-login__modal-content__catch">お気に入りのお店やスタッフを登録して新着情報やスタッフブログを見逃さずにしよう‼</p>
       <div class="modal-login__modal-box">
         <div class="row">
-          <li class="modal-login__modal-box__li-mail col s12 l12">
-            <div class="input-field">
-              <input type="email" class="validate modal-login__input" placeholder="メールアドレス">
-              <label for="email">Email</label>
+          <?= $this->Form->create('null', array('url' => '/user/users/login')) ?>
+            <div class="modal-login__modal-box__li-mail col s12 l12">
+              <?= $this->Form->control('email', array('class'=>'modal-login__modal-box__li__input','placeholder'=>'メールアドレス','required' => false)) ?>
             </div>
-          </li>
-          <li class="modal-login__modal-box__li-pass col s12 l12">
-            <div class="input-field">
-              <input type="password" class="validate modal-login__input" placeholder="パスワード">
-              <label for="password">Password</label>
+            <div class="modal-login__modal-box__li-pass col s12 l12">
+              <?= $this->Form->control('password', array('class'=>'modal-login__modal-box__li__input','placeholder'=>'パスワード','required' => false)) ?>
             </div>
-          </li>
+            <div class="modal-login__modal-box__li-remember_me col s12 l12">
+              <?= $this->Form->control('remember_me',['type'=>'checkbox','label'=>['text'=>'ログイン状態を保存する']]) ?>
+            </div>
+            <div class="modal-login__modal-box__li login col s12 l12">
+                <?= $this->Form->button('ログイン',array('class'=>'modal-login__modal-box__li_btn-login btn waves-effect waves-light'));?>
+            </div>
+          <?= $this->Form->end() ?>
         </div>
         <div class="row">
           <div class="col s11">
             <ul>
-              <li class="modal-login__modal-box__li login">
-                <button class="modal-login__modal-box__li_btn-login btn waves-effect waves-light" type="submit" name="action">ログイン
-                </button>
+              <li class="modal-login__modal-box__li signup">
+                <a class="modal-login__modal-box__li_btn-signup btn waves-effect waves-light" href="/user/users/signup" name="action">
+                  新規登録</a>
               </li>
               <li class="modal-login__modal-box__li forget">
-                <button class="modal-login__modal-box__li_btn-forget btn waves-effect waves-light" type="submit" name="action">パスワードをお忘れですか？
-                </button>
-              </li>
-            </ul>
-          </div>
-          <div class="col s8">
-            <ul>
-              <li class="modal-login__modal-box__li signup">
-                <a class="modal-login__modal-box__li_btn-signup btn waves-effect waves-light" href="/user/users/signup" name="action">新規登録
-                </a>
+                <a href="/user/users/pass_reset" class="modal-login__modal-box__li_btn-forget btn waves-effect waves-light" name="action">
+                  パスワードをお忘れですか？</a>
               </li>
             </ul>
           </div>

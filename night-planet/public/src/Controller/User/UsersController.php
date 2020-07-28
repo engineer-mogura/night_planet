@@ -26,13 +26,16 @@ class UsersController extends AppController
     {
         // AppController.beforeFilterをコールバック
         parent::beforeFilter($event);
-
+        // AppController.beforeFilterをコールバック
+        $this->Security->setConfig('blackHoleCallback', 'blackhole');
+        // 店舗スイッチアクションのセキュリティ無効化 AJAXを使用しているので
+        $this->Security->setConfig('unlockedActions', ['login']);
         // ユーザに関する情報をセット
         if (!is_null($user = $this->Auth->user())) {
             if ($this->Users->exists(['id' => $user['id']])) {
                 $user = $this->Users->get($user['id']);
                 // ユーザに関する情報をセット
-                $this->set('userInfo', $this->Util->getUserItem($user, $shop));
+                $this->set('userInfo', $this->Util->getUserInfo($user));
             } else {
                 $session = $this->request->getSession();
                 $session->destroy();
@@ -1384,33 +1387,53 @@ class UsersController extends AppController
         $this->viewBuilder()->autoLayout(false);
 
         if ($this->request->is('post')) {
-
+            // エラーフラグ
+            $is_error = false;
             // バリデーションはログイン用を使う。
             $user = $this->Users->newEntity($this->request->getData(), ['validate' => 'userLogin']);
 
             if (!$user->errors()) {
-                $this->log($this->request->getData("remember_me"), "debug");
+
+                // 現在リクエスト中のユーザーを識別する
                 $user = $this->Auth->identify();
                 if ($user) {
                     $this->Auth->setUser($user);
                     Log::info($this->Util->setAccessLog(
                         $user, $this->request->params['action']), 'access');
 
-                    return $this->redirect($this->Auth->redirectUrl());
+                } else {
+                    // ログイン失敗
+                    $is_error = true;
+                    $this->Flash->error(RESULT_M['FRAUD_INPUT_FAILED']);
                 }
 
-                $this->Flash->error(RESULT_M['FRAUD_INPUT_FAILED']);
             } else {
-                foreach ($user->errors() as $key1 => $value1) {
+
+                Log::error($this->Util->setAccessLog(
+                    $user, $this->request->params['action']).'　失敗', 'access');
+
+                    foreach ($user->errors() as $key1 => $value1) {
                     foreach ($value1 as $key2 => $value2) {
                         $this->Flash->error($value2);
                     }
                 }
+                $is_error = true;
+            }
+            // エラーがある場合はログイン画面でエラーを表示する
+            if ($is_error) {
+                // 認証完了セッションをセット※モーダルを自動表示するためのパラメタ
+                $this->request->session()->write('auth_success', 1);
+                // エラーをセッションにセット
+                $this->request->session()->write('error', $this->request->data());
+                $this->set('user', $user);
+                return $this->redirect(PUBLIC_DOMAIN);
             }
         } else {
             $user = $this->Users->newEntity();
         }
-        $this->set('user', $user);
+        // 認証完了セッションをセット※モーダルを自動表示するためのパラメタ
+        $this->request->session()->write('auth_success', 1);
+        return $this->redirect(PUBLIC_DOMAIN);
     }
 
     public function logout()

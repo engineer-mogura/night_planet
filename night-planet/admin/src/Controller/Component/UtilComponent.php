@@ -99,6 +99,31 @@ class UtilComponent extends Component
 
         return null;
     }
+    /**
+     * ユーザー情報を取得する。
+     *
+     * @return void
+     */
+    public function getUserInfo($user)
+    {
+        // TODO: Authセッションからオーナー情報を取得せず、shopsテーブルから取る？
+        $userInfo = array();
+
+        $userInfo = $userInfo + array('id'=>$user['id']);
+        $path = PATH_ROOT['IMG'].DS.PATH_ROOT['USER'];
+        $userInfo = $userInfo + array('user_path'=> $path);
+
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$userInfo['user_path']
+        ), true, 0755);
+
+        // ファイルは１つのみだけど配列で取得する
+        $files = glob($dir->path.DS.'*.*');
+        $userInfo = $userInfo + array('icon_name'=>basename($files[0]));
+
+        return  $userInfo;
+    }
+
 
     /**
      * オーナー情報を取得する。

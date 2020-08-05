@@ -104,6 +104,11 @@ class UsersTable extends Table
                         'rule' => ['compareWith','password_check'],  //←バリデーションのルール
                         'message' => '確認用のパスワードと一致しません。'  //←エラー時のメッセージ
             ]]);
+        $validator
+            ->integer('gender')
+            ->requirePresence('gender', 'create')
+            ->notEmpty('gender','性別を選択してください。')
+            ->allowEmptyString('gender', false);
 
         $validator
             ->integer('status')

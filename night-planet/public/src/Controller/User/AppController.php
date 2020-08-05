@@ -35,7 +35,7 @@ class AppController extends \App\Controller\AppController
 
             'loginAction' => ['controller' => 'Users','action' => 'login'],
             'unauthorizedRedirect' => ['controller' => 'Main','action' => 'top'],
-            'loginRedirect' => ['controller' => 'Users','action' => 'index'],
+            'loginRedirect' => ['controller' => 'Users','action' => 'mypage'],
             'logoutRedirect' => ['controller' => 'Main','action' => 'top'],
             // コントローラーで isAuthorized を使用します
             'authorize' => ['Controller'],
@@ -50,7 +50,7 @@ class AppController extends \App\Controller\AppController
         $action = $this->request->getParam('action');
 
         // ログイン時に許可するアクション
-        $access = ['index','deleteDiary','updateDiary','passChange'];
+        $access = ['mypage','profile','passChange'];
         if (in_array($action, $access)) {
             return true;
         }
@@ -59,11 +59,14 @@ class AppController extends \App\Controller\AppController
 
     public function beforeFilter(Event $event)
     {
-        parent::beforeFilter($event);
         $this->Auth->allow(['signup','verify','resetVerify','login','logout','passReset']);
         $this->Auth->config('authError', "もう一度ログインしてください。");
-        parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
+
         $this->viewBuilder()->layout('userDefault');
+        $masterCodesFind = array('area','genre');
+        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+        $this->set(compact('selectList'));
+
     }
 
    /**

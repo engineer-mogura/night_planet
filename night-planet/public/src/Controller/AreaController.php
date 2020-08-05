@@ -1,13 +1,11 @@
 <?php
 namespace App\Controller;
 
-use Cake\I18n\Time;
 use \Cake\ORM\Query;
 use Cake\Event\Event;
 use Cake\Routing\Router;
 use \Cake\I18n\FrozenTime;
 use Cake\Filesystem\Folder;
-use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
 
 class AreaController extends AppController
@@ -17,31 +15,16 @@ class AreaController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users         = TableRegistry::get('users');
-        $this->Shops         = TableRegistry::get('shops');
-        $this->Coupons       = TableRegistry::get('coupons');
-        $this->Casts         = TableRegistry::get('casts');
-        $this->Diarys        = TableRegistry::get('diarys');
-        $this->ShopInfoLikes = TableRegistry::get('shop_info_likes');
-        $this->DiaryLikes    = TableRegistry::get('diary_likes');
-        $this->Jobs          = TableRegistry::get('jobs');
-        $this->ShopInfos     = TableRegistry::get("shop_infos");
-        $this->Updates       = TableRegistry::get("updates");
-        $this->MasterCodes   = TableRegistry::get("master_codes");
-        $this->WorkSchedules = TableRegistry::get("work_schedules");
-        $this->ShopOptions   = TableRegistry::get("shop_options");
-        $this->NewPhotosRank = TableRegistry::get('new_photos_rank');
-
-
     }
+
     public function beforeFilter(Event $event)
     {
+        parent::beforeFilter($event);
         // 常に現在エリアを取得
         $is_area = mb_strtolower($this->request->getparam("controller"));
         $this->set(compact('is_area'));
-        // レイアウトをセット
-        $this->viewBuilder()->layout('userDefault');
     }
+
     public function beforeRender(Event $event)
     {
         parent::beforeRender($event);

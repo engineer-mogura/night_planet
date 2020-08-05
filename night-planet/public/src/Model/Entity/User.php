@@ -40,6 +40,7 @@ class User extends Entity
         'role' => true,
         'email' => true,
         'password' => true,
+        'gender' => true,
         'file_name' => true,
         'remember_token' => true,
         'status' => true,

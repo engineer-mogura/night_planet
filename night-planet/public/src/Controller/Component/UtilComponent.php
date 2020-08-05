@@ -109,17 +109,30 @@ class UtilComponent extends Component
         // TODO: Authセッションからオーナー情報を取得せず、shopsテーブルから取る？
         $userInfo = array();
 
-        $userInfo = $userInfo + array('id'=>$user['id']);
-        $path = PATH_ROOT['IMG'].DS.PATH_ROOT['USER'];
-        $userInfo = $userInfo + array('user_path'=> $path);
+        $userInfo = $userInfo + array('id'=>$user['id']
+                    , 'name'=>$user['name'], 'email'=>$user['email']
+                    , 'created'=>$user['created']->format('Y年m月d日'));
+        $path = DS.PATH_ROOT['IMG'].DS.PATH_ROOT['USER'];
+        $userInfo = $userInfo + array('user_path'=> $path
+                        , 'tmp_path'=>DS.PATH_ROOT['IMG'] . DS . PATH_ROOT['TMP']);
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$userInfo['user_path']
-        ), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                    , WWW_ROOT.$userInfo['user_path']), true, 0755);
 
-        // ファイルは１つのみだけど配列で取得する
-        $files = glob($dir->path.DS.'*.*');
-        $userInfo = $userInfo + array('icon_name'=>basename($files[0]));
+        if (!empty($user['file_name'])) {
+
+            // ファイルは１つのみだけど配列で取得する
+            $files = glob($dir->path.DS.$user['file_name']);
+            if (count($files) > 0) {
+                $userInfo = $userInfo + array('icon_path'=>$userInfo['user_path'].DS.basename($files[0]));
+            } else {
+                $userInfo = $userInfo + array('icon_path'=> null);
+            }
+
+        } else {
+            $userInfo = $userInfo + array('icon_path'=> null);
+        }
 
         return  $userInfo;
     }

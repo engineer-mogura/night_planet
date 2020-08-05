@@ -903,6 +903,86 @@ function initializeUser() {
         });
     }
     /* お知らせ画面 END */
+
+    /* プロフィール 画面 START */
+    if ($("#profile").length) {
+        var $profile = $("#profile");
+
+        // 画像を選択した時
+        $(document).on("change", "#image-file", function () {
+            var $form = $(this).closest("form");
+            var file = this.files[0];
+            var img = new Image();
+            loadImage.parseMetaData(file, (data) => {
+                var options = {
+                    canvas: true,
+                };
+                if (data.exif) {
+                    options.orientation = data.exif.get("Orientation");
+                }
+                loadImage(
+                    file,
+                    (canvas) => {
+                        var dataUri = canvas.toDataURL("image/jpeg");
+
+                        img.src = dataUri;
+                        $(document).find("img").attr({ src: dataUri });
+                    },
+                    options
+                );
+                // 画像が読み込まれてから処理
+                img.onload = function () {
+                    // IMGのセレクタ取得
+                    var $selecter = $(document).find("img");
+                    // ファイル変換
+                    var blobList = fileConvert("#image-canvas", $selecter);
+
+                    // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                    // POSTでリクエスト内のデータが全部なくなるので。
+                    // TODO: 後で対策を考えよう
+                    $($form).find("#image-file, .file-path").val("");
+
+                    // アップロード用blobをformDataに設定
+                    var formData = new FormData($form.get()[0]);
+                    formData.append("image", blobList[0]);
+
+                    //通常のアクションをキャンセルする
+                    event.preventDefault();
+                    fileUpAjaxCommon($form, formData, $("#wrapper"));
+                };
+            });
+        });
+        // 入力フォームに変更があった時
+        $(document)
+            .find($profile)
+            .on("input", function () {
+                $($profile).find(".saveBtn").removeClass("disabled");
+            });
+        // リストボックスを変更した時
+        $(document).on("change", "select", function () {
+            $($profile).find(".saveBtn").removeClass("disabled");
+        });
+        // 登録ボタン押した時
+        $($profile)
+            .find(".saveBtn")
+            .on("click", function () {
+                if (!confirm("こちらのプロフィール内容でよろしいですか？")) {
+                    return false;
+                }
+                var $form = $("#save-profile");
+
+                //通常のアクションをキャンセルする
+                event.preventDefault();
+                ajaxCommon($form, $("#wrapper"));
+            });
+    }
+    // /* プロフィール 画面 END */
+    /* ユーザー管理画面 START */
+    if ($("#mypage").length) {
+        // 検索ボタン押した時
+        commonSearch(false);
+    }
+    /* ユーザー管理画面 END */
 }
 
 /**

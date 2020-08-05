@@ -1,9 +1,3 @@
-<?php
-/**
-* @var \App\View\AppView $this
-* @var \App\Model\Entity\shop[]|\Cake\Collection\CollectionInterface $owners
-*/
-?>
 <div id="cast" class="container">
     <?= $this->Flash->render() ?>
     <?= $this->element('nav-breadcrumb'); ?>
@@ -11,7 +5,7 @@
         <div id="cast-main" class="col s12 m12 l8">
 			<!-- スタッフヘッダ START -->
             <div class="row cast-head-section">
-				<img class="responsive-img" width="100%" src=<?= $cast->top_image ?>>
+               <img class="responsive-img" width="100%" src=<?= $cast->top_image ?>>
                 <div class="cast-head">
                     <div class="cast-head-line1 col s12">
                         <ul class="cast-head-line1__ul">

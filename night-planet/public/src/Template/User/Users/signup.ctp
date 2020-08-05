@@ -16,6 +16,9 @@
                 <div class="message-label">パスワードは大文字小文字を混在させた8文字以上、32文字以内で入力してください。</div>
                 <?= $this->Form->control('password', array('label'=>'パスワード')) ?>
                 <?= $this->Form->control('password_check', array('type'=>'password','label' => 'パスワード再入力')) ?>
+                <?php $options = array('1' => '男', '0' => '女');
+                    $attributes = array('legend' => true,'value'=>'1'); ?>
+                <?= $this->Form->radio('gender', $options, $attributes); ?>
                 <?= $this->Form->input('role', array('type' => 'hidden',
                     'value' => 'user'));?>
                 <div class="or-button">

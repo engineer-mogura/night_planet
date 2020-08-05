@@ -564,6 +564,17 @@ return [
         ],
 
     )),
+    // 所属エリアリスト
+    define('USER', array(
+        'index'=> [
+            'label' => "マイページ",
+            'path' => "mypage",
+        ],
+        'voice'=> [
+            'label' => "口コミ",
+            'path' => "voice",
+        ],
+    )),
     // 共通メッセージ common.message
     define('COMMON_M', array(
         'LOGINED'=>'ログインしました。',

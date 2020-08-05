@@ -1,21 +1,10 @@
 <?php
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link      https://cakephp.org CakePHP(tm) Project
- * @since     0.2.9
- * @license   https://opensource.org/licenses/mit-license.php MIT License
- */
+
 namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -29,27 +18,42 @@ class AppController extends Controller
 {
     public $components = array('Util');
 
-    /**
-     * Initialization hook method.
-     *
-     * Use this method to add common initialization code like loading components.
-     *
-     * e.g. `$this->loadComponent('Security');`
-     *
-     * @return void
-     */
     public function initialize()
     {
         parent::initialize();
-        $this->loadComponent('RequestHandler', [
-          'enableBeforeRedirect' => false,
-        ]);
         $this->loadComponent('Flash');
+        $this->Users         = TableRegistry::get('users');
+        $this->Casts         = TableRegistry::get('casts');
+        $this->Coupons       = TableRegistry::get('coupons');
+        $this->DiaryLikes    = TableRegistry::get('diary_likes');
+        $this->Diarys        = TableRegistry::get('diarys');
+        $this->Jobs          = TableRegistry::get('jobs');
+        $this->MasterCodes   = TableRegistry::get("master_codes");
+        $this->NewPhotosRank = TableRegistry::get('new_photos_rank');
+        $this->ShopInfoLikes = TableRegistry::get('shop_info_likes');
+        $this->ShopInfos     = TableRegistry::get("shop_infos");
+        $this->ShopOptions   = TableRegistry::get("shop_options");
+        $this->Shop_infos    = TableRegistry::get('shop_infos');
+        $this->Shops         = TableRegistry::get('shops');
+        $this->Updates       = TableRegistry::get("updates");
+        $this->WorkSchedules = TableRegistry::get("work_schedules");
     }
 
     public function beforeFilter(Event $event)
     {
+      $masterCodesFind = array('area','genre');
+      $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
+      $this->set(compact('selectList'));
+      $this->viewBuilder()->layout('userDefault');
 
+      // 認証済クッキーがあればユーザ情報を取得する
+      if(!empty($user = (array) json_decode($this->request->getCookie('_auth_info')))) {
+        if ($this->Users->exists(['id' => $user['id']])) {
+            $user = $this->Users->get($user['id']);
+            // ユーザに関する情報をセット
+            $this->set('userInfo', $this->Util->getUserInfo($user));
+        }
+      }
       //$this->Auth->allow(['login', 'display']);
     }
 }

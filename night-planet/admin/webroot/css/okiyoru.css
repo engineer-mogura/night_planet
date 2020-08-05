@@ -9,6 +9,9 @@ body {
 .container {
   width: 94.5%;
 }
+.side-nav__user-view {
+  font-family: fantasy;
+}
 .entry.container {
   padding: initial;
 }
@@ -68,10 +71,10 @@ span.logo-head-color {
   font-size: larger;
 }
 .brand-logo.oki-brand-logo {
-  margin-left: 50px;
+  font-family: fantasy;
 }
 span.area-logo {
-  font-size: 1.7rem;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 span.area-logo-tail {
@@ -194,7 +197,9 @@ nav {
   background-color: #3e3e3e;
 }
 ul.right.nav-right li {
-  margin-right: 17px;
+  margin-right: 0.5em;
+  width: 4em;
+  text-align: center;
 }
 ul.right.nav-right li span {
   display: block;
@@ -203,13 +208,13 @@ ul.right.nav-right li span {
   top: 20px;
 }
 ul.right.nav-right li.nav-search span {
-  right: 63px;
+
 }
 ul.right.nav-right li.nav-search a {
   color: aquamarine;
 }
 ul.right.nav-right li.nav-account-login span {
-  right: 10px;
+
 }
 ul.right.nav-right li.nav-account-login.unlock a {
   color: #fbff00;
@@ -753,7 +758,8 @@ ul.tabs > li.tab-original.tab > .active {
 /* 店舗ページ START */
 
 #shop-main,
-#cast-main {
+#cast-main,
+#user-main {
   margin-top: 0.5rem;
 }
 
@@ -1449,6 +1455,200 @@ background-color: #fb8c00; */
 
 /* 日記ページ END */
 
+/* ユーザーページ START */
+/** USER HEAD START */
+.user-head-section {
+  position: relative;
+  margin-bottom: initial;
+}
+.user-head-section__content {
+  display: grid;
+}
+.user-head {
+  height: 70px;
+  position: relative;
+}
+.user-head-line1__ul_li {
+  float: left;
+  margin-left: 2em;
+  font-family: fantasy;
+}
+.user-head-line2 {
+  height: 50px;
+  height: 50px;
+  position: absolute;
+  bottom: -4.5em;
+}
+.user-head-line2__ul {
+  margin: initial;
+}
+.user-head-line2__ul_li {
+  float: left;
+}
+.favorite-num {
+  position: relative;
+  top: 20px;
+  right: 10px;
+}
+.voice-num {
+  position: relative;
+  top: 20px;
+  right: 10px;
+}
+.user-head-line2__ul {
+  position: absolute;
+  left: 1.5em;
+  font-family: fantasy;
+}
+.user-head-line2__ul_li.user-icon {
+  position: absolute;
+  bottom: 2.4em;
+}
+.user-head-line2__ul_li.favorite {
+  margin-left: 1em;
+}
+.user-head-line2__ul_li__voice__count {
+  position: relative;
+  bottom: 10px;
+}
+.user-head-line2__ul_li__favorite__count {
+  position: relative;
+  bottom: 10px;
+}
+.user-head-line2__ul_li__image__count {
+  position: relative;
+  bottom: 10px;
+}
+.user-head-line2__ul_li.day-work {
+  margin-left: 3em;
+}
+.user-head-line2__ul_li__day-work__status {
+  font-weight: bolder;
+  color: coral;
+}
+.user-head-line2 {
+  height: 30px;
+  font-weight: bold;
+  font-size: large;
+}
+/** STAFF HEAD END */
+
+.user-header .user-name-box {
+  color: slategrey;
+}
+.user-header .count-box {
+  padding-top: 6px;
+  /* color: white;
+background-color: #fb8c00; */
+  height: 30px;
+  border-radius: 32px;
+}
+.user-header span.header-diary:before {
+  content: ""; /*何も入れない*/
+  display: inline-block; /*忘れずに！*/
+  width: 20px; /*画像の幅*/
+  height: 20px; /*画像の高さ*/
+  background-image: url(/img/common/diary-icon.jpg);
+  background-size: contain;
+  vertical-align: middle;
+}
+.users-header span.header-users:before {
+  content: ""; /*何も入れない*/
+  display: inline-block; /*忘れずに！*/
+  width: 20px; /*画像の幅*/
+  height: 20px; /*画像の高さ*/
+  background-image: url(/img/common/users-icon.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: middle;
+}
+
+.user-header span.header-gallery:before {
+  content: ""; /*何も入れない*/
+  display: inline-block; /*忘れずに！*/
+  width: 20px; /*画像の幅*/
+  height: 20px; /*画像の高さ*/
+  background-image: url(/img/common/image-gallery-icon.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: middle;
+}
+#p-users-section .users-label span:before,
+#p-users-section .users-label span:after {
+  background-image: url(/img/common/users-icon.png);
+  background-repeat: no-repeat;
+  content: ""; /*何も入れない*/
+  display: inline-block; /*忘れずに！*/
+  width: 30px; /*画像の幅*/
+  height: 30px; /*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+.user-header span.header-working {
+  font-weight: bolder;
+  color: crimson;
+}
+
+/** STAFF HEAD END */
+
+.user-header .user-name-box {
+  color: slategrey;
+}
+.user-header .count-box {
+  padding-top: 6px;
+  /* color: white;
+background-color: #fb8c00; */
+  height: 30px;
+  border-radius: 32px;
+}
+.user-header span.header-diary:before {
+  content: ""; /*何も入れない*/
+  display: inline-block; /*忘れずに！*/
+  width: 20px; /*画像の幅*/
+  height: 20px; /*画像の高さ*/
+  background-image: url(/img/common/diary-icon.jpg);
+  background-size: contain;
+  vertical-align: middle;
+}
+.users-header span.header-users:before {
+  content: ""; /*何も入れない*/
+  display: inline-block; /*忘れずに！*/
+  width: 20px; /*画像の幅*/
+  height: 20px; /*画像の高さ*/
+  background-image: url(/img/common/users-icon.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: middle;
+}
+
+.user-header span.header-gallery:before {
+  content: ""; /*何も入れない*/
+  display: inline-block; /*忘れずに！*/
+  width: 20px; /*画像の幅*/
+  height: 20px; /*画像の高さ*/
+  background-image: url(/img/common/image-gallery-icon.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  vertical-align: middle;
+}
+#p-users-section .users-label span:before,
+#p-users-section .users-label span:after {
+  background-image: url(/img/common/users-icon.png);
+  background-repeat: no-repeat;
+  content: ""; /*何も入れない*/
+  display: inline-block; /*忘れずに！*/
+  width: 30px; /*画像の幅*/
+  height: 30px; /*画像の高さ*/
+  background-size: contain;
+  vertical-align: middle;
+}
+.user-header span.header-working {
+  font-weight: bolder;
+  color: crimson;
+}
+
+/* ユーザーページ END */
+
 /* テーブル系共通 START */
 table {
   width: 100%;
@@ -1639,6 +1839,9 @@ form .message-label {
   object-fit: cover;
 }
 #cast-main img {
+  object-fit: cover;
+}
+#user-main img {
   object-fit: cover;
 }
 /* 画像共通 END */
@@ -1845,6 +2048,13 @@ form .message-label {
 }
 
 @media only screen and (min-width: 600px) and (max-width: 992px) {
+  #user-main img {
+      height: 12em;
+      width: 12em;
+  }
+  .shop-menu .shop-menu-label {
+      font-size: initial;
+  }
   .my-gallery figure img {
       height: 160px;
       object-fit: cover;
@@ -1860,6 +2070,9 @@ form .message-label {
 }
 
 @media only screen and (min-width: 993px) {
+  .brand-logo.oki-brand-logo {
+      margin-left: 50px;
+  }
   .fixed-action-btn.share {
       display: none;
   }
@@ -1892,6 +2105,13 @@ form .message-label {
 
 @media only screen and (max-width: 601px) {
 
+  /* UESR */
+  .favorite-num {
+      font-size: x-small;
+  }
+  .voice-num {
+      font-size: x-small;
+  }
   .p-casts-section__list img.circle {
     height: 7em;
     width: 7em;
@@ -2044,7 +2264,10 @@ form .message-label {
 }
 
 @media only screen and (min-width: 450px) and (max-width: 602px) {
-
+  .brand-logo.oki-brand-logo {
+      margin-left: initial;
+      font-size: 1.7em;
+  }
   .search-result-card .card-image img.card-image-img {
       object-fit: cover;
   }
@@ -2393,7 +2616,7 @@ ul.marquee li {
 }
 @media (max-width: 1023px) {
   .swiper-container.main-swiper {
-      height: 50vw;
+      height: 60vw;
   }
   .swiper-container.swiper-container-coverflow {
       padding-top: 0;

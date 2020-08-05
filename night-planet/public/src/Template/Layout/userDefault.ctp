@@ -84,19 +84,16 @@
         height: auto;
     }
   </style>
-  <?php !empty($userInfo['main_image'])? $mainImage = $userInfo['image_path'].DS.$userInfo['main_image'] : $mainImage = PATH_ROOT['NO_IMAGE02']; ?>
-  <?php $id = $this->request->getSession()->read('Auth.User.id') ?>
-  <?php $role = $this->request->getSession()->read('Auth.User.role') ?>
 <body id="user-default">
   <ul id="slide-out" class="side-nav fixed">
     <li>
-      <div class="user-view">
+      <div class="user-view side-nav__user-view">
         <div class="background" style="background-color: orange;">
-          <!-- <img src="/img/common/area/top1.jpg"> -->
         </div>
-        <a href="#!user"><img class="circle" src="<?=$mainImage?>"></a>
-        <a href="#!name"><span class="white-text name"><?=!empty($this->request->getSession()->read('Auth.User.name'))?$this->request->getSession()->read('Auth.User.name'):"ゲストさん"?></span></a>
-        <a href="#!email"><span class="white-text email"><?=$this->request->getSession()->read('Auth.User.email')?></span></a>
+        <a href="#!user"><img class="circle" src="<?=$this->User->get_u_info('icon');?>"></a>
+        <a href="#!name"><span class="white-text name"><?=$this->User->get_u_info('name');?></span></a>
+        <a href="#!email"><span class="white-text email"><?=$this->User->get_u_info('email');?></span></a>
+        <a href="#!created"><span class="white-text created"><?=$this->User->get_u_info('created');?> に参加</span></a>
       </div>
     </li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
@@ -121,8 +118,13 @@
       <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
       <a href="<?= $is_area != AREA['okinawa']['path'] ? DS.$is_area : DS?>" class="brand-logo oki-brand-logo"><?= LT['001'] ?><?=!empty($is_area)?'<span class="area-logo"> '.AREA[$is_area]['label'].'</span>':"" ?></a>
       <ul class="right nav-right">
-        <li class="nav-search"><a data-target="modal-search" class="modal-trigger"><i id="search-puyon" class="puyon material-icons">search</i><span>検索する</span></a></li>
-        <li class="nav-account-login <?=true?' lock':' unlock'?>"><a data-target="modal-login" class="modal-trigger"><i class="material-icons"><?=true?'lock':'lock_open'?></i><span><?=true?' ログイン':' マイページ'?></span></a></li>
+        <li class="nav-search">
+          <a data-target="modal-search" class="modal-trigger">
+            <i id="search-puyon" class="puyon material-icons">search</i>
+            <span>検索する</span>
+          </a>
+        </li>
+        <?=$this->User->get_u_info('auth');?>
       </ul>
     </div>
   </nav>
@@ -130,7 +132,14 @@
   <?= $this->element('modal/searchModal'); ?>
   <!-- 検索モーダル END -->
   <!-- ログインモーダル START -->
-  <?= $this->element('modal/loginModal'); ?>
+  <?php 
+    // マイページは、ログインモーダルは表示させない
+    if ($this->request->prefix != PATH_ROOT['USER']) {
+  ?>
+    <?= $this->element('modal/loginModal'); ?>
+  <?php
+    }
+  ?>
   <!-- ログインモーダル END -->
   <!-- クーポンモーダル START -->
   <?= $this->element('modal/couponModal'); ?>

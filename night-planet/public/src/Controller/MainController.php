@@ -1,11 +1,8 @@
 <?php
 namespace App\Controller;
 
-use Cake\I18n\Time;
 use Cake\Event\Event;
 use Token\Util\Token;
-use Cake\Filesystem\Folder;
-use Cake\ORM\TableRegistry;
 use Cake\Mailer\MailerAwareTrait;
 
 /**
@@ -22,20 +19,12 @@ class MainController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users          = TableRegistry::get('users');
-        $this->Shops          = TableRegistry::get('shops');
-        $this->Coupons        = TableRegistry::get('coupons');
-        $this->Casts          = TableRegistry::get('casts');
-        $this->Jobs           = TableRegistry::get('jobs');
-        $this->Shop_infos     = TableRegistry::get('shop_infos');
-        $this->Diarys         = TableRegistry::get('diarys');
-        $this->MasterCodes    = TableRegistry::get("master_codes");
-        $this->NewPhotosRank  = TableRegistry::get('new_photos_rank');
-
     }
 
     public function beforeFilter(Event $event)
     {
+        parent::beforeFilter($event);
+
         // ユーザ認証後の初回のみ自動でモーダルを表示するパラメタをセットする
         if ($this->request->session()->check('auth_success')) {
             $is_login_modal_show = $this->request->session()->consume('auth_success');
@@ -46,8 +35,7 @@ class MainController extends AppController
                 }
             }
         }
-        parent::beforeFilter($event);
-        $this->viewBuilder()->layout('userDefault');
+
         // 常に現在エリアを取得
         $is_area = AREA['okinawa']['path'];
         // SEO対策
@@ -59,8 +47,6 @@ class MainController extends AppController
     public function top()
     {
         //$this->redirect("http://localhost:8080/api-googles/oauth2-callback");
-        $masterCodesFind = array('area','genre');
-        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, false);
 
         $shops_query = $this->Shops->find();
         $casts_query = $this->Casts->find();
@@ -119,7 +105,7 @@ class MainController extends AppController
         $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', null);
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
-        $this->set(compact('area', 'region', 'all_cnt', 'selectList', 'diarys'
+        $this->set(compact('area', 'region', 'all_cnt', 'diarys'
             , 'notices', 'new_photos', 'ig_data','is_naipura', 'adsenses', 'shop_ranking'));
     }
 

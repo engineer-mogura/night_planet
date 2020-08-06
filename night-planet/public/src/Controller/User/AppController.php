@@ -36,7 +36,7 @@ class AppController extends \App\Controller\AppController
             'loginAction' => ['controller' => 'Users','action' => 'login'],
             'unauthorizedRedirect' => ['controller' => 'Main','action' => 'top'],
             'loginRedirect' => ['controller' => 'Users','action' => 'mypage'],
-            'logoutRedirect' => ['controller' => 'Main','action' => 'top'],
+            // 'logoutRedirect' => ['controller' => 'Main','action' => 'top'],
             // コントローラーで isAuthorized を使用します
             'authorize' => ['Controller'],
             // 未認証の場合、直前のページに戻します
@@ -91,5 +91,32 @@ class AppController extends \App\Controller\AppController
         }
 
         return $rslt;
+    }
+
+   /**
+     * 認証後、Main,Areaコントローラでも認証情報を保持
+     * するクッキーを作成する
+     *
+     * @param Array $user
+     * @return Boolean $rslt
+     */
+    public function setAuthInfoCookie($user)
+    {
+        $values = [
+            'id' => $user['id'],
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'file_name' => $user['file_name']
+        ];
+        $values = json_encode($values);
+        $cookie = [
+            'value' => $values,
+            'path' => '/',
+            'httpOnly' => true,
+            'secure' => false,
+            'expire' => strtotime('+100 day')
+        ];
+
+        return $this->response->withCookie('_auth_info', $cookie);
     }
 }

@@ -107,6 +107,9 @@ class EntryController extends AppController
 
     public function signup()
     {
+        // レイアウト上書き
+        $this->viewBuilder()->layout('simpleDefault');
+
         // 登録ボタン押下時
         if ($this->request->is('post')) {
             // バリデーションは新規登録用を使う。

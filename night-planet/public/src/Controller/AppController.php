@@ -54,6 +54,5 @@ class AppController extends Controller
             $this->set('userInfo', $this->Util->getUserInfo($user));
         }
       }
-      //$this->Auth->allow(['login', 'display']);
     }
 }

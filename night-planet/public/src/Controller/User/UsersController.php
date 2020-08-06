@@ -37,7 +37,8 @@ class UsersController extends AppController
                 $user = $this->Users->get($user['id']);
                 // ユーザに関する情報をセット
                 $this->set('userInfo', $this->Util->getUserInfo($user));
-
+                // ユーザ情報をセット
+                $this->response = $this->setAuthInfoCookie($user);
                 // 常に現在エリアを取得
                 $is_area = AREA['okinawa']['path'];
                 // SEO対策
@@ -83,9 +84,9 @@ class UsersController extends AppController
         // $user = $this->Users->find('all')
         //     ->contain(['shops','diarys'])->where(['users.id'=>$id])->first();
 
-        // 非表示または論理削除している場合はログイン画面にリダイレクトする
+        // 非表示または論理削除している場合はトップ画面にリダイレクトする
         if (!$this->checkStatus($user)) {
-            return $this->redirect($this->Auth->logout());
+            return $this->redirect(PUBLIC_DOMAIN);
         }
         $this->set('next_view', 'mypage');
         $this->set(compact('user'));
@@ -104,9 +105,9 @@ class UsersController extends AppController
         $user = $this->Users->get($id);
         $this->set('next_view', 'profile');
 
-        // 非表示または論理削除している場合はログイン画面にリダイレクトする
+        // 非表示または論理削除している場合はトップ画面にリダイレクトする
         if (!$this->checkStatus($user)) {
-            return $this->redirect($this->Auth->logout());
+            return $this->redirect(PUBLIC_DOMAIN);
         }
         if ($this->request->is('ajax')) {
 
@@ -352,25 +353,9 @@ class UsersController extends AppController
         } else {
             $user = $this->Users->newEntity();
         }
-        // 認証後、Main,Areaコントローラでも認証情報を保持するため、
-        // クッキーを作成する
-        $values = [
-            'id' => $user['id'],
-            'name' => $user['name'],
-            'email' => $user['email'],
-            'file_name' => $user['file_name']
-        ];
-        $values = json_encode($values);
-        $cookie = [
-            'value' => $values,
-            'path' => '/',
-            'httpOnly' => true,
-            'secure' => false,
-            'expire' => strtotime('+100 day')
-        ];
 
-        $this->response = $this->response->withCookie('_auth_info', $cookie);
-
+        // // ユーザ情報をセット
+        // $this->response = $this->setAuthInfoCookie($user);
         // 認証完了セッションをセット※モーダルを自動表示するためのパラメタ
         $this->request->session()->write('first_login', 1);
         $this->redirect('user/users/mypage');
@@ -379,14 +364,14 @@ class UsersController extends AppController
     public function logout()
     {
         $auth = $this->request->session()->read('Auth.User');
-
         Log::info($this->Util->setAccessLog(
             $auth, $this->request->params['action']), 'access');
-
-        // レイアウトを使用しない
-        $this->viewBuilder()->autoLayout(false);
+        // ユーザ認証削除
+        $this->request->session()->destroy();
+        // ユーザクッキー削除
+        $this->response = $this->response->withExpiredCookie('_auth_info');
         $this->Flash->success(COMMON_M['LOGGED_OUT']);
-        return $this->redirect($this->Auth->logout());
+        return $this->redirect(PUBLIC_DOMAIN);
     }
 
     /**
@@ -484,9 +469,9 @@ class UsersController extends AppController
                 $user = $this->Users->find()
                     ->where(['email' => $user->email])->first();
 
-                // 非表示または論理削除している場合はログイン画面にリダイレクトする
+                // 非表示または論理削除している場合はトップ画面にリダイレクトする
                 if (!$this->checkStatus($user)) {
-                    return $this->redirect($this->Auth->logout());
+                    return $this->redirect(PUBLIC_DOMAIN);
                 }
 
                 $email = new Email('default');
@@ -686,7 +671,6 @@ class UsersController extends AppController
     {
 
         $this->viewBuilder()->layout('simpleDefault');
-        $this->Security->setConfig('blackHoleCallback', 'blackhole');
 
         // 登録ボタン押下時
         if ($this->request->is('post')) {

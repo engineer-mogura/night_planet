@@ -833,11 +833,6 @@ div.description {
 /** SHOP HEAD END */
 
 /** SHOP MENU START */
-
-.shop-menu .shop-menu-label {
-    font-family: fantasy;
-    font-size: xx-small;
-}
 nav ul a {
     padding: 0 5px;
 }
@@ -888,7 +883,8 @@ nav ul a {
     background-size: contain;
     vertical-align: middle;
 }
-.shop-menu .shop-menu-label.cast:before {
+.shop-menu .shop-menu-label.cast:before,
+.shop-menu .shop-menu-label.profile:before {
     content: ""; /*何も入れない*/
     display: inline-block; /*忘れずに！*/
     width: 30px; /*画像の幅*/
@@ -988,6 +984,33 @@ nav ul a {
     background-size: contain;
     vertical-align: middle;
 }
+.shop-menu .shop-menu-label.shop:before {
+    content: ""; /*何も入れない*/
+    display: inline-block; /*忘れずに！*/
+    width: 30px; /*画像の幅*/
+    height: 30px; /*画像の高さ*/
+    background-image: url(/img/common/shop-icon.png);
+    background-size: contain;
+    vertical-align: middle;
+}
+.shop-menu .shop-menu-label.menu:before {
+    content: ""; /*何も入れない*/
+    display: inline-block; /*忘れずに！*/
+    width: 30px; /*画像の幅*/
+    height: 30px; /*画像の高さ*/
+    background-image: url(/img/common/menu-icon.png);
+    background-size: contain;
+    vertical-align: middle;
+}
+.shop-menu .shop-menu-label.shop-gallery:before {
+    content: ""; /*何も入れない*/
+    display: inline-block; /*忘れずに！*/
+    width: 30px; /*画像の幅*/
+    height: 30px; /*画像の高さ*/
+    background-image: url(/img/common/image-gallery-icon.jpg);
+    background-size: contain;
+    vertical-align: middle;
+}
 /** SHOP MENU END */
 
 /** SECTION LABEL START */
@@ -996,7 +1019,17 @@ nav ul a {
 }
 #shop-menu-section .shop-menu-label span:before,
 #shop-menu-section .shop-menu-label span:after {
-    background-image: url(/img/common/shop-icon.png);
+    background-image: url(/img/common/menu-icon.png);
+    content: ""; /*何も入れない*/
+    display: inline-block; /*忘れずに！*/
+    width: 30px; /*画像の幅*/
+    height: 30px; /*画像の高さ*/
+    background-size: contain;
+    vertical-align: middle;
+}
+#shop-menu-section .favorite-label span:before,
+#shop-menu-section .favorite-label span:after {
+    background-image: url(/img/common/favorite-icon.png);
     content: ""; /*何も入れない*/
     display: inline-block; /*忘れずに！*/
     width: 30px; /*画像の幅*/

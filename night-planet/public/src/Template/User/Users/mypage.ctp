@@ -61,44 +61,39 @@
 			<!-- ユーザーメニュー START -->
 			<div id="shop-menu-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="shop-menu-label section-label"><span> <?=$this->User->get_fw_name(1);?>My メニュー </span></p>
+					<p class="shop-menu-label section-label"><span> MY MENU </span></p>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<?= in_array(SHOP_MENU_NAME['COUPON'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label coupon"></br>ﾏｲﾌﾟﾛﾌ</span>
-						<a class="waves-effect waves-light modal-trigger" href="/user/users/profile"></a>
+						<span class="shop-menu-label profile"></br>PROFILE</span>
+						<a class="waves-effect waves-light" href="/user/users/profile"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<?= in_array(SHOP_MENU_NAME['WORK_SCHEDULE'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label work-schedule"></br>口コミ</span>
-						<a class="waves-effect waves-light modal-trigger" href="#today-member-modal"></a>
+						<span class="shop-menu-label comment"></br>VOICE</span>
+						<a class="waves-effect waves-light" href="#comment-section"></a>
 					</div>
 				</div>
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="shop-menu-label section-label"><span> Myファボ </span></p>
+					<p class="favorite-label section-label"><span> MY FAVO </span></p>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<?= in_array(SHOP_MENU_NAME['EVENT'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label event"></br>お店</span>
-						<a class="waves-effect waves-light" href="#event-section"></a>
+						<span class="shop-menu-label shop"></br>SHOP</span>
+						<a class="waves-effect waves-light" href="#shop-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<?= preg_grep("/^".SHOP_MENU_NAME['STAFF']."/", $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label casts"></br>スタッフ</span>
+						<span class="shop-menu-label casts"></br>STAFF</span>
 						<a class="waves-effect waves-light" href="#p-casts-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<?= in_array(SHOP_MENU_NAME['DIARY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label diary"></br>ギャラリー</span>
-						<a class="waves-effect waves-light" href="#diary-section"></a>
+						<span class="shop-menu-label shop-gallery"></br>GALLERY</span>
+						<a class="waves-effect waves-light" href="#gallery-section"></a>
 					</div>
 				</div>
 			</div>

@@ -91,28 +91,28 @@
                 <div class="col s4 m3 l3">
                     <div class="white lighten-4 linkbox card-panel hoverable center-align">
                         <?= in_array(SHOP_MENU_NAME['DIARY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-                        <span class="shop-menu-label diary"></br>日記</span>
+                        <span class="shop-menu-label diary"></br>DIARY</span>
                         <a class="waves-effect waves-light" href="#diary-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
                     <div
                         class="<?=empty($cast->snss[0]['instagram'])? 'grey ':'white lighten-4 '?>linkbox card-panel hoverable center-align">
-                        <span class="shop-menu-label instagram"></br>instagram</span>
+                        <span class="shop-menu-label instagram"></br>INSTAGRAM</span>
                         <a class="waves-effect waves-light" href="#instagram-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
                     <div
                         class="<?=empty($cast->snss[0]['facebook'])? 'grey ':'white lighten-4 '?>linkbox card-panel hoverable center-align">
-                        <span class="shop-menu-label facebook"></br>Facebook</span>
+                        <span class="shop-menu-label facebook"></br>FACEBOOK</span>
                         <a class="waves-effect waves-light" href="#facebook-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
                     <div
                         class="<?=empty($cast->snss[0]['twitter'])? 'grey ':'white lighten-4 '?>linkbox card-panel hoverable center-align">
-                        <span class="shop-menu-label twitter"></br>Twitter</span>
+                        <span class="shop-menu-label twitter"></br>TWITTER</span>
                         <a class="waves-effect waves-light" href="#twitter-section"></a>
                     </div>
                 </div>

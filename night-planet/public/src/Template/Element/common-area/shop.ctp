@@ -70,49 +70,49 @@
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['COUPON'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label coupon"></br>クーポン</span>
+						<span class="shop-menu-label coupon"></br>COUPON</span>
 						<a class="waves-effect waves-light modal-trigger" href="#coupons-modal"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['WORK_SCHEDULE'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label work-schedule"></br>今日の出勤</span>
+						<span class="shop-menu-label work-schedule"></br>MEMBER</span>
 						<a class="waves-effect waves-light modal-trigger" href="#today-member-modal"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['EVENT'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label event"></br>お知らせ</span>
+						<span class="shop-menu-label event"></br>SHOP INFO</span>
 						<a class="waves-effect waves-light" href="#event-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= preg_grep("/^".SHOP_MENU_NAME['STAFF']."/", $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label casts"></br>スタッフ</span>
+						<span class="shop-menu-label casts"></br>STAFF</span>
 						<a class="waves-effect waves-light" href="#p-casts-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['DIARY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label diary"></br>日記</span>
+						<span class="shop-menu-label diary"></br>DIARY</span>
 						<a class="waves-effect waves-light" href="#diary-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['SHOP_GALLERY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label shop-gallery"></br>Shop Gallery</span>
+						<span class="shop-menu-label shop-gallery"></br>GALLERY</span>
 						<a class="waves-effect waves-light" href="#shop-gallery-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
 					<div
 						class="<?=empty($shop->snss[0]['instagram'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label instagram"></br>instagram</span>
+						<span class="shop-menu-label instagram"></br>INSTAGRAM</span>
 						<a class="waves-effect waves-light" href="#instagram-section"></a>
 					</div>
 				</div>
@@ -135,13 +135,13 @@
 				<div class="col s4 m4 l4">
 					<div
 						class="<?=empty($shop->snss[0]['twitter'])? 'grey ':'lighten-4 '?>linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label twitter"></br>Twitter</span>
+						<span class="shop-menu-label twitter"></br>TWITTER</span>
 						<a class="waves-effect waves-light" href="#twitter-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label comment"></br>口コミ</span>
+						<span class="shop-menu-label comment"></br>VOICE</span>
 						<a class="waves-effect waves-light" href="#comment-section"></a>
 					</div>
 				</div>
@@ -154,14 +154,14 @@
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['SYSTEM'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label system"></br>店舗情報</span>
+						<span class="shop-menu-label system"></br>SHOP INFO</span>
 						<a class="waves-effect waves-light" href="#shop-info-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l4">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<?= in_array(SHOP_MENU_NAME['RECRUIT'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-						<span class="shop-menu-label recruit"></br>リクルート</span>
+						<span class="shop-menu-label recruit"></br>RECRUIT</span>
 						<a class="waves-effect waves-light" href="#recruit-section"></a>
 					</div>
 				</div>
@@ -196,7 +196,7 @@
 			<!-- 日記 START -->
 			<div id="diary-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="diary-label section-label"><span> 日記 </span></p>
+					<p class="diary-label section-label"><span> DIARY </span></p>
 				</div>
 				<?php if (count($diarys) > 0): ?>
 				<ul class="collection z-depth-3">
@@ -363,7 +363,7 @@
 			<!-- お知らせ START -->
 			<div id="event-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="event-label section-label"><span> お知らせ </span></p>
+					<p class="event-label section-label"><span> SHOP INFO </span></p>
 				</div>
 				<?php if (count($shop->shop_infos) > 0): ?>
 					<div class="my-gallery col s12">
@@ -411,7 +411,7 @@
 			<!-- 店舗ギャラリー START -->
 			<div id="shop-gallery-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="shop-gallery-label section-label"><span> 店内ギャラリー </span></p>
+					<p class="shop-gallery-label section-label"><span> GALLERY </span></p>
 				</div>
 				<?= count($shop->gallery) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
 				<div class="my-gallery" style="display:inline-block;">
@@ -431,7 +431,7 @@
 			<!-- 口コミ START -->
 			<div id="comment-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="comment-label section-label"><span> 口コミ </span></p>
+					<p class="comment-label section-label"><span> VOICE </span></p>
 				</div>
 				<p class="col">口コミはありません。</p>
 			</div>
@@ -447,7 +447,7 @@
 			<!-- 求人情報 START -->
 			<div id="recruit-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="recruit-label section-label"><span> リクルート </span></p>
+					<p class="recruit-label section-label"><span> RECRUIT </span></p>
 				</div>
 				<div class="col s12 m12 l12">
 					<table class="bordered shop-table z-depth-2" border="1">

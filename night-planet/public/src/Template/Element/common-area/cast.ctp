@@ -72,24 +72,24 @@
             <!-- スタッフメニュー START -->
             <div id="shop-menu-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="shop-menu-label section-label"><span> CAST MENU </span></p>
+                    <p class="shop-menu-label section-label"><span> STAFF MENU </span></p>
                 </div>
                 <div class="col s4 m3 l3">
-                    <div class="pink lighten-4 linkbox card-panel hoverable center-align">
+                    <div class="white lighten-4 linkbox card-panel hoverable center-align">
                         <?= in_array(SHOP_MENU_NAME['PROFILE'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-                        <span class="shop-menu-label cast"></br>プロフ</span>
+                        <span class="shop-menu-label cast"></br>PFOFILE</span>
                         <a class="waves-effect waves-light" href="#cast-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
-                    <div class="pink lighten-4 linkbox card-panel hoverable center-align">
+                    <div class="white lighten-4 linkbox card-panel hoverable center-align">
                         <?= in_array(SHOP_MENU_NAME['WORK'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-                        <span class="shop-menu-label work-schedule"></br>出勤予定</span>
+                        <span class="shop-menu-label work-schedule"></br>TODAY WORK</span>
                         <a class="waves-effect waves-light" href="#!"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
-                    <div class="pink lighten-4 linkbox card-panel hoverable center-align">
+                    <div class="white lighten-4 linkbox card-panel hoverable center-align">
                         <?= in_array(SHOP_MENU_NAME['DIARY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
                         <span class="shop-menu-label diary"></br>日記</span>
                         <a class="waves-effect waves-light" href="#diary-section"></a>
@@ -97,43 +97,43 @@
                 </div>
                 <div class="col s4 m3 l3">
                     <div
-                        class="<?=empty($cast->snss[0]['instagram'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
+                        class="<?=empty($cast->snss[0]['instagram'])? 'grey ':'white lighten-4 '?>linkbox card-panel hoverable center-align">
                         <span class="shop-menu-label instagram"></br>instagram</span>
                         <a class="waves-effect waves-light" href="#instagram-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
                     <div
-                        class="<?=empty($cast->snss[0]['facebook'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
+                        class="<?=empty($cast->snss[0]['facebook'])? 'grey ':'white lighten-4 '?>linkbox card-panel hoverable center-align">
                         <span class="shop-menu-label facebook"></br>Facebook</span>
                         <a class="waves-effect waves-light" href="#facebook-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
                     <div
-                        class="<?=empty($cast->snss[0]['twitter'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
+                        class="<?=empty($cast->snss[0]['twitter'])? 'grey ':'white lighten-4 '?>linkbox card-panel hoverable center-align">
                         <span class="shop-menu-label twitter"></br>Twitter</span>
                         <a class="waves-effect waves-light" href="#twitter-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
                     <div
-                        class="<?=empty($cast->snss[0]['line'])? 'grey ':'pink lighten-4 '?>linkbox card-panel hoverable center-align">
+                        class="<?=empty($cast->snss[0]['line'])? 'grey ':'white lighten-4 '?>linkbox card-panel hoverable center-align">
                         <span class="shop-menu-label line"></br>LINE</span>
                         <a class="waves-effect waves-light" href="#line-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
-                    <div class="pink lighten-4 linkbox card-panel hoverable center-align">
+                    <div class="white lighten-4 linkbox card-panel hoverable center-align">
                         <?= in_array(SHOP_MENU_NAME['CAST'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-                        <span class="shop-menu-label casts"></br>スタッフ</span>
+                        <span class="shop-menu-label casts"></br>STAFF</span>
                         <a class="waves-effect waves-light" href="#p-casts-section"></a>
                     </div>
                 </div>
                 <div class="col s4 m3 l3">
-                    <div class="pink lighten-4 linkbox card-panel hoverable center-align">
+                    <div class="white lighten-4 linkbox card-panel hoverable center-align">
                         <?= in_array(SHOP_MENU_NAME['CAST_GALLERY'], $update_icon) ? '<div class="new-info"></div>' : ''?>
-                        <span class="shop-menu-label shop-gallery"></br>Gallery</span>
+                        <span class="shop-menu-label shop-gallery"></br>GALLERY</span>
                         <a class="waves-effect waves-light" href="#cast-gallery-section"></a>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
             <!-- プロフィール START -->
             <div id="cast-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="cast-profile-label section-label"><span> プロフィール </span></p>
+                    <p class="cast-profile-label section-label"><span> PROFILE </span></p>
                 </div>
                 <div class="col s12 m12 l12">
                     <table class="bordered shop-table z-depth-2" border="1">
@@ -171,7 +171,7 @@
             <!-- スタッフギャラリー START -->
             <div id="cast-gallery-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="cast-gallery-label section-label"><span> ギャラリー </span></p>
+                    <p class="cast-gallery-label section-label"><span> GALLERY </span></p>
                 </div>
                 <?= count($cast->gallery) == 0 ? '<p class="col">まだ投稿がありません。</p>': ""; ?>
                 <div class="my-gallery" style="display:inline-block;">
@@ -206,7 +206,7 @@
             <!-- 日記 START -->
             <div id="diary-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="diary-label section-label"><span> 日記 </span></p>
+                    <p class="diary-label section-label"><span> DIARY </span></p>
                 </div>
                 <?php if (count($cast->diarys) > 0): ?>
                 <div class="my-gallery" style="display:inline-block;">
@@ -244,7 +244,7 @@
             <?php if(!empty($cast->snss[0]['instagram'])): ?>
             <div id="instagram-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="instagram-label section-label"><span> instagram </span></p>
+                    <p class="instagram-label section-label"><span> INSTAGRAM </span></p>
                 </div>
                 <?php if(!empty($ig_error)):
                   echo('<p class="col">'.$ig_error.'</p>');
@@ -263,7 +263,7 @@
             <?php if(!empty($cast->snss[0]['facebook'])): ?>
             <div id="facebook-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="facebook-label section-label"><span> facebook </span></p>
+                    <p class="facebook-label section-label"><span> FACEBOOK </span></p>
                 </div>
                 <div id="fb-root"></div>
                 <script async defer crossorigin="anonymous"
@@ -282,7 +282,7 @@
             <?php if(!empty($cast->snss[0]['twitter'])): ?>
             <div id="twitter-section" class="row shop-menu section scrollspy">
                 <div class="light-blue accent-2 card-panel col s12 center-align">
-                    <p class="twitter-label section-label"><span> twitter </span></p>
+                    <p class="twitter-label section-label"><span> TWITTER </span></p>
                 </div>
                 <div class="twitter-box col">
                     <a class="twitter-timeline"

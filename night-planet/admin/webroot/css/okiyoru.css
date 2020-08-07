@@ -555,11 +555,17 @@ form .warning-message {
 /* ランキング END */
 
 /* トップページ画面 START */
+.area-section {
+  font-family: fantasy;
+}
 .area-section li i {
   color: mediumslateblue;
 }
 .area-section .secondary-content i {
   color: crimson;
+}
+.genre-section {
+  font-family: fantasy;
 }
 .genre-section li i {
   color: gold;
@@ -726,6 +732,9 @@ ul.tabs > li.tab-original.tab > .active {
 .linkbox__card-content {
   position: relative;
 }
+#search-result {
+  font-family: fantasy;
+}
 #search-result .linkbox.search-result-card {
   width: 100%;
   padding-left: 0px;
@@ -740,6 +749,7 @@ ul.tabs > li.tab-original.tab > .active {
   margin-top: 7px;
 }
 .search-word {
+  font-family: fantasy;
   border-radius: 15px;
   padding: 3px 8px;
   margin: 5px;
@@ -799,16 +809,19 @@ div.description {
   right: 10px;
 }
 .shop-head-line1__ul_li__voice__count {
+  font-family: fantasy;
   position: relative;
   right: 25px;
   bottom: 10px;
 }
 .shop-head-line1__ul_li__favorite__count {
+  font-family: fantasy;
   position: relative;
   right: 25px;
   bottom: 10px;
 }
 .shop-head-line1__ul_li__image__count {
+  font-family: fantasy;
   position: relative;
   bottom: 10px;
 }
@@ -822,6 +835,7 @@ div.description {
 /** SHOP MENU START */
 
 .shop-menu .shop-menu-label {
+  font-family: fantasy;
   font-size: xx-small;
 }
 nav ul a {
@@ -1257,6 +1271,7 @@ background-color: red;
 }
 
 p.section-label {
+  font-family: fantasy;
   right: 5%;
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
@@ -1359,16 +1374,19 @@ span.icon-vertical-align {
   margin-left: 1em;
 }
 .cast-head-line1__ul_li__voice__count {
+  font-family: fantasy;
   position: relative;
   right: 25px;
   bottom: 10px;
 }
 .cast-head-line1__ul_li__favorite__count {
+  font-family: fantasy;
   position: relative;
   right: 25px;
   bottom: 10px;
 }
 .cast-head-line1__ul_li__image__count {
+  font-family: fantasy;
   position: relative;
   bottom: 10px;
 }

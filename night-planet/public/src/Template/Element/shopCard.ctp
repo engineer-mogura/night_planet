@@ -5,11 +5,11 @@
 		<?php $genre = empty($this->request->query('genre'))? "指定なし": GENRE[$this->request->query('genre')]['label']; ?>
 		<!-- パンくずからのジャンルの場合 -->
 		<?php if(isset($shops)): ?>
-			<span class="header"><?=h($area_genre['area']['label'].'の'.$area_genre['genre']['label'].'　'.count($shops).'件')?></span>
+			<span class="header"><?=h($area_genre['area']['label'].'の'.$area_genre['genre']['label'].'　'.count($shops).' 件')?></span>
 		<?php $search = $shops; ?>
 		<!-- UNKNOWからの場合 -->
 		<?php elseif(isset($unknow)): ?>
-			<span class="header"><?=h($area.'の'.$genre.'　'.count($search).'件')?></span>
+			<span class="header"><?=h($area.'の'.$genre.'　'.count($search).' 件')?></span>
 		<?php else: ?>
 			<div class="search-word white-text left header brown darken-1"><?=h("店舗の検索結果 ".count($search)." 件")?></div>
 			<div class="search-word white-text left header red darken-1"><?=h("キーワード「".$key_word."」")?></div>

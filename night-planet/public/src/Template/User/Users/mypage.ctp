@@ -59,19 +59,19 @@
 			<?= $this->element('info-marquee'); ?>
 			<!-- 更新情報 END -->
 			<!-- ユーザーメニュー START -->
-			<div id="shop-menu-section" class="row shop-menu section scrollspy">
+			<div id="menu-section" class="row shop-menu section scrollspy">
 				<div class="light-blue accent-2 card-panel col s12 center-align">
-					<p class="shop-menu-label section-label"><span> MY MENU </span></p>
+					<p class="user-menu-section section-label"><span> MY MENU </span></p>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label profile"></br>PROFILE</span>
+						<span class="menu-section profile"></br>PROFILE</span>
 						<a class="waves-effect waves-light" href="/user/users/profile"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label comment"></br>VOICE</span>
+						<span class="menu-section comment"></br>VOICE</span>
 						<a class="waves-effect waves-light" href="#comment-section"></a>
 					</div>
 				</div>
@@ -80,19 +80,19 @@
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label shop"></br>SHOP</span>
+						<span class="menu-section shop"></br>SHOP</span>
 						<a class="waves-effect waves-light" href="#shop-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label casts"></br>STAFF</span>
+						<span class="menu-section casts"></br>STAFF</span>
 						<a class="waves-effect waves-light" href="#p-casts-section"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
-						<span class="shop-menu-label shop-gallery"></br>GALLERY</span>
+						<span class="menu-section shop-gallery"></br>GALLERY</span>
 						<a class="waves-effect waves-light" href="#gallery-section"></a>
 					</div>
 				</div>

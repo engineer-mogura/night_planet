@@ -1,5 +1,7 @@
 html {
-  font-family: GillSans, Calibri, Trebuchet, sans-serif;
+  /* font-family: GillSans, Calibri, Trebuchet, sans-serif; */
+  font-family: 'Lato', 'Noto Sans JP', 'ヒラギノ角ゴ ProN', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, 'ＭＳ Ｐゴシック', 'MS PGothic', sans-serif;
+
   color: #595958;
 }
 html,
@@ -10,7 +12,10 @@ body {
   width: 94.5%;
 }
 .side-nav__user-view {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
+}
+.side-nav__user-view__img {
+  object-fit: cover;
 }
 .entry.container {
   padding: initial;
@@ -71,7 +76,7 @@ span.logo-head-color {
   font-size: larger;
 }
 .brand-logo.oki-brand-logo {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
 }
 span.area-logo {
   font-size: 1.5rem;
@@ -196,28 +201,35 @@ nav {
   color: #fff;
   background-color: #3e3e3e;
 }
+ul.right.nav-right {
+  position: absolute;
+  right: 0;
+}
 ul.right.nav-right li {
   margin-right: 0.5em;
   width: 4em;
   text-align: center;
 }
+ul.right.nav-right li:nth-child(2) {
+  width: 4.3em;
+}
 ul.right.nav-right li span {
   display: block;
-  position: absolute;
+  position: relative;
   font-size: xx-small;
-  top: 20px;
+  bottom: 4.2em;
 }
 ul.right.nav-right li.nav-search span {
 
 }
 ul.right.nav-right li.nav-search a {
-  color: aquamarine;
+  color: #ffa8e4;
 }
 ul.right.nav-right li.nav-account-login span {
 
 }
 ul.right.nav-right li.nav-account-login.unlock a {
-  color: #fbff00;
+  color: #89d9ff;
 }
 /* ヘッダー固定 END */
 /* ボトムナビゲーション START */
@@ -556,7 +568,7 @@ form .warning-message {
 
 /* トップページ画面 START */
 .area-section {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
 }
 .area-section li i {
   color: mediumslateblue;
@@ -565,7 +577,7 @@ form .warning-message {
   color: crimson;
 }
 .genre-section {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
 }
 .genre-section li i {
   color: gold;
@@ -733,7 +745,7 @@ ul.tabs > li.tab-original.tab > .active {
   position: relative;
 }
 #search-result {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
 }
 #search-result .linkbox.search-result-card {
   width: 100%;
@@ -749,7 +761,7 @@ ul.tabs > li.tab-original.tab > .active {
   margin-top: 7px;
 }
 .search-word {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
   border-radius: 15px;
   padding: 3px 8px;
   margin: 5px;
@@ -809,19 +821,19 @@ div.description {
   right: 10px;
 }
 .shop-head-line1__ul_li__voice__count {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
   position: relative;
   right: 25px;
   bottom: 10px;
 }
 .shop-head-line1__ul_li__favorite__count {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
   position: relative;
   right: 25px;
   bottom: 10px;
 }
 .shop-head-line1__ul_li__image__count {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
   position: relative;
   bottom: 10px;
 }
@@ -846,7 +858,10 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.coupon:before {
+.menu-section {
+  font-size: x-small;
+}
+.shop-menu .menu-section.coupon:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -855,7 +870,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.casts:before {
+.shop-menu .menu-section.casts:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -865,7 +880,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.work-schedule:before {
+.shop-menu .menu-section.work-schedule:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -874,7 +889,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.event:before {
+.shop-menu .menu-section.event:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -883,8 +898,8 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.cast:before,
-.shop-menu .shop-menu-label.profile:before {
+.shop-menu .menu-section.cast:before,
+.shop-menu .menu-section.profile:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -893,7 +908,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.instagram:before {
+.shop-menu .menu-section.instagram:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -902,7 +917,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.facebook:before {
+.shop-menu .menu-section.facebook:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -911,7 +926,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.twitter:before {
+.shop-menu .menu-section.twitter:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -920,7 +935,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.line:before {
+.shop-menu .menu-section.line:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -929,7 +944,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.diary:before {
+.shop-menu .menu-section.diary:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -938,7 +953,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.shop-gallery:before {
+.shop-menu .menu-section.shop-gallery:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -948,7 +963,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.comment:before {
+.shop-menu .menu-section.comment:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -957,7 +972,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.map:before {
+.shop-menu .menu-section.map:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -966,7 +981,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.recruit:before {
+.shop-menu .menu-section.recruit:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -975,7 +990,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.system:before {
+.shop-menu .menu-section.system:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -984,7 +999,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.shop:before {
+.shop-menu .menu-section.shop:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -993,7 +1008,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.menu:before {
+.shop-menu .menu-section.menu:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -1002,7 +1017,7 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-.shop-menu .shop-menu-label.shop-gallery:before {
+.shop-menu .menu-section.shop-gallery:before {
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
   width: 30px; /*画像の幅*/
@@ -1017,8 +1032,12 @@ nav ul a {
 #instagram-section {
   margin-bottom: initial;
 }
-#shop-menu-section .shop-menu-label span:before,
-#shop-menu-section .shop-menu-label span:after {
+#menu-section .shop-menu-section span:before,
+#menu-section .shop-menu-section span:after,
+#menu-section .staff-menu-section span:before,
+#menu-section .staff-menu-section span:after,
+#menu-section .user-menu-section span:before,
+#menu-section .user-menu-section span:after {
   background-image: url(/img/common/menu-icon.png);
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
@@ -1027,8 +1046,8 @@ nav ul a {
   background-size: contain;
   vertical-align: middle;
 }
-#shop-menu-section .favorite-label span:before,
-#shop-menu-section .favorite-label span:after {
+#menu-section .favorite-label span:before,
+#menu-section .favorite-label span:after {
   background-image: url(/img/common/favorite-icon.png);
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
@@ -1304,7 +1323,7 @@ background-color: red;
 }
 
 p.section-label {
-  font-family: fantasy;
+  font-family:;
   right: 5%;
   content: ""; /*何も入れない*/
   display: inline-block; /*忘れずに！*/
@@ -1407,19 +1426,19 @@ span.icon-vertical-align {
   margin-left: 1em;
 }
 .cast-head-line1__ul_li__voice__count {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
   position: relative;
   right: 25px;
   bottom: 10px;
 }
 .cast-head-line1__ul_li__favorite__count {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
   position: relative;
   right: 25px;
   bottom: 10px;
 }
 .cast-head-line1__ul_li__image__count {
-  font-family: fantasy;
+  /*font-family: fantasy;*/
   position: relative;
   bottom: 10px;
 }
@@ -1522,7 +1541,7 @@ background-color: #fb8c00; */
 .user-head-line1__ul_li {
   float: left;
   margin-left: 2em;
-  font-family: fantasy;
+  /*font-family: fantasy;*/
 }
 .user-head-line2 {
   height: 50px;
@@ -1549,7 +1568,7 @@ background-color: #fb8c00; */
 .user-head-line2__ul {
   position: absolute;
   left: 1.5em;
-  font-family: fantasy;
+  /*font-family: fantasy;*/
 }
 .user-head-line2__ul_li.user-icon {
   position: absolute;
@@ -2103,7 +2122,7 @@ form .message-label {
       height: 12em;
       width: 12em;
   }
-  .shop-menu .shop-menu-label {
+  .shop-menu .menu-section {
       font-size: initial;
   }
   .my-gallery figure img {

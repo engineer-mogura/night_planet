@@ -60,6 +60,8 @@
   <link href='/PhotoSwipe-master/dist/default-skin/default-skin.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href='/PhotoSwipe-master/dist/photoswipe.css' rel='stylesheet' /> <!-- PhotoSwipe 4.1.3 -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Noto+Sans+JP:400,700" rel="stylesheet">
+
 
   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/pace.min.js"></script>--><!-- 画面ローディング -->
   <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.0.2/themes/red/pace-theme-center-circle.min.css" />--><!-- 画面ローディング -->
@@ -90,7 +92,7 @@
       <div class="user-view side-nav__user-view">
         <div class="background" style="background-color: orange;">
         </div>
-        <a href="#!user"><img class="circle" src="<?=$this->User->get_u_info('icon');?>"></a>
+        <a href="#!user"><img class="circle side-nav__user-view__img" src="<?=$this->User->get_u_info('icon');?>"></a>
         <a href="#!name"><span class="white-text name"><?=$this->User->get_u_info('name');?></span></a>
         <a href="#!email"><span class="white-text email"><?=$this->User->get_u_info('email');?></span></a>
         <a href="#!created"><span class="white-text created"><?=$this->User->get_u_info('created');?> に参加</span></a>

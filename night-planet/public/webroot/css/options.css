@@ -1,26 +1,26 @@
 /** オプション メニュー色 START **/
-#shop-menu-section.option-menu-color-white .linkbox {
+#menu-section.option-menu-color-white .linkbox {
   background-color: #ffffff !important;
 }
-#shop-menu-section.option-menu-color-pink .linkbox {
+#menu-section.option-menu-color-pink .linkbox {
   background-color: #f8bbd0 !important;
 }
-#shop-menu-section.option-menu-color-yellow .linkbox {
+#menu-section.option-menu-color-yellow .linkbox {
   background-color: #fffe00 !important;
 }
-#shop-menu-section.option-menu-color-perple .linkbox {
+#menu-section.option-menu-color-perple .linkbox {
   background-color: #df47ff !important;
 }
-#shop-menu-section.option-menu-color-green .linkbox {
+#menu-section.option-menu-color-green .linkbox {
   background-color: #8eff9f !important;
 }
-#shop-menu-section.option-menu-color-blue .linkbox {
+#menu-section.option-menu-color-blue .linkbox {
   background-color: #388bff !important;
 }
-#shop-menu-section.option-menu-color-red .linkbox {
+#menu-section.option-menu-color-red .linkbox {
   background-color: #ff4372 !important;
 }
-#shop-menu-section .grey.linkbox {
+#menu-section .grey.linkbox {
   background-color: #9F9F9F !important;
 }
 

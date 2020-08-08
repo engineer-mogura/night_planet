@@ -8,7 +8,7 @@
 		<div class="col s12 m12 l8">
 			<?= $this->element('info-marquee'); ?>
 			<div class="row count-section">
-				<div id="shop-menu-section" class="shop-menu">
+				<div id="menu-section" class="shop-menu">
 					<div class="white card-panel col s6 center-align">
 						<p class="shop-count section-label"><span>　店舗 ( <?=$all_cnt['shops'];?> )</span></p>
 					</div>

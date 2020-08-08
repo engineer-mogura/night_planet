@@ -1,9 +1,9 @@
 <div id="wrapper">
-    <div class="container">
+    <div id="user" class="container">
         <div class="row">
             <?= $this->element('nav-breadcrumb'); ?>
             <?= $this->Flash->render() ?>
-            <div class="col s12 m4 l4">
+            <div id="user-main" class="col s12 m4 l4">
                 <form id="save-image" name="save_image" method="post" accept-charset="utf-8" enctype="multipart/form-data" action="/user/users/profile">
                     <div style="display:none;">
                         <input type="hidden" name="action_type" value="image">

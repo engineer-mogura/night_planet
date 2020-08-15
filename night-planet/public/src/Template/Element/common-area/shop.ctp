@@ -11,18 +11,14 @@
 						<ul class="shop-head-line1__ul">
 							<li class="shop-head-line1__ul_li">
 								<div class="shop-head-line1__ul_li__favorite">
-									<a class="btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
-										<i class="material-icons">favorite</i>
-									</a>
+									<?=$this->User->get_favo_html('header', $shop->registry_alias, $shop['id'])?>
 									<i class="favorite-add material-icons">add</i>
 									<span class="shop-head-line1__ul_li__favorite__count">0</span>
 								</div>
 							</li>
 							<li class="shop-head-line1__ul_li">
 								<div class="shop-head-line1__ul_li__voice">
-									<a class="btn-floating btn waves-effect waves-light red modal-trigger" data-target="modal-login">
-										<i class="material-icons">comment</i>
-									</a>
+									<?=$this->User->get_comment_html('shop', $shop->registry_alias, $shop['id'])?>
 									<i class="voice-add material-icons">add</i>
 									<span class="shop-head-line1__ul_li__voice__count">0</span>
 								</div>
@@ -175,9 +171,7 @@
 				<?php if(count($shop->casts) > 0): ?>
 				<?php foreach($shop->casts as $cast): ?>
 				<div class="p-casts-section__list center-align col s3 m3 l3">
-					<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
-						<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
-					</a>
+					<?=$this->User->get_favo_html('staff_list', $cast->registry_alias, $cast['id'])?>
 					<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
 						<img src="<?=$cast->icon?>" alt="<?=$cast->nickname?>" class="p-casts-section__list_img_circle circle">
 					</a>

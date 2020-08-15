@@ -8,7 +8,6 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $shop_info_id
- * @property int $shop_id
  * @property int $user_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
@@ -30,7 +29,6 @@ class ShopInfoLike extends Entity
      */
     protected $_accessible = [
         'shop_info_id' => true,
-        'shop_id' => true,
         'user_id' => true,
         'created' => true,
         'modified' => true,

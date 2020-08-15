@@ -58,7 +58,6 @@ class JobsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
-
         $validator->setProvider('custom', 'App\Model\Validation\CustomValidation');
 
         $validator
@@ -85,7 +84,7 @@ class JobsTable extends Table
 
         $validator
             ->scalar('work_time_hosoku')
-            ->maxLength('work_time_hosoku', 50,"時間についての補足は50文字以内にしてください。")
+            ->maxLength('work_time_hosoku', 50, "時間についての補足は50文字以内にしてください。")
             ->allowEmptyString('work_time_hosoku');
 
         $validator
@@ -99,7 +98,7 @@ class JobsTable extends Table
                     return false;
                 }
                 return true;
-            },['下の年齢を入力する際は、上の年齢も入力して下さい']);
+            }, ['下の年齢を入力する際は、上の年齢も入力して下さい']);
 
         $validator
             ->scalar('to_age')
@@ -112,12 +111,12 @@ class JobsTable extends Table
                     return false;
                 }
                 return true;
-            },['上の年齢を入力する際は、下の年齢も入力して下さい'])
-            ->greaterThanField('to_age', 'from_age','年齢の範囲が不正です。');
+            }, ['上の年齢を入力する際は、下の年齢も入力して下さい'])
+            ->greaterThanField('to_age', 'from_age', '年齢の範囲が不正です。');
 
         $validator
             ->scalar('qualification_hosoku')
-            ->maxLength('qualification_hosoku', 50,'資格についての補足は50文字以内にしてください。')
+            ->maxLength('qualification_hosoku', 50, '資格についての補足は50文字以内にしてください。')
             ->allowEmptyString('qualification_hosoku');
 
         $validator
@@ -127,7 +126,7 @@ class JobsTable extends Table
 
         $validator
             ->scalar('holiday_hosoku')
-            ->maxLength('holiday_hosoku', 50,'休日についての補足は50文字以内にしてください。')
+            ->maxLength('holiday_hosoku', 50, '休日についての補足は50文字以内にしてください。')
             ->allowEmptyString('holiday_hosoku');
 
         $validator
@@ -137,15 +136,15 @@ class JobsTable extends Table
 
         $validator
             ->scalar('pr')
-            ->maxLength('pr', 400,'PR文は400文字以内にしてください。')
+            ->maxLength('pr', 400, 'PR文は400文字以内にしてください。')
             ->allowEmptyString('pr');
 
         $validator
             ->scalar('tel1')
-            ->maxLength('tel1', 15,"電話番号１は長いです。")
+            ->maxLength('tel1', 15, "電話番号１は長いです。")
             ->allowEmptyString('tel1')
             ////電話番号形式のチェック ////
-            ->add('tel1', 'tel_check',[
+            ->add('tel1', 'tel_check', [
                 'rule' =>'tel_check',
                 'provider' => 'custom',
                 'message' => '電話番号１は無効な電話番号です。'
@@ -153,22 +152,22 @@ class JobsTable extends Table
 
         $validator
             ->scalar('tel2')
-            ->maxLength('tel2', 15,"電話番号２は長いです。")
+            ->maxLength('tel2', 15, "電話番号２は長いです。")
             ->allowEmptyString('tel2')
             ////電話番号形式のチェック ////
-            ->add('tel2', 'tel_check',[
+            ->add('tel2', 'tel_check', [
                 'rule' =>'tel_check',
                 'provider' => 'custom',
                 'message' => '電話番号２は無効な電話番号です。'
             ]);
 
         $validator
-            ->email('email',false, "メールアドレスの形式が不正です。")
+            ->email('email', false, "メールアドレスの形式が不正です。")
             ->allowEmpty('email');
 
         $validator
             ->scalar('lineid')
-            ->maxLength('lineid', 20,"電話番号１は長いです。")
+            ->maxLength('lineid', 20, "電話番号１は長いです。")
             ->maxLength('lineid', 20)
             ->allowEmptyString('lineid');
 
@@ -190,7 +189,7 @@ class JobsTable extends Table
     }
 
     /**
-     * リクエストデータがエンティティーに変換される前に呼ばれる処理。 
+     * リクエストデータがエンティティーに変換される前に呼ばれる処理。
      * 主にリクエストデータに変換を掛けたり、バリデーションを条件次第で事前に解除したりできる。
      * @param Event $event
      * @param ArrayObject $data
@@ -201,7 +200,7 @@ class JobsTable extends Table
     {
         // 休日は、csv形式に変換
         if (isset($data['holiday'])) {
-            $data['holiday'] = implode (",", $data['holiday']);
+            $data['holiday'] = implode(",", $data['holiday']);
         }
         // tel1は、ハイフン削除
         if (isset($data['tel1'])) {
@@ -223,6 +222,5 @@ class JobsTable extends Table
         if ($this->Jobs->find()->where($conditions)->count()) {
             $this->Jobs->validator('default')->offsetUnset('email');
         };
-
     }
 }

@@ -7,23 +7,23 @@ use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
 /**
- * DiaryLikes Model
+ * CastLikes Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $Diaries
+ * @property \App\Model\Table\CastsTable|\Cake\ORM\Association\BelongsTo $Casts
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  *
- * @method \App\Model\Entity\DiaryLike get($primaryKey, $options = [])
- * @method \App\Model\Entity\DiaryLike newEntity($data = null, array $options = [])
- * @method \App\Model\Entity\DiaryLike[] newEntities(array $data, array $options = [])
- * @method \App\Model\Entity\DiaryLike|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\DiaryLike saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
- * @method \App\Model\Entity\DiaryLike patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
- * @method \App\Model\Entity\DiaryLike[] patchEntities($entities, array $data, array $options = [])
- * @method \App\Model\Entity\DiaryLike findOrCreate($search, callable $callback = null, $options = [])
+ * @method \App\Model\Entity\CastLike get($primaryKey, $options = [])
+ * @method \App\Model\Entity\CastLike newEntity($data = null, array $options = [])
+ * @method \App\Model\Entity\CastLike[] newEntities(array $data, array $options = [])
+ * @method \App\Model\Entity\CastLike|bool save(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\CastLike saveOrFail(\Cake\Datasource\EntityInterface $entity, $options = [])
+ * @method \App\Model\Entity\CastLike patchEntity(\Cake\Datasource\EntityInterface $entity, array $data, array $options = [])
+ * @method \App\Model\Entity\CastLike[] patchEntities($entities, array $data, array $options = [])
+ * @method \App\Model\Entity\CastLike findOrCreate($search, callable $callback = null, $options = [])
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class DiaryLikesTable extends Table
+class CastLikesTable extends Table
 {
     /**
      * Initialize method
@@ -35,20 +35,26 @@ class DiaryLikesTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('diary_likes');
+        $this->setTable('cast_likes');
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Diaries', [
-            'foreignKey' => 'diary_id',
+        $this->belongsTo('casts', [
+            'foreignKey' => 'cast_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Users', [
+        $this->belongsTo('users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER'
+            'joinType' => 'LEFT'
         ]);
+        $this->hasOne('is_like', [
+            'className' => 'cast_likes',
+            'foreignKey' => 'cast_id',
+            'bindingKey' => 'user_id',
+            'joinType' => 'INNER'
+          ]);
     }
 
     /**
@@ -75,7 +81,7 @@ class DiaryLikesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['diary_id'], 'Diaries'));
+        $rules->add($rules->existsIn(['cast_id'], 'Casts'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;

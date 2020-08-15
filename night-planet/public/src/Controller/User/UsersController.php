@@ -259,6 +259,54 @@ class UsersController extends AppController
     }
 
     /**
+     * お気に入りボタン押下処理
+     *
+     * @return void
+     */
+    public function favoriteClick()
+    {
+        // AJAXのアクセス以外は不正とみなす。
+        if (!$this->request->is('ajax')) {
+            throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
+        }
+        $flg = true; // 返却フラグ
+        $message = ""; // 返却メッセージ
+        $this->confReturnJson(); // responceがjsonタイプの場合の共通設定
+        $auth = $this->request->session()->read('Auth.User');
+        $id = $auth['id']; // ユーザーID
+
+        try {
+            // スタッフ
+            if ($this->request->getData('alias') == 'casts') {
+                if ($this->request->getData('status') == 1) {
+                    $entity = $this->CastLikes->newEntity($this->request->getData());
+                    // レコード更新実行
+                    if (!$this->CastLikes->save($entity)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                } else {
+                    $entity = $this->CastLikes->get($this->request->getData('id'));
+                    // レコード削除実行
+                    if (!$this->CastLikes->delete($entity)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                }
+            }
+
+        } catch(RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
+            $message = RESULT_M['CHANGE_FAILED'];
+            $flg = false;
+        }
+
+        $response = array(
+            'success' => $flg,
+            'message' => $message
+        );
+        $this->response->body(json_encode($response));
+    }
+
+    /**
      * ギャラリー 画面表示処理
      *
      * @return void
@@ -284,22 +332,6 @@ class UsersController extends AppController
         }
 
         $this->set(compact('gallery'));
-        $this->render();
-    }
-
-    /**
-     * 日記 画面表示処理
-     *
-     * @return void
-     */
-    public function diary()
-    {
-        $id = $this->request->getSession()->read('Auth.User.id');
-
-        $diarys = $this->Util->getDiarys($id
-            , $this->viewVars['userInfo']['diary_path']);
-
-        $this->set(compact('diarys'));
         $this->render();
     }
 
@@ -350,15 +382,18 @@ class UsersController extends AppController
                 $this->set('user', $user);
                 return $this->redirect(PUBLIC_DOMAIN);
             }
+            // // ユーザ情報をセット
+            // $this->response = $this->setAuthInfoCookie($user);
+            // 認証完了セッションをセット※モーダルを自動表示するためのパラメタ
+            $this->request->session()->write('first_login', 1);
+            $this->redirect('user/users/mypage');
         } else {
             $user = $this->Users->newEntity();
         }
-
-        // // ユーザ情報をセット
-        // $this->response = $this->setAuthInfoCookie($user);
-        // 認証完了セッションをセット※モーダルを自動表示するためのパラメタ
-        $this->request->session()->write('first_login', 1);
-        $this->redirect('user/users/mypage');
+        // TODO: ログアウト後の戻るボタンでmypage→loginで遷移される
+        // リダイレクトループを回避するため、無条件でトップへリダイレクトする
+        $this->set('user', $user);
+        return $this->redirect(PUBLIC_DOMAIN);
     }
 
     public function logout()
@@ -611,7 +646,7 @@ class UsersController extends AppController
     {
         $auth = $this->request->session()->read('Auth.User');
         $id = $auth['id']; // ユーザーID
-        $new_pass = "";
+
         if ($this->request->is('post')) {
 
             $isValidate = false; // エラー有無

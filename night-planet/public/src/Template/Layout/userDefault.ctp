@@ -92,10 +92,12 @@
       <div class="user-view side-nav__user-view">
         <div class="background" style="background-color: orange;">
         </div>
-        <a href="#!user"><img class="circle side-nav__user-view__img" src="<?=$this->User->get_u_info('icon');?>"></a>
-        <a href="#!name"><span class="white-text name"><?=$this->User->get_u_info('name');?></span></a>
-        <a href="#!email"><span class="white-text email"><?=$this->User->get_u_info('email');?></span></a>
-        <a href="#!created"><span class="white-text created"><?=$this->User->get_u_info('created');?> に参加</span></a>
+        <img class="circle side-nav__user-view__img" src="<?=$this->User->get_u_info('icon');?>">
+        <span class="white-text name"><?=$this->User->get_u_info('name');?></span></a>
+        <?php if ($this->User->get_u_info('is_auth')) { ?>
+          <span class="white-text email"><?=$this->User->get_u_info('email');?></span>
+          <span class="white-text created"><?=$this->User->get_u_info('created');?> に参加</span>
+        <?php } ?>
       </div>
     </li>
     <li><a class="waves-effect" href="#!"><i class="material-icons">info_outline</i><?= USER_LM['001'] ?></a></li>
@@ -126,7 +128,7 @@
             <span>検索する</span>
           </a>
         </li>
-        <?=$this->User->get_u_info('auth');?>
+        <?=$this->User->get_login_html();?>
       </ul>
     </div>
   </nav>

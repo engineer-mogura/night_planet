@@ -62,6 +62,9 @@ class CastsTable extends Table
         $this->hasMany('updates', [
             'foreignKey' => 'cast_id'
         ]);
+        $this->hasMany('cast_likes', [
+            'foreignKey' => 'cast_id'
+        ]);
     }
 
     /**

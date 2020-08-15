@@ -8,7 +8,7 @@
 		<div class="col s12 m12 l8">
 			<?= $this->element('info-marquee'); ?>
 			<div class="row count-section">
-				<div id="menu-section" class="shop-menu">
+				<div id="shop-menu-section" class="shop-menu">
 					<div class="white card-panel col s6 center-align">
 						<p class="shop-count section-label"><span>　店舗 ( <?=$all_cnt['shops'];?> )</span></p>
 					</div>
@@ -45,9 +45,7 @@
 										.' '.$value->shop['name']?></span><br>
 										<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
-									<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
-										<i class="material-icons">favorite</i>
-									</a>
+									<?=$this->User->get_favo_html('new_info', $value->registry_alias, $value['id'])?>
 									<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->shop->id."?area=".$value->shop->area."&genre=".$value->shop->genre
 										."&name=".$value->shop->name."&shop_infos=".$value->id ?>">
 									</a>
@@ -71,9 +69,7 @@
 										.' '.$value->cast->shop['name']?></span><br>
 										<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
-									<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
-										<i class="material-icons">favorite</i>
-									</a>
+									<?=$this->User->get_favo_html('new_info', $value->registry_alias, $value['id'])?>
 									<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
 									"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
 								</li>

@@ -65,15 +65,15 @@ class ShopInfosTable extends Table
 
         $validator
             ->scalar('title')
-            ->maxLength('title', 50,'タイトルが長すぎます。')
-            ->notEmpty('title','タイトルを入力してください。')
+            ->maxLength('title', 50, 'タイトルが長すぎます。')
+            ->notEmpty('title', 'タイトルを入力してください。')
             ->requirePresence('title', 'create')
             ->allowEmptyString('title', false);
 
         $validator
             ->scalar('content')
-            ->maxLength('content', 600,'内容が長すぎます。')
-            ->notEmpty('content','内容を入力してください。')
+            ->maxLength('content', 600, '内容が長すぎます。')
+            ->notEmpty('content', '内容を入力してください。')
             ->requirePresence('content', 'create')
             ->allowEmptyString('content', false);
 

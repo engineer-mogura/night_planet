@@ -64,12 +64,12 @@ class Owner extends Entity
         //'remember_token',  // 自動ログイン用トークン TODO: リリース前にコメントインする
     ];
 
-  protected function _setPassword($value){
-      if (strlen($value)) {
-          $hasher = new DefaultPasswordHasher();
+    protected function _setPassword($value)
+    {
+        if (strlen($value)) {
+            $hasher = new DefaultPasswordHasher();
 
-          return $hasher->hash($value);
-      }
-  }
-
+            return $hasher->hash($value);
+        }
+    }
 }

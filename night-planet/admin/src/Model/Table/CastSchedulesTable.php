@@ -7,6 +7,7 @@ use Cake\I18n\Time;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\Validation\Validator;
+
 /**
  * CastSchedules Model
  *
@@ -130,7 +131,7 @@ class CastSchedulesTable extends Table
     }
 
     /**
-     * リクエストデータがエンティティーに変換される前に呼ばれる処理。 
+     * リクエストデータがエンティティーに変換される前に呼ばれる処理。
      * 主にリクエストデータに変換を掛けたり、バリデーションを条件次第で事前に解除したりできる。
      * @param Event $event
      * @param ArrayObject $data
@@ -149,6 +150,5 @@ class CastSchedulesTable extends Table
             $data['end'] = new Time($data['end']);
             $data['end'] = $data['end']->i18nFormat('YYYY-MM-dd HH:mm:ss');
         }
-
     }
 }

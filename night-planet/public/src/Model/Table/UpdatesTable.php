@@ -44,7 +44,7 @@ class UpdatesTable extends Table
         $this->belongsTo('shops', [
             'foreignKey' => 'shop_id'
         ]);
-        $this->belongsTo('casts', [
+        $this->belongsToMany('casts', [
             'foreignKey' => 'cast_id'
         ]);
     }

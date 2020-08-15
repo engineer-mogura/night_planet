@@ -4,18 +4,19 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Tag Entity
+ * CastLike Entity
  *
  * @property int $id
- * @property string|null $title
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property int $cast_id
+ * @property int $user_id
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  *
- * @property \App\Model\Entity\Article[] $articles
+ * @property \App\Model\Entity\Cast $cast
+ * @property \App\Model\Entity\User $user
  */
-class Tag extends Entity
+class CastLike extends Entity
 {
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -26,9 +27,11 @@ class Tag extends Entity
      * @var array
      */
     protected $_accessible = [
-        'title' => true,
+        'cast_id' => true,
+        'user_id' => true,
         'created' => true,
         'modified' => true,
-        'articles' => true
+        'cast' => true,
+        'user' => true
     ];
 }

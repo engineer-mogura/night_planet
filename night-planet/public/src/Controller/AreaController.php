@@ -573,52 +573,88 @@ class AreaController extends AppController
 
     public function cast($id = null)
     {
-        // スタッフ情報、最新の日記情報とイイネの総数取得
-        $cast = $this->Casts->find("all")
-            ->where(['casts.id' => $id,
-                'casts.status = 1 AND casts.delete_flag = 0'])
-            ->contain(['shops' => function (Query $q) {
-                return $q
-                        ->where(['shops.id is not' => $id,
-                            'shops.status = 1 AND shops.delete_flag = 0']);
-            }, 'diarys' => function (Query $q) {
-                return $q
-                    ->order(['diarys.created'=>'DESC']);
-            }
-                , 'diarys.diary_likes','Snss'
-            ])->first();
+
+        $shop_id = $this->Casts->find('all', ['fields'=>['shop_id']])
+                    ->where(['id' => $id, 'status = 1 AND delete_flag = 0'])
+                    ->first()->shop_id;
 
         // 店舗が非表示または論理削除している場合はリダイレクトする
-        if (empty($cast)) {
+        if (empty($shop_id)) {
             $url = explode(DS, $this->request->url);
             return $this->redirect(
                 ['controller' => 'Unknow', 'action' => 'cast',
                         '?'=> array('area'=>$url[0])]
             );
         }
+        /**
+         * 店舗スタッフ一覧とお気に入り数ユーザーのお気に入り状況を取得する
+         */
+        $shop = $this->Shops->find("all")
+            ->where(['shops.id' => $shop_id,
+                'shops.status = 1 AND shops.delete_flag = 0'])
+            ->contain(['casts' => function (Query $q) use ($id) {
+                    return $q
+                        ->where(['casts.status = 1 AND casts.delete_flag = 0'])
+                        ->order(['id = '.$id.' desc', 'rand()']);
+                }, 'casts.cast_likes' => function (Query $q) {
+                    return $q
+                        ->select(['cast_likes.id','cast_likes.cast_id','cast_likes.user_id'
+                            , 'total' => $q->func()->count('cast_likes.cast_id')])
+                        ->group('cast_id')
+                        ->where(['cast_likes.cast_id'])
+                        ->order(['cast_id' => $id]);
+                }, 'casts.cast_likes.users' => function (Query $q) {
+                    return $q
+                        ->select(['is_like' => $q->func()->count('users.id')])
+                        ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+                // 更新情報の最新は特に必要ない？
+                /*, 'casts.updates' => function (Query $q) {
+                    return $q
+                        ->select(['updates.cast_id', 'modified' => $q->func()->max('updates.modified')])
+                        ->group('updates.cast_id')
+                        ->order(['modified' => 'desc']);*/
+                }, 'casts.diarys' => function (Query $q) {
+                    return $q
+                        ->order(['diarys.created'=>'DESC']);
+                }, 'casts.diarys.diary_likes' => function (Query $q) {
+                    return $q
+                        ->where(['diary_likes.user_id' => $this->viewVars['userInfo']['id']]);
+                },'Snss'
+            ])->first();
 
-        // その他のスタッフを取得する
-        $other_casts = $this->Casts->find("all")
-            ->where(['casts.shop_id' => $cast->shop_id,
-                'casts.id is not' => $id,
-                'casts.status = 1 AND casts.delete_flag = 0'
-            ])
-            ->order(['created'=>'DESC'])
-            ->toArray();
+        // 店舗情報
+        $shopInfo = $this->Util->getShopInfo($shop);
 
-        // 本日のスタッフの出勤有無を取得する
+        // スタッフのアイコンを設定する
+        foreach ($shop->casts as $key => $cast) {
+            $path = $shopInfo['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'];
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$path), true, 0755);
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if (count($files) > 0) {
+                foreach ($files as $file) {
+                    $cast->set('icon', $path.DS.(basename($file)));
+                }
+            } else {
+                // 共通アイコンをセット
+                $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
+            }
+        }
+
+        // メインスタッフの出勤有無を取得する
         $end_date = date("Y-m-d H:i:s");
         $start_date = date("Y-m-d H:i:s", strtotime($end_date . "-24 hour"));
         $range = "'".$start_date."' and '".$end_date."'";
 
         $isWorkDay = $this->WorkSchedules->find('all')
-                ->where(['shop_id'=>$cast->shop_id
+                ->where(['shop_id'=>$shop->id
                     , "modified BETWEEN".$range
-                    , 'FIND_IN_SET(\''. $cast->id .'\', cast_ids)'])
+                    , 'FIND_IN_SET(\''. $shop->casts[0]->id .'\', cast_ids)'])
                 ->count();
 
-        // スタッフ情報取得
-        $castInfo = $this->Util->getCastItem($cast, $cast->shop);
+        // メインスタッフ情報取得
+        $castInfo = $this->Util->getCastItem($shop->casts[0], $shop);
 
         // トップ画像を設定する
         $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$castInfo['top_image_path']), true, 0755);
@@ -628,29 +664,14 @@ class AreaController extends AppController
         // ファイルが存在したら、画像をセット
         if (count($files) > 0) {
             foreach ($files as $file) {
-                $cast->set('top_image', $castInfo['top_image_path'].DS.(basename($file)));
+                $shop->casts[0]->set('top_image', $castInfo['top_image_path'].DS.(basename($file)));
             }
         } else {
             // 共通トップ画像をセット
-            $cast->set('top_image', PATH_ROOT['CAST_TOP_IMAGE']);
-        }
-        // アイコンを設定する
-        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$castInfo['profile_path']), true, 0755);
-
-        $files = array();
-        $files = glob($dir->path.DS.'*.*');
-        // ファイルが存在したら、画像をセット
-        if (count($files) > 0) {
-            foreach ($files as $file) {
-                $cast->set('icon', $castInfo['profile_path'].DS.(basename($file)));
-            }
-        } else {
-            // 共通トップ画像をセット
-            $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
+            $shop->casts[0]->set('top_image', PATH_ROOT['CAST_TOP_IMAGE']);
         }
 
-        // ギャラリーリストを作成
-        // ディクレトリ取得
+        // メインスタッフのギャラリーリストを作成
         $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$castInfo['image_path']), true, 0755);
         $gallery = array();
 
@@ -664,14 +685,15 @@ class AreaController extends AppController
                 "file_path"=>$castInfo['image_path'].DS.(basename($file))
                 ,"date"=>$timestamp));
         }
-        $cast->set('gallery', $gallery);
+        $shop->casts[0]->set('gallery', $gallery);
 
         // 日記が１つでもある場合
-        if (count($cast->diarys) > 0) {
+        if (count($shop->casts[0]->diarys) > 0) {
 
             // 日記のギャラリーリストを作成
-            // ディクレトリ取得
-            $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$castInfo['diary_path'].$cast->diarys[0]->dir), true, 0755);
+            $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                , WWW_ROOT.$castInfo['diary_path'].$shop->casts[0]->diarys[0]->dir), true, 0755);
+
             $gallery = array();
             /// 並び替えして出力
             $files = array();
@@ -680,49 +702,16 @@ class AreaController extends AppController
             foreach ($files as $file) {
                 $timestamp = date('Y/m/d H:i', filemtime($file));
                 array_push($gallery, array(
-                    "file_path"=>$castInfo['diary_path'].$cast->diarys[0]->dir.DS.(basename($file))
+                    "file_path"=>$castInfo['diary_path'].$shop->casts[0]->diarys[0]->dir.DS.(basename($file))
                     ,"date"=>$timestamp));
             }
-            $cast->diarys[0]->set('gallery', $gallery);
-        }
-
-        $shopInfo = $this->Util->getShopInfo($cast->shop);
-
-        // その他スタッフのアイコンを設定する
-        foreach ($other_casts as $key => $otherCast) {
-            $path = $shopInfo['cast_path'].DS.$otherCast->dir.DS.PATH_ROOT['PROFILE'];
-            $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$path), true, 0755);
-            $files = array();
-            $files = glob($dir->path.DS.'*.*');
-            // ファイルが存在したら、画像をセット
-            if (count($files) > 0) {
-                foreach ($files as $file) {
-                    $otherCast->set('icon', $path.DS.(basename($file)));
-                }
-            } else {
-                // 共通トップ画像をセット
-                $otherCast->set('icon', PATH_ROOT['NO_IMAGE02']);
-            }
-        }
-        // 店舗のトップ画像を設定する
-        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$shopInfo['top_image_path']), true, 0755);
-
-        $files = array();
-        $files = glob($dir->path.DS.'*.*');
-        // ファイルが存在したら、画像をセット
-        if (count($files) > 0) {
-            foreach ($files as $file) {
-                $cast->shop->set('top_image', $shopInfo['top_image_path'].DS.(basename($file)));
-            }
-        } else {
-            // 共通トップ画像をセット
-            $cast->shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+            $shop->casts[0]->diarys[0]->set('gallery', $gallery);
         }
 
         $ig_data = null; // Instagramデータ
         // Instagramアカウントが入力されていればインスタデータを取得する
-        if (!empty($cast->snss[0]->instagram)) {
-            $insta_user_name = $cast->snss[0]->instagram;
+        if (!empty($shop->casts[0]->snss[0]->instagram)) {
+            $insta_user_name = $shop->casts[0]->snss[0]->instagram;
             // インスタのキャッシュパス
             $cache_path = preg_replace(
                 '/(\/\/)/',
@@ -735,7 +724,7 @@ class AreaController extends AppController
             if (!$tmp_ig_data) {
                 $this->log('【'.AREA[$shop->area]['label']
                     .GENRE[$shop->genre]['label'].$shop->name
-                    .'】のインスタグラムのデータ取得に失敗しました。', 'error');
+                    .' '.$shop->casts[0]->name.'】のインスタグラムのデータ取得に失敗しました。', 'error');
                 $this->Flash->warning('インスタグラムのデータ取得に失敗しました。');
             }
             $ig_data = $tmp_ig_data->business_discovery;
@@ -747,7 +736,7 @@ class AreaController extends AppController
             }
         }
         $this->set('next_view', PATH_ROOT['CAST']);
-        $this->set(compact('cast', 'isWorkDay', 'ig_data', 'other_casts', 'shopInfo', 'castInfo'));
+        $this->set(compact('shop', 'isWorkDay', 'ig_data', 'shopInfo', 'castInfo'));
         $this->render();
     }
 

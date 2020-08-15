@@ -56,6 +56,9 @@ class ShopsTable extends Table
         $this->hasMany('casts', [
             'foreignKey' => 'shop_id'
         ]);
+        $this->hasMany('casts.cast_likes', [
+            'foreignKey' => 'cast_id'
+        ]);
         $this->hasMany('coupons', [
             'foreignKey' => 'shop_id'
         ]);

@@ -2,20 +2,30 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Token\Model\Entity\TokenTrait;
 use Cake\Auth\DefaultPasswordHasher;
 
 /**
- * Developer Entity
+ * User Entity
  *
  * @property int $id
+ * @property string $name
+ * @property string $role
  * @property string $email
  * @property string $password
+ * @property string|null $file_name
+ * @property string|null $remember_token
+ * @property int $status
+ * @property int $delete_flag
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
+ *
+ * @property \App\Model\Entity\DiaryLike[] $diary_likes
+ * @property \App\Model\Entity\ShopInfoLike[] $shop_info_likes
  */
-class Developer extends Entity
+class User extends Entity
 {
-
+    use TokenTrait;
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -26,10 +36,19 @@ class Developer extends Entity
      * @var array
      */
     protected $_accessible = [
+        'name' => true,
+        'role' => true,
         'email' => true,
         'password' => true,
+        'gender' => true,
+        'file_name' => true,
+        'remember_token' => true,
+        'status' => true,
+        'delete_flag' => true,
         'created' => true,
-        'modified' => true
+        'modified' => true,
+        'diary_likes' => true,
+        'shop_info_likes' => true
     ];
 
     /**
@@ -38,8 +57,9 @@ class Developer extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password'
-    ];
+        'password',
+        //'remember_token',  // 自動ログイン用トークン TODO: リリース前にコメントインする
+        ];
 
     protected function _setPassword($value)
     {

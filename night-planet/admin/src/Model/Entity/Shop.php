@@ -94,4 +94,15 @@ class Shop extends Entity
         return $this->_properties['pref21'] .
             $this->_properties['addr21'] . $this->_properties['strt21'];
     }
+
+    /**
+     * テーブル名を返却する
+     *
+     *
+     * @return void
+     */
+    protected function _getRegistryAlias()
+    {
+        return $this->_registryAlias;
+    }
 }

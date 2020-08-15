@@ -40,7 +40,11 @@ class ShopOptionsTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Shops', [
+        $this->belongsTo('shops', [
+            'foreignKey' => 'shop_id',
+            'joinType' => 'INNER'
+        ]);
+        $this->hasMany('shop_options', [
             'foreignKey' => 'shop_id',
             'joinType' => 'INNER'
         ]);
@@ -75,7 +79,7 @@ class ShopOptionsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['shop_id'], 'Shops'));
+        $rules->add($rules->existsIn(['shop_id'], 'shops'));
 
         return $rules;
     }

@@ -90,4 +90,15 @@ class Cast extends Entity
             return $hasher->hash($value);
         }
     }
+
+    /**
+     * テーブル名を返却する
+     *
+     *
+     * @return void
+     */
+    protected function _getRegistryAlias()
+    {
+        return $this->_registryAlias;
+    }
 }

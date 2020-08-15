@@ -33,7 +33,7 @@ class NewPhotosRankTable extends Table
         parent::initialize($config);
 
         $this->setTable('new_photos_rank');
-        $this->setDisplayField('name');
+        $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');

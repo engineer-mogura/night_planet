@@ -9,8 +9,7 @@ use Cake\Validation\Validator;
 /**
  * DiaryLikes Model
  *
- * @property \App\Model\Table\DiariesTable|\Cake\ORM\Association\BelongsTo $Diaries
- * @property \App\Model\Table\CastsTable|\Cake\ORM\Association\BelongsTo $Casts
+ * @property |\Cake\ORM\Association\BelongsTo $Diaries
  * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
  *
  * @method \App\Model\Entity\DiaryLike get($primaryKey, $options = [])
@@ -42,12 +41,8 @@ class DiaryLikesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('diaries', [
+        $this->belongsTo('Diaries', [
             'foreignKey' => 'diary_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->belongsTo('casts', [
-            'foreignKey' => 'cast_id',
             'joinType' => 'INNER'
         ]);
         $this->belongsTo('Users', [
@@ -81,7 +76,6 @@ class DiaryLikesTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['diary_id'], 'Diaries'));
-        $rules->add($rules->existsIn(['cast_id'], 'Casts'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;

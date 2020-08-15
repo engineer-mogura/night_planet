@@ -25,12 +25,14 @@ class AppController extends Controller
         $this->Users         = TableRegistry::get('users');
         $this->Casts         = TableRegistry::get('casts');
         $this->Coupons       = TableRegistry::get('coupons');
-        $this->DiaryLikes    = TableRegistry::get('diary_likes');
         $this->Diarys        = TableRegistry::get('diarys');
         $this->Jobs          = TableRegistry::get('jobs');
         $this->MasterCodes   = TableRegistry::get("master_codes");
         $this->NewPhotosRank = TableRegistry::get('new_photos_rank');
+        $this->ShopLikes     = TableRegistry::get('shop_likes');
+        $this->CastLikes     = TableRegistry::get('cast_likes');
         $this->ShopInfoLikes = TableRegistry::get('shop_info_likes');
+        $this->DiaryLikes    = TableRegistry::get('diary_likes');
         $this->ShopInfos     = TableRegistry::get("shop_infos");
         $this->ShopOptions   = TableRegistry::get("shop_options");
         $this->Shop_infos    = TableRegistry::get('shop_infos');

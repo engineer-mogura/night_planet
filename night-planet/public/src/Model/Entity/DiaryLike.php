@@ -8,7 +8,6 @@ use Cake\ORM\Entity;
  *
  * @property int $id
  * @property int $diary_id
- * @property int $cast_id
  * @property int $user_id
  * @property \Cake\I18n\FrozenTime $created
  * @property \Cake\I18n\FrozenTime $modified
@@ -30,7 +29,6 @@ class DiaryLike extends Entity
      */
     protected $_accessible = [
         'diary_id' => true,
-        'cast_id' => true,
         'user_id' => true,
         'created' => true,
         'modified' => true,

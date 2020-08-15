@@ -4,6 +4,7 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 use Token\Model\Entity\TokenTrait;
 use Cake\Auth\DefaultPasswordHasher;
+
 /**
  * Cast Entity
  *
@@ -81,11 +82,23 @@ class Cast extends Entity
         //'remember_token',  // 自動ログイン用トークン TODO: リリース前にコメントインする
         ];
 
-    protected function _setPassword($value){
+    protected function _setPassword($value)
+    {
         if (strlen($value)) {
             $hasher = new DefaultPasswordHasher();
 
             return $hasher->hash($value);
         }
+    }
+
+    /**
+     * テーブル名を返却する
+     *
+     *
+     * @return void
+     */
+    protected function _getRegistryAlias()
+    {
+        return $this->_registryAlias;
     }
 }

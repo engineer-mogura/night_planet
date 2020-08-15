@@ -9,9 +9,8 @@ use Cake\Validation\Validator;
 /**
  * ShopInfoLikes Model
  *
- * @property \App\Model\Table\ShopInfosTable|\Cake\ORM\Association\BelongsTo $ShopInfos
- * @property \App\Model\Table\ShopsTable|\Cake\ORM\Association\BelongsTo $Shops
- * @property \App\Model\Table\UsersTable|\Cake\ORM\Association\BelongsTo $Users
+ * @property |\Cake\ORM\Association\BelongsTo $ShopInfos
+ * @property |\Cake\ORM\Association\BelongsTo $Users
  *
  * @method \App\Model\Entity\ShopInfoLike get($primaryKey, $options = [])
  * @method \App\Model\Entity\ShopInfoLike newEntity($data = null, array $options = [])
@@ -42,15 +41,11 @@ class ShopInfoLikesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('shop_infos', [
+        $this->belongsTo('ShopInfos', [
             'foreignKey' => 'shop_info_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('shops', [
-            'foreignKey' => 'shop_id',
-            'joinType' => 'INNER'
-        ]);
-        $this->belongsTo('users', [
+        $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
@@ -80,9 +75,8 @@ class ShopInfoLikesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['shop_info_id'], 'shop_infos'));
-        $rules->add($rules->existsIn(['shop_id'], 'shops'));
-        $rules->add($rules->existsIn(['user_id'], 'users'));
+        $rules->add($rules->existsIn(['shop_info_id'], 'ShopInfos'));
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
     }

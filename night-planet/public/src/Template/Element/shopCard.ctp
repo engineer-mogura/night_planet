@@ -44,12 +44,8 @@
 							<?php endif; ?>
 						</h1>
 						<div class="card-content linkbox__card-content">
-							<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
-								<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>
-							</a>
+							<?=$this->User->get_favo_html('search', $rows->registry_alias, $rows['id'])?>
 							<span class="card-tag white-text red"><?= $rows['name']?></span>
-
-
 							<p class="gray-text text-darken-2"><?= $rows['catch']?></p>
 							<span class="card-tag white-text orange darken-1">
 								<?=GENRE[$rows['genre']]['label']?>

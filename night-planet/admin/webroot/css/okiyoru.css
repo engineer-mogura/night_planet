@@ -204,20 +204,24 @@ nav {
 ul.right.nav-right {
   position: absolute;
   right: 0;
+  height: 100%;
 }
 ul.right.nav-right li {
   margin-right: 0.5em;
   width: 4em;
   text-align: center;
+  height: 100%;
 }
 ul.right.nav-right li:nth-child(2) {
   width: 4.3em;
+  height: 100%;
 }
 ul.right.nav-right li span {
   display: block;
-  position: relative;
+  position: absolute;
   font-size: xx-small;
-  bottom: 4.2em;
+  top: 2em;
+  height: 50%;
 }
 ul.right.nav-right li.nav-search span {
 
@@ -630,7 +634,11 @@ ul.tabs > li.tab-original.tab > .active {
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-
+.tabs-new-info__ul_li__favorite__count {
+  position: absolute;
+  right: 50px;
+  top: 0px;
+}
 /* トップページ画面 END */
 
 /* unknow画面 START */
@@ -813,12 +821,12 @@ div.description {
 .favorite-add {
   position: relative;
   top: 20px;
-  right: 10px;
+  right: 7px;
 }
 .voice-add {
   position: relative;
   top: 20px;
-  right: 10px;
+  right: 7px;
 }
 .shop-head-line1__ul_li__voice__count {
   /*font-family: fantasy;*/
@@ -1408,12 +1416,12 @@ span.icon-vertical-align {
 .favorite-add {
   position: relative;
   top: 20px;
-  right: 10px;
+  right: 7px;
 }
 .voice-add {
   position: relative;
   top: 20px;
-  right: 10px;
+  right: 7px;
 }
 .cast-head-line1__ul {
   position: absolute;
@@ -1428,19 +1436,19 @@ span.icon-vertical-align {
 .cast-head-line1__ul_li__voice__count {
   /*font-family: fantasy;*/
   position: relative;
-  right: 25px;
-  bottom: 10px;
+  right: 23px;
+  bottom: 7px;
 }
 .cast-head-line1__ul_li__favorite__count {
   /*font-family: fantasy;*/
   position: relative;
-  right: 25px;
-  bottom: 10px;
+  right: 23px;
+  bottom: 7px;
 }
 .cast-head-line1__ul_li__image__count {
   /*font-family: fantasy;*/
   position: relative;
-  bottom: 10px;
+  bottom: 7px;
 }
 .cast-head-line1__ul_li.day-work {
   margin-left: 3em;
@@ -1873,6 +1881,10 @@ li.eventlist {
 #modal-notice .fixed-action-btn.modal-more-horiz > a {
   top: 15px;
 }
+.modal-footer__a-favorite__count {
+  position: absolute;
+  left: 50px;
+}
 /* モーダル日記 お知らせ END */
 
 /* カラー共通 START */
@@ -1917,6 +1929,15 @@ form .message-label {
 /* 画像共通 END */
 
 /* 共通 START */
+.casts-section__list__favorite__count {
+  position: absolute;
+  right: 3px;
+  top: -17px;
+}
+.search-result__like-count {
+  position: relative;
+  bottom: 20px;
+}
 
 /* 共通 END */
 
@@ -2191,9 +2212,9 @@ form .message-label {
       height: 2em;
   }
   .p-casts-section__list__favorite .p-casts-section__list__favorite__icon {
-      font-size: 1em;
+      font-size: 1.5em;
       position: relative;
-      bottom: 0.3em;
+      bottom: 0.25em;
   }
   .linkbox__card-content > .p-casts-section__list__favorite {
       position: absolute;
@@ -2206,6 +2227,11 @@ form .message-label {
       font-size: 1.7em;
       position: relative;
       top: 0.1em;
+  }
+  .search-result__like-count {
+      position: relative;
+      bottom: 20px;
+      left: 50px;
   }
 }
 

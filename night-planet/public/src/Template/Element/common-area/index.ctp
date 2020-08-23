@@ -26,22 +26,22 @@
 			</div>
 			<div class="row section tabs-section1">
 				<ul id="tabs-new-info" class="tabs tabs-fixed-width">
-                    <li class="tab-original tab col s6"><a href="#new-info-1-tabs">店舗からのお知らせ</a></li>
-                    <li class="tab-original tab col s6"><a class="active" href="#new-info-2-tabs">スタッフ日記</a></li>
+                    <li class="tab-original tab col s6"><a class="active" href="#new-info-1-tabs">店舗からのお知らせ</a></li>
+                    <li class="tab-original tab col s6"><a href="#new-info-2-tabs">スタッフ日記</a></li>
                 </ul>
                 <div id="new-info-1-tabs" class="col s12">
 					<?php if(count($notices) > 0): ?>
 						<ul id="shop-new-notice" class="collection z-depth-3">
 							<?php foreach ($notices as $key => $value): ?>
-								<li class="linkbox collection-item avatar">
+								<li class="linkbox collection-item avatar favorite">
 									<img src="<?= $value->icon ?>" alt="" class="circle">
 									<span class="title color-blue"><?= $value->created->nice()?></span>
 									<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$value->gallery_count?></span>
-									<p><span class="color-blue"><?= AREA[$value->shop['area']]['label'].' '.GENRE[$value->shop['genre']]['label']
+									<p><span class="color-blue truncate"><?= AREA[$value->shop['area']]['label'].' '.GENRE[$value->shop['genre']]['label']
 										.' '.$value->shop['name']?></span><br>
 									<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
-									<?=$this->User->get_favo_html('new_info', $value->registry_alias, $value['id'])?>
+									<?=$this->User->get_favo_html('new_info', $value)?>
 									<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->shop->id."?area=".$value->shop->area."&genre=".$value->shop->genre
 										."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
 								</li>
@@ -55,16 +55,16 @@
 					<?php if (count($diarys) > 0): ?>
 						<ul id="cast-new-diary" class="collection z-depth-3">
 							<?php foreach ($diarys as $key => $value): ?>
-								<li class="linkbox collection-item avatar">
+								<li class="linkbox collection-item avatar favorite">
 									<img src="<?= $value->icon ?>" alt="" class="circle">
 									<span class="title color-blue"><?= $value->created->nice()?></span>
 									<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$value->gallery_count?></span>
 									<p><span class="color-blue"><?=$value->cast['nickname']?> </span>
-										<span class="color-blue"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
+										<span class="color-blue truncate"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
 										.' '.$value->cast->shop['name']?></span><br>
 										<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									</p>
-									<?=$this->User->get_favo_html('new_info', $value->registry_alias, $value['id'])?>
+									<?=$this->User->get_favo_html('new_info', $value)?>
 									<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
 									"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>
 								</li>

@@ -12,6 +12,30 @@
 								<img src="<?=$shop->top_image?>" height="300px;" width="100%" alt="">
 							</a>
 						</div>
+						<div class="col">
+							<div class="shop-head-line1 col s12">
+								<ul class="shop-head-line1__ul">
+									<li class="shop-head-line1__ul_li favorite">
+										<div class="shop-head-line1__ul_li__favorite">
+											<?=$this->User->get_favo_html('header', $shop)?>
+										</div>
+									</li>
+									<li class="shop-head-line1__ul_li voice">
+										<div class="shop-head-line1__ul_li__voice">
+											<?=$this->User->get_comment_html('header',  $shop)?>
+										</div>
+									</li>
+									<!-- <li class="shop-head-line1__ul_li">
+										<div class="shop-head-line1__ul_li__voice">
+											<a class="btn-floating btn orange darken-4">
+												<i class="material-icons">camera_alt</i>
+											</a>
+											<span class="shop-head-line1__ul_li__image__count">0</span>
+										</div>
+									</li> -->
+								</ul>
+							</div>
+						</div>
 						<div class="card-content">
 							<table class="highlight">
 								<thead>

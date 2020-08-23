@@ -353,16 +353,32 @@ class UtilComponent extends Component
     /**
      * スタッフの全ての日記情報を取得する処理
      *
-     * @param [type] $id
-     * @param [type] $diaryPath
+     * @param [type] $cast_id
+     * @param [type] $diary_path
+     * @param [type] $user_id
      * @return array
      */
-    public function getDiarys($id, $diaryPath)
+    public function getDiarys($cast_id, $diary_path, $user_id)
     {
         $diarys = TableRegistry::get('diarys');
         // スタッフ情報、最新の日記情報とイイネの総数取得
         // 過去の日記をアーカイブ形式で取得する
-        $query = $diarys->find('all')->select($diarys->Schema()->columns());
+        $query = $diarys->find('all')
+            ->select($diarys->Schema()->columns())
+            ->contain(['diary_likes' => function ($q)  {
+                return $q
+                    ->select(['id','diary_id','user_id'
+                        , 'total' => $q->func()->count('diary_id')])
+                    ->group('diary_id')
+                    ->where(['diary_id']);
+
+            }, 'diary_likes.users' => function ($q) use ($user_id) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $user_id]);
+            }])
+            ->where(['cast_id' => $cast_id])
+            ->order(['created' => 'DESC']);
         $ym = $query->func()->date_format([
             'created' => 'identifier',
             "'%Y/%c'" => 'literal']);
@@ -372,14 +388,12 @@ class UtilComponent extends Component
         $archives = $query->select([
             'ym_created' => $ym,
             'md_created' => $md])
-            ->where(['cast_id' => $id])
-            ->contain(['diary_likes'])
-            ->order(['created' => 'DESC'])->all();
+            ->toArray();
         $archives = $this->groupArray($archives, 'ym_created');
         $archives = array_values($archives);
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$diaryPath), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$diary_path), true, 0755);
 
         foreach ($archives as $key => $archive) {
             foreach ($archive as $key => $value) {
@@ -392,7 +406,7 @@ class UtilComponent extends Component
                 foreach ($files as $file) {
                     $timestamp = date('Y/m/d H:i', filemtime($file));
                     array_push($gallery, array(
-                    "file_path"=>$diaryPath.$value->dir.DS.(basename($file))
+                    "file_path"=>$diary_path.$value->dir.DS.(basename($file))
                     ,"date"=>$timestamp));
                     continue; // １件のみ取得できればよい
                 }
@@ -410,24 +424,37 @@ class UtilComponent extends Component
      * 指定した１件の日記情報を取得する処理
      *
      * @param [type] $id
-     * @param [type] $diaryPath
+     * @param [type] $diary_path
+     * @param [type] $user_id
      * @return array
      */
-    public function getDiary($id, $diaryPath)
+    public function getDiary($id, $diary_path, $user_id)
     {
         $diary = TableRegistry::get('diarys');
-        $query = $diary->find('all')->select($diary->Schema()->columns());
+        $query = $diary->find('all')
+            ->select($diary->Schema()->columns())
+            ->contain(['diary_likes' => function ($q)  {
+                return $q
+                    ->select(['id','diary_id','user_id'
+                        , 'total' => $q->func()->count('diary_id')])
+                    ->group('diary_id')
+                    ->where(['diary_id']);
+
+            }, 'diary_likes.users' => function ($q) use ($user_id) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $user_id]);
+            }]);
         $ymd = $query->func()->date_format([
             'created' => 'identifier',
             "'%Y年%c月%e日'" => 'literal']);
         $diary = $query->select([
-            'ymd_created' => $ymd])
+                'ymd_created' => $ymd])
             ->where(['id' => $id])
-            ->contain(['diary_likes'])
             ->first();
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$diaryPath), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$diary_path), true, 0755);
 
         $gallery = array();
 
@@ -449,43 +476,74 @@ class UtilComponent extends Component
     /**
      * 日記テーブルから最新の日記情報とイイネの総数を取得する処理
      *
-     * @param [type] $rowNum
-     * @param [type] $isArea
+     * @param [type] $row_num
+     * @param [type] $is_area
      * @param [type] $shop_id
      * @return array
      */
-    public function getNewDiarys($rowNum, $isArea = null, $shop_id = null)
+    public function getNewDiarys($row_num, $is_area = null, $shop_id = null, $user_id)
     {
         $diarys = TableRegistry::get('diarys');
 
-        if (!empty($isArea)) {
+        if (!empty($shop_id)) {
+
+            // 最新のスタッフブログ情報とイイネの総数取得
             $diarys = $diarys->find('all')
-            ->contain(['diary_likes','casts','casts.shops'])
-            ->matching('casts.shops', function ($q) use ($isArea) {
-                return $q->where(['shops.area'=>$isArea,
-                        'shops.status = 1 AND shops.delete_flag = 0
-                            AND casts.status = 1 AND casts.delete_flag = 0']);
-            })
-            ->order(['diarys.created' => 'DESC'])
-            ->limit($rowNum)->all();
-        } elseif (!empty($shop_id)) {
-            $diarys = $diarys->find('all')
-                ->contain(['diary_likes','casts','casts.shops'])
-                ->matching('casts.shops', function ($q) use ($shop_id) {
-                    return $q->where(['shops.id'=>$shop_id,
-                        'shops.status = 1 AND shops.delete_flag = 0
-                            AND casts.status = 1 AND casts.delete_flag = 0']);
-                })
+                ->contain(['casts.shops' => function ($q) use ($shop_id) {
+                    $conditions = 'shops.id = ' . $shop_id
+                        . ' AND shops.status = 1 AND shops.delete_flag = 0'
+                        . ' AND casts.status = 1 AND casts.delete_flag = 0';
+                    return $q
+                        ->where([$conditions]);
+                }, 'diary_likes' => function ($q)  {
+                    return $q
+                        ->select(['id','diary_id','user_id'
+                            , 'total' => $q->func()->count('diary_id')])
+                        ->group('diary_id')
+                        ->where(['diary_id']);
+
+                }, 'diary_likes.users' => function ($q) use ($user_id) {
+                    return $q
+                        ->select(['is_like' => $q->func()->count('users.id')])
+                        ->where(['users.id' => $user_id]);
+                }])
                 ->order(['diarys.created' => 'DESC'])
-                ->limit($rowNum)->all();
+                ->limit($row_num)->toArray();
+
         } else {
+
+            // 最新のスタッフブログ情報とイイネの総数取得
             $diarys = $diarys->find('all')
-                ->contain(['diary_likes','casts','casts.shops'])
-                ->where('shops.status = 1 AND shops.delete_flag = 0
-                        AND casts.status = 1 AND casts.delete_flag = 0')
+                ->contain(['casts.shops' => function ($q) use ($is_area) {
+                    // トップページ
+                    if (empty($is_area)) {
+                        $conditions = 'shops.status = 1 AND shops.delete_flag = 0'
+                        . ' AND casts.status = 1 AND casts.delete_flag = 0';
+                    } else {
+                        // エリアトップページ
+                        $conditions = 'area = "'. $is_area . '" AND '
+                            .'shops.status = 1 AND shops.delete_flag = 0'
+                            .' AND casts.status = 1 AND casts.delete_flag = 0';
+                    }
+                    return $q
+                        ->where([$conditions]);
+                }, 'diary_likes' => function ($q)  {
+                    return $q
+                        ->select(['id','diary_id','user_id'
+                            , 'total' => $q->func()->count('diary_id')])
+                        ->group('diary_id')
+                        ->where(['diary_id']);
+
+                }, 'diary_likes.users' => function ($q) use ($user_id) {
+                    return $q
+                        ->select(['is_like' => $q->func()->count('users.id')])
+                        ->where(['users.id' => $user_id]);
+                }])
                 ->order(['diarys.created' => 'DESC'])
-                ->limit($rowNum)->all();
+                ->limit($row_num)->toArray();
+
         }
+
         foreach ($diarys as $key => $diary) {
             $diaryPath = WWW_ROOT . PATH_ROOT['IMG']
                 . DS . AREA[$diary->cast->shop->area]['path']
@@ -523,22 +581,38 @@ class UtilComponent extends Component
         }
 
 
-        return $diarys->toArray();
+        return $diarys;
     }
 
     /**
      * 店舗の全てのお知らせ情報を取得する処理
      *
-     * @param [type] $id
-     * @param [type] $noticePath
+     * @param [type] $shop_id
+     * @param [type] $notice_path
+     * @param [type] $user_id
      * @return array
      */
-    public function getNotices($id, $noticePath)
+    public function getNotices($shop_id, $notice_path, $user_id = null)
     {
         $shopInfos = TableRegistry::get('shop_infos');
-        // スタッフ情報、最新の日記情報とイイネの総数取得
-        // 過去の日記をアーカイブ形式で取得する
-        $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
+        // 最新の店舗ニュース情報とイイネの総数取得
+        // 過去のニュースをアーカイブ形式で取得する
+        $query = $shopInfos->find('all')
+            ->select($shopInfos->Schema()->columns())
+            ->contain(['shop_info_likes' => function ($q)  {
+                return $q
+                    ->select(['id','shop_info_id','user_id'
+                        , 'total' => $q->func()->count('shop_info_id')])
+                    ->group('shop_info_id')
+                    ->where(['shop_info_id']);
+
+            }, 'shop_info_likes.users' => function ($q) use ($user_id) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $user_id]);
+            }])
+            ->where(['shop_id' => $shop_id])
+            ->order(['created' => 'DESC']);
         $ym = $query->func()->date_format([
             'created' => 'identifier',
             "'%Y/%c'" => 'literal']);
@@ -548,10 +622,7 @@ class UtilComponent extends Component
         $archives = $query->select([
             'ym_created' => $ym,
             'md_created' => $md])
-            ->where(['shop_id' => $id])
-            ->contain(['shop_info_likes'])
-            ->order(['created' => 'DESC'])
-            ->all();
+            ->toArray();
 
         $archives = $this->groupArray($archives, 'ym_created');
         $archives = array_values($archives);
@@ -587,24 +658,37 @@ class UtilComponent extends Component
     * 指定した１件のお知らせ情報を取得する処理
     *
     * @param [type] $id
-    * @param [type] $noticePath
+    * @param [type] $notice_path
+    * @param [type] $user_id
     * @return array
     */
-    public function getNotice($id, $noticePath)
+    public function getNotice($id, $notice_path, $user_id = null)
     {
-        $shopInfos = TableRegistry::get('shop_infos');
-        $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
+        $shopInfo = TableRegistry::get('shop_infos');
+        $query = $shopInfo->find('all')
+            ->select($shopInfo->Schema()->columns())
+            ->contain(['shop_info_likes' => function ($q)  {
+                return $q
+                    ->select(['id','shop_info_id','user_id'
+                        , 'total' => $q->func()->count('shop_info_id')])
+                    ->group('shop_info_id')
+                    ->where(['shop_info_id']);
+
+            }, 'shop_info_likes.users' => function ($q) use ($user_id) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $user_id]);
+            }]);
         $ymd = $query->func()->date_format([
             'created' => 'identifier',
             "'%Y年%c月%e日'" => 'literal']);
         $shopInfo = $query->select([
-            'ymd_created' => $ymd])
+                'ymd_created' => $ymd])
             ->where(['id' => $id])
-            ->contain(['shop_info_likes'])
             ->first();
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$noticePath), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$notice_path), true, 0755);
 
         $gallery = array();
 
@@ -614,7 +698,7 @@ class UtilComponent extends Component
         foreach ($files as $file) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
-            "file_path"=>$noticePath.$shopInfo->dir.DS.(basename($file))
+            "file_path"=>$notice_path.$shopInfo->dir.DS.(basename($file))
             ,"date"=>$timestamp));
         }
         $shopInfo->set('gallery', $gallery);
@@ -625,31 +709,41 @@ class UtilComponent extends Component
     /**
      * 日記テーブルから最新の日記情報を取得する処理
      *
-     * @param [type] $rowNum
+     * @param [type] $row_num
+     * @param [type] $is_area
+     * @param [type] $user_id
      * @return void
      */
-    public function getNewNotices($rowNum, $isArea = null)
+    public function getNewNotices($row_num, $is_area = null, $user_id = null)
     {
         $shopInfos = TableRegistry::get('shop_infos');
-        $query = $shopInfos->find('all')->select($shopInfos->Schema()->columns());
-        // スタッフ情報、最新の日記情報とイイネの総数取得
-        // 過去の日記をアーカイブ形式で取得する
-        if (!empty($isArea)) {
-            $shopInfos = $shopInfos->find('all')
-                ->contain(['shop_info_likes','shops'])
-                ->matching('shops', function ($q) use ($isArea) {
-                    return $q->where(['shops.area'=>$isArea,
-                            'status = 1 AND delete_flag = 0']);
-                })
-                ->order(['shop_infos.created' => 'DESC'])
-                ->limit($rowNum)->all();
-        } else {
-            $shopInfos = $shopInfos->find('all')
-                ->contain(['shop_info_likes','shops'])
-                ->where(['status = 1 AND delete_flag = 0'])
-                ->order(['shop_infos.created' => 'DESC'])
-                ->limit($rowNum)->all();
-        }
+
+        // 最新の店舗ニュース情報とイイネの総数取得
+        $shopInfos = $shopInfos->find('all')
+            ->contain(['shops' => function ($q) use ($is_area) {
+            // トップページ
+            if (empty($is_area)) {
+                $conditions = 'status = 1 AND delete_flag = 0';
+            } else {
+                // エリアトップページ
+                $conditions = 'area = "'. $is_area . '" AND status = 1 AND delete_flag = 0';
+            }
+            return $q
+                ->where([$conditions]);
+        }, 'shop_info_likes' => function ($q)  {
+            return $q
+                ->select(['id','shop_info_id','user_id'
+                    , 'total' => $q->func()->count('shop_info_id')])
+                ->group('shop_info_id')
+                ->where(['shop_info_id']);
+
+        }, 'shop_info_likes.users' => function ($q) use ($user_id) {
+            return $q
+                ->select(['is_like' => $q->func()->count('users.id')])
+                ->where(['users.id' => $user_id]);
+        }])
+        ->order(['shop_infos.created' => 'DESC'])
+        ->limit($row_num)->toArray();
 
         foreach ($shopInfos as $key => $shopInfo) {
             $noticePath = WWW_ROOT . PATH_ROOT['IMG']
@@ -682,7 +776,7 @@ class UtilComponent extends Component
             // アイコン画像をセット
             $shopInfo->set('icon', $icon);
         }
-        return $shopInfos->toArray();
+        return $shopInfos;
     }
      /**
      * 広告情報を取得する処理

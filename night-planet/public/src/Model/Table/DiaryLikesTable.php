@@ -41,13 +41,13 @@ class DiaryLikesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->belongsTo('Diaries', [
+        $this->belongsTo('diarys', [
             'foreignKey' => 'diary_id',
             'joinType' => 'INNER'
         ]);
-        $this->belongsTo('Users', [
+        $this->belongsTo('users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER'
+            'joinType' => 'LEFT'
         ]);
     }
 
@@ -75,8 +75,8 @@ class DiaryLikesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['diary_id'], 'Diaries'));
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->existsIn(['diary_id'], 'diarys'));
+        $rules->add($rules->existsIn(['user_id'], 'users'));
 
         return $rules;
     }

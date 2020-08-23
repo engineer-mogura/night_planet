@@ -36,4 +36,15 @@ class DiaryLike extends Entity
         'cast' => true,
         'user' => true
     ];
+
+    /**
+     * テーブル名を返却する
+     *
+     *
+     * @return void
+     */
+    protected function _getRegistryAlias()
+    {
+        return $this->_registryAlias;
+    }
 }

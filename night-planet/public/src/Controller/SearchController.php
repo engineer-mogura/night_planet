@@ -32,7 +32,7 @@ class SearchController extends AppController
 
     public function beforeFilter(Event $event)
     {
-        // parent::beforeFilter($event);
+        parent::beforeFilter($event);
         // $this->Auth->allow(['signup','verify','logout']);
         parent::beforeRender($event); //親クラスのbeforeRendorを呼ぶ
         $this->viewBuilder()->layout('userDefault');
@@ -120,8 +120,18 @@ class SearchController extends AppController
         if ($requestData['search-choice'] == 'shop') {
             $query = $this->Shops->find()
                ->where(['shops.status = 1 AND shops.delete_flag = 0'])
-               ->contain(['snss']);
-
+               ->contain(['snss'
+               , 'shop_likes' => function (Query $q) {
+                   return $q
+                        ->select(['shop_likes.id','shop_likes.shop_id','shop_likes.user_id'
+                            , 'total' => $q->func()->count('shop_likes.shop_id')])
+                        ->group('shop_id')
+                        ->where(['shop_likes.shop_id']);
+               }, 'shop_likes.users' => function (Query $q) {
+                    return $q
+                        ->select(['is_like' => $q->func()->count('users.id')])
+                        ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+                    }]);
             foreach ($requestData as $key => $findData) {
                 // ラジオボタンの場合コンティニュー
                 if ($key == 'search-choice') {

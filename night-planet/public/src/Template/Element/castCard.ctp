@@ -38,8 +38,8 @@
 								</a>
 							<?php endif; ?>
 						</h1>
-						<div class="card-content linkbox__card-content">
-							<?=$this->User->get_favo_html('search', $rows->registry_alias, $rows['id'])?>
+						<div class="card-content linkbox__card-content favorite">
+							<?=$this->User->get_favo_html('search', $rows)?>
 							<span class="card-tag white-text red"><?= $rows['name']?></span><span class="card-tag white-text red"><?= $rows->shop['name']?></span>
 							<p class="gray-text text-darken-2"><?= $rows['message']
 							. '<br><span class="card-tag white-text orange darken-1">'

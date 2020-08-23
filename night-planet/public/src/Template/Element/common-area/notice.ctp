@@ -1,54 +1,47 @@
 <?= $this->element('modal/viewNoticeModal'); ?>
 <div id="notice" class="container">
+    <?= $this->Flash->render() ?>
+    <?= $this->element('nav-breadcrumb'); ?>
     <div class="row">
-        <div class="col s12 m8 l8">
+        <div id="cast-main" class="col s12 m12 l8">
             <div style="display:none;">
-                <input type="hidden" name="notice_dir" value="<?=$shopInfo['notice_path']?>">
-                <input type="hidden" name="notice_id" value=''>
+                <input type="hidden" name="cast_dir" value="<?=$userInfo['notice_path']?>">
             </div>
             <span id="dummy" style="display: hidden;"></span>
-            <?= $this->Flash->render() ?>
-            <?= $this->element('nav-breadcrumb'); ?>
-            <div class="row">
-                <form id="view-archive-notice" name="view_archive_notice" method="get" style="display:none;" action="<?=DS.$shopInfo['area']['path'].DS.'view_notice'.DS?>">
-                    <input type="hidden" name="_method" value="POST">
-                    <input type="hidden" name="id" value="<?=$shopInfo['id']?>">
-                    <input type="hidden" name="notice_id" value="">
-                </form>
-                <div class="col s12 m12 l12 xl12">
-                    <?php if(count($notices) > 0) { ?>
+                <div class="row">
+                    <form id="view-archive-notice" name="view_archive_notice" method="get" style="display:none;" action="<?=DS.$shopInfo['area']['path'].DS.'view_notice'.DS?>">
+                        <input type="hidden" name="_method" value="POST">
+                        <input type="hidden" name="id" value="<?=$userInfo['id']?>">
+                        <input type="hidden" name="notice_id" value="">
+                    </form>
+                    <div class="col s12 m12 l12 xl12">
+                    <?php if(count($top_notices) > 0) { ?>
                         <ul class="collection z-depth-3">
-                            <?php $count = 0; ?>
-                            <?php foreach ($notices as $key => $rows): ?>
-                            <?php foreach ($rows as $key => $row): ?>
-                            <li class="linkbox collection-item avatar">
-                                <a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
-                                    <i class="material-icons">favorite</i>
-                                </a>
-                                <div class="archiveLink">
-                                    <input type="hidden" name="notice_id" value=<?=$row->id?>>
-                                    <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
-                                    <img src="<?= $imgPath ?>" alt="" class="circle">
-                                    <span class="title color-blue"><?= $row->created->nice() ?></span>
-                                    <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i><?=$row->gallery_count?></span>
-                                    <p><span class="truncate"><?= $row->title ?><br>
-                                        <?= $row['content'] ?></span>
-                                    </p>
-                                    <a class="waves-effect hoverable" href="#"></a>
-                                </div>
-                            </li>
-                            <?php $count = $count + 1;?>
-                            <?php if ($count == 5) {break;} ?>
-                            <?php endforeach; ?>
-                            <?php if ($count == 5) {break;} ?>
+                            <?php foreach ($top_notices as $key => $row): ?>
+                                <li class="linkbox collection-item avatar">
+                                    <div class="archiveLink">
+                                        <input type="hidden" name="notice_id" value=<?=$row->id?>>
+                                        <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                                        <img src="<?= $imgPath ?>" alt="" class="circle">
+                                        <span class="title color-blue truncate"><?= $row->created->nice() ?></span>
+                                        <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i><?=$row->gallery_count?></span>
+                                        <p><span class="truncate"><?= $row->title ?><br>
+                                            <?= $row['content'] ?></span>
+                                        </p>
+                                        <?=$this->User->get_favo_html('new_info_favo_disable', $row)?>
+                                        <a class="waves-effect hoverable" href="#"></a>
+                                    </div>
+                                </li>
                             <?php endforeach; ?>
                         </ul>
                     <?php } ?>
-                    <?php if(count($notices) > 0) { ?>
+                    <?php
+                    ?>
+                    <?php if(count($arcive_notices) > 0) { ?>
                         <ul class="collapsible popout" data-collapsible="accordion">
-                            <?php foreach ($notices as $rows): ?>
+                            <?php foreach ($arcive_notices as $rows): ?>
                             <li class="collection-item">
-                                <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
+                                <div class="collapsible-header waves-effect"><?= $rows[0]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                                 <?php foreach ($rows as $row): ?>
                                 <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                                 <div class="linkbox collapsible-body">
@@ -62,6 +55,7 @@
                                         <p><span class="truncate"><?= $row->title ?><br>
                                             <?= $row['content'] ?></span>
                                         </p>
+                                        <?=$this->User->get_favo_html('new_info_favo_disable', $row)?>
                                         <a class="waves-effect hoverable" href="#"></a>
                                     </div>
                                 </div>

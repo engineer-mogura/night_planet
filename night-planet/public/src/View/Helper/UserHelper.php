@@ -71,8 +71,11 @@ class UserHelper extends Helper
     {
 		switch ($type) {
 			// メイントップ、エリアトップ画面時のお気に入りボタンを返す
-			case 'new_info';
-				return $this->get_favo_html_type_new_info($alias, $id);
+			case preg_match("/new_info/", $type) == 1;
+				return $this->get_favo_html_type_new_info($type, $entity);
+			break;
+			case 'view_info';
+				return $this->get_favo_html_type_view_info($entity);
 			break;
 			// 店舗、スタッフのヘッダお気に入りボタンを返す
 			case 'header';
@@ -84,7 +87,11 @@ class UserHelper extends Helper
 			break;
 			// 検索画面時のお気に入りボタンを返す
 			case 'search';
-				return $this->get_favo_html_type_search($alias, $id);
+				return $this->get_favo_html_type_search($entity);
+			break;
+			// モーダル画面時のお気に入りボタンを返す
+			case 'modal';
+				return $this->get_favo_html_type_modal($entity);
 			break;
 			default:
 				return '';
@@ -97,12 +104,12 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_comment_html(string $type, string $alias, int $id)
+    function get_comment_html(string $type, Object $entity)
     {
 		switch ($type) {
 			// 店舗ページ画面時のコメントボタンを返す
 			case 'header';
-				return $this->get_comment_html_type_header($alias, $id);
+				return $this->get_comment_html_type_header($entity);
 			break;
 		default:
 			return '';
@@ -132,16 +139,133 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_favo_html_type_new_info(string $alias, int $id)
+    function get_favo_html_type_new_info(string $type, Object $entity)
     {
+		$count    = 0;
+		$alias = $entity->registry_alias;
+
+		// お気に入り数
+		// 店舗
+		if ($alias == 'shop_infos') {
+			if (count($entity->shop_info_likes) > 0) {
+				$count    = $entity->shop_info_likes[0]->total;
+			}
+		// スタッフ
+		} else if ($alias == 'diarys') {
+			if (count($entity->diary_likes) > 0) {
+				$count    = $entity->diary_likes[0]->total;
+			}
+		}
+		// いいねボタン無効化するか
+		if (preg_match("/_favo_disable/", $type)) {
+			$is_click = '';
+		} else {
+			$is_click = 'waves-effect waves-light favo_click ';
+		}
 		if ($this->get_u_info('is_auth')) {
-			$html = '<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 favo_click" data-id="'.$id.'" data-alias="'.$alias.'">'
-						. '<i class="material-icons">favorite</i>'
-					. '</a>';
+			$favorite = 'grey';
+			$id    = $entity['id'];
+
+			// 店舗ニュース
+			if ($alias == 'shop_infos') {
+
+				if (count($entity->shop_info_likes) > 0) {
+					// ユーザーがお気に入りしているか
+					if ($entity->shop_info_likes[0]->is_like) {
+						$favorite = 'red';
+					}
+				}
+				$unique_id = $entity->shop_info_likes['id'];
+
+				$data =  'data-id="'.$unique_id.'" data-shop_info_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+			// ブログ
+			} else if ($alias == 'diarys') {
+
+				if (count($entity->diary_likes) > 0) {
+					// ユーザーがお気に入りしているか
+					if ($entity->diary_likes[0]->is_like) {
+						$favorite = 'red';
+					}
+				}
+				$unique_id = $entity->diary_likes[0]['id'];
+
+				$data =  'data-id='.$unique_id.' data-diary_id='.$id.' data-user_id='.$this->get_u_info('id').' data-alias='.$alias.'"';
+
+			}
+				$html = '<a class="li-linkbox__a-favorite btn-floating btn '. $is_click .$favorite.' lighten-1 ' . $data . '>'
+							. '<i class="material-icons">favorite</i>'
+						. '</a>'
+						. '<span class="tabs-new-info__ul_li__favorite__count count">'.$count.'</span>';
 		} else {
 			$html = '<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
 						. '<i class="material-icons">favorite</i>'
-					. '</a>';
+					. '</a>'
+					. '<span class="tabs-new-info__ul_li__favorite__count count">'.$count.'</span>';
+		}
+		return $html;
+	}
+
+    /**
+     * 新着情報表示用いいねボタンを返す
+     *
+     * @var array
+     */
+    function get_favo_html_type_view_info(Object $entity)
+    {
+		$count    = 0;
+		$alias = $entity->registry_alias;
+
+		// お気に入り数
+		// 店舗
+		if ($alias == 'shop_infos') {
+			if (count($entity->shop_info_likes) > 0) {
+				$count    = $entity->shop_info_likes[0]->total;
+			}
+		// スタッフ
+		} else if ($alias == 'diarys') {
+			if (count($entity->diary_likes) > 0) {
+				$count    = $entity->diary_likes[0]->total;
+			}
+		}
+		if ($this->get_u_info('is_auth')) {
+			$favorite = 'grey';
+			$id    = $entity['id'];
+
+			// 店舗ニュース
+			if ($alias == 'shop_infos') {
+
+				if (count($entity->shop_info_likes) > 0) {
+					// ユーザーがお気に入りしているか
+					if ($entity->shop_info_likes[0]->is_like) {
+						$favorite = 'red';
+					}
+				}
+				$unique_id = $entity->shop_info_likes['id'];
+
+				$data =  'data-id="'.$unique_id.'" data-shop_info_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+			// ブログ
+			} else if ($alias == 'diarys') {
+
+				if (count($entity->diary_likes) > 0) {
+					// ユーザーがお気に入りしているか
+					if ($entity->diary_likes[0]->is_like) {
+						$favorite = 'red';
+					}
+				}
+				$unique_id = $entity->diary_likes[0]['id'];
+
+				$data =  'data-id='.$unique_id.' data-diary_id='.$id.' data-user_id='.$this->get_u_info('id').' data-alias='.$alias.'"';
+
+			}
+				$html = '<a class="li-linkbox__a-favorite btn-floating btn '. $is_click .$favorite.' lighten-1 favo_click ' . $data . '>'
+							. '<i class="material-icons">favorite</i>'
+						. '</a>'
+						. '<span class="modal-footer__a-favorite__count count">'.$count.'</span>';
+		} else {
+			$html = '<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
+						. '<i class="material-icons">favorite</i>'
+					. '</a>'
+					. '<span class="modal-footer__a-favorite__count count">'.$count.'</span>';
 		}
 		return $html;
     }
@@ -154,17 +278,33 @@ class UserHelper extends Helper
     //function get_favo_html_type_header(string $alias, int $unique_id = null, int $id, bool $is_favo)
     function get_favo_html_type_header(Object $entity)
     {
+		$count    = 0;
+		$alias = $entity->registry_alias;
+
+		// お気に入り数
+		// 店舗
+		if ($alias == 'shops') {
+			if (count($entity->shop_likes) > 0) {
+				$count    = $entity->shop_likes[0]->total;
+			}
+		// スタッフ
+		} else if ($alias == 'casts') {
+			if (count($entity->cast_likes) > 0) {
+				$count    = $entity->cast_likes[0]->total;
+			}
+		}
 
 		if ($this->get_u_info('is_auth')) {
 			$favorite = 'grey';
-
-			$alias = $entity->registry_alias;
 			$id    = $entity['id'];
 			// 店舗
 			if ($alias == 'shops') {
 
 				if (count($entity->shop_likes) > 0) {
-					$favorite = 'red';
+					// ユーザーがお気に入りしているか
+					if ($entity->shop_likes[0]->is_like) {
+						$favorite = 'red';
+					}
 				}
 				$unique_id = $entity->shop_likes['id'];
 
@@ -174,20 +314,27 @@ class UserHelper extends Helper
 			} else if ($alias == 'casts') {
 
 				if (count($entity->cast_likes) > 0) {
-					$favorite = 'red';
+					// ユーザーがお気に入りしているか
+					if ($entity->cast_likes[0]->is_like) {
+						$favorite = 'red';
+					}
 				}
 				$unique_id = $entity->cast_likes[0]['id'];
 
 				$data =  'data-id="'.$unique_id.'" data-cast_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
 
 			}
-			$html = '<a class="btn-floating btn waves-effect waves-light '.$favorite.' lighten-1 favo_click" ' . $data . '>'
+			$html =   '<a class="btn-floating btn waves-effect waves-light '.$favorite.' lighten-1 favo_click" ' . $data . '>'
 						. '<i class="material-icons">favorite</i>'
-					. '</a>';
+					. '</a>'
+					. '<i class="favorite-add material-icons">add</i>'
+					. '<span class="cast-head-line1__ul_li__favorite__count count">'.$count.'</span>';
 		} else {
-		$html = '<a class="btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
-					. '<i class="material-icons">favorite</i>'
-				. '</a>';
+			$html = '<a class="btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
+						. '<i class="material-icons">favorite</i>'
+					. '</a>'
+					. '<i class="favorite-add material-icons">add</i>'
+					. '<span class="cast-head-line1__ul_li__favorite__count count">'.$count.'</span>';
 		}
 		return $html;
     }
@@ -200,16 +347,28 @@ class UserHelper extends Helper
     //function get_favo_html_type_staff_list(string $alias, int $id, bool $is_favo)
     function get_favo_html_type_staff_list(Object $entity)
     {
+		$count    = 0;
+		$alias = $entity->registry_alias;
+
+		// お気に入り数
+		// スタッフ
+		if ($alias == 'casts') {
+			if (count($entity->cast_likes) > 0) {
+				$count    = $entity->cast_likes[0]->total;
+			}
+		}
+
         if ($this->get_u_info('is_auth')) {
 			$favorite = 'grey';
-
-			$alias = $entity->registry_alias;
 			$id    = $entity['id'];
 			// スタッフ
 			if ($alias == 'casts') {
 
 				if (count($entity->cast_likes) > 0) {
-					$favorite = 'red';
+					// ユーザーがお気に入りしているか
+					if ($entity->cast_likes[0]->is_like) {
+						$favorite = 'red';
+					}
 				}
 				$unique_id = $entity->shop_likes['id'];
 
@@ -218,12 +377,14 @@ class UserHelper extends Helper
 			}
 			$html = '<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light '.$favorite.' lighten-1 favo_click" ' . $data . '>'
 					. '<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>'
-					. '</a>';
+					. '</a>'
+					. '<span class="casts-section__list__favorite__count count">'.$count.'</span>';
 
         } else {
 			$html = '<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
 					. '<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>'
-					. '</a>';
+					. '</a>'
+					. '<span class="casts-section__list__favorite__count count">'.$count.'</span>';
         }
       return $html;
     }
@@ -233,18 +394,66 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_favo_html_type_search(string $alias, int $id)
+    function get_favo_html_type_search(Object $entity)
     {
-		if ($this->get_u_info('is_auth')) {
-			$html = '<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 favo_click" data-id="'.$id.'" data-alias="'.$alias.'">'
-						. '<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>'
-					. '</a>';
-		} else {
-			$html = '<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
-						. '<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>'
-					. '</a>';
+		$count    = 0;
+		$alias = $entity->registry_alias;
+
+		// お気に入り数
+		// 店舗
+		if ($alias == 'shops') {
+			if (count($entity->shop_likes) > 0) {
+				$count    = $entity->shop_likes[0]->total;
+			}
+		// スタッフ
+		} else if ($alias == 'casts') {
+			if (count($entity->cast_likes) > 0) {
+				$count    = $entity->cast_likes[0]->total;
+			}
 		}
-		return $html;
+
+        if ($this->get_u_info('is_auth')) {
+			$favorite = 'grey';
+			$id    = $entity['id'];
+			// スタッフ
+			if ($alias == 'casts') {
+
+				if (count($entity->cast_likes) > 0) {
+					// ユーザーがお気に入りしているか
+					if ($entity->cast_likes[0]->is_like) {
+						$favorite = 'red';
+					}
+				}
+				$unique_id = $entity->cast_likes['id'];
+
+				$data =  'data-id="'.$unique_id.'" data-cast_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+
+			// スタッフ
+			} else if ($alias == 'shops') {
+
+				if (count($entity->shop_likes) > 0) {
+					// ユーザーがお気に入りしているか
+					if ($entity->shop_likes[0]->is_like) {
+						$favorite = 'red';
+					}
+				}
+				$unique_id = $entity->shop_likes[0]['id'];
+
+				$data =  'data-id="'.$unique_id.'" data-shop_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+
+			}
+			$html = '<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light '.$favorite.' lighten-1 favo_click" ' . $data . '>'
+					. '<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>'
+					. '</a>'
+					. '<span class="search-result__like-count count">'.$count.'</span>';
+
+        } else {
+			$html = '<a class="p-casts-section__list__favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
+					. '<i class="material-icons p-casts-section__list__favorite__icon">favorite</i>'
+					. '</a>'
+					. '<span class="search-result__like-count count">'.$count.'</span>';
+        }
+      return $html;
     }
 
     /**
@@ -252,17 +461,94 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_comment_html_type_header(string $alias, int $id)
+    function get_comment_html_type_header(Object $entity)
     {
-		if ($this->get_u_info('is_auth')) {
-			$html = '<a class="btn-floating btn waves-effect waves-light grey favo_click" data-id="'.$id.'" data-alias="'.$alias.'">'
+		$count    = 0;
+		// $alias = $entity->registry_alias;
+
+		// // お気に入り数
+		// // 店舗
+		// if ($alias == 'shops') {
+		// 	if (count($entity->shop_likes) > 0) {
+		// 		$count    = $entity->shop_likes[0]->total;
+		// 	}
+		// // スタッフ
+		// } else if ($alias == 'casts') {
+		// 	if (count($entity->cast_likes) > 0) {
+		// 		$count    = $entity->cast_likes[0]->total;
+		// 	}
+		// }
+
+        if ($this->get_u_info('is_auth')) {
+			$favorite = 'grey';
+			// $id    = $entity['id'];
+			// // 店舗
+            // if ($alias == 'shops') {
+            //     if (count($entity->shop_likes) > 0) {
+            //         $favorite = 'red';
+            //     }
+            //     $unique_id = $entity->shop_likes['id'];
+
+            //     $data =  'data-id="'.$unique_id.'" data-shop_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+
+            // // スタッフ
+            // } else if ($alias == 'casts') {
+
+			// 	if (count($entity->cast_likes) > 0) {
+			// 		// ユーザーがお気に入りしているか
+			// 		if ($entity->cast_likes[0]->is_like) {
+			// 			$favorite = 'red';
+			// 		}
+			// 	}
+			// 	$unique_id = $entity->shop_likes['id'];
+
+			// 	$data =  'data-id="'.$unique_id.'" data-cast_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+			// }
+
+			$html = '<a class="btn-floating btn waves-effect waves-light '.$favorite.' lighten-1" ' . $data . '>'
 						. '<i class="material-icons">comment</i>'
-					. '</a>';
+					. '</a>'
+					. '<i class="favorite-add material-icons">add</i>'
+					. '<span class="cast-head-line1__ul_li__voice__count count">'.$count.'</span>';
+
 		} else {
 			$html = '<a class="btn-floating btn waves-effect waves-light red modal-trigger" data-target="modal-login">'
 						. '<i class="material-icons">comment</i>'
-					. '</a>';
+					. '</a>'
+					. '<i class="favorite-add material-icons">add</i>'
+					. '<span class="cast-head-line1__ul_li__voice__count count">'.$count.'</span>';
 		}
       return $html;
+	}
+
+	/**
+     * モーダル画面時のお気に入りボタンを返す
+     *
+     * @var array
+     */
+    function get_favo_html_type_modal(Object $entity)
+    {
+		if ($this->get_u_info('is_auth')) {
+
+			$alias = $entity->registry_alias;
+
+			// 店舗ニュース
+			if ($alias == 'shop_infos') {
+				$data =  'data-id="" data-shop_info_id="" data-user_id='.$this->get_u_info('id').' data-alias='.$alias.'';
+			// ブログ
+			} else if ($alias == 'diarys') {
+				$data =  'data-id="" data-diary_id="" data-user_id='.$this->get_u_info('id').' data-alias='.$alias.'';
+			}
+				$html = '<a class="modal-footer__a-favorite btn-floating btn grey lighten-1 favo_click" ' . $data . '>'
+							. '<i class="material-icons">favorite</i>'
+						. '</a>'
+						. '<span class="modal-footer__a-favorite__count count">0</span>';
+		} else {
+			$html = '<a class="modal-footer__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
+						. '<i class="material-icons">favorite</i>'
+					. '</a>'
+					. '<span class="modal-footer__a-favorite__count count">0</span>';
+		}
+		return $html;
     }
 }

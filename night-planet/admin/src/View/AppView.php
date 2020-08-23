@@ -36,22 +36,51 @@ class AppView extends View
      */
     public function initialize()
     {
+        // UserHelper.php 読み込み
+        $this->loadHelper('User');
         $this->loadHelper('Form', [
         'templates' => 'app_form',
       ]);
 
-        // $title = '';
-        // if (!empty($this->viewVars['title'])) {
-        //     // testtitleテスト
-        //     $title .=  $this->viewVars['title'] . ' | ';
-        // }
-        // $title .= LT['001'];
         $this->assign('title', $this->viewVars['title']);
-
-        // パンくずを設定する
-        $this->setBreadcrumb(explode(DS, rtrim($this->request->url, DS)));
+        // URLをスプリット
+        $arrayUrl = explode(DS, rtrim($this->request->url, DS));
+        // 空の場合はトップページになる
+        if (empty($arrayUrl[0])) {
+            $arrayUrl[0] = AREA['okinawa']['path'];
+        }
+        // ユーザー
+        if ($arrayUrl[0] == PATH_ROOT['USER']) {
+            // パンくずを設定する
+            $this->setMyPageBreadcrumb($arrayUrl);
+        } else if (array_key_exists($arrayUrl[0], AREA) || $arrayUrl[0] == 'search') {
+            // パンくずを設定する
+            $this->setBreadcrumb($arrayUrl);
+        }
     }
-
+    /**
+     * パンくずを設定する
+     *
+     * @param array $breadcrumbList
+     * @return void
+     */
+    public function setMyPageBreadcrumb($breadcrumbList)
+    {
+        // 次の画面がトップページの場合
+        if ($this->viewVars['next_view'] == 'mypage') {
+            $this->Breadcrumbs->add([
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS],
+                ['title' => 'マイページ', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'mypage']]
+            ]);
+        } else if ($this->viewVars['next_view'] == 'profile') {
+            // 次の画面がプロフィールページの場合
+            $this->Breadcrumbs->add([
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS],
+                ['title' => 'マイページ', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'mypage']],
+                ['title' => 'プロフィール', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'profile']]
+            ]);
+        }
+    }
     /**
      * パンくずを設定する
      *
@@ -114,7 +143,7 @@ class AppView extends View
             ]);
             // リストの最後に追加
             $this->Breadcrumbs->add(
-                $this->viewVars['cast']['nickname'],
+                $this->viewVars['shop']['casts'][0]['nickname'],
                 "#!",
                 ['class' => 'breadcrumbs-tail']
             );

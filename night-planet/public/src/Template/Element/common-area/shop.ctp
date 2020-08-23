@@ -9,18 +9,14 @@
 				<div class="shop-head">
 					<div class="shop-head-line1 col s12">
 						<ul class="shop-head-line1__ul">
-							<li class="shop-head-line1__ul_li">
+							<li class="shop-head-line1__ul_li favorite">
 								<div class="shop-head-line1__ul_li__favorite">
-									<?=$this->User->get_favo_html('header', $shop->registry_alias, $shop['id'])?>
-									<i class="favorite-add material-icons">add</i>
-									<span class="shop-head-line1__ul_li__favorite__count">0</span>
+									<?=$this->User->get_favo_html('header', $shop)?>
 								</div>
 							</li>
-							<li class="shop-head-line1__ul_li">
+							<li class="shop-head-line1__ul_li voice">
 								<div class="shop-head-line1__ul_li__voice">
-									<?=$this->User->get_comment_html('shop', $shop->registry_alias, $shop['id'])?>
-									<i class="voice-add material-icons">add</i>
-									<span class="shop-head-line1__ul_li__voice__count">0</span>
+									<?=$this->User->get_comment_html('header',  $shop)?>
 								</div>
 							</li>
 							<li class="shop-head-line1__ul_li">
@@ -170,8 +166,8 @@
 				</div>
 				<?php if(count($shop->casts) > 0): ?>
 				<?php foreach($shop->casts as $cast): ?>
-				<div class="p-casts-section__list center-align col s3 m3 l3">
-					<?=$this->User->get_favo_html('staff_list', $cast->registry_alias, $cast['id'])?>
+				<div class="p-casts-section__list center-align col s3 m3 l3 favorite">
+					<?=$this->User->get_favo_html('staff_list', $cast)?>
 					<a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
 						<img src="<?=$cast->icon?>" alt="<?=$cast->nickname?>" class="p-casts-section__list_img_circle circle">
 					</a>
@@ -201,14 +197,12 @@
 						<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i>
 							<?=$value->gallery_count?></span>
 						<p><span class="color-blue"><?=$value->cast['nickname']?></span><br>
-							<span class="color-blue"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
+							<span class="color-blue truncate"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
 								.' '.$value->cast->shop['name']?></span><br>
 							<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 						</p>
-						<span class="like-count secondary-content icon-vertical-align color-blue"><i
-								class="small material-icons">favorite_border</i><?=count($value->diary_likes)?></span>
-							<a class="waves-effect hoverable"
-							href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id ?>"></a>
+							<?=$this->User->get_favo_html('new_info_favo_disable', $value)?>
+						<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id ?>"></a>
 					</li>
 					<?php endforeach ?>
 				</ul>
@@ -387,13 +381,13 @@
 						</p>
 						<p><?=$this->Text->autoParagraph($shop->shop_infos[0]->content)?></p>
 						<p>
-							<span class="icon-vertical-align color-blue"><i class="material-icons">favorite_border</i><span
-									class="like-field-span like-count"><?=count($shop->shop_infos[0]->likes)?></span></span>
-							<span class="like-field-span like-count"></span>
+						<div class="favorite">
+							<?=$this->User->get_favo_html('view_info', $shop->shop_infos[0])?>
+						</div>
 							<span style="float:right;">
 								<a href="<?=DS.$shopInfo['area']['path'].DS.PATH_ROOT['NOTICE'].DS.$shop->id."?area=".$shop->area."&genre=".$shop->genre.
-						"&shop=".$shop->id."&name=".$shop->name?>"
-									class="waves-effect waves-green btn"><?=COMMON_LB['052']?></a>
+									"&shop=".$shop->id."&name=".$shop->name?>" class="waves-effect waves-green btn"><?=COMMON_LB['052']?>
+								</a>
 							</span>
 						</p>
 					</div>

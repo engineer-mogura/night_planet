@@ -21,9 +21,9 @@
 			</div>
 		</div>
 		<div class="modal-footer">
-			<a class="modal-footer__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">
-				<i class="material-icons">favorite</i>
-			</a>
+			<div class="favorite">
+				<?=$this->User->get_favo_html('modal', (object) array('registry_alias' => 'diarys'))?>
+			</div>
 			<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
 		</div>
 	</div>

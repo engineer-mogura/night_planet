@@ -36,4 +36,15 @@ class DiaryLike extends Entity
         'cast' => true,
         'user' => true
     ];
+
+    /**
+     * ƒe[ƒuƒ‹–¼‚ğ•Ô‹p‚·‚é
+     *
+     *
+     * @return void
+     */
+    protected function _getRegistryAlias()
+    {
+        return $this->_registryAlias;
+    }
 }

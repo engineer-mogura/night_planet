@@ -99,8 +99,8 @@ class MainController extends AppController
                         ->toArray();
 
         $shop_ranking = $this->Util->getRanking($range, $limit, null);
-        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null);
-        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']);
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null, $this->viewVars['userInfo']['id']);
+        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], null , $this->viewVars['userInfo']['id']);
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', null);
         $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', null);
         //広告を配列にセット

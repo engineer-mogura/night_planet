@@ -296,7 +296,13 @@ class OwnersController extends AppController
 
             // オーナーに所属する全ての店舗を取得する
             $shops = $this->Shops->find('all')
-                ->contain(['owners'])
+                ->contain(['owners', 'shop_likes' => function ($q) {
+                    return $q
+                        ->select(['shop_likes.id','shop_likes.shop_id','shop_likes.user_id'
+                            , 'total' => $q->func()->count('shop_likes.shop_id')])
+                        ->group('shop_id')
+                        ->where(['shop_likes.shop_id']);
+                }])
                 ->where(['owner_id' => $user['id']])->toArray();
 
             // 非表示または論理削除している場合はログイン画面にリダイレクトする

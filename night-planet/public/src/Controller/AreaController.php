@@ -187,9 +187,11 @@ class AreaController extends AppController
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
         // 日記を取得
-        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area'], null);
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX']
+            , $this->viewVars['is_area'], null, $this->viewVars['userInfo']['id']);
         // お知らせを取得
-        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], $this->viewVars['is_area']);
+        $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']
+            , $this->viewVars['is_area'], $this->viewVars['userInfo']['id']);
 
         $this->set('next_view', 'area');
         $this->set(compact('all_cnt', 'genreCounts', 'selectList', 'new_photos'
@@ -323,9 +325,20 @@ class AreaController extends AppController
         $area_genre = ['area'=> AREA[$url['0']], 'genre'=>GENRE[$url['1']]];
         // エリア、ジャンルの店舗情報取得
         $shops = $this->Shops->find('all')
-                    ->where(['area'=> $url['0'], 'genre' => $url['1'],
-                    'status = 1 AND delete_flag = 0'])
-                    ->contain(['snss'])->toArray();
+            ->contain(['snss', 'shop_likes' => function (Query $q) {
+                return $q
+                    ->select(['shop_likes.id','shop_likes.shop_id','shop_likes.user_id'
+                        , 'total' => $q->func()->count('shop_likes.shop_id')])
+                    ->group('shop_id')
+                    ->where(['shop_likes.shop_id']);
+            }, 'shop_likes.users' => function (Query $q) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+            }])
+            ->where(['area'=> $url['0'], 'genre' => $url['1'],
+                'status = 1 AND delete_flag = 0'])
+            ->toArray();
 
         // トップ画像を設定する
         foreach ($shops as $key => $shop) {
@@ -360,26 +373,79 @@ class AreaController extends AppController
     public function commonShop($id)
     {
         $sharer =  Router::reverse($this->request, true);
-        $columns = $this->ShopInfos->schema()->columns();
 
-        $shop = $this->Shops->find('all')
+         $shop = $this->Shops->find('all')
             ->where(['shops.id' => $id,
                 'shops.status = 1 AND shops.delete_flag = 0'])
-            ->contain(['owners','owners.servece_plans','casts' => function (Query $q) {
+            ->contain(['owners','owners.servece_plans'
+            , 'shop_likes' => function (Query $q) {
                 return $q
-                        ->where(['casts.status = 1 AND casts.delete_flag = 0']);
-            }, 'owners.shops' => function (Query $q) {
+                    ->select(['shop_likes.id','shop_likes.shop_id','shop_likes.user_id'
+                        , 'total' => $q->func()->count('shop_likes.shop_id')])
+                    ->group('shop_id')
+                    ->where(['shop_likes.shop_id']);
+            }, 'shop_likes.users' => function (Query $q) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+            } ,'casts' => function (Query $q) {
+                return $q
+                    ->where(['casts.status = 1 AND casts.delete_flag = 0'])
+                    ->order(['rand()']);
+            } ,'casts' => function (Query $q) {
+                $now = date('Y-m-d');
+                $case = $q->newExpr()->addCase(
+                    [$q->newExpr()->between(
+                        'created', date('Y-m-d', strtotime("-10 day")), $now)]
+                        ,[1, 0]
+                        ,['integer', 'integer']
+                );
+                return $q->find('all')
+                    ->select(['casts.id','casts.shop_id','casts.role','casts.name','casts.nickname','casts.email','casts.password','casts.birthday',
+                        'casts.three_size','casts.blood_type','casts.constellation','casts.age','casts.message','casts.holiday','casts.dir',
+                        'casts.remember_token','casts.status','casts.delete_flag','casts.created','casts.modified',
+                        'is_new' => $case])
+                    ->where(['casts.status = 1 AND casts.delete_flag = 0'])
+                    ->order(['rand()']);
+            }, 'casts.updates' => function (Query $q) use ($id) {
+                return $q
+                    ->select()
+                    ->where(['shop_id' => $id,
+                        'updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR'])
+                    ->order(['created' => 'DESC']);
+            }, 'casts.cast_likes' => function (Query $q) {
+                return $q
+                    ->select(['cast_likes.id','cast_likes.cast_id','cast_likes.user_id'
+                        , 'total' => $q->func()->count('cast_likes.cast_id')])
+                    ->group('cast_id')
+                    ->where(['cast_likes.cast_id']);
+            }, 'casts.cast_likes.users' => function (Query $q) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+            }, 'owners.shops' => function (Query $q) use ($id) {
                 return $q
                         ->where(['shops.id is not' => $id,
-                            'shops.status = 1 AND shops.delete_flag = 0']);
+                            'shops.status = 1 AND shops.delete_flag = 0',
+                            'not' => ['shops.id in' => [$id]]]);
             }, 'coupons' => function (Query $q) {
                 return $q
                         ->where(['coupons.status'=>'1']);
-            },'shop_infos' => function (Query $q) use ($columns) {
+            },'shop_infos' => function (Query $q) {
                 return $q
-                        ->select($columns)
+                        ->find("all")
                         ->order(['shop_infos.created'=>'DESC'])
                         ->limit(1);
+            }, 'shop_infos.shop_info_likes' => function ($q)  {
+                return $q
+                    ->select(['id','shop_info_id','user_id'
+                        , 'total' => $q->func()->count('shop_info_id')])
+                    ->group('shop_info_id')
+                    ->where(['shop_info_id']);
+            }, 'shop_infos.shop_info_likes.users' => function ($q) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' =>$this->viewVars['userInfo']['id']]);
             },'work_schedules' => function (Query $q) {
                 $end_date = date("Y-m-d H:i:s");
                 $start_date = date("Y-m-d H:i:s", strtotime($end_date . "-24 hour"));
@@ -397,64 +463,63 @@ class AreaController extends AppController
             );
         }
 
-        // 店舗が複数ある場合
-        foreach($shop->owner->shops as $key => $value) {
-            if($value->id == $id) {
-               unset($shop->owner->shops[$key]);
-            }
-        }
-        // その他の店舗情報
-        $otherShopInfo = array();
         // その他の店舗情報をセット
         foreach($shop->owner->shops as $key => $value) {
-            array_push($otherShopInfo, $this->Util->getShopInfo($value));
             $shop->owner->shops[$key]->set('shopInfo', $this->Util->getShopInfo($value));
         }
 
         $shopInfo = $this->Util->getShopInfo($shop);
-        $query = $this->Updates->find();
-        $columns = $this->Updates->schema()->columns();
-        // 店舗の更新情報を取得する
-        $updateInfo = $this->Updates->find('all', array(
-            'conditions' => array('updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR')
-        ))
-        ->join([
-            'table' => 'updates',
-            'alias' => 'u',
-            'type' => 'LEFT',
-            'conditions' => 'u.content = updates.content and u.created > updates.created'
-        ])
-        ->select($columns)
-        ->where(['updates.shop_id'=>$shopInfo['id'],'u.created IS NULL'])
-        ->order(['updates.created'=>'DESC'])
-        ->toArray();
 
-        $update_icon = array();
-        // 画面の店舗メニューにnew-icon画像を付与するための配列をセットする
-        foreach ($updateInfo as $key => $value) {
-            $isNew = in_array($value->type, SHOP_MENU_NAME);
-            if ($isNew) {
-                $update_icon[] = $value->type;
-            }
-        }
-        // 今日の日付から1ヶ月前
-        $end_date = date('Y-m-d', strtotime("-7 day"));
-        // スタッフの登録日付をチェックする
-        foreach ($shop->casts as $key => $cast) {
-            $user_created = $cast->created->format('Y-m-d');
-            $end_ts = strtotime($end_date);
-            $user_ts = strtotime($user_created);
-            // 新しいスタッフの場合フラグセット
-            if ($user_ts >= $end_ts) {
-                $cast->set('new_cast', true);
-            }
-            // スタッフの更新があればフラグをセット
-            foreach ($updateInfo as $key => $value) {
-                if (!empty($value->cast_id) && $value->cast_id == $cast->id) {
-                    $cast->set('update_cast', true);
-                }
-            }
-        }
+        // // 店舗の更新情報を取得する
+        // $updateInfo = $this->Updates->find('all')
+        //     ->where(['shop_id' => $id,
+        //         'updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR'])
+        //     ->order(['created' => 'DESC'])
+        //     ->toArray();
+
+        // $columns = $this->Updates->schema()->columns();
+
+        // 店舗の更新情報を取得する
+        // $updateInfo = $this->Updates->find('all', array(
+        //     'conditions' => array('updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR')
+        // ))
+        // ->join([
+        //     'table' => 'updates',
+        //     'alias' => 'u',
+        //     'type' => 'LEFT',
+        //     'conditions' => 'u.content = updates.content and u.created > updates.created'
+        // ])
+        // ->select($columns)
+        // ->where(['updates.shop_id'=>$shopInfo['id'],'u.created IS NULL'])
+        // ->order(['updates.created'=>'DESC'])
+        // ->toArray();
+
+        // $update_icon = array();
+        // // 画面の店舗メニューにnew-icon画像を付与するための配列をセットする
+        // foreach ($updateInfo as $key => $value) {
+        //     $isNew = in_array($value->type, SHOP_MENU_NAME);
+        //     if ($isNew) {
+        //         $update_icon[] = $value->type;
+        //     }
+        // }
+        // // 今日の日付から1ヶ月前
+        // $end_date = date('Y-m-d', strtotime("-7 day"));
+        // // スタッフの登録日付をチェックする
+        // foreach ($shop->casts as $key => $cast) {
+        //     $user_created = $cast->created->format('Y-m-d');
+        //     $end_ts = strtotime($end_date);
+        //     $user_ts = strtotime($user_created);
+        //     // 新しいスタッフの場合フラグセット
+        //     if ($user_ts >= $end_ts) {
+        //         $cast->set('new_cast', true);
+        //     }
+        //     // スタッフの更新があればフラグをセット
+        //     foreach ($updateInfo as $key => $value) {
+        //         if (!empty($value->cast_id) && $value->cast_id == $cast->id) {
+        //             $cast->set('update_cast', true);
+        //         }
+        //     }
+        // }
 
         // トップ画像を設定する
         $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$shopInfo['top_image_path']), true, 0755);
@@ -525,7 +590,7 @@ class AreaController extends AppController
             }
         }
         // 店舗スタッフの最新日記を取得する
-        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id);
+        $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, $id, $this->viewVars['userInfo']['id']);
 
         $credits = $this->MasterCodes->find()->where(['code_group' => 'credit']);
         $ig_data = null; // Instagramデータ
@@ -601,8 +666,7 @@ class AreaController extends AppController
                         ->select(['cast_likes.id','cast_likes.cast_id','cast_likes.user_id'
                             , 'total' => $q->func()->count('cast_likes.cast_id')])
                         ->group('cast_id')
-                        ->where(['cast_likes.cast_id'])
-                        ->order(['cast_id' => $id]);
+                        ->where(['cast_likes.cast_id']);
                 }, 'casts.cast_likes.users' => function (Query $q) {
                     return $q
                         ->select(['is_like' => $q->func()->count('users.id')])
@@ -790,14 +854,38 @@ class AreaController extends AppController
             );
         }
 
-        $this->set('userInfo', $this->Util->getCastItem($cast, $cast->shop));
+        $this->set('castInfo', $this->Util->getCastItem($cast, $cast->shop));
         $this->set('shopInfo', $this->Util->getShopInfo($cast->shop));
 
         // スタッフの全ての日記を取得
-        $diarys = $this->Util->getDiarys($id, $this->viewVars['userInfo']['diary_path']);
-
+        $diarys = $this->Util->getDiarys($id, $this->viewVars['castInfo']['diary_path'], $this->viewVars['userInfo']['id']);
+        $top_diarys = array();
+        $arcive_diarys = array();
+        $count = 0;
+        foreach ($diarys as $key1 => $rows) :
+            foreach ($rows as $key2 => $row) :
+                if ($count == 5) :
+                    break;
+                endif;
+                array_push($top_diarys, $row);
+                unset($diarys[$key1][$key2]);
+                $count = $count + 1;
+            endforeach;
+        endforeach;
+        foreach ($diarys as $key => $rows) :
+            if (count($rows) == 0) :
+                unset($diarys[$key]);
+            endif;
+        endforeach;
+        foreach ($diarys as $key1 => $rows) :
+            $tmp_array = array();
+            foreach ($rows as $key2 => $row) :
+                array_push($tmp_array, $row);
+            endforeach;
+            array_push($arcive_diarys, array_values($tmp_array));
+        endforeach;
         $this->set('next_view', PATH_ROOT['DIARY']);
-        $this->set(compact('cast', 'diarys'));
+        $this->set(compact('cast', 'top_diarys', 'arcive_diarys'));
         $this->render();
     }
 
@@ -813,8 +901,9 @@ class AreaController extends AppController
             ->contain(['shops'])
             ->first();
 
-        $this->set('userInfo', $this->Util->getCastItem($cast, $cast->shop));
-        $diary = $this->Util->getDiary($this->request->getQuery('diary_id'), $this->viewVars['userInfo']['diary_path']);
+        $this->set('castInfo', $this->Util->getCastItem($cast, $cast->shop));
+        $diary = $this->Util->getDiary($this->request->getQuery('diary_id')
+            , $this->viewVars['castInfo']['diary_path'], $this->viewVars['userInfo']['id']);
         $this->response->body(json_encode($diary));
         return;
     }
@@ -856,18 +945,64 @@ class AreaController extends AppController
 
     public function notice($id = null)
     {
-        $shop = $this->Shops->get($id);
-        $shopInfo = $this->Util->getShopInfo($shop);
-        $notices = $this->Util->getNotices($shop->id, $shopInfo['notice_path']);
+        $shop = $this->Shops->find("all")
+            ->where(['shops.id' => $id,
+                'shops.status = 1 AND shops.delete_flag = 0'])
+            ->first();
 
+        // 店舗が非表示または論理削除している場合はリダイレクトする
+        if (empty($shop)) {
+            $url = explode(DS, $this->request->url);
+            return $this->redirect(
+                ['controller' => 'Unknow', 'action' => 'diary',
+                        '?'=> array('area'=>$url[0])]
+            );
+        }
+
+        $this->set('shopInfo', $this->Util->getShopInfo($shop));
+
+        // 店舗の全てのニュースを取得
+        $notices = $this->Util->getNotices($id, $this->viewVars['shopInfo']['notice_path'], $this->viewVars['userInfo']['id']);
+        $top_notices = array();
+        $arcive_notices = array();
+        $count = 0;
+        foreach ($notices as $key1 => $rows) :
+            foreach ($rows as $key2 => $row) :
+                if ($count == 5) :
+                    break;
+                endif;
+                array_push($top_notices, $row);
+                unset($notices[$key1][$key2]);
+                $count = $count + 1;
+            endforeach;
+        endforeach;
+        foreach ($notices as $key => $rows) :
+            if (count($rows) == 0) :
+                unset($notices[$key]);
+            endif;
+        endforeach;
+        foreach ($notices as $key1 => $rows) :
+            $tmp_array = array();
+            foreach ($rows as $key2 => $row) :
+                array_push($tmp_array, $row);
+            endforeach;
+            array_push($arcive_notices, array_values($tmp_array));
+        endforeach;
         $this->set('next_view', PATH_ROOT['NOTICE']);
-        $this->set(compact('shop', 'notices', 'shopInfo'));
+        $this->set(compact('cast', 'top_notices', 'arcive_notices'));
         $this->render();
+
+        // $shop = $this->Shops->get($id);
+        // $shopInfo = $this->Util->getShopInfo($shop);
+        // $notices = $this->Util->getNotices($shop->id, $shopInfo['notice_path']);
+
+        // $this->set('next_view', PATH_ROOT['NOTICE']);
+        // $this->set(compact('shop', 'notices', 'shopInfo'));
+        // $this->render();
     }
 
     public function viewNotice()
     {
-
         // AJAXのアクセス以外は不正とみなす。
         if (!$this->request->is('ajax')) {
             throw new MethodNotAllowedException('AJAX以外でのアクセスがあります。');
@@ -875,29 +1010,12 @@ class AreaController extends AppController
         $this->confReturnJson(); // json返却用の設定
         $shop = $this->Shops->get($this->request->query["id"]);
 
+
         $this->set('shopInfo', $this->Util->getShopInfo($shop));
-        $notice = $this->Util->getNotice($this->request->getQuery('notice_id'), $this->viewVars['shopInfo']['notice_path']);
+        $notice = $this->Util->getNotice($this->request->getQuery('notice_id')
+            , $this->viewVars['shopInfo']['notice_path'], $this->viewVars['userInfo']['id']);
         $this->response->body(json_encode($notice));
         return;
-
-        // if ($this->request->is('ajax')) {
-        //     $this->confReturnJson(); // json返却用の設定
-        //     $query = $this->ShopInfos->find();
-        //     $columns = $this->ShopInfos->schema()->columns();
-        //     $ymd = $query->func()->date_format([
-        //         'created' => 'literal',
-        //         "'%Y/%c/%e %H:%i'" => 'literal']);
-        //     $columns = $columns + ['ymd_created'=>$ymd];
-
-        //     // スタッフ情報、最新の日記情報とイイネの総数取得
-        //     $notice = $this->ShopInfos->find("all")
-        //         ->select($columns)
-        //         ->where(['id' => $this->request->query["id"]])
-        //         ->contain(['Shop_info_Likes'])
-        //         ->first();
-        //     $this->response->body(json_encode($notice));
-        //     return;
-        // }
     }
 
     /**

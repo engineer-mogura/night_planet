@@ -15,15 +15,11 @@
                             <li class="cast-head-line1__ul_li favorite">
                                 <div class="cast-head-line1__ul_li__favorite">
                                     <?=$this->User->get_favo_html('header', $shop->casts[0])?>
-                                    <i class="favorite-add material-icons">add</i>
-                                    <span class="cast-head-line1__ul_li__favorite__count count"><?=$shop->casts[0]->cast_likes[0]['total']?></span>
-                                </div>
+                               </div>
                             </li>
                             <li class="cast-head-line1__ul_li voice">
                                 <div class="cast-head-line1__ul_li__voice">
-                                    <?=$this->User->get_comment_html('header', $shop->casts[0]->registry_alias, $shop->casts[0]['id'])?>
-                                    <i class="favorite-add material-icons">add</i>
-                                    <span class="cast-head-line1__ul_li__voice__count count">0</span>
+                                    <?=$this->User->get_comment_html('header', $shop)?>
                                 </div>
                             </li>
                             <li class="cast-head-line1__ul_li">
@@ -298,7 +294,7 @@
 				<?php if(count($shop->casts) > 1): ?>
 				<?php foreach($shop->casts as $key => $cast): ?>
                     <?php if ($key == 0) {continue;}; ?>
-                    <div class="p-casts-section__list center-align col s3 m3 l3">
+                    <div class="p-casts-section__list favorite center-align col s3 m3 l3">
                         <?=$this->User->get_favo_html('staff_list', $cast)?>
                         <a href="<?=DS.$shop['area'].DS.PATH_ROOT['CAST'].DS.$cast['id']?>">
                             <img src="<?=$cast->icon?>" alt="<?=$cast->nickname?>" class="p-casts-section__list_img_circle circle">

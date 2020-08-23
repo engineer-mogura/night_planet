@@ -276,26 +276,93 @@ class UsersController extends AppController
         $id = $auth['id']; // ユーザーID
 
         try {
+            // 店舗
+            if ($this->request->getData('alias') == 'shops') {
+                if ($this->request->getData('status') == 1) {
+                    $message = "お気に入り追加しました。"; // 返却メッセージ
+                    $entity = $this->ShopLikes->newEntity($this->request->getData());
+                    // レコード更新実行
+                    if (!$this->ShopLikes->save($entity)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                } else {
+                    $message = "お気に入り解除しました。"; // 返却メッセージ
+                    $entity = $this->ShopLikes->find()
+                            ->where(['shop_id' => $this->request->getData('shop_id')
+                                , 'user_id' => $this->request->getData('user_id')])
+                            ->first();
+                    // レコード削除実行
+                    if (!$this->ShopLikes->delete($entity)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                }
+            }
             // スタッフ
             if ($this->request->getData('alias') == 'casts') {
                 if ($this->request->getData('status') == 1) {
+                    $message = "お気に入り追加しました。"; // 返却メッセージ
                     $entity = $this->CastLikes->newEntity($this->request->getData());
                     // レコード更新実行
                     if (!$this->CastLikes->save($entity)) {
                         throw new RuntimeException('レコードの更新ができませんでした。');
                     }
                 } else {
-                    $entity = $this->CastLikes->get($this->request->getData('id'));
+                    $message = "お気に入り解除しました。"; // 返却メッセージ
+                    $entity = $this->CastLikes->find()
+                            ->where(['cast_id' => $this->request->getData('cast_id')
+                                , 'user_id' => $this->request->getData('user_id')])
+                            ->first();
                     // レコード削除実行
                     if (!$this->CastLikes->delete($entity)) {
                         throw new RuntimeException('レコードの更新ができませんでした。');
                     }
                 }
             }
-
+            // 店舗ニュース
+            if ($this->request->getData('alias') == 'shop_infos') {
+                if ($this->request->getData('status') == 1) {
+                    $message = "いいねしました。"; // 返却メッセージ
+                    $entity = $this->ShopInfoLikes->newEntity($this->request->getData());
+                    // レコード更新実行
+                    if (!$this->ShopInfoLikes->save($entity)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                } else {
+                    $message = "いいねを解除しました。"; // 返却メッセージ
+                    $entity = $this->ShopInfoLikes->find()
+                            ->where(['shop_info_id' => $this->request->getData('shop_info_id')
+                                , 'user_id' => $this->request->getData('user_id')])
+                            ->first();
+                    // レコード削除実行
+                    if (!$this->ShopInfoLikes->delete($entity)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                }
+            }
+            // スタッフブログ
+            if ($this->request->getData('alias') == 'diarys') {
+                if ($this->request->getData('status') == 1) {
+                    $message = "いいねしました。"; // 返却メッセージ
+                    $entity = $this->DiaryLikes->newEntity($this->request->getData());
+                    // レコード更新実行
+                    if (!$this->DiaryLikes->save($entity)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                } else {
+                    $message = "いいねを解除しました。"; // 返却メッセージ
+                    $entity = $this->DiaryLikes->find()
+                            ->where(['diary_id' => $this->request->getData('diary_id')
+                                , 'user_id' => $this->request->getData('user_id')])
+                            ->first();
+                    // レコード削除実行
+                    if (!$this->DiaryLikes->delete($entity)) {
+                        throw new RuntimeException('レコードの更新ができませんでした。');
+                    }
+                }
+            }
         } catch(RuntimeException $e) {
             $this->log($this->Util->setLog($auth, $e));
-            $message = RESULT_M['CHANGE_FAILED'];
+            $message = "お気に入り追加に失敗しました。";
             $flg = false;
         }
 

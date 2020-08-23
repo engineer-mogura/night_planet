@@ -41,13 +41,16 @@ class UsersTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        $this->hasMany('DiaryLikes', [
+        $this->hasMany('diary_likes', [
             'foreignKey' => 'user_id'
         ]);
-        $this->hasMany('CastLikes', [
+        $this->hasMany('cast_likes', [
             'foreignKey' => 'user_id'
         ]);
-        $this->hasMany('ShopInfoLikes', [
+        $this->hasMany('shop_likes', [
+            'foreignKey' => 'user_id'
+        ]);
+        $this->hasMany('shop_info_likes', [
             'foreignKey' => 'user_id'
         ]);
 

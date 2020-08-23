@@ -702,6 +702,11 @@ function initializeUser() {
 
     // いいね、口コミボタン押した時
     $(document).on("click", ".favo_click", function () {
+        // アニメーションする
+        $(this).addClass('purupuru');
+        $(this).delay(800).queue(function () {
+            $(this).removeClass('purupuru').dequeue();
+        });
         var data = $(this).data();
         var count_elm = null;
         // お気に入りか、口コミか
@@ -710,19 +715,21 @@ function initializeUser() {
         } else if ($(this).closest('.voice').length > 0) {
             count_elm = $(this).closest('.voice').find(".count");
         }
+        var status = 1; // クリック状態初期値
+
         // お気に入り追加
         if ($(this).hasClass('grey')) {
             $(count_elm).text(Number($(count_elm).text()) + 1);
         } else {
             if (Number($(count_elm).text()) != 0) {
-                $(count_elm).text(Number($(count_elm).text()) + 1);
+                $(count_elm).text(Number($(count_elm).text()) - 1);
+                status = 0;
             }
         }
-        var status = 1; // クリック状態初期値
-        // チェックされてない場合
-        if (!$(this).hasClass('grey')) {
-            status = 0;
-        }
+        // お気に入りボタンカラー切り替え
+        $(this).toggleClass('grey');
+        $(this).toggleClass('red');
+
         data.status = status;
         data.action = "/user/users/favorite_click";
 
@@ -741,20 +748,18 @@ function initializeUser() {
             success: function (response, dataType) {
                 // OKの場合
                 if (response.success) {
-                    // Materialize.toast(
-                    //     $(target).find(".shop-num").text() +
-                    //         response.message,
-                    //     3000,
-                    //     "rounded"
-                    // );
+                    Materialize.toast(
+                        response.message,
+                        3000,
+                        "rounded"
+                    );
                 } else {
                     // NGの場合
-                    // Materialize.toast(
-                    //     $(target).find(".shop-num").text() +
-                    //         response.message,
-                    //     3000,
-                    //     "rounded"
-                    // );
+                    Materialize.toast(
+                        response.message,
+                        3000,
+                        "rounded"
+                    );
                 }
             },
             error: function (response, textStatus, xhr) {
@@ -938,7 +943,7 @@ function initializeUser() {
                 .val($(this).find("input[name='diary_id']").val());
             //通常のアクションをキャンセルする
             event.preventDefault();
-            callModalDiaryWithAjax($form, "user");
+            callModalDiaryWithAjax($form , $(this), "user");
             $(".materialboxed").materialbox();
         });
     }
@@ -958,7 +963,7 @@ function initializeUser() {
             //$($form).find("input[name='id']").val($(this).find("input[name='id']").val());
             //通常のアクションをキャンセルする
             event.preventDefault();
-            callModalNoticeWithAjax($form, "user");
+            callModalNoticeWithAjax($form, $(this), "user");
             $(".materialboxed").materialbox();
         });
     }
@@ -2454,7 +2459,7 @@ function initializeShop() {
                 .val($(this).find("input[name='id']").val());
             //通常のアクションをキャンセルする
             event.preventDefault();
-            callModalNoticeWithAjax($form, "admin");
+            callModalNoticeWithAjax($form, null, "admin");
             $(".materialboxed").materialbox();
         });
         // モーダルお知らせの更新モードボタン押した時
@@ -2767,7 +2772,7 @@ var searchAjax = function (searchResult, form) {
  * @param  {} $form
  * @param  {} userType
  */
-var callModalDiaryWithAjax = function ($form, userType) {
+var callModalDiaryWithAjax = function ($form, $this, userType) {
     $.ajax({
         url: $form.attr("action"), //Formのアクションを取得して指定する
         type: $form.attr("method"), //Formのメソッドを取得して指定する
@@ -2822,9 +2827,9 @@ var callModalDiaryWithAjax = function ($form, userType) {
                     $(diaryCard)
                         .find("p[name='content']")
                         .textWithLF(response["content"]);
-                    $("#modal-diary")
-                        .find(".like-count")
-                        .text(response["diary_likes"].length);
+                    // お気に入り設定
+                    ajaxModalFavo(diaryCard.closest('#modal-diary')
+                            .find('.modal-footer'), response, 'diarys');
 
                     // 画像表示するグリッドを決定する
                     if (response["gallery"].length > 0) {
@@ -2845,6 +2850,7 @@ var callModalDiaryWithAjax = function ($form, userType) {
                         $(diaryCard).find("figure.hide").remove();
                         initPhotoSwipeFromDOM(".my-gallery");
                     }
+
                     // 管理者の場合JSONデータを保持する
                     if (userType == "admin") {
                         var images = [];
@@ -2879,10 +2885,27 @@ var callModalDiaryWithAjax = function ($form, userType) {
                 complete: function () {
                     // ユーザーの場合
                     if (userType == "user") {
+                        console.log($this);
+                        $clone = $($(this)[0]["$el"]).find(".clone");
+                        $footer = $clone.closest('#modal-diary')
+                            .find('.modal-footer');
+                        // アーカイブリンクにモーダル表示時のイイネを反映する
+                        $this.find('.count').text($footer.find('.count').text());
+                        if ($footer.find('.modal-footer__a-favorite').hasClass('red')) {
+
+                            $this.find('.li-linkbox__a-favorite').addClass('red');
+                            $this.find('.li-linkbox__a-favorite').removeClass('grey');
+                        } else {
+                            $this.find('.li-linkbox__a-favorite').addClass('grey');
+                            $this.find('.li-linkbox__a-favorite').removeClass('red');
+                        }
+
                         // モーダル非表示した時は、背景画面のスクロールを解除する
                         $("body").removeClass("fixed").css({ top: 0 });
                         window.scrollTo(0, scrollPosition);
-                        $($(this)[0]["$el"]).find(".clone").remove();
+                        $footer.find('.count').text("");
+                        $footer.find('.modal-footer__a-favorite').removeClass('red');
+                        $clone.remove();
                     } else if (userType == "admin") {
                         //スタッフの場合
                         // モーダルフォームをクリアする
@@ -2924,7 +2947,7 @@ var callModalDiaryWithAjax = function ($form, userType) {
  * @param  {} $form
  * @param  {} userType
  */
-var callModalNoticeWithAjax = function ($form, userType) {
+var callModalNoticeWithAjax = function ($form, $this, userType) {
     $.ajax({
         url: $form.attr("action"), //Formのアクションを取得して指定する
         type: $form.attr("method"), //Formのメソッドを取得して指定する
@@ -2979,9 +3002,8 @@ var callModalNoticeWithAjax = function ($form, userType) {
                     $(noticeCard)
                         .find("p[name='content']")
                         .textWithLF(response["content"]);
-                    $("#modal-notice")
-                        .find(".like-count")
-                        .text(response["shop_info_likes"].length);
+                    ajaxModalFavo(noticeCard.closest('#modal-notice')
+                            .find('.modal-footer'), response, 'shop_infos');
 
                     // 画像表示するグリッドを決定する
                     if (response["gallery"].length > 0) {
@@ -3002,6 +3024,7 @@ var callModalNoticeWithAjax = function ($form, userType) {
                         $(noticeCard).find("figure.hide").remove();
                         initPhotoSwipeFromDOM(".my-gallery");
                     }
+
                     // 管理者の場合JSONデータを保持する
                     if (userType == "admin") {
                         var images = [];
@@ -3036,10 +3059,25 @@ var callModalNoticeWithAjax = function ($form, userType) {
                 complete: function () {
                     // ユーザーの場合
                     if (userType == "user") {
+                        console.log($this);
+                        $clone = $($(this)[0]["$el"]).find(".clone");
+                        // アーカイブリンクにモーダル表示時のイイネを反映する
+                        $this.find('.count').text($clone.closest('#modal-notice')
+                            .find('.modal-footer').find('.count').text());
+                        if ($clone.closest('#modal-notice')
+                                .find('.modal-footer__a-favorite').hasClass('red')) {
+
+                            $this.find('.li-linkbox__a-favorite').addClass('red');
+                            $this.find('.li-linkbox__a-favorite').removeClass('grey');
+                        } else {
+                            $this.find('.li-linkbox__a-favorite').addClass('grey');
+                            $this.find('.li-linkbox__a-favorite').removeClass('red');
+                        }
+
                         // モーダル非表示した時は、背景画面のスクロールを解除する
                         $("body").removeClass("fixed").css({ top: 0 });
                         window.scrollTo(0, scrollPosition);
-                        $($(this)[0]["$el"]).find(".clone").remove();
+                        $clone.remove();
                     } else if (userType == "admin") {
                         //スタッフの場合
                         // モーダルフォームをクリアする
@@ -3075,6 +3113,34 @@ var callModalNoticeWithAjax = function ($form, userType) {
         },
     });
 };
+
+/**
+ * @description モーダルニュース、日記のお気に入り設定
+ * @param  {} $like
+ */
+var ajaxModalFavo = function ($element, data, alias) {
+    $element.find('.count').text(0);
+    $element.find('.modal-footer__a-favorite').addClass('grey');
+    if (alias == 'shop_infos') {
+        $element.find('.modal-footer__a-favorite').data('shop_info_id', data['id']);
+    } else if (alias == 'diarys') {
+        $element.find('.modal-footer__a-favorite').data('diary_id', data['id']);
+    }
+    if (data['shop_info_likes']) {
+        $element.find('.count').text(data['shop_info_likes'][0]['total']);
+        if (data['shop_info_likes'][0]['is_like'] > 0) {
+            $element.find('.modal-footer__a-favorite').addClass('red');
+            $element.find('.modal-footer__a-favorite').removeClass('grey');
+        }
+    } else if (data['diary_likes']) {
+        $element.find('.count').text(data['diary_likes'][0]['total']);
+        if (data['diary_likes'][0]['is_like'] > 0) {
+            $element.find('.modal-footer__a-favorite').addClass('red');
+            $element.find('.modal-footer__a-favorite').removeClass('grey');
+        }
+    }
+
+}
 
 /**
  * スタッフ画面の初期化処理
@@ -3501,7 +3567,7 @@ function initializeCast() {
                 .val($(this).find("input[name='id']").val());
             //通常のアクションをキャンセルする
             event.preventDefault();
-            callModalDiaryWithAjax($form, "admin");
+            callModalDiaryWithAjax($form, null, "admin");
             $(".materialboxed").materialbox();
         });
         // モーダル日記の更新モードボタン押した時

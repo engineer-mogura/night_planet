@@ -30,20 +30,23 @@
                                     <span class="cast-head-line1__ul_li__image__count count">0</span>
                                 </div>
                             </li>
-                            <li class="cast-head-line1__ul_li day-work">
-								<div class="cast-head-line1__ul_li__day-work<?=$isWorkDay > 0 ? " puyon":""?>">
-									<span class="cast-head-line1__ul_li__day-work__status">
-                                        <?=$isWorkDay > 0 ? "本日出勤予定":"本日出勤未定"?>
-									</span>
-								</div>
-							</li>
                         </ul>
                     </div>
                     <div class="cast-head-line2 col s12">
-                        <ul class="cast-head-line1__ul">
-                            <li class="cast-head-line1__ul_li">
+                        <ul class="row cast-head-line2__ul">
+                            <li class="col s6 cast-head-line2__ul_li">
                                 <?= !empty($shop->casts[0]->name) ? h($shop->casts[0]->name) : h('-') ?>
                             </li>
+                            <li class="col s6 cast-head-line2__ul_li day-work">
+                                <span class="cast-head-line2__ul_li__day-work__status<?=$isWorkDay > 0 ? " puyon":""?>">
+                                    <?=$isWorkDay > 0 ? "本日出勤予定":"本日出勤未定"?>
+                                </span>
+								<!-- <div class="cast-head-line2__ul_li__day-work<?=$isWorkDay > 0 ? " puyon":""?>">
+									<span class="cast-head-line2__ul_li__day-work__status">
+                                        <?=$isWorkDay > 0 ? "本日出勤予定":"本日出勤未定"?>
+									</span>
+								</div> -->
+							</li>
                         </ul>
                     </div>
 				</div>

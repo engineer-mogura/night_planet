@@ -772,6 +772,85 @@ function initializeUser() {
         });
     });
 
+    // レビュー送信ボタン押した時
+    $(document).on("click", ".review_send", function () {
+        // ボタン
+        $btn = $(this);
+        //ボタン無効化
+        $btn.addClass("disabled");
+        var flag = true;
+        var form = $('#review-form');
+        // 各値を入れるオブジェクト
+        var data= new Object();
+        data['id'] = Number(form.find('input[name="shop_id"]').val());
+        data['cost'] = form.find('div[name="cost"]').data("rateitValue");
+        data['atmosphere'] = form.find('div[name="atmosphere"]').data("rateitValue");
+        data['customer'] = form.find('div[name="customer"]').data("rateitValue");
+        data['staff'] = form.find('div[name="staff"]').data("rateitValue");
+        data['cleanliness'] = form.find('div[name="cleanliness"]').data("rateitValue");
+        data['comment'] = form.find('textarea[name="comment"]').val();
+        $.each(data, function(index, value) {
+            console.log(index + ': ' + value);
+            if (value === 0) {
+                alert("☆は１個以上選択してください。");
+                //ボタン有効化
+                $btn.removeClass("disabled");
+                flag = false;
+            }
+            var input = $("<input>")
+                .attr({"type": "hidden","name": index, 'value':value});
+            form.append(input);
+        })
+        //通常のアクションをキャンセルする
+        event.preventDefault();
+        if (!flag) {
+            return false;
+        }
+        form.submit();
+    });
+
+     // レビューをもっと見るボタン押した時
+     $(document).on("click", ".see_more_reviews", function () {
+
+        var data = $(this).data();
+        data['now_count'] = $('.other-review-section__ul__li').length
+        $.ajax({
+            type: "POST",
+            datatype: "JSON",
+            url: data.action,
+            data: data,
+            timeout: 10000,
+            beforeSend: function (xhr, settings) {
+                //Buttonを無効にする
+                //処理中のを通知するアイコンを表示する
+                $("#dummy").load("/module/Preloader.ctp");
+            },
+            complete: function (xhr, textStatus) {
+                //処理中アイコン削除
+                $(".preloader-wrapper").remove();
+            },
+            success: function (response, textStatus, xhr) {
+                // OKの場合
+                if (response.success) {
+                    if (response.html != null) {
+                        $(response.html).appendTo('.other-review-section__ul');
+                        $('div.rateit').rateit();
+                    } else {
+                        $('.see_more_reviews').remove();
+                        $('.review-more-btn-section').html('<p>すべて表示しました。</p>');
+                    }
+
+                }
+            },
+            error: function (response, textStatus, xhr) {
+                $.notifyBar({
+                    cssClass: "error",
+                    html: "データ取得に失敗しました。"
+                });
+            },
+        });
+    });
+
     // 通常モーダルの初期化処理(個別に設定する場合は、この処理の下に再初期化すること)
     $(".modal").modal({
         ready: function () {
@@ -851,6 +930,18 @@ function initializeUser() {
         ready: function () {
             $("#modal-login").css('z-index','9999');
             alert("現在ログイン機能は利用できません。");
+            //this.close();
+        },
+        // モーダル非表示完了コールバック
+        complete: function () {
+            // alert("complete");
+        },
+    });
+
+    // TODO: ユーザーのログイン機能実装時に解除する
+    $("#modal-review").modal({
+        ready: function () {
+            $("#modal-review").css('z-index','9999');
             //this.close();
         },
         // モーダル非表示完了コールバック

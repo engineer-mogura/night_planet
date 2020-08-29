@@ -7,10 +7,12 @@ use Cake\Routing\Router;
 use \Cake\I18n\FrozenTime;
 use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\Datasource\ConnectionManager;
 
 class AreaController extends AppController
 {
     use MailerAwareTrait;
+    // public $components = array('Util', 'OutSideSql');
 
     public function initialize()
     {
@@ -991,14 +993,6 @@ class AreaController extends AppController
         $this->set('next_view', PATH_ROOT['NOTICE']);
         $this->set(compact('cast', 'top_notices', 'arcive_notices'));
         $this->render();
-
-        // $shop = $this->Shops->get($id);
-        // $shopInfo = $this->Util->getShopInfo($shop);
-        // $notices = $this->Util->getNotices($shop->id, $shopInfo['notice_path']);
-
-        // $this->set('next_view', PATH_ROOT['NOTICE']);
-        // $this->set(compact('shop', 'notices', 'shopInfo'));
-        // $this->render();
     }
 
     public function viewNotice()
@@ -1016,6 +1010,92 @@ class AreaController extends AppController
             , $this->viewVars['shopInfo']['notice_path'], $this->viewVars['userInfo']['id']);
         $this->response->body(json_encode($notice));
         return;
+    }
+
+    public function review($id = null)
+    {
+        // AJAXのアクセス以外は不正とみなす。
+        if ($this->request->is('ajax')) {
+
+            $this->confReturnJson(); // json返却用の設定
+            $data = $this->request->getData();
+            if ($data['type'] == 'see_more_reviews') {
+                $shop = $this->Shops->find("all")
+                    ->contain(['reviews' => function (Query $q) use ($id, $data) {
+                            return $q
+                                ->select(['reviews.id','reviews.shop_id','reviews.user_id'
+                                    , 'cost','atmosphere','customer','staff','cleanliness'
+                                    , 'comment'
+                                    , 'total' => $q->func()->count('reviews.shop_id')])
+                                ->group('user_id')
+                                ->where(['shop_id' => $id])
+                                ->limit(2)
+                                ->offset($data['now_count'])
+                                ->order(['reviews.created' => 'desc']);
+                        }, 'reviews.users' => function (Query $q){
+                            return $q
+                                ->select(['name','file_name','created'
+                                    , 'is_like' => $q->func()->count('users.id')]);
+                    }])
+                    ->where(['id' => $id, 'status = 1 AND delete_flag = 0'])
+                    ->first();
+
+                foreach ($shop->reviews as $key => $value) {
+                    // ユーザに関する情報をセット
+                    $value->set('userInfo', $this->Util->getUserInfo($value->user));
+                }
+            }
+
+            $this->set(compact('shop'));
+            $this->render('/Element/review-list');
+            $response = array(
+                'success' => true,
+                'html' => $this->response->body(),
+            );
+            $this->response->body(json_encode($response));
+            return;
+        }
+        $shop = $this->Shops->find("all")
+            ->contain(['reviews' => function (Query $q) use ($id) {
+                    return $q
+                        ->select(['reviews.id','reviews.shop_id','reviews.user_id'
+                            , 'cost','atmosphere','customer','staff','cleanliness'
+                            , 'comment'
+                            , 'total' => $q->func()->count('reviews.shop_id')])
+                        ->group('user_id')
+                        ->where(['shop_id' => $id])
+                        ->limit(2)
+                        ->order(['reviews.created' => 'desc']);
+                }, 'reviews.users' => function (Query $q){
+                    return $q
+                        ->select(['name','file_name','created'
+                            , 'is_like' => $q->func()->count('users.id')]);
+            }])
+            ->where(['id' => $id, 'status = 1 AND delete_flag = 0'])
+            ->first();
+
+        // 店舗が非表示または論理削除している場合はリダイレクトする
+        if (empty($shop)) {
+            $url = explode(DS, $this->request->url);
+            return $this->redirect(
+                ['controller' => 'Unknow', 'action' => 'shop',
+                     '?'=> array('area'=>$url[0], 'genre'=>$url[1], 'id'=>$url[2])]
+            );
+        }
+
+        $sql = $this->OutSideSql->getReview();
+        $connection = ConnectionManager::get('default');
+        $total_review = $connection->execute($sql, [$id])->fetchAll('assoc');
+        $shop->set('total_review', json_encode($total_review[0]));
+
+        foreach ($shop->reviews as $key => $value) {
+            // ユーザに関する情報をセット
+            $value->set('userInfo', $this->Util->getUserInfo($value->user));
+        }
+        $this->set('shopInfo', $this->Util->getShopInfo($shop));
+        $this->set('next_view', PATH_ROOT['REVIEW']);
+        $this->set(compact('shop'));
+        $this->render();
     }
 
     /**

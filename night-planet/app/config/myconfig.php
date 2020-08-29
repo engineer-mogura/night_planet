@@ -170,6 +170,7 @@ return [
         'EVENT'=>'event', // お知らせ
         'STAFF'=>'staff', // スタッフ
         'DIARY'=>'diary', // 日記
+        'REVIEW'=>'レビュー', // 日記
         'SHOP_TOP_IMAGE'=>'shop_top_image', // 店舗トップ画像
         'SHOP_GALLERY'=>'shop_gallery', // 店内ギャラリー
         'SYSTEM'=>'system', // 店舗情報
@@ -206,6 +207,7 @@ return [
         'ADSENSE'=> 'adsense',
         'NOTICE'=> 'notice',
         'DIARY'=> 'diary',
+        'REVIEW'=> 'review',
         'GALLERY'=> 'gallery',
         'SCHEDULE'=> 'schedule',
         'TMP'=> 'tmp',
@@ -563,6 +565,17 @@ return [
             'path' => "blood_type4"
         ],
 
+    )),
+    // 所属エリアリスト
+    define('USER', array(
+        'index'=> [
+            'label' => "マイページ",
+            'path' => "mypage",
+        ],
+        'voice'=> [
+            'label' => "口コミ",
+            'path' => "voice",
+        ],
     )),
     // 共通メッセージ common.message
     define('COMMON_M', array(

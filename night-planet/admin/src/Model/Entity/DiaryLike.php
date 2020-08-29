@@ -38,7 +38,7 @@ class DiaryLike extends Entity
     ];
 
     /**
-     * ƒe[ƒuƒ‹–¼‚ğ•Ô‹p‚·‚é
+     * ãƒ†ãƒ¼ãƒ–ãƒ«åã‚’è¿”å´ã™ã‚‹
      *
      *
      * @return void

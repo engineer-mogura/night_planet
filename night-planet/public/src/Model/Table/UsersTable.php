@@ -53,6 +53,9 @@ class UsersTable extends Table
         $this->hasMany('shop_info_likes', [
             'foreignKey' => 'user_id'
         ]);
+        $this->hasMany('reviews', [
+            'foreignKey' => 'user_id'
+        ]);
 
     }
 

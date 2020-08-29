@@ -101,8 +101,7 @@
 			<!--フッター START -->
 			<p><a href="/user/users/logout">ログアウト</a></p>
 			<!--フッター END -->
-			</div>
-
+		</div>
 	</div>
 </div>
 <!-- ショップ用ボトムナビゲーション START -->

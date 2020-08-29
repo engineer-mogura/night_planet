@@ -47,8 +47,7 @@ class UserHelper extends Helper
 			break;
 			// アイコン画像のパスを返す。画像がない場合は共通画像を返す
 			case 'icon';
-				$rtn = !empty($this->_View->viewVars['userInfo']['icon_path']) ?
-					$this->_View->viewVars['userInfo']['icon_path'] : PATH_ROOT['NO_IMAGE02'];
+				$rtn = $this->get_icon_path($this->_View->viewVars['userInfo']);
 				return $rtn;
 			break;
 			// 認証状況を返す
@@ -60,6 +59,18 @@ class UserHelper extends Helper
 				return '';
 			break;
       }
+    }
+
+	/**
+     * ユーザーアイコンパスを返す.
+     *
+     * @var array
+     */
+    function get_icon_path($user)
+    {
+		$rtn = !empty($user['icon_path']) ?
+			$user['icon_path'] : PATH_ROOT['NO_IMAGE02'];
+		return $rtn;
     }
 
     /**
@@ -110,6 +121,10 @@ class UserHelper extends Helper
 			// 店舗ページ画面時のコメントボタンを返す
 			case 'header';
 				return $this->get_comment_html_type_header($entity);
+			break;
+			// レビュー画面時の口コミボタンを返す
+			case 'comment_write';
+				return $this->get_comment_html_type_white($entity);
 			break;
 		default:
 			return '';
@@ -327,13 +342,13 @@ class UserHelper extends Helper
 			$html =   '<a class="btn-floating btn waves-effect waves-light '.$favorite.' lighten-1 favo_click" ' . $data . '>'
 						. '<i class="material-icons">favorite</i>'
 					. '</a>'
-					. '<i class="favorite-add material-icons">add</i>'
+					. '<span class="favorite-num">お気に入りの数</span>'
 					. '<span class="cast-head-line1__ul_li__favorite__count count">'.$count.'</span>';
 		} else {
 			$html = '<a class="btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
 						. '<i class="material-icons">favorite</i>'
 					. '</a>'
-					. '<i class="favorite-add material-icons">add</i>'
+					. '<span class="favorite-num">お気に入りの数</span>'
 					. '<span class="cast-head-line1__ul_li__favorite__count count">'.$count.'</span>';
 		}
 		return $html;
@@ -464,59 +479,37 @@ class UserHelper extends Helper
     function get_comment_html_type_header(Object $entity)
     {
 		$count    = 0;
-		// $alias = $entity->registry_alias;
 
-		// // お気に入り数
-		// // 店舗
-		// if ($alias == 'shops') {
-		// 	if (count($entity->shop_likes) > 0) {
-		// 		$count    = $entity->shop_likes[0]->total;
-		// 	}
-		// // スタッフ
-		// } else if ($alias == 'casts') {
-		// 	if (count($entity->cast_likes) > 0) {
-		// 		$count    = $entity->cast_likes[0]->total;
-		// 	}
-		// }
+		$html = '<a href="'.DS.$entity['area'].DS.PATH_ROOT['REVIEW'].DS.$entity['id'].'" class="btn-floating btn waves-effect waves-light red">'
+					. '<i class="material-icons">comment</i>'
+				. '</a>'
+				. '	<span class="voice-num">口コミの数</span>'
+				. '<span class="cast-head-line1__ul_li__voice__count count">'.$count.'</span>';
+
+      return $html;
+	}
+
+	    /**
+     * レビュー画面時の口コミボタンを返す
+     *
+     * @var array
+     */
+    function get_comment_html_type_white(Object $entity)
+    {
+		$alias = $entity->registry_alias;
 
         if ($this->get_u_info('is_auth')) {
-			$favorite = 'grey';
-			// $id    = $entity['id'];
-			// // 店舗
-            // if ($alias == 'shops') {
-            //     if (count($entity->shop_likes) > 0) {
-            //         $favorite = 'red';
-            //     }
-            //     $unique_id = $entity->shop_likes['id'];
+			$id    = $entity['id'];
+			$unique_id = $entity->shop_likes['id'];
+			$data =  'data-id="'.$unique_id.'" data-shop_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+			$html = '<a class="red darken-1 waves-effect waves-green btn modal-trigger" data-target="modal-review"' . $data . '>口コミを書く</a>';
 
-            //     $data =  'data-id="'.$unique_id.'" data-shop_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
-
-            // // スタッフ
-            // } else if ($alias == 'casts') {
-
-			// 	if (count($entity->cast_likes) > 0) {
-			// 		// ユーザーがお気に入りしているか
-			// 		if ($entity->cast_likes[0]->is_like) {
-			// 			$favorite = 'red';
-			// 		}
-			// 	}
-			// 	$unique_id = $entity->shop_likes['id'];
-
-			// 	$data =  'data-id="'.$unique_id.'" data-cast_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
-			// }
-
-			$html = '<a class="btn-floating btn waves-effect waves-light '.$favorite.' lighten-1" ' . $data . '>'
-						. '<i class="material-icons">comment</i>'
-					. '</a>'
-					. '<i class="favorite-add material-icons">add</i>'
-					. '<span class="cast-head-line1__ul_li__voice__count count">'.$count.'</span>';
+			if (count($entity->review_likes) > 0) {
+				$html = '<a class="red darken-1 waves-effect waves-green btn reviewed_click">口コミを書く</a>';
+			}
 
 		} else {
-			$html = '<a class="btn-floating btn waves-effect waves-light red modal-trigger" data-target="modal-login">'
-						. '<i class="material-icons">comment</i>'
-					. '</a>'
-					. '<i class="favorite-add material-icons">add</i>'
-					. '<span class="cast-head-line1__ul_li__voice__count count">'.$count.'</span>';
+			$html = '<a class="yellow darken-4 waves-effect waves-green btn modal-trigger" data-target="modal-login">口コミを書く</a>';
 		}
       return $html;
 	}

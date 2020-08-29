@@ -73,7 +73,7 @@
   <nav id="nav-header-menu" class="nav-header-menu nav-opacity">
     <div class="nav-wrapper">
       <a href="#!" data-activates="slide-out" class="button-collapse oki-button-collapse"><i class="material-icons">menu</i></a>
-      <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'] ?></a>
+      <a href="#!" class="brand-logo oki-brand-logo"><?= LT['001'].' '.LT['004'] ?></a>
       <ul class="right">
         <li><a data-target="modal-help" class="modal-trigger"><i class="material-icons">help</i></a></li>
       </ul>

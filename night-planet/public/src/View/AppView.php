@@ -110,7 +110,45 @@ class AppView extends View
                 ['class' => 'breadcrumbs-tail']
             );
         } else if ($this->viewVars['next_view'] == PATH_ROOT['SHOP']) {
-        // 次の画面が店舗の場合
+            // 次の画面が店舗の場合
+                // リストに追加
+                $this->Breadcrumbs->add([
+                    ['title' => '<i class="material-icons">home</i>', 'url' => DS]
+                    , ['title' => $this->viewVars['shopInfo']['area']['label']
+                        , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']]]
+                    , ['title' => $this->viewVars['shopInfo']['genre']['label']
+                        ,'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                             .DS . $this->viewVars['shopInfo']['genre']['path']]],
+                ]);
+                // リストの最後に追加
+                $this->Breadcrumbs->add(
+                    $this->viewVars['shop']['name'],
+                    "#!",
+                    ['class' => 'breadcrumbs-tail']
+                );
+            } else if ($this->viewVars['next_view'] == PATH_ROOT['REVIEW']) {
+            // 次の画面がレビューの場合
+                // リストに追加
+                $this->Breadcrumbs->add([
+                    ['title' => '<i class="material-icons">home</i>', 'url' => DS]
+                    , ['title' => $this->viewVars['shopInfo']['area']['label']
+                        , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']]]
+                    , ['title' => $this->viewVars['shopInfo']['genre']['label']
+                        ,'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                            .DS . $this->viewVars['shopInfo']['genre']['path']]]
+                    , ['title' => $this->viewVars['shopInfo']['name']
+                        , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                            .DS . $this->viewVars['shopInfo']['genre']['path']
+                            .DS . $this->viewVars['shopInfo']['id']]],
+                ]);
+                // リストの最後に追加
+                $this->Breadcrumbs->add(
+                    SHOP_MENU_NAME['REVIEW'],
+                    "#!",
+                    ['class' => 'breadcrumbs-tail']
+                );
+            } else if ($this->viewVars['next_view'] == PATH_ROOT['CAST']) {
+            // 次の画面がスタッフの場合
             // リストに追加
             $this->Breadcrumbs->add([
                 ['title' => '<i class="material-icons">home</i>', 'url' => DS]
@@ -118,26 +156,9 @@ class AppView extends View
                     , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']]]
                 , ['title' => $this->viewVars['shopInfo']['genre']['label']
                     ,'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
-                         .DS . $this->viewVars['shopInfo']['genre']['path']]],
-            ]);
-            // リストの最後に追加
-            $this->Breadcrumbs->add(
-                $this->viewVars['shop']['name'],
-                "#!",
-                ['class' => 'breadcrumbs-tail']
-            );
-        } else if ($this->viewVars['next_view'] == PATH_ROOT['CAST']) {
-        // 次の画面がスタッフの場合
-            // リストに追加
-            $this->Breadcrumbs->add([
-                ['title' => '<i class="material-icons">home</i>', 'url' => DS]
-                , ['title' => $this->viewVars['shopInfo']['area']['label']
-                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']]]
-                , ['title' => $this->viewVars['shopInfo']['genre']['label']
-                ,'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
                         .DS . $this->viewVars['shopInfo']['genre']['path']]]
                 , ['title' => $this->viewVars['shopInfo']['name']
-                , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
+                    , 'url' => ['controller' => $this->viewVars['shopInfo']['area']['path']
                         .DS . $this->viewVars['shopInfo']['genre']['path']
                         .DS . $this->viewVars['shopInfo']['id']]],
             ]);

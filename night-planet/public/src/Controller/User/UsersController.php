@@ -374,6 +374,35 @@ class UsersController extends AppController
     }
 
     /**
+     * レビュー送信ボタン押下処理
+     *
+     * @return void
+     */
+    public function reviewSend()
+    {
+
+        $message = "レビューを追加しました。"; // 返却メッセージ
+        $auth = $this->request->session()->read('Auth.User');
+        $id = $auth['id']; // ユーザーID
+        try {
+
+            $entity = $this->Reviews->newEntity($this->request->getQuery());
+            $entity->user_id = $id;
+
+            // レコード更新実行
+            if (!$this->Reviews->save($entity)) {
+                throw new RuntimeException('レコードの更新ができませんでした。');
+            }
+        } catch(RuntimeException $e) {
+            $this->log($this->Util->setLog($auth, $e));
+            $message = "レビュー追加に失敗しました。";
+            $this->Flash->error($message);
+        }
+        $this->Flash->success($message);
+        $this->redirect($this->referer(null, true));
+    }
+
+    /**
      * ギャラリー 画面表示処理
      *
      * @return void

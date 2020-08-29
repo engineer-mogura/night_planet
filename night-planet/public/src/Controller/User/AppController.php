@@ -19,6 +19,7 @@ class AppController extends \App\Controller\AppController
         $this->CastLikes = TableRegistry::get('cast_likes');
         $this->ShopInfoLikes = TableRegistry::get('shop_info_likes');
         $this->DiaryLikes = TableRegistry::get('diary_likes');
+        $this->Reviews = TableRegistry::get('reviews');
         $this->CastSchedules = TableRegistry::get('cast_schedules');
         $this->Snss = TableRegistry::get('snss');
         $this->Updates = TableRegistry::get('updates');
@@ -53,7 +54,7 @@ class AppController extends \App\Controller\AppController
         $action = $this->request->getParam('action');
 
         // ログイン時に許可するアクション
-        $access = ['mypage','profile','favoriteClick','passChange'];
+        $access = ['mypage','profile','favoriteClick','reviewSend','passChange'];
         if (in_array($action, $access)) {
             return true;
         }

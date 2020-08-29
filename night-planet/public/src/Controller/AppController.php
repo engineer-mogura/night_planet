@@ -2,9 +2,12 @@
 
 namespace App\Controller;
 
-use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
+use Cake\Controller\Component;
+use Cake\Controller\Controller;
+use Cake\Controller\ComponentRegistry;
+use App\Controller\Component\OutSideSqlComponent;
 
 /**
  * Application Controller
@@ -16,7 +19,7 @@ use Cake\ORM\TableRegistry;
  */
 class AppController extends Controller
 {
-    public $components = array('Util');
+    public $components = array('Util', 'OutSideSql');
 
     public function initialize()
     {
@@ -34,6 +37,7 @@ class AppController extends Controller
         $this->ShopInfoLikes = TableRegistry::get('shop_info_likes');
         $this->DiaryLikes    = TableRegistry::get('diary_likes');
         $this->ShopInfos     = TableRegistry::get("shop_infos");
+        $this->Reviews       = TableRegistry::get('reviews');
         $this->ShopOptions   = TableRegistry::get("shop_options");
         $this->Shop_infos    = TableRegistry::get('shop_infos');
         $this->Shops         = TableRegistry::get('shops');

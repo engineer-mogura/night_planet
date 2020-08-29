@@ -1428,7 +1428,7 @@ span.icon-vertical-align {
 }
 .cast-head-line1__ul_li.cast-icon {
   position: absolute;
-  bottom: 1.8em;
+  bottom: 1.6em;
 }
 .cast-head-line1__ul_li.favorite {
   margin-left: 1em;
@@ -1436,13 +1436,13 @@ span.icon-vertical-align {
 .cast-head-line1__ul_li__voice__count {
   /*font-family: fantasy;*/
   position: relative;
-  right: 23px;
+  right: 45px;
   bottom: 7px;
 }
 .cast-head-line1__ul_li__favorite__count {
   /*font-family: fantasy;*/
   position: relative;
-  right: 23px;
+  right: 65px;
   bottom: 7px;
 }
 .cast-head-line1__ul_li__image__count {
@@ -1450,17 +1450,22 @@ span.icon-vertical-align {
   position: relative;
   bottom: 7px;
 }
-.cast-head-line1__ul_li.day-work {
-  margin-left: 3em;
-}
-.cast-head-line1__ul_li__day-work__status {
-  font-weight: bolder;
-  color: coral;
-}
+
 .cast-head-line2 {
   height: 30px;
   font-weight: bold;
   font-size: large;
+}
+.cast-head-line2__ul {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+.cast-head-line2__ul_li__day-work__status {
+  display: block;
+  font-size: small;
+  font-weight: bolder;
+  color: coral;
+  float: right;
 }
 /** STAFF HEAD END */
 
@@ -2506,6 +2511,12 @@ form .message-label {
       width: 100%;
   }
   #modal-search {
+      width: 100%;
+      height: 90%;
+      height: 90%;
+      max-height: 90%;
+  }
+  #modal-review {
       width: 100%;
       height: 90%;
       height: 90%;

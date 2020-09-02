@@ -74,7 +74,7 @@
             }
 
             .rateit button.rateit-reset {
-                background: url(delete.gif) 0 0;
+                background: url(/img/common/review/delete.gif) 0 0;
                 width: 16px;
                 height: 16px;
                 display: -moz-inline-box;

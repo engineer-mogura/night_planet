@@ -79,10 +79,10 @@
                 labels: ['コスパ', '店内雰囲気', '客層', 'スタッフ', '清潔感'], 
                 datasets: [{
                     label: '口コミレビュー',
-                    backgroundColor: 'rgb(255, 25, 102)',
+                    backgroundColor: 'rgb(255, 0, 0)',
                     borderColor: 'rgb(255, 99, 132)',
                     data: [Number(data['cost_star']).toFixed(2)
-                        , Number(data['atmosphere_star_star']).toFixed(2)
+                        , Number(data['atmosphere_star']).toFixed(2)
                         , Number(data['customer_star']).toFixed(2)
                         , Number(data['staff_star']).toFixed(2)
                         , Number(data['cleanliness_star']).toFixed(2)]

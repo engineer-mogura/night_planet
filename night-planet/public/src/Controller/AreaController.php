@@ -453,8 +453,17 @@ class AreaController extends AppController
                 $start_date = date("Y-m-d H:i:s", strtotime($end_date . "-24 hour"));
                 $range = "'".$start_date."' and '".$end_date."'";
                 return $q
-                        ->where(["work_schedules.modified BETWEEN".$range]);
+                    ->where(["work_schedules.modified BETWEEN".$range]);
+            },'reviews' => function (Query $q) use ($id) {
+                return $q
+                    ->select(['reviews.shop_id', 'total' => $q->func()->count('reviews.shop_id')])
+                    ->where(['shop_id' => $id]);
+            }, 'reviews.users' => function (Query $q){
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
             },'jobs','snss','shop_options'])->first();
+
 
         // 店舗が非表示または論理削除している場合はリダイレクトする
         if (empty($shop)) {

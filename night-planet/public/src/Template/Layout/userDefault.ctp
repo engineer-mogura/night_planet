@@ -125,7 +125,7 @@
         <li class="nav-search">
           <a data-target="modal-search" class="modal-trigger">
             <i id="search-puyon" class="puyon material-icons">search</i>
-            <span>検索する</span>
+            <div class="nav-search__label">検索する</div>
           </a>
         </li>
         <?=$this->User->get_login_html();?>

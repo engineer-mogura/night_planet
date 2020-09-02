@@ -78,7 +78,7 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_favo_html(string $type, Object $entity)
+    function get_favo_html(string $type, $entity)
     {
 		switch ($type) {
 			// メイントップ、エリアトップ画面時のお気に入りボタンを返す
@@ -119,7 +119,7 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_comment_html(string $type, Object $entity)
+    function get_comment_html(string $type, $entity)
     {
 		switch ($type) {
 			// 店舗ページ画面時のコメントボタンを返す
@@ -145,10 +145,10 @@ class UserHelper extends Helper
     {
 		if ($this->get_u_info('is_auth')) {
 			$html = '<li class="nav-account-login unlock"><a href="/user/users/mypage">'
-					. '<i class="material-icons">lock_open</i><span>マイページ</span></a></li>';
+					. '<i class="material-icons">lock_open</i><div class="nav-account-login__label">マイページ</div></a></li>';
 		} else {
 			$html = '<li class="nav-account-login lock"><a data-target="modal-login" class="modal-trigger">'
-					. '<i class="material-icons">lock</i><span>ログイン</span></a></li>';
+					. '<i class="material-icons">lock</i><div class="nav-account-login__label">ログイン</div></a></li>';
 		}
 		return $html;
     }
@@ -158,7 +158,7 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_favo_html_type_new_info(string $type, Object $entity)
+    function get_favo_html_type_new_info(string $type, $entity)
     {
 		$count    = 0;
 		$alias = $entity->registry_alias;
@@ -229,7 +229,7 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_favo_html_type_view_info(Object $entity)
+    function get_favo_html_type_view_info($entity)
     {
 		$count    = 0;
 		$alias = $entity->registry_alias;
@@ -295,7 +295,7 @@ class UserHelper extends Helper
      * @var array
      */
     //function get_favo_html_type_header(string $alias, int $unique_id = null, int $id, bool $is_favo)
-    function get_favo_html_type_header(Object $entity)
+    function get_favo_html_type_header($entity)
     {
 		$count    = 0;
 		$alias = $entity->registry_alias;
@@ -364,7 +364,7 @@ class UserHelper extends Helper
      * @var array
      */
     //function get_favo_html_type_staff_list(string $alias, int $id, bool $is_favo)
-    function get_favo_html_type_staff_list(Object $entity)
+    function get_favo_html_type_staff_list($entity)
     {
 		$count    = 0;
 		$alias = $entity->registry_alias;
@@ -413,7 +413,7 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_favo_html_type_search(Object $entity)
+    function get_favo_html_type_search($entity)
     {
 		$count    = 0;
 		$alias = $entity->registry_alias;
@@ -480,16 +480,31 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_comment_html_type_header(Object $entity)
+    function get_comment_html_type_header($entity)
     {
-		$count    = 0;
 
-		$html = '<a href="'.DS.$entity['area'].DS.PATH_ROOT['REVIEW'].DS.$entity['id'].'" class="btn-floating btn waves-effect waves-light red">'
-					. '<i class="material-icons">comment</i>'
+		$count = 0;
+		$favorite = 'grey';
+
+		if (!empty($entity->reviews)) {
+			$review = $entity->reviews[0];
+			$count = $review->total;
+			if ($review->is_like) {
+				$favorite = 'red';
+			}
+
+			// 店舗お気に入り
+			if ($entity->registry_alias == 'shops') {
+			// スタッフお気に入り
+			} else if ($entity->registry_alias == 'casts') {
+			}
+		}
+
+		$html = '<a href="'.DS.$entity['area'].DS.PATH_ROOT['REVIEW'].DS.$entity['id'].'" class="btn-floating btn waves-effect waves-light '.$favorite.'">'
+				. '<i class="material-icons">comment</i>'
 				. '</a>'
 				. '	<span class="voice-num">口コミの数</span>'
 				. '<span class="cast-head-line1__ul_li__voice__count count">'.$count.'</span>';
-
       return $html;
 	}
 
@@ -498,20 +513,27 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_comment_html_type_white(Object $entity)
+    function get_comment_html_type_white($entity)
     {
 		$alias = $entity->registry_alias;
 
         if ($this->get_u_info('is_auth')) {
+
+			// 店舗お気に入り
+			if ($entity->registry_alias == 'shops') {
+			// スタッフお気に入り
+			} else if ($entity->registry_alias == 'casts') {
+			}
 			$id    = $entity['id'];
 			$unique_id = $entity->shop_likes['id'];
 			$data =  'data-id="'.$unique_id.'" data-shop_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
 			$html = '<a class="red darken-1 waves-effect waves-green btn modal-trigger" data-target="modal-review"' . $data . '>口コミを書く</a>';
 
-			if (count($entity->review_likes) > 0) {
-				$html = '<a class="red darken-1 waves-effect waves-green btn reviewed_click">口コミを書く</a>';
+			if (!empty($entity->reviews)) {
+				if (count($entity->reviews[0]->is_like) > 0) {
+					$html = '<a class="darken-1 waves-effect waves-green btn disabled">レビュー済み</a>';
+				}
 			}
-
 		} else {
 			$html = '<a class="yellow darken-4 waves-effect waves-green btn modal-trigger" data-target="modal-login">口コミを書く</a>';
 		}
@@ -523,7 +545,7 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_favo_html_type_modal(Object $entity)
+    function get_favo_html_type_modal($entity)
     {
 		if ($this->get_u_info('is_auth')) {
 
@@ -554,7 +576,7 @@ class UserHelper extends Helper
      *
      * @var array
      */
-    function get_favo_html_type_my_favo(Object $entity)
+    function get_favo_html_type_my_favo($entity)
     {
 		$count = 0;
 		$alias = $entity->registry_alias;

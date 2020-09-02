@@ -223,8 +223,12 @@ ul.right.nav-right li span {
     top: 2em;
     height: 50%;
 }
-ul.right.nav-right li.nav-search span {
-
+.nav-search__label,
+.nav-account-login__label {
+    position: relative;
+    font-size: xx-small;
+    bottom: 4em;
+    height: 10px;
 }
 ul.right.nav-right li.nav-search a {
     color: #ffa8e4;

@@ -69,20 +69,6 @@ class UsersController extends AppController
         if ($this->request->session()->check('first_login')) {
 
         }
-        // $query = $this->Diarys->find();
-        // // ユーザの記事といいね数を取得
-        // $diarys = $query->select(['id',
-        //     'diary_like_num'=> $query->func()->count('diary_likes.diary_id')])
-        //     ->contain('diary_likes')
-        //     ->leftJoinWith('diary_likes')
-        //     ->where(['diarys.user_id'=>$id])
-        //     ->group(['diary_likes.diary_id'])
-        //     ->order(['diary_like_num' => 'desc'])->toArray();
-        // $likeTotal = array_sum(array_column($diarys, 'diary_like_num'));
-        //$like = $query->select(['total_like' => $query->func()->sum('user_id')])
-        //$diarydiary_likes = $this->Diarys->find('all')->where(['user_id'=>$id])->contain('diary_likes');
-        // $user = $this->Users->find('all')
-        //     ->contain(['shops','diarys'])->where(['users.id'=>$id])->first();
 
         // 非表示または論理削除している場合はトップ画面にリダイレクトする
         if (!$this->checkStatus($user)) {
@@ -277,7 +263,9 @@ class UsersController extends AppController
 
         try {
             // 店舗
-            if ($this->request->getData('alias') == 'shops') {
+            if ($this->request->getData('alias') == 'shops'
+                    || $this->request->getData('alias') == 'shop_likes') {
+
                 if ($this->request->getData('status') == 1) {
                     $message = "お気に入り追加しました。"; // 返却メッセージ
                     $entity = $this->ShopLikes->newEntity($this->request->getData());
@@ -298,7 +286,8 @@ class UsersController extends AppController
                 }
             }
             // スタッフ
-            if ($this->request->getData('alias') == 'casts') {
+            if ($this->request->getData('alias') == 'casts'
+                    || $this->request->getData('alias') == 'cast_likes') {
                 if ($this->request->getData('status') == 1) {
                     $message = "お気に入り追加しました。"; // 返却メッセージ
                     $entity = $this->CastLikes->newEntity($this->request->getData());
@@ -400,6 +389,173 @@ class UsersController extends AppController
         }
         $this->Flash->success($message);
         $this->redirect($this->referer(null, true));
+    }
+
+    /**
+     * 店舗お気に入りボタン押下処理
+     *
+     * @return void
+     */
+    public function shopFavo()
+    {
+        $user = $this->request->session()->read('Auth.User');
+        $id = $user['id']; // ユーザID
+        $data = $this->request->getData();
+
+        // 非表示または論理削除している場合はトップ画面にリダイレクトする
+        if (!$this->checkStatus($user)) {
+            return $this->redirect(PUBLIC_DOMAIN);
+        }
+        $favos = $this->ShopLikes->find('all')
+            ->contain(['shops' => function ($q) {
+                return $q
+                    ->select($this->Shops)
+                    ->where(['shops.status' => '1', 'shops.delete_flag' => '0']);
+            }, 'users' => function ($q) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+            }])
+
+            ->select(['shop_likes.id','shop_likes.shop_id'
+                ,'shop_likes.user_id','shop_likes.created'
+                , 'total' => $this->ShopLikes->find()->func()->count('shop_id')])
+            ->group('shop_likes.shop_id')
+            ->where(['shop_likes.shop_id'])
+            ->order(['shop_likes.created' => 'DESC'])
+            ->limit(4);
+        // もっと見るボタンの時
+        if ($this->request->is('ajax')) {
+            $favos->offset($data['now_count']);
+        }
+        $favos = $favos->toArray();
+
+        foreach ($favos as $key => $favo) {
+            $shop = $favo->shop;
+            // 店舗に関する情報をセット
+            $shop->set('shopInfo', $this->Util->getShopInfo($shop));
+        }
+
+        // トップ画像を設定する
+        foreach ($favos as $key => $favo) {
+            $shop = $favo->shop;
+            $path = PATH_ROOT['IMG'].DS.AREA[$shop->area]['path']
+                .DS.GENRE[$shop->genre]['path']
+                .DS.$shop->dir.DS.PATH_ROOT['TOP_IMAGE'];
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$path), true, 0755);
+
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if (count($files) > 0) {
+                foreach ($files as $file) {
+                    $shop->set('top_image', DS.$path.DS.(basename($file)));
+                }
+            } else {
+                // 共通トップ画像をセット
+                $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+            }
+        }
+
+        // AJAX
+        if ($this->request->is('ajax')) {
+            $this->confReturnJson(); // json返却用の設定
+            $this->set(compact('shops'));
+            $this->render('/Element/favo-list');
+            $response = array(
+                'success' => true,
+                'html' => $this->response->body(),
+            );
+            $this->response->body(json_encode($response));
+            return;
+        } else {
+            $this->set('next_view', 'shop_favo');
+            $this->set(compact('favos'));
+            $this->render();
+        }
+    }
+
+    /**
+     * スタッフお気に入り、もっと見るボタン押下処理
+     *
+     * @return void
+     */
+    public function castFavo()
+    {
+        $user = $this->request->session()->read('Auth.User');
+        $id = $user['id']; // ユーザID
+        $data = $this->request->getData();
+
+        // 非表示または論理削除している場合はトップ画面にリダイレクトする
+        if (!$this->checkStatus($user)) {
+            return $this->redirect(PUBLIC_DOMAIN);
+        }
+        $favos = $this->CastLikes->find('all')
+            ->contain(['casts.shops' => function ($q) {
+                return $q
+                    ->select($this->Shops)
+                    ->where(['shops.status' => '1', 'shops.delete_flag' => '0']);
+            }, 'casts' => function ($q) {
+                return $q
+                    ->select($this->Casts)
+                    ->where(['casts.status' => '1', 'casts.delete_flag' => '0']);
+            }, 'users' => function ($q) {
+                return $q
+                    ->select(['is_like' => $q->func()->count('users.id')])
+                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+            }])
+
+            ->select(['cast_likes.id','cast_likes.cast_id'
+                ,'cast_likes.user_id','cast_likes.created'
+                , 'total' => $this->CastLikes->find()->func()->count('cast_id')])
+            ->group('cast_likes.cast_id')
+            ->where(['cast_likes.cast_id'])
+            ->order(['cast_likes.created' => 'DESC'])
+            ->limit(4);
+        // もっと見るボタンの時
+        if ($this->request->is('ajax')) {
+            $favos->offset($data['now_count']);
+        }
+        $favos = $favos->toArray();
+
+        foreach ($favos as $key => $favo) {
+            $cast = $favo->cast;
+            // スタッフに関する情報をセット
+            $cast->set('castInfo', $this->Util->getCastItem($cast, $cast->shop));
+        }
+        // トップ画像を設定する
+        foreach ($favos as $key => $favo) {
+            $cast = $favo->cast;
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$cast->castInfo['profile_path']), true, 0755);
+
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if (count($files) > 0) {
+                foreach ($files as $file) {
+                    $cast->set('icon', $cast->castInfo['profile_path'].DS.(basename($file)));
+                }
+            } else {
+                // 共通トップ画像をセット
+                $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
+            }
+        }
+        // AJAX
+        if ($this->request->is('ajax')) {
+            $this->confReturnJson(); // json返却用の設定
+            $this->set(compact('favos'));
+            $this->render('/Element/favo-list');
+            $response = array(
+                'success' => true,
+                'html' => $this->response->body(),
+            );
+            $this->response->body(json_encode($response));
+            return;
+        } else {
+            $this->set('next_view', 'cast_favo');
+            $this->set(compact('favos'));
+            $this->render();
+        }
     }
 
     /**

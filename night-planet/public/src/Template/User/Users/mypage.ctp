@@ -81,13 +81,13 @@
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<span class="menu-section shop"></br>SHOP</span>
-						<a class="waves-effect waves-light" href="#shop-section"></a>
+						<a class="waves-effect waves-light" href="/user/users/shop_favo"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l2">
 					<div class="lighten-4 linkbox card-panel hoverable center-align">
 						<span class="menu-section casts"></br>STAFF</span>
-						<a class="waves-effect waves-light" href="#p-casts-section"></a>
+						<a class="waves-effect waves-light" href="/user/users/cast_favo"></a>
 					</div>
 				</div>
 				<div class="col s4 m4 l2">

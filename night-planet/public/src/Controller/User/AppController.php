@@ -54,7 +54,7 @@ class AppController extends \App\Controller\AppController
         $action = $this->request->getParam('action');
 
         // ログイン時に許可するアクション
-        $access = ['mypage','profile','favoriteClick','reviewSend','passChange'];
+        $access = ['mypage','profile','favoriteClick','reviewSend','shopFavo','castFavo','passChange'];
         if (in_array($action, $access)) {
             return true;
         }

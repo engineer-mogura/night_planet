@@ -851,6 +851,47 @@ function initializeUser() {
         });
     });
 
+     // お気に入りをもっと見るボタン押した時
+     $(document).on("click", ".see_more_favos", function () {
+
+        var data = $(this).data();
+        data['now_count'] = $('.favo-list-section__ul__li').length
+        $.ajax({
+            type: "POST",
+            datatype: "JSON",
+            url: data.action,
+            data: data,
+            timeout: 10000,
+            beforeSend: function (xhr, settings) {
+                //Buttonを無効にする
+                //処理中のを通知するアイコンを表示する
+                $("#dummy").load("/module/Preloader.ctp");
+            },
+            complete: function (xhr, textStatus) {
+                //処理中アイコン削除
+                $(".preloader-wrapper").remove();
+            },
+            success: function (response, textStatus, xhr) {
+                // OKの場合
+                if (response.success) {
+                    if (response.html != null) {
+                        $(response.html).appendTo('.favo-list-section__ul');
+                    } else {
+                        $('.see_more_favos').remove();
+                        $('.favo-more-btn-section').html('<p>すべて表示しました。</p>');
+                    }
+
+                }
+            },
+            error: function (response, textStatus, xhr) {
+                $.notifyBar({
+                    cssClass: "error",
+                    html: "データ取得に失敗しました。"
+                });
+            },
+        });
+    });
+
     // 通常モーダルの初期化処理(個別に設定する場合は、この処理の下に再初期化すること)
     $(".modal").modal({
         ready: function () {
@@ -1004,7 +1045,14 @@ function initializeUser() {
         googlemap_init("google_map", address);
     }
     /* 店舗画面 END */
-
+    /* レビュー画面 START */
+    if ($("#review").length) {
+        // 検索ボタン押した時
+        commonSearch(false);
+        // 店舗住所取得
+        var address = $("table td[name='address']").text();
+    }
+    /* レビュー画面 END */
     /* スタッフ画面 START */
     if ($("#cast").length) {
         // 検索ボタン押した時

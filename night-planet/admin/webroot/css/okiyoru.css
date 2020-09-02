@@ -777,7 +777,6 @@ ul.tabs > li.tab-original.tab > .active {
 .card-tag {
   border-radius: 15px;
   padding: 3px 8px;
-  margin: 5px;
   font-size: xx-small;
 }
 
@@ -1539,7 +1538,6 @@ background-color: #fb8c00; */
 /* 日記ページ END */
 
 /* ユーザーページ START */
-/** USER HEAD START */
 .user-head-section {
   position: relative;
   margin-bottom: initial;
@@ -1614,7 +1612,6 @@ background-color: #fb8c00; */
   font-weight: bold;
   font-size: large;
 }
-/** STAFF HEAD END */
 
 .user-header .user-name-box {
   color: slategrey;
@@ -1671,9 +1668,6 @@ background-color: #fb8c00; */
   font-weight: bolder;
   color: crimson;
 }
-
-/** STAFF HEAD END */
-
 .user-header .user-name-box {
   color: slategrey;
 }
@@ -1729,7 +1723,19 @@ background-color: #fb8c00; */
   font-weight: bolder;
   color: crimson;
 }
-
+.favo-list-section__ul__li__favorite {
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
+}
+.favo-list-section__ul__li__favorite-count {
+  position: absolute;
+  right: 45px;
+  bottom: 10px;
+}
+.avatar img {
+  object-fit: cover;
+}
 /* ユーザーページ END */
 
 /* テーブル系共通 START */
@@ -2238,6 +2244,21 @@ form .message-label {
       bottom: 20px;
       left: 50px;
   }
+  .favo-list-section__ul__li__favorite {
+      width: 2em;
+      height: 2em;
+  }
+  .favo-list-section__ul__li__favorite .favo-list-section__ul__li__favorite__icon {
+      font-size: 1.5em;
+      position: relative;
+      bottom: 0.25em;
+  }
+  .favo-list-section__ul__li__favorite-count {
+      position: absolute;
+      right: 35px;
+      bottom: 10px;
+  }
+
 }
 
 @media only screen and (min-width: 768px) {
@@ -2315,6 +2336,9 @@ form .message-label {
   #today-member-modal h6 span,
   #cast-main .cast-header-icon * {
       font-size: x-small;
+  }
+  .favo-list-section__ul__li__address {
+      font-size: smaller;
   }
   .p-casts-section__list img.circle {
       height: 5em;

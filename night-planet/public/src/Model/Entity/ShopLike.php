@@ -34,4 +34,16 @@ class ShopLike extends Entity
         'shop' => true,
         'user' => true
     ];
+
+    /**
+     * テーブル名を返却する
+     *
+     *
+     * @return void
+     */
+    protected function _getRegistryAlias()
+    {
+        return $this->_registryAlias;
+    }
+
 }

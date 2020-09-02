@@ -79,8 +79,22 @@ class AppView extends View
                 ['title' => 'マイページ', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'mypage']],
                 ['title' => 'プロフィール', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'profile']]
             ]);
+        } else if ($this->viewVars['next_view'] == 'shop_favo') {
+            // 次の画面が店舗お気に入りページの場合
+            $this->Breadcrumbs->add([
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS],
+                ['title' => 'マイページ', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'mypage']],
+                ['title' => '店舗お気に入り', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'shop_favo']]
+            ]);
+        } else if ($this->viewVars['next_view'] == 'cast_favo') {
+            // 次の画面がスタッフお気に入りページの場合
+            $this->Breadcrumbs->add([
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS],
+                ['title' => 'マイページ', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'mypage']],
+                ['title' => 'スタッフお気に入り', 'url' => ['controller' => $breadcrumbList[1], 'action' => 'cast_favo']]
+            ]);
         }
-    }
+}
     /**
      * パンくずを設定する
      *

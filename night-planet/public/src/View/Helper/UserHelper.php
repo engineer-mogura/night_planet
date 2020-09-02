@@ -104,6 +104,10 @@ class UserHelper extends Helper
 			case 'modal';
 				return $this->get_favo_html_type_modal($entity);
 			break;
+			// お気に入り画面時のお気に入りボタンを返す
+			case 'my_favo';
+				return $this->get_favo_html_type_my_favo($entity);
+			break;
 			default:
 				return '';
 			break;
@@ -543,5 +547,40 @@ class UserHelper extends Helper
 					. '<span class="modal-footer__a-favorite__count count">0</span>';
 		}
 		return $html;
+	}
+
+	/**
+     * お気に入り画面時のお気に入りボタンを返す
+     *
+     * @var array
+     */
+    function get_favo_html_type_my_favo(Object $entity)
+    {
+		$count = 0;
+		$alias = $entity->registry_alias;
+		$favorite = 'red';
+
+		// 店舗お気に入り
+		if ($alias == 'shop_likes') {
+			$id    = $entity->shop['id'];
+			$unique_id = $entity['id'];
+			$count = $entity->total;
+			$data =  'data-id="'.$unique_id.'" data-shop_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+		// スタッフお気に入り
+		} else if ($alias == 'cast_likes') {
+			$id    = $entity->cast['id'];
+			$unique_id = $entity['id'];
+			$count = $entity->total;
+			$data =  'data-id="'.$unique_id.'" data-cast_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
+		}
+
+		$html = '<a class="favo-list-section__ul__li__favorite btn-floating btn waves-effect waves-light '.$favorite.' lighten-1 favo_click" ' . $data . '>'
+				. '<i class="material-icons favo-list-section__ul__li__favorite__icon">favorite</i>'
+				. '</a>'
+				. '<span class="favo-list-section__ul__li__favorite-count count">'.$count.'</span>';
+
+
+      return $html;
     }
+
 }

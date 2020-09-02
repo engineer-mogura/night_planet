@@ -81,8 +81,8 @@ class CastLikesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['cast_id'], 'Casts'));
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->existsIn(['cast_id'], 'casts'));
+        $rules->add($rules->existsIn(['user_id'], 'users'));
 
         return $rules;
     }

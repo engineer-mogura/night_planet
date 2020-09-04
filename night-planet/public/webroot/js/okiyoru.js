@@ -3265,14 +3265,18 @@ var ajaxModalFavo = function ($element, data, alias) {
         $element.find('.modal-footer__a-favorite').data('diary_id', data['id']);
     }
     if (data['shop_info_likes']) {
-        $element.find('.count').text(data['shop_info_likes'][0]['total']);
-        if (data['shop_info_likes'][0]['is_like'] > 0) {
+        if (data['shop_info_likes'].length == 0) {
+            $element.find('.count').text(0);
+        } else {
+            $element.find('.count').text(data['shop_info_likes'][0]['total']);
             $element.find('.modal-footer__a-favorite').addClass('red');
             $element.find('.modal-footer__a-favorite').removeClass('grey');
         }
     } else if (data['diary_likes']) {
-        $element.find('.count').text(data['diary_likes'][0]['total']);
-        if (data['diary_likes'][0]['is_like'] > 0) {
+        if (data['diary_likes'].length == 0) {
+            $element.find('.count').text(0);
+        } else {
+            $element.find('.count').text(data['diary_likes'][0]['total']);
             $element.find('.modal-footer__a-favorite').addClass('red');
             $element.find('.modal-footer__a-favorite').removeClass('grey');
         }

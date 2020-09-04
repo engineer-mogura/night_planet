@@ -432,7 +432,7 @@ class UtilComponent extends Component
     {
         $diary = TableRegistry::get('diarys');
         $query = $diary->find('all')
-            ->select($diary->Schema()->columns())
+            ->select($diary)
             ->contain(['diary_likes' => function ($q)  {
                 return $q
                     ->select(['id','diary_id','user_id'
@@ -464,7 +464,7 @@ class UtilComponent extends Component
         foreach ($files as $file) {
             $timestamp = date('Y/m/d H:i', filemtime($file));
             array_push($gallery, array(
-            "file_path"=>$diaryPath.$diary->dir.DS.(basename($file))
+            "file_path"=>$diary_path.$diary->dir.DS.(basename($file))
             ,"date"=>$timestamp));
         }
         $diary->set('gallery', $gallery);

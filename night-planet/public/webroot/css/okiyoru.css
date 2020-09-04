@@ -373,6 +373,21 @@ ul.right.nav-right li.nav-account-login.unlock a {
     position: relative;
     bottom: -0.1em;
 }
+.li-linkbox__a__h6 {
+    position: relative;
+}
+.linkbox .li-linkbox__a-image {
+    position: absolute;
+    top: -1em;
+    left: 10em;
+    width: 2.5em;
+    height: 2.5em;
+    z-index: 10;
+}
+.linkbox .li-linkbox__a-image > i {
+    position: relative;
+    bottom: 0.1em;
+}
 
 /* フラッシュメッセージ系 START */
 
@@ -642,6 +657,11 @@ ul.tabs > li.tab-original.tab > .active {
     position: absolute;
     right: 50px;
     top: 0px;
+}
+.li-linkbox__a-image__count {
+    position: relative;
+    top: -1em;
+    left: 1em;
 }
 /* トップページ画面 END */
 

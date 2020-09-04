@@ -35,12 +35,14 @@
 							<?php foreach ($notices as $key => $value): ?>
 								<li class="linkbox collection-item avatar favorite">
 									<img src="<?= $value->icon ?>" alt="" class="circle">
-									<span class="title color-blue"><?= $value->created->nice()?></span>
-									<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$value->gallery_count?></span>
-									<p><span class="color-blue truncate"><?= AREA[$value->shop['area']]['label'].' '.GENRE[$value->shop['genre']]['label']
-										.' '.$value->shop['name']?></span><br>
+									<h6 class="li-linkbox__a__h6"><?=$value->created->nice()?>
+										<a class="li-linkbox__a-image btn-floating btn red darken-3 lighten-1"><i class="material-icons">camera_alt</i></a>
+										<span class="li-linkbox__a-image__count"><?=$value->gallery_count?></span>
+									</h6>
+									<span class="card-tag white-text red"><?=$value->shop['name']?></span></br>
+									<span class="card-tag white-text blue darken-1"><?=AREA[$value->shop['area']]['label']?></span>
+									<span class="card-tag white-text orange darken-1"><?=GENRE[$value->shop['genre']]['label']?></span>
 									<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
-									</p>
 									<?=$this->User->get_favo_html('new_info', $value)?>
 									<a class="waves-effect hoverable" href="<?=DS.$value->shop['area'].DS.PATH_ROOT['NOTICE'].DS.$value->shop->id."?area=".$value->shop->area."&genre=".$value->shop->genre
 										."&name=".$value->shop->name."&shop_infos=".$value->id ?>"></a>
@@ -57,13 +59,15 @@
 							<?php foreach ($diarys as $key => $value): ?>
 								<li class="linkbox collection-item avatar favorite">
 									<img src="<?= $value->icon ?>" alt="" class="circle">
-									<span class="title color-blue"><?= $value->created->nice()?></span>
-									<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i> <?=$value->gallery_count?></span>
-									<p><span class="color-blue"><?=$value->cast['nickname']?> </span>
-										<span class="color-blue truncate"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
-										.' '.$value->cast->shop['name']?></span><br>
-										<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
-									</p>
+									<h6 class="li-linkbox__a__h6"><?=$value->created->nice()?>
+										<a class="li-linkbox__a-image btn-floating btn red darken-3 lighten-1"><i class="material-icons">camera_alt</i></a>
+										<span class="li-linkbox__a-image__count"><?=$value->gallery_count?></span>
+									</h6>
+									<span class="card-tag white-text red"><?=$value->cast['nickname']?></span>
+									<span class="card-tag white-text red"><?=$value->cast->shop['name']?></span></br>
+									<span class="card-tag white-text blue darken-1"><?=AREA[$value->cast->shop['area']]['label']?></span>
+									<span class="card-tag white-text orange darken-1"><?=GENRE[$value->cast->shop['genre']]['label']?></span>
+									<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
 									<?=$this->User->get_favo_html('new_info', $value)?>
 									<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id."?area=".$value->cast->shop->area."&genre=".$value->cast->shop->genre.
 									"&shop=".$value->cast->shop->id."&name=".$value->cast->shop->name."&cast=".$value->cast->id."&nickname=".$value->cast->nickname?>"></a>

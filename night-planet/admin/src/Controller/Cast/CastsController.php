@@ -997,9 +997,33 @@ class CastsController extends AppController
         $id = $this->request->getSession()->read('Auth.Cast.id');
 
         $diarys = $this->Util->getDiarys($id
-            , $this->viewVars['userInfo']['diary_path']);
-
-        $this->set(compact('diarys'));
+            , $this->viewVars['userInfo']['diary_path'], null);
+        $top_diarys = array();
+        $arcive_diarys = array();
+        $count = 0;
+        foreach ($diarys as $key1 => $rows) :
+            foreach ($rows as $key2 => $row) :
+                if ($count == 5) :
+                    break;
+                endif;
+                array_push($top_diarys, $row);
+                unset($diarys[$key1][$key2]);
+                $count = $count + 1;
+            endforeach;
+        endforeach;
+        foreach ($diarys as $key => $rows) :
+            if (count($rows) == 0) :
+                unset($diarys[$key]);
+            endif;
+        endforeach;
+        foreach ($diarys as $key1 => $rows) :
+            $tmp_array = array();
+            foreach ($rows as $key2 => $row) :
+                array_push($tmp_array, $row);
+            endforeach;
+            array_push($arcive_diarys, array_values($tmp_array));
+        endforeach;
+        $this->set(compact('top_diarys', 'arcive_diarys'));
         $this->render();
     }
 
@@ -1100,7 +1124,7 @@ class CastsController extends AppController
         }
 
         $diarys = $this->Util->getDiarys($id
-            , $this->viewVars['userInfo']['diary_path']);
+            , $this->viewVars['userInfo']['diary_path'], null);
 
         $this->set(compact('diarys'));
         $this->render('/Cast/Casts/diary');
@@ -1128,7 +1152,7 @@ class CastsController extends AppController
         $this->confReturnJson(); // json返却用の設定
 
         $diary = $this->Util->getDiary($this->request->query["id"]
-            , $this->viewVars['userInfo']['diary_path']);
+            , $this->viewVars['userInfo']['diary_path'], null);
 
         $this->response->body(json_encode($diary));
         return;

@@ -11,7 +11,7 @@
                 <div class="row">
                     <form id="view-archive-diary" name="view_archive_diary" method="get" style="display:none;" action="<?=DS.$shopInfo['area']['path'].DS.'view_diary'.DS?>">
                         <input type="hidden" name="_method" value="POST">
-                        <input type="hidden" name="id" value="<?=$userInfo['id']?>">
+                        <input type="hidden" name="id" value="<?=$castInfo['id']?>">
                         <input type="hidden" name="diary_id" value="">
                     </form>
                     <div class="col s12 m12 l12 xl12">
@@ -23,11 +23,11 @@
                                         <input type="hidden" name="diary_id" value=<?=$row->id?>>
                                         <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
                                         <img src="<?= $imgPath ?>" alt="" class="circle">
-                                        <span class="title color-blue truncate"><?= $row->created->nice() ?></span>
-                                        <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i><?=$row->gallery_count?></span>
-                                        <p><span class="truncate"><?= $row->title ?><br>
-                                            <?= $row['content'] ?></span>
-                                        </p>
+                                        <h6 class="li-linkbox__a__h6"><?=$row->created->nice()?>
+                                            <a class="li-linkbox__a-image btn-floating btn red darken-3 lighten-1"><i class="material-icons">camera_alt</i></a>
+                                            <span class="li-linkbox__a-image__count"><?=$row->gallery_count?></span>
+                                        </h6></br>
+                                        <span class="truncate"><?= $row['title'] ?><br><?= $row['content'] ?></span>
                                         <?=$this->User->get_favo_html('new_info_favo_disable', $row)?>
                                         <a class="waves-effect hoverable" href="#"></a>
                                     </div>
@@ -50,11 +50,11 @@
                                     </a>
                                     <div class="archiveLink">
                                         <input type="hidden" name="diary_id" value=<?=$row->id?>>
-                                        <span class="title color-blue"><?= $row->created->nice() ?></span>
-                                        <span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i><?=$row->gallery_count?></span>
-                                        <p><span class="truncate"><?= $row->title ?><br>
-                                            <?= $row['content'] ?></span>
-                                        </p>
+                                        <h6 class="li-linkbox__a__h6"><?=$row->created->nice()?>
+                                            <a class="li-linkbox__a-image btn-floating btn red darken-3 lighten-1"><i class="material-icons">camera_alt</i></a>
+                                            <span class="li-linkbox__a-image__count"><?=$row->gallery_count?></span>
+                                        </h6></br>
+                                        <span class="truncate"><?= $row['title'] ?><br><?= $row['content'] ?></span>
                                         <?=$this->User->get_favo_html('new_info_favo_disable', $row)?>
                                         <a class="waves-effect hoverable" href="#"></a>
                                     </div>

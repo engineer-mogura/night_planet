@@ -51,55 +51,52 @@
                     </div>
                 </div>
                 <div class="col s12 m12 l12 xl4">
-                <?php if(count($notices) > 0) { ?>
-                    <ul class="collection z-depth-3">
-                        <?php $count = 0; ?>
-                        <?php foreach ($notices as $key => $rows): ?>
-                        <?php foreach ($rows as $key => $row): ?>
-                        <li class="linkbox collection-item avatar archiveLink">
-                            <input type="hidden" name="id" value=<?=$row['id']?>>
-                        <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
-                            <img src="<?= $imgPath ?>" alt="" class="circle">
-                            <span class="title color-blue"><?= $row['md_created'] ?></span>
-                            <p><span class="truncate"><?= $row->title ?><br>
-                                <?= $row['content'] ?></span>
-                            </p>
-                            <a class="waves-effect hoverable" href="#">
-                                <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row['likes']) ?></span>
-                            </a>
-                        </li>
-                        <?php $count = $count + 1;?>
-                        <?php if ($count == 5) {break;} ?>
-                        <?php endforeach; ?>
-                        <?php if ($count == 5) {break;} ?>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php } else { ?>
-                    <p>最近の投稿はありません。</p>
-                <?php } ?>
-                <?php if(count($notices) > 0) { ?>
-                    <ul class="collapsible popout" data-collapsible="accordion">
-                        <?php foreach ($notices as $rows): ?>
-                        <li class="collection-item">
-                            <div class="collapsible-header waves-effect"><?= $rows["0"]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
-                            <?php foreach ($rows as $row): ?>
-                                <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
-                                <div class="linkbox collapsible-body archiveLink">
-                                    <input type="hidden" name="id" value=<?=$row->id?>>
-                                    <span class="title color-blue"><?= $row['md_created'] ?></span>
-                                    <span class="like-count secondary-content center-align"><i class="small material-icons">favorite_border</i><?= count($row['likes']) ?></span>
-                                    <p><span class="truncate"><?= $row->title ?><br>
-                                        <?= $row['content'] ?></span>
-                                    </p>
-                                    <a class="waves-effect hoverable" href="#"></a>
-                                </div>
+                    <?php if(count($top_notices) > 0) { ?>
+                        <ul class="collection z-depth-3">
+                            <?php foreach ($top_notices as $key => $row): ?>
+                                <li class="linkbox collection-item avatar">
+                                    <div class="archiveLink">
+                                        <input type="hidden" name="id" value=<?=$row->id?>>
+                                        <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                                        <img src="<?= $imgPath ?>" alt="" class="circle">
+                                        <h6 class="li-linkbox__a__h6"><?=$row->created->nice()?>
+                                            <a class="li-linkbox__a-image btn-floating btn red darken-3 lighten-1"><i class="material-icons">camera_alt</i></a>
+                                            <span class="li-linkbox__a-image__count"><?=$row->gallery_count?></span>
+                                        </h6>
+                                        <span class="truncate"><?= $row['title'] ?><br><?= $row['content'] ?></span>
+                                        <?=$this->User->get_favo_html('new_info_favo_disable', $row)?>
+                                        <a class="waves-effect hoverable" href="#"></a>
+                                    </div>
+                                </li>
                             <?php endforeach; ?>
-                        </li>
-                        <?php endforeach; ?>
-                    </ul>
-                <?php } else { ?>
-                    <p>過去の投稿はありません。</p>
-                <?php } ?>
+                        </ul>
+                    <?php } ?>
+                    <?php if(count($arcive_notices) > 0) { ?>
+                        <ul class="collapsible popout" data-collapsible="accordion">
+                            <?php foreach ($arcive_notices as $rows): ?>
+                            <li class="collection-item">
+                                <div class="collapsible-header waves-effect"><?= $rows[0]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
+                                <?php foreach ($rows as $row): ?>
+                                <?php !empty($row['gallery'][0]['file_path'])? $imgPath = $row['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+                                <div class="linkbox collapsible-body">
+                                    <div class="archiveLink">
+                                        <input type="hidden" name="notice_id" value=<?=$row->id?>>
+                                        <h6 class="li-linkbox__a__h6"><?=$row->created->nice()?>
+                                            <a class="li-linkbox__a-image btn-floating btn red darken-3 lighten-1"><i class="material-icons">camera_alt</i></a>
+                                            <span class="li-linkbox__a-image__count"><?=$row->gallery_count?></span>
+                                        </h6>
+                                        <span class="truncate"><?= $row['title'] ?><br><?= $row['content'] ?></span>
+                                        <?=$this->User->get_favo_html('new_info_favo_disable', $row)?>
+                                        <a class="waves-effect hoverable" href="#"></a>
+                                    </div>
+                                </div>
+                                <?php endforeach; ?>
+                            </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    <?php } else { ?>
+                        <p>過去の投稿はありません。</p>
+                    <?php } ?>
             </div>
         </div>
     </div>

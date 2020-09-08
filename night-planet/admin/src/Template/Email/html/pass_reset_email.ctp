@@ -17,4 +17,6 @@
 <?php
     endif;
 ?>
+<span style="color:red;font-weight: bold;">※ URLがリンクになっていない場合、お手数ですが、リンクをコピーし、ブラウザのURL欄に張り付けてください。</span><br><br>
+
 <?= $url ?>

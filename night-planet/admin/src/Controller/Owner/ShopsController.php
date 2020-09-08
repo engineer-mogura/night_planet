@@ -1387,10 +1387,36 @@ class ShopsController extends AppController
      */
     public function notice()
     {
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
-            , $this->viewVars['shopInfo']['notice_path']);
+        $id = $this->request->getSession()->read('Auth.Owner.id');
 
-        $this->set(compact('notices'));
+        $notices = $this->Util->getNotices($id
+            , $this->viewVars['shopInfo']['notice_path']);
+        $top_notices = array();
+        $arcive_notices = array();
+        $count = 0;
+        foreach ($notices as $key1 => $rows) :
+            foreach ($rows as $key2 => $row) :
+                if ($count == 5) :
+                    break;
+                endif;
+                array_push($top_notices, $row);
+                unset($notices[$key1][$key2]);
+                $count = $count + 1;
+            endforeach;
+        endforeach;
+        foreach ($notices as $key => $rows) :
+            if (count($rows) == 0) :
+                unset($notices[$key]);
+            endif;
+        endforeach;
+        foreach ($notices as $key1 => $rows) :
+            $tmp_array = array();
+            foreach ($rows as $key2 => $row) :
+                array_push($tmp_array, $row);
+            endforeach;
+            array_push($arcive_notices, array_values($tmp_array));
+        endforeach;
+        $this->set(compact('top_notices', 'arcive_notices'));
         $this->render();
     }
 

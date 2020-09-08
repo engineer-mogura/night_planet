@@ -351,7 +351,7 @@ class UsersController extends AppController
             }
         } catch(RuntimeException $e) {
             $this->log($this->Util->setLog($auth, $e));
-            $message = "お気に入り追加に失敗しました。";
+            $message = "アクションに失敗しました。";
             $flg = false;
         }
 
@@ -421,7 +421,7 @@ class UsersController extends AppController
                 ,'shop_likes.user_id','shop_likes.created'
                 , 'total' => $this->ShopLikes->find()->func()->count('shop_id')])
             ->group('shop_likes.shop_id')
-            ->where(['shop_likes.shop_id'])
+            ->where(['shop_likes.user_id' => $this->viewVars['userInfo']['id']])
             ->order(['shop_likes.created' => 'DESC'])
             ->limit(4);
         // もっと見るボタンの時
@@ -509,7 +509,7 @@ class UsersController extends AppController
                 ,'cast_likes.user_id','cast_likes.created'
                 , 'total' => $this->CastLikes->find()->func()->count('cast_id')])
             ->group('cast_likes.cast_id')
-            ->where(['cast_likes.cast_id'])
+            ->where(['cast_likes.user_id' => $this->viewVars['userInfo']['id']])
             ->order(['cast_likes.created' => 'DESC'])
             ->limit(4);
         // もっと見るボタンの時

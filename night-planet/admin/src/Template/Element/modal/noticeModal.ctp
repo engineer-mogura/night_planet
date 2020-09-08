@@ -85,13 +85,9 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<span>
-			<span class="btn-floating waves-effect waves-green btn-flat blue">
-				<i class="material-icons">favorite_border</i>
-			</span>
-			<span class="like-field-span like-count"></span>
-		</span>
-		<a class="modal-action waves-effect waves-light btn updateBtn disabled"><i class="material-icons right">update</i>更新</a>
-		<a href="#!" class="modal-action modal-close waves-effect waves-green btn">閉じる</a>
+		<div class="favorite">
+			<?=$this->User->get_favo_html('modal', (object) array('registry_alias' => 'shop_infos'))?>
+		</div>
+		<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
 	</div>
 </div>

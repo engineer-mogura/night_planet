@@ -1186,8 +1186,17 @@ function initializeUser() {
         }
         /* プロフィール 画面 END */
     }
+
+    /* お気に入り 画面 START */
+    if ($("#myfavo").length) {
+
+        // 検索ボタン押した時
+        commonSearch(false);
+    }
+    /* お気に入り 画面 END */
+
     /* ユーザー管理画面 END */
- 
+
 }
 
 /**

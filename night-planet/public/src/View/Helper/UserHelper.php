@@ -208,16 +208,16 @@ class UserHelper extends Helper
 				}
 				$unique_id = $entity->diary_likes[0]['id'];
 
-				$data =  'data-id='.$unique_id.' data-diary_id='.$id.' data-user_id='.$this->get_u_info('id').' data-alias='.$alias.'"';
+				$data =  'data-id="'.$unique_id.'" data-diary_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
 
 			}
 				$html = '<a class="li-linkbox__a-favorite btn-floating btn '. $is_click .$favorite.' lighten-1 ' . $data . '>'
-							. '<i class="material-icons">favorite</i>'
+							. '<i class="material-icons">thumb_up</i>'
 						. '</a>'
 						. '<span class="tabs-new-info__ul_li__favorite__count count">'.$count.'</span>';
 		} else {
 			$html = '<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
-						. '<i class="material-icons">favorite</i>'
+						. '<i class="material-icons">thumb_up</i>'
 					. '</a>'
 					. '<span class="tabs-new-info__ul_li__favorite__count count">'.$count.'</span>';
 		}
@@ -277,12 +277,12 @@ class UserHelper extends Helper
 
 			}
 				$html = '<a class="li-linkbox__a-favorite btn-floating btn '. $is_click .$favorite.' lighten-1 favo_click ' . $data . '>'
-							. '<i class="material-icons">favorite</i>'
+							. '<i class="material-icons">thumb_up</i>'
 						. '</a>'
 						. '<span class="modal-footer__a-favorite__count count">'.$count.'</span>';
 		} else {
 			$html = '<a class="li-linkbox__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
-						. '<i class="material-icons">favorite</i>'
+						. '<i class="material-icons">thumb_up</i>'
 					. '</a>'
 					. '<span class="modal-footer__a-favorite__count count">'.$count.'</span>';
 		}
@@ -559,12 +559,12 @@ class UserHelper extends Helper
 				$data =  'data-id="" data-diary_id="" data-user_id='.$this->get_u_info('id').' data-alias='.$alias.'';
 			}
 				$html = '<a class="modal-footer__a-favorite btn-floating btn grey lighten-1 favo_click" ' . $data . '>'
-							. '<i class="material-icons">favorite</i>'
+							. '<i class="material-icons">thumb_up</i>'
 						. '</a>'
 						. '<span class="modal-footer__a-favorite__count count">0</span>';
 		} else {
 			$html = '<a class="modal-footer__a-favorite btn-floating btn waves-effect waves-light grey lighten-1 modal-trigger" data-target="modal-login">'
-						. '<i class="material-icons">favorite</i>'
+						. '<i class="material-icons">thumb_up</i>'
 					. '</a>'
 					. '<span class="modal-footer__a-favorite__count count">0</span>';
 		}

@@ -427,7 +427,7 @@ function castImageDeleteBtn(form, obj) {
         type: $form.attr("method"), //Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: "html", //データにFormがserialzeした結果を入れる
-        timeout: 10000,
+        timeout: 15000,
         beforeSend: function (xhr, settings) {
             //Buttonを無効にする
             $($form).find(".saveBtn").removeClass("disabled");
@@ -738,7 +738,7 @@ function initializeUser() {
             datatype: "JSON",
             url: data.action,
             data: data,
-            timeout: 10000,
+            timeout: 15000,
             beforeSend: function (xhr, settings) {
                 $(this).attr("disabled", true);
             },
@@ -819,7 +819,7 @@ function initializeUser() {
             datatype: "JSON",
             url: data.action,
             data: data,
-            timeout: 10000,
+            timeout: 15000,
             beforeSend: function (xhr, settings) {
                 //Buttonを無効にする
                 //処理中のを通知するアイコンを表示する
@@ -861,7 +861,7 @@ function initializeUser() {
             datatype: "JSON",
             url: data.action,
             data: data,
-            timeout: 10000,
+            timeout: 15000,
             beforeSend: function (xhr, settings) {
                 //Buttonを無効にする
                 //処理中のを通知するアイコンを表示する
@@ -1272,7 +1272,7 @@ function initializeOwner() {
                 datatype: "JSON",
                 url: data.action,
                 data: data,
-                timeout: 10000,
+                timeout: 15000,
                 beforeSend: function (xhr, settings) {
                     $("#dashbord").find(".shop-switchBtn").attr("disabled", true);
                 },
@@ -1704,7 +1704,7 @@ function initializeShop() {
                 datatype: "json",
                 url: data.action,
                 data: data,
-                timeout: 10000,
+                timeout: 15000,
                 beforeSend: function (xhr, settings) {
                     $("#coupon")
                         .find(".coupon-switchBtn")
@@ -1885,7 +1885,7 @@ function initializeShop() {
                 datatype: "json",
                 url: data.action,
                 data: data,
-                timeout: 10000,
+                timeout: 15000,
                 beforeSend: function (xhr, settings) {
                     $("#cast").find(".cast-switchBtn").attr("disabled", true);
                 },
@@ -2785,7 +2785,7 @@ var ajaxCommon = function ($form, $tab) {
         type: $form.attr("method"), //Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: "json", //データにFormがserialzeした結果を入れる
-        timeout: 10000,
+        timeout: 15000,
         beforeSend: function (xhr, settings) {
             //Buttonを無効にする
             $($tab).find("button").attr("disabled", true);
@@ -2838,7 +2838,7 @@ var fileUpAjaxCommon = function ($form, formData, $tab) {
         dataType: "json", //データにFormがserialzeした結果を入れる
         processData: false,
         contentType: false,
-        timeout: 10000,
+        timeout: 15000,
         beforeSend: function (xhr, settings) {
             //Buttonを無効にする
             $($tab).find("button").attr("disabled", true);
@@ -2889,7 +2889,7 @@ var searchAjax = function (searchResult, form) {
         type: form.attr("method"), //Formのメソッドを取得して指定する
         data: form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: "json", //データにFormがserialzeした結果を入れる
-        timeout: 10000000,
+        timeout: 15000,
         beforeSend: function (xhr, settings) {
             //Buttonを無効にする
             $(document).find(".searchBtn").addClass("disabled");
@@ -2925,7 +2925,7 @@ var callModalDiaryWithAjax = function ($form, $this, userType) {
         type: $form.attr("method"), //Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: "json", //データにFormがserialzeした結果を入れる
-        timeout: 10000,
+        timeout: 15000,
         beforeSend: function (xhr, settings) {
             // 他のアーカイブリンクを無効化する
             $(".archiveLink").each(function (i, elem) {
@@ -3100,7 +3100,7 @@ var callModalNoticeWithAjax = function ($form, $this, userType) {
         type: $form.attr("method"), //Formのメソッドを取得して指定する
         data: $form.serialize(), //データにFormがserialzeした結果を入れる
         dataType: "json", //データにFormがserialzeした結果を入れる
-        timeout: 10000,
+        timeout: 15000,
         beforeSend: function (xhr, settings) {
             // 他のアーカイブリンクを無効化する
             $(".archiveLink").each(function (i, elem) {
@@ -3378,7 +3378,7 @@ function initializeCast() {
                     type: $form.attr("method"), //Formのメソッドを取得して指定する
                     data: $form.serialize(), //データにFormがserialzeした結果を入れる
                     dataType: "json", //データにFormがserialzeした結果を入れる
-                    timeout: 10000,
+                    timeout: 15000,
                     beforeSend: function (xhr, settings) {
                         //Buttonを無効にする
                         $($form).find("button").attr("disabled", true);

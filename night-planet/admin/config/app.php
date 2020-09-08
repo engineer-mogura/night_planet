@@ -475,15 +475,17 @@ return [
 
     'Session' => [
         'defaults' => 'php',
-        'cookie' => 'okiyorugo_cookie', // 任意の文字列
+        'cookie' => 'night_planet', // 任意の文字列
         'timeout' => 259200, // 180days
         'cookieTimeout' => 259200, // 180days
         'autoRegenerate' => false, // 自動でセッションを再生成するのをやめる
         'checkAgent' => false, // trueにすると毎回セッションが切れることがある
         'ini' => array(
+            'session.cookie_path' => '/',
             'session.cookie_lifetime' => 15552000, //180days
             'session.gc_divisor' => 15552000,
             'session.gc_maxlifetime' => 15552000, //180days
+            'session.cookie_secure' => false,
         ),
         'use_cookies' => 1, // SessionをCookieにも保存する
         'cookie_lifetime' => 15552000, //180days

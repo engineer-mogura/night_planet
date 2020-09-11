@@ -3,7 +3,7 @@
 		<img src="<?=$this->User->get_icon_path($value->userInfo)?>" alt="" class="circle">
 		<span class="title"><?=$value->user->name?></span>
 		<h6><?=$value->user->created?> に参加</h6>
-		<span class="truncate"><?=$value->comment?></span>
+		<span class="truncate truncate__show__review"><?=$value->comment?></span>
 		<a href="#!" class="secondary-content">
 			<div class="rateit"
 					data-rateit-readonly=true

@@ -50,7 +50,7 @@ class AppController extends \App\Controller\AppController
         $action = $this->request->getParam('action');
 
         // ログイン時に許可するアクション
-        $access = ['index','editCalendar','profile','topImage','saveTopImage'
+        $access = ['index','favo','editCalendar','profile','topImage','saveTopImage'
             ,'gallery','saveGallery','sns','deleteGallery','diary'
             ,'saveDiary','viewDiary','deleteDiary','updateDiary','passChange'];
         if (in_array($action, $access)) {

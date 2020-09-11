@@ -422,8 +422,12 @@ class UsersController extends AppController
                 , 'total' => $this->ShopLikes->find()->func()->count('shop_id')])
             ->group('shop_likes.shop_id')
             ->where(['shop_likes.user_id' => $this->viewVars['userInfo']['id']])
-            ->order(['shop_likes.created' => 'DESC'])
-            ->limit(4);
+            ->order(['shop_likes.created' => 'DESC']);
+
+        $all_favo = $favos->count();
+
+        $favos->limit(4);
+
         // もっと見るボタンの時
         if ($this->request->is('ajax')) {
             $favos->offset($data['now_count']);
@@ -460,17 +464,18 @@ class UsersController extends AppController
         // AJAX
         if ($this->request->is('ajax')) {
             $this->confReturnJson(); // json返却用の設定
-            $this->set(compact('shops'));
+            $this->set(compact('favos'));
             $this->render('/Element/favo-list');
             $response = array(
                 'success' => true,
+                'all_favo' => $all_favo,
                 'html' => $this->response->body(),
             );
             $this->response->body(json_encode($response));
             return;
         } else {
             $this->set('next_view', 'shop_favo');
-            $this->set(compact('favos'));
+            $this->set(compact('favos', 'all_favo'));
             $this->render();
         }
     }
@@ -510,8 +515,12 @@ class UsersController extends AppController
                 , 'total' => $this->CastLikes->find()->func()->count('cast_id')])
             ->group('cast_likes.cast_id')
             ->where(['cast_likes.user_id' => $this->viewVars['userInfo']['id']])
-            ->order(['cast_likes.created' => 'DESC'])
-            ->limit(4);
+            ->order(['cast_likes.created' => 'DESC']);
+
+        $all_favo = $favos->count();
+
+        $favos->limit(4);
+
         // もっと見るボタンの時
         if ($this->request->is('ajax')) {
             $favos->offset($data['now_count']);
@@ -547,13 +556,14 @@ class UsersController extends AppController
             $this->render('/Element/favo-list');
             $response = array(
                 'success' => true,
+                'all_favo' => $all_favo,
                 'html' => $this->response->body(),
             );
             $this->response->body(json_encode($response));
             return;
         } else {
             $this->set('next_view', 'cast_favo');
-            $this->set(compact('favos'));
+            $this->set(compact('favos', 'all_favo'));
             $this->render();
         }
     }

@@ -2045,6 +2045,12 @@ form .message-label {
 }
 /** プラン変更画面 END */
 
+/** スタッフ管理画面 START */
+.dashboard__cast__card-content__p {
+  font-weight: bold;
+}
+/** スタッフ管理画面 END */
+
 @media only screen and (max-width: 992px) {
   .button-collapse {
       display: block;

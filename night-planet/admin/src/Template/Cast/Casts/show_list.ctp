@@ -1,7 +1,5 @@
-<div id="myfavo" class="container">
-    <?= $this->Flash->render() ?>
-    <?= $this->element('nav-breadcrumb'); ?>
-    <div class="row">
+<div id="wrapper">
+    <div class="container">
         <div class="col s12 m12 l8">
             <span id="dummy" style="display: hidden;"></span>
             <div class="row">
@@ -25,19 +23,5 @@
                 </div>
             </div>
         </div>
-        <!--デスクトップ用 サイドバー START -->
-        <?= $this->element('sidebar'); ?>
-        <!--デスクトップ用 サイドバー END -->
     </div>
 </div>
-<?= $this->element('photoSwipe'); ?>
-<!-- ショップ用ボトムナビゲーション START -->
-<?= $this->element('shop-bottom-navigation'); ?>
-<!-- ショップ用ボトムナビゲーション END -->
-<script>
-    var all_favo = '<?php echo ($all_favo); ?>';
-    (function (all_favo) {
-        var count = $('.favo-list-section__ul__li').length;
-        $('.paging').text(count + '/' + all_favo);
-    }(all_favo));
-</script>

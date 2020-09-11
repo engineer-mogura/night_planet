@@ -839,7 +839,8 @@ function initializeUser() {
                         $('.see_more_reviews').remove();
                         $('.review-more-btn-section').html('<p>すべて表示しました。</p>');
                     }
-
+                    var count = $('.other-review-section__ul__li').length;
+                    $('.paging').text(count + '/' + response.all_favo);
                 }
             },
             error: function (response, textStatus, xhr) {
@@ -880,7 +881,8 @@ function initializeUser() {
                         $('.see_more_favos').remove();
                         $('.favo-more-btn-section').html('<p>すべて表示しました。</p>');
                     }
-
+                    var count = $('.favo-list-section__ul__li').length;
+                    $('.paging').text(count + '/' + response.all_favo);
                 }
             },
             error: function (response, textStatus, xhr) {

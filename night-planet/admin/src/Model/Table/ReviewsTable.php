@@ -47,7 +47,7 @@ class ReviewsTable extends Table
         ]);
         $this->belongsTo('users', [
             'foreignKey' => 'user_id',
-            'joinType' => 'INNER'
+            'joinType' => 'LEFT'
         ]);
     }
 

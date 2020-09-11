@@ -380,89 +380,89 @@ class AreaController extends AppController
             ->where(['shops.id' => $id,
                 'shops.status = 1 AND shops.delete_flag = 0'])
             ->contain(['owners','owners.servece_plans'
-            , 'shop_likes' => function (Query $q) {
-                return $q
-                    ->select(['shop_likes.id','shop_likes.shop_id','shop_likes.user_id'
-                        , 'total' => $q->func()->count('shop_likes.shop_id')])
-                    ->group('shop_id')
-                    ->where(['shop_likes.shop_id']);
-            }, 'shop_likes.users' => function (Query $q) {
-                return $q
-                    ->select(['is_like' => $q->func()->count('users.id')])
-                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
-            } ,'casts' => function (Query $q) {
-                return $q
-                    ->where(['casts.status = 1 AND casts.delete_flag = 0'])
-                    ->order(['rand()']);
-            } ,'casts' => function (Query $q) {
-                $now = date('Y-m-d');
-                $case = $q->newExpr()->addCase(
-                    [$q->newExpr()->between(
-                        'created', date('Y-m-d', strtotime("-10 day")), $now)]
-                        ,[1, 0]
-                        ,['integer', 'integer']
-                );
-                return $q->find('all')
-                    ->select(['casts.id','casts.shop_id','casts.role','casts.name','casts.nickname','casts.email','casts.password','casts.birthday',
-                        'casts.three_size','casts.blood_type','casts.constellation','casts.age','casts.message','casts.holiday','casts.dir',
-                        'casts.remember_token','casts.status','casts.delete_flag','casts.created','casts.modified',
-                        'is_new' => $case])
-                    ->where(['casts.status = 1 AND casts.delete_flag = 0'])
-                    ->order(['rand()']);
-            }, 'casts.updates' => function (Query $q) use ($id) {
-                return $q
-                    ->select()
-                    ->where(['shop_id' => $id,
-                        'updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR'])
-                    ->order(['created' => 'DESC']);
-            }, 'casts.cast_likes' => function (Query $q) {
-                return $q
-                    ->select(['cast_likes.id','cast_likes.cast_id','cast_likes.user_id'
-                        , 'total' => $q->func()->count('cast_likes.cast_id')])
-                    ->group('cast_id')
-                    ->where(['cast_likes.cast_id']);
-            }, 'casts.cast_likes.users' => function (Query $q) {
-                return $q
-                    ->select(['is_like' => $q->func()->count('users.id')])
-                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
-            }, 'owners.shops' => function (Query $q) use ($id) {
-                return $q
-                        ->where(['shops.id is not' => $id,
-                            'shops.status = 1 AND shops.delete_flag = 0',
-                            'not' => ['shops.id in' => [$id]]]);
-            }, 'coupons' => function (Query $q) {
-                return $q
-                        ->where(['coupons.status'=>'1']);
-            },'shop_infos' => function (Query $q) {
-                return $q
-                        ->find("all")
-                        ->order(['shop_infos.created'=>'DESC'])
-                        ->limit(1);
-            }, 'shop_infos.shop_info_likes' => function ($q)  {
-                return $q
-                    ->select(['id','shop_info_id','user_id'
-                        , 'total' => $q->func()->count('shop_info_id')])
-                    ->group('shop_info_id')
-                    ->where(['shop_info_id']);
-            }, 'shop_infos.shop_info_likes.users' => function ($q) {
-                return $q
-                    ->select(['is_like' => $q->func()->count('users.id')])
-                    ->where(['users.id' =>$this->viewVars['userInfo']['id']]);
-            },'work_schedules' => function (Query $q) {
-                $end_date = date("Y-m-d H:i:s");
-                $start_date = date("Y-m-d H:i:s", strtotime($end_date . "-24 hour"));
-                $range = "'".$start_date."' and '".$end_date."'";
-                return $q
-                    ->where(["work_schedules.modified BETWEEN".$range]);
-            },'reviews' => function (Query $q) use ($id) {
-                return $q
-                    ->select(['reviews.shop_id', 'total' => $q->func()->count('reviews.shop_id')])
-                    ->where(['shop_id' => $id]);
-            }, 'reviews.users' => function (Query $q){
-                return $q
-                    ->select(['is_like' => $q->func()->count('users.id')])
-                    ->where(['users.id' => $this->viewVars['userInfo']['id']]);
-            },'jobs','snss','shop_options'])->first();
+                , 'shop_likes' => function (Query $q) {
+                    return $q
+                        ->select(['shop_likes.id','shop_likes.shop_id','shop_likes.user_id'
+                            , 'total' => $q->func()->count('shop_likes.shop_id')])
+                        ->group('shop_id')
+                        ->where(['shop_likes.shop_id']);
+                }, 'shop_likes.users' => function (Query $q) {
+                    return $q
+                        ->select(['is_like' => $q->func()->count('users.id')])
+                        ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+                } ,'casts' => function (Query $q) {
+                    return $q
+                        ->where(['casts.status = 1 AND casts.delete_flag = 0'])
+                        ->order(['rand()']);
+                } ,'casts' => function (Query $q) {
+                    $now = date('Y-m-d');
+                    $case = $q->newExpr()->addCase(
+                        [$q->newExpr()->between(
+                            'created', date('Y-m-d', strtotime("-10 day")), $now)]
+                            ,[1, 0]
+                            ,['integer', 'integer']
+                    );
+                    return $q->find('all')
+                        ->select($this->Casts)
+                        ->select(['is_new' => $case])
+                        ->where(['casts.status = 1 AND casts.delete_flag = 0'])
+                        ->order(['rand()']);
+                }, 'casts.updates' => function (Query $q) use ($id) {
+                    return $q
+                        ->select()
+                        ->where(['shop_id' => $id,
+                            'updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR'])
+                        ->order(['created' => 'DESC']);
+                }, 'casts.cast_likes' => function (Query $q) {
+                    return $q
+                        ->select(['cast_likes.id','cast_likes.cast_id','cast_likes.user_id'
+                            , 'total' => $q->func()->count('cast_likes.cast_id')])
+                        ->group('cast_id')
+                        ->where(['cast_likes.cast_id']);
+                }, 'casts.cast_likes.users' => function (Query $q) {
+                    return $q
+                        ->select(['is_like' => $q->func()->count('users.id')])
+                        ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+                }, 'owners.shops' => function (Query $q) use ($id) {
+                    return $q
+                            ->where(['shops.id is not' => $id,
+                                'shops.status = 1 AND shops.delete_flag = 0',
+                                'not' => ['shops.id in' => [$id]]]);
+                }, 'coupons' => function (Query $q) {
+                    return $q
+                            ->where(['coupons.status'=>'1']);
+                },'shop_infos' => function (Query $q) {
+                    return $q
+                            ->find("all")
+                            ->order(['shop_infos.created'=>'DESC'])
+                            ->limit(1);
+                }, 'shop_infos.shop_info_likes' => function ($q)  {
+                    return $q
+                        ->select(['id','shop_info_id','user_id'
+                            , 'total' => $q->func()->count('shop_info_id')])
+                        ->group('shop_info_id')
+                        ->where(['shop_info_id']);
+                }, 'shop_infos.shop_info_likes.users' => function ($q) {
+                    return $q
+                        ->select(['is_like' => $q->func()->count('users.id')])
+                        ->where(['users.id' =>$this->viewVars['userInfo']['id']]);
+                },'work_schedules' => function (Query $q) {
+                    $end_date = date("Y-m-d H:i:s");
+                    $start_date = date("Y-m-d H:i:s", strtotime($end_date . "-24 hour"));
+                    $range = "'".$start_date."' and '".$end_date."'";
+                    return $q
+                        ->where(["work_schedules.modified BETWEEN".$range]);
+                },'reviews' => function (Query $q) use ($id) {
+                    return $q
+                        ->select(['reviews.shop_id', 'total' => $q->func()->count('reviews.shop_id')])
+                        ->group('shop_id')
+                        ->where(['shop_id' => $id]);
+                }, 'reviews.users' => function (Query $q){
+                    return $q
+                        ->select(['is_like' => $q->func()->count('users.id')])
+                        ->where(['users.id' => $this->viewVars['userInfo']['id']]);
+                },'jobs','snss','shop_options'])
+            ->first();
 
 
         // 店舗が非表示または論理削除している場合はリダイレクトする
@@ -481,12 +481,12 @@ class AreaController extends AppController
 
         $shopInfo = $this->Util->getShopInfo($shop);
 
-        // // 店舗の更新情報を取得する
-        // $updateInfo = $this->Updates->find('all')
-        //     ->where(['shop_id' => $id,
-        //         'updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR'])
-        //     ->order(['created' => 'DESC'])
-        //     ->toArray();
+        // 店舗の更新情報を取得する
+        $updateInfo = $this->Updates->find('all')
+            ->where(['shop_id' => $id,
+                'updates.created > NOW() - INTERVAL '.PROPERTY['UPDATE_INFO_DAY_MAX'].' HOUR'])
+            ->order(['created' => 'DESC'])
+            ->toArray();
 
         // $columns = $this->Updates->schema()->columns();
 
@@ -505,32 +505,32 @@ class AreaController extends AppController
         // ->order(['updates.created'=>'DESC'])
         // ->toArray();
 
-        // $update_icon = array();
-        // // 画面の店舗メニューにnew-icon画像を付与するための配列をセットする
-        // foreach ($updateInfo as $key => $value) {
-        //     $isNew = in_array($value->type, SHOP_MENU_NAME);
-        //     if ($isNew) {
-        //         $update_icon[] = $value->type;
-        //     }
-        // }
-        // // 今日の日付から1ヶ月前
-        // $end_date = date('Y-m-d', strtotime("-7 day"));
-        // // スタッフの登録日付をチェックする
-        // foreach ($shop->casts as $key => $cast) {
-        //     $user_created = $cast->created->format('Y-m-d');
-        //     $end_ts = strtotime($end_date);
-        //     $user_ts = strtotime($user_created);
-        //     // 新しいスタッフの場合フラグセット
-        //     if ($user_ts >= $end_ts) {
-        //         $cast->set('new_cast', true);
-        //     }
-        //     // スタッフの更新があればフラグをセット
-        //     foreach ($updateInfo as $key => $value) {
-        //         if (!empty($value->cast_id) && $value->cast_id == $cast->id) {
-        //             $cast->set('update_cast', true);
-        //         }
-        //     }
-        // }
+        $update_icon = array();
+        // 画面の店舗メニューにnew-icon画像を付与するための配列をセットする
+        foreach ($updateInfo as $key => $value) {
+            $isNew = in_array($value->type, SHOP_MENU_NAME);
+            if ($isNew) {
+                $update_icon[] = $value->type;
+            }
+        }
+        // 今日の日付から1ヶ月前
+        $end_date = date('Y-m-d', strtotime("-7 day"));
+        // スタッフの登録日付をチェックする
+        foreach ($shop->casts as $key => $cast) {
+            $user_created = $cast->created->format('Y-m-d');
+            $end_ts = strtotime($end_date);
+            $user_ts = strtotime($user_created);
+            // 新しいスタッフの場合フラグセット
+            if ($user_ts >= $end_ts) {
+                $cast->set('new_cast', true);
+            }
+            // スタッフの更新があればフラグをセット
+            foreach ($updateInfo as $key => $value) {
+                if (!empty($value->cast_id) && $value->cast_id == $cast->id) {
+                    $cast->set('update_cast', true);
+                }
+            }
+        }
 
         // トップ画像を設定する
         $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$shopInfo['top_image_path']), true, 0755);
@@ -1023,22 +1023,25 @@ class AreaController extends AppController
 
     public function review($id = null)
     {
+        $all_favo = 0; // &を付けて値渡しする
         // AJAXのアクセス以外は不正とみなす。
         if ($this->request->is('ajax')) {
 
             $this->confReturnJson(); // json返却用の設定
             $data = $this->request->getData();
+
             if ($data['type'] == 'see_more_reviews') {
                 $shop = $this->Shops->find("all")
-                    ->contain(['reviews' => function (Query $q) use ($id, $data) {
-                            return $q
+                    ->contain(['reviews' => function (Query $q) use ($id, $data, &$all_favo) {
+                            $q
                                 ->select(['reviews.id','reviews.shop_id','reviews.user_id'
                                     , 'cost','atmosphere','customer','staff','cleanliness'
                                     , 'comment'
                                     , 'total' => $q->func()->count('reviews.shop_id')])
                                 ->group('user_id')
-                                ->where(['shop_id' => $id])
-                                ->limit(2)
+                                ->where(['shop_id' => $id]);
+                            $all_favo = $q->count();
+                            return $q->limit(2)
                                 ->offset($data['now_count'])
                                 ->order(['reviews.created' => 'desc']);
                         }, 'reviews.users' => function (Query $q){
@@ -1059,22 +1062,27 @@ class AreaController extends AppController
             $this->render('/Element/review-list');
             $response = array(
                 'success' => true,
+                'all_favo' => $all_favo,
                 'html' => $this->response->body(),
             );
             $this->response->body(json_encode($response));
             return;
         }
         $shop = $this->Shops->find("all")
-            ->contain(['reviews' => function (Query $q) use ($id) {
-                    return $q
+            ->contain(['reviews' => function (Query $q) use ($id, &$all_favo) {
+                    $q
                         ->select(['reviews.id','reviews.shop_id','reviews.user_id'
                             , 'cost','atmosphere','customer','staff','cleanliness'
                             , 'comment'
                             , 'total' => $q->func()->count('reviews.shop_id')])
+                        ->where(['shop_id' => $id]);
+                    $all_favo = $q->count();
+                    return $q
                         ->group('user_id')
-                        ->where(['shop_id' => $id])
                         ->limit(2)
+                        ->offset($data['now_count'])
                         ->order(['reviews.created' => 'desc']);
+
                 }, 'reviews.users' => function (Query $q){
                     return $q
                         ->select(['name','file_name','created'
@@ -1103,7 +1111,7 @@ class AreaController extends AppController
         }
         $this->set('shopInfo', $this->Util->getShopInfo($shop));
         $this->set('next_view', PATH_ROOT['REVIEW']);
-        $this->set(compact('shop'));
+        $this->set(compact('shop', 'all_favo'));
         $this->render();
     }
 

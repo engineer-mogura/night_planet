@@ -19,6 +19,7 @@
                                      data-type='see_more_favos' data-action=<?=DS.$this->request->url?>><?=_("もっと見る")?>
                                 </a>
                             </div>
+                            <span class="paging" style="float:right"></span>
                         </div>
                     </div>
                 </div>
@@ -33,3 +34,10 @@
 <!-- ショップ用ボトムナビゲーション START -->
 <?= $this->element('shop-bottom-navigation'); ?>
 <!-- ショップ用ボトムナビゲーション END -->
+<script>
+    var all_favo = '<?php echo ($all_favo); ?>';
+    (function (all_favo) {
+        var count = $('.favo-list-section__ul__li').length;
+        $('.paging').text(count + '/' + all_favo);
+    }(all_favo));
+</script>

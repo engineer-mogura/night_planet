@@ -53,20 +53,23 @@ class CastsController extends AppController
     {
         $auth = $this->request->session()->read('Auth.Cast');
         $id = $auth['id']; // スタッフID
-        $query = $this->Diarys->find();
-        // スタッフの記事といいね数を取得
-        $diarys = $query->select(['id',
-            'diary_like_num'=> $query->func()->count('diary_likes.diary_id')])
-            ->contain('diary_likes')
-            ->leftJoinWith('diary_likes')
-            ->where(['diarys.cast_id'=>$id])
-            ->group(['diary_likes.diary_id'])
-            ->order(['diary_like_num' => 'desc'])->toArray();
-        $likeTotal = array_sum(array_column($diarys, 'diary_like_num'));
-        //$like = $query->select(['total_like' => $query->func()->sum('cast_id')])
-        //$diarydiary_likes = $this->Diarys->find('all')->where(['cast_id'=>$id])->contain('diary_likes');
+
         $cast = $this->Casts->find('all')
-            ->contain(['shops','diarys'])->where(['casts.id'=>$id])->first();
+            ->contain(['shops', 'cast_likes' => function ($q) use ($id){
+                return $q
+                    ->select(['cast_likes.cast_id'
+                        , 'total' => $q->func()->count('cast_likes.cast_id')])
+                    ->group('cast_likes.cast_id')
+                    ->where(['cast_likes.cast_id' => $id]);
+            }, 'diarys' => function ($q) use ($id){
+                return $q
+                    ->select(['diarys.id', 'diarys.cast_id'
+                        , 'total' => $q->func()->count('diarys.id')])
+                    ->group('diarys.id')
+                    ->where(['diarys.id' => $id]);
+            }])
+            ->where(['casts.id' => $id])
+            ->first();
 
         // 非表示または論理削除している場合はログイン画面にリダイレクトする
         if (!$this->checkStatus($cast)) {
@@ -75,20 +78,72 @@ class CastsController extends AppController
 
         // JSONファイルをDB内容にて、更新する
         // JSONファイルに書き込むカラム情報
-        $Columns = array('id','title','start','end'
-            ,'time_start', 'time_end','all_day');
-
-        $cast_schedule = $this->CastSchedules->find('all', array('fields' => $Columns))
-            ->where(['id'=>$userInfo['id'], 'shop_id'=> $userInfo['shop_id']]);
+        $cast_schedule = $this->CastSchedules
+            ->find('all')->select($this->CastSchedules)
+            ->where(['id' => $userInfo['id'], 'shop_id'=> $userInfo['shop_id']]);
         $cast_schedule = json_encode($cast_schedule);
-        // JSONファイルに書き込む
-        $tmp_path = preg_replace('/(\/\/)/', '/',
-            WWW_ROOT.$this->viewVars['userInfo']['tmp_path']);
 
         $masterCodesFind = array('time','event');
         $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, true);
 
-        $this->set(compact('cast', 'likeTotal', 'selectList', 'cast_schedule'));
+        $this->set(compact('cast', 'selectList', 'cast_schedule'));
+        $this->render();
+    }
+
+    /**
+     * スタッフ画面トップの処理
+     *
+     * @return void
+     */
+    public function favo($page)
+    {
+        $auth = $this->request->session()->read('Auth.Cast');
+        $id = $auth['id']; // スタッフID
+        if ($page == 'favo') {
+            $cast = $this->Casts->find('all')
+                ->contain(['cast_likes' => function ($q) use ($id){
+                    return $q
+                        ->select(['cast_likes.cast_id'
+                            , 'total' => $q->func()->count('cast_likes.cast_id')])
+                        ->group('cast_likes.cast_id')
+                        ->where(['cast_likes.cast_id' => $id]);
+                }]);
+        } else if ($page == 'likes') {
+            $cast = $this->Casts->find('all')
+                ->contain(['cast_likes' => function ($q) use ($id){
+                    return $q
+                        ->select(['cast_likes.cast_id'
+                            , 'total' => $q->func()->count('cast_likes.cast_id')])
+                        ->group('cast_likes.cast_id')
+                        ->where(['cast_likes.cast_id' => $id]);
+                }]);
+        } else if ($page == 'diary') {
+            $cast = $this->Casts->find('all')
+                ->contain(['shops', 'cast_likes' => function ($q) use ($id){
+                    return $q
+                        ->select(['cast_likes.cast_id'
+                            , 'total' => $q->func()->count('cast_likes.cast_id')])
+                        ->group('cast_likes.cast_id')
+                        ->where(['cast_likes.cast_id' => $id]);
+                }]);
+        }
+
+        // 非表示または論理削除している場合はログイン画面にリダイレクトする
+        if (!$this->checkStatus($cast)) {
+            return $this->redirect($this->Auth->logout());
+        }
+
+        // JSONファイルをDB内容にて、更新する
+        // JSONファイルに書き込むカラム情報
+        $cast_schedule = $this->CastSchedules
+            ->find('all')->select($this->CastSchedules)
+            ->where(['id' => $userInfo['id'], 'shop_id'=> $userInfo['shop_id']]);
+        $cast_schedule = json_encode($cast_schedule);
+
+        $masterCodesFind = array('time','event');
+        $selectList = $this->Util->getSelectList($masterCodesFind, $this->MasterCodes, true);
+
+        $this->set(compact('cast', 'selectList', 'cast_schedule'));
         $this->render();
     }
 

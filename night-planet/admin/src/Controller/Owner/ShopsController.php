@@ -134,10 +134,9 @@ class ShopsController extends AppController
 
         if(!is_null($user = $this->Auth->user())){
             $shop = $this->Shops->find()
-            ->where(['shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
-            ->contain(['coupons','jobs','snss','casts' => function(Query $q) {
-                return $q->where(['casts.delete_flag'=>'0']);
-            }])->first();
+                    ->where(['shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
+                    ->contain(['coupons','jobs','snss','casts'])
+                ->first();
         }
 
         // ディクレトリ取得
@@ -928,10 +927,13 @@ class ShopsController extends AppController
             $this->Flash->success($message);
         }
         $shop = $this->Shops->find()
-            ->where(['id' => $this->viewVars['shopInfo']['id']])
-            ->contain(['casts' => function(Query $q) {
-                return $q->where(['casts.delete_flag'=>'0']);
-            }])->first();
+                ->where(['id' => $this->viewVars['shopInfo']['id']])
+                ->contain(['casts'])
+            ->first();
+        $shop = $this->Shops->find()
+                ->where(['shops.id'=> $this->viewVars["shopInfo"]["id"]])
+                ->contain(['coupons','jobs','snss','casts'])
+            ->first();
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/cast');
         $response = array(

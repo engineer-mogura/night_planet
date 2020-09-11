@@ -130,6 +130,49 @@
             <?php
                 endif;
             ?>
+            <div class="white card-panel col s12 center-align">
+                <p class="recruit-label section-label"><span> その他 </span></p>
+            </div>
+            <div id="cast" class="row">
+            <div class="col s12 m4 l4">
+                <a href="/owner/shops/index">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="/img/common/favo.png">
+                            <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">favorite</i></a>
+                        </div>
+                        <div class="card-content">
+                            <p class="dashboard__cast__card-content__p">お気に入りの数：<?=!empty($cast->cast_likes) ? $cast->cast_likes[0]->total : 0 ?></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col s12 m4 l4">
+                <a href="/owner/shops/index">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="/img/common/like1.png">
+                            <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">thumb_up</i></a>
+                        </div>
+                        <div class="card-content">
+                            <p class="dashboard__cast__card-content__p">いいねの数：<?=!empty($cast->diary_likes) ? $cast->diary_likes[0]->total : 0 ?></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col s12 m4 l4">
+                <a href="/owner/shops/notice">
+                    <div class="card">
+                        <div class="card-image">
+                            <img src="/img/common/notebook1.png">
+                            <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
+                        </div>
+                        <div class="card-content">
+                            <p class="dashboard__cast__card-content__p">お知らせの投稿数：<?=!empty($cast->diarys) ? $cast->diarys[0]->total : 0 ?></p>
+                        </div>
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </div>

@@ -7,64 +7,54 @@
                 <?= $this->Flash->render() ?>
                 <h5><?= $cast->name.'　所属：'?><a href="<?=$userInfo['shop_url']?>" target=”_blank” rel="noopener noreferrer"><?=$cast->shop->name?></a></h5>
                 <p style="font-weight: bolder;">現在、一番下の出勤スケジュールのみが有効になります。</p>
-
                 <div id="cast" class="row">
                     <div class="col s12 m4 l4">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="/img/common/notebook1.png">
-                                <span class="card-title">日記の投稿数</span>
-                                <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
+                        <a href="/cast/casts/index">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="/img/common/favo.png">
+                                    <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">favorite</i></a>
+                                </div>
+                                <div class="card-content">
+                                    <p class="dashboard__cast__card-content__p">お気に入りの数：<?=!empty($cast->cast_likes) ? $cast->cast_likes[0]->total : 0 ?></p>
+                                </div>
                             </div>
-                            <div class="card-content">
-                                <p>日記の投稿数：<?=count($cast->diarys)?></p>
+                        </a>
+                    </div>
+                    <div class="col s12 m4 l4">
+                        <a href="/cast/casts/index">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="/img/common/like1.png">
+                                    <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">thumb_up</i></a>
+                                </div>
+                                <div class="card-content">
+                                    <p class="dashboard__cast__card-content__p">いいねの数：<?=!empty($cast->diary_likes) ? $cast->diary_likes[0]->total : 0 ?></p>
+                                </div>
                             </div>
-                        </div>
+                        </a>
+                    </div>
+                    <div class="col s12 m4 l4">
+                        <a href="/cast/casts/diary">
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="/img/common/notebook1.png">
+                                    <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
+                                </div>
+                                <div class="card-content">
+                                    <p class="dashboard__cast__card-content__p">日記の投稿数：<?=!empty($cast->diarys) ? $cast->diarys[0]->total : 0 ?></p>
+                                </div>
+                            </div>
+                        </a>
                     </div>
                     <div class="col s12 m4 l4">
                         <div class="card">
                             <div class="card-image">
                                 <img src="/img/common/calendar1.png">
-                                <span class="card-title">出勤率</span>
                                 <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">directions_run</i></a>
                             </div>
                             <div class="card-content">
-                                <p>出勤率</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s12 m4 l4">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="/img/common/like1.png">
-                                <span class="card-title">いいねの数</span>
-                                <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">favorite_border</i></a>
-                            </div>
-                            <div class="card-content">
-                                <p>いいねの数：<?=$likeTotal?></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col s12 m4 l4">
-                        <div class="card">
-                            <div class="card-image">
-                                <img src="/img/common/pencil1.png">
-                                <span class="card-title">Card Title</span>
-                                <a class="btn-floating halfway-fab waves-effect waves-light red"><i class="material-icons">mode_edit</i></a>
-                            </div>
-                            <div class="card-content">
-                                <div id="show-job">
-                                    <div style="display:none;">
-                                        <input type="hidden" name="job_copy" value='<?=$cast->job ?>'>
-                                        <input type="hidden" name="treatment_hidden" value=''>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="determinate" style="width: 70%"></div>
-                                    </div>
-                                    <span class="right">プロフィールの入力率：70%</span>
-                                </div>
+                                <p class="dashboard__cast__card-content__p">出勤率：</p>
                             </div>
                         </div>
                     </div>

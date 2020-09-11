@@ -1,5 +1,16 @@
 <div id="cast" class="col s12">
     <p>スタッフ<span><a href="" data-target="modal-help" data-help="3" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
+    <?php $length = 0; $castSize = count($shop->casts);?>
+    <?php foreach ($shop->casts as $key => $cast): ?>
+        <?php if ($castSize - 1 == $length) : ?>
+            <?php if ($length > 0) : ?>
+                <div class="card-panel red lighten-5"><?=$length . 'の承認待ちがあります。'?></div>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($cast->delete_flag == 1) : ?>
+            <?php $length = ++$length; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
     <div id="show-cast">
         <div class="row">
             <form id="delete-cast" name="delete_cast" method="post" style="display:none;"
@@ -20,11 +31,14 @@
                                 <tr>
                                     <td colspan="2">
                                         <span class="cast-num">スタッフ＃<?=$key + 1?></span>
+                                        <?php if ($cast->delete_flag == 1) : ?>
+                                            <span class="badge red darken-1 white-text"><?=承認待ち?></span>
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <img src="<?=$cast->icon?>" alt="" class="circle left" width="80" height="80">
+                                        <img src="<?=$cast->icon?>" style="object-fit: cover;" alt="<?=$cast->name ?>" class="circle left" width="80" height="80">
                                         <input type="checkbox" class="check-cast-group" name="check_cast"
                                             id="check-cast<?=$key?>" />
                                         <label for="check-cast<?=$key?>">編集する</label>

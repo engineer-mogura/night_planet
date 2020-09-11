@@ -528,12 +528,11 @@ class UserHelper extends Helper
 			$unique_id = $entity->shop_likes['id'];
 			$data =  'data-id="'.$unique_id.'" data-shop_id="'.$id.'" data-user_id="'.$this->get_u_info('id').'" data-alias="'.$alias.'"';
 			$html = '<a class="red darken-1 waves-effect waves-green btn modal-trigger" data-target="modal-review"' . $data . '>口コミを書く</a>';
-
-			if (!empty($entity->reviews)) {
-				if (count($entity->reviews[0]->is_like) > 0) {
-					$html = '<a class="darken-1 waves-effect waves-green btn disabled">レビュー済み</a>';
-				}
+			// レビュー済か
+			if (count($entity->is_reviewed) > 0) {
+				$html = '<a class="darken-1 waves-effect waves-green btn disabled">レビュー済み</a>';
 			}
+
 		} else {
 			$html = '<a class="yellow darken-4 waves-effect waves-green btn modal-trigger" data-target="modal-login">口コミを書く</a>';
 		}

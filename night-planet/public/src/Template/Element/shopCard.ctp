@@ -15,7 +15,9 @@
 			<div class="search-word white-text left header red darken-1"><?=h("キーワード「".$key_word."」")?></div>
 			<div class="search-word white-text left header blue darken-1"><?=h("エリア「".$area."」")?></div>
 			<div class="search-word white-text left header orange darken-1"><?=h("ジャンル「".$genre."」")?></div>
-			<p class="message"><?= count($search) == 0 ? h("検索結果が０件でした。条件を変更し、もう一度検索してみてください。"):""?></p>
+			<?php if (count($search) == 0) { ?>
+				<p class="right message">検索結果が０件でした。条件を変更し、もう一度検索してみてください。</p>
+			<?php } ?>
 		<?php endif; ?>
 	</div>
 	<?php if(count($search) > 0): ?>

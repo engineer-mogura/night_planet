@@ -139,7 +139,7 @@ class SearchController extends AppController
                 }
                 // リクエストデータが[key_word]かつ値が空じゃない場合
                 if (($key == 'key_word') && ($findData !== "")) {
-                    $query->orWhere(function ($exp, $q) use ($findData) {
+                    $query->andWhere(function ($exp, $q) use ($findData) {
                         $exp->like('name', '%'.$findData.'%');
                         return $exp;
                     });
@@ -183,7 +183,7 @@ class SearchController extends AppController
                 }
                 // リクエストデータが[key_word]かつ値が空じゃない場合
                 if (($key == 'key_word') && ($findData !== "")) {
-                    $query->orWhere(function ($exp, $q) use ($findData) {
+                    $query->andWhere(function ($exp, $q) use ($findData) {
                         $exp->like('nickname', '%'.$findData.'%');
                         return $exp;
                     });

@@ -1024,6 +1024,7 @@ class AreaController extends AppController
     public function review($id = null)
     {
         $all_favo = 0; // &を付けて値渡しする
+        $is_like  = 0; // &を付けて値渡しする
         // AJAXのアクセス以外は不正とみなす。
         if ($this->request->is('ajax')) {
 
@@ -1068,6 +1069,9 @@ class AreaController extends AppController
             $this->response->body(json_encode($response));
             return;
         }
+        $is_reviewed = $this->Reviews->find('all')
+            ->where(['reviews.user_id' => $this->viewVars['userInfo']['id']])
+            ->count();
         $shop = $this->Shops->find("all")
             ->contain(['reviews' => function (Query $q) use ($id, &$all_favo) {
                     $q
@@ -1077,6 +1081,7 @@ class AreaController extends AppController
                             , 'total' => $q->func()->count('reviews.shop_id')])
                         ->where(['shop_id' => $id]);
                     $all_favo = $q->count();
+
                     return $q
                         ->group('user_id')
                         ->limit(2)
@@ -1090,6 +1095,8 @@ class AreaController extends AppController
             }])
             ->where(['id' => $id, 'status = 1 AND delete_flag = 0'])
             ->first();
+        // レビュー済カウント数
+        $shop->set('is_reviewed', $is_reviewed);
 
         // 店舗が非表示または論理削除している場合はリダイレクトする
         if (empty($shop)) {

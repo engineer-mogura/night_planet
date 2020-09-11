@@ -52,6 +52,15 @@ class UsersController extends AppController
                 $this->Flash->error('うまくアクセス出来ませんでした。もう一度やり直してみてください。');
             }
 
+        } else {
+            // ユーザクッキー削除
+            if (!empty($this->response->withExpiredCookie('_auth_info'))) {
+                $auth = ['id'=>'Unknown','role'=>'user','email'=>'Unknown'];
+                Log::info($this->Util->setAccessLog(
+                    $auth, $this->request->params['action']), 'access');
+                $this->response = $this->response->withExpiredCookie('_auth_info');
+                $this->Flash->error('予期しないログインセッションエラーが発生しました。もう一度ログインしてください。');
+            }
         }
     }
 

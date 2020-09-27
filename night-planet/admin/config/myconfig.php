@@ -492,7 +492,7 @@ return [
         'pub'=> [
             'label' => "パブ",
             'path' => "pub",
-            'image' => "/img/common/genre/cabacura.jpg"
+            'image' => "/img/common/genre/cabacura.jpeg"
         ],
         'bar'=> [
             'label' => "バー",

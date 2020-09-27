@@ -663,6 +663,30 @@ ul.tabs > li.tab-original.tab > .active {
   top: -1em;
   left: 1em;
 }
+
+.area-section__list {
+  position: relative;
+}
+.area-section__list_img_circle__label_left {
+  position: absolute;
+  left: 5px;
+  top: 0;
+}
+.area-section__list_img_circle__label_left > i {
+  font-size: large;
+}
+.area-section__list_img_circle__label_bottom > i {
+  font-size: small;
+}
+.area-section__list_img_circle__label_bottom {
+  position: absolute;
+  right: 5px;
+  top: 6.5em;
+}
+.area-section__list_img_circle.circle {
+  height: 9em;
+  width:  9em;
+}
 /* トップページ画面 END */
 
 /* unknow画面 START */
@@ -802,6 +826,13 @@ ul.tabs > li.tab-original.tab > .active {
   border-radius: 15px;
   padding: 3px 8px;
   font-size: xx-small;
+}
+.card-tag.text-size {
+  font-size: medium;
+  position: relative;
+  top: 0;
+  left: 0;
+  display: block;
 }
 
 /* 検索画面 END */
@@ -2047,6 +2078,7 @@ form .message-label {
 
 /** スタッフ管理画面 START */
 .dashboard__cast__card-content__p {
+  font-size: x-large;
   font-weight: bold;
 }
 /** スタッフ管理画面 END */
@@ -2198,6 +2230,11 @@ form .message-label {
   .p-casts-section__list__favorite .p-casts-section__list__favorite__icon {
       position: relative;
       bottom: -0.1em;
+  }
+
+  .area-section__list_img_circle.circle {
+    height: 10em;
+    width:  10em;
   }
 }
 
@@ -2362,6 +2399,11 @@ form .message-label {
   nav.nav-breadcrumb > .nav-wrapper.nav-wrapper-oki a {
       font-size: xx-small;
   }
+  .area-section__list_img_circle.circle {
+    height: 8em;
+    width:  8em;
+}
+
   #p-casts-section h6 span,
   #today-member-modal h6 span,
   #cast-main .cast-header-icon * {

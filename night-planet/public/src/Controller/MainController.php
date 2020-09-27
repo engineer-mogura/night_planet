@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use Cake\Event\Event;
 use Token\Util\Token;
+use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
 
 /**
@@ -50,10 +51,29 @@ class MainController extends AppController
 
         $shops_query = $this->Shops->find();
         $casts_query = $this->Casts->find();
+        $shops = $shops_query->select($this->Shops);
         $shops = $shops_query->select(['count'=> $shops_query->func()->count('area'),'area'])
                     ->where(['status = 1 AND delete_flag = 0'])
                     ->group('area')->toArray();
 
+        // 店舗情報をセット
+        foreach($shops as $key => $shop) {
+            $shop->set('shopInfo', $this->Util->getShopInfo($shop));
+            // アイコンを設定する
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$shop->shopInfo['top_image_path']), true, 0755);
+
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if (count($files) > 0) {
+                foreach ($files as $file) {
+                    $shop->set('top_image', $shop->shopInfo['top_image_path'].DS.(basename($file)));
+                }
+            } else {
+                // 共通トップ画像をセット
+                $shop->set('top_image', PATH_ROOT['SHOP_TOP_IMAGE']);
+            }
+        }
         // 全体店舗数
         $shops_cnt = 0;
         // 画面表示するランキング数【１カラム：３】,【２カラム：７】,【３カラム：１０】,【４カラム：１３】
@@ -77,6 +97,16 @@ class MainController extends AppController
                 }
             }
         }
+        // エリア毎のアイコンをセットする
+        foreach ($area as $key1 => $value) {
+            $area[$key1]['image'] = PATH_ROOT['NIGHT_PLANET_IMAGE'];
+            foreach ($shops as $key2 => $shop) {
+                if ($value['path'] == $shop['area']) {
+                    $area[$key1]['image'] = $shop->top_image;
+                    break;
+                }
+            }
+        }
         $regin = [];
         foreach (REGION as $key => $value1) {
             $region_cnt = 0;
@@ -84,8 +114,10 @@ class MainController extends AppController
                 if ($value2['region'] == $value1['path']) {
                     $region_cnt += $value2['count'];
                 }
+
             }
             $region[$value1['path']] = $region_cnt;
+            $region['color'] = $value1['color'];
         }
         // 全体スタッフ数を取得
         $casts_cnt = $casts_query->find('all')

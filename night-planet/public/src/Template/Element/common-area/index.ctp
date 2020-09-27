@@ -22,7 +22,19 @@
 				<?= $this->element('sub-slider'); ?>
 			</div>
 			<div class="row genre-section">
-				<?= $this->element('genreCard'); ?>
+				<!-- ジャンルリスト -->
+				<?php foreach ($genreCounts as $key => $value): ?>
+					<div class="area-section__list center-align col s4 m3 l3 avatar favorite">
+						<a href="<?=$value['area'].DS.$value['path'].DS ?>">
+							<img src="<?=$value['image'] ?>" alt="<?=$value['label']?>" class="area-section__list_img_circle circle">
+							<a class="area-section__list_img_circle__label_bottom btn-floating btn pink darken-1 lighten-1">
+								<i class="material-icons"><?=mb_convert_kana($value['count'], 'A')?></i>
+							</a>
+							<span class="card-tag text-size white-text orange darken-1"><?=mb_convert_kana($value['label'], 'k')?></span>
+						</a><p></p>
+					</div>
+				<?php endforeach; ?>
+				<!-- <?= $this->element('genreCard'); ?> -->
 			</div>
 			<div class="row section tabs-section1">
 				<ul id="tabs-new-info" class="tabs tabs-fixed-width">

@@ -195,7 +195,7 @@ return [
         'NO_IMAGE03'=> '/img/common/no-img150_150/no-img7.png',
         'NO_IMAGE04'=> '/img/common/no-img150_150/no-img8.png',
         'NO_IMAGE05'=> '/img/common/no-img150_150/no-img9.png',
-        'NIGHT_PLANET_IMAGE'=> 'https://drive.google.com/uc?id=18mb-vlqKidqGfT21iptwlvm9628rBFkd',
+        'NIGHT_PLANET_IMAGE'=> '/img/common/night_planet_top_icon.png',
         'NIGHT_PLANET_CHARA'=> 'https://drive.google.com/uc?id=1VaqWsqOBUm7dnji0iHbCkSAgIlAp7dn6',
         'NIGHT_PLANET_CACHE'=> '/img/tmp/cache/',
         'CAST_TOP_IMAGE'=> '/img/common/cast/top-image.jpg',
@@ -335,26 +335,32 @@ return [
             'okinawa'=> [
                 'label' => "沖縄",
                 'path' => "okinawa",
+                'color' => "lime darken-1",
             ],
             'south'=> [
                 'label' => "南部",
                 'path' => "south",
+                'color' => "deep-orange darken-2",
             ],
             'center'=> [
                 'label' => "中部",
                 'path' => "center",
+                'color' => "light-green darken-2",
             ],
             'north'=> [
                 'label' => "北部",
                 'path' => "north",
+                'color' => "cyan darken-1",
             ],
             'miyakojima'=> [
                 'label' => "宮古島",
                 'path' => "miyakojima",
+                'color' => "lime darken-1",
             ],
             'ishigakijima'=> [
                 'label' => "石垣島",
                 'path' => "ishigakijima",
+                'color' => "lime darken-1",
             ],
     )),
     // 所属エリアリスト
@@ -461,37 +467,37 @@ return [
         'cabacula'=> [
             'label' => "キャバクラ",
             'path' => "cabacula",
-            'image' => "https://drive.google.com/uc?id=1lgEzrYyH3h-_9ULqmSJSJ_XmnaVfqyGW"
+            'image' => "/img/common/genre/cabacura.jpeg"
         ],
         'snack'=> [
             'label' => "スナック",
             'path' => "snack",
-            'image' => "https://drive.google.com/uc?id=1TTvCl-tlLA6LnnznlFsjAXPQFNh1F_Ri"
+            'image' => "/img/common/genre/snack.jpg"
         ],
         'girlsbar'=> [
             'label' => "ガールズバー",
             'path' => "girlsbar",
-            'image' => "https://drive.google.com/uc?id=108dWaFNSntR4b3UIKnyOxjr-9bIJSI14"
+            'image' => "/img/common/genre/girsbar.jpeg"
         ],
         'club'=> [
             'label' => "クラブ",
             'path' => "club",
-            'image' => "https://drive.google.com/uc?id=170U2YZIE0Ew2m_1gWcR9UEzILupnabai"
+            'image' => "/img/common/genre/rounge.jpg"
         ],
         'lounge'=> [
             'label' => "ラウンジ",
             'path' => "lounge",
-            'image' => "https://drive.google.com/uc?id=1gZXTi4LPhYzfUptpsZImc8bf87mXve_7"
+            'image' => "/img/common/genre/rounge.jpg"
         ],
         'pub'=> [
             'label' => "パブ",
             'path' => "pub",
-            'image' => "https://drive.google.com/uc?id=1naVYWMpUN4QTqI02zYXWbmzjYC7UzsJ5"
+            'image' => "/img/common/genre/cabacura.jpg"
         ],
         'bar'=> [
             'label' => "バー",
             'path' => "bar",
-            'image' => "https://drive.google.com/uc?id=1DUNny2vYOqVixDxghJkt7D2acvqNfVYK"
+            'image' => "/img/common/genre/bar.jpg"
         ],
     )),
     // 星座リスト

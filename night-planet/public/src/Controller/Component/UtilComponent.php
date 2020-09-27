@@ -642,7 +642,7 @@ class UtilComponent extends Component
         $archives = array_values($archives);
 
         // ディクレトリ取得
-        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$noticePath), true, 0755);
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$notice_path), true, 0755);
 
         foreach ($archives as $key => $archive) {
             foreach ($archive as $key => $value) {
@@ -655,7 +655,7 @@ class UtilComponent extends Component
                 foreach ($files as $file) {
                     $timestamp = date('Y/m/d H:i', filemtime($file));
                     array_push($gallery, array(
-                    "file_path"=>$noticePath.$value->dir.DS.(basename($file))
+                    "file_path"=>$notice_path.$value->dir.DS.(basename($file))
                     ,"date"=>$timestamp));
                     continue; // １件のみ取得できればよい
                 }

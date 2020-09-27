@@ -26,7 +26,30 @@
 			<!-- <?= $this->element('elmSearch'); ?> -->
 			<div class="row section area-section">
 			<!-- エリアリスト -->
-				<?= $this->element('area-list'); ?>
+			<?php foreach ($area as $key => $value): ?>
+				<?php if (REGION['okinawa']['path'] != $value['region']): ?>
+					<div class="area-section__list center-align col s4 m3 l3 avatar favorite">
+						<a href="<?=$value['path']?>">
+							<img src="<?=$value['image'] ?>" alt="<?=$value['label']?>" class="area-section__list_img_circle circle">
+							<?php if (REGION['miyakojima']['path'] == $value['region']
+								|| REGION['ishigakijima']['path'] == $value['region']) : ?>
+								<a class="area-section__list_img_circle__label_bottom btn-floating btn pink darken-1 lighten-1">
+									<i class="material-icons"><?=mb_convert_kana($value['count'], 'A')?></i>
+								</a>
+								<span class="card-tag text-size white-text orange darken-1"><?=$value['label']?></span>
+							<?php else: ?>
+								<a class="area-section__list_img_circle__label_left btn-floating btn <?=REGION[$value['region']]['color']?>">
+									<i class="material-icons"><?=REGION[$value['region']]['label']?></i>
+								</a>
+								<a class="area-section__list_img_circle__label_bottom btn-floating btn pink darken-1 lighten-1">
+									<i class="material-icons"><?=mb_convert_kana($value['count'], 'A')?></i>
+								</a>
+								<span class="card-tag text-size white-text orange darken-1"><?=$value['label']?></span>
+							<?php endif ?>
+						</a><p></p>
+					</div>
+				<?php endif; ?>
+			<?php endforeach; ?>
 			</div>
 			<div class="row section tabs-section1">
 				<ul id="tabs-new-info" class="tabs tabs-fixed-width">

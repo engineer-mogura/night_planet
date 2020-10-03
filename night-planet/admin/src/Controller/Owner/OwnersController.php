@@ -437,26 +437,22 @@ class OwnersController extends AppController
                     $this->request->getData('genre') . DS
                 ), true, 0755);
 
-                // TODO: scandirは、リストがないと、falseだけじゃなく
-                // warningも吐く。後で対応を考える。
-                // 指定フォルダ配下にあればラストの連番に+1していく
-                if (file_exists($dir->path)) {
-                    $dirArray = scandir($dir->path);
-                    $nextDir = sprintf("%05d", (int) end($dirArray) + 1);
-                } else {
-                    // 指定フォルダが空なら00001連番から振る
-                    $nextDir = sprintf("%05d", 1);
+                // ディレクトリ存在フラグ
+                $exists = true;
+
+                while ($exists) {
+                    $newDir = $this->Util->makeRandStr(15);
+                    if (!file_exists($dir->path . $newDir)) {
+                        $exists = false;
+                    }
                 }
+
                 // コネクションオブジェクト取得
                 $connection = ConnectionManager::get('default');
                 // トランザクション処理開始
                 $connection->begin();
 
                 try {
-                    // パスが存在しなければディレクトリを掘ってDB登録
-                    if (realpath($dir->path.$nextDir)) {
-                        throw new RuntimeException('既にディレクトリが存在します。');
-                    }
 
                     // 店舗情報セット
                     $shop = $this->Shops->newEntity();
@@ -466,14 +462,14 @@ class OwnersController extends AppController
                     $shop->genre = $this->request->getData('genre');
                     $shop->status = 0;
                     $shop->delete_flag = 0;
-                    $shop->dir = $nextDir;
+                    $shop->dir = $newDir;
                     // 店舗登録
                     if (!$this->Shops->save($shop)) {
                         throw new RuntimeException('レコードの登録に失敗しました。');
                     }
 
                     // ディレクトリを掘る
-                    $dir = new Folder($dir->path.$nextDir, true, 0755);
+                    $dir = new Folder($dir->path.$newDir, true, 0755);
                     $paths[] = $dir->path . DS . PATH_ROOT['TOP_IMAGE'];
                     $paths[] = $dir->path . DS . PATH_ROOT['IMAGE'];
                     $paths[] = $dir->path . DS . PATH_ROOT['CACHE'];

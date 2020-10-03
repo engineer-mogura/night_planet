@@ -189,23 +189,25 @@
 					<p class="diary-label section-label"><span> DIARY </span></p>
 				</div>
 				<?php if (count($diarys) > 0): ?>
-				<ul class="collection z-depth-3">
-					<?php foreach ($diarys as $key => $value): ?>
-					<li class="linkbox collection-item avatar">
-						<img src="<?= $value->icon ?>" alt="" class="circle">
-						<span class="title color-blue"><?= $value->created->nice()?></span>
-						<span class="icon-vertical-align color-blue"><i class="small material-icons">camera_alt</i>
-							<?=$value->gallery_count?></span>
-						<p><span class="color-blue"><?=$value->cast['nickname']?></span><br>
-							<span class="color-blue truncate"><?= AREA[$value->cast->shop['area']]['label'].' '.GENRE[$value->cast->shop['genre']]['label']
-								.' '.$value->cast->shop['name']?></span><br>
-							<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
-						</p>
-							<?=$this->User->get_favo_html('new_info_favo_disable', $value)?>
-						<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id ?>"></a>
-					</li>
-					<?php endforeach ?>
-				</ul>
+					<ul class="collection z-depth-3">
+						<?php foreach ($diarys as $key => $value): ?>
+							<li class="linkbox collection-item avatar">
+								<div class="archiveLink">
+									<input type="hidden" name="diary_id" value=<?=$value->id?>>
+									<?php !empty($value['gallery'][0]['file_path'])? $imgPath = $value['gallery'][0]['file_path'] : $imgPath = PATH_ROOT['NO_IMAGE01']; ?>
+									<img src="<?= $value->icon ?>" alt="" class="circle">
+									<h6 class="li-linkbox__a__h6"><?=$value->created->nice()?>
+										<a class="li-linkbox__a-image btn-floating btn red darken-3 lighten-1"><i class="material-icons">camera_alt</i></a>
+										<span class="li-linkbox__a-image__count"><?=$value->gallery_count?></span>
+									</h6>
+									<span class="card-tag white-text red"><?=$value->cast->nickname?></span></br>
+									<span class="truncate"><?= $value['title'] ?><br><?= $value['content'] ?></span>
+									<?=$this->User->get_favo_html('new_info_favo_disable', $value)?>
+									<a class="waves-effect hoverable" href="<?=DS.$value->cast->shop['area'].DS.PATH_ROOT['DIARY'].DS.$value->cast->id ?>"></a>
+								</div>
+							</li>
+						<?php endforeach; ?>
+					</ul>
 				<?php else:?>
 				<p class="col">まだ日記がありません。</p>
 				<?php endif ?>

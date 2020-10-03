@@ -691,18 +691,18 @@ class UsersController extends AppController
         // シンプルレイアウトを使用
         $this->viewBuilder()->layout('simpleDefault');
         try {
-            $user = $this->Users->get(Token::getId($token));
+            $tmp = $this->Tmps->get(Token::getId($token));
         } catch(RuntimeException $e) {
             $this->Flash->error('URLが無効になっています。');
             return $this->render('/common/error');
         }
 
         // 以下でトークンの有効期限や改ざんを検証することが出来る
-        if (!$user->tokenVerify($token)) {
-            $this->log($this->Util->setLog($user
+        if (!$tmp->tokenVerify($token)) {
+            $this->log($this->Util->setLog($tmp
                 , 'トークンの有効期限が切れたか、改ざんが行われた可能性があります。'));
             // 仮登録してるレコードを削除する
-            $this->Users->delete($user);
+            $this->Tmps->delete($tmp);
 
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
             return $this->render('/common/error');
@@ -712,7 +712,7 @@ class UsersController extends AppController
         $this->viewBuilder()->layout('userDefault');
 
         // 仮登録時点で仮登録フラグは立っていない想定。
-        if ($user->status == 1) {
+        if ($tmp->status == 1) {
             // すでに登録しているとみなし、ログイン画面へ
             $this->Flash->success(RESULT_M['REGISTERED_FAILED']);
             // 認証完了セッションをセット※モーダルを自動表示するためのパラメタ
@@ -722,7 +722,16 @@ class UsersController extends AppController
         }
 
         try{
-            $user->status = 1;      // 仮登録フラグを下げる
+            $tmp->status = 1;      // 仮登録フラグを下げる
+            $data = ['name'=>$tmp->name,'role'=>$tmp->role
+                ,'email'=>$tmp->email,'password'=>$tmp->password
+                ,'gender'=>$tmp->gender,'age'=>$tmp->age
+                ,'status'=>$tmp->status];
+
+            // 新規エンティティ
+            $newUser = $this->Users->newEntity();
+            $user = $this->Users->patchEntity($newUser, $data);
+
             // ユーザ登録
             if (!$this->Users->save($user)) {
 
@@ -742,12 +751,14 @@ class UsersController extends AppController
                 ->send();
             $this->set('user', $user);
             $this->log($email,'debug');
+            // 一時テーブル削除
+            $this->Tmps->delete($tmp);
 
         } catch(RuntimeException $e) {
 
             $this->log($this->Util->setLog($user, $e));
             // 仮登録してるレコードを削除する
-            $this->Users->delete($user);
+            $this->Tmps->delete($tmp);
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
             return $this->render('/common/error');
         }
@@ -981,13 +992,13 @@ class UsersController extends AppController
         // 登録ボタン押下時
         if ($this->request->is('post')) {
             // バリデーションは新規登録用を使う。
-            $user = $this->Users->newEntity($this->request->getData(), ['validate' => 'userRegistration']);
+            $user = $this->Tmps->newEntity($this->request->getData(), ['validate' => 'userRegistration']);
 
             if (!$user->errors()) {
 
                 $user = $this->Users->patchEntity($user, $this->request->getData());
 
-                if ($this->Users->save($user)) {
+                if ($this->Tmps->save($user)) {
 
                     $email = new Email('default');
                     $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])

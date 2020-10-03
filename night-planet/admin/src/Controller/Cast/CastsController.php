@@ -1518,18 +1518,18 @@ class CastsController extends AppController
         // シンプルレイアウトを使用
         $this->viewBuilder()->layout('simpleDefault');
         try {
-            $cast = $this->Casts->get(Token::getId($token));
+            $tmp = $this->Tmps->get(Token::getId($token));
         } catch(RuntimeException $e) {
             $this->Flash->error('URLが無効になっています。');
             return $this->render('/common/error');
         }
 
         // 以下でトークンの有効期限や改ざんを検証することが出来る
-        if (!$cast->tokenVerify($token)) {
-            $this->log($this->Util->setLog($cast
+        if (!$tmp->tokenVerify($token)) {
+            $this->log($this->Util->setLog($tmp
                 , 'トークンの有効期限が切れたか、改ざんが行われた可能性があります。'));
             // 仮登録してるレコードを削除する
-            $this->Casts->delete($cast);
+            $this->Tmps->delete($tmp);
 
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
             return $this->render('/common/error');
@@ -1539,26 +1539,25 @@ class CastsController extends AppController
         $this->viewBuilder()->layout('castDefault');
 
         // 仮登録時点で削除フラグは立っている想定。
-        if ($cast->delete_flag != 1) {
+        if ($tmp->delete_flag != 1) {
             // すでに登録しているとみなし、ログイン画面へ
             $this->Flash->success(RESULT_M['REGISTERED_FAILED']);
             return $this->redirect(['action' => 'login']);
         }
         // 店舗情報を取得
-        $shopInfo = $this->Util->getShopInfo($this->Shops->get($cast->shop_id));
+        $shopInfo = $this->Util->getShopInfo($this->Shops->get($tmp->shop_id));
         // スタッフ用のディレクトリを掘る
         $dir = new Folder( preg_replace('/(\/\/)/', '/',
                 WWW_ROOT . $shopInfo['cast_path'].DS) , true, 0755);
 
-        // TODO: scandirは、リストがないと、falseだけじゃなく
-        // warningも吐く。後で対応を考える。
-        // 指定フォルダ配下にあればラストの連番に+1していく
-        if (file_exists($dir->path)) {
-            $dirArray = scandir($dir->path);
-            $nextDir = sprintf("%05d", (int) end($dirArray) + 1);
-        } else {
-            // 指定フォルダが空なら00001連番から振る
-            $nextDir = sprintf("%05d", 1);
+        // ディレクトリ存在フラグ
+        $exists = true;
+
+        while ($exists) {
+            $newDir = $this->Util->makeRandStr(15);
+            if (!file_exists($dir->path . $newDir)) {
+                $exists = false;
+            }
         }
 
         // コネクションオブジェクト取得
@@ -1567,14 +1566,20 @@ class CastsController extends AppController
         $connection->begin();
 
         try{
-            // パスが存在しなければディレクトリを掘ってDB登録
-            if (realpath($dir->path.$nextDir)) {
 
-                throw new RuntimeException('既にディレクトリが存在します。');
-            }
             // スタッフ情報セット
-            $cast->dir = $nextDir; // 連番ディレクトリをセット
-            $cast->delete_flag = 0; // 論理削除フラグを下げる
+            $tmp->dir = $newDir; // 連番ディレクトリをセット
+            $tmp->delete_flag = 0; // 論理削除フラグを下げる
+            $data = ['shop_id'=>$tmp->shop_id,'role'=>$tmp->role
+                ,'name'=>$tmp->name,'email'=>$tmp->email
+                ,'password'=>$tmp->password,'age'=>$tmp->age
+                ,'dir'=>$tmp->dir,'status'=>$tmp->status
+                ,'delete_flag'=>$tmp->delete_flag];
+
+            // 新規エンティティ
+            $newCast = $this->Casts->newEntity();
+            $cast = $this->Casts->patchEntity($newCast, $data);
+
             // スタッフ登録
             if (!$this->Casts->save($cast)) {
 
@@ -1592,7 +1597,7 @@ class CastsController extends AppController
             }
 
             // ディレクトリを掘る
-            $dir = new Folder($dir->path.$nextDir, true, 0755);
+            $dir = new Folder($dir->path.$newDir, true, 0755);
             $paths[] = $dir->path . DS . PATH_ROOT['TOP_IMAGE'];
             $paths[] = $dir->path . DS . PATH_ROOT['IMAGE'];
             $paths[] = $dir->path . DS . PATH_ROOT['PROFILE'];
@@ -1619,13 +1624,15 @@ class CastsController extends AppController
                 ->send();
             $this->set('cast', $cast);
             $this->log($email,'debug');
+            // 一時テーブル削除
+            $this->Tmps->delete($tmp);
 
         } catch(RuntimeException $e) {
             // ロールバック
             $connection->rollback();
             $this->log($this->Util->setLog($cast, $e));
             // 仮登録してるレコードを削除する
-            $this->Casts->delete($cast);
+            $this->Tmps->delete($tmp);
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
             return $this->redirect(['action' => 'login']);
         }

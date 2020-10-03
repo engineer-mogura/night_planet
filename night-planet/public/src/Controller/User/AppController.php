@@ -24,7 +24,7 @@ class AppController extends \App\Controller\AppController
         $this->Snss          = TableRegistry::get('snss');
         $this->Updates       = TableRegistry::get('updates');
         $this->MasterCodes   = TableRegistry::get("master_codes");
-        $this->Tmp           = TableRegistry::get("tmp");
+        $this->Tmps          = TableRegistry::get("tmps");
 
         $this->loadComponent('Auth', [
             'authenticate' => [

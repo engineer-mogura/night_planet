@@ -137,6 +137,14 @@ class ShopsController extends AppController
                     ->where(['shops.id'=> $this->viewVars["shopInfo"]["id"] , 'owner_id' => $user['id']])
                     ->contain(['coupons','jobs','snss','casts'])
                 ->first();
+            $tmps  = $this->Tmps->find()
+                ->where(['shop_id' => $this->viewVars["shopInfo"]["id"]])
+                ->toArray();
+
+            // 承認待ちユーザー追加
+            foreach ($tmps as $key => $tmp) {
+                array_unshift($shop->casts, $tmp);
+            }
         }
 
         // ディクレトリ取得
@@ -866,9 +874,11 @@ class ShopsController extends AppController
 
         // 新規登録(仮登録) 店舗IDとステータスも論理削除フラグセットする
         if($this->request->getData('crud_type') == 'insert') {
-            $cast = $this->Casts->newEntity(array_merge(
+            $cast = $this->Tmps->newEntity(array_merge(
                 ['shop_id' => $this->viewVars['shopInfo']['id'], 'status' => 0 , 'delete_flag' => 1]
-                    ,$this->request->getData()));
+                    , $this->request->getData())
+                    , ['validate' => 'castRegistration']);
+
             $message = MAIL['CAST_AUTH_CONFIRMATION']; // 返却メッセージ
         } else if($this->request->getData('crud_type') == 'update') {
             // 更新
@@ -889,14 +899,21 @@ class ShopsController extends AppController
             return;
         }
         try {
-            // レコード登録、更新実行
-            if (!$this->Casts->save($cast)) {
-                if($this->request->getData('crud_type') == 'insert') {
+
+            if($this->request->getData('crud_type') == 'insert') {
+                // レコード一時登録実行
+                if (!$this->Tmps->save($cast)) {
                     $message = RESULT_M['SIGNUP_FAILED'];
-                    throw new RuntimeException('レコードの登録ができませんでした。');
+                    throw new RuntimeException('レコードの一時登録ができませんでした。');
                 }
-                $message = RESULT_M['UPDATE_FAILED'];
-                throw new RuntimeException('レコードの更新ができませんでした。');
+
+            } else {
+                // レコード更新実行
+                if (!$this->Casts->save($cast)) {
+                    $message = RESULT_M['SIGNUP_FAILED'];
+                    throw new RuntimeException('レコードの更新ができませんでした。');
+                }
+
             }
         } catch(RuntimeException $e) {
             $this->log($this->Util->setLog($auth, $e));
@@ -934,6 +951,34 @@ class ShopsController extends AppController
                 ->where(['shops.id'=> $this->viewVars["shopInfo"]["id"]])
                 ->contain(['coupons','jobs','snss','casts'])
             ->first();
+        $tmps  = $this->Tmps->find()
+            ->where(['shop_id' => $this->viewVars["shopInfo"]["id"]])
+            ->toArray();
+        // 承認待ちユーザー追加
+        foreach ($tmps as $key => $tmp) {
+            array_unshift($shop->casts, $tmp);
+        }
+        // スタッフのアイコンを設定する
+        foreach ($shop->casts as $key => $cast) {
+            $path = $this->viewVars['shopInfo']['cast_path'].DS.$cast->dir.DS.PATH_ROOT['PROFILE'];
+            if (file_exists($path)) {
+                $dir = new Folder(preg_replace('/(\/\/)/', '/'
+                    , WWW_ROOT.$path), true, 0755);
+            }
+
+            $files = array();
+            $files = glob($dir->path.DS.'*.*');
+            // ファイルが存在したら、画像をセット
+            if(count($files) > 0) {
+                foreach( $files as $file ) {
+                    $cast->set('icon', $path.DS.(basename($file)));
+                }
+            } else {
+                // 共通トップ画像をセット
+                $cast->set('icon', PATH_ROOT['NO_IMAGE02']);
+            }
+        }
+
         $this->set(compact('shop'));
         $this->render('/Element/shopEdit/cast');
         $response = array(
@@ -1391,7 +1436,7 @@ class ShopsController extends AppController
     {
         $id = $this->request->getSession()->read('Auth.Owner.id');
 
-        $notices = $this->Util->getNotices($id
+        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
             , $this->viewVars['shopInfo']['notice_path']);
         $top_notices = array();
         $arcive_notices = array();

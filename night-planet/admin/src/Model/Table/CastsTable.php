@@ -1,7 +1,6 @@
 <?php
 namespace App\Model\Table;
 
-use Cake\ORM\Query;
 use Cake\ORM\Table;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\TableRegistry;
@@ -65,109 +64,6 @@ class CastsTable extends Table
         $this->hasMany('cast_likes', [
             'foreignKey' => 'cast_id'
         ]);
-    }
-
-    /**
-     * Default validation rules.
-     *
-     * @param \Cake\Validation\Validator $validator Validator instance.
-     * @return \Cake\Validation\Validator
-     */
-    public function validationDefault(Validator $validator)
-    {
-        $validator
-            ->integer('id')
-            ->allowEmptyString('id', 'create');
-
-        $validator
-            ->scalar('name')
-            ->notEmpty('name','名前を入力してください。')
-            ->maxLength('name', 30, '名前が長すぎます。')
-            ->requirePresence('name', 'create')
-            ->allowEmptyString('name', false);
-
-        $validator
-            ->scalar('nickname')
-            ->notEmpty('nickname','ニックネームを入力してください。')
-            ->maxLength('nickname', 30, 'ニックネームが長すぎます。')
-            ->requirePresence('nickname', 'create')
-            ->allowEmptyString('nickname', false);
-
-        $validator
-            ->email('email',false, "メールアドレスの形式が不正です。")
-            ->notEmpty('email','メールアドレスを入力してください。')
-            ->requirePresence('email', 'create')
-            ->allowEmptyString('email', false)
-            ->add('email', [
-                'exists' => [
-                    'rule' => function($value, $context) {
-                        return !TableRegistry::get('casts')->exists(['email' => $value]);
-                    },
-                    'message' => 'そのメールアドレスは既に登録されています。'
-                ],
-            ]);
-
-        $validator
-            ->scalar('password')
-            ->maxLength('password', 32,'パスワードが長すぎます。')
-            ->minLength('password', 8,'パスワードが短すぎます。')
-            ->notEmpty('password','パスワードを入力してください。')
-            ->requirePresence('password', 'create')
-            ->allowEmptyString('password', false);
-
-        $validator
-            ->date('birthday')
-            ->allowEmptyTime('birthday');
-
-        $validator
-            ->scalar('three_size')
-            ->maxLength('three_size', 10)
-            ->allowEmptyString('three_size');
-
-        $validator
-            ->scalar('blood_type')
-            ->maxLength('blood_type', 20)
-            ->allowEmptyString('blood_type');
-
-        $validator
-            ->scalar('constellation')
-            ->maxLength('constellation', 20)
-            ->allowEmptyString('constellation');
-
-        $validator
-            ->scalar('age')
-            ->maxLength('age', 5)
-            ->allowEmptyString('age');
-
-        $validator
-            ->scalar('message')
-            ->maxLength('message', 50,'メッセージが長すぎます。')
-            ->allowEmptyString('message', false);
-
-        $validator
-            ->scalar('holiday')
-            ->maxLength('holiday', 50)
-            ->allowEmptyString('holiday');
-
-        $validator
-            ->scalar('dir')
-            ->maxLength('dir', 255)
-            ->allowEmptyString('dir');
-
-        $validator
-            ->scalar('remember_token')
-            ->maxLength('remember_token', 64)
-            ->allowEmptyString('remember_token');
-
-        $validator
-            ->integer('status')
-            ->allowEmptyString('status', false);
-
-        $validator
-            ->integer('delete_flag')
-            ->allowEmptyString('delete_flag');
-
-        return $validator;
     }
 
     /**

@@ -11,7 +11,7 @@
                 <div class="row">
                     <form id="view-archive-notice" name="view_archive_notice" method="get" style="display:none;" action="<?=DS.$shopInfo['area']['path'].DS.'view_notice'.DS?>">
                         <input type="hidden" name="_method" value="POST">
-                        <input type="hidden" name="id" value="<?=$userInfo['id']?>">
+                        <input type="hidden" name="id" value="<?=$shopInfo['id']?>">
                         <input type="hidden" name="notice_id" value="">
                     </form>
                     <div class="col s12 m12 l12 xl12">

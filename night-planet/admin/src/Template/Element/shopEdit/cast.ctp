@@ -1,16 +1,14 @@
 <div id="cast" class="col s12">
     <p>スタッフ<span><a href="" data-target="modal-help" data-help="3" class="modal-trigger edit-help"><i class="material-icons">help</i></a></span></p>
-    <?php $length = 0; $castSize = count($shop->casts);?>
+    <?php $count = 0;?>
     <?php foreach ($shop->casts as $key => $cast): ?>
-        <?php if ($castSize - 1 == $length) : ?>
-            <?php if ($length > 0) : ?>
-                <div class="card-panel red lighten-5"><?=$length . 'の承認待ちがあります。'?></div>
-            <?php endif; ?>
-        <?php endif; ?>
-        <?php if ($cast->delete_flag == 1) : ?>
-            <?php $length = ++$length; ?>
+        <?php if ($cast->registryAlias == 'tmps') : ?>
+            <?php $count = ++$count; ?>
         <?php endif; ?>
     <?php endforeach; ?>
+    <?php if ($count > 0) : ?>
+        <div class="card-panel red lighten-5"><?=$count . '件の承認待ちがあります。'?></div>
+    <?php endif; ?>
     <div id="show-cast">
         <div class="row">
             <form id="delete-cast" name="delete_cast" method="post" style="display:none;"
@@ -20,60 +18,60 @@
                 <input type="hidden" name="dir" value="">
             </form>
             <?php foreach ($shop->casts as $key => $cast): ?>
-            <div class="col s12 m6 l6 cast-box">
-                <div style="display:none;">
-                    <input type="hidden" name="json_data" value='<?=$cast ?>'>
-                </div>
-                <ul class="collection z-depth-2 <?php if(count($shop->casts) == $key + 1) { echo('cast-Scroll');}?>">
-                    <li class="collection-item">
-                        <table class="highlight">
-                            <thead>
-                                <tr>
-                                    <td colspan="2">
-                                        <span class="cast-num">スタッフ＃<?=$key + 1?></span>
-                                        <?php if ($cast->delete_flag == 1) : ?>
-                                            <span class="badge red darken-1 white-text"><?=承認待ち?></span>
-                                        <?php endif; ?>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <img src="<?=$cast->icon?>" style="object-fit: cover;" alt="<?=$cast->name ?>" class="circle left" width="80" height="80">
-                                        <input type="checkbox" class="check-cast-group" name="check_cast"
-                                            id="check-cast<?=$key?>" />
-                                        <label for="check-cast<?=$key?>">編集する</label>
-                                        <div style="display:none;">
-                                            <input type="hidden" name="json_data" value='<?=$cast ?>'>
-                                        </div>
-                                        <a href="#!" class="secondary-content">
-                                            <div class="switch">
-                                                <label>OFF<input type="checkbox" value="<?=$cast->status ?>"
-                                                        name="cast_switch<?=$cast->id ?>" class="cast-switchBtn"
-                                                        <?php if ($cast->status == 1) { echo 'checked'; }?>><span
-                                                        class="lever"></span>ON</label>
+                <div class="col s12 m6 l6 cast-box">
+                    <div style="display:none;">
+                        <input type="hidden" name="json_data" value='<?=$cast ?>'>
+                    </div>
+                    <ul class="collection z-depth-2 <?php if(count($shop->casts) == $key + 1) { echo('cast-Scroll');}?>">
+                        <li class="collection-item">
+                            <table class="highlight">
+                                <thead>
+                                    <tr>
+                                        <td colspan="2">
+                                            <span class="cast-num">スタッフ＃<?=$key + 1?></span>
+                                            <?php if ($cast->delete_flag == 1) : ?>
+                                                <span class="badge red darken-1 white-text"><?=承認待ち?></span>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <img src="<?=$cast->icon?>" style="object-fit: cover;" alt="<?=$cast->name ?>" class="circle left" width="80" height="80">
+                                            <input type="checkbox" class="check-cast-group" name="check_cast"
+                                                id="check-cast<?=$key?>" />
+                                            <label for="check-cast<?=$key?>">編集する</label>
+                                            <div style="display:none;">
+                                                <input type="hidden" name="json_data" value='<?=$cast ?>'>
                                             </div>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </thead>
-                            <tbody class="tbody-cast-group">
-                                <tr>
-                                    <th>名前</th>
-                                    <td><?=$cast->name ?></td>
-                                </tr>
-                                <tr>
-                                    <th>ニックネーム</th>
-                                    <td><?=$cast->nickname ?></td>
-                                </tr>
-                                <tr>
-                                    <th>メールアドレス</th>
-                                    <td><?=$cast->email ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </li>
-                </ul>
-            </div>
+                                            <a href="#!" class="secondary-content">
+                                                <div class="switch">
+                                                    <label>OFF<input type="checkbox" value="<?=$cast->status ?>"
+                                                            name="cast_switch<?=$cast->id ?>" class="cast-switchBtn"
+                                                            <?php if ($cast->status == 1) { echo 'checked'; }?>><span
+                                                            class="lever"></span>ON</label>
+                                                </div>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody class="tbody-cast-group">
+                                    <tr>
+                                        <th>名前</th>
+                                        <td><?=$cast->name ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>ニックネーム</th>
+                                        <td><?=$cast->nickname ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th>メールアドレス</th>
+                                        <td><?=$cast->email ?></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                    </ul>
+                </div>
             <?php endforeach; ?>
             <div class="col s12 m12 l12">
                 <?php if(count($shop->casts) == 0) { ?>

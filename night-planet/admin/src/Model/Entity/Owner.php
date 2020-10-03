@@ -3,7 +3,6 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Token\Model\Entity\TokenTrait;
-use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Owner Entity

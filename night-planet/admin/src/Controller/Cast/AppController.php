@@ -12,14 +12,16 @@ class AppController extends \App\Controller\AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Shops = TableRegistry::get('shops');
-        $this->Casts = TableRegistry::get('casts');
-        $this->Diarys = TableRegistry::get('diarys');
-        $this->DiaryLikes = TableRegistry::get('diary_likes');
+        $this->Shops         = TableRegistry::get('shops');
+        $this->Casts         = TableRegistry::get('casts');
+        $this->Diarys        = TableRegistry::get('diarys');
+        $this->DiaryLikes    = TableRegistry::get('diary_likes');
         $this->CastSchedules = TableRegistry::get('cast_schedules');
-        $this->Snss = TableRegistry::get('snss');
-        $this->Updates = TableRegistry::get('updates');
-        $this->MasterCodes = TableRegistry::get("master_codes");
+        $this->Snss          = TableRegistry::get('snss');
+        $this->Updates       = TableRegistry::get('updates');
+        $this->MasterCodes   = TableRegistry::get("master_codes");
+        $this->Tmps          = TableRegistry::get("tmps");
+
         $this->loadComponent('Auth', [
             'authenticate' => [
                 'Form' => [

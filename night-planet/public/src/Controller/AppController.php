@@ -27,6 +27,7 @@ class AppController extends Controller
         $this->loadComponent('Flash');
         $this->Users         = TableRegistry::get('users');
         $this->Casts         = TableRegistry::get('casts');
+        $this->Owners        = TableRegistry::get('owners');
         $this->Coupons       = TableRegistry::get('coupons');
         $this->Diarys        = TableRegistry::get('diarys');
         $this->Jobs          = TableRegistry::get('jobs');
@@ -43,6 +44,7 @@ class AppController extends Controller
         $this->Shops         = TableRegistry::get('shops');
         $this->Updates       = TableRegistry::get("updates");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
+        $this->Tmps           = TableRegistry::get("tmps");
     }
 
     public function beforeFilter(Event $event)

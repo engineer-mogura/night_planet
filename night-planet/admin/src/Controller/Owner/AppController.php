@@ -27,6 +27,8 @@ class AppController extends \App\Controller\AppController
         $this->AccessYears   = TableRegistry::get('access_years');
         $this->AccessMonths  = TableRegistry::get('access_months');
         $this->AccessWeeks   = TableRegistry::get('access_weeks');
+        $this->Tmps          = TableRegistry::get("tmps");
+
         $this->loadComponent('Auth', [
             'authenticate' => [
                 'Form' => [

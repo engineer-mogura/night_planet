@@ -38,8 +38,6 @@ class EntryController extends AppController
 
     public function beforeFilter(Event $event)
     {
-        $this->MasterCodes = TableRegistry::get("master_codes");
-        $this->Owners = TableRegistry::get("owners");
         $this->viewBuilder()->layout('simpleDefault');
         $this->Security->setConfig('blackHoleCallback', 'blackhole');
         // $this->Auth->allow(['signup','verify','logout']);
@@ -113,11 +111,11 @@ class EntryController extends AppController
         // 登録ボタン押下時
         if ($this->request->is('post')) {
             // バリデーションは新規登録用を使う。
-            $owner = $this->Owners->newEntity($this->request->getData(), ['validate' => 'ownerRegistration']);
+            $owner = $this->Tmps->newEntity($this->request->getData(), ['validate' => 'ownerRegistration']);
 
             if (!$owner->errors()) {
 
-                if ($this->Owners->save($owner)) {
+                if ($this->Tmps->save($owner)) {
 
                     $email = new Email('default');
                     $email->setFrom([MAIL['FROM_SUBSCRIPTION'] => MAIL['FROM_NAME']])

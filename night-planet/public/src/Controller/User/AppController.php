@@ -11,19 +11,21 @@ class AppController extends \App\Controller\AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Users = TableRegistry::get("users");
-        $this->Shops = TableRegistry::get('shops');
-        $this->Casts = TableRegistry::get('casts');
-        $this->Diarys = TableRegistry::get('diarys');
-        $this->ShopLikes = TableRegistry::get('shop_likes');
-        $this->CastLikes = TableRegistry::get('cast_likes');
+        $this->Users         = TableRegistry::get("users");
+        $this->Shops         = TableRegistry::get('shops');
+        $this->Casts         = TableRegistry::get('casts');
+        $this->Diarys        = TableRegistry::get('diarys');
+        $this->ShopLikes     = TableRegistry::get('shop_likes');
+        $this->CastLikes     = TableRegistry::get('cast_likes');
         $this->ShopInfoLikes = TableRegistry::get('shop_info_likes');
-        $this->DiaryLikes = TableRegistry::get('diary_likes');
-        $this->Reviews = TableRegistry::get('reviews');
+        $this->DiaryLikes    = TableRegistry::get('diary_likes');
+        $this->Reviews       = TableRegistry::get('reviews');
         $this->CastSchedules = TableRegistry::get('cast_schedules');
-        $this->Snss = TableRegistry::get('snss');
-        $this->Updates = TableRegistry::get('updates');
-        $this->MasterCodes = TableRegistry::get("master_codes");
+        $this->Snss          = TableRegistry::get('snss');
+        $this->Updates       = TableRegistry::get('updates');
+        $this->MasterCodes   = TableRegistry::get("master_codes");
+        $this->Tmp           = TableRegistry::get("tmp");
+
         $this->loadComponent('Auth', [
             'authenticate' => [
                 'Form' => [

@@ -174,22 +174,22 @@ class OwnersController extends AppController
     public function verify($token)
     {
         try {
-            $owner = $this->Owners->get(Token::getId($token));
+            $tmp = $this->Tmps->get(Token::getId($token));
         } catch(RuntimeException $e) {
             $this->Flash->error('URLが無効になっています。');
             return $this->redirect(['action' => 'signup']);
         }
         // 以下でトークンの有効期限や改ざんを検証することが出来る
-        if (!$owner->tokenVerify($token)) {
-            $this->log($this->Util->setLog($owner
+        if (!$tmp->tokenVerify($token)) {
+            $this->log($this->Util->setLog($tmp
                 , 'トークンの有効期限が切れたか、改ざんが行われた可能性があります。'));
             // 仮登録してるレコードを削除する
-            $this->Owners->delete($owner);
+            $this->Tmps->delete($tmp);
             $this->Flash->success(RESULT_M['AUTH_FAILED']);
-            return $this->redirect(['action' => 'signup']);
+            return $this->redirect(PUBLIC_DOMAIN.'/entry/signup');
         }
         // 仮登録時点で仮登録フラグは立っていない想定。
-        if ($owner->status == 1) {
+        if ($tmp->status == 1) {
             // すでに登録しているとみなし、ログイン画面へ
             $this->Flash->success(RESULT_M['REGISTERED_FAILED']);
             return $this->redirect(['action' => 'login']);
@@ -198,15 +198,14 @@ class OwnersController extends AppController
         $dir = new Folder( preg_replace('/(\/\/)/', '/',
             WWW_ROOT . PATH_ROOT['IMG'] . DS . PATH_ROOT['OWNER'] . DS) , true, 0755);
 
-        // TODO: scandirは、リストがないと、falseだけじゃなく
-        // warningも吐く。後で対応を考える。
-        // 指定フォルダ配下にあればラストの連番に+1していく
-        if (file_exists($dir->path)) {
-            $dirArray = scandir($dir->path);
-            $nextDir = sprintf("%05d", (int) end($dirArray) + 1);
-        } else {
-            // 指定フォルダが空なら00001連番から振る
-            $nextDir = sprintf("%05d", 1);
+        // ディレクトリ存在フラグ
+        $exists = true;
+
+        while ($exists) {
+            $newDir = $this->Util->makeRandStr(15);
+            if (!file_exists($dir->path . $newDir)) {
+                $exists = false;
+            }
         }
 
         // コネクションオブジェクト取得
@@ -215,15 +214,19 @@ class OwnersController extends AppController
         $connection->begin();
 
         try{
-            // パスが存在しなければディレクトリを掘ってDB登録
-            if (realpath($dir->path.$nextDir)) {
-
-                throw new RuntimeException('既にディレクトリが存在します。');
-            }
 
             // オーナー情報セット
-            $owner->dir = $nextDir;  // 連番ディレクトリをセット
-            $owner->status = 1;      // 仮登録フラグを下げる
+            $tmp->dir = $newDir;  // 連番ディレクトリをセット
+            $tmp->status = 1;      // 仮登録フラグを下げる
+            $data = ['name'=>$tmp->name,'role'=>$tmp->role
+                ,'tel'=>$tmp->tel,'email'=>$tmp->email
+                ,'password'=>$tmp->password,'age'=>$tmp->age
+                ,'dir'=>$tmp->dir,'status'=>$tmp->status];
+
+            // 新規エンティティ
+            $newOwner = $this->Owners->newEntity();
+            $owner = $this->Owners->patchEntity($newOwner, $data);
+
             // オーナー本登録
             if (!$this->Owners->save($owner)) {
 
@@ -248,7 +251,7 @@ class OwnersController extends AppController
                 throw new RuntimeException('レコードの登録に失敗しました。');
             }
             // ディレクトリを掘る
-            $dir = new Folder($dir->path.$nextDir, true, 0755);
+            $dir = new Folder($dir->path.$newDir, true, 0755);
             $paths[] = $dir->path . DS . PATH_ROOT['IMAGE'];
             $paths[] = $dir->path . DS . PATH_ROOT['PROFILE'];
             // その他ディレクトリ作成
@@ -269,13 +272,15 @@ class OwnersController extends AppController
                 ->viewVars(['owner' => $owner])
                 ->send();
             $this->set('owner', $owner);
+            // 一時テーブル削除
+            $this->Tmps->delete($tmp);
 
         } catch(RuntimeException $e) {
             // ロールバック
             $connection->rollback();
             $this->log($this->Util->setLog($owner, $e));
             // 仮登録してるレコードを削除する
-            $this->Owners->delete($owner);
+            $this->Tmps->delete($tmp);
             $this->Flash->error(RESULT_M['AUTH_FAILED']);
             return $this->redirect(PUBLIC_DOMAIN.'/entry/signup');
         }

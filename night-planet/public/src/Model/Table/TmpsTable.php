@@ -5,11 +5,12 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use Cake\ORM\TableRegistry;
 
 /**
- * Tmp Model
+ * Tmps Model
  *
- * @property |\Cake\ORM\Association\BelongsTo $Shops
+ * @property \App\Model\Table\ShopsTable|\Cake\ORM\Association\BelongsTo $Shops
  *
  * @method \App\Model\Entity\Tmp get($primaryKey, $options = [])
  * @method \App\Model\Entity\Tmp newEntity($data = null, array $options = [])
@@ -22,7 +23,7 @@ use Cake\Validation\Validator;
  *
  * @mixin \Cake\ORM\Behavior\TimestampBehavior
  */
-class TmpTable extends Table
+class TmpsTable extends Table
 {
     /**
      * Initialize method
@@ -34,13 +35,10 @@ class TmpTable extends Table
     {
         parent::initialize($config);
 
-        $this->setTable('tmp');
+        $this->setTable('tmps');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
 
-        $this->setTable('owners');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
         $this->addBehavior('Timestamp');
 
         $this->belongsTo('Shops', [
@@ -198,7 +196,7 @@ class TmpTable extends Table
             ->add('email', [
                 'exists' => [
                     'rule' => function($value, $context) {
-                        return !TableRegistry::get('owners')->exists(['email' => $value]);
+                        return !TableRegistry::get('tmps')->exists(['email' => $value]);
                     },
                     'message' => 'そのメールアドレスは既に登録されています。'
                 ],

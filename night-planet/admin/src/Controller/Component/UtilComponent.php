@@ -170,13 +170,6 @@ class UtilComponent extends Component
             ,'image_path'=> $path.DS.PATH_ROOT['IMAGE'],'profile_path'=> $path.DS.PATH_ROOT['PROFILE']
             ,'current_plan'=>$owner->servece_plan->current_plan,'previous_plan'=>$owner->servece_plan->previous_plan);
 
-        // ディクレトリ取得
-        $dir = new Folder(preg_replace(
-            '/(\/\/)/',
-            '/',
-            WWW_ROOT.$ownerInfo['profile_path']
-        ), true, 0755);
-
         // ファイルは１つのみだけど配列で取得する
         $files = glob($dir->path.DS.'*.*');
         $ownerInfo = $ownerInfo + array('icon_name'=>basename($files[0]));

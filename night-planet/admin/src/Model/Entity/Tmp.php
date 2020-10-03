@@ -6,28 +6,38 @@ use Token\Model\Entity\TokenTrait;
 use Cake\Auth\DefaultPasswordHasher;
 
 /**
- * Owner Entity
+ * Tmp Entity
  *
  * @property int $id
  * @property string $name
+ * @property int $shop_id
  * @property string $role
+ * @property string $nickname
  * @property string $tel
  * @property string $email
- * @property string $password
+ * @property string|null $password
+ * @property \Cake\I18n\FrozenTime|null $birthday
+ * @property string|null $three_size
  * @property int $gender
  * @property string $age
+ * @property string|null $blood_type
+ * @property string|null $constellation
+ * @property string|null $message
+ * @property string|null $holiday
  * @property string|null $dir
+ * @property string|null $file_name
  * @property string|null $remember_token
- * @property int|null $status
+ * @property int $status
  * @property int|null $delete_flag
- * @property \Cake\I18n\FrozenTime|null $created
- * @property \Cake\I18n\FrozenTime|null $modified
+ * @property \Cake\I18n\FrozenTime $created
+ * @property \Cake\I18n\FrozenTime $modified
  *
- * @property \App\Model\Entity\Shop[] $shops
+ * @property \App\Model\Entity\Shop $shop
  */
-class Owner extends Entity
+class Tmp extends Entity
 {
     use TokenTrait;
+
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *
@@ -39,19 +49,28 @@ class Owner extends Entity
      */
     protected $_accessible = [
         'name' => true,
+        'shop_id' => true,
         'role' => true,
+        'nickname' => true,
         'tel' => true,
         'email' => true,
         'password' => true,
+        'birthday' => true,
+        'three_size' => true,
         'gender' => true,
         'age' => true,
+        'blood_type' => true,
+        'constellation' => true,
+        'message' => true,
+        'holiday' => true,
         'dir' => true,
+        'file_name' => true,
         'remember_token' => true,
         'status' => true,
         'delete_flag' => true,
         'created' => true,
         'modified' => true,
-        'shops' => true
+        'shop' => true
     ];
 
     /**
@@ -60,18 +79,15 @@ class Owner extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password',
-        //'remember_token',  // 自動ログイン用トークン TODO: リリース前にコメントインする
+        'password'
     ];
 
-    /**
-     * テーブル名を返却する
-     *
-     *
-     * @return void
-     */
-    protected function _getRegistryAlias()
+    protected function _setPassword($value)
     {
-        return $this->_registryAlias;
+        if (strlen($value)) {
+            $hasher = new DefaultPasswordHasher();
+
+            return $hasher->hash($value);
+        }
     }
 }

@@ -44,6 +44,7 @@ class AppController extends Controller
         $this->Shops         = TableRegistry::get('shops');
         $this->Updates       = TableRegistry::get("updates");
         $this->WorkSchedules = TableRegistry::get("work_schedules");
+        $this->Tmps          = TableRegistry::get("tmps");
     }
 
     public function beforeFilter(Event $event)

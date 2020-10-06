@@ -1047,7 +1047,7 @@ class AreaController extends AppController
                                 ->order(['reviews.created' => 'desc']);
                         }, 'reviews.users' => function (Query $q){
                             return $q
-                                ->select(['name','file_name','created'
+                                ->select(['id','name','file_name','email','created'
                                     , 'is_like' => $q->func()->count('users.id')]);
                     }])
                     ->where(['id' => $id, 'status = 1 AND delete_flag = 0'])
@@ -1070,7 +1070,7 @@ class AreaController extends AppController
             return;
         }
         $is_reviewed = $this->Reviews->find('all')
-            ->where(['reviews.user_id' => $this->viewVars['userInfo']['id']])
+            ->where(['shop_id' => $id, 'user_id' => $this->viewVars['userInfo']['id']])
             ->count();
         $shop = $this->Shops->find("all")
             ->contain(['reviews' => function (Query $q) use ($id, &$all_favo) {
@@ -1080,7 +1080,7 @@ class AreaController extends AppController
                             , 'comment'
                             , 'total' => $q->func()->count('reviews.shop_id')])
                         ->where(['shop_id' => $id]);
-                    $all_favo = $q->count();
+                    $all_favo = $q->toArray()[0]->total;
 
                     return $q
                         ->group('user_id')

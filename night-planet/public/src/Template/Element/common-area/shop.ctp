@@ -423,7 +423,10 @@
 				<div class="light-blue accent-2 card-panel col s12 center-align">
 					<p class="comment-label section-label"><span> VOICE </span></p>
 				</div>
-				<p class="col">口コミはありません。</p>
+				<span style="float:right;">
+					<a href="<?=DS.$shop['area'].DS.PATH_ROOT['REVIEW'].DS.$shop['id']?>" class="waves-effect waves-green orange btn">レビュー画面へ行く
+					</a>
+				</span>
 			</div>
 			<!-- 口コミ MAP END -->
 			<!-- GOOGLE MAP START -->

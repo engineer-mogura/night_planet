@@ -53,7 +53,8 @@ class AppView extends View
         if ($arrayUrl[0] == PATH_ROOT['USER']) {
             // パンくずを設定する
             $this->setMyPageBreadcrumb($arrayUrl);
-        } else if (array_key_exists($arrayUrl[0], AREA) || $arrayUrl[0] == 'search') {
+        } else if (array_key_exists($arrayUrl[0], AREA) || $arrayUrl[0] == 'search'
+            || $arrayUrl[0] == 'news') {
             // パンくずを設定する
             $this->setBreadcrumb($arrayUrl);
         }
@@ -104,7 +105,13 @@ class AppView extends View
     public function setBreadcrumb($breadcrumbList)
     {
         // 次の画面がエリアのトップページの場合
-        if ($this->viewVars['next_view'] == 'area') {
+        if ($this->viewVars['next_view'] == 'news') {
+            $this->Breadcrumbs->add([
+                ['title' => '<i class="material-icons">home</i>', 'url' => DS],
+                ['title' => 'ニュース', 'url' => ['controller' => $breadcrumbList[0], 'action' => 'index']]
+            ]);
+        } else if ($this->viewVars['next_view'] == 'area') {
+        // 次の画面がエリアのトップページの場合
             $this->Breadcrumbs->add([
                 ['title' => '<i class="material-icons">home</i>', 'url' => DS],
                 ['title' => AREA[$breadcrumbList[0]]['label'], 'url' => ['controller' => $breadcrumbList[0], 'action' => 'index']]

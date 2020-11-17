@@ -7,6 +7,9 @@ if (!empty($owner)) :
 elseif (!empty($user)) :
     $url = PUBLIC_DOMAIN . '/user/users/verify/' . $user->tokenGenerate();
     echo($user->name . "様。初めまして、" . MAIL['FROM_NAME'] . 'です。<br>');
+elseif (!empty($developer)) :
+    $url = ADMIN_DOMAIN . '/developer/developer/verify/' . $developer->tokenGenerate();
+    echo($developer->name . "様。初めまして、" . MAIL['FROM_NAME'] . 'です。<br>');
 endif;
 
 echo('メールアドレスの認証をするために以下のURLにアクセスしてください。<br><br>');

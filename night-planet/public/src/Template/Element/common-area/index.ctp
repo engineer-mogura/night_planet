@@ -5,7 +5,9 @@
 <div id="area" class="container">
 	<div class="row">
 		<div class="col s12 m12 l8">
-			<?= $this->element('info-marquee'); ?>
+			<div class="row section sub-slider-section">
+				<?= $this->element('sub-slider'); ?>
+			</div>
 			<div class="row count-section">
 				<div id="menu-section" class="shop-menu">
 					<div class="white card-panel col s6 center-align">
@@ -17,9 +19,6 @@
 						<p class="cast-count section-label"><span>スタッフ ( <?=$all_cnt['casts'];?> )</span></p>
 					</div>
 				</div>
-			</div>
-			<div class="row sub-slider-section">
-				<?= $this->element('sub-slider'); ?>
 			</div>
 			<div class="row genre-section">
 				<!-- ジャンルリスト -->
@@ -34,8 +33,8 @@
 						</a><p></p>
 					</div>
 				<?php endforeach; ?>
-				<!-- <?= $this->element('genreCard'); ?> -->
 			</div>
+			<?= $this->element('info-marquee'); ?>
 			<div class="row section tabs-section1">
 				<ul id="tabs-new-info" class="tabs tabs-fixed-width">
                     <li class="tab-original tab col s6"><a class="active" href="#new-info-1-tabs">店舗からのお知らせ</a></li>

@@ -1,6 +1,6 @@
-<div id="modal-notice" class="modal modal-fixed-footer">
+<div id="modal-news" class="modal modal-fixed-footer">
 	<div class="modal-content">
-		<form id="delete-notice" name="delete_notice" method="post" style="display:none;" action="/owner/shops/delete_notice/">
+		<form id="delete-news" name="delete_news" method="post" style="display:none;" action="/developer/developers/delete_news/">
 			<input type="hidden" name="_method" value="POST">
 			<input type="hidden" name="id" value="">
 			<input type="hidden" name="dir_path" value="">
@@ -12,7 +12,7 @@
 			</a>
 			<ul>
 				<li>
-					<a class="btn-floating red waves-effect waves-light deleteBtn" data-delete="notice">
+					<a class="btn-floating red waves-effect waves-light deleteBtn" data-delete="news">
 						<i class="material-icons">delete</i>
 					</a>
 				</li>
@@ -29,17 +29,17 @@
 		<!-- モバイル用ボタン END-->
 		<!-- デスクトップ用ボタン START-->
 		<div class="right-align hide-on-small-only">
-			<a class="red waves-effect waves-light btn deleteBtn" data-delete="notice"><i class="material-icons left">delete</i>削除する</a>
+			<a class="red waves-effect waves-light btn deleteBtn" data-delete="news"><i class="material-icons left">delete</i>削除する</a>
 			<a class="blue waves-effect waves-light btn updateModeBtn"><i class="material-icons left">mode_edit</i>編集する</a>
 			<a class="blue waves-effect waves-light btn returnBtn hide"><i class="material-icons left">keyboard_return</i>戻る</a>
 		</div>
 		<!-- デスクトップ用ボタン END-->
 		<div>
-			<div class="row modal-edit-notice hide">
-				<form id="modal-edit-notice" name="modal_edit_notice" method="post" action="/owner/shops/update_notice/">
+			<div class="row modal-edit-news hide">
+				<form id="modal-edit-news" name="modal_edit_news" method="post" action="/developer/developers/update_news/">
 					<div style="display:none;">
 						<input type="hidden" name="_method" value="POST">
-						<input type="hidden" name="notice_id" value=''>
+						<input type="hidden" name="news_id" value=''>
 						<input type="hidden" name="json_data" value=''>
 						<input type="hidden" name="del_list" value="">
 						<input type="hidden" name="dir_path" value="">
@@ -66,8 +66,8 @@
 					</div>
 				</form>
 			</div>
-			<div id="view-notice" class="row">
-				<div class="notice-card hide">
+			<div id="view-news" class="row">
+				<div class="news-card hide">
 					<div class="my-gallery">
 						<figure class="col s4 m4 l3 hide">
 							<a href="" data-size="800x1000"><img width="100%" src="" alt="写真の説明でーす。" /></a>
@@ -85,9 +85,6 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<div class="favorite">
-			<?=$this->User->get_favo_html('modal', (object) array('registry_alias' => 'shop_infos'))?>
-		</div>
 		<a class="modal-action waves-effect waves-light btn updateBtn disabled"><i class="material-icons right">update</i>更新</a>
 		<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">閉じる</a>
 	</div>

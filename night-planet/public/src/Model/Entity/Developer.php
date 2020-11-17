@@ -2,14 +2,19 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
-use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Developer Entity
  *
  * @property int $id
+ * @property string $name
+ * @property string $role
  * @property string $email
  * @property string $password
+ * @property string|null $file_name
+ * @property string|null $remember_token
+ * @property int $status
+ * @property int $delete_flag
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
  */
@@ -26,8 +31,14 @@ class Developer extends Entity
      * @var array
      */
     protected $_accessible = [
+        'name' => true,
+        'role' => true,
         'email' => true,
         'password' => true,
+        'file_name' => true,
+        'remember_token' => true,
+        'status' => true,
+        'delete_flag' => true,
         'created' => true,
         'modified' => true
     ];
@@ -38,15 +49,18 @@ class Developer extends Entity
      * @var array
      */
     protected $_hidden = [
-        'password'
+        'password',
+        //'remember_token',  // 自動ログイン用トークン TODO: リリース前にコメントインする
     ];
 
-    protected function _setPassword($value)
+    /**
+     * テーブル名を返却する
+     *
+     *
+     * @return void
+     */
+    protected function _getRegistryAlias()
     {
-        if (strlen($value)) {
-            $hasher = new DefaultPasswordHasher();
-
-            return $hasher->hash($value);
-        }
+        return $this->_registryAlias;
     }
 }

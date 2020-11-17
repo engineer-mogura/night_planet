@@ -164,14 +164,6 @@ span.notice {
   vertical-align: middle;
 }
 
-#info-marquee {
-  padding: 0 0 0 40px;
-  background: url(/img/common/update-icon.svg) no-repeat left center;
-  -webkit-background-size: 30px 30px;
-  background-size: 30px 30px;
-  padding: 0 0 0 40px;
-  background-position: 5px;
-}
 #info-marquee a {
   vertical-align: -webkit-baseline-middle;
 }
@@ -528,6 +520,29 @@ form .warning-message {
 .my-gallery > figure {
   margin: initial;
 }
+/* 1列画像 */
+.grid1.my-gallery > figure {
+  float: left;
+  width: initial;
+  margin: 0;
+  margin: 0;
+}
+/* 2列画像 */
+.grid2.my-gallery > figure {
+  float: left;
+  margin: 0;
+  width: 50%;
+  margin: 0;
+}
+/* 3列画像 */
+.grid3 figure {
+  float: left;
+  margin: 0;
+  width: 33.333333333333%;
+  width: initial;
+  margin: 0;
+}
+/* 3列画像 */
 .my-gallery figure {
   float: left;
   margin: 0;
@@ -1926,26 +1941,32 @@ li.eventlist {
 
 /* モーダル日記 お知らせ START */
 #modal-diary,
-#modal-notice {
+#modal-notice,
+#modal-news {
   word-break: break-all;
 }
 #view-diary .my-gallery,
-#view-notice .my-gallery {
-  margin-top: 1rem;
+#view-notice .my-gallery,
+#view-news .my-gallery {
+    margin-top: 1rem;
 }
 .diary-list p.content,
 #modal-diary p.content,
 .notice-list p.content,
-#modal-notice p.content {
-  margin-top: 10px;
+#modal-notice p.content,
+.news-list p.content,
+#modal-news p.content {
+    margin-top: 10px;
 }
 #modal-diary .fixed-action-btn.modal-more-horiz,
-#modal-notice .fixed-action-btn.modal-more-horiz {
-  position: relative;
+#modal-notice .fixed-action-btn.modal-more-horiz,
+#modal-news .fixed-action-btn.modal-more-horiz {
+    position: relative;
 }
 #modal-diary .fixed-action-btn.modal-more-horiz > a,
-#modal-notice .fixed-action-btn.modal-more-horiz > a {
-  top: 15px;
+#modal-notice .fixed-action-btn.modal-more-horiz > a,
+#modal-news .fixed-action-btn.modal-more-horiz > a {
+    top: 15px;
 }
 .modal-footer__a-favorite__count {
   position: absolute;
@@ -2604,9 +2625,12 @@ form .message-label {
       width: 100%;
   }
   #modal-notice {
-      width: 100%;
+    width: 100%;
   }
-  #modal-search {
+  #modal-news {
+    width: 100%;
+  }
+#modal-search {
       width: 100%;
       height: 90%;
       height: 90%;

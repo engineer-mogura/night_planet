@@ -133,12 +133,13 @@ class MainController extends AppController
         $shop_ranking = $this->Util->getRanking($range, $limit, null);
         $diarys = $this->Util->getNewDiarys(PROPERTY['NEW_INFO_MAX'], null, null, $this->viewVars['userInfo']['id']);
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX'], null , $this->viewVars['userInfo']['id']);
+        $news = $this->Util->getNewss(null, 5);
         $main_adsenses = $this->Util->getAdsense(PROPERTY['TOP_SLIDER_GALLERY_MAX'], 'main', null);
         $sub_adsenses = $this->Util->getAdsense(PROPERTY['SUB_SLIDER_GALLERY_MAX'], 'sub', null);
         //広告を配列にセット
         $adsenses = array('main_adsenses' => $main_adsenses, 'sub_adsenses' => $sub_adsenses);
         $this->set(compact('area', 'region', 'all_cnt', 'diarys'
-            , 'notices', 'new_photos', 'ig_data','is_naipura', 'adsenses', 'shop_ranking'));
+            , 'notices', 'news', 'new_photos', 'ig_data','is_naipura', 'adsenses', 'shop_ranking'));
     }
 
     /**

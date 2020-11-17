@@ -194,10 +194,12 @@ class AreaController extends AppController
         // お知らせを取得
         $notices = $this->Util->getNewNotices(PROPERTY['NEW_INFO_MAX']
             , $this->viewVars['is_area'], $this->viewVars['userInfo']['id']);
+        // ニュースを取得
+        $news = $this->Util->getNewss(null, 5);
 
         $this->set('next_view', 'area');
         $this->set(compact('all_cnt', 'genreCounts', 'selectList', 'new_photos'
-            , 'diarys', 'notices', 'adsenses', 'shop_ranking'));
+            , 'diarys', 'notices', 'news', 'adsenses', 'shop_ranking'));
 
         $this->render();
     }

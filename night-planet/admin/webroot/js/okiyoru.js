@@ -20,6 +20,9 @@ function allInitialize() {
     if ($("#cast-default").length) {
         initializeCast();
     }
+    if ($("#developer-default").length) {
+        initializeDeveloper();
+    }
 
     // 初期化
     initialize();
@@ -40,6 +43,9 @@ function crearAllevents() {
     }
     if ($("#cast-default").length) {
         crearCastEvents();
+    }
+    if ($("#developer-default").length) {
+        crearDeveloperEvents();
     }
 
     crearCommonEvents();
@@ -156,6 +162,28 @@ function crearCastEvents() {
     $(document).off("click", ".chancelBtn");
     $(document).off("click", ".changeBtn");
     $(document).off("change", "#image-file");
+}
+
+/**
+ * ショップ画面のイベントクリア
+ */
+function crearDeveloperEvents() {
+
+    /** ニュース画面 */
+    $(document).off("change", "#title, #content, #image-file");
+    $(document).off(
+        "change",
+        "#modal-title, #modal-content, #modal-image-file"
+    );
+    $(document).off("change", "#image-file");
+    $(document).off("change", "#modal-image-file");
+    $(document).off("click", ".createBtn");
+    $(document).off("click", ".updateBtn");
+    $(document).off("click", ".archiveLink");
+    $(document).off("click", ".updateModeBtn");
+    $(document).off("click", ".returnBtn");
+    $(document).off("click", ".deleteBtn");
+    /** ニュース画面 */
 }
 
 /**
@@ -2393,46 +2421,6 @@ function initializeShop() {
             Materialize.updateTextFields(); // インプットフィールドの初期化
         }
     });
-    // TODO: snsのURLをリアルチェックするのは後で考える
-    // $(function() {
-    //     var facebook = $('form#save-sns').find("input[name='facebook']");
-    //     var twitter = $('form#save-sns').find("input[name='twitter']");
-    //     var instagram = $('form#save-sns').find("input[name='instagram']");
-    //     var line = $('form#save-sns').find("input[name='line']");
-    //     var url = "";
-    //     // facebookの入力フォームに変更があった時
-    //     $(facebook).on("input", function() {
-    //         console.log(this);
-    //         url = 'https://twitter.com/' + $(this).val();
-    //         urlCheck(url);
-    //     });
-    //     $(twitter).on("input", function() {
-    //         console.log(this);
-    //         url = 'https://twitter.com/' + $(this).val();
-    //         urlCheck(url);
-    //     });
-    //     $(instagram).on("input", function() {
-    //         console.log(this);
-    //         urlCheck(url);
-    //     });
-    //     $(line).on("input", function() {
-    //         console.log(this);
-    //         urlCheck(url);
-    //     });
-    //     function urlCheck(url) {
-    //         var jqxhr = $.ajax(url)
-    //         .done(function() {
-    //           alert( "success" );
-    //         })
-    //         .fail(function() {
-    //           alert( "error" );
-    //         })
-    //         .always(function() {
-    //           alert( "complete" );
-    //         });
-    //     }
-
-    // });
 
     // SNS 登録ボタン押した時
     $(document).on("click", ".sns-saveBtn", function () {
@@ -3264,6 +3252,178 @@ var callModalNoticeWithAjax = function ($form, $this, userType) {
 };
 
 /**
+ * @description モーダルお知らせ表示 ユーザー、店舗お知らせのみで使用
+ * @param  {} $form
+ * @param  {} userType
+ */
+var callModalNewsWithAjax = function ($form, $this, userType) {
+    $.ajax({
+        url: $form.attr("action"), //Formのアクションを取得して指定する
+        type: $form.attr("method"), //Formのメソッドを取得して指定する
+        data: $form.serialize(), //データにFormがserialzeした結果を入れる
+        dataType: "json", //データにFormがserialzeした結果を入れる
+        timeout: 15000,
+        beforeSend: function (xhr, settings) {
+            // 他のアーカイブリンクを無効化する
+            $(".archiveLink").each(function (i, elem) {
+                $(elem).css("pointer-events", "none");
+            });
+            //処理中のを通知するアイコンを表示する
+            $("#dummy").load("/module/Preloader.ctp");
+        },
+        complete: function (xhr, textStatus) {
+            // 他のアーカイブリンクを有効化する
+            $(".archiveLink").each(function (i, elem) {
+                $(elem).css("pointer-events", "");
+            });
+            //処理中アイコン削除
+            $(".preloader-wrapper").remove();
+        },
+        success: function (response, dataType) {
+            $("#modal-news").modal({
+                dismissible: true, // Modal can be dismissed by clicking outside of the modal
+                opacity: 0.2, // Opacity of modal background
+                inDuration: 300, // Transition in duration
+                outDuration: 200, // Transition out duration
+                startingTop: "4%", // Starting top style attribute
+                endingTop: "10%", // Ending top style attribute
+                // モーダル表示完了コールバック
+                ready: function () {
+                    scrollPosition = $(window).scrollTop();
+                    // モーダル表示してる時は、背景画面のスクロールを禁止する
+                    $("body").addClass("fixed").css({ top: -scrollPosition });
+                    // スタッフのお知らせディレクトリを取得する
+                    var newsDir =
+                        $("input[name='news_dir']").val() + response["dir"];
+                    // お知らせカードの要素を複製し、複製したやつを表示するようにする。
+                    var newsCard = $(".news-card")
+                        .clone(true)
+                        .insertAfter(".news-card")
+                        .addClass("clone")
+                        .removeClass("hide");
+                    // お知らせ内容の設定
+                    $(newsCard)
+                        .find("p[name='created']")
+                        .text(response["ymd_created"]);
+                    $(newsCard)
+                        .find("p[name='title']")
+                        .text(response["title"]);
+                    $(newsCard)
+                        .find("p[name='content']")
+                        .textWithLF(response["content"]);
+                    ajaxModalFavo(newsCard.closest('#modal-news')
+                            .find('.modal-footer'), response, 'shop_infos');
+
+                    // 画像表示するグリッドを決定する
+                    if (response["gallery"].length > 0) {
+                        var figure = $(newsCard).find("figure");
+                        var imgClass = "";
+                        $.each(response["gallery"], function (key, value) {
+                            var cloneFigure = $(figure)
+                                .clone(true)
+                                .removeClass()
+                                .insertAfter(figure);
+                            $(cloneFigure)
+                                .find("a")
+                                .attr({ href: value["file_path"] });
+                            $(cloneFigure)
+                                .find("img")
+                                .attr({ src: value["file_path"] });
+                        });
+                        $(newsCard).find("figure.hide").remove();
+                        initPhotoSwipeFromDOM(".my-gallery");
+                    }
+
+                    // 管理者の場合JSONデータを保持する
+                    if (userType == "admin") {
+                        var images = [];
+                        $.each(response["gallery"], function (key, value) {
+                            // プッシュする
+                            images.push({
+                                id: response["id"],
+                                path: value["file_path"],
+                                key: key,
+                            });
+                        });
+
+                        var dir = $("#news")
+                            .find("input[name='news_dir']")
+                            .val();
+                        $("#delete-news")
+                            .find("input[name='id']")
+                            .val(response["id"]);
+                        $("#delete-news")
+                            .find("input[name='dir_path']")
+                            .val(dir + response["dir"]);
+                        $("#modal-edit-news")
+                            .find("input[name='id']")
+                            .val(response["id"]);
+                        $("#modal-edit-news")
+                            .find("input[name='json_data']")
+                            .val(JSON.stringify(images));
+                    }
+                },
+
+                // モーダル非表示完了コールバック
+                complete: function () {
+                    // ユーザーの場合
+                    if (userType == "user") {
+                        console.log($this);
+                        $clone = $($(this)[0]["$el"]).find(".clone");
+                        // アーカイブリンクにモーダル表示時のイイネを反映する
+                        $this.find('.count').text($clone.closest('#modal-news')
+                            .find('.modal-footer').find('.count').text());
+                        if ($clone.closest('#modal-news')
+                                .find('.modal-footer__a-favorite').hasClass('red')) {
+
+                            $this.find('.li-linkbox__a-favorite').addClass('red');
+                            $this.find('.li-linkbox__a-favorite').removeClass('grey');
+                        } else {
+                            $this.find('.li-linkbox__a-favorite').addClass('grey');
+                            $this.find('.li-linkbox__a-favorite').removeClass('red');
+                        }
+
+                        // モーダル非表示した時は、背景画面のスクロールを解除する
+                        $("body").removeClass("fixed").css({ top: 0 });
+                        window.scrollTo(0, scrollPosition);
+                        $clone.remove();
+                    } else if (userType == "admin") {
+                        //スタッフの場合
+                        // モーダルフォームをクリアする
+                        $("#modal-edit-news").find(".card-img").remove();
+                        $("#modal-edit-news")
+                            .find("#modal-image-file")
+                            .replaceWith(
+                                $("#modal-image-file").val("").clone(true)
+                            );
+                        $("#modal-edit-news")
+                            .find("input[name='modal_file_path']")
+                            .val("");
+                        // モーダルを初期化
+                        resetModal();
+                        // モーダル非表示した時は、背景画面のスクロールを解除する
+                        $("body").removeClass("fixed").css({ top: 0 });
+                        window.scrollTo(0, scrollPosition);
+                        $(".modal-edit-news").addClass("hide");
+                        $("#view-news").removeClass("hide");
+                        $("#view-news").find(".clone").remove();
+                        $(".updateBtn").addClass("disabled");
+                    }
+                    $(".tooltipped").tooltip({ delay: 50 });
+                },
+            });
+            $("#modal-news").modal("open");
+        },
+        error: function (response, textStatus, xhr) {
+            $.notifyBar({
+                cssClass: "error",
+                html: "通信に失敗しました。ステータス：" + textStatus,
+            });
+        },
+    });
+};
+
+/**
  * @description モーダルニュース、日記のお気に入り設定
  * @param  {} $like
  */
@@ -3959,44 +4119,271 @@ function initializeCast() {
     /* SNS 画面 END */
 }
 
-/*  document.addEventListener('DOMContentLoaded', function() {
-var elems = document.querySelectorAll('.modal');
-var instances = M.Modal.init(elems, options);
-});*/
+/**
+ * デベロッパ画面の初期化処理
+ */
+function initializeDeveloper() {
+    /* ニュース 画面 START */
+    if ($("#news").length) {
+        // 入力フォームに変更があった時
+        $(document).on("input", "#title, #content, #image-file", function () {
+            $("#edit-news").find(".createBtn").removeClass("disabled");
+            $("#edit-news").find(".cancelBtn").removeClass("disabled");
+        });
+        // モーダルニュースの入力フォームに変更があった時
+        $(document).on(
+            "input",
+            "#modal-title, #modal-content, #modal-image-file",
+            function () {
+                $(".updateBtn").removeClass("disabled");
+            }
+        );
+        // 画像を選択した時
+        $(document).on("change", "#image-file", function () {
+            canvasRender("#news", this, true);
+        });
+        // モーダルニュースで画像を選択した時
+        $(document).on("change", "#modal-image-file", function () {
+            canvasRender("#modal-news", this, true);
+        });
+        // 登録ボタン押した時
+        $(document).on("click", ".createBtn", function () {
+            var form = $("#edit-news");
+            if (formValidete(form)) {
+                return false;
+            }
 
-/*    if (navigator.geolocation) {
-alert("この端末では位置情報が取得できます");
-// Geolocation APIに対応していない
-} else {
-alert("この端末では位置情報が取得できません");
-}*/
+            if (!confirm("こちらのニュース内容でよろしいですか？")) {
+                return false;
+            }
 
-// 現在地取得処理
-/*    function getPosition() {
-var accessStatus = Geolocator.RequestAccessAsync();
-alert(accessStatus);
-// 現在地を取得
-navigator.geolocation.getCurrentPosition(
-// 取得成功した場合
-function(position) {
-    alert("緯度:"+position.coords.latitude+",経度"+position.coords.longitude);
-},
-// 取得失敗した場合
-function(error) {
-  switch(error.code) {
-    case 1: //PERMISSION_DENIED
-      alert("位置情報の利用が許可されていませんafdfddf");
-      break;
-    case 2: //POSITION_UNAVAILABLE
-      alert("現在位置が取得できませんでした");
-      break;
-    case 3: //TIMEOUT
-      alert("タイムアウトになりました");
-      break;
-    default:
-      alert("その他のエラー(エラーコード:"+error.code+")");
-      break;
-  }
+            var fileCheck = $("#news").find("#image-file").val().length;
+
+            //ファイル選択済みの場合はajax処理を切り替える
+            if (fileCheck > 0) {
+                // 新しく追加された画像のみを対象にする
+                var $selecter = $(".card-img").find("img");
+
+                // ファイル変換
+                var blobList = fileConvert("#image-canvas", $selecter);
+
+                // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                // POSTでリクエスト内のデータが全部なくなるので。
+                // TODO: 後で対策を考えよう
+                $(form).find("#image-file, .file-path").val("");
+
+                //アップロード用blobをformDataに設定
+                formData = new FormData(form.get()[0]);
+                for (item of blobList) {
+                    formData.append("image[]", item);
+                }
+                // for (item of formData) {
+                //     console.log(item);
+                // }
+                //通常のアクションをキャンセルする
+                event.preventDefault();
+                fileUpAjaxCommon(form, formData, $("#wrapper"));
+            } else {
+                ajaxCommon(form, $("#wrapper"));
+            }
+        });
+
+        // 更新ボタン押した時
+        $(document).on("click", ".updateBtn", function () {
+            var form = $("#modal-edit-news");
+            if (formValidete(form)) {
+                return false;
+            }
+
+            // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
+            var oldImgList = $(".card-img").not(".new"); // 既に登録した画像リスト
+            var newImgList = $(".card-img.new").find("img"); // 追加した画像リスト
+            var delList = new Array(); // 削除対象リスト
+            if (
+                $("#modal-edit-news").find("input[name='json_data']").val() !=
+                ""
+            ) {
+                delList = JSON.parse(
+                    $("#modal-edit-news")
+                        .find("input[name='json_data']")
+                        .val()
+                );
+            }
+            // 既に登録した画像リストを元に削除対象を絞る
+            $(oldImgList).each(function (i, elm1) {
+                $.each(delList, function (i, elm2) {
+                    if ($(elm1).find("input[name='path']").val() == elm2.path) {
+                        delList.splice(i, 1);
+                        return false;
+                    }
+                });
+            });
+            var form = $("#modal-edit-news");
+            $(form).find("input[name='del_list']").val(JSON.stringify(delList));
+            $(form)
+                .find("input[name='news_id']")
+                .val($("#delete-news").find("input[name='id']").val());
+            $(form)
+                .find("input[name='dir_path']")
+                .val($("#delete-news").find("input[name='dir_path']").val());
+            $(form).find(".card-img input").remove();
+
+            var fileCheck = $(form).find("#modal-image-file").val().length;
+            //ファイル選択済みの場合はajax処理を切り替える
+            if (fileCheck > 0) {
+                // 新しく追加された画像のみを対象にする
+                var $selecter = $(".card-img.new").find("img");
+
+                // ファイル変換
+                var blobList = fileConvert("#image-canvas", $selecter);
+
+                var cloneForm = $(form).clone(true);
+                // サイズの大きい画像は、POSTで弾かれるので、フォーム内容は消す。
+                // POSTでリクエスト内のデータが全部なくなるので。
+                // TODO: 後で対策を考えよう
+                $(cloneForm)
+                    .find("#modal-image-file, .modal-file-path")
+                    .val("");
+
+                //アップロード用blobをformDataに設定
+                formData = new FormData(cloneForm.get()[0]);
+
+                for (item of blobList) {
+                    formData.append("image[]", item);
+                }
+                // for (item of formData) {
+                //     console.log(item);
+                // }
+                //通常のアクションをキャンセルする
+                event.preventDefault();
+                fileUpAjaxCommon(cloneForm, formData, $("#wrapper"));
+            } else {
+                ajaxCommon(form, $("#wrapper"));
+            }
+        });
+        // キャンセルボタン押した時
+        $("#news").on("click", ".cancelBtn", function () {
+            if (!confirm("取り消しますか？")) {
+                return false;
+            }
+            $("#news").find(".createBtn").addClass("disabled");
+            $("#news").find(".updateBtn").addClass("disabled");
+            $("#news").find(".cancelBtn").addClass("disabled");
+            $("#news")
+                .find("#title, #content, #image-file, #file-path")
+                .val("");
+            $("#news").find(".card-img").remove();
+        });
+
+        // アーカイブニュースをクリックした時
+        $(document).on("click", ".archiveLink", function () {
+            var $form = $("#view-archive-news");
+            $($form)
+                .find("input[name='id']")
+                .val($(this).find("input[name='id']").val());
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            callModalNewsWithAjax($form, null, "admin");
+            $(".materialboxed").materialbox();
+        });
+        // モーダルニュースの更新モードボタン押した時
+        $(document).on("click", ".updateModeBtn", function () {
+            $("#modal-news").find(".updateModeBtn").addClass("hide");
+            $("#modal-news").find(".returnBtn").removeClass("hide");
+            // アクションタイプをhiddenにセットする。コントローラー側で処理分岐のために。
+            $("#modal-edit-news").find("input[name='_method']").val("POST");
+            $("#modal-edit-news")
+                .find("input[name='title']")
+                .val($(".news-card.clone").find("p[name='title']").text());
+            $("#modal-edit-news")
+                .find("textarea[name='content']")
+                .val(
+                    $(".news-card.clone")
+                        .find("p[name='content']")
+                        .textWithLF()
+                );
+            $("textarea").trigger("autoresize"); // テキストエリアを入力文字の幅によりリサイズする
+            // 画像が１つ以上ある場合にmaterialboxed生成
+            if (
+                $("#modal-edit-news").find("input[name='json_data']").val()
+                    .length > 0
+            ) {
+                var images = JSON.parse(
+                    $("#modal-edit-news")
+                        .find("input[name='json_data']")
+                        .val()
+                );
+                $.get("/module/materialboxed.ctp", {}, function (html) {
+                    var materialTmp = $(html).clone(); // materialboxedの部品を複製しておく
+                    $(materialTmp).removeClass("new"); // newバッチを削除する
+                    $(materialTmp).find("span.new").remove(); // newバッチを削除する
+                    var materials = $();
+                    $.each(images, function (index, image) {
+                        var material = $(materialTmp).clone();
+                        $(material).find("input[name='id']").val(image["id"]);
+                        //$(material).find("input[name='name']").val(image['name']);
+                        $(material).find("input[name='key']").val(image["key"]);
+                        $(material)
+                            .find("input[name='path']")
+                            .val(image["path"]);
+                        $(material).find("img").attr("src", image["path"]);
+                        materials = materials.add(material);
+                    });
+                    $(".modal-edit-news").find(".row").append(materials);
+                    $(".materialboxed").materialbox();
+                    Materialize.updateTextFields();
+                    $(".tooltipped").tooltip({ delay: 50 });
+                });
+            }
+            // 更新画面を表示する
+            $(".modal-edit-news").removeClass("hide");
+            $("#view-news").addClass("hide");
+        });
+        // モーダルニュースの戻るボタン押した時
+        $(document).on("click", ".returnBtn", function () {
+            // 画像フォームをクリアする
+            $("#modal-edit-news").find(".card-img").remove();
+            $("#modal-edit-news")
+                .find("#modal-image-file")
+                .replaceWith($("#modal-image-file").val("").clone(true));
+            $("#modal-edit-news")
+                .find("input[name='modal_file_path']")
+                .val("");
+            // 通常の表示モードに切り替える。
+            $("#modal-news").find(".updateModeBtn").removeClass("hide");
+            $("#modal-news").find(".returnBtn").addClass("hide");
+            $(".modal-edit-news").addClass("hide");
+            $("#view-news").removeClass("hide");
+            $("#modal-news").find(".updateBtn").addClass("disabled");
+            $(".modal-edit-news").find("input[name='title']").val("");
+            $(".modal-edit-news").find("textarea[name='content']").text("");
+            $(".modal-edit-news").find("textarea").trigger("autoresize");
+            //resetModal();
+        });
+        // モーダルニュースの削除ボタン押した時
+        $(document).on("click", ".deleteBtn", function () {
+            // 画像の削除ボタンの場合
+            if ($(this).data("delete") == "image") {
+                var $image = $(this).closest(".card-img");
+                // var serachName = $newImage.find("input[name='name']").val();
+                $(".tooltipped").tooltip({ delay: 50 });
+                $image.remove();
+                $("#modal-news").find(".updateBtn").removeClass("disabled");
+                return;
+            }
+            // ニュース削除の場合
+            if (!confirm("このニュースを削除しますか？")) {
+                return false;
+            }
+
+            var $form = $('form[id="delete-news"]');
+
+            //通常のアクションをキャンセルする
+            event.preventDefault();
+            ajaxCommon($form, $("#wrapper"));
+            $("#modal-news").modal("close");
+        });
+    }
+    /* ニュース 画面 END */
 }
-);
-}*/
+

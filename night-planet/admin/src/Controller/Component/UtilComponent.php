@@ -178,6 +178,21 @@ class UtilComponent extends Component
     }
 
     /**
+     * オーナー情報を取得する。
+     *
+     * @return void
+     */
+    public function getDeveloperInfo($developer)
+    {
+        // TODO: Authセッションからオーナー情報を取得せず、shopsテーブルから取る？
+        $developerInfo = array();
+        $developerInfo = $developerInfo + array('news_path' => DS.PATH_ROOT['IMG']
+            .DS.PATH_ROOT['DEVELOPER'].DS.PATH_ROOT[NEWS]
+            , 'id' => $developer['id']);
+        return  $developerInfo;
+    }
+
+    /**
      * 店舗情報を取得する。
      *
      * @return void
@@ -785,6 +800,106 @@ class UtilComponent extends Component
         }
         return $shopInfos;
     }
+
+    /**
+     * 指定した件数のニュースを取得する処理
+     *
+     * @param [type] $id
+     * @param [type] $news_path
+     * @param [type] $limit
+     * @return array
+     */
+    public function getNewss($news_path = null, $limit = null)
+    {
+        $news = TableRegistry::get('news');
+        // 最新のニュース情報取得
+        // 過去のニュースをアーカイブ形式で取得する
+        $query = $news->find('all')
+            ->select($news->Schema()->columns())
+            ->order(['created' => 'DESC'])
+            ->limit($limit);
+        $ym = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%Y/%c'" => 'literal']);
+        $md = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%c/%e'" => 'literal']);
+        $archives = $query->select([
+            'ym_created' => $ym,
+            'md_created' => $md])
+            ->toArray();
+
+        $archives = $this->groupArray($archives, 'ym_created');
+        $archives = array_values($archives);
+
+        if (!is_null($news_path)) {
+            // ディクレトリ取得
+            $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$news_path), true, 0755);
+
+            foreach ($archives as $key => $archive) {
+                foreach ($archive as $key => $value) {
+                    $gallery = array();
+
+                    /// 並び替えして出力
+                    $files = glob($dir->path.$value['dir'].DS.'*.*');
+                    usort($files, $this->sortByLastmod);
+
+                    foreach ($files as $file) {
+                        $timestamp = date('Y/m/d H:i', filemtime($file));
+                        array_push($gallery, array(
+                        "file_path"=>$news_path.$value->dir.DS.(basename($file))
+                        ,"date"=>$timestamp));
+                        continue; // １件のみ取得できればよい
+                    }
+                    $value->set('gallery', $gallery);
+                    // 画像数をセット
+                    $value->set('gallery_count', count($files));
+                }
+            }
+        }
+
+        return $archives;
+    }
+    /**
+    * 指定した１件のニュース情報を取得する処理
+    *
+    * @param [type] $id
+    * @param [type] $news_path
+    * @param [type] $user_id
+    * @return array
+    */
+    public function getNews($id, $news_path)
+    {
+        $news = TableRegistry::get('news');
+        $query = $news->find('all')
+            ->select($news->Schema()->columns());
+        $ymd = $query->func()->date_format([
+            'created' => 'identifier',
+            "'%Y年%c月%e日'" => 'literal']);
+        $news = $query->select([
+                'ymd_created' => $ymd])
+            ->where(['id' => $id])
+            ->first();
+ 
+        // ディクレトリ取得
+        $dir = new Folder(preg_replace('/(\/\/)/', '/', WWW_ROOT.$news_path), true, 0755);
+ 
+        $gallery = array();
+ 
+        /// 並び替えして出力
+        $files = glob($dir->path.$news['dir'].DS.'*.*');
+        usort($files, $this->sortByLastmod);
+        foreach ($files as $file) {
+            $timestamp = date('Y/m/d H:i', filemtime($file));
+            array_push($gallery, array(
+            "file_path"=>$news_path.$news->dir.DS.(basename($file))
+            ,"date"=>$timestamp));
+        }
+        $news->set('gallery', $gallery);
+ 
+        return $news;
+    }
+
      /**
      * 広告情報を取得する処理
      *

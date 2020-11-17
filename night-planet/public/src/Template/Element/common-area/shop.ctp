@@ -367,14 +367,6 @@
 							</figcaption>
 						</figure>
 						<?php endforeach; ?>
-						<?php foreach ($nImageList as $key => $value): ?>
-						<figure>
-							<a href="<?=$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.$value['name']?>"
-								data-size="800x1000"><img width="100%"
-									src="<?=$shopInfo['notice_path'].$shop->shop_infos[0]->dir.DS.$value['name']?>"
-									alt="" /></a>
-						</figure>
-						<?php endforeach; ?>
 					</div>
 					<div class="col s12 event-section__content">
 						<p class="right-align"><?=$shop->shop_infos[0]->created->nice()?></p>

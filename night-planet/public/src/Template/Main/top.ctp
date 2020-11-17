@@ -6,7 +6,11 @@
 <div id="top" class="container">
 	<div class="row">
 		<div class="col s12 m12 l8">
-			<?= $this->element('info-marquee'); ?>
+			<div class="row section sub-slider-section">
+				<?= $this->element('sub-slider'); ?>
+			</div>
+			<!-- <span>選択してキーワードを入力してください</span> -->
+			<!-- <?= $this->element('elmSearch'); ?> -->
 			<div class="row count-section">
 				<div id="shop-menu-section" class="shop-menu">
 					<div class="white card-panel col s6 center-align">
@@ -19,38 +23,34 @@
 					</div>
 				</div>
 			</div>
-			<div class="row sub-slider-section">
-				<?= $this->element('sub-slider'); ?>
-			</div>
-			<!-- <span>選択してキーワードを入力してください</span> -->
-			<!-- <?= $this->element('elmSearch'); ?> -->
 			<div class="row section area-section">
-			<!-- エリアリスト -->
-			<?php foreach ($area as $key => $value): ?>
-				<?php if (REGION['okinawa']['path'] != $value['region']): ?>
-					<div class="area-section__list center-align col s4 m3 l3 avatar favorite">
-						<a href="<?=$value['path']?>">
-							<img src="<?=$value['image'] ?>" alt="<?=$value['label']?>" class="area-section__list_img_circle circle">
-							<?php if (REGION['miyakojima']['path'] == $value['region']
-								|| REGION['ishigakijima']['path'] == $value['region']) : ?>
-								<a class="area-section__list_img_circle__label_bottom btn-floating btn pink darken-1 lighten-1">
-									<i class="material-icons"><?=mb_convert_kana($value['count'], 'A')?></i>
-								</a>
-								<span class="card-tag text-size white-text orange darken-1"><?=$value['label']?></span>
-							<?php else: ?>
-								<a class="area-section__list_img_circle__label_left btn-floating btn <?=REGION[$value['region']]['color']?>">
-									<i class="material-icons"><?=REGION[$value['region']]['label']?></i>
-								</a>
-								<a class="area-section__list_img_circle__label_bottom btn-floating btn pink darken-1 lighten-1">
-									<i class="material-icons"><?=mb_convert_kana($value['count'], 'A')?></i>
-								</a>
-								<span class="card-tag text-size white-text orange darken-1"><?=$value['label']?></span>
-							<?php endif ?>
-						</a><p></p>
-					</div>
-				<?php endif; ?>
-			<?php endforeach; ?>
+				<!-- エリアリスト -->
+				<?php foreach ($area as $key => $value): ?>
+					<?php if (REGION['okinawa']['path'] != $value['region']): ?>
+						<div class="area-section__list center-align col s4 m3 l3 avatar favorite">
+							<a href="<?=$value['path']?>">
+								<img src="<?=$value['image'] ?>" alt="<?=$value['label']?>" class="area-section__list_img_circle circle">
+								<?php if (REGION['miyakojima']['path'] == $value['region']
+									|| REGION['ishigakijima']['path'] == $value['region']) : ?>
+									<a class="area-section__list_img_circle__label_bottom btn-floating btn pink darken-1 lighten-1">
+										<i class="material-icons"><?=mb_convert_kana($value['count'], 'A')?></i>
+									</a>
+									<span class="card-tag text-size white-text orange darken-1"><?=$value['label']?></span>
+								<?php else: ?>
+									<a class="area-section__list_img_circle__label_left btn-floating btn <?=REGION[$value['region']]['color']?>">
+										<i class="material-icons"><?=REGION[$value['region']]['label']?></i>
+									</a>
+									<a class="area-section__list_img_circle__label_bottom btn-floating btn pink darken-1 lighten-1">
+										<i class="material-icons"><?=mb_convert_kana($value['count'], 'A')?></i>
+									</a>
+									<span class="card-tag text-size white-text orange darken-1"><?=$value['label']?></span>
+								<?php endif ?>
+							</a><p></p>
+						</div>
+					<?php endif; ?>
+				<?php endforeach; ?>
 			</div>
+			<?= $this->element('info-marquee'); ?>
 			<div class="row section tabs-section1">
 				<ul id="tabs-new-info" class="tabs tabs-fixed-width">
                     <li class="tab-original tab col s6"><a class="active" href="#new-info-1-tabs">店舗からのお知らせ</a></li>

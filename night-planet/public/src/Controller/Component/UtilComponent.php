@@ -380,7 +380,7 @@ class UtilComponent extends Component
      * @param [type] $user_id
      * @return array
      */
-    public function getDiarys($cast_id, $diary_path, $user_id)
+    public function getDiarys($cast_id, $diary_path, $user_id = null)
     {
         $diarys = TableRegistry::get('diarys');
         // スタッフ情報、最新の日記情報とイイネの総数取得

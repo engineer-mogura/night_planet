@@ -1049,37 +1049,12 @@ class CastsController extends AppController
      */
     public function diary()
     {
-        $id = $this->request->getSession()->read('Auth.Cast.id');
-
-        $diarys = $this->Util->getDiarys($id
+        $allDiary = $this->getAllDiary($this->viewVars['userInfo']['id']
             , $this->viewVars['userInfo']['diary_path'], null);
-        $top_diarys = array();
-        $arcive_diarys = array();
-        $count = 0;
-        foreach ($diarys as $key1 => $rows) :
-            foreach ($rows as $key2 => $row) :
-                if ($count == 5) :
-                    break;
-                endif;
-                array_push($top_diarys, $row);
-                unset($diarys[$key1][$key2]);
-                $count = $count + 1;
-            endforeach;
-        endforeach;
-        foreach ($diarys as $key => $rows) :
-            if (count($rows) == 0) :
-                unset($diarys[$key]);
-            endif;
-        endforeach;
-        foreach ($diarys as $key1 => $rows) :
-            $tmp_array = array();
-            foreach ($rows as $key2 => $row) :
-                array_push($tmp_array, $row);
-            endforeach;
-            array_push($arcive_diarys, array_values($tmp_array));
-        endforeach;
-        $this->set(compact('top_diarys', 'arcive_diarys'));
-        $this->render();
+        $top_diary = $allDiary[0];
+        $arcive_diary = $allDiary[1];
+        $this->set(compact('top_diary', 'arcive_diary'));
+        return $this->render();
     }
 
     /**
@@ -1177,11 +1152,13 @@ class CastsController extends AppController
             $this->response->body(json_encode($response));
             return;
         }
-
-        $diarys = $this->Util->getDiarys($id
+        // 日記取得
+        $allDiary = $this->getAllDiary($this->viewVars['userInfo']['id']
             , $this->viewVars['userInfo']['diary_path'], null);
+        $top_diary = $allDiary[0];
+        $arcive_diary = $allDiary[1];
 
-        $this->set(compact('diarys'));
+        $this->set(compact('top_diary', 'arcive_diary'));
         $this->render('/Cast/Casts/diary');
         $response = array(
             'html' => $this->response->body(),
@@ -1347,10 +1324,13 @@ class CastsController extends AppController
         if (file_exists($tmpDir->path)) {
             $tmpDir->delete();// tmpフォルダ削除
         }
-        $diarys = $this->Util->getDiarys($id
-            , $this->viewVars['userInfo']['diary_path']);
+        // 日記取得
+        $allDiary = $this->getAllDiary($this->viewVars['userInfo']['id']
+            , $this->viewVars['userInfo']['diary_path'], null);
+        $top_diary = $allDiary[0];
+        $arcive_diary = $allDiary[1];
 
-        $this->set(compact('diarys'));
+        $this->set(compact('top_diary', 'arcive_diary'));
         $this->render('/Cast/Casts/diary');
         $response = array(
             'html' => $this->response->body(),
@@ -1444,10 +1424,13 @@ class CastsController extends AppController
         if (file_exists($tmpDir->path)) {
             $tmpDir->delete();
         }
-        $diarys = $this->Util->getDiarys($id
-            , $this->viewVars['userInfo']['diary_path']);
+        // 日記取得
+        $allDiary = $this->getAllDiary($this->viewVars['userInfo']['id']
+            , $this->viewVars['userInfo']['diary_path'], null);
+        $top_diary = $allDiary[0];
+        $arcive_diary = $allDiary[1];
 
-        $this->set(compact('diarys'));
+        $this->set(compact('top_diary', 'arcive_diary'));
         $this->render('/Cast/Casts/diary');
         $response = array(
             'html' => $this->response->body(),
@@ -1854,6 +1837,44 @@ class CastsController extends AppController
         }
         $this->set('cast', $cast);
         return $this->render();
+    }
+
+    /**
+     * 全ての日記を取得する処理
+     *
+     * @return void
+     */
+    public function getAllDiary($id, $diary_path, $user_id = null)
+    {
+        $diary = $this->Util->getDiarys($id
+            , $this->viewVars['userInfo']['diary_path'], null);
+        $top_diary = array();
+        $arcive_diary = array();
+        $count = 0;
+        foreach ($diary as $key1 => $rows) :
+            foreach ($rows as $key2 => $row) :
+                if ($count == 5) :
+                    break;
+                endif;
+                array_push($top_diary, $row);
+                unset($diary[$key1][$key2]);
+                $count = $count + 1;
+            endforeach;
+        endforeach;
+        foreach ($diary as $key => $rows) :
+            if (count($rows) == 0) :
+                unset($diary[$key]);
+            endif;
+        endforeach;
+        foreach ($diary as $key1 => $rows) :
+            $tmp_array = array();
+            foreach ($rows as $key2 => $row) :
+                array_push($tmp_array, $row);
+            endforeach;
+            array_push($arcive_diary, array_values($tmp_array));
+        endforeach;
+
+        return array($top_diary, $arcive_diary);
     }
 
     /**

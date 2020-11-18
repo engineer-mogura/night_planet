@@ -1434,37 +1434,12 @@ class ShopsController extends AppController
      */
     public function notice()
     {
-        $id = $this->request->getSession()->read('Auth.Owner.id');
-
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
-            , $this->viewVars['shopInfo']['notice_path']);
-        $top_notices = array();
-        $arcive_notices = array();
-        $count = 0;
-        foreach ($notices as $key1 => $rows) :
-            foreach ($rows as $key2 => $row) :
-                if ($count == 5) :
-                    break;
-                endif;
-                array_push($top_notices, $row);
-                unset($notices[$key1][$key2]);
-                $count = $count + 1;
-            endforeach;
-        endforeach;
-        foreach ($notices as $key => $rows) :
-            if (count($rows) == 0) :
-                unset($notices[$key]);
-            endif;
-        endforeach;
-        foreach ($notices as $key1 => $rows) :
-            $tmp_array = array();
-            foreach ($rows as $key2 => $row) :
-                array_push($tmp_array, $row);
-            endforeach;
-            array_push($arcive_notices, array_values($tmp_array));
-        endforeach;
-        $this->set(compact('top_notices', 'arcive_notices'));
-        $this->render();
+        $allNotice = $this->getAllNotice($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path'], null);
+        $top_notice = $allNotice[0];
+        $arcive_notice = $allNotice[1];
+        $this->set(compact('top_notice', 'arcive_notice'));
+        return $this->render();
     }
 
     /**
@@ -1562,11 +1537,13 @@ class ShopsController extends AppController
             $this->response->body(json_encode($response));
             return;
         }
+        // お知らせ取得
+        $allNotice = $this->getAllNotice($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path'], null);
+        $top_notice = $allNotice[0];
+        $arcive_notice = $allNotice[1];
 
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
-            , $this->viewVars['shopInfo']['notice_path']);
-
-        $this->set(compact('notices'));
+        $this->set(compact('top_notice', 'arcive_notice'));
         $this->render('/Owner/Shops/notice');
         $response = array(
             'html' => $this->response->body(),
@@ -1731,9 +1708,13 @@ class ShopsController extends AppController
             $tmpDir->delete();// tmpフォルダ削除
         }
 
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
-            , $this->viewVars['shopInfo']['notice_path']);
-        $this->set(compact('notices'));
+        // お知らせ取得
+        $allNotice = $this->getAllNotice($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path'], null);
+        $top_notice = $allNotice[0];
+        $arcive_notice = $allNotice[1];
+
+        $this->set(compact('top_notice', 'arcive_notice'));
         $this->render('/Owner/Shops/notice');
         $response = array(
             'html' => $this->response->body(),
@@ -1825,9 +1806,13 @@ class ShopsController extends AppController
         if (file_exists($tmpDir->path)) {
             $tmpDir->delete();
         }
-        $notices = $this->Util->getNotices($this->viewVars['shopInfo']['id']
-            , $this->viewVars['shopInfo']['notice_path']);
-        $this->set(compact('notices'));
+        // お知らせ取得
+        $allNotice = $this->getAllNotice($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path'], null);
+        $top_notice = $allNotice[0];
+        $arcive_notice = $allNotice[1];
+
+        $this->set(compact('top_notice', 'arcive_notice'));
         $this->render('/Owner/Shops/notice');
         $response = array(
             'html' => $this->response->body(),
@@ -2136,6 +2121,44 @@ class ShopsController extends AppController
 
         $this->set(compact('option','mast_data'));
         $this->render();
+    }
+
+    /**
+     * 全てのお知らせを取得する処理
+     *
+     * @return void
+     */
+    public function getAllNotice($shop_id, $notice_path, $user_id = null)
+    {
+        $notice = $this->Util->getNotices($this->viewVars['shopInfo']['id']
+            , $this->viewVars['shopInfo']['notice_path'], null);
+        $top_notice = array();
+        $arcive_notice = array();
+        $count = 0;
+        foreach ($notice as $key1 => $rows) :
+            foreach ($rows as $key2 => $row) :
+                if ($count == 5) :
+                    break;
+                endif;
+                array_push($top_notice, $row);
+                unset($notice[$key1][$key2]);
+                $count = $count + 1;
+            endforeach;
+        endforeach;
+        foreach ($notice as $key => $rows) :
+            if (count($rows) == 0) :
+                unset($notice[$key]);
+            endif;
+        endforeach;
+        foreach ($notice as $key1 => $rows) :
+            $tmp_array = array();
+            foreach ($rows as $key2 => $row) :
+                array_push($tmp_array, $row);
+            endforeach;
+            array_push($arcive_notice, array_values($tmp_array));
+        endforeach;
+
+        return array($top_notice, $arcive_notice);
     }
 
     /**

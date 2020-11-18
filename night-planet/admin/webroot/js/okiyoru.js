@@ -1035,7 +1035,12 @@ function initializeUser() {
         $("ul.tabs").tabs(options);
     }
     /* トップ画面 END */
-
+    /* ニュース画面 START */
+    if ($("#news").length) {
+        // 検索ボタン押した時
+        commonSearch(false);
+    }
+    /* ニュース画面 END */
     /* エリア画面 START */
     if ($("#area").length) {
         // 検索ボタン押した時

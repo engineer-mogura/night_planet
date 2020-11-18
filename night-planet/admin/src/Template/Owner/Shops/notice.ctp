@@ -51,9 +51,9 @@
                     </div>
                 </div>
                 <div class="col s12 m12 l12 xl4">
-                    <?php if(count($top_notices) > 0) { ?>
+                    <?php if(count($top_notice) > 0) { ?>
                         <ul class="collection z-depth-3">
-                            <?php foreach ($top_notices as $key => $row): ?>
+                            <?php foreach ($top_notice as $key => $row): ?>
                                 <li class="linkbox collection-item avatar">
                                     <div class="archiveLink">
                                         <input type="hidden" name="id" value=<?=$row->id?>>
@@ -71,9 +71,9 @@
                             <?php endforeach; ?>
                         </ul>
                     <?php } ?>
-                    <?php if(count($arcive_notices) > 0) { ?>
+                    <?php if(count($arcive_notice) > 0) { ?>
                         <ul class="collapsible popout" data-collapsible="accordion">
-                            <?php foreach ($arcive_notices as $rows): ?>
+                            <?php foreach ($arcive_notice as $rows): ?>
                             <li class="collection-item">
                                 <div class="collapsible-header waves-effect"><?= $rows[0]["ym_created"] ?><span class="badge">投稿：<?= count($rows) ?></span></div>
                                 <?php foreach ($rows as $row): ?>

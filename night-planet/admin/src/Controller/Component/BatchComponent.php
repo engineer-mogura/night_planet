@@ -56,7 +56,7 @@ class BatchComponent extends Component
         exec('chmod 700 ' . $dirpath);
 
         // コマンド
-        $command = sprintf($mysqldump_path . ' -h %s -u %s -p%s %s > %sbackup.sql'
+        $command = sprintf($mysqldump_path . ' -h %s -u %s -p%s %s | gzip > %sbackup.sql.gz'
             , $con->config()['host'], $con->config()['username']
             , $con->config()['password'], $con->config()['database']
             , $dirpath . DS . $date);

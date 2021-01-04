@@ -1,22 +1,17 @@
 #!/usr/bin/bash
 export LC_CTYPE='ja_JP.UTF-8'
 
+#現在の絶対パス
+DIR_NAME=$(cd $(dirname $0); pwd)
+
 #環境変数読み込み
-. ./conf.txt
+source ./env.sh $DIR_NAME
+
+# 環境名表示
+show_env_name
 
 #イメージ側ログディレクトリ
 I_DIR=$IMAGE_DIR$DS
-
-echo "$I_DIR"
-
-#対象環境を表示
-if [ $BASE_ENV = $LOCAL_ENV ]; then
-  echo "☆彡★☆彡　${BASE_ENV} が対象です。　☆彡★☆彡"
-elif [ $BASE_ENV = $HOSYU_ENV ]; then
-  echo "☆彡★☆彡　${BASE_ENV} が対象です。　☆彡★☆彡"
-else
-  echo "☆彡★☆彡　${BASE_ENV} が対象です。　☆彡★☆彡"
-fi
 
 # エリア、ジャンルのディレクトリを作成する
 echo -n "エリア、ジャンルのディレクトリを作成します。よろしいですか？ [Y/n]: "

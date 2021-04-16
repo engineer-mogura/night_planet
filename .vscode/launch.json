@@ -7,7 +7,7 @@
             "request": "launch",
             "port": 9000,
             "pathMappings": {
-                "/vagrant/night-planet": "c:/vm/01_okiyoru/night-planet"
+                "/vagrant/night-planet": "d:/CentOS7/night_planet/night-planet"
             },
             "log": true,
         },

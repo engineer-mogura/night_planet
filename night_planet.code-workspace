@@ -10,7 +10,6 @@
 		"files.exclude": {
 			"**/tests": true,
 			"**/vendor": true,
-			"bk_01_okiyoru": true,
 			"phpmyadmin": true
 		},
 		"git.ignoreLimitWarning": true

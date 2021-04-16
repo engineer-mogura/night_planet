@@ -1,1 +1,1 @@
-{"virtualbox":{"/vagrant":{"mount_options":["dmode=777","fmode=777","uid=1000","gid=1000"],"guestpath":"/vagrant","hostpath":"C:/vm/01_okiyoru","disabled":false,"__vagrantfile":true}}}
+{"virtualbox":{"/vagrant":{"mount_options":["dmode=777","fmode=777","uid=1000","gid=1000"],"guestpath":"/vagrant","hostpath":"D:/CentOS7/night_planet","disabled":false,"__vagrantfile":true}}}

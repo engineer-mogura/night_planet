@@ -5,6 +5,9 @@
 //     }
 
 {
+    // ウェルカムページ非表示
+    "workbench.startupEditor": "newUntitledFile",
+
     "gitlens.advanced.messages": {
         "suppressLineUncommittedWarning": true
     },

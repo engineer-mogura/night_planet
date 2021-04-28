@@ -11,7 +11,7 @@
 /config/.env
 /logs/*
 /tmp/*
-/vendor/*
+# /vendor/*
 
 # OS generated files #
 ######################
@@ -48,4 +48,5 @@ nbproject/*
 night-planet/admin/tmp/**/**/**
 night-planet/public/tmp/**/**/**
 night-planet/admin/logs/*.*
+night-planet/developer/work/*.*
 night-planet/public/webroot/cache/instagram_graph_api.dat

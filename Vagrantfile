@@ -34,7 +34,7 @@ Vagrant.configure("2") do |config|
   # using a specific IP.
   config.vm.network "private_network", ip: "192.168.33.10"
   # config.vm.hostname = "localhost"
-  config.hostsupdater.aliases = ["night-planet.local","admin.night-planet.local","img.night-planet.local","night-planet-db.local"]
+  config.hostsupdater.aliases = ["night-planet.local","admin.night-planet.local","img.night-planet.local"]
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on

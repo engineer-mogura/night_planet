@@ -1,8 +1,14 @@
+# Gitに表示させるかフィルターできるファイル
+
 /phpmyadmin/
 
 # 画像ファイル
 /night-planet/img/**
-/night-planet/public/webroot/**
+
+# フロント側
+# /night-planet/public/webroot/**
+# /night-planet/admin/webroot/**
+
 # CakePHP specific files #
 ##########################
 /config/app.php
@@ -46,5 +52,7 @@ nbproject/*
 night-planet/admin/tmp/**
 night-planet/public/tmp/**
 night-planet/admin/logs/*.*
+night-planet/public/logs/*.*
 night-planet/developer/work/**
+night-planet/admin/webroot/cache/**
 night-planet/public/webroot/cache/**

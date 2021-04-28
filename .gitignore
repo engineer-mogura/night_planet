@@ -1,17 +1,15 @@
-/bk_01_okiyoru/
 /phpmyadmin/
 
 # 画像ファイル
-/night-planet/img/*
-/night-planet/public/webroot/bk_img/*
-/night-planet/public/webroot/img/
+/night-planet/img/**
+/night-planet/public/webroot/**
 # CakePHP specific files #
 ##########################
 /config/app.php
 /config/.env
 /logs/*
 /tmp/*
-# /vendor/*
+/vendor/*
 
 # OS generated files #
 ######################
@@ -45,8 +43,8 @@ nbproject/*
 .vscode
 # Sass preprocessor
 .sass-cache/
-night-planet/admin/tmp/**/**/**
-night-planet/public/tmp/**/**/**
+night-planet/admin/tmp/**
+night-planet/public/tmp/**
 night-planet/admin/logs/*.*
-night-planet/developer/work/*.*
-night-planet/public/webroot/cache/instagram_graph_api.dat
+night-planet/developer/work/**
+night-planet/public/webroot/cache/**

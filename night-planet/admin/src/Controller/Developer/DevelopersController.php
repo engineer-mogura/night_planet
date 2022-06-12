@@ -8,6 +8,7 @@ use Cake\Filesystem\File;
 use Cake\Filesystem\Folder;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\I18n\Time;
+use RuntimeException;
 
 /**
 * Developers Controller

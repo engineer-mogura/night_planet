@@ -52,6 +52,99 @@ class OwnersTable extends Table
         ]);
     }
 
+        /**
+     * オーナー バリデーション 新規登録.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationOwnerRegistration(Validator $validator)
+    {
+
+        $validator->setProvider('custom', 'App\Model\Validation\CustomValidation');
+
+        $validator
+            ->integer('id')
+            ->allowEmptyString('id', 'create');
+
+        $validator
+            ->scalar('name')
+            ->notEmpty('name','名前を入力してください。')
+            ->maxLength('name', 45, '名前が長すぎます。')
+            ->requirePresence('name', 'create')
+            ->allowEmptyString('name', false);
+
+        $validator
+            ->scalar('role')
+            ->maxLength('role', 10)
+            ->requirePresence('role', 'create')
+            ->allowEmptyString('role', false);
+
+        $validator
+            ->email('email',false, "メールアドレスの形式が不正です。")
+            ->requirePresence('email', 'create')
+            ->notEmpty('email','メールアドレスを入力してください。')
+            ->allowEmptyString('email', false)
+            ->add('email', [
+                'exists' => [
+                    'rule' => function($value, $context) {
+                        return !TableRegistry::get('tmps')->exists(['email' => $value]);
+                    },
+                    'message' => 'そのメールアドレスは既に登録されています。'
+                ],
+            ]);
+
+        $validator
+            ->scalar('password')
+            ->maxLength('password', 32,'パスワードが長すぎます。')
+            ->minLength('password', 8,'パスワードが短すぎます。')
+            ->notEmpty('password','パスワードを入力してください。')
+            ->requirePresence('password', 'create')
+            ->allowEmptyString('password', false)
+            ->add('password',[  //←バリデーション対象カラム
+                    'comWith' => [  //←任意のバリデーション名
+                        'rule' => ['compareWith','password_check'],  //←バリデーションのルール
+                        'message' => '確認用のパスワードと一致しません。'  //←エラー時のメッセージ
+            ]]);
+
+        $validator
+            ->integer('status')
+            ->allowEmptyString('status');
+
+        $validator
+            ->integer('gender')
+            ->requirePresence('gender', 'create')
+            ->notEmpty('gender','性別を選択してください。')
+            ->allowEmptyString('gender', false);
+
+        $validator
+            ->scalar('age')
+            ->maxLength('age', 5)
+            ->requirePresence('age', 'create')
+            ->notEmpty('age','年齢を選択してください。')
+            ->allowEmptyString('age', false);
+
+        $validator
+            ->integer('dir');
+
+        $validator
+            ->scalar('tel')
+            ->requirePresence('tel', 'create')
+            ->notEmpty('tel','電話番号を入力してください。')
+            ////電話番号形式のチェック ////
+            ->add('tel', 'tel_check',[
+                'rule' =>'tel_check',
+                'provider' => 'custom',
+                'message' => '無効な電話番号です。'
+            ]);
+
+        $validator
+            ->integer('status')
+            ->allowEmptyString('status');
+
+        return $validator;
+    }
+
     /**
      * バリデーション ログイン.
      *

@@ -231,7 +231,7 @@ return [
             'port'      => 465,
             'timeout'   => 30,
             'username'  => 'info.night.planet@gmail.com',
-            'password'  => 'night-planet910',
+            'password'  => 'qwxndtueofagchdq',
             'transport' => 'Smtp',
             'client'    => null,
             'tls'       => null,
